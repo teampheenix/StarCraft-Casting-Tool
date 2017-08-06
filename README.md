@@ -11,3 +11,5 @@ AlphaSC2-Tool is a Python 3.6 script that can load all relevant data from an Alp
 ## Instructions for Use
 
 ## Support
+
+Alpha SC2 Discord Server: https://discordapp.com/invite/yRWNYr
