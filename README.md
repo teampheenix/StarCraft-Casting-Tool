@@ -34,7 +34,7 @@ If you want to support this project, consider subscribing to https://www.twitch.
 
 ## Twitch Integration
 
-To update your Twitch title via click on *Update Twitch Title* you have to set your *channel*, *clientid*, and *oauth* in the *data.ini* file that can be edited with any text editor. *channel* is the name of your channel, e.g., 
+To update your Twitch title via click on *Update Twitch Title* you have to set your *channel*, *clientid*, and *oauth* in the *data.ini* file that can be edited with any text editor. The parameter *channel* is the name of your channel, e.g., 
 *teampheenix* for https://www.twitch.tv/teampheenix.
 
 ### Creating a twitch application which the script can access to update the title
@@ -43,11 +43,11 @@ To update your Twitch title via click on *Update Twitch Title* you have to set y
 * App Name: enter any unique name like "AlphaSC2Tool"
 * Use this Redirect URI: http://localhost
 * App category: Game Integration -> hit "Register"
-* Look for the "Client ID" on that website and save it. This is the parameter *clientid* you need to enter in *data.ini* file.
+* Look for the "Client ID" on that website and save it. This is the parameter *clientid* you need to enter in the *data.ini* file.
 
 ### Getting the token from the twitch application
 * Replace the "INSERT_CLIENT_ID" in the following link with the "Client ID" from the last step, and then open it in your browser https://api.twitch.tv/kraken/oauth2/authorize?response_type=token&client_id=INSERT_CLIENT_ID&redirect_uri=http://localhost&scope=channel_editor
 * So it should look something like this https://api.twitch.tv/kraken/oauth2/authorize?response_type=token&client_id=l3jijexx69n17s56a8s1ddv8x5j5nsm&redirect_uri=http://localhost&scope=channel_editor
 * Click "Authorize"
 * Now you get redirected to a blank website with some similar URL like http://localhost/#access_token=k9y42hj9df8fg73vd3zpsop7erbsp32jco1t&scope=channel_editor
-* Copy that token (key) from the URL between "access_token=" and "&scope=channel_editor" and save it for the next step. This is the parameter *oauth* you need to enter in *data.ini* file.
+* Copy that token (key) from the URL between "access_token=" and "&scope=channel_editor" and save it for the next step. This is the parameter *oauth* you need to enter in the *data.ini* file.
