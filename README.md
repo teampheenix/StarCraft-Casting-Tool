@@ -26,7 +26,7 @@ Some basic options for customization can be found in *data.ini*. For additional 
 
 ## Help & Contribution
 
-If you need help, have bugs to report or want to contribute to this project go to #dev channel of the Alpha SC2 Discord Server https://discordapp.com/invite/yRWNYr and/or message me Discord *pres.sure#5247*.
+If you need help, have bugs to report or want to contribute to this project go to #dev channel of the Alpha SC2 Discord Server https://discordapp.com/invite/yRWNYr and/or message me on Discord: *pres.sure#5247*.
 
 ## Support
 
