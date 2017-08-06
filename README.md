@@ -22,7 +22,7 @@ The top slider is to select *your* team. Once selected the border of the map ico
 
 ## Customization
 
-Some basic options for customization can be found in *data.ini*. For additional customization of the map icons you can alter the *\OBS_mapicons\src\map.css* file, e.g., try to replace *map.css* with *map_alternative.css*.
+Some basic options for customization can be found in *data.ini*. For additional customization of the map icons you can alter the */OBS_mapicons/src/map.css* file, e.g., try to replace *map.css* with *map_alternative.css*.
 
 ## Help & Contribution
 
