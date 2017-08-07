@@ -11,7 +11,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 
-version='v0.4.3'
+version='v0.5.0'
 configFile = "config.ini"
 jsonFile   = "data.json"
 OBSdataDir = "OBS_data"
