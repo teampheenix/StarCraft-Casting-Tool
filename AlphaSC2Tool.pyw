@@ -15,6 +15,7 @@ configFile = "config.ini"
 jsonFile   = "data.json"
 OBSdataDir = "OBS_data"
 OBSmapDir  = "OBS_mapicons"
+OBSmapDirData  = "OBS_mapicons/data"
 
 #Reading the configuration from file
 Config = configparser.ConfigParser()
@@ -41,7 +42,16 @@ races = ("Random","Protoss","Zerg","Terran")
 #Creating directories if not exisiting 
 if not os.path.exists(OBSdataDir):
     os.makedirs(OBSdataDir)
-
+    
+#Creating directories if not exisiting 
+if not os.path.exists(OBSmapDir):
+    os.makedirs(OBSmapDir)
+    
+#Creating directories if not exisiting 
+if not os.path.exists(OBSmapDirData):
+    os.makedirs(OBSmapDirData)
+        
+    
 class AlphaMatchData:
 
     def __init__(self,IDorURL=-1):
@@ -171,7 +181,7 @@ class AlphaMatchData:
         team = int(team)
         score = [0,0]
         for i in range(1,6):
-            filename=OBSmapDir+"/data/"+str(i)+".html"
+            filename=OBSmapDirData+str(i)+".html"
          
             try:
                 player1=self.jsonData['lineup1'][i-1]['nickname']
@@ -550,8 +560,11 @@ class AlphaController:
         
     def openURL(self,IDorURL):
         if(len(IDorURL)>0):
-            self.matchData.setIDorURL(IDorURL)
-            url="http://alpha.tl/match/"+str(self.matchData.getID())
+            try:
+               self.matchData.setIDorURL(IDorURL)
+               url="http://alpha.tl/match/"+str(self.matchData.getID())
+            except:
+               url="http://alpha.tl/match/"
         else:
             url="http://alpha.tl/match/"
         webbrowser.open(url)
