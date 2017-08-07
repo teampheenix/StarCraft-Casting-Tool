@@ -182,7 +182,7 @@ class AlphaMatchData:
         team = int(team)
         score = [0,0]
         for i in range(1,6):
-            filename=OBSmapDirData+str(i)+".html"
+            filename=OBSmapDirData+"/"+str(i)+".html"
          
             try:
                 player1=self.jsonData['lineup1'][i-1]['nickname']
