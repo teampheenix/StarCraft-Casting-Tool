@@ -6,11 +6,12 @@ import requests
 import urllib.request
 import os, sys
 import webbrowser
+import time
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 
-version='v0.4.2'
+version='v0.4.3'
 configFile = "config.ini"
 jsonFile   = "data.json"
 OBSdataDir = "OBS_data"
@@ -269,10 +270,12 @@ class mainWindow(QMainWindow):
         self.createFormGroupBox()
         self.createFormGroupBox2()
         self.createHorizontalGroupBox()
+        self.createAutoUpdateGroupBox()
 
         mainLayout = QVBoxLayout()
         mainLayout.addWidget(self.formGroupBox,2)
         mainLayout.addWidget(self.formGroupBox2,7)
+        mainLayout.addWidget(self.autoUpdateGroupBox,1)
         mainLayout.addWidget(self.horizontalGroupBox,1)
 
         self.setWindowTitle("Alpha SC2 Tool "+version)
@@ -282,12 +285,18 @@ class mainWindow(QMainWindow):
         self.setCentralWidget(self.window)
         
         self.statusBar()
-        self.setGeometry(600, 300, 500, 200)
+        self.setGeometry(600, 300, 550, 500)
         self.controller = controller
         self.controller.setView(self)
         self.show()
 
+    def closeEvent(self, event):
 
+        self.controller.cleanUp()
+
+        # close window
+        event.accept()
+        
     def createFormGroupBox(self):
         self.formGroupBox = QGroupBox("Alpha SC2 Teamleague")
         self.le_url =  QLineEdit()
@@ -398,7 +407,24 @@ class mainWindow(QMainWindow):
         layout.addWidget(self.pb_obsupdate)
         
         self.horizontalGroupBox.setLayout(layout)
+        
+    def createAutoUpdateGroupBox(self):
+        self.autoUpdateGroupBox = QGroupBox("SC2 Client-API")
+        layout = QHBoxLayout()
+        
+        self.cb_autoUpdate = QCheckBox("Automatic Score Update")
+        self.cb_autoUpdate.setChecked(False)
+        self.cb_autoUpdate.stateChanged.connect(self.autoUpdate_change)
+           
+        layout.addWidget(self.cb_autoUpdate)
+        
+        self.autoUpdateGroupBox.setLayout(layout)
 
+    def autoUpdate_change(self):
+        if(self.cb_autoUpdate.isChecked()):
+           self.controller.runAutoUpdate()
+        else:
+           self.controller.stopAutoUpdate()
         
     def refresh_click(self):
         url = self.le_url.text()
@@ -432,6 +458,18 @@ class mainWindow(QMainWindow):
         self.controller.updateOBS()
         self.statusBar().showMessage('')
         self.trigger = True
+        
+    def setScore(self,idx,score):
+        if(self.sl_score[idx].value()==0):
+            self.statusBar().showMessage('Updating Score...')
+            self.trigger = False
+            self.sl_score[idx].setValue(score)
+            self.controller.updateOBS()
+            self.statusBar().showMessage('')
+            self.trigger = True 
+            return True
+        else:
+            return False
        
     def sl_changed(self):
         if(self.trigger):
@@ -441,6 +479,7 @@ class AlphaController:
     
     def __init__(self):
         self.matchData = AlphaMatchData()
+        self.autoUpdateThread = AutoUpdateThread(self)
 
     def setView(self,view):
         self.view = view
@@ -561,18 +600,146 @@ class AlphaController:
     def openURL(self,IDorURL):
         if(len(IDorURL)>0):
             try:
-               self.matchData.setIDorURL(IDorURL)
-               url="http://alpha.tl/match/"+str(self.matchData.getID())
+                self.matchData.setIDorURL(IDorURL)
+                url="http://alpha.tl/match/"+str(self.matchData.getID())
             except:
-               url="http://alpha.tl/match/"
+                url="http://alpha.tl/match/"
         else:
             url="http://alpha.tl/match/"
         webbrowser.open(url)
+    
+    def runAutoUpdate(self):
+        if(not self.autoUpdateThread.isRunning()):
+            self.autoUpdateThread.start()
+        else:
+            self.autoUpdateThread.cancelTerminationRequest()
+          
+       
+    def stopAutoUpdate(self):   
+        self.autoUpdateThread.requestTermination()
+        
+    def cleanUp(self):
+        self.stopAutoUpdate()
+        
+    def requestScoreUpdate(self,newSC2MatchData):
+        
+        print("Trying to update the score")
+        
+        self.updateData()
+        newscore = 0
+        for i in range(5):
+            found, newscore = newSC2MatchData.compare(self.matchData.jsonData['lineup1'][i]['nickname'],self.matchData.jsonData['lineup2'][i]['nickname'])
+            if(found and newscore != 0):
+                if(self.view.setScore(i,newscore)):
+                    break
+                else:
+                    continue
+                           
+                
+        
+class SC2MatchData:
+    
+    def __init__(self, GAMEresponse = False):
+        try:
+            self.player1 = GAMEresponse["players"][0]["name"]
+            self.player2 = GAMEresponse["players"][1]["name"]
+            self.race1   = self.getRace(GAMEresponse["players"][0]["race"])
+            self.race2   = self.getRace(GAMEresponse["players"][1]["race"])
+            self.length  = GAMEresponse["displayTime"]
+            if(GAMEresponse["players"][0]["result"]=="Victory"):
+                self.result = -1
+            elif(GAMEresponse["players"][0]["result"]=="Defeat")    :
+                self.result = 1
+            else:
+                self.result = 0
+        except:
+            self.player1 = ""
+            self.player2 = ""
+            self.race1   = ""
+            self.race2   = ""
+            self.result  = 0
+            self.length  = 0
+            
+    def compare(self, player1, player2):
 
+        if(self.player1.upper()==player1.upper() and self.player2.upper()==player2.upper()):
+            return True, self.result
+        elif(self.player1.upper()==player2.upper() and self.player2.upper()==player1.upper()):
+            return True, -self.result
+        else:
+            return False, 0
+            
+    def getRace(self,str):
+        for idx, race in enumerate(races):
+            if(str[0].upper()==race[0].upper()):
+                return races[idx]
+        return ""
+            
+    def isValid(self):
+        return (self.result!=0 and self.length > 60)    
+        
+    def __str__(self):
+        return str(self.__dict__)
+
+    def __eq__(self, other): 
+        return self.__dict__ == other.__dict__
+
+        
+class AutoUpdateThread(QThread):
+   
+    def __init__(self, controller, parent = None):
+        QThread.__init__(self, parent)
+        self.exiting = False
+        self.currentData = SC2MatchData()
+        self.controller = controller
+      
+    def requestTermination(self):
+        self.exiting = True
+        print('Requesting termination')  
+   
+    def cancelTerminationRequest(self):
+        self.exiting = False
+        print('Termination request cancelled')  
+      
+    def run(self):
+        print("Start")
+        self.exiting=False
+      
+        GAMEurl = "http://localhost:6119/game"
+        #UIurl = "http://localhost:6119/ui"
+      
+        while self.exiting==False:
+            #See: https://us.battle.net/forums/en/sc2/topic/20748195420
+            try:
+                GAMEresponse = requests.get(GAMEurl, timeout=100).json()
+                #UIresponse = requests.get(UIurl, timeout=100).json()
+                if(len(GAMEresponse["players"]) == 2): #activate script if 2 players are playing right now & not in replay
+                    self.updateScore(SC2MatchData(GAMEresponse))
+                    
+                
+            except requests.exceptions.ConnectionError: #handle exception when starcraft is detected as not running
+                print("StarCraft 2 not running!")
+                time.sleep(5)
+            except ValueError:
+                print("StarCraft 2 starting.")
+                time.sleep(5)
+            
+            time.sleep(5)
+      
+        print('terminated')
+        
+    def updateScore(self,newData):
+        if(self.exiting==False and newData!=self.currentData):
+            self.currentData = newData
+            print("New data:")
+            print(str(newData))
+            if(newData.isValid()):
+                self.controller.requestScoreUpdate(newData)
+         
 def main():
     
     app = QApplication(sys.argv)
-    #QApplication.setStyle(QStyleFactory.create('Fusion'))
+    QApplication.setStyle(QStyleFactory.create('Fusion'))
     app.setWindowIcon(QIcon('alpha.ico'))
     controller = AlphaController()
     view = mainWindow(controller)
@@ -581,4 +748,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-    k=input("press close to exit")
