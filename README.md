@@ -20,6 +20,8 @@ To update your Twitch title via click on *Update Twitch Title* you have to set y
 
 The top slider is to select *your* team. Once selected the border of the map icons turn green or red depending on your result. To select your team my default you can set the parameter *myteam* in `config.ini`.
 
+The automatic detection of the score via the SC2-Client-API does only work if you either play or observe a complete game (game length > 60 seconds) with a pair of players that were specified on one of the five maps. 
+
 ## Customization
 
 Some basic options for customization can be found in `config.ini`. For additional customization of the map icons you can alter the `/OBS_mapicons/src/map.css` file, e.g., try to replace `map.css` with `map_alternative.css`.
