@@ -1,4 +1,3 @@
-#!python3
 #!/usr/bin/env python3
 import json
 import configparser
@@ -13,7 +12,6 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 
-system = platform.system()
 
 if(system=="Windows"):
     import ctypes

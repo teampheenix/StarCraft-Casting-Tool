@@ -11,4 +11,4 @@ pip.main(['install', 'configparser'])
 
 
 if(system=="Windows"):
-    pip.main(['install', 'win32gui'])
+    pip.main(['install', 'pypiwin32'])
