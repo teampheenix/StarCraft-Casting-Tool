@@ -14,7 +14,7 @@ from PyQt5.QtGui import *
 
 system = platform.system()
 
-version='v0.6.1'
+version='v0.6.3'
 configFile = "config.ini"
 jsonFile   = "data.json"
 OBSdataDir = "OBS_data"
@@ -51,6 +51,7 @@ if(system=="Windows"):
     SHIFT = 0x2A
     S = 0x1F
     D = 0x20
+    X = 0x2D
     DIK_1 = 0x02
     DIK_2 = 0x03
     DIK_3 = 0x04
@@ -61,6 +62,7 @@ if(system=="Windows"):
     DIK_8 = 0x09
     DIK_9 = 0x0A
     DIK_0 = 0x0B
+    
     
     
     # C struct redefinitions 
@@ -111,31 +113,50 @@ if(system=="Windows"):
         ctypes.windll.user32.SendInput(1, ctypes.pointer(x), ctypes.sizeof(x))
     
     
-    def ToggleScore(score1,score2,bestof=5):
-        score1=int2DIK(score1)
-        score2=int2DIK(score2)
-        bestof=int2DIK(bestof)
+    def ToggleScore(score1_in,score2_in,bestof=5):
+
+        score1,skip1 = int2DIK(score1_in)
+        score2,skip2 = int2DIK(score2_in)  
+        bestof,skipBestof = int2DIK(bestof)
         lag = 0.01
-        time.sleep(lag)
+        
+        
         PressKey(CONTROL)
         PressKey(SHIFT)
         PressKey(S)
         time.sleep(lag)
         ReleaseKey(S)
-        PressKey(bestof)
-        time.sleep(lag)
-        ReleaseKey(bestof)
         ReleaseKey(SHIFT)
-        time.sleep(lag)
-        PressKey(score2) #Score Player2
-        time.sleep(lag)
-        ReleaseKey(score2)
         ReleaseKey(CONTROL)
-        PressKey(SHIFT)
-        PressKey(score1) #Score Player1
-        time.sleep(lag)    
-        ReleaseKey(score1)
-        ReleaseKey(SHIFT)
+        time.sleep(lag)
+            
+        if(not skipBestof):
+            print("Best of")
+            PressKey(CONTROL)
+            PressKey(SHIFT)
+            PressKey(bestof)
+            time.sleep(lag)
+            ReleaseKey(bestof)
+            ReleaseKey(SHIFT)
+            ReleaseKey(CONTROL)
+            time.sleep(lag)
+            
+        if(not skip2):    
+            PressKey(CONTROL)
+            PressKey(score2) #Score player2
+            time.sleep(lag)
+            ReleaseKey(score2)
+            ReleaseKey(CONTROL)
+            time.sleep(lag)
+            
+        if(not skip1):     
+            PressKey(SHIFT)
+            PressKey(score1) #Score player1
+            time.sleep(lag)    
+            ReleaseKey(score1)
+            ReleaseKey(SHIFT)
+            time.sleep(lag)
+            
         print("Toggled Score")
     
     def ToggleProduction():
@@ -149,25 +170,25 @@ if(system=="Windows"):
         
     def int2DIK(integer):
         if(integer==0):
-            return DIK_0
+            return DIK_0, True
         elif(integer==1):
-            return DIK_1
+            return DIK_1, False
         elif(integer==2):
-            return DIK_2
+            return DIK_2, False
         elif(integer==3):
-            return DIK_3
+            return DIK_3, False
         elif(integer==4):
-            return DIK_4
+            return DIK_4, False
         elif(integer==5):
-            return DIK_5
+            return DIK_5, False
         elif(integer==6):
-            return DIK_6
+            return DIK_6, False
         elif(integer==7):
-            return DIK_7
+            return DIK_7, False
         elif(integer==8):
-            return DIK_8
+            return DIK_8, False
         elif(integer==9):
-            return DIK_9
+            return DIK_9, False
         else:
             raise ValueError('The integer has to be in the range 0 to 9')
 			
@@ -947,12 +968,12 @@ class SC2ApiThread(QThread):
 
             except requests.exceptions.ConnectionError: #handle exception when starcraft is detected as not running
                 print("StarCraft 2 not running!")
-                time.sleep(5)
+                time.sleep(10)
             except ValueError:
                 print("StarCraft 2 starting.")
-                time.sleep(5)
+                time.sleep(10)
             
-            time.sleep(5)
+            time.sleep(2)
       
         print('terminated')
         
@@ -984,7 +1005,7 @@ class SC2ApiThread(QThread):
             print("Toggle not working on this OS")
 
 def isSC2onForeground():
-    return GetWindowText(GetForegroundWindow())=="StarCraft II"
+    return GetWindowText(GetForegroundWindow()).lower()=="StarCraft II".lower()
          
 def main():
     
