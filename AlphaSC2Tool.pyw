@@ -14,6 +14,35 @@ from PyQt5.QtGui import *
 
 system = platform.system()
 
+version='v0.6.1'
+configFile = "config.ini"
+jsonFile   = "data.json"
+OBSdataDir = "OBS_data"
+OBSmapDir  = "OBS_mapicons"
+OBSmapDirData  = "OBS_mapicons/data"
+
+#Reading the configuration from file
+Config = configparser.ConfigParser()
+Config.read(configFile)
+
+twitchChannel = Config.get("Twitch", "Channel")
+clientID  = Config.get("Twitch", "clientID")
+oauth = Config.get("Twitch", "oauth")
+
+twitchTitleTemplate = Config.get("Twitch", "title_template")
+
+
+win_font_color         = Config.get("MapIcons", "win_font_color")
+default_border_color   = Config.get("MapIcons", "default_border_color")
+win_border_color       = Config.get("MapIcons", "win_border_color")
+lose_border_color      = Config.get("MapIcons", "lose_border_color")
+notplayed_border_color = Config.get("MapIcons", "notplayed_border_color")
+notplayed_opacity      = Config.get("MapIcons", "notplayed_opacity")
+
+myteam =  Config.get("AlphaSC2","myteam")
+
+races = ("Random","Protoss","Zerg","Terran")
+
 if(system=="Windows"):
     import ctypes
     from win32gui import GetWindowText, GetForegroundWindow #pip install pypiwin32
@@ -141,39 +170,7 @@ if(system=="Windows"):
             return DIK_9
         else:
             raise ValueError('The integer has to be in the range 0 to 9')
-
-version='v0.6.0'
-configFile = "config.ini"
-jsonFile   = "data.json"
-OBSdataDir = "OBS_data"
-OBSmapDir  = "OBS_mapicons"
-OBSmapDirData  = "OBS_mapicons/data"
-
-#Reading the configuration from file
-Config = configparser.ConfigParser()
-Config.read(configFile)
-
-twitchChannel = Config.get("Twitch", "Channel")
-clientID  = Config.get("Twitch", "clientID")
-oauth = Config.get("Twitch", "oauth")
-
-twitchTitleTemplate = Config.get("Twitch", "title_template")
-
-
-win_font_color         = Config.get("MapIcons", "win_font_color")
-default_border_color   = Config.get("MapIcons", "default_border_color")
-win_border_color       = Config.get("MapIcons", "win_border_color")
-lose_border_color      = Config.get("MapIcons", "lose_border_color")
-notplayed_border_color = Config.get("MapIcons", "notplayed_border_color")
-notplayed_opacity      = Config.get("MapIcons", "notplayed_opacity")
-
-myteam =  Config.get("AlphaSC2","myteam")
-
-races = ("Random","Protoss","Zerg","Terran")
-
-
-
-
+			
 #Creating directories if not exisiting 
 if not os.path.exists(OBSdataDir):
     os.makedirs(OBSdataDir)
