@@ -7,11 +7,143 @@ import urllib.request
 import os, sys
 import webbrowser
 import time
+import platform
+
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 
-version='v0.5.1'
+system = platform.system()
+
+if(system=="Windows"):
+    import ctypes
+    from win32gui import GetWindowText, GetForegroundWindow #pip install pypiwin32
+    SendInput = ctypes.windll.user32.SendInput
+    CONTROL = 0x1D
+    SHIFT = 0x2A
+    S = 0x1F
+    D = 0x20
+    DIK_1 = 0x02
+    DIK_2 = 0x03
+    DIK_3 = 0x04
+    DIK_4 = 0x05
+    DIK_5 = 0x06
+    DIK_6 = 0x07
+    DIK_7 = 0x08
+    DIK_8 = 0x09
+    DIK_9 = 0x0A
+    DIK_0 = 0x0B
+    
+    
+    # C struct redefinitions 
+    PUL = ctypes.POINTER(ctypes.c_ulong)
+    class KeyBdInput(ctypes.Structure):
+        _fields_ = [("wVk", ctypes.c_ushort),
+                    ("wScan", ctypes.c_ushort),
+                    ("dwFlags", ctypes.c_ulong),
+                    ("time", ctypes.c_ulong),
+                    ("dwExtraInfo", PUL)]
+    
+    class HardwareInput(ctypes.Structure):
+        _fields_ = [("uMsg", ctypes.c_ulong),
+                    ("wParamL", ctypes.c_short),
+                    ("wParamH", ctypes.c_ushort)]
+    
+    class MouseInput(ctypes.Structure):
+        _fields_ = [("dx", ctypes.c_long),
+                    ("dy", ctypes.c_long),
+                    ("mouseData", ctypes.c_ulong),
+                    ("dwFlags", ctypes.c_ulong),
+                    ("time",ctypes.c_ulong),
+                    ("dwExtraInfo", PUL)]
+    
+    class Input_I(ctypes.Union):
+        _fields_ = [("ki", KeyBdInput),
+                    ("mi", MouseInput),
+                    ("hi", HardwareInput)]
+    
+    class Input(ctypes.Structure):
+        _fields_ = [("type", ctypes.c_ulong),
+                    ("ii", Input_I)]
+    
+    # Actuals Functions
+    
+    def PressKey(hexKeyCode):
+        extra = ctypes.c_ulong(0)
+        ii_ = Input_I()
+        ii_.ki = KeyBdInput( 0, hexKeyCode, 0x0008, 0, ctypes.pointer(extra) )
+        x = Input( ctypes.c_ulong(1), ii_ )
+        ctypes.windll.user32.SendInput(1, ctypes.pointer(x), ctypes.sizeof(x))
+    
+    def ReleaseKey(hexKeyCode):
+        extra = ctypes.c_ulong(0)
+        ii_ = Input_I()
+        ii_.ki = KeyBdInput( 0, hexKeyCode, 0x0008 | 0x0002, 0, ctypes.pointer(extra) )
+        x = Input( ctypes.c_ulong(1), ii_ )
+        ctypes.windll.user32.SendInput(1, ctypes.pointer(x), ctypes.sizeof(x))
+    
+    
+    def ToggleScore(score1,score2,bestof=5):
+        score1=int2DIK(score1)
+        score2=int2DIK(score2)
+        bestof=int2DIK(bestof)
+        lag = 0.01
+        time.sleep(lag)
+        PressKey(CONTROL)
+        PressKey(SHIFT)
+        PressKey(S)
+        time.sleep(lag)
+        ReleaseKey(S)
+        PressKey(bestof)
+        time.sleep(lag)
+        ReleaseKey(bestof)
+        ReleaseKey(SHIFT)
+        time.sleep(lag)
+        PressKey(score2) #Score Player2
+        time.sleep(lag)
+        ReleaseKey(score2)
+        ReleaseKey(CONTROL)
+        PressKey(SHIFT)
+        PressKey(score1) #Score Player1
+        time.sleep(lag)    
+        ReleaseKey(score1)
+        ReleaseKey(SHIFT)
+        print("Toggled Score")
+    
+    def ToggleProduction():
+        lag = 0.01
+        time.sleep(lag)
+        PressKey(CONTROL)
+        PressKey(D)
+        time.sleep(lag)
+        ReleaseKey(CONTROL)
+        ReleaseKey(D)   
+        
+    def int2DIK(integer):
+        if(integer==0):
+            return DIK_0
+        elif(integer==1):
+            return DIK_1
+        elif(integer==2):
+            return DIK_2
+        elif(integer==3):
+            return DIK_3
+        elif(integer==4):
+            return DIK_4
+        elif(integer==5):
+            return DIK_5
+        elif(integer==6):
+            return DIK_6
+        elif(integer==7):
+            return DIK_7
+        elif(integer==8):
+            return DIK_8
+        elif(integer==9):
+            return DIK_9
+        else:
+            raise ValueError('The integer has to be in the range 0 to 9')
+
+version='v0.6.0'
 configFile = "config.ini"
 jsonFile   = "data.json"
 OBSdataDir = "OBS_data"
@@ -40,6 +172,9 @@ myteam =  Config.get("AlphaSC2","myteam")
 
 races = ("Random","Protoss","Zerg","Terran")
 
+
+
+
 #Creating directories if not exisiting 
 if not os.path.exists(OBSdataDir):
     os.makedirs(OBSdataDir)
@@ -52,6 +187,10 @@ if not os.path.exists(OBSmapDir):
 if not os.path.exists(OBSmapDirData):
     os.makedirs(OBSmapDirData)
         
+        
+
+
+
     
 class AlphaMatchData:
 
@@ -255,7 +394,8 @@ def updateTwitchTitle(newTitle):
    
    headers = {'Accept':'application/vnd.twitchtv.v3+json', 'Authorization':'OAuth ' + oauth, 'Client-ID':clientID}
    params = {'channel[status]': newTitle}
-   r = requests.put('https://api.twitch.tv/kraken/channels/' + twitchChannel, headers = headers, params = params).raise_for_status()
+   r = requests.put('https://api.twitch.tv/kraken/channels/' + twitchChannel,\
+                    headers = headers, params = params).raise_for_status()
    msg = "Updated stream title of "+twitchChannel+' to: "' + newTitle.encode("ascii", "ignore").decode()+'"'
    
    return msg
@@ -270,12 +410,12 @@ class mainWindow(QMainWindow):
         self.createFormGroupBox()
         self.createFormGroupBox2()
         self.createHorizontalGroupBox()
-        self.createAutoUpdateGroupBox()
+        self.createSC2APIGroupBox()
 
         mainLayout = QVBoxLayout()
         mainLayout.addWidget(self.formGroupBox,2)
         mainLayout.addWidget(self.formGroupBox2,7)
-        mainLayout.addWidget(self.autoUpdateGroupBox,1)
+        mainLayout.addWidget(self.SC2APIGroupBox,1)
         mainLayout.addWidget(self.horizontalGroupBox,1)
 
         self.setWindowTitle("Alpha SC2 Tool "+version)
@@ -408,23 +548,52 @@ class mainWindow(QMainWindow):
         
         self.horizontalGroupBox.setLayout(layout)
         
-    def createAutoUpdateGroupBox(self):
-        self.autoUpdateGroupBox = QGroupBox("SC2 Client-API")
+    def createSC2APIGroupBox(self):
+        self.SC2APIGroupBox = QGroupBox("SC2 Client-API")
         layout = QHBoxLayout()
         
-        self.cb_autoUpdate = QCheckBox("Automatic Score Update")
+        self.cb_autoUpdate = QCheckBox("Score Update")
         self.cb_autoUpdate.setChecked(False)
         self.cb_autoUpdate.stateChanged.connect(self.autoUpdate_change)
-           
-        layout.addWidget(self.cb_autoUpdate)
         
-        self.autoUpdateGroupBox.setLayout(layout)
+        self.cb_autoToggleScore = QCheckBox("Set UI-Ingame Score")
+        self.cb_autoToggleScore.setChecked(False)
+        self.cb_autoToggleScore.stateChanged.connect(self.autoToggleScore_change)
+        
+        self.cb_autoToggleProduction = QCheckBox("Toggle Production-Tab")
+        self.cb_autoToggleProduction.setChecked(False)
+        self.cb_autoToggleProduction.stateChanged.connect(self.autoToggleProduction_change)
+        
+        if(system!="Windows"):
+            self.cb_autoToggleScore.setEnabled(False)
+            self.cb_autoToggleProduction.setEnabled(False)
+        
+        layout.addWidget(QLabel("Automatic:"),3)
+        layout.addWidget(self.cb_autoUpdate,3)
+        layout.addWidget(self.cb_autoToggleScore,3)
+        layout.addWidget(self.cb_autoToggleProduction,3)
+        
+        self.SC2APIGroupBox.setLayout(layout)
 
     def autoUpdate_change(self):
         if(self.cb_autoUpdate.isChecked()):
-           self.controller.runAutoUpdate()
+           self.controller.runSC2ApiThread("updateScore")
         else:
-           self.controller.stopAutoUpdate()
+           self.controller.stopSC2ApiThread("updateScore")
+           
+    def autoToggleScore_change(self):
+        if(self.cb_autoToggleScore.isChecked()):
+           self.controller.runSC2ApiThread("toggleScore")
+        else:
+           self.controller.stopSC2ApiThread("toggleScore")
+           
+                  
+    def autoToggleProduction_change(self):
+        if(self.cb_autoToggleProduction.isChecked()):
+           self.controller.runSC2ApiThread("toggleProduction")
+        else:
+           self.controller.stopSC2ApiThread("toggleProduction")
+           
         
     def refresh_click(self):
         url = self.le_url.text()
@@ -479,7 +648,7 @@ class AlphaController:
     
     def __init__(self):
         self.matchData = AlphaMatchData()
-        self.autoUpdateThread = AutoUpdateThread(self)
+        self.SC2ApiThread = SC2ApiThread(self)
 
     def setView(self,view):
         self.view = view
@@ -508,7 +677,8 @@ class AlphaController:
                 except:
                     self.view.le_player[j][i].setText("TBD")
                 try:
-                    index = self.view.cb_race[j][i].findText(self.matchData.jsonData['lineup'+str(j+1)][i]['race'].title(), Qt.MatchFixedString)
+                    index = self.view.cb_race[j][i].findText(self.matchData.jsonData['lineup'+str(j+1)][i]['race'].title(),\
+                                                             Qt.MatchFixedString)
                     if index >= 0:
                         self.view.cb_race[j][i].setCurrentIndex(index)
                 except:
@@ -547,7 +717,8 @@ class AlphaController:
                     self.matchData.jsonData['lineup'+str(j+1)][i]['nickname'] = self.view.le_player[j][i].text()
                     self.matchData.jsonData['lineup'+str(j+1)][i]['race'] = self.view.cb_race[j][i].currentText()
                 except:
-                    self.matchData.jsonData['lineup'+str(j+1)].insert(i,{'nickname': self.view.le_player[j][i].text(),'race': self.view.cb_race[j][i].currentText()})
+                    self.matchData.jsonData['lineup'+str(j+1)].insert(i,\
+                        {'nickname': self.view.le_player[j][i].text(),'race': self.view.cb_race[j][i].currentText()})
             
             if(self.view.sl_score[i].value()==0):
                 score = 0
@@ -608,18 +779,18 @@ class AlphaController:
             url="http://alpha.tl/match/"
         webbrowser.open(url)
     
-    def runAutoUpdate(self):
-        if(not self.autoUpdateThread.isRunning()):
-            self.autoUpdateThread.start()
+    def runSC2ApiThread(self,task):
+        if(not self.SC2ApiThread.isRunning()):
+            self.SC2ApiThread.startTask(task)
         else:
-            self.autoUpdateThread.cancelTerminationRequest()
+            self.SC2ApiThread.cancelTerminationRequest(task)
           
        
-    def stopAutoUpdate(self):   
-        self.autoUpdateThread.requestTermination()
+    def stopSC2ApiThread(self,task):   
+        self.SC2ApiThread.requestTermination(task)
         
     def cleanUp(self):
-        self.stopAutoUpdate()
+        self.SC2ApiThread.requestTermination("ALL")
         
     def requestScoreUpdate(self,newSC2MatchData):
         
@@ -628,28 +799,56 @@ class AlphaController:
         self.updateData()
         newscore = 0
         for i in range(5):
-            found, newscore = newSC2MatchData.compare(self.matchData.jsonData['lineup1'][i]['nickname'],self.matchData.jsonData['lineup2'][i]['nickname'])
+            found, newscore = newSC2MatchData.compare_returnScore(self.matchData.jsonData['lineup1'][i]['nickname'],\
+                                                                  self.matchData.jsonData['lineup2'][i]['nickname'])
             if(found and newscore != 0):
                 if(self.view.setScore(i,newscore)):
                     break
                 else:
                     continue
-                           
+                    
+    def requestToggleScore(self,newSC2MatchData):
+        
+        self.updateData()
+        newscore = 0
+        for i in range(5):
+            found, order = newSC2MatchData.compare_returnOrder(self.matchData.jsonData['lineup1'][i]['nickname'],\
+                                                               self.matchData.jsonData['lineup2'][i]['nickname'])
+            if(found):
+                try:
+                    score = [0, 0]
+                    for winner in self.matchData.jsonData['games']:
+                        if(winner!=0):
+                            score[winner-1] += 1
+                    
+                except:
+                    score = [0, 0]
+                
+                if(order):
+                    ToggleScore(score[0],score[1])  
+                else:
+                    ToggleScore(score[1],score[0])
+                
+                break    
+               
                 
         
 class SC2MatchData:
     
-    def __init__(self, GAMEresponse = False):
+    def __init__(self, GAMEresponse = False, UIresponse = False):
         try:
             self.player1 = GAMEresponse["players"][0]["name"]
             self.player2 = GAMEresponse["players"][1]["name"]
             self.race1   = self.getRace(GAMEresponse["players"][0]["race"])
             self.race2   = self.getRace(GAMEresponse["players"][1]["race"])
-            self.length  = GAMEresponse["displayTime"]
+            self.time  = GAMEresponse["displayTime"]
+            self.ingame = UIresponse["activeScreens"] == []
             if(GAMEresponse["players"][0]["result"]=="Victory"):
                 self.result = -1
-            elif(GAMEresponse["players"][0]["result"]=="Defeat")    :
+            elif(GAMEresponse["players"][0]["result"]=="Defeat"):
                 self.result = 1
+            elif(GAMEresponse["players"][0]["result"]=="Undecided"):
+                self.result = 99
             else:
                 self.result = 0
         except:
@@ -658,9 +857,10 @@ class SC2MatchData:
             self.race1   = ""
             self.race2   = ""
             self.result  = 0
-            self.length  = 0
+            self.time  = 0
+            self.ingame = False
             
-    def compare(self, player1, player2):
+    def compare_returnScore(self, player1, player2):
 
         if(self.player1.upper()==player1.upper() and self.player2.upper()==player2.upper()):
             return True, self.result
@@ -669,54 +869,86 @@ class SC2MatchData:
         else:
             return False, 0
             
+    def compare_returnOrder(self, player1, player2):
+
+        if(self.player1.upper()==player1.upper() and self.player2.upper()==player2.upper()):
+            return True, True
+        elif(self.player1.upper()==player2.upper() and self.player2.upper()==player1.upper()):
+            return True, False
+        else:
+            return False, False
+            
     def getRace(self,str):
         for idx, race in enumerate(races):
             if(str[0].upper()==race[0].upper()):
                 return races[idx]
         return ""
             
-    def isValid(self):
-        return (self.result!=0 and self.length > 60)    
+    def isDecidedGame(self):
+        return (self.result!=0 and self.time > 60)  
+        
+    def isLive(self):
+        return (self.ingame and self.result==99 and self.time < 30)      
         
     def __str__(self):
         return str(self.__dict__)
 
     def __eq__(self, other): 
-        return self.__dict__ == other.__dict__
+        return (self.player1 == other.player1 and self.player2 == other.player2\
+                and self.race1 == other.race1 and self.race2 == other.race2\
+                and self.result == other.result and self.ingame == other.ingame)
+
 
         
-class AutoUpdateThread(QThread):
+class SC2ApiThread(QThread):
    
     def __init__(self, controller, parent = None):
         QThread.__init__(self, parent)
         self.exiting = False
+        self.activeTask = {}
+        self.activeTask['updateScore'] = False
+        self.activeTask['toggleScore'] = False
+        self.activeTask['toggleProduction'] = False
         self.currentData = SC2MatchData()
         self.controller = controller
+        self.currentÍngameStatus = False
+        
+    def startTask(self,task):
+        self.activeTask[task] = True
+        self.start() 
       
-    def requestTermination(self):
-        self.exiting = True
-        print('Requesting termination')  
+    def requestTermination(self,task):
+        if(task == 'ALL'):
+            for task in self.activeTask:
+                self.activeTask[task] = False
+        else:
+            self.activeTask[task] = False
+            print('Requesting termination fo task "'+task+'"')
+            
+        if(not any(self.activeTask.values())):
+            self.exiting = True
+            print('Requesting termination of thread')  
    
-    def cancelTerminationRequest(self):
+    def cancelTerminationRequest(self,task):
+        self.activeTask[task] = True
         self.exiting = False
-        print('Termination request cancelled')  
+        print('Termination request fo task "'+task+'" cancelled')  
       
     def run(self):
         print("Start")
         self.exiting=False
       
         GAMEurl = "http://localhost:6119/game"
-        #UIurl = "http://localhost:6119/ui"
+        UIurl = "http://localhost:6119/ui"
       
         while self.exiting==False:
             #See: https://us.battle.net/forums/en/sc2/topic/20748195420
             try:
                 GAMEresponse = requests.get(GAMEurl, timeout=100).json()
-                #UIresponse = requests.get(UIurl, timeout=100).json()
-                if(len(GAMEresponse["players"]) == 2): #activate script if 2 players are playing right now & not in replay
-                    self.updateScore(SC2MatchData(GAMEresponse))
-                    
-                
+                UIresponse = requests.get(UIurl, timeout=100).json()
+                if(len(GAMEresponse["players"]) == 2): #activate script if 2 players are playing right now 
+                    self.parseMatchData(SC2MatchData(GAMEresponse,UIresponse))
+
             except requests.exceptions.ConnectionError: #handle exception when starcraft is detected as not running
                 print("StarCraft 2 not running!")
                 time.sleep(5)
@@ -728,13 +960,35 @@ class AutoUpdateThread(QThread):
       
         print('terminated')
         
-    def updateScore(self,newData):
-        if(self.exiting==False and newData!=self.currentData):
-            self.currentData = newData
+    def parseMatchData(self,newData):
+        if(self.exiting==False and (newData!=self.currentData or newData.time < self.currentData.time)):
             print("New data:")
             print(str(newData))
-            if(newData.isValid()):
+            if(self.activeTask['updateScore'] and newData.isDecidedGame()):
                 self.controller.requestScoreUpdate(newData)
+                   
+            if(newData.isLive() and (self.activeTask['toggleScore'] or self.activeTask['toggleProduction'])):
+                self.tryToggle(newData)
+                
+            self.currentData = newData    
+    
+    def tryToggle(self,data):
+        try:
+            while self.exiting==False and (self.activeTask['toggleScore'] or self.activeTask['toggleProduction']):
+                if(isSC2onForeground()):
+                    if(self.activeTask['toggleScore']):
+                        self.controller.requestToggleScore(data)
+                    if(self.activeTask['toggleProduction']):
+                        ToggleProduction()
+                    break
+                else:
+                    print("SC2 not on foreground... waiting.")
+                    time.sleep(4)
+        except:
+            print("Toggle not working on this OS")
+
+def isSC2onForeground():
+    return GetWindowText(GetForegroundWindow())=="StarCraft II"
          
 def main():
     

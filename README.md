@@ -4,13 +4,13 @@ Alpha SC2 Teamleague: http://alpha.tl/
 
 ## General Information
 
-AlphaSC2-Tool is a Python 3.6 script that can load all relevant data from an Alpha SC2 Teamleague match and convert it such that the information can be readily included for streaming, e.g., in OBS-Studio. Moreover, the tool generates corresponding map icons for presentation on your stream, including the map, the players, their races and the score (if played). Additionally, the title of your Twitch stream can be updated accordingly by a single click. If you like, the tool can automatically dectect and update the score by monitoring your SC2-Client.
+AlphaSC2-Tool is a Python 3.6 script that can load all relevant data from an Alpha SC2 Teamleague match and convert it such that the information can be readily included for streaming, e.g., in OBS-Studio. Moreover, the tool generates corresponding map icons for presentation on your stream, including the map, the players, their races and the score (if played). Additionally, the title of your Twitch stream can be updated accordingly by a single click. If you like, the tool can automatically dectect the score by monitoring your SC2-Client. On Windows the tool can automatically set the score of in your SC2-Observer UI and toggle the production tab at the start of the game.
 
-This tool should run on any operating system that supports Python, e.g., Windows, MacOS, and Linux.
+This tool should run on any operating system that supports Python, e.g., Windows, MacOS, and Linux. Yet, the interaction with the SC2-Observer-UI is currently only supported on Windows.  
 
 ## Installation
 
-[Download](https://github.com/teampheenix/AlphaSC2Tool/archive/master.zip) and exctract this tool, download the latest version of Python 3.6 at https://www.python.org/downloads. This tool requires the additional Python Packages *PyQt5*, *requests*, and *configparser*. To install these packages run the script `installPackages.py` once or do it manually. Run `AlphaSC2Tool.pyw` to start the AlphaSC2-Tool.
+[Download](https://github.com/teampheenix/AlphaSC2Tool/archive/master.zip) and exctract this tool, download the latest version of Python 3.6 at https://www.python.org/downloads. This tool requires the additional Python Packages *PyQt5*, *requests*, *configparser*, and on Windows additonally *win32gui* and *ctypes*. To install these packages run the script `installPackages.py` once or do it manually. Run `AlphaSC2Tool.pyw` to start the AlphaSC2-Tool.
 
 ## Instructions for Use
 
