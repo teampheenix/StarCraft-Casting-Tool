@@ -14,7 +14,7 @@ from PyQt5.QtGui import *
 
 system = platform.system()
 
-version='v0.6.3'
+version='v0.6.4'
 configFile = "config.ini"
 jsonFile   = "data.json"
 OBSdataDir = "OBS_data"
@@ -39,9 +39,15 @@ lose_border_color      = Config.get("MapIcons", "lose_border_color")
 notplayed_border_color = Config.get("MapIcons", "notplayed_border_color")
 notplayed_opacity      = Config.get("MapIcons", "notplayed_opacity")
 
+CB_ScoreUpdate = Config.getboolean("Form","ScoreUpdate")
+CB_ToggleScore = Config.getboolean("Form","ToggleScore")
+CB_ToggleProd  = Config.getboolean("Form","ToggleProd")
+
+
 myteam =  Config.get("AlphaSC2","myteam")
 
 races = ("Random","Protoss","Zerg","Terran")
+
 
 if(system=="Windows"):
     import ctypes
@@ -675,6 +681,7 @@ class AlphaController:
             self.updateForms()
             self.view.trigger = True
             self.view.le_url.selectAll()
+            self.setCBs()
         except:
             pass
 
@@ -764,6 +771,16 @@ class AlphaController:
           
         return msg
         
+    def setCBs(self):
+        if(CB_ScoreUpdate):
+            self.view.cb_autoUpdate.setChecked(True)
+            
+        if(CB_ToggleScore):
+            self.view.cb_autoToggleScore.setChecked(True)
+            
+        if(CB_ToggleProd):
+            self.view.cb_autoToggleProduction.setChecked(True)
+
     def updateOBS(self):
         self.updateData()
         self.matchData.createOBStxtFiles()
@@ -808,7 +825,17 @@ class AlphaController:
         
     def cleanUp(self):
         self.SC2ApiThread.requestTermination("ALL")
+        self.saveConfig()
+
+    def saveConfig(self):
+        Config.set("Form","scoreupdate",str(self.view.cb_autoUpdate.isChecked()))
+        Config.set("Form","togglescore",str(self.view.cb_autoToggleScore.isChecked()))
+        Config.set("Form","toggleprod",str(self.view.cb_autoToggleProduction.isChecked()))
         
+        cfgfile = open(configFile,'w')
+        Config.write(cfgfile)    
+        cfgfile.close()
+   
     def requestScoreUpdate(self,newSC2MatchData):
         
         print("Trying to update the score")
