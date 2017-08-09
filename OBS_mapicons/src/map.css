@@ -1,3 +1,11 @@
+@font-face {
+font-family: 'Orbitron';
+    src:	url('./Orbitron-Regular.ttf') format('truetype');
+font-weight: normal;
+font-style: normal;
+}
+
+
 .image { 
    position: relative; 
    width: 265px; height: 250px; /* for IE 6 */
