@@ -14,7 +14,7 @@ from PyQt5.QtGui import *
 
 system = platform.system()
 
-version='v0.6.4'
+version='v0.6.5'
 configFile = "config.ini"
 jsonFile   = "data.json"
 OBSdataDir = "OBS_data"
@@ -431,13 +431,13 @@ class mainWindow(QMainWindow):
         self.trigger = True
          
         self.createFormGroupBox()
-        self.createFormGroupBox2()
+        self.createFromMatchDataBox()
         self.createHorizontalGroupBox()
         self.createSC2APIGroupBox()
 
         mainLayout = QVBoxLayout()
         mainLayout.addWidget(self.formGroupBox,2)
-        mainLayout.addWidget(self.formGroupBox2,7)
+        mainLayout.addWidget(self.fromMatchDataBox,7)
         mainLayout.addWidget(self.SC2APIGroupBox,1)
         mainLayout.addWidget(self.horizontalGroupBox,1)
 
@@ -448,7 +448,7 @@ class mainWindow(QMainWindow):
         self.setCentralWidget(self.window)
         
         self.statusBar()
-        self.setGeometry(600, 300, 550, 500)
+        self.setGeometry(600, 300, 650, 500)
         self.controller = controller
         self.controller.setView(self)
         self.show()
@@ -485,20 +485,27 @@ class mainWindow(QMainWindow):
         self.formGroupBox.setLayout(layout)
         
         
-    def createFormGroupBox2(self):
+    def createFromMatchDataBox(self):
        
-        self.formGroupBox2 = QGroupBox("Match Data")
+        self.fromMatchDataBox = QGroupBox("Match Data")
         layout2 = QFormLayout()
         
         self.le_league  = QLineEdit()
         self.le_league.setText("League TBD")
         self.le_league.setAlignment(Qt.AlignCenter)
-        layout2.addRow(self.le_league)
+        
+        container = QHBoxLayout()
+        label = QLabel("League:")
+        label.setAlignment(Qt.AlignCenter)
+        container.addWidget(label,3)
+        container.addWidget(self.le_league,13)
+        layout2.addRow(container)
         
         self.le_team = [QLineEdit() for y in range(2)]
         self.le_player = [[QLineEdit() for x in range(5)] for y in range(2)] 
         self.cb_race   = [[QComboBox() for x in range(5)] for y in range(2)] 
         self.sl_score  = [QSlider(Qt.Horizontal)  for y in range(5)]  
+        self.le_map    = [QLineEdit()  for y in range(5)]  
          
         container = QHBoxLayout()
         for team_idx in range(2):
@@ -516,7 +523,10 @@ class mainWindow(QMainWindow):
         self.sl_team.setTickPosition( QSlider.TicksBothSides)
         self.sl_team.setTickInterval(1)
         self.sl_team.valueChanged.connect(self.sl_changed)
-           
+          
+        label = QLabel("Maps \ Teams:")
+        label.setAlignment(Qt.AlignCenter)
+        container.addWidget(label,3)
         container.addWidget(self.le_team[0],6)    
         container.addWidget(self.sl_team,1)
         container.addWidget(self.le_team[1],6) 
@@ -537,8 +547,13 @@ class mainWindow(QMainWindow):
            self.sl_score[player_idx].setTickPosition( QSlider.TicksBothSides)
            self.sl_score[player_idx].setTickInterval(1)
            self.sl_score[player_idx].valueChanged.connect(self.sl_changed)
+           
+           self.le_map[player_idx].setText("TBD")
+           self.le_map[player_idx].setAlignment(Qt.AlignCenter)
+           #self.le_map[player_idx].setReadOnly(True)
             
            container = QHBoxLayout()
+           container.addWidget(self.le_map[player_idx],3)
            container.addWidget(self.cb_race[0][player_idx],2)
            container.addWidget(self.le_player[0][player_idx],4)
            container.addWidget(self.sl_score[player_idx],1)
@@ -547,7 +562,7 @@ class mainWindow(QMainWindow):
            layout2.addRow(container)
            
         
-        self.formGroupBox2.setLayout(layout2)
+        self.fromMatchDataBox.setLayout(layout2)
         
     def createHorizontalGroupBox(self):
         self.horizontalGroupBox = QGroupBox("Tasks")
@@ -709,6 +724,11 @@ class AlphaController:
                     self.view.cb_race[j][i].setCurrentIndex(0)
             
             try:
+                self.view.le_map[i].setText(self.matchData.jsonData['maps'][i])
+            except:
+                self.view.le_map[i].setText("TBD")
+            
+            try:
                 value = int(self.matchData.jsonData['games'][i])
                 if(value == 0):
                     value = 0
@@ -744,11 +764,13 @@ class AlphaController:
                     self.matchData.jsonData['lineup'+str(j+1)].insert(i,\
                         {'nickname': self.view.le_player[j][i].text(),'race': self.view.cb_race[j][i].currentText()})
             
+            self.matchData.jsonData['maps'][i] = self.view.le_map[i].text()
+
             if(self.view.sl_score[i].value()==0):
                 score = 0
             else:
                 score = int((self.view.sl_score[i].value()+3)/2)
-            
+        
             try:
                 self.matchData.jsonData['games'][i] = score
             except:
