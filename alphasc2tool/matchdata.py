@@ -60,6 +60,20 @@ class AlphaMatchData:
         else:
             self.jsonData['myteam']=0
             
+        self.renameMaps()    
+            
+            
+    def renameMaps(self):
+        
+        renaming = {}
+        renaming['MechDepot'] = 'Mech Depot';
+        
+        for idx, map in enumerate(self.jsonData['maps']):
+            if(map in renaming.keys()):
+                self.jsonData['maps'][idx] = renaming[map]
+            
+
+            
     def downloadMatchBanner(self, id=-1):
         
         self.getID(id)
