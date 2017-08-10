@@ -1,6 +1,8 @@
 # AlphaSC2Tool
 
-Alpha SC2 Teamleague: http://alpha.tl/
+[Alpha SC2 Teamleague](http://alpha.tl/)
+
+![alphasc2tool-preview2](https://user-images.githubusercontent.com/26044736/29190439-7155c4ca-7e1a-11e7-9282-58e1fdc6e9fb.png)
 
 ## General Information
 
