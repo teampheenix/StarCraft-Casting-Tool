@@ -1,6 +1,6 @@
 # AlphaSC2Tool
 
-![alphasc2tool-preview2](https://user-images.githubusercontent.com/26044736/29190439-7155c4ca-7e1a-11e7-9282-58e1fdc6e9fb.png)
+![alphasc2tool-preview2](https://user-images.githubusercontent.com/26044736/29190579-f7bcb05a-7e1a-11e7-9c6e-988360dcff31.png)
 
 
 ![alphasc2tool-preview1](https://user-images.githubusercontent.com/26044736/29190435-6e477b52-7e1a-11e7-99d7-360848473899.png)
