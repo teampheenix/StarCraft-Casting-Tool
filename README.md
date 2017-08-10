@@ -7,7 +7,7 @@
 
 ## General Information
 
-AlphaSC2-Tool is a Python 3.6 script that can load all relevant data from an [Alpha SC2 Teamleague](http://alpha.tl/) match and convert it such that the information can be readily included for streaming, e.g., in OBS-Studio. Moreover, the tool generates corresponding map icons for presentation on your stream, including the map, the players, their races and the score (if played). Additionally, the title of your Twitch stream can be updated accordingly by a single click. If you like, the tool can automatically dectect the score by monitoring your SC2-Client. On Windows the tool can automatically set the score of in your SC2-Observer UI and toggle the production tab at the start of the game.
+AlphaSC2-Tool is a Python 3.6 script that can load all relevant data from an [Alpha SC2 Teamleague](http://alpha.tl/) match and convert it such that the information can be readily included for streaming, e.g., in OBS-Studio. Moreover, the tool generates corresponding map icons for presentation on your stream, including the map, the players, their races, and the score (if played). Additionally, the title of your Twitch stream can be updated accordingly by a single click. If you wish, the tool can automatically dectect the score by monitoring your SC2-Client. On Windows the tool can automatically set the score of in your SC2-Observer UI and toggle the production tab at the start of the game.
 
 This tool should run on any operating system that supports Python, e.g., Windows, MacOS, and Linux. Yet, the interaction with the SC2-Observer-UI is currently only supported on Windows.  
 
