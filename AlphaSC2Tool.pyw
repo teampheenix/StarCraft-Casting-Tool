@@ -38,4 +38,5 @@ try:
         main()
         
 except Exception as e:
-    logger.exception("message")       
+    logger.exception("message")
+    raise       

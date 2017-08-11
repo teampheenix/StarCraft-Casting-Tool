@@ -1,10 +1,15 @@
 #!/usr/bin/python
-import configparser
-import os
 import logging
 
 # create logger
 module_logger = logging.getLogger('alphasc2tool.settings')
+
+try:
+    import configparser
+    import os
+except Exception as e:
+    module_logger.exception("message") 
+    raise  
 
 try:
     version    = 'v0.7.1'
@@ -58,3 +63,4 @@ try:
 
 except Exception as e:
     module_logger.exception("message") 
+    raise

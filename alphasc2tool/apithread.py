@@ -1,16 +1,22 @@
 #!/usr/bin/env python
-from PyQt5.QtCore import *
-import platform
-import requests
-import time
-import json
-from difflib import SequenceMatcher
-import alphasc2tool.settings
 import logging
 
 # create logger
 module_logger = logging.getLogger('alphasc2tool.apithread')
 
+try:
+    from PyQt5.QtCore import *
+    import platform
+    import requests
+    import timeas
+    import json
+    from difflib import SequenceMatcher
+    import alphasc2tool.settings
+
+except Exception as e:
+    module_logger.exception("message") 
+    raise  
+    
 if(platform.system()=="Windows"):
     try:
         import ctypes

@@ -1,16 +1,22 @@
 #!/usr/bin/env python
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtQml import *
-
-import alphasc2tool.settings
-import platform
 import logging
 
 # create logger
 module_logger = logging.getLogger('alphasc2tool.view')
 
+try:
+    import platform
+    from PyQt5.QtWidgets import *
+    from PyQt5.QtCore import *
+    from PyQt5.QtGui import *
+    from PyQt5.QtQml import *
+
+    import alphasc2tool.settings
+
+except Exception as e:
+    module_logger.exception("message") 
+    raise  
+    
 class mainWindow(QMainWindow):
     def __init__(self,controller):
         try:

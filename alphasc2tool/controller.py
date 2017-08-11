@@ -1,13 +1,18 @@
 #!/usr/bin/env python
-from alphasc2tool.matchdata import *
-from alphasc2tool.apithread import *
-import alphasc2tool.settings
-import alphasc2tool.twitch
-import webbrowser
 import logging
 
 # create logger
 module_logger = logging.getLogger('alphasc2tool.controller')
+
+try:
+    from alphasc2tool.matchdata import *
+    from alphasc2tool.apithread import *
+    import alphasc2tool.settings
+    import alphasc2tool.twitch
+    import webbrowser
+except Exception as e:
+    module_logger.exception("message") 
+    raise  
 
 class AlphaController:
     

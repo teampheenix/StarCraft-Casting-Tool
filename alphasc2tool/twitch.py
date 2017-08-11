@@ -1,10 +1,16 @@
 #!/usr/bin/env python
-import requests
-import alphasc2tool.settings
 import logging
 
 # create logger
 module_logger = logging.getLogger('alphasc2tool.twitch')
+
+try:
+   import requests
+   import alphasc2tool.settings
+except Exception as e:
+    module_logger.exception("message") 
+    raise  
+
 
 def updateTitle(newTitle):
     

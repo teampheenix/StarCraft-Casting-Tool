@@ -1,12 +1,17 @@
 #!/usr/bin/env python
-import urllib.request
-import requests
-import alphasc2tool.settings
-import json
 import logging
 
 # create logger
 module_logger = logging.getLogger('alphasc2tool.matchdata')
+
+try:
+    import urllib.request
+    import requests
+    import alphasc2tool.settings
+    import json
+except Exception as e:
+    module_logger.exception("message") 
+    raise  
 
 
 class AlphaMatchData:
