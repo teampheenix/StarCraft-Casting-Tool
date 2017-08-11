@@ -2,3 +2,5 @@ OBS_data/
 alphasc2tool/__pycache__/
 OBS_mapicons/data/
 src/data.json
+src/installpackages.log
+src/alphasc2tool.log

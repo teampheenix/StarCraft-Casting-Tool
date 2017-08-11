@@ -2,13 +2,35 @@
 import pip
 import sys
 import platform
+import logging
 
 system = platform.system()
 
-pip.main(['install', 'PyQt5'])
-pip.main(['install', 'requests'])
-pip.main(['install', 'configparser'])
 
+# create logger with 'spam_application'
+logger = logging.getLogger('installpackages')
+logger.setLevel(logging.DEBUG)
+# create file handler which logs even debug messages
+fh = logging.FileHandler('src/installpackages.log', 'w')
+# create console handler with a higher log level
+ch = logging.StreamHandler()
+# create formatter and add it to the handlers
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+fh.setFormatter(formatter)
+ch.setFormatter(formatter)
+# add the handlers to the logger
+logger.addHandler(fh)
+logger.addHandler(ch)
 
-if(system=="Windows"):
-    pip.main(['install', 'pypiwin32'])
+logger.info("system: "+system)
+ 
+try:
+    pip.main(['install', 'PyQt5'])
+    pip.main(['install', 'requests'])
+    pip.main(['install', 'configparseras'])
+
+    if(system=="Windows"):
+        pip.main(['install', 'pypiwin32'])
+
+except Exception as e:
+    logger.exception("message")
