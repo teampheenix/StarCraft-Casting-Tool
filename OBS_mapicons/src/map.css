@@ -32,7 +32,7 @@ div.data {
 
 .mapname{
    background: rgb(0, 0, 0); /* fallback color */	
-   background: rgba(0, 0, 0, 0.5)!important; 
+   background: rgba(0, 0, 0, 0.6)!important; 
    height:25px;
    width: 265px!important; 
    top: 0px!important;  
@@ -47,14 +47,14 @@ div.data {
 .player1{
    font-size: 30px!important;
    top: 40px;
-   left: 10px; 
+   left: 5px; 
    text-align: left;
 }
 
 .player2{
    font-size: 30px!important;
    top: 170px;
-   right: 10px; 
+   right: 5px; 
    text-align: right;
 }
 
@@ -89,7 +89,7 @@ div.number{
    font: bold 24px Orbitron, Helvetica, Sans-Serif; 
    letter-spacing: 0px;  
    background: rgb(0, 0, 0); /* fallback color */
-   background: rgba(0, 0, 0, 0.5)!important; 
+   background: rgba(0, 0, 0, 0.6)!important; 
    position: absolute; 
    width: 140px; height:30px;
    border-top-left-radius: 20px;
@@ -102,14 +102,14 @@ div.number{
 
 #firstrace {
    position: absolute; 
-   top: 90px; 
+   top: 85px; 
    left: 0px; 
    height: 95px; 
 }
 
 #secondrace {
    position: absolute; 
-   top: 75px; 
+   top: 85px; 
    right: 0px; 
    height: 95px; 
 }

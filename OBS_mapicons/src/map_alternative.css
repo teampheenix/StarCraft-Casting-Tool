@@ -47,14 +47,14 @@ div.data {
 .player1{
    font-size: 30px!important;
    top: 40px;
-   left: 10px; 
+   left: 5px; 
    text-align: left;
 }
 
 .player2{
    font-size: 30px!important;
    top: 170px;
-   right: 10px; 
+   right: 5px; 
    text-align: right;
 }
 
@@ -102,14 +102,14 @@ div.number{
 
 #firstrace {
    position: absolute; 
-   top: 90px; 
+   top: 85px; 
    left: 0px; 
    height: 95px; 
 }
 
 #secondrace {
    position: absolute; 
-   top: 75px; 
+   top: 85px; 
    right: 0px; 
    height: 95px; 
 }
