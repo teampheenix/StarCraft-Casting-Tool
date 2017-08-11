@@ -4,8 +4,9 @@ import platform
 import requests
 import time
 import json
+from difflib import SequenceMatcher
 import alphasc2tool.settings
-from fuzzywuzzy import fuzz
+
 
 if(platform.system()=="Windows"):
     import ctypes
@@ -325,8 +326,8 @@ class SC2MatchData:
 def compareStr(str1,str2):
     fuzzymatch = alphasc2tool.settings.fuzzymatch
     if(fuzzymatch):
-        threshold = 75
-        return fuzz.partial_ratio(str1, str2) >= threshold
+        threshold = 0.75
+        return SequenceMatcher(None, str1.upper(), str2.upper()).ratio() >= threshold
     else:
         return str1 == str2 
     

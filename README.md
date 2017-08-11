@@ -13,7 +13,7 @@ This tool should run on any operating system that supports Python, e.g., Windows
 
 ## Installation
 
-[Download](https://github.com/teampheenix/AlphaSC2Tool/archive/master.zip) and exctract AlphaSC2Tool, download the latest version of Python 3.6 at https://www.python.org/downloads. This tool requires the additional Python Packages *PyQt5*, *requests*, *configparser*, *fuzzywuzzy* and on Windows additonally *pypiwin32*. To install these packages execute the script `installPackages.py` once or do it manually. Execute `AlphaSC2Tool.pyw` to start the AlphaSC2-Tool.
+[Download](https://github.com/teampheenix/AlphaSC2Tool/archive/master.zip) and exctract AlphaSC2Tool, download the latest version of Python 3.6 at https://www.python.org/downloads. This tool requires the additional Python Packages *PyQt5*, *requests*, *configparser*, and on Windows additonally *pypiwin32*. To install these packages execute the script `installPackages.py` once or do it manually. Execute `AlphaSC2Tool.pyw` to start the AlphaSC2-Tool.
 
 ## Instructions for Use
 
