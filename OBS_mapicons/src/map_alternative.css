@@ -32,7 +32,7 @@ div.data {
 
 .mapname{
    background: rgb(0, 0, 0); /* fallback color */	
-   background: rgba(0, 0, 0, 0.5)!important; 
+   background: rgba(0, 0, 0, 0.6)!important; 
    height:25px;
    width: 265px!important; 
    top: 0px!important;  
@@ -89,7 +89,7 @@ div.number{
    font: bold 24px Orbitron, Helvetica, Sans-Serif; 
    letter-spacing: 0px;  
    background: rgb(0, 0, 0); /* fallback color */
-   background: rgba(0, 0, 0, 0.5)!important; 
+   background: rgba(0, 0, 0, 0.6)!important; 
    position: absolute; 
    width: 140px; height:30px;
    border-top-left-radius: 20px;
