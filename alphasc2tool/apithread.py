@@ -8,7 +8,7 @@ try:
     from PyQt5.QtCore import *
     import platform
     import requests
-    import timeas
+    import time
     import json
     from difflib import SequenceMatcher
     import alphasc2tool.settings
