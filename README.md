@@ -18,7 +18,7 @@ This tool should run on any operating system that supports Python, e.g., Windows
 
 Execute `StarCraftCastingTool.pyw` to start the SCC-Tool. Enter the Match-URL of an Alpha SC2 Teamleague match, e.g., "http://alpha.tl/match/2392". Press *Load Data from URL* and edit the data if necessary. The sliders control the score of each map. Press "Update OBS Data" or alter the score to update the data for streaming, which can be found in the directory `OBS_data`. If you want to include the team logos and the matchbanner it is recommended to include them as browser source *(Banner: 1200x740px, Logos: 300x300px)* via the html files given in the directory `OBS_html`. The map icons can be found in the directory `OBS_mapicons` and may be included in your stream as browser source *(280x270px)*.
 
-To update your Twitch title via click on *Update Twitch Title* you have to set your *channel*, *clientid*, and *oauth* in the `config.ini` file that can be edited with any text editor. For instructions how to obtain these, see **Twitch Integration** below. The template for the title can be customized in config file `config.ini`.
+To update your Twitch title via click on *Update Twitch Title* you have to set your *channel*, *clientid*, and *oauth* in the `config.ini` file that can be edited with any text editor. For instructions how to obtain these, see **Twitch Integration** below. The template for the title can be customized in config file `config.ini`. You have to run SCC-Tool once to generate the `config.ini` file.
 
 The top slider is to select *your* team. Once selected the border of the map icons turn green or red depending on your result. To select your team my default you can set the parameter *myteam* in `config.ini`.
 
