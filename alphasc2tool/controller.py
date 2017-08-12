@@ -72,7 +72,6 @@ class AlphaController:
                 self.view.le_map[i].show()    
                 self.view.sl_score[i].show()
                     
-
         except Exception as e:
             module_logger.exception("message")  
             raise  
@@ -92,7 +91,7 @@ class AlphaController:
                 
                 self.matchData.setMap(i,self.view.le_map[i].text())
                 self.matchData.setMapScore(i,self.view.sl_score[i].value(),True)
-            
+                
         except Exception as e:
             module_logger.exception("message")    
                     
@@ -295,7 +294,10 @@ class AlphaController:
                     else:
                         ToggleScore(score[1],score[0],self.matchData.getBestOf())
                     
-                    break    
+                    return    
+                    
+            ToggleScore(0,0,self.matchData.getBestOf())
+            
         except Exception as e:
             module_logger.exception("message")    
                

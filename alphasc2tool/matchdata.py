@@ -199,7 +199,7 @@ class matchData:
                 return best_of
             else: #even
                 score = self.getScore()
-                if(min(score) < best_of/2):
+                if(min(score) < best_of/2-1):
                     return best_of - 1
                 else:
                     return best_of + 1      
