@@ -12,7 +12,7 @@ except Exception as e:
     raise  
 
 try:
-    version    = 'v0.8.2'
+    version    = 'v0.8.3'
     configFile = "config.ini"
     jsonFile   = "src/data.json"
     OBSdataDir = "OBS_data"
@@ -41,9 +41,42 @@ try:
     
     #Reading the configuration from file
     Config = configparser.ConfigParser()
-    Config.read(configFile)
+    try:
+        Config.read(configFile)
+    except:
+        Config.defaults()
+        
+    #Setting default values for config file
     
+    def setDefaultConfig(sec,opt,value):
+        if(not Config.has_section(sec)):
+            Config.add_section(sec)
+        if(not Config.has_option(sec,opt)):
+            Config.set(sec,opt,value)
     
+    setDefaultConfig("Twitch","channel","")
+    setDefaultConfig("Twitch","clientid","")
+    setDefaultConfig("Twitch","oauth","")
+    setDefaultConfig("Twitch","title_template","")
+    
+    setDefaultConfig("NightBot","token","")
+    setDefaultConfig("NightBot","command","!matchlink")
+    
+    setDefaultConfig("SCT","myteam","MiXed Minds")
+    setDefaultConfig("SCT","fuzzymatch","True")
+    
+    setDefaultConfig("Form","scoreupdate","False")
+    setDefaultConfig("Form","togglescore","False")
+    setDefaultConfig("Form","toggleprod", "False")
+
+    setDefaultConfig("MapIcons","win_font_color","#f29b00")
+    setDefaultConfig("MapIcons","default_border_color","#f29b00")
+    setDefaultConfig("MapIcons","win_border_color","#008000")
+    setDefaultConfig("MapIcons","lose_border_color","#f22200")
+    setDefaultConfig("MapIcons","notplayed_border_color","#c0c0c0")
+    setDefaultConfig("MapIcons","notplayed_opacity","0.4")
+    
+
     def nightbotIsValid():
         return (len(Config.get("NightBot", "token"))>0 and len(Config.get("NightBot", "command"))>0)
     

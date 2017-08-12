@@ -4,3 +4,4 @@ OBS_mapicons/data/
 src/data.json
 src/installpackages.log
 src/scctool.log
+config.ini
