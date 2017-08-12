@@ -1,8 +1,0 @@
-2017-08-12 19:25:29,847 - alphasc2tool.matchdata - ERROR - message
-Traceback (most recent call last):
-  File "C:\Users\tasch\Documents\Code\GitHub\AlphaSC2Tool\alphasc2tool\matchdata.py", line 27, in readJsonFile
-    with open(alphasc2tool.settings.jsonFile) as json_file:
-FileNotFoundError: [Errno 2] No such file or directory: 'src/data.json'
-2017-08-12 19:25:29,886 - alphasc2tool - INFO - Starting...
-2017-08-12 19:25:44,790 - alphasc2tool.apithread - INFO - Requesting termination of thread
-2017-08-12 19:25:44,791 - alphasc2tool.webapp - INFO - cleanUp called
