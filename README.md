@@ -30,7 +30,7 @@ Some basic options for customization can be found in `config.ini`. For additiona
 
 ## Help & Contribution
 
-If you need help, have bugs to report or want to contribute to this project go to *#dev* channel of the Alpha SC2 Discord Server https://discordapp.com/invite/yRWNYr and/or message me on Discord: *pres.sure#5247*.
+If you need help, have bugs to report or want to contribute to this project go to *#dev* channel of the Alpha SC2 Discord Server https://discordapp.com/invite/yRWNYr and/or message me on Discord: *pres.sure#5247*. In the case of a bug report please provide the log-files `src/scctool.log` and `src/installpackages.log`.
 
 ## Support
 
