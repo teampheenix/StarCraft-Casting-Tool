@@ -87,7 +87,7 @@ class mainWindow(QMainWindow):
         
     def createFormGroupBox(self):
         try:
-            self.formGroupBox = QGroupBox("Match Grabber for Alpha.TL && RSTL")
+            self.formGroupBox = QGroupBox("Match Grabber for AlphaTL && RSTL")
             self.le_url =  QLineEdit()
             self.le_url.setAlignment(Qt.AlignCenter)
             
@@ -105,8 +105,8 @@ class mainWindow(QMainWindow):
             container = QHBoxLayout()
             label = QLabel("Match-URL:")
             label.setAlignment(Qt.AlignCenter)
-            container.addWidget(label,1)
-            container.addWidget(self.le_url,6)
+            container.addWidget(label,6)
+            container.addWidget(self.le_url,26)
             
             
             layout = QFormLayout()
@@ -115,11 +115,11 @@ class mainWindow(QMainWindow):
             container = QHBoxLayout()
             #self.pb_download = QPushButton("Download Images from URL")
             #container.addWidget(self.pb_download)
-            container.addWidget(QLabel(""),1)
+            container.addWidget(QLabel(""),6)
             self.pb_refresh = QPushButton("Load Data from URL")
             self.pb_refresh.clicked.connect(self.refresh_click)
-            container.addWidget(self.pb_openBrowser,3)
-            container.addWidget(self.pb_refresh,3)
+            container.addWidget(self.pb_openBrowser,13)
+            container.addWidget(self.pb_refresh,13)
 
             
             layout.addRow(container)
