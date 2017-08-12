@@ -2,7 +2,7 @@
 import logging
 
 # create logger
-module_logger = logging.getLogger('alphasc2tool.view')
+module_logger = logging.getLogger('scctool.view')
 
 try:
     import platform
@@ -11,7 +11,7 @@ try:
     from PyQt5.QtGui import *
     from PyQt5.QtQml import *
 
-    import alphasc2tool.settings
+    import scctool.settings
 
 except Exception as e:
     module_logger.exception("message") 
@@ -37,7 +37,7 @@ class mainWindow(QMainWindow):
             mainLayout.addWidget(self.SC2APIGroupBox,1)
             mainLayout.addWidget(self.horizontalGroupBox,1)
 
-            self.setWindowTitle("Starcraft Casting Tool " + alphasc2tool.settings.version)
+            self.setWindowTitle("StarCraft Casting Tool " + scctool.settings.version)
             
             self.window = QWidget()
             self.window.setLayout(mainLayout)
@@ -185,7 +185,7 @@ class mainWindow(QMainWindow):
                     self.le_player[team_idx][player_idx].setText("TBD")
                     self.le_player[team_idx][player_idx].setAlignment(Qt.AlignCenter)
                 
-                    for race in alphasc2tool.settings.races:
+                    for race in scctool.settings.races:
                         self.cb_race[team_idx][player_idx].addItem(race)
                     
                 self.sl_score[player_idx].setMinimum(-1)
@@ -198,7 +198,7 @@ class mainWindow(QMainWindow):
             
                 self.le_map[player_idx].setText("TBD")
                 self.le_map[player_idx].setAlignment(Qt.AlignCenter)
-                completer = QCompleter(alphasc2tool.settings.maps,self.le_map[player_idx])
+                completer = QCompleter(scctool.settings.maps,self.le_map[player_idx])
                 completer.setCaseSensitivity(Qt.CaseInsensitive)
                 completer.setCompletionMode(QCompleter.InlineCompletion)
                 completer.setWrapAround(True)
@@ -423,14 +423,14 @@ class subwindow(QWidget):
         layout = QFormLayout()
 
         self.twitchChannel = QLineEdit()
-        self.twitchChannel.setText(alphasc2tool.settings.Config.get("Twitch", "channel"))
+        self.twitchChannel.setText(scctool.settings.Config.get("Twitch", "channel"))
         self.twitchChannel.setAlignment(Qt.AlignCenter)
         layout.addRow(QLabel("Channel:"),self.twitchChannel)
         
         container = QHBoxLayout()
         
         self.twitchToken = QLineEdit()
-        self.twitchToken.setText(alphasc2tool.settings.Config.get("Twitch", "oauth"))
+        self.twitchToken.setText(scctool.settings.Config.get("Twitch", "oauth"))
         self.twitchToken.setAlignment(Qt.AlignCenter)
 
         container.addWidget(self.twitchToken);
@@ -441,7 +441,7 @@ class subwindow(QWidget):
         layout.addRow(QLabel("Access-Token:"),container)
         self.twitchTemplate = QLineEdit()
         
-        self.twitchTemplate.setText(alphasc2tool.settings.Config.get("Twitch", "title_template"))
+        self.twitchTemplate.setText(scctool.settings.Config.get("Twitch", "title_template"))
         self.twitchTemplate.setAlignment(Qt.AlignCenter)
         self.twitchTemplate.setToolTip('Placeholder: (TOUR), (TEAM1), (TEAM2)') 
         layout.addRow(QLabel("Title-Template:"), self.twitchTemplate)
@@ -454,11 +454,11 @@ class subwindow(QWidget):
         container = QHBoxLayout()
 
         self.nightbotToken = QLineEdit()
-        self.nightbotToken.setText(alphasc2tool.settings.Config.get("NightBot", "token"))
+        self.nightbotToken.setText(scctool.settings.Config.get("NightBot", "token"))
         self.nightbotToken.setAlignment(Qt.AlignCenter)
         
         self.nightbotCommand = QLineEdit()
-        self.nightbotCommand.setText(alphasc2tool.settings.Config.get("NightBot", "command"))
+        self.nightbotCommand.setText(scctool.settings.Config.get("NightBot", "command"))
         self.nightbotCommand.setAlignment(Qt.AlignCenter)
         
         container.addWidget(self.nightbotToken);
@@ -491,11 +491,11 @@ class subwindow(QWidget):
             module_logger.exception("message")
       
     def saveData(self):
-        alphasc2tool.settings.Config.set("Twitch", "channel", self.twitchChannel.text())
-        alphasc2tool.settings.Config.set("Twitch", "oauth", self.twitchToken.text())
-        alphasc2tool.settings.Config.set("Twitch", "title_template", self.twitchTemplate.text())
-        alphasc2tool.settings.Config.set("NightBot", "token", self.nightbotToken.text())
-        alphasc2tool.settings.Config.set("NightBot", "command", self.nightbotCommand.text())
+        scctool.settings.Config.set("Twitch", "channel", self.twitchChannel.text())
+        scctool.settings.Config.set("Twitch", "oauth", self.twitchToken.text())
+        scctool.settings.Config.set("Twitch", "title_template", self.twitchTemplate.text())
+        scctool.settings.Config.set("NightBot", "token", self.nightbotToken.text())
+        scctool.settings.Config.set("NightBot", "command", self.nightbotCommand.text())
         
         self.controller.refreshButtonStatus()
 
@@ -538,7 +538,7 @@ class MapLineEdit(QLineEdit):
     def __handleEditingFinished(self):
         before, after = self._before, self.text()
         if before != after:
-            after, known = alphasc2tool.matchdata.autoCorrectMap(after)
+            after, known = scctool.matchdata.autoCorrectMap(after)
             self.setText(after)
             self._before = after
             self.textModified.emit(before, after)

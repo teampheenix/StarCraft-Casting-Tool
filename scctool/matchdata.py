@@ -2,12 +2,12 @@
 import logging
 
 # create logger
-module_logger = logging.getLogger('alphasc2tool.matchdata')
+module_logger = logging.getLogger('scctool.matchdata')
 
 try:
     import urllib.request
     import requests
-    import alphasc2tool.settings
+    import scctool.settings
     import json
     import re
     import difflib
@@ -24,14 +24,14 @@ class matchData:
         
     def readJsonFile(self):
         try:
-            with open(alphasc2tool.settings.jsonFile) as json_file:  
+            with open(scctool.settings.jsonFile) as json_file:  
                 self.__data = json.load(json_file)
         except Exception as e:
             module_logger.exception("message") 
 
     def writeJsonFile(self):
         try:
-            with open(alphasc2tool.settings.jsonFile, 'w') as outfile:  
+            with open(scctool.settings.jsonFile, 'w') as outfile:  
                 json.dump(self.__data, outfile)
         except Exception as e:
             module_logger.exception("message") 
@@ -513,7 +513,7 @@ class matchData:
         
     def downloadMatchBannerAlphaSC2(self):
         try:
-            fname = alphasc2tool.settings.OBSdataDir+"/matchbanner.png"
+            fname = scctool.settings.OBSdataDir+"/matchbanner.png"
             urllib.request.urlretrieve("http://alpha.tl/announcement/"+str(self.getID())+"?vs", fname) 
         except Exception as e:
             module_logger.exception("message") 
@@ -531,7 +531,7 @@ class matchData:
     def downloadLogosAlphaSC2(self):
         try:
             for i in range(1,3):
-                fname = alphasc2tool.settings.OBSdataDir+"/logo"+str(i)+".png"
+                fname = scctool.settings.OBSdataDir+"/logo"+str(i)+".png"
                 urllib.request.urlretrieve(self.__rawData['team'+str(i)]['logo'], fname) 
         except Exception as e:
             module_logger.exception("message") 
@@ -539,7 +539,7 @@ class matchData:
     def downloadLogosRSTL(self):
         try:
             for i in range(1,3):
-                fname = alphasc2tool.settings.OBSdataDir+"/logo"+str(i)+".png"
+                fname = scctool.settings.OBSdataDir+"/logo"+str(i)+".png"
                 urllib.request.urlretrieve("http://hdgame.net"+self.__rawData['member'+str(i)]['img_m'], fname) 
         except Exception as e:
             module_logger.exception("message") 
@@ -549,11 +549,11 @@ class matchData:
         
     def createOBStxtFiles(self):
         try:
-            f = open(alphasc2tool.settings.OBSdataDir+"/lineup.txt", mode = 'w')
-            f2 = open(alphasc2tool.settings.OBSdataDir+"/maps.txt", mode = 'w')
+            f = open(scctool.settings.OBSdataDir+"/lineup.txt", mode = 'w')
+            f2 = open(scctool.settings.OBSdataDir+"/maps.txt", mode = 'w')
             for idx in range (0,self.getNoSets()):
                 map = self.getMap(idx)
-                f3 = open(alphasc2tool.settings.OBSdataDir+"/map"+str(idx+1)+".txt", mode = 'w')
+                f3 = open(scctool.settings.OBSdataDir+"/map"+str(idx+1)+".txt", mode = 'w')
                 f.write(map+"\n")
                 f2.write(map+"\n")
                 f3.write(map+"\n")
@@ -569,23 +569,23 @@ class matchData:
             f.close()
             f2.close()
 
-            f = open(alphasc2tool.settings.OBSdataDir+"/teams_vs_long.txt", mode = 'w')
+            f = open(scctool.settings.OBSdataDir+"/teams_vs_long.txt", mode = 'w')
             f.write(self.getTeam(0)+' vs '+self.getTeam(1)+"\n")
             f.close()
             
-            f = open(alphasc2tool.settings.OBSdataDir+"/teams_vs_short.txt", mode = 'w')
+            f = open(scctool.settings.OBSdataDir+"/teams_vs_short.txt", mode = 'w')
             f.write(self.getTeamTag(0)+' vs '+self.getTeamTag(1)+"\n")
             f.close()
         
-            f = open(alphasc2tool.settings.OBSdataDir+"/team1.txt", mode = 'w')
+            f = open(scctool.settings.OBSdataDir+"/team1.txt", mode = 'w')
             f.write(self.getTeam(0))
             f.close()
         
-            f = open(alphasc2tool.settings.OBSdataDir+"/team2.txt", mode = 'w')
+            f = open(scctool.settings.OBSdataDir+"/team2.txt", mode = 'w')
             f.write(self.getTeam(1))
             f.close()
         
-            f = open(alphasc2tool.settings.OBSdataDir+"/tournament.txt", mode = 'w')
+            f = open(scctool.settings.OBSdataDir+"/tournament.txt", mode = 'w')
             f.write(self.getLeague())
             f.close()
     
@@ -595,7 +595,7 @@ class matchData:
             except:
                 score_str = "0 - 0"
                 
-            f = open(alphasc2tool.settings.OBSdataDir+"/score.txt", mode = 'w')
+            f = open(scctool.settings.OBSdataDir+"/score.txt", mode = 'w')
             f.write(score_str)
             f.close()
             
@@ -608,7 +608,7 @@ class matchData:
             team = self.getMyTeam()
             score = [0,0]
             for i in range(0,self.getNoSets()):
-                filename=alphasc2tool.settings.OBSmapDirData+"/"+str(i+1)+".html"
+                filename=scctool.settings.OBSmapDirData+"/"+str(i+1)+".html"
    
                 winner = self.getMapScore(i)
                 player1 = self.getPlayer(0,i)
@@ -620,21 +620,21 @@ class matchData:
                 threshold = int(self.getBestOf()/2)
                 
                 if(score[0]>threshold or score[1] >threshold):
-                    border_color=alphasc2tool.settings.notplayed_border_color
-                    opacity = alphasc2tool.settings.notplayed_opacity 
+                    border_color=scctool.settings.notplayed_border_color
+                    opacity = scctool.settings.notplayed_opacity 
                     winner = 0
                 elif(won==1):
-                    border_color=alphasc2tool.settings.win_border_color 
+                    border_color=scctool.settings.win_border_color 
                 elif(won==-1):
-                    border_color=alphasc2tool.settings.lose_border_color
+                    border_color=scctool.settings.lose_border_color
                 else:
-                    border_color=alphasc2tool.settings.default_border_color 
+                    border_color=scctool.settings.default_border_color 
             
                 if(winner==-1):
-                    player1='<font color="'+alphasc2tool.settings.win_font_color+'">'+player1+'</font>'
+                    player1='<font color="'+scctool.settings.win_font_color+'">'+player1+'</font>'
                     score[0] +=  1
                 elif(winner==1):
-                    player2='<font color="'+alphasc2tool.settings.win_font_color+'">'+player2+'</font>'
+                    player2='<font color="'+scctool.settings.win_font_color+'">'+player2+'</font>'
                     score[1] +=  1
                     
                 map=self.getMap(i)
@@ -643,7 +643,7 @@ class matchData:
                 race2png=self.getRace(1,i)+".png"
                 hidden = ""
     
-                with open(alphasc2tool.settings.OBSmapDir+"/data_template.html", "rt") as fin:
+                with open(scctool.settings.OBSmapDir+"/data_template.html", "rt") as fin:
                     with open(filename, "wt") as fout:
                         for line in fin:
                             line = line.replace('%PLAYER1%', player1).replace('%PLAYER2%', player2)
@@ -655,9 +655,9 @@ class matchData:
                             fout.write(line)
                             
             for i in range(self.getNoSets(),7): 
-                filename=alphasc2tool.settings.OBSmapDirData+"/"+str(i+1)+".html"             
+                filename=scctool.settings.OBSmapDirData+"/"+str(i+1)+".html"             
                 hidden = "visibility: hidden;"
-                with open(alphasc2tool.settings.OBSmapDir+"/data_template.html", "rt") as fin:
+                with open(scctool.settings.OBSmapDir+"/data_template.html", "rt") as fin:
                     with open(filename, "wt") as fout:
                         for line in fin:
                             line = line.replace('%HIDDEN%',hidden)
@@ -668,7 +668,7 @@ class matchData:
       
 def autoCorrectMap(map):
     try:
-        matches = difflib.get_close_matches(map.lower(),alphasc2tool.settings.maps,1) 
+        matches = difflib.get_close_matches(map.lower(),scctool.settings.maps,1) 
         if(len(matches) == 0):
             return map, False
         else:
@@ -679,9 +679,9 @@ def autoCorrectMap(map):
         
 def getRace(str):
     try: 
-        for idx, race in enumerate(alphasc2tool.settings.races):
+        for idx, race in enumerate(scctool.settings.races):
             if(str[0].upper()==race[0].upper()):
-                return alphasc2tool.settings.races[idx]
+                return scctool.settings.races[idx]
     except:
         pass
     

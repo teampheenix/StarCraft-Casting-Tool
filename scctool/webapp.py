@@ -2,11 +2,11 @@
 import logging
 
 # create logger
-module_logger = logging.getLogger('alphasc2tool.webapp')
+module_logger = logging.getLogger('scctool.webapp')
 
 try:
     import requests, json
-    import alphasc2tool.settings
+    import scctool.settings
     import webbrowser
     import requests.auth
     import urllib
@@ -81,7 +81,7 @@ def nightbot_callback():
     w.signal.emit()
     shutdown_server()
     
-    return  '''AlphaSC2Tool: Succesfully recived access to Nightbot - you can close this tab now.'''
+    return  '''scctool: Succesfully recived access to Nightbot - you can close this tab now.'''
    
 class FlaskThread(QtCore.QThread):
     signal = QtCore.pyqtSignal()

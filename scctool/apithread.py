@@ -2,7 +2,7 @@
 import logging
 
 # create logger
-module_logger = logging.getLogger('alphasc2tool.apithread')
+module_logger = logging.getLogger('scctool.apithread')
 
 try:
     from PyQt5.QtCore import *
@@ -11,7 +11,7 @@ try:
     import time
     import json
     from difflib import SequenceMatcher
-    import alphasc2tool.settings
+    import scctool.settings
 
 except Exception as e:
     module_logger.exception("message") 
@@ -337,9 +337,9 @@ class SC2MatchData:
             
     def getRace(self,str):
         try: 
-            for idx, race in enumerate(alphasc2tool.settings.races):
+            for idx, race in enumerate(scctool.settings.races):
                 if(str[0].upper()==race[0].upper()):
-                    return alphasc2tool.settings.races[idx]
+                    return scctool.settings.races[idx]
         except Exception as e:
             module_logger.exception("message")
             
@@ -363,7 +363,7 @@ class SC2MatchData:
                 
 def compareStr(str1,str2):
     try:
-        fuzzymatch = alphasc2tool.settings.fuzzymatch
+        fuzzymatch = scctool.settings.fuzzymatch
         if(fuzzymatch):
             threshold = 0.75
             return SequenceMatcher(None, str1.upper(), str2.upper()).ratio() >= threshold

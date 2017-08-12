@@ -2,15 +2,15 @@
 import logging
 
 # create logger
-module_logger = logging.getLogger('alphasc2tool.controller')
+module_logger = logging.getLogger('scctool.controller')
 
 try:
-    from alphasc2tool.matchdata import *
-    from alphasc2tool.apithread import *
-    from alphasc2tool.webapp import *
-    import alphasc2tool.settings
-    import alphasc2tool.twitch
-    import alphasc2tool.nightbot
+    from scctool.matchdata import *
+    from scctool.apithread import *
+    from scctool.webapp import *
+    import scctool.settings
+    import scctool.twitch
+    import scctool.nightbot
     import webbrowser
 except Exception as e:
     module_logger.exception("message") 
@@ -115,13 +115,13 @@ class AlphaController:
         
     def setCBs(self):
         try:
-            if(alphasc2tool.settings.CB_ScoreUpdate):
+            if(scctool.settings.CB_ScoreUpdate):
                 self.view.cb_autoUpdate.setChecked(True)
                 
-            if(alphasc2tool.settings.CB_ToggleScore):
+            if(scctool.settings.CB_ToggleScore):
                 self.view.cb_autoToggleScore.setChecked(True)
                 
-            if(alphasc2tool.settings.CB_ToggleProd):
+            if(scctool.settings.CB_ToggleProd):
                 self.view.cb_autoToggleProduction.setChecked(True)
         except Exception as e:
             module_logger.exception("message")    
@@ -163,7 +163,7 @@ class AlphaController:
         
     def updateNightbotCommand(self):
         try:
-            msg = alphasc2tool.nightbot.updateCommand(self.matchData.getURL())
+            msg = scctool.nightbot.updateCommand(self.matchData.getURL())
         except Exception as e:
             msg = str(e)
             module_logger.exception("message") 
@@ -177,11 +177,11 @@ class AlphaController:
             msg = ''
             self.updateData()
             try:
-                title = alphasc2tool.settings.Config.get("Twitch","title_template")
+                title = scctool.settings.Config.get("Twitch","title_template")
                 title = title.replace("(TOUR)",self.matchData.getLeague())
                 title = title.replace("(TEAM1)",self.matchData.getTeam(0))
                 title = title.replace("(TEAM2)",self.matchData.getTeam(1))
-                msg = alphasc2tool.twitch.updateTitle(title)
+                msg = scctool.twitch.updateTitle(title)
             except Exception as e:
                 msg = str(e)
                 module_logger.exception("message") 
@@ -227,12 +227,12 @@ class AlphaController:
 
     def saveConfig(self):
         try:
-            alphasc2tool.settings.Config.set("Form","scoreupdate",str(self.view.cb_autoUpdate.isChecked()))
-            alphasc2tool.settings.Config.set("Form","togglescore",str(self.view.cb_autoToggleScore.isChecked()))
-            alphasc2tool.settings.Config.set("Form","toggleprod",str(self.view.cb_autoToggleProduction.isChecked()))
+            scctool.settings.Config.set("Form","scoreupdate",str(self.view.cb_autoUpdate.isChecked()))
+            scctool.settings.Config.set("Form","togglescore",str(self.view.cb_autoToggleScore.isChecked()))
+            scctool.settings.Config.set("Form","toggleprod",str(self.view.cb_autoToggleProduction.isChecked()))
             
-            cfgfile = open(alphasc2tool.settings.configFile,'w')
-            alphasc2tool.settings.Config.write(cfgfile)    
+            cfgfile = open(scctool.settings.configFile,'w')
+            scctool.settings.Config.write(cfgfile)    
             cfgfile.close()
         except Exception as e:
             module_logger.exception("message")    
@@ -259,7 +259,7 @@ class AlphaController:
             
     def refreshButtonStatus(self):
         
-        if(not alphasc2tool.settings.twitchIsValid()):
+        if(not scctool.settings.twitchIsValid()):
             self.view.pb_twitchupdate.setEnabled(False)
             self.view.pb_twitchupdate.setAttribute(Qt.WA_AlwaysShowToolTips)
             self.view.pb_twitchupdate.setToolTip('Specify your Twitch Settings to use this feature')   
@@ -268,7 +268,7 @@ class AlphaController:
             self.view.pb_twitchupdate.setAttribute(Qt.WA_AlwaysShowToolTips)
             self.view.pb_twitchupdate.setToolTip('')  
             
-        if(not alphasc2tool.settings.nightbotIsValid()):
+        if(not scctool.settings.nightbotIsValid()):
             self.view.pb_nightbotupdate.setEnabled(False)
             self.view.pb_nightbotupdate.setAttribute(Qt.WA_AlwaysShowToolTips)
             self.view.pb_nightbotupdate.setToolTip('Specify your NightBot Settings to use this feature')   

@@ -2,7 +2,7 @@
 import logging
 
 # create logger
-module_logger = logging.getLogger('alphasc2tool.settings')
+module_logger = logging.getLogger('scctool.settings')
 
 try:
     import configparser
@@ -12,7 +12,7 @@ except Exception as e:
     raise  
 
 try:
-    version    = 'v0.8.1'
+    version    = 'v0.8.2'
     configFile = "config.ini"
     jsonFile   = "src/data.json"
     OBSdataDir = "OBS_data"
@@ -70,8 +70,8 @@ try:
     CB_ToggleProd  = Config.getboolean("Form","ToggleProd")
     
     
-    myteam =  Config.get("AlphaSC2","myteam")
-    fuzzymatch = Config.get("AlphaSC2","fuzzymatch")
+    myteam =  Config.get("SCT","myteam")
+    fuzzymatch = Config.get("SCT","fuzzymatch")
 
 except Exception as e:
     module_logger.exception("message") 

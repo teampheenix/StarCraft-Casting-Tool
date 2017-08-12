@@ -1,23 +1,22 @@
-# AlphaSC2Tool
+# StarCraft Casting Tool
 
-![alphasc2tool-preview2](https://user-images.githubusercontent.com/26044736/29190579-f7bcb05a-7e1a-11e7-9c6e-988360dcff31.png)
+![preview-1](https://user-images.githubusercontent.com/26044736/29243717-560d80b2-7fa6-11e7-94e7-a040342964b2.png)
+![preview-2](https://user-images.githubusercontent.com/26044736/29243719-572aa024-7fa6-11e7-9c7f-f0cb49040c23.png)
 
-
-![alphasc2tool-preview1](https://user-images.githubusercontent.com/26044736/29190435-6e477b52-7e1a-11e7-99d7-360848473899.png)
 
 ## General Information
 
-AlphaSC2-Tool is a Python 3.6 script that can load all relevant data from an [Alpha SC2 Teamleague](http://alpha.tl/) match and convert it such that the information can be readily included for streaming, e.g., in OBS-Studio. Moreover, the tool generates corresponding map icons for presentation on your stream, including the map, the players, their races, and the score (if played). Additionally, the title of your Twitch stream can be updated accordingly by a single click. If you wish, the tool can automatically dectect the score by monitoring your SC2-Client. On Windows the tool can automatically set the score of in your SC2-Observer UI and toggle the production tab at the start of the game.
+StarCraft Casting Tool (SCC-Tool) is a Python 3.6 script that can load all relevant data of Stracraft 2 Team League Match from either [Alpha SC2 Teamleague](http://alpha.tl/) or [RSTL](http://hdgame.net/en/tournaments/list/tournament/rstl-12/) and convert it such that the information can be readily included for streaming, e.g., in OBS-Studio. Moreover, the tool generates corresponding map icons for presentation on your stream, including the map, the players, their races, and the score (if played). Additionally, the title of your Twitch stream and you Nightbot chat commands can be updated accordingly by a single click. If you wish, the tool can automatically dectect the score by monitoring your SC2-Client. On Windows the tool can automatically set the score of in your SC2-Observer UI and toggle the production tab at the start of the game.
 
 This tool should run on any operating system that supports Python, e.g., Windows, MacOS, and Linux. Yet, the interaction with the SC2-Observer-UI is currently only supported on Windows.  
 
 ## Installation
 
-[Download](https://github.com/teampheenix/AlphaSC2Tool/archive/master.zip) and exctract AlphaSC2Tool, download the latest version of Python 3.6 at https://www.python.org/downloads. This tool requires the additional Python Packages *PyQt5*, *requests*, *configparser*, and on Windows additonally *pypiwin32*. To install these packages execute the script `installPackages.py` once or do it manually. Execute `AlphaSC2Tool.pyw` to start the AlphaSC2-Tool.
+[Download](https://github.com/teampheenix/AlphaSC2Tool/archive/master.zip) and exctract StarCraft Casting Tool, download the latest version of Python 3.6 at https://www.python.org/downloads. This tool requires the additional Python Packages *PyQt5*, *requests*, *configparser*, and on Windows additonally *pypiwin32*. To install these packages execute the script `installPackages.py` once or do it manually. Execute `StarCraftCastingTool.pyw` to start the SCC-Tool.
 
 ## Instructions for Use
 
-Execute `AlphaSC2Tool.pyw` to start the AlphaSC2-Tool. Enter the Match-ID or URL of an Alpha SC2 Teamleague match, e.g., "http://alpha.tl/match/2392" or "2392". Press *Load Data from URL* and edit the data if necessary. The sliders control the score of each map. Press "Update OBS Data" or alter the score to update the data for streaming, which can be found in the directory `OBS_data`. If you want to include the team logos and the matchbanner it is recommended to include them as browser source *(Banner: 1200x740px, Logos: 300x300px)* via the html files given in the directory `OBS_html`. The map icons can be found in the directory `OBS_mapicons` and may be included in your stream as browser source *(280x270px)*.
+Execute `StarCraftCastingTool.pyw` to start the SCC-Tool. Enter the Match-URL of an Alpha SC2 Teamleague match, e.g., "http://alpha.tl/match/2392". Press *Load Data from URL* and edit the data if necessary. The sliders control the score of each map. Press "Update OBS Data" or alter the score to update the data for streaming, which can be found in the directory `OBS_data`. If you want to include the team logos and the matchbanner it is recommended to include them as browser source *(Banner: 1200x740px, Logos: 300x300px)* via the html files given in the directory `OBS_html`. The map icons can be found in the directory `OBS_mapicons` and may be included in your stream as browser source *(280x270px)*.
 
 To update your Twitch title via click on *Update Twitch Title* you have to set your *channel*, *clientid*, and *oauth* in the `config.ini` file that can be edited with any text editor. For instructions how to obtain these, see **Twitch Integration** below. The template for the title can be customized in config file `config.ini`.
 

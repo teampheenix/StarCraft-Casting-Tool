@@ -2,11 +2,11 @@
 import logging
 
 # create logger
-module_logger = logging.getLogger('alphasc2tool.nightbot')
+module_logger = logging.getLogger('scctool.nightbot')
 
 try:
     import requests, json
-    import alphasc2tool.settings
+    import scctool.settings
 
 except Exception as e:
     module_logger.exception("message") 
@@ -17,12 +17,12 @@ def base_headers():
     
 def updateCommand(message):
     
-    cmd = alphasc2tool.settings.Config.get("NightBot","command")
+    cmd = scctool.settings.Config.get("NightBot","command")
 
     #Updates the twitch title specified in the config file 
     try:
         headers = base_headers()
-        headers.update({"Authorization": "Bearer " + alphasc2tool.settings.Config.get("NightBot","token")})
+        headers.update({"Authorization": "Bearer " + scctool.settings.Config.get("NightBot","token")})
         
         response = requests.get("https://api.nightbot.tv/1/commands", headers=headers).json()
         
