@@ -67,7 +67,6 @@ class matchData:
         self.__data['matchlink'] = ""
         self.__data['no_sets'] = 0
         self.__data['best_of'] = 0
-        self.__data['score'] = [0, 0]
         self.__data['my_team'] = 0
         self.__data['teams'] = []
         self.__data['teams'].append({'name':'TBD','tag': None})
@@ -179,23 +178,32 @@ class matchData:
         except:
             return False
          
-    def setScore(self, score):
-        try:
-            self.__data['score'][0] = int(score[0])
-            self.__data['score'][1] = int(score[1])
-            return True
-        except:
-            return False
-            
+
     def getScore(self):
-        try:
-            return self.__data['score']
-        except:
-            return False   
+        score = [0,0]
+        
+        for set_idx in range(self.getNoSets()):
+            map_score = self.getMapScore(set_idx)
+            if(map_score < 0):
+                score[0] += 1
+            elif(map_score > 0):
+                score[1] += 1
+            else:
+                continue
+        return score
             
     def getBestOf(self):
         try:
-            return self.__data['best_of']
+            best_of = self.__data['best_of']
+            if(best_of % 2): #odd, okay
+                return best_of
+            else: #even
+                score = self.getScore()
+                if(min(score) < best_of/2):
+                    return best_of - 1
+                else:
+                    return best_of + 1      
+            return 
         except:
             return False  
             
@@ -332,7 +340,7 @@ class matchData:
         return True
         
     def getLeague(self):
-        return (self.__data['league'])
+        return self.__data['league']
         
     def setURL(self,url):
         self.__data['matchlink'] = str(url)
@@ -411,13 +419,7 @@ class matchData:
                     score = 0
                     
                 self.setMapScore(set_idx, score)
-                if(score<0):
-                    totalScore[0] += 1
-                elif(score>0):
-                    totalScore[1] += 1
-                    
-                    
-            self.setScore(totalScore)
+
 
     def grabDataRSTL(self):
         self.setProvider("RSTL") 
@@ -431,7 +433,7 @@ class matchData:
             data = data['data']
             self.__rawData = data
             self.setURL("http://hdgame.net/en/tournaments/list/tournament/rstl-12/tmenu/tmatches/?match="+str(self.getID()))
-            self.setNoSets(7)
+            self.setNoSets(7,6)
             self.setLeague(data['tournament']['name'])
             
             for set_idx in range(0,7):
@@ -500,12 +502,7 @@ class matchData:
                 else:
                     score = 0
                 self.setMapScore(set_idx, score)
-                if(score<0):
-                    totalScore[0] += 1
-                elif(score>0):
-                    totalScore[1] += 1
-                    
-            self.setScore(totalScore)
+
         
     def grabDataCustom(self):
         raise ValueError("Error: You cannot grab data from a custom provider")

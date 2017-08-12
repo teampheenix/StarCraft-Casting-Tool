@@ -52,7 +52,7 @@ def updateCommand(message):
                              data=post_data)
             print(response.json())
      
-        msg = "Set NightBot Command '"+cmd+"' to '"+message+"'"        
+        msg = "Updated NightBot Command '"+cmd+"' to '"+message+"'"        
             
     except Exception as e:
         msg = str(e)

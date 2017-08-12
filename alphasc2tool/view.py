@@ -37,7 +37,7 @@ class mainWindow(QMainWindow):
             mainLayout.addWidget(self.SC2APIGroupBox,1)
             mainLayout.addWidget(self.horizontalGroupBox,1)
 
-            self.setWindowTitle("Starcraft 2 Streaming Tool " + alphasc2tool.settings.version)
+            self.setWindowTitle("Starcraft Casting Tool " + alphasc2tool.settings.version)
             
             self.window = QWidget()
             self.window.setLayout(mainLayout)
@@ -169,6 +169,7 @@ class mainWindow(QMainWindow):
             self.sl_team.setTickPosition( QSlider.TicksBothSides)
             self.sl_team.setTickInterval(1)
             self.sl_team.valueChanged.connect(self.sl_changed)
+            self.sl_team.setToolTip('Choose your team') 
             
             label = QLabel("Maps \ Teams:")
             label.setAlignment(Qt.AlignCenter)
@@ -193,6 +194,7 @@ class mainWindow(QMainWindow):
                 self.sl_score[player_idx].setTickPosition( QSlider.TicksBothSides)
                 self.sl_score[player_idx].setTickInterval(1)
                 self.sl_score[player_idx].valueChanged.connect(self.sl_changed)
+                self.sl_score[player_idx].setToolTip('Set the score') 
             
                 self.le_map[player_idx].setText("TBD")
                 self.le_map[player_idx].setAlignment(Qt.AlignCenter)

@@ -85,7 +85,7 @@ class AlphaController:
             for i in range(2):
                  self.matchData.setTeam(i,self.view.le_team[i].text())
                 
-            for i in range(5):
+            for i in range(min(self.view.max_no_sets,self.matchData.getNoSets())):
                 for j in range(2):
                      self.matchData.setPlayer(j,i,self.view.le_player[j][i].text())
                      self.matchData.setRace(j,i,self.view.cb_race[j][i].currentText())
@@ -164,7 +164,7 @@ class AlphaController:
         
     def updateNightbotCommand(self):
         try:
-            msg = alphasc2tool.nightbot.updateCommand("http://alpha.tl/match/"+str(self.matchData.jsonData['matchid']))
+            msg = alphasc2tool.nightbot.updateCommand(self.matchData.getURL())
         except Exception as e:
             msg = str(e)
             module_logger.exception("message") 
@@ -179,9 +179,9 @@ class AlphaController:
             self.updateData()
             try:
                 title = alphasc2tool.settings.Config.get("Twitch","title_template")
-                title = title.replace("(TOUR)",self.matchData.jsonData['tournament'])
-                title = title.replace("(TEAM1)",self.matchData.jsonData['team1']['name'])
-                title = title.replace("(TEAM2)",self.matchData.jsonData['team2']['name'])
+                title = title.replace("(TOUR)",self.matchData.getLeague())
+                title = title.replace("(TEAM1)",self.matchData.getTeam(0))
+                title = title.replace("(TEAM2)",self.matchData.getTeam(1))
                 msg = alphasc2tool.twitch.updateTitle(title)
             except Exception as e:
                 msg = str(e)
@@ -246,9 +246,9 @@ class AlphaController:
             
             self.updateData()
             newscore = 0
-            for i in range(5):
-                found, newscore = newSC2MatchData.compare_returnScore(self.matchData.jsonData['lineup1'][i]['nickname'],\
-                                                                    self.matchData.jsonData['lineup2'][i]['nickname'])
+            for i in range(self.matchData.getNoSets()):
+                found, newscore = newSC2MatchData.compare_returnScore(self.matchData.getPlayer(0,i),\
+                                                                   self.matchData.getPlayer(1,i))
                 if(found and newscore != 0):
                     if(self.view.setScore(i,newscore)):
                         break
@@ -283,24 +283,17 @@ class AlphaController:
         
         try:
             self.updateData()
-            newscore = 0
-            for i in range(5):
-                found, order = newSC2MatchData.compare_returnOrder(self.matchData.jsonData['lineup1'][i]['nickname'],\
-                                                                self.matchData.jsonData['lineup2'][i]['nickname'])
+            
+            for i in range(self.matchData.getNoSets()):
+                found, order = newSC2MatchData.compare_returnOrder(self.matchData.getPlayer(0,i),\
+                                                                self.matchData.getPlayer(1,i))
                 if(found):
-                    try:
-                        score = [0, 0]
-                        for winner in self.matchData.jsonData['games']:
-                            if(winner!=0):
-                                score[winner-1] += 1
-                        
-                    except:
-                        score = [0, 0]
+                    score = self.matchData.getScore()
                     
                     if(order):
-                        ToggleScore(score[0],score[1])  
+                        ToggleScore(score[0],score[1],self.matchData.getBestOf())  
                     else:
-                        ToggleScore(score[1],score[0])
+                        ToggleScore(score[1],score[0],self.matchData.getBestOf())
                     
                     break    
         except Exception as e:
