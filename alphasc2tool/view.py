@@ -28,6 +28,8 @@ class mainWindow(QMainWindow):
             self.createFromMatchDataBox()
             self.createHorizontalGroupBox()
             self.createSC2APIGroupBox()
+            
+            self.createMenuBar()
 
             mainLayout = QVBoxLayout()
             mainLayout.addWidget(self.formGroupBox,2)
@@ -35,49 +37,92 @@ class mainWindow(QMainWindow):
             mainLayout.addWidget(self.SC2APIGroupBox,1)
             mainLayout.addWidget(self.horizontalGroupBox,1)
 
-            self.setWindowTitle("Alpha SC2 Tool " + alphasc2tool.settings.version)
+            self.setWindowTitle("Starcraft 2 Streaming Tool " + alphasc2tool.settings.version)
             
             self.window = QWidget()
             self.window.setLayout(mainLayout)
             self.setCentralWidget(self.window)
         
+            self.size
             self.statusBar()
+
             self.controller = controller
             self.controller.setView(self)
+            self.controller.refreshButtonStatus()
+            
             self.show()
         except Exception as e:
             module_logger.exception("message")    
 
+
     def closeEvent(self, event):
         try:
+            try:
+                if(self.mySubwindow.isVisible()):
+                    self.mySubwindow.close()
+            except:
+                pass
             self.controller.cleanUp()
-            # close window
             event.accept()
         except Exception as e:
-            module_logger.exception("message")        
+            module_logger.exception("message")    
+            
+    def createMenuBar(self):
+        try:
+            menubar = self.menuBar()
+            settingsMenu = menubar.addMenu('Settings') 
+            apiAct = QAction('&API-Integration', self)  
+            apiAct.setStatusTip('Edit API-Settings for Twitch and Nightbot')
+            apiAct.triggered.connect(self.openApiDialog)
+            settingsMenu.addAction(apiAct)
+
+        except Exception as e:
+            module_logger.exception("message")   
+        
+             
+    def openApiDialog(self):
+        self.mySubwindow=subwindow()
+        self.mySubwindow.createWindow(self)
+        self.mySubwindow.show()
         
     def createFormGroupBox(self):
         try:
-            self.formGroupBox = QGroupBox("Alpha SC2 Teamleague")
+            self.formGroupBox = QGroupBox("Match Grabber for Alpha.TL && RSTL")
             self.le_url =  QLineEdit()
             self.le_url.setAlignment(Qt.AlignCenter)
             
-            self.le_url.setText("http://alpha.tl/match/")
+            self.le_url.setPlaceholderText("http://alpha.tl/match/2392")
             
-            self.pb_refresh = QPushButton("Load Data from URL")
-            self.pb_refresh.clicked.connect(self.refresh_click)
+            completer = QCompleter(["http://alpha.tl/match/","http://hdgame.net/en/tournaments/list/tournament/rstl-12/"], self.le_url)
+            completer.setCaseSensitivity(Qt.CaseInsensitive)
+            completer.setCompletionMode(QCompleter.UnfilteredPopupCompletion)
+            completer.setWrapAround(True)
+            self.le_url.setCompleter(completer)
             
             self.pb_openBrowser = QPushButton("Open in Browser")
             self.pb_openBrowser.clicked.connect(self.openBrowser_click)
             
             container = QHBoxLayout()
-            container.addWidget(QLabel("Match-URL or Match-ID:"),2)
-            container.addWidget(self.le_url,4)
-            container.addWidget(self.pb_openBrowser,1)
+            label = QLabel("Match-URL:")
+            label.setAlignment(Qt.AlignCenter)
+            container.addWidget(label,1)
+            container.addWidget(self.le_url,6)
+            
             
             layout = QFormLayout()
             layout.addRow(container)
-            layout.addRow(self.pb_refresh)
+            
+            container = QHBoxLayout()
+            #self.pb_download = QPushButton("Download Images from URL")
+            #container.addWidget(self.pb_download)
+            container.addWidget(QLabel(""),1)
+            self.pb_refresh = QPushButton("Load Data from URL")
+            self.pb_refresh.clicked.connect(self.refresh_click)
+            container.addWidget(self.pb_openBrowser,3)
+            container.addWidget(self.pb_refresh,3)
+
+            
+            layout.addRow(container)
             
             self.formGroupBox.setLayout(layout)
         except Exception as e:
@@ -85,13 +130,16 @@ class mainWindow(QMainWindow):
         
     def createFromMatchDataBox(self):
         try:
+            
+            self.max_no_sets = 7
+            
             self.fromMatchDataBox = QGroupBox("Match Data")
             layout2 = QFormLayout()
             
             self.le_league  = QLineEdit()
             self.le_league.setText("League TBD")
             self.le_league.setAlignment(Qt.AlignCenter)
-            
+
             container = QHBoxLayout()
             label = QLabel("League:")
             label.setAlignment(Qt.AlignCenter)
@@ -100,10 +148,10 @@ class mainWindow(QMainWindow):
             layout2.addRow(container)
             
             self.le_team = [QLineEdit() for y in range(2)]
-            self.le_player = [[QLineEdit() for x in range(5)] for y in range(2)] 
-            self.cb_race   = [[QComboBox() for x in range(5)] for y in range(2)] 
-            self.sl_score  = [QSlider(Qt.Horizontal)  for y in range(5)]  
-            self.le_map    = [QLineEdit()  for y in range(5)]  
+            self.le_player = [[QLineEdit() for x in range(self.max_no_sets)] for y in range(2)] 
+            self.cb_race   = [[QComboBox() for x in range(self.max_no_sets)] for y in range(2)] 
+            self.sl_score  = [QSlider(Qt.Horizontal)  for y in range(self.max_no_sets)]  
+            self.le_map    = [MapLineEdit()  for y in range(self.max_no_sets)]  
             
             container = QHBoxLayout()
             for team_idx in range(2):
@@ -131,7 +179,7 @@ class mainWindow(QMainWindow):
             
             layout2.addRow(container)
             
-            for player_idx in range(5):   
+            for player_idx in range(self.max_no_sets):   
                 for team_idx in range(2):
                     self.le_player[team_idx][player_idx].setText("TBD")
                     self.le_player[team_idx][player_idx].setAlignment(Qt.AlignCenter)
@@ -148,6 +196,13 @@ class mainWindow(QMainWindow):
             
                 self.le_map[player_idx].setText("TBD")
                 self.le_map[player_idx].setAlignment(Qt.AlignCenter)
+                completer = QCompleter(alphasc2tool.settings.maps,self.le_map[player_idx])
+                completer.setCaseSensitivity(Qt.CaseInsensitive)
+                completer.setCompletionMode(QCompleter.InlineCompletion)
+                completer.setWrapAround(True)
+                self.le_map[player_idx].setCompleter(completer)
+ 
+                
                 #self.le_map[player_idx].setReadOnly(True)
                 
                 container = QHBoxLayout()
@@ -167,26 +222,21 @@ class mainWindow(QMainWindow):
         try:
             self.horizontalGroupBox = QGroupBox("Tasks")
             layout = QHBoxLayout()
-            
-            self.pb_settings = QPushButton("Settings")
-            self.pb_settings.clicked.connect(self.settings_click)
-            
+           
             self.pb_twitchupdate = QPushButton("Update Twitch Title")
             self.pb_twitchupdate.clicked.connect(self.updatetwitch_click)
             
-            if(not alphasc2tool.settings.twitch_valid):
-                self.pb_twitchupdate.setEnabled(False)
-                self.pb_twitchupdate.setAttribute(Qt.WA_AlwaysShowToolTips)
-                self.pb_twitchupdate.setToolTip('Specify your twitch account to use this feature') 
-            
+            self.pb_nightbotupdate = QPushButton("Update NightBot")
+            self.pb_nightbotupdate.clicked.connect(self.updatenightbot_click)
+
             self.pb_resetscore = QPushButton("Reset Score")
             self.pb_resetscore.clicked.connect(self.resetscore_click)
             
             self.pb_obsupdate = QPushButton("Update OBS Data")
             self.pb_obsupdate.clicked.connect(self.updateobs_click)
             
-            #layout.addWidget(self.pb_settings)
             layout.addWidget(self.pb_twitchupdate)
+            layout.addWidget(self.pb_nightbotupdate)
             layout.addWidget(self.pb_resetscore)
             layout.addWidget(self.pb_obsupdate)
             
@@ -274,19 +324,20 @@ class mainWindow(QMainWindow):
             self.controller.openURL(url)
         except Exception as e:
             module_logger.exception("message")
-        
-    def settings_click(self):
+
+    def updatenightbot_click(self):
         try:
-            self.controller.NightBotDialog()
+            self.statusBar().showMessage('Updating NightBot Command...')
+            msg = self.controller.updateNightbotCommand()
+            self.statusBar().showMessage(msg)
         except Exception as e:
             module_logger.exception("message")
-
-    
+            
     def updatetwitch_click(self):
         try:
             url = self.le_url.text()
             self.statusBar().showMessage('Updating Twitch Title...')
-            msg = self.controller.updateTitle()
+            msg = self.controller.updateTwitchTitle()
             self.statusBar().showMessage(msg)
         except Exception as e:
             module_logger.exception("message")
@@ -333,3 +384,160 @@ class mainWindow(QMainWindow):
                 self.controller.updateOBS()
         except Exception as e:
             module_logger.exception("message")
+            
+class subwindow(QWidget):
+    def createWindow(self,mainWindow):
+        
+        try:
+            parent=None
+            super(subwindow,self).__init__(parent)
+            #self.setWindowFlags(Qt.WindowStaysOnTopHint)
+            
+            self.passEvent = False
+            self.controller = mainWindow.controller
+            
+            self.createFormGroupTwitch()
+            self.createFormGroupNightbot()
+            self.createButtonGroup()
+            
+            mainLayout = QVBoxLayout()
+            mainLayout.addWidget(self.formGroupTwitch)
+            mainLayout.addWidget(self.formGroupNightbot)
+            mainLayout.addLayout(self.buttonGroup)
+            self.setLayout(mainLayout)
+            
+            self.resize(QSize(mainWindow.size().width()*.80,self.sizeHint().height()))
+            self.move(mainWindow.pos() + QPoint(mainWindow.size().width()/2,mainWindow.size().height()/3)\
+                                    - QPoint(self.size().width()/2,self.size().height()/3))
+        
+            self.setWindowTitle("API-Integration Settings")
+            
+        except Exception as e:
+            module_logger.exception("message")
+            
+        
+    def createFormGroupTwitch(self):
+        self.formGroupTwitch = QGroupBox("Twitch")
+        layout = QFormLayout()
+
+        self.twitchChannel = QLineEdit()
+        self.twitchChannel.setText(alphasc2tool.settings.Config.get("Twitch", "channel"))
+        self.twitchChannel.setAlignment(Qt.AlignCenter)
+        layout.addRow(QLabel("Channel:"),self.twitchChannel)
+        
+        container = QHBoxLayout()
+        
+        self.twitchToken = QLineEdit()
+        self.twitchToken.setText(alphasc2tool.settings.Config.get("Twitch", "oauth"))
+        self.twitchToken.setAlignment(Qt.AlignCenter)
+
+        container.addWidget(self.twitchToken);
+        self.pb_getTwitch = QPushButton('Get', self)
+        self.pb_getTwitch.setEnabled(False)
+        container.addWidget(self.pb_getTwitch );
+
+        layout.addRow(QLabel("Access-Token:"),container)
+        self.twitchTemplate = QLineEdit()
+        
+        self.twitchTemplate.setText(alphasc2tool.settings.Config.get("Twitch", "title_template"))
+        self.twitchTemplate.setAlignment(Qt.AlignCenter)
+        self.twitchTemplate.setToolTip('Placeholder: (TOUR), (TEAM1), (TEAM2)') 
+        layout.addRow(QLabel("Title-Template:"), self.twitchTemplate)
+        
+        self.formGroupTwitch.setLayout(layout)
+        
+    def createFormGroupNightbot(self):
+        self.formGroupNightbot = QGroupBox("Nightbot")
+        layout = QFormLayout()
+        container = QHBoxLayout()
+
+        self.nightbotToken = QLineEdit()
+        self.nightbotToken.setText(alphasc2tool.settings.Config.get("NightBot", "token"))
+        self.nightbotToken.setAlignment(Qt.AlignCenter)
+        
+        self.nightbotCommand = QLineEdit()
+        self.nightbotCommand.setText(alphasc2tool.settings.Config.get("NightBot", "command"))
+        self.nightbotCommand.setAlignment(Qt.AlignCenter)
+        
+        container.addWidget(self.nightbotToken);
+        self.pb_getNightbot = QPushButton('Get', self)
+        self.pb_getNightbot.clicked.connect(self.controller.getNightbotToken)
+        #self.pb_getNightbot.setEnabled(False)
+        container.addWidget(self.pb_getNightbot);
+
+        layout.addRow(QLabel("Access-Token:"),container)
+        layout.addRow(QLabel("Matchlink command:"), self.nightbotCommand)
+        
+        self.formGroupNightbot.setLayout(layout)
+    
+    def createButtonGroup(self):
+        try:
+            layout = QHBoxLayout()
+            
+            layout.addWidget(QLabel(""))
+            
+            buttonCancel = QPushButton('Cancel', self)
+            buttonCancel.clicked.connect(self.closeWindow)
+            layout.addWidget(buttonCancel) 
+    
+            buttonSave = QPushButton('Save && Close', self)
+            buttonSave.clicked.connect(self.saveCloseWindow)
+            layout.addWidget(buttonSave) 
+            
+            self.buttonGroup = layout
+        except Exception as e:
+            module_logger.exception("message")
+      
+    def saveData(self):
+        alphasc2tool.settings.Config.set("Twitch", "channel", self.twitchChannel.text())
+        alphasc2tool.settings.Config.set("Twitch", "oauth", self.twitchToken.text())
+        alphasc2tool.settings.Config.set("Twitch", "title_template", self.twitchTemplate.text())
+        alphasc2tool.settings.Config.set("NightBot", "token", self.nightbotToken.text())
+        alphasc2tool.settings.Config.set("NightBot", "command", self.nightbotCommand.text())
+        
+        self.controller.refreshButtonStatus()
+
+      
+    def saveCloseWindow(self):
+        self.saveData()
+        self.passEvent = True
+        self.close()   
+        
+    def closeWindow(self):
+        self.passEvent = True
+        self.close()    
+        
+    def closeEvent(self, event):
+        try:
+            if(not self.passEvent):
+                if(self.isMinimized()):
+                    self.showNormal()
+                buttonReply = QMessageBox.question(self, 'Save data?', "Save data?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+                if buttonReply == QMessageBox.Yes:
+                    self.saveData()
+            event.accept()
+        except Exception as e:
+            module_logger.exception("message")  
+            
+            
+class MapLineEdit(QLineEdit):
+    textModified = pyqtSignal(str, str) # (before, after)
+
+    def __init__(self, contents='', parent=None):
+        super(MapLineEdit, self).__init__(contents, parent)
+        self.editingFinished.connect(self.__handleEditingFinished)
+        self.textChanged.connect(self.__handleTextChanged)
+        self._before = contents
+
+    def __handleTextChanged(self, text):
+        if not self.hasFocus():
+            self._before = text
+
+    def __handleEditingFinished(self):
+        before, after = self._before, self.text()
+        if before != after:
+            after, known = alphasc2tool.matchdata.autoCorrectMap(after)
+            self.setText(after)
+            self._before = after
+            self.textModified.emit(before, after)
+                

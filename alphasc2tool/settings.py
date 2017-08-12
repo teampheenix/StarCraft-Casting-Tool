@@ -12,7 +12,7 @@ except Exception as e:
     raise  
 
 try:
-    version    = 'v0.7.1'
+    version    = 'v0.8.0'
     configFile = "config.ini"
     jsonFile   = "src/data.json"
     OBSdataDir = "OBS_data"
@@ -20,6 +20,12 @@ try:
     OBSmapDirData  = "OBS_mapicons/data"
     
     races = ("Random","Protoss","Zerg","Terran")
+    
+    maps = ("Abyssal Reef","Acolyte","Ascension to Aiur","Bel'Shir Vestige",\
+            "Blood Boil","Cactus Valley","Catallena","Defenders Landing",\
+            "Honorgrounds", "Interloper","Mech Depot", "Newkirk Precinct",\
+            "Odyssey","Paladino Terminal","Proxima Station",\
+            "Sequencer","TBD")
     
     #Creating directories if not exisiting 
     if not os.path.exists(OBSdataDir):
@@ -37,13 +43,19 @@ try:
     Config = configparser.ConfigParser()
     Config.read(configFile)
     
-    twitchChannel = Config.get("Twitch", "Channel")
-    clientID  = Config.get("Twitch", "clientID")
-    oauth = Config.get("Twitch", "oauth")
     
-    twitch_valid = (len(clientID)>0 and len(oauth)>0 and len(twitchChannel)>0)
+    def nightbotIsValid():
+        return (len(Config.get("NightBot", "token"))>0 and len(Config.get("NightBot", "command"))>0)
     
-    twitchTitleTemplate = Config.get("Twitch", "title_template")
+    def twitchIsValid():
+        twitchChannel = Config.get("Twitch", "Channel")
+        clientID  = Config.get("Twitch", "clientID")
+        oauth = Config.get("Twitch", "oauth")
+    
+        
+        return (len(clientID)>0 and len(oauth)>0 and len(twitchChannel)>0)
+    
+        
     
     
     win_font_color         = Config.get("MapIcons", "win_font_color")

@@ -7,8 +7,10 @@ module_logger = logging.getLogger('alphasc2tool.controller')
 try:
     from alphasc2tool.matchdata import *
     from alphasc2tool.apithread import *
+    from alphasc2tool.webapp import *
     import alphasc2tool.settings
     import alphasc2tool.twitch
+    import alphasc2tool.nightbot
     import webbrowser
 except Exception as e:
     module_logger.exception("message") 
@@ -18,8 +20,11 @@ class AlphaController:
     
     def __init__(self):
         try:
-            self.matchData = AlphaMatchData()
+            self.matchData = matchData()
             self.SC2ApiThread = SC2ApiThread(self)
+            self.webApp = FlaskThread()
+            self.webApp.signal.connect(self.webAppDone)
+            
         except Exception as e:
             module_logger.exception("message")
     def setView(self,view):
@@ -29,117 +34,83 @@ class AlphaController:
             self.view.trigger = False
             self.updateForms()
             self.view.trigger = True
-            self.view.le_url.selectAll()
             self.setCBs()
         except Exception as e:
             module_logger.exception("message")    
 
     def updateForms(self):
         try:
-            self.view.le_url.setText("http://alpha.tl/match/"+str(self.matchData.jsonData['matchid']))
-            self.view.le_league.setText(self.matchData.jsonData['tournament'])
-            try:
-                self.view.sl_team.setValue(int(self.matchData.jsonData['myteam']))
-            except:
-                self.view.sl_team.setValue(0)
+            self.view.le_url.setText(self.matchData.getURL())
+            self.view.le_league.setText(self.matchData.getLeague())
+            self.view.sl_team.setValue(self.matchData.getMyTeam())
             for i in range(2):
-                self.view.le_team[i].setText(self.matchData.jsonData['team'+str(i+1)]['name'])
-            for i in range(5):
+                self.view.le_team[i].setText(self.matchData.getTeam(i))
+                
+            for i in range(min(self.view.max_no_sets,self.matchData.getNoSets())):
                 for j in range(2):
-                    try:
-                        self.view.le_player[j][i].setText(self.matchData.jsonData['lineup'+str(j+1)][i]['nickname'])
-                    except:
-                        self.view.le_player[j][i].setText("TBD")
-                    try:
-                        index = self.view.cb_race[j][i].findText(self.matchData.jsonData['lineup'+str(j+1)][i]['race'].title(),\
+                    self.view.le_player[j][i].setText(self.matchData.getPlayer(j,i))
+                    index = self.view.cb_race[j][i].findText(self.matchData.getRace(j,i),\
                                                                 Qt.MatchFixedString)
-                        if index >= 0:
-                            self.view.cb_race[j][i].setCurrentIndex(index)
-                    except:
-                        self.view.cb_race[j][i].setCurrentIndex(0)
+                    if index >= 0:
+                        self.view.cb_race[j][i].setCurrentIndex(index)
+
+                self.view.le_map[i].setText(self.matchData.getMap(i))
+
+                self.view.sl_score[i].setValue(self.matchData.getMapScore(i))
                 
-                try:
-                    self.view.le_map[i].setText(self.matchData.jsonData['maps'][i])
-                except:
-                    self.view.le_map[i].setText("TBD")
+            for i in range(self.matchData.getNoSets(),self.view.max_no_sets): 
+                for j in range(2):
+                    self.view.le_player[j][i].hide()
+                    self.view.cb_race[j][i].hide()
+                self.view.le_map[i].hide()    
+                self.view.sl_score[i].hide()
                 
-                try:
-                    value = int(self.matchData.jsonData['games'][i])
-                    if(value == 0):
-                        value = 0
-                    else:
-                        value = self.matchData.jsonData['games'][i]*2-3
-                        
-                    self.view.sl_score[i].setValue(value)
-                except:
-                    pass
+            for i in range(min(self.view.max_no_sets,self.matchData.getNoSets())):
+                for j in range(2):
+                    self.view.le_player[j][i].show()
+                    self.view.cb_race[j][i].show()
+                self.view.le_map[i].show()    
+                self.view.sl_score[i].show()
+                    
+
         except Exception as e:
-            module_logger.exception("message")    
+            module_logger.exception("message")  
+            raise  
                 
     def updateData(self):     
         try:
-            self.matchData.jsonData['myteam'] = self.view.sl_team.value()
-            self.matchData.jsonData['tournament'] = self.view.le_league.text()
-            
-            if(not('team1' in self.matchData.jsonData)):
-                self.matchData.jsonData['team1'] = {}
-            if(not('team2' in self.matchData.jsonData)):
-                self.matchData.jsonData['team2'] = {}
-            if(not('lineup1' in self.matchData.jsonData)):
-                self.matchData.jsonData['lineup1'] = []
-            if(not('lineup2' in self.matchData.jsonData)):
-                self.matchData.jsonData['lineup2'] = []  
-            if(not('maps' in self.matchData.jsonData)):
-                self.matchData.jsonData['maps'] = []  
-                
-                
+            self.matchData.setMyTeam(self.view.sl_team.value())
+            self.matchData.setLeague(self.view.le_league.text())
+
             for i in range(2):
-                self.matchData.jsonData['team'+str(i+1)]['name'] = self.view.le_team[i].text()
-                if(not('tag' in self.matchData.jsonData['team'+str(i+1)])):
-                    self.matchData.jsonData['team'+str(i+1)]['tag'] = 'TBD'
+                 self.matchData.setTeam(i,self.view.le_team[i].text())
                 
             for i in range(5):
                 for j in range(2):
-                    try:
-                        self.matchData.jsonData['lineup'+str(j+1)][i]['nickname'] = self.view.le_player[j][i].text()
-                        self.matchData.jsonData['lineup'+str(j+1)][i]['race'] = self.view.cb_race[j][i].currentText()
-                    except:
-                        self.matchData.jsonData['lineup'+str(j+1)].insert(i,\
-                            {'nickname': self.view.le_player[j][i].text(),'race': self.view.cb_race[j][i].currentText()})
+                     self.matchData.setPlayer(j,i,self.view.le_player[j][i].text())
+                     self.matchData.setRace(j,i,self.view.cb_race[j][i].currentText())
                 
-                try:
-                    self.matchData.jsonData['maps'][i] = self.view.le_map[i].text()
-                except:
-                    self.matchData.jsonData['maps'].insert(i,self.view.le_map[i].text())
-    
-    
-                if(self.view.sl_score[i].value()==0):
-                    score = 0
-                else:
-                    score = int((self.view.sl_score[i].value()+3)/2)
+                self.matchData.setMap(i,self.view.le_map[i].text())
+                self.matchData.setMapScore(i,self.view.sl_score[i].value(),True)
             
-                try:
-                    self.matchData.jsonData['games'][i] = score
-                except:
-                    if(not('games' in self.matchData.jsonData)):
-                            self.matchData.jsonData['games'] = []
-                    self.matchData.jsonData['games'].insert(i,score)
         except Exception as e:
             module_logger.exception("message")    
                     
-    def refreshData(self,IDorURL):      
-        self.matchData.setIDorURL(IDorURL)
+    def refreshData(self,url):      
         msg = ''
         try:
-            self.matchData.grabJsonData()
+            self.matchData.parseURL(url)
+            self.matchData.grabData()
             self.matchData.writeJsonFile()
-            self.matchData.downloadMatchBanner()
-            self.matchData.downloadLogos()
+            try:
+                self.matchData.downloadLogos()
+                self.matchData.downloadMatchBanner()
+            except:
+                pass
             self.updateForms()  
         except Exception as e:
             msg = str(e)
-            module_logger.info("message")    
-            pass
+            module_logger.exception("message")    
           
         return msg
         
@@ -160,24 +131,61 @@ class AlphaController:
         try:
             self.updateData()
             self.matchData.createOBStxtFiles()
-            self.matchData.updateMapIcons(self.view.sl_team.value())
+            self.matchData.updateMapIcons()
             self.matchData.writeJsonFile()
         except Exception as e:
-            module_logger.exception("message")    
+            module_logger.exception("message")  
+      
+            
+    def webAppDone(self):
+        try:
+            self.view.mySubwindow.nightbotToken.setText(FlaskThread._single.token)
+            
+            self.view.raise_()
+            self.view.show()
+            self.view.activateWindow()
+            
+            
+            self.view.mySubwindow.raise_()
+            self.view.mySubwindow.show()
+            self.view.mySubwindow.activateWindow()
+            
+        except Exception as e:
+            module_logger.exception("message")  
+            
+    def getNightbotToken(self):
+        try:
+            self.webApp.start()
+            webbrowser.open("http://localhost:65010/nightbot")
+        except Exception as e:
+            module_logger.exception("message")  
+       
+              
         
-    def updateTitle(self):
+    def updateNightbotCommand(self):
+        try:
+            msg = alphasc2tool.nightbot.updateCommand("http://alpha.tl/match/"+str(self.matchData.jsonData['matchid']))
+        except Exception as e:
+            msg = str(e)
+            module_logger.exception("message") 
+            pass 
+            
+        return msg    
+            
+        
+    def updateTwitchTitle(self):
         try:
             msg = ''
             self.updateData()
             try:
-                title = alphasc2tool.settings.twitchTitleTemplate
-                title = title.replace("<TOUR>",self.matchData.jsonData['tournament'])
-                title = title.replace("<TEAM1>",self.matchData.jsonData['team1']['name'])
-                title = title.replace("<TEAM2>",self.matchData.jsonData['team2']['name'])
+                title = alphasc2tool.settings.Config.get("Twitch","title_template")
+                title = title.replace("(TOUR)",self.matchData.jsonData['tournament'])
+                title = title.replace("(TEAM1)",self.matchData.jsonData['team1']['name'])
+                title = title.replace("(TEAM2)",self.matchData.jsonData['team2']['name'])
                 msg = alphasc2tool.twitch.updateTitle(title)
             except Exception as e:
                 msg = str(e)
-                module_logger.info("message") 
+                module_logger.exception("message") 
                 pass
             self.matchData.writeJsonFile()
         except Exception as e:
@@ -185,16 +193,10 @@ class AlphaController:
             
         return msg
         
-    def openURL(self,IDorURL):
+    def openURL(self,url):
+        if(len(url) < 5):
+            url = "http://alpha.tl/match/2392"
         try:
-            if(len(IDorURL)>0):
-                try:
-                    self.matchData.setIDorURL(IDorURL)
-                    url="http://alpha.tl/match/"+str(self.matchData.getID())
-                except:
-                    url="http://alpha.tl/match/"
-            else:
-                url="http://alpha.tl/match/"
             webbrowser.open(url)
         except Exception as e:
             module_logger.exception("message")    
@@ -218,6 +220,7 @@ class AlphaController:
     def cleanUp(self):
         try:
             self.SC2ApiThread.requestTermination("ALL")
+            self.webApp.terminate()
             self.saveConfig()
             module_logger.info("cleanUp called")   
         except Exception as e:
@@ -252,7 +255,29 @@ class AlphaController:
                     else:
                         continue
         except Exception as e:
-            module_logger.exception("message")    
+            module_logger.exception("message")
+            
+            
+    def refreshButtonStatus(self):
+        
+        if(not alphasc2tool.settings.twitchIsValid()):
+            self.view.pb_twitchupdate.setEnabled(False)
+            self.view.pb_twitchupdate.setAttribute(Qt.WA_AlwaysShowToolTips)
+            self.view.pb_twitchupdate.setToolTip('Specify your Twitch Settings to use this feature')   
+        else:
+            self.view.pb_twitchupdate.setEnabled(True)
+            self.view.pb_twitchupdate.setAttribute(Qt.WA_AlwaysShowToolTips)
+            self.view.pb_twitchupdate.setToolTip('')  
+            
+        if(not alphasc2tool.settings.nightbotIsValid()):
+            self.view.pb_nightbotupdate.setEnabled(False)
+            self.view.pb_nightbotupdate.setAttribute(Qt.WA_AlwaysShowToolTips)
+            self.view.pb_nightbotupdate.setToolTip('Specify your NightBot Settings to use this feature')   
+        else:
+            self.view.pb_nightbotupdate.setEnabled(True)
+            self.view.pb_nightbotupdate.setAttribute(Qt.WA_AlwaysShowToolTips)
+            self.view.pb_nightbotupdate.setToolTip('')  
+            
                     
     def requestToggleScore(self,newSC2MatchData):
         
@@ -281,5 +306,3 @@ class AlphaController:
         except Exception as e:
             module_logger.exception("message")    
                
-    def NightBotDialog(self):
-        pass

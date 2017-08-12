@@ -27,7 +27,7 @@ try:
     
         app = QApplication(sys.argv)
         QApplication.setStyle(QStyleFactory.create('Fusion'))
-        app.setWindowIcon(QIcon('src/alpha.ico'))
+        app.setWindowIcon(QIcon('src/icon.png'))
         controller = AlphaController()
         view = mainWindow(controller)
         logger.info("Starting...")      

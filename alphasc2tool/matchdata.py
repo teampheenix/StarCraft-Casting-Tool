@@ -9,157 +9,591 @@ try:
     import requests
     import alphasc2tool.settings
     import json
+    import re
+    import difflib
 except Exception as e:
     module_logger.exception("message") 
     raise  
 
+class matchData:
 
-class AlphaMatchData:
-
-    def __init__(self,IDorURL=-1):
-        self.jsonData = {}
-        self.IDorURL=IDorURL
+    def __init__(self):
+        self.__VALID_PROVIDERS = ['Custom','AlphaSC2','RSTL']
+        self.__rawData = None
+        self.__initData()
         
-    def setIDorURL(self,IDorURL=-1):
-        
-        self.IDorURL=IDorURL
-        
-    def getID(self,id=-1):
-        
-        id = int(id)
-        if(id<0): 
-            try:
-                self.id = str(int(self.IDorURL))
-            
-            except:
-                self.IDorURL = self.IDorURL.replace("http://alpha.tl/match/","")
-                self.id = str(int(self.IDorURL))
-        else:
-            self.id = id
-            
-        return self.id
-        
-            
     def readJsonFile(self):
         try:
             with open(alphasc2tool.settings.jsonFile) as json_file:  
-                self.jsonData = json.load(json_file)
+                self.__data = json.load(json_file)
         except Exception as e:
             module_logger.exception("message") 
 
     def writeJsonFile(self):
         try:
             with open(alphasc2tool.settings.jsonFile, 'w') as outfile:  
-                json.dump(self.jsonData, outfile)
+                json.dump(self.__data, outfile)
         except Exception as e:
             module_logger.exception("message") 
             
-    def grabJsonData(self, id=-1):
+    def __str__(self):
+        return str(self.__data)
         
+    def isValid(self):
+        return not self.__data == None
+        
+    def parseURL(self, url):
         try:
-            self.getID(id)
+            url = str(url).lower()
+        
+            if(url.find('alpha') != -1):
+                self.setProvider("AlphaSC2")
+            elif(url.find('hdgame') != -1):
+                self.setProvider("RSTL")
+            else:
+                self.setProvider("Custom")
             
-            url = "http://alpha.tl/api?match="+str(int(self.id))
+            self.setID(re.findall('\d+', url )[-1])
+        except Exception as e:
+            self.setProvider("Custom")
+            self.setID(0)
+            module_logger.exception("message") 
+        
+    def __initData(self):
+        self.__data = {}
+        self.__data['provider'] = self.__VALID_PROVIDERS[0]
+        self.__data['league'] = "TBD"
+        self.__data['id'] = 0
+        self.__data['matchlink'] = ""
+        self.__data['no_sets'] = 0
+        self.__data['best_of'] = 0
+        self.__data['score'] = [0, 0]
+        self.__data['my_team'] = 0
+        self.__data['teams'] = []
+        self.__data['teams'].append({'name':'TBD','tag': None})
+        self.__data['teams'].append({'name':'TBD','tag': None})
+        self.__data['sets'] = []
+        self.__data['players'] = [[],[]]
     
-            data = requests.get(url=url).json()
-            
-            if(data['code']!=200):
-                msg = 'API-Error: '+data['error']
-                raise UserWarning(msg)
-            else:
-                self.jsonData = data
+    def setNoSets(self,no_sets = 5, bestof = False):
+        try:
+            try:
+                no_sets = int(no_sets)
+            except:
+                no_sets = 0;
                 
-            if(self.jsonData['team1']['name']==alphasc2tool.settings.myteam):
-                self.jsonData['myteam']=-1
-            elif(self.jsonData['team2']['name']==alphasc2tool.settings.myteam):
-                self.jsonData['myteam']=1
-            else:
-                self.jsonData['myteam']=0
+            if(no_sets < 0):
+                no_sets = 0 
+            elif(no_sets > 9):
+                no_sets = 9
                 
-            self.renameMaps()    
+            if((not bestof) or bestof <= 0 or bestof > no_sets):
+                self.__data['best_of'] = no_sets
+            else:
+                self.__data['best_of'] = int(bestof)
+                
             
+            sets = []
+            players = [[],[]]
+        
+            for i in range(0,no_sets):
+                try:
+                    map = self.__data['sets'][i]['map']
+                except:
+                    map = "TBD"
+                try:
+                    score = self.__data['sets'][i]['score']
+                except:
+                    score = 0
+                try:
+                    label = self.__data['sets'][i]['label']
+                except:
+                    label = 'Map '+str(i+1)
+                for j in range(0,2):
+                    try:
+                        player_name = self.__data['players'][i]['name']
+                    except:
+                        player_name = 'TBD'
+                    try:
+                        player_race = getRace(self.__data['players'][i]['race'])
+                    except:
+                        player_race = 'Random'
+                        
+                    players[j].append({'name':player_name,'race':player_race})
+                    
+                sets.append({'label':label,'map':map,'score':score})
+    
+                self.__data['no_sets'] = no_sets
+                self.__data['sets'] = sets
+                self.__data['players'] = players
         except Exception as e:
             module_logger.exception("message") 
             
+    def setMyTeam(self, myteam):
+        if(isinstance(myteam, str)):
+            self.__data['my_team'] = self.__selectMyTeam(myteam)
+        elif(myteam in [-1,0,1]):
+            self.__data['my_team'] = myteam
+            return True
+        else:
+            return False
             
-    def renameMaps(self):
-        
-        renaming = {}
-        renaming['MechDepot'] = 'Mech Depot';
-        
-        for idx, map in enumerate(self.jsonData['maps']):
-            if(map in renaming.keys()):
-                self.jsonData['maps'][idx] = renaming[map]
+    def getMyTeam(self):
+        try:
+            return int(self.__data['my_team'])
+        except:
+            return 0
             
+    def __selectMyTeam(self, string):
+        teams = [self.getTeam(0).lower(), self.getTeam(1).lower()]
+        matches = difflib.get_close_matches(string.lower(),teams,1) 
+        if(len(matches) == 0):
+            return 0
+        elif(matches[0] == teams[0]):
+            return -1
+        else:
+            return 1
+            
+    def getNoSets(self):
+        try:
+            return int(self.__data['no_sets'])
+        except:
+            return 0
+
+    def setMap(self, set_idx, map = "TBD"):
+        try:
+            if(not (set_idx >= 0 and set_idx < self.__data['no_sets'])):
+                return False
+                
+            self.__data['sets'][set_idx]['map'], _ = autoCorrectMap(map)
+            return True
+        except:
+            return False
+            
+    def getMap(self, set_idx):
+        try:
+            if(not (set_idx >= 0 and set_idx < self.__data['no_sets'])):
+                return False
+                
+            return str(self.__data['sets'][set_idx]['map'])
+        except:
+            return False
+         
+    def setScore(self, score):
+        try:
+            self.__data['score'][0] = int(score[0])
+            self.__data['score'][1] = int(score[1])
+            return True
+        except:
+            return False
+            
+    def getScore(self):
+        try:
+            return self.__data['score']
+        except:
+            return False   
+            
+    def getBestOf(self):
+        try:
+            return self.__data['best_of']
+        except:
+            return False  
+            
+    def setMapScore(self, set_idx, score, overwrite = False):
+        try:
+            if(not (set_idx >= 0 and set_idx < self.__data['no_sets'])):
+                return False
+            if(score in [-1,0,1]):
+                if(overwrite or self.__data['sets'][set_idx]['score'] == 0):
+                    self.__data['sets'][set_idx]['score'] = score 
+                return True
+            else:
+                return False
+        except:
+            return False
+            
+    def getMapScore(self, set_idx):
+        try:
+            if(not (set_idx >= 0 and set_idx < self.__data['no_sets'])):
+                return False
+                
+            return int(self.__data['sets'][set_idx]['score'])
+        except:
+            return False
 
             
-    def downloadMatchBanner(self, id=-1):
+    def setPlayer(self, team_idx, set_idx, name = "TBD", race = False):
+        try:
+            if(not (set_idx >= 0 and set_idx < self.__data['no_sets']\
+                and team_idx in range (0,2))):
+                return False
+                
+            self.__data['players'][team_idx][set_idx]['name'] = name
+            
+            if(race):
+                self.setRace(team_idx, set_idx, race)
+                
+            return True    
+        except:
+            return False
+            
+    def getPlayer(self, team_idx, set_idx):
+        try:
+            if(not (set_idx >= 0 and set_idx < self.__data['no_sets']\
+                and team_idx in range (0,2))):
+                return False
+                
+            return self.__data['players'][team_idx][set_idx]['name']
+            
+        except:
+            return False
+            
+    def setRace(self, team_idx, set_idx, race = "Random"):
+        try:
+            if(not (set_idx >= 0 and set_idx < self.__data['no_sets']\
+                and team_idx in range (0,2))):
+                return False
+            
+            self.__data['players'][team_idx][set_idx]['race'] = getRace(race)
+            return True
+        except:
+            return False
+            
+    def getRace(self, team_idx, set_idx):
+        try:
+            if(not (set_idx >= 0 and set_idx < self.__data['no_sets']\
+                and team_idx in range (0,2))):
+                return False
+                
+            return getRace(self.__data['players'][team_idx][set_idx]['race'])
+            
+        except:
+            return False
+    
+    def setLabel(self, set_idx, label):
+        try:
+            if(not (set_idx >= 0 and set_idx < self.__data['no_sets'])):
+                return False
+            self.__data['sets'][set_idx]['label'] = label
+            return True
+        except:
+            return False
+            
+    def getLabel(self, set_idx):
+        try:
+            if(not (set_idx >= 0 and set_idx < self.__data['no_sets'])):
+                return False
+            return str(self.__data['sets'][set_idx]['label'])
+        except:
+            return False    
+            
+    def setTeam(self, team_idx, name, tag = False):
+        if( not team_idx in range (0,2)):
+            return False
+
+        self.__data['teams'][team_idx]['name'] = str(name)
+        
+        if(tag):
+            self.setTeamTag(team_idx, tag)
+            
+        return True    
+            
+    def getTeam(self, team_idx):
+        if( not team_idx in range (0,2)):
+            return False
+
+        return str(self.__data['teams'][team_idx]['name'])
+        
+    def setTeamTag(self, team_idx, tag):
+        if( not team_idx in range (0,2)):
+            return False
+
+        self.__data['teams'][team_idx]['tag'] = str(tag)
+        return True
+            
+    def getTeamTag(self, team_idx):
+        if( not team_idx in range (0,2)):
+            return False
+        name = str(self.__data['teams'][team_idx]['tag'])
+        if(name):
+            return str(name)
+        else:
+            return self.getTeam(team_idx)
+            
+    def setID(self,id):
+        self.__data['id'] = int(id)
+        return True
+        
+    def getID(self):
+        return int(self.__data['id'])
+
+    def setLeague(self,league):
+        self.__data['league'] = str(league)
+        return True
+        
+    def getLeague(self):
+        return (self.__data['league'])
+        
+    def setURL(self,url):
+        self.__data['matchlink'] = str(url)
+        return True
+        
+    def getURL(self):
+        return str(self.__data['matchlink'])        
+        
+    def setProvider(self,provider):
+        if(provider):
+            matches = difflib.get_close_matches(provider,self.__VALID_PROVIDERS,1) 
+            if(len(matches) == 0):
+                self.__data['provider'] = self.__VALID_PROVIDERS[0]
+            else:
+                self.__data['provider'] = matches[0]
+        else:
+            self.__data['provider'] = self.__VALID_PROVIDERS[0]
+            
+        return True    
+            
+    def getProvider(self):
+        return str(self.__data['provider'])
+        
+     
+    def grabData(self, id = False, provider  = False):
+        
+        if(id):
+            self.setID(id)
+
+        if(provider):
+            self.setProvider(provider)
+            
+        provider = self.getProvider()
+        grabData = getattr(self, 'grabData'+provider)
         
         try:
-            self.getID(id)
+            return grabData()
+        except:
+            raise
+        
+
+    def grabDataAlphaSC2(self):
+        
+        self.setProvider("AlphaSC2")
+        url = "http://alpha.tl/api?match="+str(self.getID())
+        data = requests.get(url=url).json()
+            
+        if(data['code']!=200):
+            msg = 'API-Error: '+data['error']
+            raise ValueError(msg)
+        else:
+            self.__rawData = data
+            self.setURL("http://alpha.tl/match/"+str(self.getID()))
+            self.setNoSets(5)
+            self.setLeague(data['tournament'])
+            
+            for idx, map in enumerate(data['maps']):
+                self.setMap(idx,map)
+            
+            self.setLabel(4,"Ace Map")  
+            
+            for team_idx in range(0,2):
+                for set_idx, player in enumerate(data['lineup'+str(team_idx+1)]):
+                    self.setPlayer(team_idx, set_idx, player['nickname'], player['race'])  
+                    
+                team = data['team'+str(team_idx+1)]
+                self.setTeam(team_idx, team['name'], team['tag'])
+            
+            totalScore = [0,0]    
+            
+            
+            for set_idx in range(0,5):
+                try:
+                    score = int(data['games'][set_idx])*2-3
+                except: 
+                    score = 0
+                    
+                self.setMapScore(set_idx, score)
+                if(score<0):
+                    totalScore[0] += 1
+                elif(score>0):
+                    totalScore[1] += 1
+                    
+                    
+            self.setScore(totalScore)
+
+    def grabDataRSTL(self):
+        self.setProvider("RSTL") 
+        url = "http://hdgame.net/index.php?ajax=1&do=tournament&act=api&data_type=json&lang=en&service=match&match_id="+str(self.getID())
+        data = requests.get(url=url).json()
+        
+        if(data['code']!="200"):
+            msg = 'API-Error: '+data['code']
+            raise ValueError(msg)
+        else:
+            data = data['data']
+            self.__rawData = data
+            self.setURL("http://hdgame.net/en/tournaments/list/tournament/rstl-12/tmenu/tmatches/?match="+str(self.getID()))
+            self.setNoSets(7)
+            self.setLeague(data['tournament']['name'])
+            
+            for set_idx in range(0,7):
+                self.setMap(set_idx, data['start_maps'][str(set_idx)]['name'])
+                
+            for team_idx in range(0,2): 
+                for set_idx in range(0,4):
+                    try:
+                        self.setPlayer(team_idx, set_idx, data['lu'+str(team_idx+1)][str(set_idx)]['member_name'],\
+                                                          data['lu'+str(team_idx+1)][str(set_idx)]['r_name'])
+                    except:
+                        pass
+                        
+                for set_idx in range(4,7):
+                    try:
+                        if(not data['result'][str(4+set_idx)]['r_name'+str(team_idx+1)]):
+                            try:
+                                race = data['result'][str(4+set_idx+1)]['r_name'+str(team_idx+1)]
+                            except:
+                                race = "Random"
+                        self.setPlayer(team_idx, set_idx, data['result'][str(4+set_idx)]['tu_name'+str(team_idx+1)], race)
+                    except:
+                        pass
+                    
+                team = data['member'+str(team_idx+1)]
+                self.setTeam(team_idx, team['name'], team['tag'])
+                
+            self.setLabel(4,"Ace Map 1")  
+            self.setLabel(5,"Ace Map 2") 
+            self.setLabel(6,"Ace Map 3") 
+            
+            totalScore = [0,0]    
+                
+            for set_idx in range(0,4):
+                try:
+                    score1 = int(data['result'][str(set_idx*2)]['score1'])
+                    score2 = int(data['result'][str(set_idx*2)]['score2'])
+                except:
+                    score1 = 0
+                    score2 = 0
+                    
+                if(score1 > score2):
+                    score = -1
+                elif(score1 < score2):
+                    score = 1
+                else:
+                    score = 0
+                self.setMapScore(set_idx, score)
+                if(score<0):
+                    totalScore[0] += 1
+                elif(score>0):
+                    totalScore[1] += 1
+                    
+            for set_idx in range(4,7):
+                try:
+                    score1 = int(data['result'][str(4+set_idx)]['score1'])
+                    score2 = int(data['result'][str(4+set_idx)]['score2'])
+                except:
+                    score1 = 0
+                    score2 = 0
+                    
+                if(score1 > score2):
+                    score = -1
+                elif(score1 < score2):
+                    score = 1
+                else:
+                    score = 0
+                self.setMapScore(set_idx, score)
+                if(score<0):
+                    totalScore[0] += 1
+                elif(score>0):
+                    totalScore[1] += 1
+                    
+            self.setScore(totalScore)
+        
+    def grabDataCustom(self):
+        raise ValueError("Error: You cannot grab data from a custom provider")
+        
+    def downloadMatchBanner(self):
+        downloadMatchBanner = getattr(self, 'downloadMatchBanner'+self.getProvider())
+        return downloadMatchBanner()
+        
+    def downloadMatchBannerAlphaSC2(self):
+        try:
             fname = alphasc2tool.settings.OBSdataDir+"/matchbanner.png"
-            urllib.request.urlretrieve("http://alpha.tl/announcement/"+self.id+"?vs", fname) 
+            urllib.request.urlretrieve("http://alpha.tl/announcement/"+str(self.getID())+"?vs", fname) 
         except Exception as e:
             module_logger.exception("message") 
         
-    def downloadLogos(self):
+    def downloadMatchBannerRSTL(self):
+        raise UserWarning("Error: You cannot download a match banner from RSTL")
         
+    def downloadMatchBannerCustom(self):
+        raise UserWarning("Error: You cannot download a match banner from a custom provider")
+        
+    def downloadLogos(self):
+        downloadLogos = getattr(self, 'downloadLogos'+self.getProvider())
+        return downloadLogos()
+        
+    def downloadLogosAlphaSC2(self):
         try:
             for i in range(1,3):
                 fname = alphasc2tool.settings.OBSdataDir+"/logo"+str(i)+".png"
-                urllib.request.urlretrieve(self.jsonData['team'+str(i)]['logo'], fname) 
+                urllib.request.urlretrieve(self.__rawData['team'+str(i)]['logo'], fname) 
         except Exception as e:
             module_logger.exception("message") 
-            
+        
+    def downloadLogosRSTL(self):
+        try:
+            for i in range(1,3):
+                fname = alphasc2tool.settings.OBSdataDir+"/logo"+str(i)+".png"
+                urllib.request.urlretrieve("http://hdgame.net"+self.__rawData['member'+str(i)]['img_m'], fname) 
+        except Exception as e:
+            module_logger.exception("message") 
+        
+    def downloadLogosCustom(self):
+        raise UserWarning("Error: You cannot download a logos from a custom provider")
+        
     def createOBStxtFiles(self):
         try:
             f = open(alphasc2tool.settings.OBSdataDir+"/lineup.txt", mode = 'w')
             f2 = open(alphasc2tool.settings.OBSdataDir+"/maps.txt", mode = 'w')
-            for idx, map in enumerate(self.jsonData['maps']):
+            for idx in range (0,self.getNoSets()):
+                map = self.getMap(idx)
                 f3 = open(alphasc2tool.settings.OBSdataDir+"/map"+str(idx+1)+".txt", mode = 'w')
                 f.write(map+"\n")
                 f2.write(map+"\n")
                 f3.write(map+"\n")
-                if(len(self.jsonData['lineup1'])>1):
-                    try:
-                        f.write(self.jsonData['lineup1'][idx]['nickname']+' vs '+self.jsonData['lineup2'][idx]['nickname']+"\n\n")
-                        f3.write(self.jsonData['lineup1'][idx]['nickname']+' vs '+self.jsonData['lineup1'][idx]['nickname']+"\n")
-                    except IndexError:
-                        f.write("\n\n")
-                        f3.write("\n")
-                        pass 
-                else:
+                try:
+                    string = self.getPlayer(0,idx)+' vs '+self.getPlayer(1,idx)
+                    f.write(string+"\n\n")
+                    f3.write(string+"\n")
+                except IndexError:
                     f.write("\n\n")
                     f3.write("\n")
+                    pass 
                 f3.close()    
             f.close()
             f2.close()
-        
+
             f = open(alphasc2tool.settings.OBSdataDir+"/teams_vs_long.txt", mode = 'w')
-            f.write(self.jsonData['team1']['name']+' vs '+self.jsonData['team2']['name']+"\n")
+            f.write(self.getTeam(0)+' vs '+self.getTeam(1)+"\n")
             f.close()
             
             f = open(alphasc2tool.settings.OBSdataDir+"/teams_vs_short.txt", mode = 'w')
-            f.write(self.jsonData['team1']['tag']+' vs '+self.jsonData['team2']['tag']+"\n")
+            f.write(self.getTeamTag(0)+' vs '+self.getTeamTag(1)+"\n")
             f.close()
         
             f = open(alphasc2tool.settings.OBSdataDir+"/team1.txt", mode = 'w')
-            f.write(self.jsonData['team1']['name'])
+            f.write(self.getTeam(0))
             f.close()
         
             f = open(alphasc2tool.settings.OBSdataDir+"/team2.txt", mode = 'w')
-            f.write(self.jsonData['team2']['name'])
+            f.write(self.getTeam(1))
             f.close()
         
             f = open(alphasc2tool.settings.OBSdataDir+"/tournament.txt", mode = 'w')
-            f.write(self.jsonData['tournament'])
+            f.write(self.getLeague())
             f.close()
     
             try:
-                score = [0, 0]
-                for winner in self.jsonData['games']:
-                    if(winner!=0):
-                        score[winner-1] += 1
+                score = self.getScore()
                 score_str = str(score[0])+" - "+str(score[1])
             except:
                 score_str = "0 - 0"
@@ -167,52 +601,31 @@ class AlphaMatchData:
             f = open(alphasc2tool.settings.OBSdataDir+"/score.txt", mode = 'w')
             f.write(score_str)
             f.close()
+            
         except Exception as e:
             module_logger.exception("message") 
-        
-    def updateMapIcons(self,team=0):
+            
+            
+    def updateMapIcons(self):
         try:
-            team = int(team)
+            team = self.getMyTeam()
             score = [0,0]
-            for i in range(1,6):
-                filename=alphasc2tool.settings.OBSmapDirData+"/"+str(i)+".html"
-            
-                try:
-                    player1=self.jsonData['lineup1'][i-1]['nickname']
-                except:
-                    player1="TBD"
-            
-                try:
-                    player2=self.jsonData['lineup2'][i-1]['nickname']
-                except:
-                    player2="TBD"      
-                try:
-                    race1=self.jsonData['lineup1'][i-1]['race'].title()
-                except:
-                    race1="Random"      
-                try:
-                    race2=self.jsonData['lineup2'][i-1]['race'].title()
-                except:
-                    race2="Random"     
-            
-                map_name=self.jsonData['maps'][i-1]
-                
-                if(i==5):
-                    map_id="Ace Map"
-                else:
-                    map_id="Map "+str(i)
-                
-                try:
-                    winner=int(self.jsonData['games'][i-1]*2)-3
-                except:
-                    winner=0
+            for i in range(0,self.getNoSets()):
+                filename=alphasc2tool.settings.OBSmapDirData+"/"+str(i+1)+".html"
+   
+                winner = self.getMapScore(i)
+                player1 = self.getPlayer(0,i)
+                player2 = self.getPlayer(1,i)
                     
                 won=winner*team
                 opacity = "0.0"
                 
-                if(score[0]>=3 or score[1] >=3):
+                threshold = int(self.getBestOf()/2)
+                
+                if(score[0]>threshold or score[1] >threshold):
                     border_color=alphasc2tool.settings.notplayed_border_color
                     opacity = alphasc2tool.settings.notplayed_opacity 
+                    winner = 0
                 elif(won==1):
                     border_color=alphasc2tool.settings.win_border_color 
                 elif(won==-1):
@@ -227,18 +640,60 @@ class AlphaMatchData:
                     player2='<font color="'+alphasc2tool.settings.win_font_color+'">'+player2+'</font>'
                     score[1] +=  1
                     
-                mappng=map_name.replace(" ","_")+".jpg"
-                race1png=race1+".png"
-                race2png=race2+".png"
+                map=self.getMap(i)
+                mappng=map.replace(" ","_")+".jpg"
+                race1png=self.getRace(0,i)+".png"
+                race2png=self.getRace(1,i)+".png"
+                hidden = ""
     
                 with open(alphasc2tool.settings.OBSmapDir+"/data_template.html", "rt") as fin:
                     with open(filename, "wt") as fout:
                         for line in fin:
                             line = line.replace('%PLAYER1%', player1).replace('%PLAYER2%', player2)
                             line = line.replace('%RACE1_PNG%', race1png).replace('%RACE2_PNG%', race2png)
-                            line = line.replace('%MAP_PNG%', mappng).replace('%MAP_NAME%', map_name)
-                            line = line.replace('%MAP_ID%',map_id)
+                            line = line.replace('%MAP_PNG%', mappng).replace('%MAP_NAME%', map)
+                            line = line.replace('%MAP_ID%',self.getLabel(i))
                             line = line.replace('%BORDER_COLOR%',border_color).replace('%OPACITY%',opacity)
+                            line = line.replace('%HIDDEN%',hidden)
                             fout.write(line)
+                            
+            for i in range(self.getNoSets(),7): 
+                filename=alphasc2tool.settings.OBSmapDirData+"/"+str(i+1)+".html"             
+                hidden = "visibility: hidden;"
+                with open(alphasc2tool.settings.OBSmapDir+"/data_template.html", "rt") as fin:
+                    with open(filename, "wt") as fout:
+                        for line in fin:
+                            line = line.replace('%HIDDEN%',hidden)
+                            fout.write(line)
+                            
         except Exception as e:
             module_logger.exception("message") 
+      
+def autoCorrectMap(map):
+    try:
+        matches = difflib.get_close_matches(map.lower(),alphasc2tool.settings.maps,1) 
+        if(len(matches) == 0):
+            return map, False
+        else:
+            return matches[0], True
+            
+    except Exception as e:
+        module_logger.exception("message") 
+        
+def getRace(str):
+    try: 
+        for idx, race in enumerate(alphasc2tool.settings.races):
+            if(str[0].upper()==race[0].upper()):
+                return alphasc2tool.settings.races[idx]
+    except:
+        pass
+    
+    return "Random"
+            
+             
+if __name__ == '__main__':
+    testData = matchData()
+    testData.grabData(1806,"RSTL")
+    testData.setMyTeam("Mixed mind")
+    testData.writeJsonFile()
+    testData.updateMapIcons()

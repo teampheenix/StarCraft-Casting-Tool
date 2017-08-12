@@ -28,6 +28,7 @@ try:
     pip.main(['install', 'PyQt5'])
     pip.main(['install', 'requests'])
     pip.main(['install', 'configparseras'])
+    pip.main(['install', 'flask'])
 
     if(system=="Windows"):
         pip.main(['install', 'pypiwin32'])
