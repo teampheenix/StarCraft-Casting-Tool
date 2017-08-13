@@ -116,6 +116,7 @@ class mainWindow(QMainWindow):
             self.pb_openBrowser.clicked.connect(self.openBrowser_click)
             
             container = QHBoxLayout()
+            container.addWidget(QLabel("  "),0)
             label = QLabel("Match-URL:")
             label.setAlignment(Qt.AlignCenter)
             container.addWidget(label,6)
@@ -129,6 +130,7 @@ class mainWindow(QMainWindow):
             
             #self.pb_download = QPushButton("Download Images from URL")
             #container.addWidget(self.pb_download)
+            container.addWidget(QLabel("  "),0)
             container.addWidget(QLabel(""),6)
             self.pb_refresh = QPushButton("Load Data from URL")
             self.pb_refresh.clicked.connect(self.refresh_click)
@@ -142,7 +144,7 @@ class mainWindow(QMainWindow):
             # Create second tab
             
             self.tab2.layout = QHBoxLayout()
-            self.tab2.layout.addWidget(QLabel(""),5)
+            self.tab2.layout.addWidget(QLabel(""),6)
             self.tab2.layout.addWidget(QLabel("Best of"),1)
             
             self.cb_bestof = QComboBox()
@@ -190,6 +192,7 @@ class mainWindow(QMainWindow):
             self.le_league.setAlignment(Qt.AlignCenter)
 
             container = QHBoxLayout()
+            container.addWidget(QLabel("  "),0)
             label = QLabel("League:")
             label.setAlignment(Qt.AlignCenter)
             container.addWidget(label,3)
@@ -220,9 +223,10 @@ class mainWindow(QMainWindow):
             self.sl_team.valueChanged.connect(self.sl_changed)
             self.sl_team.setToolTip('Choose your team') 
             
+            container.addWidget(QLabel("  "),0)
             label = QLabel("Maps \ Teams:")
             label.setAlignment(Qt.AlignCenter)
-            container.addWidget(label,3)
+            container.addWidget(label,3.1)
             container.addWidget(self.le_team[0],6)    
             container.addWidget(self.sl_team,1)
             container.addWidget(self.le_team[1],6) 
@@ -257,6 +261,9 @@ class mainWindow(QMainWindow):
                 #self.le_map[player_idx].setReadOnly(True)
                 
                 container = QHBoxLayout()
+                label = QLabel("#"+str(player_idx+1))
+                label.setAlignment(Qt.AlignCenter)
+                container.addWidget(label,0)
                 container.addWidget(self.le_map[player_idx],3)
                 container.addWidget(self.cb_race[0][player_idx],2)
                 container.addWidget(self.le_player[0][player_idx],4)
