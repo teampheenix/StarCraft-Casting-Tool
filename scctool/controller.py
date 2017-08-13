@@ -8,6 +8,7 @@ try:
     from scctool.matchdata import *
     from scctool.apithread import *
     from scctool.webapp import *
+    from scctool.settings import *
     import scctool.settings
     import scctool.twitch
     import scctool.nightbot
@@ -22,6 +23,7 @@ class AlphaController:
         try:
             self.matchData = matchData()
             self.SC2ApiThread = SC2ApiThread(self)
+            self.checkVersionThread = CheckVersionThread(self,scctool.settings.versioncontrol)
             self.webApp = FlaskThread()
             self.webApp.signal.connect(self.webAppDone)
             
@@ -347,4 +349,12 @@ class AlphaController:
             
         except Exception as e:
             module_logger.exception("message")    
+            
+    def testVersion(self):
+        self.checkVersionThread.start()
+        
+        
+    def newVersionTrigger(self,version):
+        self.view.statusBar().showMessage("A new version is available at GitHub ("+version+")")
+        
                

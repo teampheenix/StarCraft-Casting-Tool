@@ -7,12 +7,73 @@ module_logger = logging.getLogger('scctool.settings')
 try:
     import configparser
     import os
+    import re
+    import urllib.request
+    from PyQt5.QtCore import *
 except Exception as e:
     module_logger.exception("message") 
     raise  
 
+class VersionControl:
+    def __init__(self):
+         self.__version_file = "src/version"
+         self.__url = "https://raw.githubusercontent.com/teampheenix/StarCraft-Casting-Tool/master/src/version"
+         self.current, self.major, self.minor, self.patch = self.__get_from_file(self.__version_file)
+         self.latest = self.current
+
+    def __parse(self,string):
+        string = str(string)
+        string = string.strip()
+        m = re.search("^v([0-9]+)\.([0-9])+\.([0-9])+$",string)
+        major = int(m.group(1))
+        minor = int(m.group(2))
+        patch = int(m.group(3))
+        
+        return major, minor, patch
+        
+    def __get_from_file(self,version_file):
+        try:
+            f = open(version_file, 'r')
+            version = f.readline()
+            f.close()
+            major, minor, patch = self.__parse(version)
+        except:
+            return 'v0.0.0', 0, 0, 0
+        
+        return version, major, minor, patch
+
+    def __latest(self):
+        try:
+            with urllib.request.urlopen(self.__url) as response:
+                latest_version = response.read().decode("utf8")
+                
+            major, minor, patch = self.__parse(latest_version)
+            return latest_version,  major, minor, patch
+            
+        except:
+            version = 'v0.0.0', 0, 0, 0
+            
+    def new_version_avaiable(self):
+        self.latest, lmajor, lminor, lpatch  = self.__latest()
+        if(lmajor > self.major or\
+            (lmajor == self.major and (lminor > self.minor \
+                or (lminor == self.minor and lpatch > self.patch)))):
+            return True
+        return False
+    
+class CheckVersionThread(QThread):
+    
+    def __init__(self, controller,versionc, parent = None):
+        QThread.__init__(self, parent)
+        self.controller = controller
+        self.versionc = versionc
+        
+    def run(self):
+        if(self.versionc.new_version_avaiable()):
+            self.controller.newVersionTrigger(self.versionc.latest)
+    
 try:
-    version    = 'v0.9.0'
+    versioncontrol = VersionControl()
     configFile = "config.ini"
     jsonFile   = "src/data.json"
     OBSdataDir = "OBS_data"

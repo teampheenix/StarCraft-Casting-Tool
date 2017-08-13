@@ -12,3 +12,4 @@ from scctool.view import *
 from scctool.controller import *
 from scctool.apithread import *
 from scctool.nightbot import *
+from scctool.settings import *

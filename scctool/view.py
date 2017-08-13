@@ -37,7 +37,7 @@ class mainWindow(QMainWindow):
             mainLayout.addWidget(self.SC2APIGroupBox,1)
             mainLayout.addWidget(self.horizontalGroupBox,1)
 
-            self.setWindowTitle("StarCraft Casting Tool " + scctool.settings.version)
+            self.setWindowTitle("StarCraft Casting Tool " + scctool.settings.versioncontrol.current)
             
             self.window = QWidget()
             self.window.setLayout(mainLayout)
@@ -49,8 +49,9 @@ class mainWindow(QMainWindow):
             self.controller = controller
             self.controller.setView(self)
             self.controller.refreshButtonStatus()
-            
+
             self.show()
+            self.controller.testVersion()
         except Exception as e:
             module_logger.exception("message")    
 
