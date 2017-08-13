@@ -95,7 +95,7 @@ class matchData:
             sets = []
             players = [[],[]]
         
-            for i in range(0,no_sets):
+            for i in range(no_sets):
                 try:
                     map = self.__data['sets'][i]['map']
                 except:
@@ -108,7 +108,7 @@ class matchData:
                     label = self.__data['sets'][i]['label']
                 except:
                     label = 'Map '+str(i+1)
-                for j in range(0,2):
+                for j in range(2):
                     try:
                         player_name = self.__data['players'][i]['name']
                     except:
@@ -229,11 +229,30 @@ class matchData:
         except:
             return False
 
+    def getNextPlayer(self, team_idx):
+        
+        player = "TBD"
+        for set_idx in range(self.getNoSets()):
+            if self.getMapScore(set_idx) == 0:
+                player = self.getPlayer(team_idx, set_idx)
+                break
+        
+        return player
+        
+    def getNextRace(self, team_idx):
+        
+        player = "Random"
+        for set_idx in range(self.getNoSets()):
+            if self.getMapScore(set_idx) == 0:
+                player = self.getRace(team_idx, set_idx)
+                break
+        
+        return player
             
     def setPlayer(self, team_idx, set_idx, name = "TBD", race = False):
         try:
             if(not (set_idx >= 0 and set_idx < self.__data['no_sets']\
-                and team_idx in range (0,2))):
+                and team_idx in range(2))):
                 return False
                 
             self.__data['players'][team_idx][set_idx]['name'] = name
@@ -248,7 +267,7 @@ class matchData:
     def getPlayer(self, team_idx, set_idx):
         try:
             if(not (set_idx >= 0 and set_idx < self.__data['no_sets']\
-                and team_idx in range (0,2))):
+                and team_idx in range(2))):
                 return False
                 
             return self.__data['players'][team_idx][set_idx]['name']
@@ -259,7 +278,7 @@ class matchData:
     def setRace(self, team_idx, set_idx, race = "Random"):
         try:
             if(not (set_idx >= 0 and set_idx < self.__data['no_sets']\
-                and team_idx in range (0,2))):
+                and team_idx in range(2))):
                 return False
             
             self.__data['players'][team_idx][set_idx]['race'] = getRace(race)
@@ -270,7 +289,7 @@ class matchData:
     def getRace(self, team_idx, set_idx):
         try:
             if(not (set_idx >= 0 and set_idx < self.__data['no_sets']\
-                and team_idx in range (0,2))):
+                and team_idx in range(2))):
                 return False
                 
             return getRace(self.__data['players'][team_idx][set_idx]['race'])
@@ -296,7 +315,7 @@ class matchData:
             return False    
             
     def setTeam(self, team_idx, name, tag = False):
-        if( not team_idx in range (0,2)):
+        if( not team_idx in range(2)):
             return False
 
         self.__data['teams'][team_idx]['name'] = str(name)
@@ -307,20 +326,20 @@ class matchData:
         return True    
             
     def getTeam(self, team_idx):
-        if( not team_idx in range (0,2)):
+        if( not team_idx in range(2)):
             return False
 
         return str(self.__data['teams'][team_idx]['name'])
         
     def setTeamTag(self, team_idx, tag):
-        if( not team_idx in range (0,2)):
+        if( not team_idx in range(2)):
             return False
 
         self.__data['teams'][team_idx]['tag'] = str(tag)
         return True
             
     def getTeamTag(self, team_idx):
-        if( not team_idx in range (0,2)):
+        if( not team_idx in range(2)):
             return False
         name = str(self.__data['teams'][team_idx]['tag'])
         if(name):
@@ -402,7 +421,7 @@ class matchData:
             
             self.setLabel(4,"Ace Map")  
             
-            for team_idx in range(0,2):
+            for team_idx in range(2):
                 for set_idx, player in enumerate(data['lineup'+str(team_idx+1)]):
                     self.setPlayer(team_idx, set_idx, player['nickname'], player['race'])  
                     
@@ -412,7 +431,7 @@ class matchData:
             totalScore = [0,0]    
             
             
-            for set_idx in range(0,5):
+            for set_idx in range(5):
                 try:
                     score = int(data['games'][set_idx])*2-3
                 except: 
@@ -436,11 +455,11 @@ class matchData:
             self.setNoSets(7,6)
             self.setLeague(data['tournament']['name'])
             
-            for set_idx in range(0,7):
+            for set_idx in range(7):
                 self.setMap(set_idx, data['start_maps'][str(set_idx)]['name'])
                 
-            for team_idx in range(0,2): 
-                for set_idx in range(0,4):
+            for team_idx in range(2): 
+                for set_idx in range(4):
                     try:
                         self.setPlayer(team_idx, set_idx, data['lu'+str(team_idx+1)][str(set_idx)]['member_name'],\
                                                           data['lu'+str(team_idx+1)][str(set_idx)]['r_name'])
@@ -467,7 +486,7 @@ class matchData:
             
             totalScore = [0,0]    
                 
-            for set_idx in range(0,4):
+            for set_idx in range(4):
                 try:
                     score1 = int(data['result'][str(set_idx*2)]['score1'])
                     score2 = int(data['result'][str(set_idx*2)]['score2'])
@@ -551,7 +570,7 @@ class matchData:
         try:
             f = open(scctool.settings.OBSdataDir+"/lineup.txt", mode = 'w')
             f2 = open(scctool.settings.OBSdataDir+"/maps.txt", mode = 'w')
-            for idx in range (0,self.getNoSets()):
+            for idx in range(self.getNoSets()):
                 map = self.getMap(idx)
                 f3 = open(scctool.settings.OBSdataDir+"/map"+str(idx+1)+".txt", mode = 'w')
                 f.write(map+"\n")
@@ -599,6 +618,22 @@ class matchData:
             f.write(score_str)
             f.close()
             
+            f = open(scctool.settings.OBSdataDir+"/nextplayer1.txt", mode = 'w')
+            f.write(self.getNextPlayer(0))
+            f.close()
+            
+            f = open(scctool.settings.OBSdataDir+"/nextplayer2.txt", mode = 'w')
+            f.write(self.getNextPlayer(1))
+            f.close()
+            
+            f = open(scctool.settings.OBSdataDir+"/nextrace1.txt", mode = 'w')
+            f.write(self.getNextRace(0))
+            f.close()
+            
+            f = open(scctool.settings.OBSdataDir+"/nextrace2.txt", mode = 'w')
+            f.write(self.getNextRace(1))
+            f.close()
+            
         except Exception as e:
             module_logger.exception("message") 
             
@@ -607,7 +642,7 @@ class matchData:
         try:
             team = self.getMyTeam()
             score = [0,0]
-            for i in range(0,self.getNoSets()):
+            for i in range(self.getNoSets()):
                 filename=scctool.settings.OBSmapDirData+"/"+str(i+1)+".html"
    
                 winner = self.getMapScore(i)

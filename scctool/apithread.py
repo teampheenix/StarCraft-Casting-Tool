@@ -257,7 +257,7 @@ class SC2ApiThread(QThread):
                 print(str(newData))
                 if(self.activeTask['updateScore'] and newData.isDecidedGame()):
                     self.controller.requestScoreUpdate(newData)
-                    
+
                 if(newData.isLive() and (self.activeTask['toggleScore'] or self.activeTask['toggleProduction'])):
                     self.tryToggle(newData)
                     
@@ -351,6 +351,9 @@ class SC2MatchData:
         
     def isLive(self):
         return (self.ingame and self.result==99 and self.time < 30)      
+        
+    def isStarting(self):
+        return (self.ingame and self.result==99 and self.time < 5)       
         
     def __str__(self):
         return str(self.__dict__)
