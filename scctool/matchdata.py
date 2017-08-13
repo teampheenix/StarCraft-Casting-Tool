@@ -67,6 +67,7 @@ class matchData:
         self.__data['matchlink'] = ""
         self.__data['no_sets'] = 0
         self.__data['best_of'] = 0
+        self.__data['allkill'] = False
         self.__data['my_team'] = 0
         self.__data['teams'] = []
         self.__data['teams'].append({'name':'TBD','tag': None})
@@ -74,13 +75,72 @@ class matchData:
         self.__data['sets'] = []
         self.__data['players'] = [[],[]]
     
-    def setNoSets(self,no_sets = 5, bestof = False):
+    def setAllKill(self, allkill):
+        self.__data['allkill'] = bool(allkill)
+    
+    def getAllKill(self):      
+        return bool(self.__data['allkill'])
+        
+    def allkillUpdate(self):
+        if(not self.getAllKill()):
+            return False
+            
+        for set_idx in range(self.getNoSets()):
+            if self.getMapScore(set_idx) == 0:
+                if(set_idx == 0):
+                    return False 
+                team_idx = int((self.getMapScore(set_idx-1)+1)/2)
+                if(self.getPlayer(team_idx,set_idx) != "TBD"):
+                    return False
+                self.setPlayer(team_idx,set_idx,self.getPlayer(team_idx,set_idx-1),\
+                                                self.getRace(team_idx,set_idx-1))
+                return True
+            
+        return False
+    def setCustom(self, bestof, allkill):
+        bestof = int(bestof)
+        allkill = bool(allkill)
+        no_sets =  bestof + 1 - bestof%2
+        self.setNoSets(no_sets, bestof)
+        self.resetLabels()
+        self.setAllKill(allkill)
+        self.setProvider("Custom")
+        self.setID(0)
+        self.setURL("")
+        
+    def resetData(self):
+        
+        for team_idx in range(2):
+            for set_idx in range(self.getNoSets()):
+                self.setPlayer(team_idx, set_idx, "TBD", "Random")
+            self.setTeam(team_idx,"TBD", "TBD")
+            
+        for set_idx in range(self.getNoSets()):
+            self.setMapScore(set_idx, 0)
+            self.setMap(set_idx)
+            
+        self.setLeague("TBD")
+        self.setMyTeam(0)
+        
+    def resetLabels(self):
+        best_of = self.__data['best_of']
+        no_sets = self.getNoSets()
+        ace_start = no_sets-3+2*(best_of%2)
+        skip_one = (ace_start+1 == no_sets)
+        
+        for set_idx in range(ace_start):  
+            self.setLabel(set_idx,"Map "+str(set_idx+1))
+            
+        for set_idx in range(ace_start,no_sets):
+            if(skip_one):
+                self.setLabel(set_idx,"Ace Map")
+            else:
+                self.setLabel(set_idx,"Ace Map "+str(set_idx-ace_start+1))
+    
+    def setNoSets(self,no_sets = 5, bestof = False, resetPlayers = False):
         try:
-            try:
-                no_sets = int(no_sets)
-            except:
-                no_sets = 0;
-                
+            no_sets = int(no_sets)
+              
             if(no_sets < 0):
                 no_sets = 0 
             elif(no_sets > 9):
@@ -109,22 +169,27 @@ class matchData:
                 except:
                     label = 'Map '+str(i+1)
                 for j in range(2):
-                    try:
-                        player_name = self.__data['players'][i]['name']
-                    except:
+                    if(not resetPlayers):
+                        try:
+                            player_name = self.__data['players'][j][i]['name']
+                        except:
+                            player_name = 'TBD'
+                        try:
+                            player_race = getRace(self.__data['players'][j][i]['race'])
+                        except:
+                            player_race = 'Random'
+                    else:
                         player_name = 'TBD'
-                    try:
-                        player_race = getRace(self.__data['players'][i]['race'])
-                    except:
                         player_race = 'Random'
                         
                     players[j].append({'name':player_name,'race':player_race})
                     
                 sets.append({'label':label,'map':map,'score':score})
     
-                self.__data['no_sets'] = no_sets
-                self.__data['sets'] = sets
-                self.__data['players'] = players
+            self.__data['no_sets'] = no_sets
+            self.__data['sets'] = sets
+            self.__data['players'] = players
+            
         except Exception as e:
             module_logger.exception("message") 
             
@@ -191,6 +256,12 @@ class matchData:
             else:
                 continue
         return score
+           
+    def getBestOfRaw(self):
+        try:
+            return int(self.__data['best_of'])
+        except:
+            return False  
             
     def getBestOf(self):
         try:
@@ -413,7 +484,7 @@ class matchData:
         else:
             self.__rawData = data
             self.setURL("http://alpha.tl/match/"+str(self.getID()))
-            self.setNoSets(5)
+            self.setNoSets(5, resetPlayers = True)
             self.setLeague(data['tournament'])
             
             for idx, map in enumerate(data['maps']):
@@ -452,7 +523,7 @@ class matchData:
             data = data['data']
             self.__rawData = data
             self.setURL("http://hdgame.net/en/tournaments/list/tournament/rstl-12/tmenu/tmatches/?match="+str(self.getID()))
-            self.setNoSets(7,6)
+            self.setNoSets(7,6, resetPlayers = True)
             self.setLeague(data['tournament']['name'])
             
             for set_idx in range(7):

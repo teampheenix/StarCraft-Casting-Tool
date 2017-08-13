@@ -24,7 +24,7 @@ class mainWindow(QMainWindow):
         
             self.trigger = True
          
-            self.createFormGroupBox()
+            self.createTabs()
             self.createFromMatchDataBox()
             self.createHorizontalGroupBox()
             self.createSC2APIGroupBox()
@@ -32,7 +32,7 @@ class mainWindow(QMainWindow):
             self.createMenuBar()
 
             mainLayout = QVBoxLayout()
-            mainLayout.addWidget(self.formGroupBox,2)
+            mainLayout.addWidget(self.tabs,2)
             mainLayout.addWidget(self.fromMatchDataBox,7)
             mainLayout.addWidget(self.SC2APIGroupBox,1)
             mainLayout.addWidget(self.horizontalGroupBox,1)
@@ -85,9 +85,21 @@ class mainWindow(QMainWindow):
         self.mySubwindow.createWindow(self)
         self.mySubwindow.show()
         
-    def createFormGroupBox(self):
+    def createTabs(self):
         try:
-            self.formGroupBox = QGroupBox("Match Grabber for AlphaTL && RSTL")
+            # Initialize tab screen
+            self.tabs = QTabWidget()
+            self.tab1 = QWidget()	
+            self.tab2 = QWidget()
+            #self.tabs.resize(300,200) 
+    
+            # Add tabs
+            self.tabs.addTab(self.tab1,"Match Grabber for AlphaTL && RSTL")
+            self.tabs.addTab(self.tab2,"Custom Match")
+    
+            # Create first tab
+            self.tab1.layout = QVBoxLayout(self)
+
             self.le_url =  QLineEdit()
             self.le_url.setAlignment(Qt.AlignCenter)
             
@@ -109,10 +121,11 @@ class mainWindow(QMainWindow):
             container.addWidget(self.le_url,26)
             
             
-            layout = QFormLayout()
-            layout.addRow(container)
+            self.tab1.layout  = QFormLayout()
+            self.tab1.layout .addRow(container)
             
             container = QHBoxLayout()
+            
             #self.pb_download = QPushButton("Download Images from URL")
             #container.addWidget(self.pb_download)
             container.addWidget(QLabel(""),6)
@@ -122,9 +135,44 @@ class mainWindow(QMainWindow):
             container.addWidget(self.pb_refresh,13)
 
             
-            layout.addRow(container)
+            self.tab1.layout.addRow(container)
+            self.tab1.setLayout(self.tab1.layout)
             
-            self.formGroupBox.setLayout(layout)
+            # Create second tab
+            
+            self.tab2.layout = QHBoxLayout()
+            self.tab2.layout.addWidget(QLabel(""),5)
+            self.tab2.layout.addWidget(QLabel("Best of"),1)
+            
+            self.cb_bestof = QComboBox()
+            for idx in range(0,7):
+                if(idx==1):
+                    continue
+                self.cb_bestof.addItem(str(idx+1))
+            self.cb_bestof.setCurrentIndex(3)
+            
+            self.cb_bestof.setToolTip('"Best of 6/4": First, a Bo5/3 is played and the ace map gets '+\
+                                       'extended to a Bo3 if needed.') 
+            self.tab2.layout.addWidget(self.cb_bestof,1)
+    
+            
+            self.tab2.layout.addWidget(QLabel(""),1)
+            self.cb_allkill = QCheckBox("All-Kill Format")
+            self.cb_allkill.setChecked(False)
+            self.cb_allkill.setToolTip('Winner stays and is automatically placed into the next set') 
+            #self.cb_allkill.stateChanged.connect(self.autoToggleProduction_change)
+            self.tab2.layout.addWidget(self.cb_allkill,3)
+            
+            self.tab2.layout.addWidget(QLabel(""),1)
+            self.pb_resetdata = QPushButton("Reset")
+            self.pb_resetdata.clicked.connect(self.resetdata_click)
+            self.tab2.layout.addWidget(self.pb_resetdata,5)
+            self.pb_applycustom = QPushButton("Apply")
+            self.pb_applycustom.clicked.connect(self.applycustom_click)
+            self.tab2.layout.addWidget(self.pb_applycustom,5)
+            
+            self.tab2.setLayout(self.tab2.layout)
+            
         except Exception as e:
             module_logger.exception("message")          
         
@@ -307,8 +355,29 @@ class mainWindow(QMainWindow):
                 self.controller.stopSC2ApiThread("toggleProduction")
         except Exception as e:
             module_logger.exception("message")
-           
-        
+            
+    def applycustom_click(self):
+        try:
+            url = self.le_url.text()
+            self.trigger = False
+            self.statusBar().showMessage('Applying Custom Match...')
+            msg = self.controller.applyCustom(int(self.cb_bestof.currentText()),self.cb_allkill.isChecked())
+            self.statusBar().showMessage(msg)
+            self.trigger = True
+        except Exception as e:
+            module_logger.exception("message")
+            
+    def resetdata_click(self):
+        try:
+            url = self.le_url.text()
+            self.trigger = False
+            self.statusBar().showMessage('Reading '+url+'...')
+            msg = self.controller.resetData()
+            self.statusBar().showMessage(msg)
+            self.trigger = True
+        except Exception as e:
+            module_logger.exception("message")
+            
     def refresh_click(self):
         try:
             url = self.le_url.text()
@@ -357,7 +426,7 @@ class mainWindow(QMainWindow):
         try:
             self.statusBar().showMessage('Resetting Score...')
             self.trigger = False
-            for player_idx in range(5): 
+            for player_idx in range(self.max_no_sets): 
                 self.sl_score[player_idx].setValue(0)
             self.controller.updateOBS()
             self.statusBar().showMessage('')
@@ -383,6 +452,7 @@ class mainWindow(QMainWindow):
     def sl_changed(self):
         try:
             if(self.trigger):
+                self.controller.allkillUpdate()
                 self.controller.updateOBS()
         except Exception as e:
             module_logger.exception("message")

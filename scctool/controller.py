@@ -40,6 +40,18 @@ class AlphaController:
 
     def updateForms(self):
         try:
+            if(self.matchData.getProvider() == "Custom"):
+                self.view.tabs.setCurrentIndex(1) 
+            else:
+                self.view.tabs.setCurrentIndex(0) 
+                
+            self.view.cb_allkill.setChecked(self.matchData.getAllKill())
+            self.view.cb_allkill.setChecked(self.matchData.getAllKill())
+            
+            index = self.view.cb_bestof.findText(str(self.matchData.getBestOfRaw()),\
+                                                                Qt.MatchFixedString)
+            self.view.cb_bestof.setCurrentIndex(index)
+            
             self.view.le_url.setText(self.matchData.getURL())
             self.view.le_league.setText(self.matchData.getLeague())
             self.view.sl_team.setValue(self.matchData.getMyTeam())
@@ -95,6 +107,36 @@ class AlphaController:
         except Exception as e:
             module_logger.exception("message")    
                     
+    def applyCustom(self,bestof,allkill):  
+        msg = ''
+        try: 
+        
+            self.matchData.setCustom(bestof,allkill)
+            self.matchData.writeJsonFile()
+            self.updateForms()
+            self.updateOBS()
+            
+        except Exception as e:
+            msg = str(e)
+            module_logger.exception("message")    
+          
+        return msg
+        
+    def resetData(self):  
+        msg = ''
+        try: 
+        
+            self.matchData.resetData()
+            self.matchData.writeJsonFile()
+            self.updateForms()
+            self.updateOBS()
+            
+        except Exception as e:
+            msg = str(e)
+            module_logger.exception("message")    
+          
+        return msg
+                    
     def refreshData(self,url):      
         msg = ''
         try:
@@ -135,7 +177,12 @@ class AlphaController:
         except Exception as e:
             module_logger.exception("message")  
       
-            
+    def allkillUpdate(self):
+        
+        self.updateData()
+        if(self.matchData.allkillUpdate()):
+            self.updateForms()
+    
     def webAppDone(self):
         try:
             self.view.mySubwindow.nightbotToken.setText(FlaskThread._single.token)

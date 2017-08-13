@@ -12,7 +12,7 @@ except Exception as e:
     raise  
 
 try:
-    version    = 'v0.8.3'
+    version    = 'v0.9.0'
     configFile = "config.ini"
     jsonFile   = "src/data.json"
     OBSdataDir = "OBS_data"
