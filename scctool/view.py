@@ -190,6 +190,7 @@ class mainWindow(QMainWindow):
             self.le_league  = QLineEdit()
             self.le_league.setText("League TBD")
             self.le_league.setAlignment(Qt.AlignCenter)
+            self.le_league.setPlaceholderText("League TBD")
 
             container = QHBoxLayout()
             container.addWidget(QLabel("  "),0)
@@ -208,8 +209,14 @@ class mainWindow(QMainWindow):
             
             container = QHBoxLayout()
             for team_idx in range(2):
-                self.le_team[team_idx].setText("Team TBD")
+                self.le_team[team_idx].setText("TBD")
                 self.le_team[team_idx].setAlignment(Qt.AlignCenter)
+                self.le_team[team_idx].setPlaceholderText("Team "+str(team_idx+1))
+                completer = QCompleter(scctool.settings.myteams + ["TBD"],self.le_team[team_idx])
+                completer.setCaseSensitivity(Qt.CaseInsensitive)
+                completer.setCompletionMode(QCompleter.InlineCompletion)
+                completer.setWrapAround(True)
+                self.le_team[team_idx].setCompleter(completer)
             
             
             #vslabel = QLabel("vs")
@@ -238,6 +245,12 @@ class mainWindow(QMainWindow):
                 for team_idx in range(2):
                     self.le_player[team_idx][player_idx].setText("TBD")
                     self.le_player[team_idx][player_idx].setAlignment(Qt.AlignCenter)
+                    self.le_player[team_idx][player_idx].setPlaceholderText("Player "+str(player_idx+1)+" of Team "+str(team_idx+1))
+                    completer = QCompleter(scctool.settings.commonplayers, self.le_player[team_idx][player_idx])
+                    completer.setCaseSensitivity(Qt.CaseInsensitive)
+                    completer.setCompletionMode(QCompleter.InlineCompletion)
+                    completer.setWrapAround(True)
+                    self.le_player[team_idx][player_idx].setCompleter(completer)
                 
                     for race in scctool.settings.races:
                         self.cb_race[team_idx][player_idx].addItem(race)
@@ -252,6 +265,7 @@ class mainWindow(QMainWindow):
             
                 self.le_map[player_idx].setText("TBD")
                 self.le_map[player_idx].setAlignment(Qt.AlignCenter)
+                self.le_map[player_idx].setPlaceholderText("Map "+str(player_idx+1))
                 completer = QCompleter(scctool.settings.maps,self.le_map[player_idx])
                 completer.setCaseSensitivity(Qt.CaseInsensitive)
                 completer.setCompletionMode(QCompleter.InlineCompletion)
@@ -504,6 +518,7 @@ class subwindow(QWidget):
         self.twitchChannel = QLineEdit()
         self.twitchChannel.setText(scctool.settings.Config.get("Twitch", "channel"))
         self.twitchChannel.setAlignment(Qt.AlignCenter)
+        self.twitchChannel.setPlaceholderText("Name of the Twitch channel that should be updated")
         self.twitchChannel.setToolTip('The connected twitch user needs to have editor rights for this channel.')
         layout.addRow(QLabel("Twitch-Channel:"),self.twitchChannel)
  
@@ -513,6 +528,8 @@ class subwindow(QWidget):
         self.twitchToken = QLineEdit()
         self.twitchToken.setText(scctool.settings.Config.get("Twitch", "oauth"))
         self.twitchToken.setAlignment(Qt.AlignCenter)
+        self.twitchToken.setPlaceholderText("Press 'Get' to generate a token")
+        self.twitchToken.setToolTip("Press 'Get' to generate a new token.")
 
         container.addWidget(self.twitchToken);
         self.pb_getTwitch = QPushButton('Get', self)
@@ -524,6 +541,7 @@ class subwindow(QWidget):
         
         self.twitchTemplate.setText(scctool.settings.Config.get("Twitch", "title_template"))
         self.twitchTemplate.setAlignment(Qt.AlignCenter)
+        self.twitchTemplate.setPlaceholderText("(TOUR) – (TEAM1) vs (TEAM2)")
         self.twitchTemplate.setToolTip('Placeholders: (TOUR), (TEAM1), (TEAM2)') 
         layout.addRow(QLabel("Title-Template:"), self.twitchTemplate)
         
@@ -537,9 +555,12 @@ class subwindow(QWidget):
         self.nightbotToken = QLineEdit()
         self.nightbotToken.setText(scctool.settings.Config.get("NightBot", "token"))
         self.nightbotToken.setAlignment(Qt.AlignCenter)
+        self.nightbotToken.setPlaceholderText("Press 'Get' to generate a token")
+        self.nightbotToken.setToolTip("Press 'Get' to generate a new token.")
         
         self.nightbotCommand = QLineEdit()
         self.nightbotCommand.setText(scctool.settings.Config.get("NightBot", "command"))
+        self.nightbotCommand.setPlaceholderText("!matchlink")
         self.nightbotCommand.setAlignment(Qt.AlignCenter)
         
         container.addWidget(self.nightbotToken);

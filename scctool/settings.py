@@ -123,7 +123,8 @@ try:
     setDefaultConfig("NightBot","token","")
     setDefaultConfig("NightBot","command","!matchlink")
     
-    setDefaultConfig("SCT","myteam","MiXed Minds")
+    setDefaultConfig("SCT","myteams","MiXed Minds,team pheeniX")
+    setDefaultConfig("SCT","commonplayers","pressure,Shakyor")
     setDefaultConfig("SCT","fuzzymatch","True")
     
     setDefaultConfig("Form","scoreupdate","False")
@@ -163,7 +164,9 @@ try:
     CB_ToggleProd  = Config.getboolean("Form","ToggleProd")
     
     
-    myteam =  Config.get("SCT","myteam")
+    myteams =  str(Config.get("SCT","myteams")).split(',')
+    commonplayers = str(Config.get("SCT","commonplayers")).split(',')
+    commonplayers.append("TBD")
     fuzzymatch = Config.get("SCT","fuzzymatch")
 
 except Exception as e:

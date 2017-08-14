@@ -771,6 +771,24 @@ class matchData:
                             
         except Exception as e:
             module_logger.exception("message") 
+            
+            
+    def autoSetMyTeam(self):
+        try:
+            for team_idx in range(2):
+                team = self.__data['teams'][team_idx]['name']
+                matches = difflib.get_close_matches(team.lower(),scctool.settings.myteams,1) 
+                if(len(matches) > 0):
+                    self.setMyTeam(team_idx*2-1)
+                    return True
+            
+            self.setMyTeam(0)
+            
+            return False
+         
+        except Exception as e:
+            module_logger.exception("message")  
+            return False
       
 def autoCorrectMap(map):
     try:
@@ -782,7 +800,7 @@ def autoCorrectMap(map):
             
     except Exception as e:
         module_logger.exception("message") 
-        
+
 def getRace(str):
     try: 
         for idx, race in enumerate(scctool.settings.races):
@@ -792,11 +810,3 @@ def getRace(str):
         pass
     
     return "Random"
-            
-             
-if __name__ == '__main__':
-    testData = matchData()
-    testData.grabData(1806,"RSTL")
-    testData.setMyTeam("Mixed mind")
-    testData.writeJsonFile()
-    testData.updateMapIcons()

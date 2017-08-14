@@ -148,6 +148,7 @@ class AlphaController:
         try:
             self.matchData.parseURL(url)
             self.matchData.grabData()
+            self.matchData.autoSetMyTeam()
             self.matchData.writeJsonFile()
             try:
                 self.matchData.downloadLogos()
