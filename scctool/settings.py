@@ -118,7 +118,7 @@ try:
     
     setDefaultConfig("Twitch","channel","")
     setDefaultConfig("Twitch","oauth","")
-    setDefaultConfig("Twitch","title_template","")
+    setDefaultConfig("Twitch","title_template","(TOUR) – (TEAM1) vs (TEAM2)")
     
     setDefaultConfig("NightBot","token","")
     setDefaultConfig("NightBot","command","!matchlink")
