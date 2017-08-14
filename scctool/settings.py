@@ -35,7 +35,7 @@ class VersionControl:
     def __get_from_file(self,version_file):
         try:
             f = open(version_file, 'r')
-            version = f.readline()
+            version = f.readline().strip()
             f.close()
             major, minor, patch = self.__parse(version)
         except:
@@ -46,7 +46,7 @@ class VersionControl:
     def __latest(self):
         try:
             with urllib.request.urlopen(self.__url) as response:
-                latest_version = response.read().decode("utf8")
+                latest_version = response.read().decode("utf8").strip()
                 
             major, minor, patch = self.__parse(latest_version)
             return latest_version,  major, minor, patch
