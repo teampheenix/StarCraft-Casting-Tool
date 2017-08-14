@@ -123,8 +123,10 @@ try:
     setDefaultConfig("NightBot","token","")
     setDefaultConfig("NightBot","command","!matchlink")
     
-    setDefaultConfig("SCT","myteams","MiXed Minds,team pheeniX")
-    setDefaultConfig("SCT","commonplayers","pressure,Shakyor")
+    setDefaultConfig("SCT","myteams","MiXed Minds, team pheeniX")
+    setDefaultConfig("SCT","commonplayers","Shakyor, pressure, MarineKing, Moash, Ostseedude, spaz, DERASTAT, FanTasY,"+\
+                           "chrismaverik, holden, Desolation, RiseOfDeath, TuneTrigger, MoFuJones, Fenix, Hyvaa, snoozle,"+\
+                           " CptWobbles, dreign, Sly, Sonarwolf, Unknown, Xoneon")
     setDefaultConfig("SCT","fuzzymatch","True")
     
     setDefaultConfig("Form","scoreupdate","False")
@@ -164,8 +166,8 @@ try:
     CB_ToggleProd  = Config.getboolean("Form","ToggleProd")
     
     
-    myteams =  str(Config.get("SCT","myteams")).split(',')
-    commonplayers = str(Config.get("SCT","commonplayers")).split(',')
+    myteams =  list(map(str.strip, str(Config.get("SCT","myteams")).split(',')))
+    commonplayers = list(map(str.strip, str(Config.get("SCT","commonplayers")).split(',')))
     commonplayers.append("TBD")
     fuzzymatch = Config.get("SCT","fuzzymatch")
 
