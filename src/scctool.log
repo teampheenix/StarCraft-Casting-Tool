@@ -1,0 +1,3 @@
+2017-08-14 15:32:29,955 - scctool - INFO - Starting...
+2017-08-14 15:32:45,547 - scctool.apithread - INFO - Requesting termination of thread
+2017-08-14 15:32:45,548 - scctool.settings - INFO - cleanUp called
