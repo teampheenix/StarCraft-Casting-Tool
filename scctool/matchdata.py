@@ -523,76 +523,103 @@ class matchData:
             data = data['data']
             self.__rawData = data
             self.setURL("http://hdgame.net/en/tournaments/list/tournament/rstl-12/tmenu/tmatches/?match="+str(self.getID()))
-            self.setNoSets(7,6, resetPlayers = True)
-            self.setLeague(data['tournament']['name'])
             
-            for set_idx in range(7):
-                self.setMap(set_idx, data['start_maps'][str(set_idx)]['name'])
+            if(data['game_format']=="3"): #Standard RSTL-Format 4xBo1 and Ace Bo3
+            
+                self.setNoSets(7,6, resetPlayers = True)
+                self.setLeague(data['tournament']['name'])
                 
-            for team_idx in range(2): 
+                for set_idx in range(7):
+                    self.setMap(set_idx, data['start_maps'][str(set_idx)]['name'])
+                    
+                for team_idx in range(2): 
+                    for set_idx in range(4):
+                        try:
+                            self.setPlayer(team_idx, set_idx, data['lu'+str(team_idx+1)][str(set_idx)]['member_name'],\
+                                                            data['lu'+str(team_idx+1)][str(set_idx)]['r_name'])
+                        except:
+                            pass
+                            
+                    for set_idx in range(4,7):
+                        try:
+                            if(not data['result'][str(4+set_idx)]['r_name'+str(team_idx+1)]):
+                                try:
+                                    race = data['result'][str(4+set_idx+1)]['r_name'+str(team_idx+1)]
+                                except:
+                                    race = "Random"
+                            self.setPlayer(team_idx, set_idx, data['result'][str(4+set_idx)]['tu_name'+str(team_idx+1)], race)
+                        except:
+                            pass
+                        
+                    team = data['member'+str(team_idx+1)]
+                    self.setTeam(team_idx, team['name'], team['tag'])
+                    
+                self.setLabel(4,"Ace Map 1")  
+                self.setLabel(5,"Ace Map 2") 
+                self.setLabel(6,"Ace Map 3") 
+                
+                totalScore = [0,0]    
+                    
                 for set_idx in range(4):
                     try:
-                        self.setPlayer(team_idx, set_idx, data['lu'+str(team_idx+1)][str(set_idx)]['member_name'],\
-                                                          data['lu'+str(team_idx+1)][str(set_idx)]['r_name'])
+                        score1 = int(data['result'][str(set_idx*2)]['score1'])
+                        score2 = int(data['result'][str(set_idx*2)]['score2'])
                     except:
-                        pass
+                        score1 = 0
+                        score2 = 0
+                        
+                    if(score1 > score2):
+                        score = -1
+                    elif(score1 < score2):
+                        score = 1
+                    else:
+                        score = 0
+                    self.setMapScore(set_idx, score)
+                    if(score<0):
+                        totalScore[0] += 1
+                    elif(score>0):
+                        totalScore[1] += 1
                         
                 for set_idx in range(4,7):
                     try:
-                        if(not data['result'][str(4+set_idx)]['r_name'+str(team_idx+1)]):
-                            try:
-                                race = data['result'][str(4+set_idx+1)]['r_name'+str(team_idx+1)]
-                            except:
-                                race = "Random"
-                        self.setPlayer(team_idx, set_idx, data['result'][str(4+set_idx)]['tu_name'+str(team_idx+1)], race)
+                        score1 = int(data['result'][str(4+set_idx)]['score1'])
+                        score2 = int(data['result'][str(4+set_idx)]['score2'])
                     except:
-                        pass
+                        score1 = 0
+                        score2 = 0
+                        
+                    if(score1 > score2):
+                        score = -1
+                    elif(score1 < score2):
+                        score = 1
+                    else:
+                        score = 0
+                    self.setMapScore(set_idx, score)
                     
-                team = data['member'+str(team_idx+1)]
-                self.setTeam(team_idx, team['name'], team['tag'])
-                
-            self.setLabel(4,"Ace Map 1")  
-            self.setLabel(5,"Ace Map 2") 
-            self.setLabel(6,"Ace Map 3") 
+            elif(data['game_format']=="2"): #All-Kill Bo7
             
-            totalScore = [0,0]    
+                self.resetData()
+                bo = int(data['game_format_bo'])
+                self.setNoSets(bo,bo, resetPlayers = True)
+                self.setLeague(data['tournament']['name'])
                 
-            for set_idx in range(4):
-                try:
-                    score1 = int(data['result'][str(set_idx*2)]['score1'])
-                    score2 = int(data['result'][str(set_idx*2)]['score2'])
-                except:
-                    score1 = 0
-                    score2 = 0
+                for set_idx in range(1):
+                    self.setMap(set_idx, data['start_maps'][str(set_idx)]['name'])
                     
-                if(score1 > score2):
-                    score = -1
-                elif(score1 < score2):
-                    score = 1
-                else:
-                    score = 0
-                self.setMapScore(set_idx, score)
-                if(score<0):
-                    totalScore[0] += 1
-                elif(score>0):
-                    totalScore[1] += 1
-                    
-            for set_idx in range(4,7):
-                try:
-                    score1 = int(data['result'][str(4+set_idx)]['score1'])
-                    score2 = int(data['result'][str(4+set_idx)]['score2'])
-                except:
-                    score1 = 0
-                    score2 = 0
-                    
-                if(score1 > score2):
-                    score = -1
-                elif(score1 < score2):
-                    score = 1
-                else:
-                    score = 0
-                self.setMapScore(set_idx, score)
+                for team_idx in range(2): 
+                    for set_idx in range(1):
+                        try:
+                            self.setPlayer(team_idx, set_idx, data['lu'+str(team_idx+1)][str(set_idx)]['member_name'],\
+                                                            data['lu'+str(team_idx+1)][str(set_idx)]['r_name'])
+                        except:
+                            pass
 
+                    team = data['member'+str(team_idx+1)]
+                    self.setTeam(team_idx, team['name'], team['tag'])
+                    
+                self.setAllKill(True)
+            else:
+                module_logger.info("RSTL Format Unkown")     
         
     def grabDataCustom(self):
         raise ValueError("Error: You cannot grab data from a custom provider")
