@@ -105,6 +105,8 @@ div.label{
    top: 85px; 
    left: 0px; 
    height: 95px; 
+   -webkit-filter: drop-shadow(0px 0px 3px #FFFFFF);
+   filter: drop-shadow(0px 0px 3px #FFFFFF);
 }
 
 #secondrace {
@@ -112,4 +114,6 @@ div.label{
    top: 85px; 
    right: 0px; 
    height: 95px; 
+   -webkit-filter: drop-shadow(0px 0px 3px #FFFFFF);
+   filter: drop-shadow(0px 0px 3px #FFFFFF);
 }

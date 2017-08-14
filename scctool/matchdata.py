@@ -509,8 +509,9 @@ class matchData:
                     score = 0
                     
                 self.setMapScore(set_idx, score)
-
-
+                
+            self.setAllKill(False)
+            
     def grabDataRSTL(self):
         self.setProvider("RSTL") 
         url = "http://hdgame.net/index.php?ajax=1&do=tournament&act=api&data_type=json&lang=en&service=match&match_id="+str(self.getID())
@@ -547,6 +548,9 @@ class matchData:
                                     race = data['result'][str(4+set_idx+1)]['r_name'+str(team_idx+1)]
                                 except:
                                     race = "Random"
+                            else: 
+                                race = data['result'][str(4+set_idx)]['r_name'+str(team_idx+1)]
+                                
                             self.setPlayer(team_idx, set_idx, data['result'][str(4+set_idx)]['tu_name'+str(team_idx+1)], race)
                         except:
                             pass
@@ -558,7 +562,6 @@ class matchData:
                 self.setLabel(5,"Ace Map 2") 
                 self.setLabel(6,"Ace Map 3") 
                 
-                totalScore = [0,0]    
                     
                 for set_idx in range(4):
                     try:
@@ -574,11 +577,8 @@ class matchData:
                         score = 1
                     else:
                         score = 0
+                        
                     self.setMapScore(set_idx, score)
-                    if(score<0):
-                        totalScore[0] += 1
-                    elif(score>0):
-                        totalScore[1] += 1
                         
                 for set_idx in range(4,7):
                     try:
@@ -595,6 +595,8 @@ class matchData:
                     else:
                         score = 0
                     self.setMapScore(set_idx, score)
+                    
+                self.setAllKill(False)
                     
             elif(data['game_format']=="2"): #All-Kill Bo7
             
@@ -613,10 +615,42 @@ class matchData:
                                                             data['lu'+str(team_idx+1)][str(set_idx)]['r_name'])
                         except:
                             pass
-
+                            
+                    for set_idx in range(1,bo):
+                        #try:
+                            if(not data['result'][str(set_idx*2)]['r_name'+str(team_idx+1)]):
+                                try:
+                                    race = data['result'][str(set_idx*2+1)]['r_name'+str(team_idx+1)]
+                                except:
+                                    race = "Random"
+                            else: 
+                                race = data['result'][str(4+set_idx)]['r_name'+str(team_idx+1)]
+                            self.setPlayer(team_idx, set_idx, data['result'][str(set_idx*2)]['tu_name'+str(team_idx+1)], race)
+                        #except:
+                        #    pass
+                            
                     team = data['member'+str(team_idx+1)]
                     self.setTeam(team_idx, team['name'], team['tag'])
                     
+                    
+                for set_idx in range(bo):
+                    try:
+                        score1 = int(data['result'][str(set_idx*2)]['score1'])
+                        score2 = int(data['result'][str(set_idx*2)]['score2'])
+                    except:
+                        score1 = 0
+                        score2 = 0
+                        
+                    if(score1 > score2):
+                        score = -1
+                    elif(score1 < score2):
+                        score = 1
+                    else:
+                        score = 0
+                        
+                    self.setMapScore(set_idx, score)
+
+                        
                 self.setAllKill(True)
             else:
                 module_logger.info("RSTL Format Unkown")     
@@ -741,8 +775,7 @@ class matchData:
             team = self.getMyTeam()
             score = [0,0]
             for i in range(self.getNoSets()):
-                filename=scctool.settings.OBSmapDirData+"/"+str(i+1)+".html"
-   
+
                 winner = self.getMapScore(i)
                 player1 = self.getPlayer(0,i)
                 player2 = self.getPlayer(1,i)
@@ -775,8 +808,10 @@ class matchData:
                 race1png=self.getRace(0,i)+".png"
                 race2png=self.getRace(1,i)+".png"
                 hidden = ""
-    
-                with open(scctool.settings.OBSmapDir+"/data_template.html", "rt") as fin:
+                
+                filename=scctool.settings.OBSmapDirData+"/"+str(i+1)+".html"
+                filename2=scctool.settings.OBSmapDirData+"/"+str(i+1)+"_landscape.html"
+                with open(scctool.settings.OBSmapDir+"/data_template_box.html", "rt") as fin:
                     with open(filename, "wt") as fout:
                         for line in fin:
                             line = line.replace('%PLAYER1%', player1).replace('%PLAYER2%', player2)
@@ -787,14 +822,34 @@ class matchData:
                             line = line.replace('%HIDDEN%',hidden)
                             fout.write(line)
                             
+                with open(scctool.settings.OBSmapDir+"/data_template_landscape.html", "rt") as fin:
+                    with open(filename2, "wt") as fout:
+                        for line in fin:
+                            line = line.replace('%PLAYER1%', player1).replace('%PLAYER2%', player2)
+                            line = line.replace('%RACE1_PNG%', race1png).replace('%RACE2_PNG%', race2png)
+                            line = line.replace('%MAP_PNG%', mappng).replace('%MAP_NAME%', map)
+                            line = line.replace('%MAP_ID%',self.getLabel(i))
+                            line = line.replace('%BORDER_COLOR%',border_color).replace('%OPACITY%',opacity)
+                            line = line.replace('%HIDDEN%',hidden)
+                            fout.write(line)
+                            
             for i in range(self.getNoSets(),7): 
-                filename=scctool.settings.OBSmapDirData+"/"+str(i+1)+".html"             
+                filename=scctool.settings.OBSmapDirData+"/"+str(i+1)+".html"    
+                filename2=scctool.settings.OBSmapDirData+"/"+str(i+1)+"_landscape.html"         
                 hidden = "visibility: hidden;"
-                with open(scctool.settings.OBSmapDir+"/data_template.html", "rt") as fin:
+                with open(scctool.settings.OBSmapDir+"/data_template_box.html", "rt") as fin:
                     with open(filename, "wt") as fout:
                         for line in fin:
                             line = line.replace('%HIDDEN%',hidden)
                             fout.write(line)
+                            
+                with open(scctool.settings.OBSmapDir+"/data_template_landscape.html", "rt") as fin:
+                    with open(filename, "wt") as fout:
+                        for line in fin:
+                            line = line.replace('%HIDDEN%',hidden)
+                            fout.write(line)
+                            
+                            
                             
         except Exception as e:
             module_logger.exception("message") 
