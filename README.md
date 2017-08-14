@@ -20,7 +20,7 @@ Execute `StarCraftCastingTool.pyw` to start the SCC-Tool. Enter the Match-URL of
 
 To update your [Twitch](https://www.twitch.tv/) title or [NightBot](https://nightbot.tv/) command via click on *Update Twitch Title* or *Update NightBot* you have to set your Twitch *Channel* and/or generate an corresponding access token. This can be done via *Settings: API-Integration*. Note that you can also change the title of twitch channels that do not belong to the user you have generated the access token with as long as this user is registered as an editor of corresponding channel.
 
-The top slider is to select *your* team. Once selected the border of the map icons turn green or red depending on your result. To select your team my default you can set the parameter *myteam* in `config.ini`.
+The top slider is to select *your* team. Once selected the border of the map icons turn green or red depending on the result. To select your team by default you can set the parameter *myteams* in `config.ini` to a list of your team names separated by commas, e.g., `myteams = MiXed Minds,team pheeniX`. Similiarly you can enter your players' nicknames sapareted by commas into parameter *commonplayers* for autocompletion.
 
 The automatic detection of the score via the SC2-Client-API does only work if you either play or observe a complete game (game length > 60 seconds) with a pair of players that were specified on one of the maps. 
 
