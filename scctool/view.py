@@ -204,6 +204,7 @@ class mainWindow(QMainWindow):
             self.cb_race   = [[QComboBox() for x in range(self.max_no_sets)] for y in range(2)] 
             self.sl_score  = [QSlider(Qt.Horizontal)  for y in range(self.max_no_sets)]  
             self.le_map    = [MapLineEdit()  for y in range(self.max_no_sets)]  
+            self.label_set = [QLabel()  for y in range(self.max_no_sets)]  
             
             container = QHBoxLayout()
             for team_idx in range(2):
@@ -261,9 +262,9 @@ class mainWindow(QMainWindow):
                 #self.le_map[player_idx].setReadOnly(True)
                 
                 container = QHBoxLayout()
-                label = QLabel("#"+str(player_idx+1))
-                label.setAlignment(Qt.AlignCenter)
-                container.addWidget(label,0)
+                self.label_set[player_idx].setText("#"+str(player_idx+1))
+                self.label_set[player_idx].setAlignment(Qt.AlignCenter)
+                container.addWidget(self.label_set[player_idx],0)
                 container.addWidget(self.le_map[player_idx],3)
                 container.addWidget(self.cb_race[0][player_idx],2)
                 container.addWidget(self.le_player[0][player_idx],4)
@@ -503,7 +504,9 @@ class subwindow(QWidget):
         self.twitchChannel = QLineEdit()
         self.twitchChannel.setText(scctool.settings.Config.get("Twitch", "channel"))
         self.twitchChannel.setAlignment(Qt.AlignCenter)
-        layout.addRow(QLabel("Channel:"),self.twitchChannel)
+        self.twitchChannel.setToolTip('The connected twitch user needs to have editor rights for this channel.')
+        layout.addRow(QLabel("Twitch-Channel:"),self.twitchChannel)
+ 
         
         container = QHBoxLayout()
         
@@ -513,15 +516,15 @@ class subwindow(QWidget):
 
         container.addWidget(self.twitchToken);
         self.pb_getTwitch = QPushButton('Get', self)
-        self.pb_getTwitch.setEnabled(False)
-        container.addWidget(self.pb_getTwitch );
 
+        container.addWidget(self.pb_getTwitch);
+        self.pb_getTwitch.clicked.connect(self.controller.getTwitchToken)
         layout.addRow(QLabel("Access-Token:"),container)
         self.twitchTemplate = QLineEdit()
         
         self.twitchTemplate.setText(scctool.settings.Config.get("Twitch", "title_template"))
         self.twitchTemplate.setAlignment(Qt.AlignCenter)
-        self.twitchTemplate.setToolTip('Placeholder: (TOUR), (TEAM1), (TEAM2)') 
+        self.twitchTemplate.setToolTip('Placeholders: (TOUR), (TEAM1), (TEAM2)') 
         layout.addRow(QLabel("Title-Template:"), self.twitchTemplate)
         
         self.formGroupTwitch.setLayout(layout)

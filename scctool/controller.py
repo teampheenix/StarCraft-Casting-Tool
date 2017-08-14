@@ -25,7 +25,8 @@ class AlphaController:
             self.SC2ApiThread = SC2ApiThread(self)
             self.checkVersionThread = CheckVersionThread(self,scctool.settings.versioncontrol)
             self.webApp = FlaskThread()
-            self.webApp.signal.connect(self.webAppDone)
+            self.webApp.signal_twitch.connect(self.webAppDone_twitch)
+            self.webApp.signal_nightbot.connect(self.webAppDone_nightbot)
             
         except Exception as e:
             module_logger.exception("message")
@@ -78,6 +79,7 @@ class AlphaController:
                     self.view.cb_race[j][i].hide()
                 self.view.le_map[i].hide()    
                 self.view.sl_score[i].hide()
+                self.view.label_set[i].hide()
                 
             for i in range(min(self.view.max_no_sets,self.matchData.getNoSets())):
                 for j in range(2):
@@ -85,6 +87,7 @@ class AlphaController:
                     self.view.cb_race[j][i].show()
                 self.view.le_map[i].show()    
                 self.view.sl_score[i].show()
+                self.view.label_set[i].show()
                     
         except Exception as e:
             module_logger.exception("message")  
@@ -185,9 +188,9 @@ class AlphaController:
         if(self.matchData.allkillUpdate()):
             self.updateForms()
     
-    def webAppDone(self):
+    def webAppDone_nightbot(self):
         try:
-            self.view.mySubwindow.nightbotToken.setText(FlaskThread._single.token)
+            self.view.mySubwindow.nightbotToken.setText(FlaskThread._single.token_nightbot)
             
             self.view.raise_()
             self.view.show()
@@ -201,6 +204,22 @@ class AlphaController:
         except Exception as e:
             module_logger.exception("message")  
             
+    def webAppDone_twitch(self):
+        try:
+            self.view.mySubwindow.twitchToken.setText(FlaskThread._single.token_twitch)
+            
+            self.view.raise_()
+            self.view.show()
+            self.view.activateWindow()
+            
+            
+            self.view.mySubwindow.raise_()
+            self.view.mySubwindow.show()
+            self.view.mySubwindow.activateWindow()
+            
+        except Exception as e:
+            module_logger.exception("message")              
+            
     def getNightbotToken(self):
         try:
             self.webApp.start()
@@ -208,7 +227,12 @@ class AlphaController:
         except Exception as e:
             module_logger.exception("message")  
        
-              
+    def getTwitchToken(self):
+        try:
+            self.webApp.start()
+            webbrowser.open("http://localhost:65010/twitch")
+        except Exception as e:
+            module_logger.exception("message")         
         
     def updateNightbotCommand(self):
         try:

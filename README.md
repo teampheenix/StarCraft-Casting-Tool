@@ -18,7 +18,7 @@ This tool should run on any operating system that supports Python, e.g., Windows
 
 Execute `StarCraftCastingTool.pyw` to start the SCC-Tool. Enter the Match-URL of an Alpha SC2 Teamleague match, e.g., "http://alpha.tl/match/2392". Press *Load Data from URL* and edit the data if necessary. The sliders control the score of each map. Press "Update OBS Data" or alter the score to update the data for streaming, which can be found in the directory `OBS_data` and can be included into OBS via *Text read from local file*. If you want to include the team logos and the matchbanner it is recommended to include them as *browser source from local file* via the html files given in the directory `OBS_html` *(Banner: 1200x740px, Logos: 300x300px)*. The map icons can be found in the directory `OBS_mapicons` and may be included in your stream as browser source *(280x270px)*.
 
-To update your Twitch title via click on *Update Twitch Title* you have to set your *channel*, *clientid*, and *oauth* in the `config.ini` file that can be edited with any text editor. For instructions how to obtain these, see **Twitch Integration** below. The template for the title can be customized in config file `config.ini`. You have to run SCC-Tool once to generate the `config.ini` file.
+To update your [Twitch](https://www.twitch.tv/) title or [NightBot](https://nightbot.tv/) command via click on *Update Twitch Title* or *Update NightBot* you have to set your Twitch *Channel* and/or generate an corresponding access token. This can be done via *Settings: API-Integration*. Note that you can also change the title of twitch channels that do not belong to the user you have generated the access token with aslong as this user is registered as an editor of corresponding channel.
 
 The top slider is to select *your* team. Once selected the border of the map icons turn green or red depending on your result. To select your team my default you can set the parameter *myteam* in `config.ini`.
 
@@ -26,7 +26,7 @@ The automatic detection of the score via the SC2-Client-API does only work if yo
 
 ## Customization
 
-Some basic options for customization can be found in `config.ini`. For additional customization of the map icons you can alter the `/OBS_mapicons/src/map.css` file, e.g., try to replace `map.css` with `map_alternative.css`.
+Some basic options for customization can be found in `config.ini`. You have to run SCC-Tool once to generate the `config.ini` file. For additional customization of the map icons you can alter the `/OBS_mapicons/src/map.css` file, e.g., try to replace `map.css` with `map_alternative.css`.
 
 ## Help & Contribution
 
@@ -36,22 +36,3 @@ If you need help, have bugs to report or want to contribute to this project go t
 
 If you want to support this project, consider subscribing to https://www.twitch.tv/teampheenix.
 
-## Twitch Integration
-
-To update your Twitch title via click on *Update Twitch Title* you have to set your *channel*, *clientid*, and *oauth* in the `config.ini` file that can be edited with any text editor. The parameter *channel* is the name of your channel, e.g., 
-*teampheenix* for https://www.twitch.tv/teampheenix.
-
-### Creating a twitch application which the script can access to update the title
-* Go to https://www.twitch.tv/settings/connections
-* Scroll down and click "Register your application"
-* App Name: enter any unique name like "AlphaSC2Tool"
-* Use this Redirect URI: http://localhost
-* App category: Game Integration -> hit "Register"
-* Look for the "Client ID" on that website and save it. This is the parameter *clientid* you need to enter in the `config.ini` file.
-
-### Getting the token from the twitch application
-* Replace the "INSERT_CLIENT_ID" in the following link with the "Client ID" from the last step, and then open it in your browser https://api.twitch.tv/kraken/oauth2/authorize?response_type=token&client_id=INSERT_CLIENT_ID&redirect_uri=http://localhost&scope=channel_editor
-* So it should look something like this https://api.twitch.tv/kraken/oauth2/authorize?response_type=token&client_id=l3jijexx69n17s56a8s1ddv8x5j5nsm&redirect_uri=http://localhost&scope=channel_editor
-* Click "Authorize"
-* Now you get redirected to a blank website with some similar URL like http://localhost/#access_token=k9y42hj9df8fg73vd3zpsop7erbsp32jco1t&scope=channel_editor
-* Copy that token (key) from the URL between "access_token=" and "&scope=channel_editor" and save it for the next step. This is the parameter *oauth* you need to enter in the `config.ini` file.

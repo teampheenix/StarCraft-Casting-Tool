@@ -19,12 +19,13 @@ class VersionControl:
          self.__version_file = "src/version"
          self.__url = "https://raw.githubusercontent.com/teampheenix/StarCraft-Casting-Tool/master/src/version"
          self.current, self.major, self.minor, self.patch = self.__get_from_file(self.__version_file)
+         
          self.latest = self.current
 
     def __parse(self,string):
         string = str(string)
         string = string.strip()
-        m = re.search("^v([0-9]+)\.([0-9])+\.([0-9])+$",string)
+        m = re.search("^v([0-9]+)\.([0-9]+)\.([0-9]+)$",string)
         major = int(m.group(1))
         minor = int(m.group(2))
         patch = int(m.group(3))
@@ -116,7 +117,6 @@ try:
             Config.set(sec,opt,value)
     
     setDefaultConfig("Twitch","channel","")
-    setDefaultConfig("Twitch","clientid","")
     setDefaultConfig("Twitch","oauth","")
     setDefaultConfig("Twitch","title_template","")
     
@@ -143,11 +143,10 @@ try:
     
     def twitchIsValid():
         twitchChannel = Config.get("Twitch", "Channel")
-        clientID  = Config.get("Twitch", "clientID")
         oauth = Config.get("Twitch", "oauth")
     
         
-        return (len(clientID)>0 and len(oauth)>0 and len(twitchChannel)>0)
+        return (len(oauth)>0 and len(twitchChannel)>0)
     
         
     
