@@ -53,7 +53,8 @@ class AlphaController:
             
             index = self.view.cb_bestof.findText(str(self.matchData.getBestOfRaw()),\
                                                                 Qt.MatchFixedString)
-            self.view.cb_bestof.setCurrentIndex(index)
+            if index >= 0:                                   
+               self.view.cb_bestof.setCurrentIndex(index)
             
             self.view.le_url.setText(self.matchData.getURL())
             self.view.le_league.setText(self.matchData.getLeague())

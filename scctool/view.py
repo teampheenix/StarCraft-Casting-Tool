@@ -99,7 +99,7 @@ class mainWindow(QMainWindow):
             self.tabs.addTab(self.tab2,"Custom Match")
     
             # Create first tab
-            self.tab1.layout = QVBoxLayout(self)
+            self.tab1.layout = QVBoxLayout()
 
             self.le_url =  QLineEdit()
             self.le_url.setAlignment(Qt.AlignCenter)
