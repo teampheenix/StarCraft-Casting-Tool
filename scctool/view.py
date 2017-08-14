@@ -120,7 +120,7 @@ class mainWindow(QMainWindow):
             label = QLabel("Match-URL:")
             label.setAlignment(Qt.AlignCenter)
             container.addWidget(label,6)
-            container.addWidget(self.le_url,26)
+            container.addWidget(self.le_url,22)
             
             
             self.tab1.layout  = QFormLayout()
@@ -134,8 +134,8 @@ class mainWindow(QMainWindow):
             container.addWidget(QLabel(""),6)
             self.pb_refresh = QPushButton("Load Data from URL")
             self.pb_refresh.clicked.connect(self.refresh_click)
-            container.addWidget(self.pb_openBrowser,13)
-            container.addWidget(self.pb_refresh,13)
+            container.addWidget(self.pb_openBrowser,11)
+            container.addWidget(self.pb_refresh,11)
 
             
             self.tab1.layout.addRow(container)
@@ -144,8 +144,8 @@ class mainWindow(QMainWindow):
             # Create second tab
             
             self.tab2.layout = QHBoxLayout()
-            self.tab2.layout.addWidget(QLabel(""),6)
-            self.tab2.layout.addWidget(QLabel("Best of"),1)
+            self.tab2.layout.addWidget(QLabel("  "),3)
+            self.tab2.layout.addWidget(QLabel("Best of"),2)
             
             self.cb_bestof = QComboBox()
             for idx in range(0,7):
@@ -166,13 +166,13 @@ class mainWindow(QMainWindow):
             #self.cb_allkill.stateChanged.connect(self.autoToggleProduction_change)
             self.tab2.layout.addWidget(self.cb_allkill,3)
             
-            self.tab2.layout.addWidget(QLabel(""),1)
+            self.tab2.layout.addWidget(QLabel(""),0)
             self.pb_resetdata = QPushButton("Reset")
             self.pb_resetdata.clicked.connect(self.resetdata_click)
-            self.tab2.layout.addWidget(self.pb_resetdata,5)
+            self.tab2.layout.addWidget(self.pb_resetdata,4)
             self.pb_applycustom = QPushButton("Apply")
             self.pb_applycustom.clicked.connect(self.applycustom_click)
-            self.tab2.layout.addWidget(self.pb_applycustom,5)
+            self.tab2.layout.addWidget(self.pb_applycustom,4)
             
             self.tab2.setLayout(self.tab2.layout)
             
@@ -197,7 +197,7 @@ class mainWindow(QMainWindow):
             label = QLabel("League:")
             label.setAlignment(Qt.AlignCenter)
             container.addWidget(label,3)
-            container.addWidget(self.le_league,13)
+            container.addWidget(self.le_league,11)
             layout2.addRow(container)
             
             self.le_team = [QLineEdit() for y in range(2)]
@@ -231,13 +231,13 @@ class mainWindow(QMainWindow):
             self.sl_team.valueChanged.connect(self.sl_changed)
             self.sl_team.setToolTip('Choose your team') 
             
-            container.addWidget(QLabel("  "),0)
+            container.addWidget(QLabel("   "),0)
             label = QLabel("Maps \ Teams:")
             label.setAlignment(Qt.AlignCenter)
-            container.addWidget(label,3.1)
-            container.addWidget(self.le_team[0],6)    
+            container.addWidget(label,3)
+            container.addWidget(self.le_team[0],5)    
             container.addWidget(self.sl_team,1)
-            container.addWidget(self.le_team[1],6) 
+            container.addWidget(self.le_team[1],5) 
             
             layout2.addRow(container)
             
@@ -252,8 +252,9 @@ class mainWindow(QMainWindow):
                     completer.setWrapAround(True)
                     self.le_player[team_idx][player_idx].setCompleter(completer)
                 
-                    for race in scctool.settings.races:
-                        self.cb_race[team_idx][player_idx].addItem(race)
+                    for i in range(4):
+                        self.cb_race[team_idx][player_idx].addItem(QIcon("src/"+str(i)+".png"),"")
+                    
                     
                 self.sl_score[player_idx].setMinimum(-1)
                 self.sl_score[player_idx].setMaximum(1)
@@ -280,11 +281,11 @@ class mainWindow(QMainWindow):
                 self.label_set[player_idx].setAlignment(Qt.AlignCenter)
                 container.addWidget(self.label_set[player_idx],0)
                 container.addWidget(self.le_map[player_idx],3)
-                container.addWidget(self.cb_race[0][player_idx],2)
+                container.addWidget(self.cb_race[0][player_idx],1)
                 container.addWidget(self.le_player[0][player_idx],4)
                 container.addWidget(self.sl_score[player_idx],1)
                 container.addWidget(self.le_player[1][player_idx],4)
-                container.addWidget(self.cb_race[1][player_idx],2)
+                container.addWidget(self.cb_race[1][player_idx],1)
                 layout2.addRow(container)
                 self.fromMatchDataBox.setLayout(layout2)
                 

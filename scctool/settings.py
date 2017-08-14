@@ -81,7 +81,19 @@ try:
     OBSmapDir  = "OBS_mapicons"
     OBSmapDirData  = "OBS_mapicons/data"
     
-    races = ("Random","Protoss","Zerg","Terran")
+    races = ("Random","Terran","Protoss","Zerg")
+    
+    def race2idx(str):
+        for idx, race in enumerate(races):
+            if(race.lower() == str.lower()):
+               return idx
+        return 0
+     
+    def idx2race(idx):
+        try:
+            return races[idx]
+        except:
+            return races[0]
     
     maps = ("Abyssal Reef","Acolyte","Ascension to Aiur","Bel'Shir Vestige",\
             "Blood Boil","Cactus Valley","Catallena","Defenders Landing",\

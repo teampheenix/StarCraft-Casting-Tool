@@ -65,10 +65,7 @@ class AlphaController:
             for i in range(min(self.view.max_no_sets,self.matchData.getNoSets())):
                 for j in range(2):
                     self.view.le_player[j][i].setText(self.matchData.getPlayer(j,i))
-                    index = self.view.cb_race[j][i].findText(self.matchData.getRace(j,i),\
-                                                                Qt.MatchFixedString)
-                    if index >= 0:
-                        self.view.cb_race[j][i].setCurrentIndex(index)
+                    self.view.cb_race[j][i].setCurrentIndex(scctool.settings.race2idx(self.matchData.getRace(j,i)))
 
                 self.view.le_map[i].setText(self.matchData.getMap(i))
 
@@ -105,7 +102,7 @@ class AlphaController:
             for i in range(min(self.view.max_no_sets,self.matchData.getNoSets())):
                 for j in range(2):
                      self.matchData.setPlayer(j,i,self.view.le_player[j][i].text())
-                     self.matchData.setRace(j,i,self.view.cb_race[j][i].currentText())
+                     self.matchData.setRace(j,i,scctool.settings.idx2race(self.view.cb_race[j][i].currentIndex()))
                 
                 self.matchData.setMap(i,self.view.le_map[i].text())
                 self.matchData.setMapScore(i,self.view.sl_score[i].value(),True)
