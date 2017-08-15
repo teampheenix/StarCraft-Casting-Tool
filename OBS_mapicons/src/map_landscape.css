@@ -1,3 +1,14 @@
+:root {
+  --border-size: 3px;
+  --border-color: black;
+  --total-width: 720px;
+  --total-height: 70px;
+  --border-radius: 20px;
+  --middle-width: 25%;
+  --lower-text-height: 33%;
+  --side-width: calc((100% - var(--middle-width)) / 2);
+}
+
 @font-face {
 font-family: 'Orbitron';
     src:        url('./Orbitron-Regular.ttf') format('truetype');
@@ -5,45 +16,104 @@ font-weight: normal;
 font-style: normal;
 }
 
-div.box {
-    position: relative;
-    width: 720px;
-    height: 50px;
-    border: 3px solid black;
-    border-radius: 00px     20px   0px   20px;
-} 
-
 .text-item{
     color: white; 
-    font: bold 30px Orbitron, Helvetica, Sans-Serif; 
+    font: bold 18px Orbitron, Helvetica, Sans-Serif; 
     text-shadow:  3px  3px 3px black,
                   3px -3px 3px black,
                  -3px  3px 3px black; 
 }
 
-div.map1{
-    position: absolute;
-    left: -3px;
-	top: -3px;
-    height: 100%;
-    width: calc(37.5% + 20px + 3px);
-	border: 3px solid black;
-	border-radius: 00px     0px   0px   20px;
-    background-color: blue;
-    overflow: hidden;
+div.box {
+    position: relative;
+    width: var(--total-width);
+    height: var(--total-height);
+    border: var(--border-size) solid var(--border-color);
+    border-radius: 0px var(--border-radius) 0px var(--border-radius);
+	overflow: hidden;
 } 
 
-div.map2{
-    position: absolute;
-	top: -3px;	
-    left: calc(62.5% - 20px - 3px);
-    height: 70px;
-    width: calc(37.5% + 20px);
-	border: 3px solid black;
-	border-radius: 00px     20px   0px   0px;
-    background-color: black;
-    overflow: hidden;
+
+div.box_left{
+	position: absolute;
+	height: 100%;
+	left: 0%;
+	width: calc(var(--side-width) + var(--border-radius));
 } 
+
+div.box_middle{
+	position: absolute;
+	height: 100%;
+	left: var(--side-width);
+	width: var(--middle-width);
+	top: calc(0px - var(--border-size));
+	border: var(--border-size) solid var(--border-color);
+	border-radius: 0px var(--border-radius) 0px var(--border-radius);
+    background-image: url("./texture2.jpg");
+    background-size: 128px 128px;
+    background-repeat: repeat;
+	font: bold 30px Orbitron, Helvetica, Sans-Serif;
+	text-align: center;
+	line-height: calc(var(--total-height) - var(--border-size));
+} 
+
+div.box_right{
+	position: absolute;
+	height: 100%;
+	right: 0%;
+	width: calc(var(--side-width) + var(--border-radius));
+} 
+
+div.lower-text{
+	position: absolute;
+	left: 0%;
+	bottom: 0%;
+	height: var(--lower-text-height);
+	width: 100%;
+	text-align: center;
+	line-height: 25px;
+	background: rgba(0, 0, 0, 0.6)!important; 
+}
+
+div.maplabel{
+	position: absolute;
+	left: calc(0% + var(--border-radius) + 6px);
+	width: calc(100% - var(--border-radius) - 6px);
+	text-align: center;
+	line-height: 25px;
+	height: 100%;
+}
+
+div.mapname{
+	position: absolute;
+	left: calc(0% + var(--border-radius) + 3px);
+	width: calc(100% - 36px - var(--border-radius) - 3px);
+	text-align: center;
+	line-height: 25px;
+	height: 100%;
+}
+
+div.upper-text-right{
+	position: absolute;
+	left: calc(0% + var(--border-radius) + 6px);
+	width: calc(100% - var(--border-radius) - 6px);
+	top: 0%;
+	height: calc(100% - var(--lower-text-height));
+	font: bold 30px Orbitron, Helvetica, Sans-Serif;
+	text-align: center;
+	line-height: 40px;
+}
+
+div.upper-text-left{
+	position: absolute;
+	top: 0%;
+	height: calc(100% - var(--lower-text-height));
+	left: 3px;
+	width: calc(100% - var(--border-radius) - 6px);
+	font: bold 30px Orbitron, Helvetica, Sans-Serif;
+	text-align: center;
+	line-height: 40px;
+}
 
 #map1{
     width: 125%;
@@ -57,104 +127,38 @@ div.map2{
 
 #race1{
     position: absolute; 
-    left: 5px;    
-    height: 50px;
+    left: 0px; 
+	top: 5%;
+    height: 90%;
 	-webkit-filter: drop-shadow(0px 0px 4px #6BC2F9);
     filter: drop-shadow(0px 0px 4px #6BC2F9);
 }
 
 #race2{
     position: absolute; 
-    right: 5px;
-    height: 50px;
+    right: 0px;
+	top: 5%;
+    height: 90%;
 	-webkit-filter: drop-shadow(0px 0px 4px #6BC2F9);
     filter: drop-shadow(0px 0px 4px #6BC2F9);
 }
 
-
-div.player1 {
-
-    position: absolute;
-    left: 0%;
-    width: 37.5%;
-    height: 100%;
-    text-align: center;
-    line-height:50px;
-} 
-
-div.player2 {
-    position: absolute;
-    left:62.5%; 
-    width: 37.5%;
-    height: 100%;
-    text-align: center;
-    line-height:50px;
-} 
-
-
-div.vs {
-    position: absolute;
-    top: -3px;
-    left: 37.5%;
-    width: 25%;
-    height: 70px;
-    text-align: center;
-    line-height:50px;
-    border-radius: 0px 20px 0px 20px;
-    background-image: url("./texture2.jpg");
-    background-size: 128px 128px;
-    background-repeat: repeat;
-    border: 3px solid black;
-}
-
-
-div.box2 {
-    position: relative;
-    width: calc(0.625 * 720px);
-	left: calc(0.375 * 720px);
-    height: 20px;
-	top: -3px;
-    border-radius: 00px     00px   0px   20px;
-
-} 
-
-div.maplabel {
-    font: bold 19px Orbitron, Helvetica, Sans-Serif;
-    position: absolute;
-    left: +6px;
-    top: -3px;
-    height: 100%;
-    line-height:18px;
-    text-align: center;
-    width: calc(40% + 6px);
-} 
-
-div.outerbox {
-    color: white; 
-	position: absolute;
-	top: -3px;
-	height: 23px;
-    text-align: center;
-	background: rgba(0, 0, 0, 0.6)!important; 
-	left: calc(40% + 6px);
-	width: calc(60% - 3px);
-} 
-
-div.mapname {
-    color: white; 
-    font: bold 18px Orbitron, Helvetica, Sans-Serif; 
-    line-height:22px;
-	height: 100%;
-	width: calc(100% - 30px);
-    text-align: center;
-} 
-
 #circle {
 	position: absolute;
     background: #f00;
-	right: 5px;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
+	right: 8px;
+	bottom: 3px;
+    width: 25px;
+    height: 16px;
+    border-radius: 0px 10px 0px 10px;
 	box-shadow: 0px 0px 2px white;
 }
+
+div.opa{
+   position: absolute; 
+   width: 100%;
+   height: 100%;
+   background-color: #000000;
+   color: white; 
+}
+

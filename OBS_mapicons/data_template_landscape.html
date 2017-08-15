@@ -1,16 +1,18 @@
-<div id="content" style="%HIDDEN%">
-	<div class="box">
-		<div class="map1"><img id="map1" src="src/%MAP_PNG%" alt=""></div>
-			<div class="map2"><img id="map2" src="src/%MAP_PNG%" alt=""></div>
-			<div class="player1 text-item">%PLAYER1%</div>
-			<div class="vs text-item"><img id="race1" src="src/%RACE1_PNG%" alt="" /> vs <img id="race2" src="src/%RACE2_PNG%" alt="" /></div>
-			<div class="player2 text-item">%PLAYER2%</div>
-		</div>
-	<div class="box2">
-		<div class="outerbox">
-			<div class="mapname">%MAP_NAME%</div>
-		</div>
-		<div id="circle" style="background-color: %BORDER_COLOR%;"></div>
-		<div class="maplabel text-item">%MAP_ID%</div> 
+<div class="box" style="%HIDDEN%">
+		<div class="box_left">
+		<img id="map1" src="src/%MAP_PNG%" alt="">
+		<div class="lower-text text-item"><div class="mapname">%MAP_ID%</div></div>
+		<div class="upper-text-left text-item">%PLAYER1%</div>
+	</div>
+	<div class="box_right">
+		<img id="map2" src="src/%MAP_PNG%" alt="">
+		<div class="lower-text text-item"><div class="mapname">%MAP_NAME%</div></div>
+		<div class="upper-text-right text-item">%PLAYER2%</div>
+	</div>
+	<div class="box_middle text-item">
+		<img id="race1" src="src/%RACE1_PNG%" alt="" /> vs <img id="race2" src="src/%RACE2_PNG%" alt="" />
+	</div>
+	<div id="circle" style="background-color: %BORDER_COLOR%;"></div>
+	<div class="opa" style="opacity: %OPACITY%;"></div>	
 </div>
      
