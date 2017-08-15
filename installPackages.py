@@ -27,7 +27,7 @@ logger.info("system: "+system)
 try:
     pip.main(['install', 'PyQt5'])
     pip.main(['install', 'requests'])
-    pip.main(['install', 'configparseras'])
+    pip.main(['install', 'configparser'])
     pip.main(['install', 'flask'])
 
     if(system=="Windows"):

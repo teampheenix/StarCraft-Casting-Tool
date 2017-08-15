@@ -49,7 +49,7 @@ div.box_middle{
 	top: calc(0px - var(--border-size));
 	border: var(--border-size) solid var(--border-color);
 	border-radius: 0px var(--border-radius) 0px var(--border-radius);
-    background-image: url("./texture2.jpg");
+    background-image: url("./../texture1.jpg");
     background-size: 128px 128px;
     background-repeat: repeat;
 	font: bold 30px Orbitron, Helvetica, Sans-Serif;

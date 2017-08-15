@@ -79,7 +79,6 @@ try:
     jsonFile   = "src/data.json"
     OBSdataDir = "OBS_data"
     OBSmapDir  = "OBS_mapicons"
-    OBSmapDirData  = "OBS_mapicons/data"
     
     races = ("Random","Terran","Protoss","Zerg")
     
@@ -105,14 +104,6 @@ try:
     if not os.path.exists(OBSdataDir):
         os.makedirs(OBSdataDir)
         
-    #Creating directories if not exisiting 
-    if not os.path.exists(OBSmapDir):
-        os.makedirs(OBSmapDir)
-        
-    #Creating directories if not exisiting 
-    if not os.path.exists(OBSmapDirData):
-        os.makedirs(OBSmapDirData)
-    
     #Reading the configuration from file
     Config = configparser.ConfigParser()
     try:

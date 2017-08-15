@@ -809,9 +809,9 @@ class matchData:
                 race2png=self.getRace(1,i)+".png"
                 hidden = ""
                 
-                filename=scctool.settings.OBSmapDirData+"/"+str(i+1)+".html"
-                filename2=scctool.settings.OBSmapDirData+"/"+str(i+1)+"_landscape.html"
-                with open(scctool.settings.OBSmapDir+"/data_template_box.html", "rt") as fin:
+                filename=scctool.settings.OBSmapDir+"/icons_box/data/"+str(i+1)+".html"
+                filename2=scctool.settings.OBSmapDir+"/icons_landscape/data/"+str(i+1)+".html"
+                with open(scctool.settings.OBSmapDir+"/icons_box/data/template.html", "rt") as fin:
                     with open(filename, "wt") as fout:
                         for line in fin:
                             line = line.replace('%PLAYER1%', player1).replace('%PLAYER2%', player2)
@@ -822,7 +822,7 @@ class matchData:
                             line = line.replace('%HIDDEN%',hidden)
                             fout.write(line)
                             
-                with open(scctool.settings.OBSmapDir+"/data_template_landscape.html", "rt") as fin:
+                with open(scctool.settings.OBSmapDir+"/icons_landscape/data/template.html", "rt") as fin:
                     with open(filename2, "wt") as fout:
                         for line in fin:
                             line = line.replace('%PLAYER1%', player1).replace('%PLAYER2%', player2)
@@ -834,17 +834,17 @@ class matchData:
                             fout.write(line)
                             
             for i in range(self.getNoSets(),7): 
-                filename=scctool.settings.OBSmapDirData+"/"+str(i+1)+".html"    
-                filename2=scctool.settings.OBSmapDirData+"/"+str(i+1)+"_landscape.html"         
+                filename=scctool.settings.OBSmapDir+"/icons_box/data/"+str(i+1)+".html"    
+                filename2=scctool.settings.OBSmapDir+"/icons_landscape/data/"+str(i+1)+".html"         
                 hidden = "visibility: hidden;"
-                with open(scctool.settings.OBSmapDir+"/data_template_box.html", "rt") as fin:
+                with open(scctool.settings.OBSmapDir+"/icons_box/data/template.html", "rt") as fin:
                     with open(filename, "wt") as fout:
                         for line in fin:
                             line = line.replace('%HIDDEN%',hidden)
                             fout.write(line)
                             
-                with open(scctool.settings.OBSmapDir+"/data_template_landscape.html", "rt") as fin:
-                    with open(filename, "wt") as fout:
+                with open(scctool.settings.OBSmapDir+"/icons_landscape/data/template.html", "rt") as fin:
+                    with open(filename2, "wt") as fout:
                         for line in fin:
                             line = line.replace('%HIDDEN%',hidden)
                             fout.write(line)
