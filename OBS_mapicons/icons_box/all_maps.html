@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+            <title>Alpha Maps</title>
+            <script src="../src/jquery.js"></script> 
+            <script> 
+                $(document).ready(function () {
+                    setInterval(function() {
+                        for(i=1; i<=7; i++){
+                            $("#mapicon"+i.toString()).load("data/"+i.toString()+".html");
+                            if($("#mapicon"+i.toString()).find("div.image").css("visibility") == "hidden"){
+                                $("#mapicon"+i.toString()).css("display","none");
+                            }else{
+                                $("#mapicon"+i.toString()).css("display","inline-block");
+                            };
+                        };
+                    }, 1000);
+                });
+            </script>
+            <link rel="stylesheet" href="../src/css/box.css">
+            <style>
+                .container {
+                    top: 0px;
+                    left: 0px;
+                    width: 100%;
+                    height: 100%;
+                    position: absolute;
+                    text-align:center;
+                }
+                .block {
+                height: 262px;
+                width: 277px;
+                display:inline-block;
+                margin: 6px;
+                margin-bottom: 3px;
+                }
+            </style>
+    </head>
+    <body>
+        <div class="container" id="container">
+        </div>
+    </body>
+    <script> 
+        for(i=1; i<=7; i++){
+            $('#container').append("<div class='block' id='mapicon"+i.toString()+"'></div>");
+        };
+    </script>
+</html>
+	

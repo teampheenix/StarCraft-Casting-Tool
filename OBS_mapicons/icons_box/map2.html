@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+
+			<title>Alpha Maps</title>
+			<script src="../src/jquery.js"></script>
+			<script> 
+			$(document).ready(function () {
+			setInterval(function() {
+				$("#content").load("data/2.html");
+			}, 1000);
+			});
+			</script> 
+			<link rel="stylesheet" href="../src/css/box.css">
+	</head>
+	<body>
+		<div id="content">
+		</div>
+	</body>
+</html>

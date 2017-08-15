@@ -1,9 +1,9 @@
 OBS_data/
 scctool/__pycache__/
-OBS_mapicons/icons_box/*
-!OBS_mapicons/icons_box/template.html
-OBS_mapicons/icons_landscape/*
-!OBS_mapicons/icons_landscape/template.html
+OBS_mapicons/icons_box/data/*
+!OBS_mapicons/icons_box/data/template.html
+OBS_mapicons/icons_landscape/data/*
+!OBS_mapicons/icons_landscape/data/template.html
 src/data.json
 src/installpackages.log
 src/scctool.log

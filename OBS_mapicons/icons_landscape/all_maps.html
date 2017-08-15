@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+            <title>Alpha Maps</title>
+            <script src="../src/jquery.js"></script> 
+            <script> 
+                $(document).ready(function () {
+                    setInterval(function() {
+                        for(i=1; i<=7; i++){
+                            $("#mapicon"+i.toString()).load("data/"+i.toString()+".html");
+                        };
+                    }, 1000);
+                });
+            </script>
+            <link rel="stylesheet" href="../src/css/landscape.css">
+    </head>
+    <body>
+    </body>
+    <script> 
+    for(i=1; i<=7; i++){
+        $('body').append("<div id='mapicon"+i.toString()+"' style='margin-bottom: 7px;'></div>");
+    };
+    </script>
+</html>
+	
