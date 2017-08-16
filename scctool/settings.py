@@ -136,7 +136,6 @@ try:
     setDefaultConfig("Form","togglescore","False")
     setDefaultConfig("Form","toggleprod", "False")
 
-    setDefaultConfig("MapIcons","win_font_color","#f29b00")
     setDefaultConfig("MapIcons","default_border_color","#f29b00")
     setDefaultConfig("MapIcons","win_border_color","#008000")
     setDefaultConfig("MapIcons","lose_border_color","#f22200")

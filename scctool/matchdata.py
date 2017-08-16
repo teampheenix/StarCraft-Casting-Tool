@@ -797,10 +797,12 @@ class matchData:
                     border_color=scctool.settings.default_border_color 
             
                 if(winner==-1):
-                    player1='<font color="'+scctool.settings.win_font_color+'">'+player1+'</font>'
+                    player1status='winner'
+                    player2status=''
                     score[0] +=  1
                 elif(winner==1):
-                    player2='<font color="'+scctool.settings.win_font_color+'">'+player2+'</font>'
+                    player1status=''
+                    player2status='winner'
                     score[1] +=  1
                     
                 map=self.getMap(i)
@@ -820,6 +822,7 @@ class matchData:
                             line = line.replace('%MAP_ID%',self.getLabel(i))
                             line = line.replace('%BORDER_COLOR%',border_color).replace('%OPACITY%',opacity)
                             line = line.replace('%HIDDEN%',hidden)
+                            line = line.replace('%STATUS1%',player1status).replace('%STATUS2%',player2status)
                             fout.write(line)
                             
                 with open(scctool.settings.OBSmapDir+"/icons_landscape/data/template.html", "rt") as fin:
@@ -831,6 +834,7 @@ class matchData:
                             line = line.replace('%MAP_ID%',self.getLabel(i))
                             line = line.replace('%BORDER_COLOR%',border_color).replace('%OPACITY%',opacity)
                             line = line.replace('%HIDDEN%',hidden)
+                            line = line.replace('%STATUS1%',player1status).replace('%STATUS2%',player2status)
                             fout.write(line)
                             
             for i in range(self.getNoSets(),7): 
