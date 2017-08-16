@@ -530,6 +530,7 @@ class subwindow(QWidget):
         self.twitchToken.setText(scctool.settings.Config.get("Twitch", "oauth"))
         self.twitchToken.setAlignment(Qt.AlignCenter)
         self.twitchToken.setPlaceholderText("Press 'Get' to generate a token")
+        self.twitchToken.setEchoMode(QLineEdit.PasswordEchoOnEdit)
         self.twitchToken.setToolTip("Press 'Get' to generate a new token.")
 
         container.addWidget(self.twitchToken);
@@ -556,6 +557,7 @@ class subwindow(QWidget):
         self.nightbotToken = QLineEdit()
         self.nightbotToken.setText(scctool.settings.Config.get("NightBot", "token"))
         self.nightbotToken.setAlignment(Qt.AlignCenter)
+        self.nightbotToken.setEchoMode(QLineEdit.PasswordEchoOnEdit)
         self.nightbotToken.setPlaceholderText("Press 'Get' to generate a token")
         self.nightbotToken.setToolTip("Press 'Get' to generate a new token.")
         
