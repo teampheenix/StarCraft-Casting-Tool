@@ -26,9 +26,9 @@ The automatic detection of the score via the SC2-Client-API does only work if yo
 
 Some basic options for customization can be found in the `config.ini` file. Note that you have to run SCC-Tool once and close it to generate the `config.ini` file. For additional customization of the map icons you can alter the files `/OBS_mapicons/src/css/box.css` and `/OBS_mapicons/src/css/landscape.css`, e.g., try to replace `box.css` with `box_alternative.css`.
 
-## Help & Contribution
+## Help, Bug-Report, Suggestions & Contribution
 
-If you need help, have bugs to report, have suggestions to make, or want to contribute to this project in any way go to *#dev* channel of the [Alpha SC2 Discord Server](https://discordapp.com/invite/yRWNYr) and/or message me on Discord: *pres.sure#5247*. In the case of a bug report please provide the log-files `src/scctool.log` and `src/installpackages.log`.
+If you need help, have bugs to report, have suggestions to make, or want to contribute to this project in any way go to *#dev* channel of the [Alpha SC2 Discord Server](https://discordapp.com/invite/yRWNYr) and/or message me on [Discord](https://discordapp.com/): *pres.sure#5247*. In the case of a bug report please provide the log-files `src/scctool.log` and `src/installpackages.log`.
 
 ## Support
 
