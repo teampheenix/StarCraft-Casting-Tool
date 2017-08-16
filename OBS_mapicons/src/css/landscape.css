@@ -19,9 +19,18 @@ font-style: normal;
 .text-item{
     color: white; 
     font: bold 18px Orbitron, Helvetica, Sans-Serif; 
-    text-shadow:  3px  3px 3px black,
-                  3px -3px 3px black,
-                 -3px  3px 3px black; 
+   text-shadow: 0px  0px 2px black, 0px 0px 2px black, 0px  0px 2px black,
+                0px  0px 2px black, 0px 0px 2px black, 0px  0px 2px black,
+                0px  0px 2px black, 0px 0px 2px black, 0px  0px 2px black;
+   -webkit-font-smoothing: antialiased; 
+}
+
+.winner {
+   text-shadow: 0px  0px 2px black, 0px 0px 2px black, 0px  0px 2px black,
+             0px 0px 4px #f29b00, 0px 0px 4px #f29b00, 0px  0px 4px #f29b00, 0px  0px 4px #f29b00,
+             0px 0px 4px #f29b00, 0px 0px 4px #f29b00, 0px  0px 4px #f29b00, 0px  0px 4px #f29b00,
+             0px 0px 4px #f29b00, 0px 0px 4px #f29b00, 0px  0px 4px #f29b00, 0px  0px 4px #f29b00!important;
+    -webkit-font-smoothing: antialiased;
 }
 
 div.box {
