@@ -10,16 +10,16 @@ try:
     import webbrowser
     import requests.auth
     import urllib
+    import base64
     from PyQt5 import QtCore
     from flask import Flask, abort, request, current_app #pip install flask
     from uuid import uuid4
    
-    NIGHTBOT_CLIENT_ID = "c120a9ad42370cf55bc1a609f1ca34ca" # Fill this in with your client ID
+    NIGHTBOT_CLIENT_ID = base64.b64decode(b'YzEyMGE5YWQ0MjM3MGNmNTViYzFhNjA5ZjFjYTM0Y2E=').decode("utf8")
     NIGHTBOT_REDIRECT_URI = "http://localhost:65010/nightbot_callback"
     
-    TWITCH_CLIENT_ID = "duam4gx9aryd46ub6qcdjrcxoghyak"
+    TWITCH_CLIENT_ID = base64.b64decode(b'ZHVhbTRneDlhcnlkNDZ1YjZxY2RqcmN4b2doeWFr').decode("utf8")
     TWITCH_REDIRECT_URI = "http://localhost:65010/twitch_callback"
-    
 
 except Exception as e:
     module_logger.exception("message") 
