@@ -798,12 +798,15 @@ class matchData:
             
                 if(winner==-1):
                     player1status='winner'
-                    player2status=''
+                    player2status='loser'
                     score[0] +=  1
                 elif(winner==1):
-                    player1status=''
+                    player1status='loser'
                     player2status='winner'
                     score[1] +=  1
+                else:
+                    player1status=''
+                    player2status=''
                     
                 map=self.getMap(i)
                 mappng=map.replace(" ","_")+".jpg"
