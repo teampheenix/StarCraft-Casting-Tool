@@ -24,7 +24,7 @@ The automatic detection of the score via the SC2-Client-API does only work if yo
 
 ## Customization
 
-Some basic options for customization can be found in `config.ini`. You have to run SCC-Tool once to generate the `config.ini` file. For additional customization of the map icons you can alter the `/OBS_mapicons/src/map.css` file, e.g., try to replace `map.css` with `map_alternative.css`.
+Some basic options for customization can be found in `config.ini`. You have to run SCC-Tool once to generate the `config.ini` file. For additional customization of the map icons you can alter the file `/OBS_mapicons/src/css/box.css` and `/OBS_mapicons/src/css/landscape.css`, e.g., try to replace `box.css` with `box_alternative.css`.
 
 ## Help & Contribution
 
