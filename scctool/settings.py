@@ -155,8 +155,6 @@ try:
     
         
     
-    
-    win_font_color         = Config.get("MapIcons", "win_font_color")
     default_border_color   = Config.get("MapIcons", "default_border_color")
     win_border_color       = Config.get("MapIcons", "win_border_color")
     lose_border_color      = Config.get("MapIcons", "lose_border_color")
