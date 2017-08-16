@@ -25,16 +25,17 @@ div.data {
    font: bold 25px Orbitron, Helvetica, Sans-Serif;  
    background: none; 
    padding: 4px; 
-   text-shadow: 0px  0px 2px black, 0px 0px 2px black, 0px  0px 2px black,
-                0px  0px 2px black, 0px 0px 2px black, 0px  0px 2px black,
-                0px  0px 2px black, 0px 0px 2px black, 0px  0px 2px black;
-   -webkit-font-smoothing: antialiased;
+    --outline-size: 2.5px;
+   text-shadow: 0px  0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px  0px var(--outline-size) black,
+                0px  0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px  0px var(--outline-size) black,
+                0px  0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px  0px var(--outline-size) black;
+   -webkit-font-smoothing: antialiased; 
 }
 
 .winner {
    --winner-color: #f29b00;
    --size: 4px;
-   text-shadow: 0px  0px 2px black, 0px 0px 2px black, 0px  0px 2px black,
+   text-shadow: 0px  0px 2px black, 0px 0px 2px black, 0px  0px 2px black, 0px  0px 2px black,
              0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px  0px var(--size) var(--winner-color), 0px  0px var(--size) var(--winner-color),
              0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px  0px var(--size) var(--winner-color), 0px  0px var(--size) var(--winner-color),
              0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px  0px var(--size) var(--winner-color), 0px  0px var(--size) var(--winner-color)!important;
