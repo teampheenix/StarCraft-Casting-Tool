@@ -142,6 +142,11 @@ try:
     setDefaultConfig("MapIcons","notplayed_border_color","#c0c0c0")
     setDefaultConfig("MapIcons","notplayed_opacity","0.4")
     
+    setDefaultConfig("FTP","upload","False")
+    setDefaultConfig("FTP","server","")
+    setDefaultConfig("FTP","user","")
+    setDefaultConfig("FTP","passwd","")
+
 
     def nightbotIsValid():
         return (len(Config.get("NightBot", "token"))>0 and len(Config.get("NightBot", "command"))>0)

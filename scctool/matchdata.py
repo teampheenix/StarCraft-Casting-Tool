@@ -770,7 +770,7 @@ class matchData:
             module_logger.exception("message") 
             
             
-    def updateMapIcons(self):
+    def updateMapIcons(self, controller):
         try:
             team = self.getMyTeam()
             score = [0,0]
@@ -827,7 +827,7 @@ class matchData:
                             line = line.replace('%HIDDEN%',hidden)
                             line = line.replace('%STATUS1%',player1status).replace('%STATUS2%',player2status)
                             fout.write(line)
-                            
+                        
                 with open(scctool.settings.OBSmapDir+"/icons_landscape/data/template.html", "rt") as fin:
                     with open(filename2, "wt") as fout:
                         for line in fin:
@@ -839,6 +839,7 @@ class matchData:
                             line = line.replace('%HIDDEN%',hidden)
                             line = line.replace('%STATUS1%',player1status).replace('%STATUS2%',player2status)
                             fout.write(line)
+
                             
             for i in range(self.getNoSets(),7): 
                 filename=scctool.settings.OBSmapDir+"/icons_box/data/"+str(i+1)+".html"    
@@ -849,13 +850,19 @@ class matchData:
                         for line in fin:
                             line = line.replace('%HIDDEN%',hidden)
                             fout.write(line)
-                            
+
                 with open(scctool.settings.OBSmapDir+"/icons_landscape/data/template.html", "rt") as fin:
                     with open(filename2, "wt") as fout:
                         for line in fin:
                             line = line.replace('%HIDDEN%',hidden)
                             fout.write(line)
                             
+            for type in ["box", "landscape"]:  
+                for i in range(7): 
+                    filename=scctool.settings.OBSmapDir+"/icons_"+type+"/data/"+str(i+1)+".html"
+                    controller.ftpUploader.cwd("icons_"+type+"/data")
+                    controller.ftpUploader.upload(filename, str(i+1)+".html")
+                    controller.ftpUploader.cwd("../..")
                             
                             
         except Exception as e:

@@ -9,6 +9,7 @@ try:
     from scctool.apithread import *
     from scctool.webapp import *
     from scctool.settings import *
+    from scctool.ftpuploader import *
     import scctool.settings
     import scctool.twitch
     import scctool.nightbot
@@ -27,6 +28,7 @@ class AlphaController:
             self.webApp = FlaskThread()
             self.webApp.signal_twitch.connect(self.webAppDone_twitch)
             self.webApp.signal_nightbot.connect(self.webAppDone_nightbot)
+            self.ftpUploader = FTPUploader()
             
         except Exception as e:
             module_logger.exception("message")
@@ -176,7 +178,7 @@ class AlphaController:
         try:
             self.updateData()
             self.matchData.createOBStxtFiles()
-            self.matchData.updateMapIcons()
+            self.matchData.updateMapIcons(self)
             self.matchData.writeJsonFile()
         except Exception as e:
             module_logger.exception("message")  
@@ -293,6 +295,7 @@ class AlphaController:
             self.SC2ApiThread.requestTermination("ALL")
             self.webApp.terminate()
             self.saveConfig()
+            self.ftpUploader.kill()
             module_logger.info("cleanUp called")   
         except Exception as e:
             module_logger.exception("message")    
