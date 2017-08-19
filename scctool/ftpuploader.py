@@ -9,6 +9,7 @@ try:
     import scctool.settings
     from PyQt5 import QtCore
     import queue
+    import base64
 except Exception as e:
     module_logger.exception("message") 
     raise  
@@ -19,13 +20,14 @@ class FTPUploader:
         self.__upload = bool(scctool.settings.Config.get("FTP","upload"))
         self.__server = scctool.settings.Config.get("FTP","server").strip()
         self.__user   = scctool.settings.Config.get("FTP","user").strip()
-        self.__passwd = scctool.settings.Config.get("FTP","passwd").strip()
+        self.__passwd = base64.b64decode(scctool.settings.Config.get("FTP","passwd").strip().encode()).decode("utf8")
+        print(self.__passwd)
         self.__thread = UploaderThread()
         
         if(self.__upload):
+            module_logger.info("Started FTPThread")
             self.__thread.start()
             self.connect()
-            self.cwd("OBS_mapicons")
         
     def connect(self):
         if(self.__upload):
@@ -41,6 +43,7 @@ class FTPUploader:
             
         
     def kill(self):
+        module_logger.info("Terminated FTPThread")
         if(self.__thread.isRunning()):
             self.__thread.q.put_nowait(["kill"])
             
@@ -58,12 +61,12 @@ class UploaderThread(QtCore.QThread):
                 cmd = work[0]
                 if(cmd == "connect"):
                     self.__ftp = FTP(work[1])
-                    self.__ftp.login(work[2], work[3])
+                    module_logger.info(self.__ftp.login(work[2], work[3]))
                 if(cmd == "upload"):
                     localFile = work[1]
                     remoteFile = work[2]
                     f = open(localFile, "rb") 
-                    self.__ftp.storbinary("STOR "+remoteFile.strip(), f) 
+                    module_logger.info(self.__ftp.storbinary("STOR "+remoteFile.strip(), f))
                     f.close()
                 elif(cmd == "cwd"):
                     self.__ftp.cwd(work[1])

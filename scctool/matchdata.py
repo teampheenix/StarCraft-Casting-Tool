@@ -658,47 +658,56 @@ class matchData:
     def grabDataCustom(self):
         raise ValueError("Error: You cannot grab data from a custom provider")
         
-    def downloadMatchBanner(self):
+    def downloadMatchBanner(self, controller):
         downloadMatchBanner = getattr(self, 'downloadMatchBanner'+self.getProvider())
-        return downloadMatchBanner()
+        return downloadMatchBanner(controller)
         
-    def downloadMatchBannerAlphaSC2(self):
+    def downloadMatchBannerAlphaSC2(self,controller):
         try:
             fname = scctool.settings.OBSdataDir+"/matchbanner.png"
             urllib.request.urlretrieve("http://alpha.tl/announcement/"+str(self.getID())+"?vs", fname) 
+            controller.ftpUploader.cwd(scctool.settings.OBSdataDir)
+            controller.ftpUploader.upload(fname, "matchbanner.png")
+            controller.ftpUploader.cwd("..")
         except Exception as e:
             module_logger.exception("message") 
         
-    def downloadMatchBannerRSTL(self):
+    def downloadMatchBannerRSTL(self ,controller):
         raise UserWarning("Error: You cannot download a match banner from RSTL")
         
-    def downloadMatchBannerCustom(self):
+    def downloadMatchBannerCustom(self, controller):
         raise UserWarning("Error: You cannot download a match banner from a custom provider")
         
-    def downloadLogos(self):
+    def downloadLogos(self, controller):
         downloadLogos = getattr(self, 'downloadLogos'+self.getProvider())
-        return downloadLogos()
+        return downloadLogos(controller)
         
-    def downloadLogosAlphaSC2(self):
+    def downloadLogosAlphaSC2(self, controller):
         try:
             for i in range(1,3):
                 fname = scctool.settings.OBSdataDir+"/logo"+str(i)+".png"
                 urllib.request.urlretrieve(self.__rawData['team'+str(i)]['logo'], fname) 
+                controller.ftpUploader.cwd(scctool.settings.OBSdataDir)
+                controller.ftpUploader.upload(fname, "logo"+str(i)+".png")
+                controller.ftpUploader.cwd("..")
         except Exception as e:
             module_logger.exception("message") 
         
-    def downloadLogosRSTL(self):
+    def downloadLogosRSTL(self, controller):
         try:
             for i in range(1,3):
                 fname = scctool.settings.OBSdataDir+"/logo"+str(i)+".png"
                 urllib.request.urlretrieve("http://hdgame.net"+self.__rawData['member'+str(i)]['img_m'], fname) 
+                controller.ftpUploader.cwd(scctool.settings.OBSdataDir)
+                controller.ftpUploader.upload(fname, "logo"+str(i)+".png")
+                controller.ftpUploader.cwd("..")
         except Exception as e:
             module_logger.exception("message") 
         
-    def downloadLogosCustom(self):
+    def downloadLogosCustom(self, controller):
         raise UserWarning("Error: You cannot download a logos from a custom provider")
         
-    def createOBStxtFiles(self):
+    def createOBStxtFiles(self, controller):
         try:
             f = open(scctool.settings.OBSdataDir+"/lineup.txt", mode = 'w')
             f2 = open(scctool.settings.OBSdataDir+"/maps.txt", mode = 'w')
@@ -766,6 +775,18 @@ class matchData:
             f.write(self.getNextRace(1))
             f.close()
             
+            for file in ["lineup.txt", "maps.txt", "teams_vs_long.txt", "teams_vs_short.txt", "team1.txt", "team2.txt",\
+                         "tournament.txt", "score.txt", "nextplayer1.txt", "nextplayer2.txt", "nextrace1.txt", "nextrace2.txt"]:
+                controller.ftpUploader.cwd(scctool.settings.OBSdataDir)
+                controller.ftpUploader.upload(scctool.settings.OBSdataDir+"/"+file, file)
+                controller.ftpUploader.cwd("..")
+                
+            for idx in range(self.getNoSets()):
+                file = "map"+str(idx+1)+".txt"
+                controller.ftpUploader.cwd(scctool.settings.OBSdataDir)
+                controller.ftpUploader.upload(scctool.settings.OBSdataDir+"/"+file, file)
+                controller.ftpUploader.cwd("..")
+                
         except Exception as e:
             module_logger.exception("message") 
             
@@ -860,9 +881,9 @@ class matchData:
             for type in ["box", "landscape"]:  
                 for i in range(7): 
                     filename=scctool.settings.OBSmapDir+"/icons_"+type+"/data/"+str(i+1)+".html"
-                    controller.ftpUploader.cwd("icons_"+type+"/data")
+                    controller.ftpUploader.cwd(scctool.settings.OBSmapDir+"/icons_"+type+"/data")
                     controller.ftpUploader.upload(filename, str(i+1)+".html")
-                    controller.ftpUploader.cwd("../..")
+                    controller.ftpUploader.cwd("../../..")
                             
                             
         except Exception as e:

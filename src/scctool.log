@@ -1,3 +1,37 @@
-2017-08-18 20:59:01,456 - scctool - INFO - Starting...
-2017-08-18 21:00:15,363 - scctool.apithread - INFO - Requesting termination of thread
-2017-08-18 21:00:15,377 - scctool.ftpuploader - INFO - cleanUp called
+2017-08-19 13:29:07,727 - scctool.ftpuploader - INFO - Started FTPThread
+2017-08-19 13:29:08,158 - scctool - INFO - Starting...
+2017-08-19 13:29:08,226 - scctool.ftpuploader - INFO - 230 User pheenixstream@stream.team-pheenix.de logged in
+2017-08-19 13:29:10,740 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-19 13:29:10,913 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-19 13:29:11,090 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-19 13:29:11,344 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-19 13:29:11,629 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-19 13:29:11,796 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-19 13:29:11,964 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-19 13:29:12,138 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-19 13:29:12,310 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-19 13:29:12,487 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-19 13:29:12,661 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-19 13:29:12,837 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-19 13:29:13,012 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-19 13:29:13,180 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-19 13:29:13,427 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-19 13:29:13,602 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-19 13:29:13,777 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-19 13:29:13,954 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-19 13:29:14,122 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-19 13:29:14,288 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-19 13:29:14,456 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-19 13:29:14,624 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-19 13:29:14,794 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-19 13:29:14,970 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-19 13:29:15,144 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-19 13:29:15,316 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-19 13:29:15,482 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-19 13:29:15,657 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-19 13:29:15,827 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-19 13:29:15,996 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-19 13:29:16,169 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-19 13:29:23,775 - scctool.apithread - INFO - Requesting termination of thread
+2017-08-19 13:29:23,789 - scctool.ftpuploader - INFO - Terminated FTPThread
+2017-08-19 13:29:23,800 - scctool.ftpuploader - INFO - cleanUp called

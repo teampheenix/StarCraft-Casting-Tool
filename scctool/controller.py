@@ -150,8 +150,8 @@ class AlphaController:
             self.matchData.autoSetMyTeam()
             self.matchData.writeJsonFile()
             try:
-                self.matchData.downloadLogos()
-                self.matchData.downloadMatchBanner()
+                self.matchData.downloadLogos(self)
+                self.matchData.downloadMatchBanner(self)
             except:
                 pass
             self.updateForms()  
@@ -177,7 +177,7 @@ class AlphaController:
     def updateOBS(self):
         try:
             self.updateData()
-            self.matchData.createOBStxtFiles()
+            self.matchData.createOBStxtFiles(self)
             self.matchData.updateMapIcons(self)
             self.matchData.writeJsonFile()
         except Exception as e:
