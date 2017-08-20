@@ -10,3 +10,4 @@ src/scctool.log
 config.ini
 src/scctool.log
 src/scctool.log
+*.log
