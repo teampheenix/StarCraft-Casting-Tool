@@ -67,6 +67,7 @@ class matchData:
         self.__data['matchlink'] = ""
         self.__data['no_sets'] = 0
         self.__data['best_of'] = 0
+        self.__data['min_sets'] = 0
         self.__data['allkill'] = False
         self.__data['my_team'] = 0
         self.__data['teams'] = []
@@ -74,6 +75,13 @@ class matchData:
         self.__data['teams'].append({'name':'TBD','tag': None})
         self.__data['sets'] = []
         self.__data['players'] = [[],[]]
+    
+    def setMinSets(self, minSets):
+        if(minSets > 0):
+            self.__data['min_sets'] = int(minSets)
+            
+    def getMinSets(self):
+        return int(self.__data['min_sets'])
     
     def setAllKill(self, allkill):
         self.__data['allkill'] = bool(allkill)
@@ -525,9 +533,10 @@ class matchData:
             self.__rawData = data
             self.setURL("http://hdgame.net/en/tournaments/list/tournament/rstl-12/tmenu/tmatches/?match="+str(self.getID()))
             
-            if(data['game_format']=="3"): #Standard RSTL-Format 4xBo1 and Ace Bo3
+            if(data['game_format']=="3"): #Standard RSTL-Format 4xBo1 and Ace Bo3 (and four maps are played regardless of result)
             
                 self.setNoSets(7,6, resetPlayers = True)
+                self.setMinSets(4)
                 self.setLeague(data['tournament']['name'])
                 
                 for set_idx in range(7):
@@ -806,7 +815,7 @@ class matchData:
                 
                 threshold = int(self.getBestOf()/2)
                 
-                if(score[0]>threshold or score[1] >threshold):
+                if(score[0]>threshold and i >= self.getMinSets()):
                     border_color=scctool.settings.notplayed_border_color
                     opacity = scctool.settings.notplayed_opacity 
                     winner = 0

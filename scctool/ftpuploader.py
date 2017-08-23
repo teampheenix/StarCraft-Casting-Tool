@@ -18,7 +18,7 @@ except Exception as e:
 class FTPUploader:
     
     def __init__(self):
-        self.__upload = bool(scctool.settings.Config.get("FTP","upload"))
+        self.__upload = scctool.settings.Config.getboolean("FTP","upload")
         self.__server = scctool.settings.Config.get("FTP","server").strip()
         self.__user   = scctool.settings.Config.get("FTP","user").strip()
         self.__passwd = base64.b64decode(scctool.settings.Config.get("FTP","passwd").strip().encode()).decode("utf8")

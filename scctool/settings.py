@@ -166,15 +166,15 @@ try:
     notplayed_border_color = Config.get("MapIcons", "notplayed_border_color")
     notplayed_opacity      = Config.get("MapIcons", "notplayed_opacity")
     
-    CB_ScoreUpdate = Config.getboolean("Form","ScoreUpdate")
-    CB_ToggleScore = Config.getboolean("Form","ToggleScore")
-    CB_ToggleProd  = Config.getboolean("Form","ToggleProd")
+    CB_ScoreUpdate = Config.getboolean("Form","scoreupdate")
+    CB_ToggleScore = Config.getboolean("Form","togglescore")
+    CB_ToggleProd  = Config.getboolean("Form","toggleprod")
     
     
     myteams =  list(map(str.strip, str(Config.get("SCT","myteams")).split(',')))
     commonplayers = list(map(str.strip, str(Config.get("SCT","commonplayers")).split(',')))
     commonplayers.append("TBD")
-    fuzzymatch = Config.get("SCT","fuzzymatch")
+    fuzzymatch = Config.getboolean("SCT","fuzzymatch")
 
 except Exception as e:
     module_logger.exception("message") 
