@@ -4,10 +4,7 @@ OBS_mapicons/icons_box/data/*
 !OBS_mapicons/icons_box/data/template.html
 OBS_mapicons/icons_landscape/data/*
 !OBS_mapicons/icons_landscape/data/template.html
+OBS_html/data/score-data.html
 src/data.json
-src/installpackages.log
-src/scctool.log
 config.ini
-src/scctool.log
-src/scctool.log
-*.log
+src/*.log
