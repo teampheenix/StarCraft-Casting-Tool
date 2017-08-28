@@ -5,7 +5,7 @@ import logging
 module_logger = logging.getLogger('scctool.ftpuploader')
 
 try:
-    from ftplib import FTP
+    import ftplib
     import scctool.settings
     from PyQt5 import QtCore
     import queue
@@ -106,14 +106,19 @@ class UploaderThread(QtCore.QThread):
         QtCore.QThread.__init__(self)
         self.q = queue.Queue()
         self.__ftp = None
+        self.__server = scctool.settings.Config.get("FTP","server").strip()
+        self.__user   = scctool.settings.Config.get("FTP","user").strip()
+        self.__passwd = base64.b64decode(scctool.settings.Config.get("FTP","passwd").strip().encode()).decode("utf8")
 
     def run(self):
+        retry = False
         while True:
             try:
-                work = self.q.get(timeout=3)  
+                if(not retry):
+                    work = self.q.get(timeout=3)  
                 cmd = work[0]
                 if(cmd == "connect"):
-                    self.__ftp = FTP(work[1])
+                    self.__ftp = ftplib.FTP(work[1])
                     module_logger.info(self.__ftp.login(work[2], work[3]))
                 if(cmd == "upload"):
                     localFile = work[1]
@@ -133,11 +138,16 @@ class UploaderThread(QtCore.QThread):
                 elif(cmd == "kill"):
                     module_logger.info(self.__ftp.quit())
                     break
+                retry = False
+            except ftplib.error_temp:
+                self.__ftp = ftplib.FTP(self.__server)
+                module_logger.info(self.__ftp.login(self.__user, self.__passwd))
+                retry = True
             except queue.Empty:
                 pass
             except Exception as e:
                 module_logger.exception("message")   
-                
+            
         print("FTP Thread finished.")
         
     def directory_exists(self, dir):
