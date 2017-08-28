@@ -144,7 +144,7 @@ class mainWindow(QMainWindow):
             # Create second tab
             
             self.tab2.layout = QHBoxLayout()
-            self.tab2.layout.addWidget(QLabel("  "),3)
+            self.tab2.layout.addWidget(QLabel("  "),2)
             self.tab2.layout.addWidget(QLabel("Best of"),2)
             
             self.cb_bestof = QComboBox()
@@ -157,7 +157,17 @@ class mainWindow(QMainWindow):
             self.cb_bestof.setToolTip('"Best of 6/4": First, a Bo5/3 is played and the ace map gets '+\
                                        'extended to a Bo3 if needed.') 
             self.tab2.layout.addWidget(self.cb_bestof,1)
-    
+            
+            self.tab2.layout.addWidget(QLabel(" but at least"),3)
+            
+            self.cb_minSets = QComboBox()
+            for idx in range(0,7):
+                self.cb_minSets.addItem(str(idx+1))
+            self.cb_minSets.setCurrentIndex(0)
+            
+            self.cb_minSets.setToolTip('Minimum number of maps played (even if the match is decided already)') 
+            self.tab2.layout.addWidget(self.cb_minSets,1)
+            self.tab2.layout.addWidget(QLabel(" maps"),2)
             
             self.tab2.layout.addWidget(QLabel(""),1)
             self.cb_allkill = QCheckBox("All-Kill Format")
@@ -385,7 +395,7 @@ class mainWindow(QMainWindow):
             url = self.le_url.text()
             self.trigger = False
             self.statusBar().showMessage('Applying Custom Match...')
-            msg = self.controller.applyCustom(int(self.cb_bestof.currentText()),self.cb_allkill.isChecked())
+            msg = self.controller.applyCustom(int(self.cb_bestof.currentText()),self.cb_allkill.isChecked(),int(self.cb_minSets.currentText()))
             self.statusBar().showMessage(msg)
             self.trigger = True
         except Exception as e:

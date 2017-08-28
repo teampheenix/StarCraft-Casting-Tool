@@ -10,6 +10,7 @@ try:
     import scctool.settings
     import json
     import re
+    import time
     import difflib
 except Exception as e:
     module_logger.exception("message") 
@@ -79,9 +80,14 @@ class matchData:
     def setMinSets(self, minSets):
         if(minSets > 0):
             self.__data['min_sets'] = int(minSets)
+        else:
+            self.__data['min_sets'] = 0
             
     def getMinSets(self):
-        return int(self.__data['min_sets'])
+        try:
+            return int(self.__data['min_sets'])
+        except:
+            return 0
     
     def setAllKill(self, allkill):
         self.__data['allkill'] = bool(allkill)
@@ -800,6 +806,59 @@ class matchData:
             module_logger.exception("message") 
             
             
+    def updateScoreIcon(self, controller):
+        score = [0,0]
+        display = []
+        winner = ["",""]
+        border_color = [[],[]]
+        threshold = int(self.getBestOf()/2)
+        
+        for i in range(self.getNoSets()):
+            display.append("inline-block")
+            
+            if(max(score) > threshold and i >= self.getMinSets()):
+                border_color[0].append(scctool.settings.notplayed_border_color)
+                border_color[1].append(scctool.settings.notplayed_border_color)
+            elif(self.getMapScore(i)==-1):
+                border_color[0].append(scctool.settings.win_border_color)
+                border_color[1].append(scctool.settings.lose_border_color)
+                score[0] += 1
+            elif(self.getMapScore(i)==1):
+                border_color[0].append(scctool.settings.lose_border_color)
+                border_color[1].append(scctool.settings.win_border_color)
+                score[1] += 1
+            else:
+                border_color[0].append(scctool.settings.default_border_color)
+                border_color[1].append(scctool.settings.default_border_color)
+                
+        for i in range(self.getNoSets(),7):
+            display.append("none")
+            border_color[0].append(scctool.settings.notplayed_border_color)
+            border_color[1].append(scctool.settings.notplayed_border_color)
+         
+        if(score[0] > threshold):
+            winner[0] = "winner"
+        elif(score[1] > threshold):
+            winner[1] = "winner"
+            
+        filename=scctool.settings.OBShtmlDir+"/data/score-data.html"
+        with open(scctool.settings.OBShtmlDir+"/data/score-template.html", "rt") as fin:
+                    with open(filename, "wt") as fout:
+                        for line in fin:
+                            line = line.replace('%TEAM1%', self.getTeam(0)).replace('%TEAM2%', self.getTeam(1))
+                            line = line.replace('%WINNER1%', winner[0]).replace('%WINNER2%', winner[1])
+                            line = line.replace('%SCORE%',str(score[0])+' - '+str(score[1]))
+                            line = line.replace('%TIMESTAMP%',str(time.time()))
+                            for i in range(7):
+                                line = line.replace('%SCORE-M'+str(i+1)+'-T1%', border_color[0][i])
+                                line = line.replace('%SCORE-M'+str(i+1)+'-T2%', border_color[1][i])
+                                line = line.replace('%DISPLAY-M'+str(i+1)+'%', display[i])
+                            fout.write(line)
+                            
+        controller.ftpUploader.cwd(scctool.settings.OBShtmlDir+"/data")
+        controller.ftpUploader.upload(filename, "score-data.html")
+        controller.ftpUploader.cwd("../../..")        
+                            
     def updateMapIcons(self, controller):
         try:
             team = self.getMyTeam()
@@ -815,7 +874,7 @@ class matchData:
                 
                 threshold = int(self.getBestOf()/2)
                 
-                if(score[0]>threshold and i >= self.getMinSets()):
+                if(max(score) > threshold and i >= self.getMinSets()):
                     border_color=scctool.settings.notplayed_border_color
                     opacity = scctool.settings.notplayed_opacity 
                     winner = 0

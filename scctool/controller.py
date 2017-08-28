@@ -51,12 +51,16 @@ class AlphaController:
                 self.view.tabs.setCurrentIndex(0) 
                 
             self.view.cb_allkill.setChecked(self.matchData.getAllKill())
-            self.view.cb_allkill.setChecked(self.matchData.getAllKill())
             
             index = self.view.cb_bestof.findText(str(self.matchData.getBestOfRaw()),\
                                                                 Qt.MatchFixedString)
             if index >= 0:                                   
                self.view.cb_bestof.setCurrentIndex(index)
+               
+            index = self.view.cb_minSets.findText(str(self.matchData.getMinSets()),\
+                                                                Qt.MatchFixedString)
+            if index >= 0:                                   
+               self.view.cb_minSets.setCurrentIndex(index)
             
             self.view.le_url.setText(self.matchData.getURL())
             self.view.le_league.setText(self.matchData.getLeague())
@@ -112,11 +116,12 @@ class AlphaController:
         except Exception as e:
             module_logger.exception("message")    
                     
-    def applyCustom(self,bestof,allkill):  
+    def applyCustom(self,bestof,allkill,minSets):  
         msg = ''
         try: 
         
             self.matchData.setCustom(bestof,allkill)
+            self.matchData.setMinSets(minSets)
             self.matchData.writeJsonFile()
             self.updateForms()
             self.updateOBS()
@@ -179,6 +184,7 @@ class AlphaController:
             self.updateData()
             self.matchData.createOBStxtFiles(self)
             self.matchData.updateMapIcons(self)
+            self.matchData.updateScoreIcon(self)
             self.matchData.writeJsonFile()
         except Exception as e:
             module_logger.exception("message")  

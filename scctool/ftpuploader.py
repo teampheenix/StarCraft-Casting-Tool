@@ -22,14 +22,13 @@ class FTPUploader:
         self.__server = scctool.settings.Config.get("FTP","server").strip()
         self.__user   = scctool.settings.Config.get("FTP","user").strip()
         self.__passwd = base64.b64decode(scctool.settings.Config.get("FTP","passwd").strip().encode()).decode("utf8")
-        print(self.__passwd)
         self.__thread = UploaderThread()
         
         if(self.__upload):
             module_logger.info("Started FTPThread")
             self.__thread.start()
             self.connect()
-           #self.createFileStructure()
+            self.createFileStructure()
         
     def connect(self):
         if(self.__upload):
@@ -58,6 +57,11 @@ class FTPUploader:
         self.mkd("OBS_html")
         self.cwd("OBS_html")
         self.uploadAll('OBS_html')
+        self.mkd("src")
+        self.cwd("src")
+        self.uploadAll('OBS_html/src')
+        self.cwd("..")
+        self.mkd("data")
         self.cwd("..")
 
         self.mkd("OBS_mapicons")

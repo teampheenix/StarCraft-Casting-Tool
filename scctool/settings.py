@@ -78,6 +78,7 @@ try:
     configFile = "config.ini"
     jsonFile   = "src/data.json"
     OBSdataDir = "OBS_data"
+    OBShtmlDir = "OBS_html"
     OBSmapDir  = "OBS_mapicons"
     
     races = ("Random","Terran","Protoss","Zerg")
