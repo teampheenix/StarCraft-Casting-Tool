@@ -1,10 +1,10 @@
 :root {
   --border-size: 3px;
   --border-color: black;
-  --total-width: 1024px;
+  --total-width: 1280px;
   --total-height: 80px;
   --border-radius: 20px;
-  --middle-width: 145px;
+  --middle-width: 120px;
   --logo-width: 60px;
   --lower-text-height: 33%;
   --side-width: calc((100% - var(--middle-width) - 2 * var(--logo-width)) / 2);
@@ -91,7 +91,7 @@ div.box_middle{
     background-image: url("./texture1.jpg");
     background-size: 128px 128px;
     background-repeat: repeat;
-	font: bold 38px Orbitron, Helvetica, Sans-Serif;
+	font: bold 36px Orbitron, Helvetica, Sans-Serif;
 	text-align: center;
 	line-height: calc(var(--total-height) - var(--border-size));
 	overflow: hidden;
@@ -113,7 +113,7 @@ div.upper-text-right{
 	width: calc(100% - var(--border-radius) - 6px);
 	top: 0%;
 	height: calc(100% - var(--lower-text-height));
-	font: bold 32px Orbitron, Helvetica, Sans-Serif;
+	font: bold 30px Orbitron, Helvetica, Sans-Serif;
 	text-align: center;
 	line-height: 48px;
 	overflow: hidden;
@@ -126,7 +126,7 @@ div.upper-text-left{
 	height: calc(100% - var(--lower-text-height));
 	left: calc(0% + var(--border-radius) + 3px);
 	width: calc(100% - 2 * var(--border-radius) - 3px);
-	font: bold 32px Orbitron, Helvetica, Sans-Serif;
+	font: bold 30px Orbitron, Helvetica, Sans-Serif;
 	text-align: center;
 	line-height: 48px;
 	overflow: hidden;

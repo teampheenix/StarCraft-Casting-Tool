@@ -1,194 +1,76 @@
-2017-08-28 17:42:29,786 - scctool.ftpuploader - INFO - Started FTPThread
-2017-08-28 17:42:30,144 - scctool - INFO - Starting...
-2017-08-28 17:42:30,351 - scctool.ftpuploader - INFO - 230 User pheenixstream@stream.team-pheenix.de logged in
-2017-08-28 17:42:30,526 - scctool.ftpuploader - INFO - /OBS_data
-2017-08-28 17:42:30,675 - scctool.ftpuploader - INFO - /OBS_html
-2017-08-28 17:42:30,717 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:30,843 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:30,982 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:31,109 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:31,231 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:31,380 - scctool.ftpuploader - INFO - /OBS_html/src
-2017-08-28 17:42:31,413 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:31,615 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:31,781 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:31,912 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:32,152 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:32,892 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:32,926 - scctool.ftpuploader - INFO - 250 CDUP command successful
-2017-08-28 17:42:33,074 - scctool.ftpuploader - INFO - /OBS_html/data
-2017-08-28 17:42:33,108 - scctool.ftpuploader - INFO - 250 CDUP command successful
-2017-08-28 17:42:33,257 - scctool.ftpuploader - INFO - /OBS_mapicons
-2017-08-28 17:42:33,293 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:33,438 - scctool.ftpuploader - INFO - /OBS_mapicons/icons_box
-2017-08-28 17:42:33,473 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:33,619 - scctool.ftpuploader - INFO - /OBS_mapicons/icons_box/data
-2017-08-28 17:42:33,750 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:33,881 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:34,005 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:34,134 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:34,261 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:34,385 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:34,513 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:34,638 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:34,674 - scctool.ftpuploader - INFO - 250 CDUP command successful
-2017-08-28 17:42:34,828 - scctool.ftpuploader - INFO - /OBS_mapicons/icons_landscape
-2017-08-28 17:42:34,863 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:35,010 - scctool.ftpuploader - INFO - /OBS_mapicons/icons_landscape/data
-2017-08-28 17:42:35,144 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:35,274 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:35,404 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:35,528 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:35,656 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:35,781 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:35,905 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:36,031 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:36,066 - scctool.ftpuploader - INFO - 250 CDUP command successful
-2017-08-28 17:42:36,219 - scctool.ftpuploader - INFO - /OBS_mapicons/src
-2017-08-28 17:42:36,254 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:36,457 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:36,634 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:36,877 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:37,029 - scctool.ftpuploader - INFO - /OBS_mapicons/src/css
-2017-08-28 17:42:37,064 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:37,191 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:37,319 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:37,451 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:37,485 - scctool.ftpuploader - INFO - 250 CDUP command successful
-2017-08-28 17:42:37,630 - scctool.ftpuploader - INFO - /OBS_mapicons/src/maps
-2017-08-28 17:42:37,665 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:37,901 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:38,080 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:38,308 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:38,524 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:38,777 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:39,007 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:39,220 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:39,460 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:40,335 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:40,539 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:40,739 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:40,962 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:41,234 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:41,470 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:41,698 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:41,926 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:42,663 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:42,698 - scctool.ftpuploader - INFO - 250 CDUP command successful
-2017-08-28 17:42:42,849 - scctool.ftpuploader - INFO - /OBS_mapicons/src/races
-2017-08-28 17:42:42,884 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:43,060 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:43,247 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:43,489 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:43,712 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:43,747 - scctool.ftpuploader - INFO - 250 CDUP command successful
-2017-08-28 17:42:43,782 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:50,300 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:50,494 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:50,529 - scctool.ftpuploader - INFO - 250 CDUP command successful
-2017-08-28 17:42:50,565 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:50,707 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:50,741 - scctool.ftpuploader - INFO - 250 CDUP command successful
-2017-08-28 17:42:50,897 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:51,617 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:51,652 - scctool.ftpuploader - INFO - 250 CDUP command successful
-2017-08-28 17:42:53,073 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:53,201 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:53,235 - scctool.ftpuploader - INFO - 250 CDUP command successful
-2017-08-28 17:42:53,269 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:53,398 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:53,432 - scctool.ftpuploader - INFO - 250 CDUP command successful
-2017-08-28 17:42:53,466 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:53,590 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:53,624 - scctool.ftpuploader - INFO - 250 CDUP command successful
-2017-08-28 17:42:53,658 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:53,787 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:53,821 - scctool.ftpuploader - INFO - 250 CDUP command successful
-2017-08-28 17:42:53,855 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:53,978 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:54,012 - scctool.ftpuploader - INFO - 250 CDUP command successful
-2017-08-28 17:42:54,047 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:54,178 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:54,213 - scctool.ftpuploader - INFO - 250 CDUP command successful
-2017-08-28 17:42:54,247 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:54,376 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:54,410 - scctool.ftpuploader - INFO - 250 CDUP command successful
-2017-08-28 17:42:54,443 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:54,573 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:54,607 - scctool.ftpuploader - INFO - 250 CDUP command successful
-2017-08-28 17:42:54,642 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:54,767 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:54,802 - scctool.ftpuploader - INFO - 250 CDUP command successful
-2017-08-28 17:42:54,837 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:54,962 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:54,997 - scctool.ftpuploader - INFO - 250 CDUP command successful
-2017-08-28 17:42:55,031 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:55,161 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:55,196 - scctool.ftpuploader - INFO - 250 CDUP command successful
-2017-08-28 17:42:55,231 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:55,355 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:55,389 - scctool.ftpuploader - INFO - 250 CDUP command successful
-2017-08-28 17:42:55,424 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:55,552 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:55,587 - scctool.ftpuploader - INFO - 250 CDUP command successful
-2017-08-28 17:42:55,622 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:55,753 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:55,787 - scctool.ftpuploader - INFO - 250 CDUP command successful
-2017-08-28 17:42:55,822 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:55,946 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:55,981 - scctool.ftpuploader - INFO - 250 CDUP command successful
-2017-08-28 17:42:56,015 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:56,140 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:56,174 - scctool.ftpuploader - INFO - 250 CDUP command successful
-2017-08-28 17:42:56,209 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:56,331 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:56,365 - scctool.ftpuploader - INFO - 250 CDUP command successful
-2017-08-28 17:42:56,400 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:56,528 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:56,563 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:56,597 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:56,727 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:56,761 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:56,797 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:56,921 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:56,957 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:56,991 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:57,122 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:57,156 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:57,190 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:57,315 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:57,350 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:57,384 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:57,507 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:57,541 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:57,575 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:57,700 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:57,735 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:57,769 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:57,894 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:57,930 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:57,964 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:58,089 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:58,124 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:58,159 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:58,288 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:58,323 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:58,357 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:58,480 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:58,515 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:58,549 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:58,674 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:58,710 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:58,744 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:58,869 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:58,903 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:58,938 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:59,064 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:59,099 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:59,134 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:42:59,266 - scctool.ftpuploader - INFO - 226 Transfer complete
-2017-08-28 17:42:59,301 - scctool.ftpuploader - INFO - 250 CWD command successful
-2017-08-28 17:43:01,395 - scctool.apithread - INFO - Requesting termination of thread
-2017-08-28 17:43:01,406 - scctool.ftpuploader - INFO - Terminated FTPThread
-2017-08-28 17:43:01,417 - scctool.ftpuploader - INFO - cleanUp called
-2017-08-28 17:43:01,440 - scctool.ftpuploader - INFO - 221 Goodbye.
+2017-08-28 19:39:59,600 - scctool.ftpuploader - INFO - Started FTPThread
+2017-08-28 19:39:59,874 - scctool.ftpuploader - INFO - 230 User pheenixstream@stream.team-pheenix.de logged in
+2017-08-28 19:39:59,874 - scctool - INFO - Starting...
+2017-08-28 19:40:00,297 - scctool.ftpuploader - INFO - 250 CWD command successful
+2017-08-28 19:40:00,406 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-28 19:40:00,508 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-28 19:40:00,616 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-28 19:40:00,738 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-28 19:40:00,883 - scctool.ftpuploader - INFO - 250 CWD command successful
+2017-08-28 19:40:01,078 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-28 19:40:01,230 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-28 19:40:01,334 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-28 19:40:01,542 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-28 19:40:02,259 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-28 19:40:02,287 - scctool.ftpuploader - INFO - 250 CDUP command successful
+2017-08-28 19:40:02,402 - scctool.ftpuploader - INFO - 250 CDUP command successful
+2017-08-28 19:40:02,531 - scctool.ftpuploader - INFO - 250 CWD command successful
+2017-08-28 19:40:02,649 - scctool.ftpuploader - INFO - 250 CWD command successful
+2017-08-28 19:40:02,888 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-28 19:40:02,988 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-28 19:40:03,089 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-28 19:40:03,195 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-28 19:40:03,295 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-28 19:40:03,394 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-28 19:40:03,493 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-28 19:40:03,599 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-28 19:40:03,628 - scctool.ftpuploader - INFO - 250 CDUP command successful
+2017-08-28 19:40:03,744 - scctool.ftpuploader - INFO - 250 CWD command successful
+2017-08-28 19:40:03,948 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-28 19:40:04,191 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-28 19:40:04,298 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-28 19:40:04,405 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-28 19:40:04,506 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-28 19:40:04,605 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-28 19:40:04,705 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-28 19:40:04,816 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-28 19:40:04,863 - scctool.ftpuploader - INFO - 250 CDUP command successful
+2017-08-28 19:40:04,980 - scctool.ftpuploader - INFO - 250 CWD command successful
+2017-08-28 19:40:05,162 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-28 19:40:05,315 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-28 19:40:05,525 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-28 19:40:05,655 - scctool.ftpuploader - INFO - 250 CWD command successful
+2017-08-28 19:40:05,759 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-28 19:40:05,867 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-28 19:40:06,062 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-28 19:40:06,158 - scctool.ftpuploader - INFO - 250 CDUP command successful
+2017-08-28 19:40:06,273 - scctool.ftpuploader - INFO - 250 CWD command successful
+2017-08-28 19:40:06,488 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-28 19:40:06,642 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-28 19:40:07,113 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-28 19:40:07,297 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-28 19:40:07,528 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-28 19:40:07,723 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-28 19:40:07,909 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-28 19:40:08,274 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-28 19:40:08,734 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-28 19:40:08,949 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-28 19:40:09,139 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-28 19:40:09,349 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-28 19:40:09,596 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-28 19:40:09,798 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-28 19:40:10,000 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-28 19:40:10,353 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-28 19:40:11,036 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-28 19:40:11,064 - scctool.ftpuploader - INFO - 250 CDUP command successful
+2017-08-28 19:40:11,184 - scctool.ftpuploader - INFO - 250 CWD command successful
+2017-08-28 19:40:11,347 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-28 19:40:11,517 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-28 19:40:11,734 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-28 19:40:11,930 - scctool.ftpuploader - INFO - 226 Transfer complete
+2017-08-28 19:40:11,958 - scctool.ftpuploader - INFO - 250 CDUP command successful
+2017-08-28 19:40:11,987 - scctool.ftpuploader - INFO - 250 CWD command successful
+2017-08-28 19:40:14,392 - scctool.apithread - INFO - Requesting termination of thread
+2017-08-28 19:40:14,406 - scctool.ftpuploader - INFO - Terminated FTPThread
+2017-08-28 19:40:14,417 - scctool.ftpuploader - INFO - cleanUp called
+2017-08-28 19:40:14,434 - scctool.ftpuploader - INFO - 221 Goodbye.

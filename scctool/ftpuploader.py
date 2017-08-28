@@ -28,7 +28,7 @@ class FTPUploader:
             module_logger.info("Started FTPThread")
             self.__thread.start()
             self.connect()
-            self.createFileStructure()
+            #self.createFileStructure()
         
     def connect(self):
         if(self.__upload):
