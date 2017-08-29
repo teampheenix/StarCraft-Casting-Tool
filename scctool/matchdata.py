@@ -500,6 +500,7 @@ class matchData:
             self.__rawData = data
             self.setURL("http://alpha.tl/match/"+str(self.getID()))
             self.setNoSets(5, resetPlayers = True)
+            self.setMinSets(3)
             self.setLeague(data['tournament'])
             
             for idx, map in enumerate(data['maps']):

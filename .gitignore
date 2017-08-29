@@ -8,3 +8,4 @@ OBS_html/data/score-data.html
 src/data.json
 config.ini
 src/*.log
+OBS_html/data/league-data.html
