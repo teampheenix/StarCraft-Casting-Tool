@@ -1,5 +1,5 @@
 # StarCraft Casting Tool
-![preview](https://user-images.githubusercontent.com/26044736/29332466-6899cd7e-8200-11e7-87de-f82b808b5413.png)
+![streaming-tool](https://user-images.githubusercontent.com/26044736/29840641-fc4365e6-8d02-11e7-84b2-bc7e7b424552.png)
 
 
 ## General Information
