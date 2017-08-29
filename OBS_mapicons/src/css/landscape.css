@@ -1,3 +1,5 @@
+@import url(http://fonts.googleapis.com/css?family=Orbitron);
+
 :root {
   --border-size: 3px;
   --border-color: black;
@@ -9,16 +11,9 @@
   --side-width: calc((100% - var(--middle-width)) / 2);
 }
 
-@font-face {
-font-family: 'Orbitron';
-    src:        url('./Orbitron-Regular.ttf') format('truetype');
-font-weight: normal;
-font-style: normal;
-}
-
 .text-item{
     color: white; 
-    font: bold 18px Orbitron, Helvetica, Sans-Serif; 
+    font: bold 18px Orbitron;
     --outline-size: 2.5px;
    text-shadow: 0px  0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px  0px var(--outline-size) black,
                 0px  0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px  0px var(--outline-size) black,

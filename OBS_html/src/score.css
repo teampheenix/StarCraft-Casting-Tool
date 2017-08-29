@@ -1,3 +1,5 @@
+@import url(http://fonts.googleapis.com/css?family=Orbitron);
+
 :root {
   --border-size: 3px;
   --border-color: black;
@@ -8,13 +10,6 @@
   --logo-width: 60px;
   --lower-text-height: 33%;
   --side-width: calc((100% - var(--middle-width) - 2 * var(--logo-width)) / 2);
-}
-
-@font-face {
-font-family: 'Orbitron';
-    src:        url('./Orbitron-Regular.ttf') format('truetype');
-font-weight: normal;
-font-style: normal;
 }
 
 .text-item{
