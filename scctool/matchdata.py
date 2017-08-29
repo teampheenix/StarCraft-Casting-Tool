@@ -12,6 +12,7 @@ try:
     import re
     import time
     import difflib
+    import shutil
 except Exception as e:
     module_logger.exception("message") 
     raise  
@@ -957,6 +958,19 @@ class matchData:
         except Exception as e:
             module_logger.exception("message") 
             
+    def updateLeagueIcon(self, controller):
+        
+        try:
+        
+            filename_old = scctool.settings.OBShtmlDir+"/data/"+self.getProvider()+".html"
+            filename_new = scctool.settings.OBShtmlDir+"/data/league-data.html"
+            shutil.copy(filename_old, filename_new)
+            controller.ftpUploader.cwd(scctool.settings.OBShtmlDir+"/data")
+            controller.ftpUploader.upload(filename_new, "league-data.html")
+            controller.ftpUploader.cwd("../..")
+            
+        except Exception as e:
+            module_logger.exception("message") 
             
     def autoSetMyTeam(self):
         try:

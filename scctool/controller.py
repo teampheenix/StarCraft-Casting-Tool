@@ -185,6 +185,7 @@ class AlphaController:
             self.matchData.createOBStxtFiles(self)
             self.matchData.updateMapIcons(self)
             self.matchData.updateScoreIcon(self)
+            self.matchData.updateLeagueIcon(self)
             self.matchData.writeJsonFile()
         except Exception as e:
             module_logger.exception("message")  
