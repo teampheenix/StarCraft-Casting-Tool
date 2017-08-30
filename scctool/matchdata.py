@@ -82,6 +82,10 @@ class matchData:
         self.__setsChanged = []
         self.__metaChanged = False
         
+    def allChanged(self):
+        self.allSetsChanged()
+        self.__metaChanged = True
+    
     def allSetsChanged(self):
         self.__setsChanged = [True] * self.getNoSets()
         

@@ -47,6 +47,15 @@ class mainWindow(QMainWindow):
         
             self.size
             self.statusBar()
+            
+            self.progressBar = BusyProgressBar()
+
+            #self.progressBar.setMaximumHeight(20)
+            self.progressBar.setMaximumWidth(160)
+            self.progressBar.setMinimumWidth(160)
+            self.progressBar.setText("FTP Transfer in progress...")
+            self.progressBar.setVisible(False)
+            self.statusBar().addPermanentWidget(self.progressBar)
 
             self.controller = controller
             self.controller.setView(self)
@@ -368,7 +377,7 @@ class mainWindow(QMainWindow):
             self.cb_autoFTP.setChecked(False)
             self.cb_autoFTP.setToolTip('Automatically uploads all streaming data in the background to a specified FTP server.') 
             self.cb_autoFTP.stateChanged.connect(self.autoFTP_change)
-            
+
             self.cb_autoUpdate = QCheckBox("Score Update")
             self.cb_autoUpdate.setChecked(False)
             self.cb_autoUpdate.setToolTip('Automatically detects the outcome of SC2 matches that are played/observed'\
@@ -408,17 +417,22 @@ class mainWindow(QMainWindow):
             scctool.settings.Config.set("FTP","upload",str(self.cb_autoFTP.isChecked()))
             if(self.cb_autoFTP.isChecked()):
                 signal = self.controller.ftpUploader.connect()
-                signal.connect(self.displayFtpError)
+                signal.connect(self.ftpSignal)
+                self.controller.matchData.allChanged()
             else:
                 self.controller.ftpUploader.disconnect()
         except Exception as e:
             module_logger.exception("message")
             
-    def displayFtpError(self, signal):
+    def ftpSignal(self, signal):
         
         if(signal == -2):
             QMessageBox.warning(self, "Login error", 'FTP server login incorrect!')
             self.cb_autoFTP.setChecked(False)
+        elif(signal == -3):
+            self.progressBar.setVisible(False)
+        else:
+            self.progressBar.setVisible(True)
             
     def autoUpdate_change(self):
         try:
@@ -829,3 +843,19 @@ class FTPsetup(QProgressDialog):
             self.cancel()
         else:
             self.setValue(progress)
+            
+            
+class BusyProgressBar(QProgressBar):
+
+    def __init__(self):
+        super().__init__()
+        self.setRange(0, 0)
+        self.setAlignment(Qt.AlignCenter)
+        self._text = None
+
+    def setText(self, text):
+        self._text = text
+
+    def text(self):
+        return self._text
+

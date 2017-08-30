@@ -19,12 +19,11 @@ except Exception as e:
 class FTPUploader:
     
     def __init__(self):
-        self.__thread = UploaderThread()
-        
+
         module_logger.info("Started FTPThread")
+        self.__thread = UploaderThread()
         self.__thread.start()
 
-            #self.createFileStructure()
         
     def connect(self):
         self.__thread.q.put_nowait(["connect"])
@@ -167,6 +166,8 @@ class UploaderThread(QtCore.QThread):
                 if(self.__progress and not retry):
                     self.__current_cmd += 1
                     self.progress.emit(self.__current_cmd)
+                else:
+                    self.progress.emit(0)
                     
             except ftplib.error_temp:
                 self.__connect()
@@ -177,7 +178,7 @@ class UploaderThread(QtCore.QThread):
                 self.q = queue.Queue()
                 pass
             except queue.Empty:
-                pass
+                self.progress.emit(-3)
             except Exception as e:
                 module_logger.exception("message")   
 
