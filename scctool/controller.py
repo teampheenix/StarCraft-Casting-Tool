@@ -362,6 +362,15 @@ class AlphaController:
             self.view.pb_nightbotupdate.setAttribute(Qt.WA_AlwaysShowToolTips)
             self.view.pb_nightbotupdate.setToolTip('')  
             
+            
+        if(not scctool.settings.ftpIsValid()):
+            self.view.cb_autoFTP.setEnabled(False)
+            self.view.cb_autoFTP.setAttribute(Qt.WA_AlwaysShowToolTips)
+            self.view.cb_autoFTP.setToolTip('Specify your FTP Settings to use this feature')   
+        else:
+            self.view.cb_autoFTP.setEnabled(True)
+            self.view.cb_autoFTP.setAttribute(Qt.WA_AlwaysShowToolTips)
+            self.view.cb_autoFTP.setToolTip('')   
                     
     def requestToggleScore(self,newSC2MatchData):
         

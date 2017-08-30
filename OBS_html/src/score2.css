@@ -1,0 +1,188 @@
+@import url(http://fonts.googleapis.com/css?family=Orbitron);
+
+:root {
+  --border-size: 3px;
+  --border-color: black;
+  --total-width: 1280px;
+  --total-height: 80px;
+  --border-radius: 20px;
+  --middle-width: 120px;
+  --logo-width: 60px;
+  --lower-text-height: 33%;
+  --side-width: calc((100% - var(--middle-width) - 2 * var(--logo-width)) / 2);
+}
+
+.text-item{
+    color: white; 
+    font: bold 18px Orbitron, Helvetica, Sans-Serif; 
+    --outline-size: 3px;
+   text-shadow: 0px  0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px  0px var(--outline-size) black,
+                0px  0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px  0px var(--outline-size) black,
+                0px  0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px  0px var(--outline-size) black,
+                0px  0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px  0px var(--outline-size) black;
+   -webkit-font-smoothing: antialiased; 
+}
+
+div.box {
+    position: relative;
+    width: var(--total-width);
+    height: var(--total-height);
+    border: var(--border-size) solid var(--border-color);
+    border-radius: 0px var(--border-radius) 0px var(--border-radius);
+	overflow: hidden;
+} 
+
+#logo1 {
+	display: block; margin-left: auto;margin-right: auto; max-width:100%;max-height:100%;
+}
+
+#logo2 {
+	display: block; margin-left: auto;margin-right: auto; max-width:100%;max-height:100%;
+}
+
+div.box_veryleft{
+	position: absolute;
+	height: 100%;
+	top: calc(0px - var(--border-size));
+	left: calc(0px - var(--border-size));
+	width: calc(var(--logo-width) + var(--border-radius));
+	background-color: white;
+	border: var(--border-size) solid var(--border-color);
+	border-radius: 0px var(--border-radius) 0px var(--border-radius);
+	overflow: hidden;
+}
+
+div.box_veryright{
+	position: absolute;
+	height: 100%;
+	top: calc(0px - var(--border-size));
+	right: calc(0px - var(--border-size));
+	width: calc(var(--logo-width) + var(--border-radius));
+	background-color: white;
+	border: var(--border-size) solid var(--border-color);
+	border-radius: 0px var(--border-radius) 0px var(--border-radius);
+	overflow: hidden;
+}
+
+div.box_left{
+	position: absolute;
+	height: 100%;
+	left: var(--logo-width);
+	background-image: url("./texture2.jpg");
+	background-size: 500px 500px;
+	background-position: 0% 0%; 
+    background-repeat: repeat;
+	width: calc(var(--side-width) + var(--border-radius));
+} 
+
+div.box_middle{
+	position: absolute;
+	height: 100%;
+	left: calc(var(--side-width) + var(--logo-width));
+	width: var(--middle-width);
+	top: calc(0px - var(--border-size));
+	border: var(--border-size) solid var(--border-color);
+	border-radius: 0px var(--border-radius) 0px var(--border-radius);
+    background-image: url("./texture1.jpg");
+    background-size: 128px 128px;
+    background-repeat: repeat;
+	font: bold 36px Orbitron, Helvetica, Sans-Serif;
+	text-align: center;
+	line-height: calc(var(--total-height) - var(--border-size));
+	overflow: hidden;
+} 
+
+div.box_right{
+	position: absolute;
+	height: 100%;
+	background-image: url("./texture2.jpg");
+	background-size: 500px 500px;
+	background-position: 30% 20%; 
+	right: var(--logo-width);
+	width: calc(var(--side-width) + var(--border-radius));
+} 
+
+div.upper-text-right{
+	position: absolute;
+	left: calc(0% + var(--border-radius) + 6px);
+	width: calc(100% - var(--border-radius) - 6px);
+	top: 0%;
+	height: calc(100% - var(--lower-text-height));
+	font: bold 30px Orbitron, Helvetica, Sans-Serif;
+	text-align: center;
+	line-height: 48px;
+	overflow: hidden;
+}
+
+
+div.upper-text-left{
+	position: absolute;
+	top: 0%;
+	height: calc(100% - var(--lower-text-height));
+	left: calc(0% + var(--border-radius) + 3px);
+	width: calc(100% - 2 * var(--border-radius) - 3px);
+	font: bold 30px Orbitron, Helvetica, Sans-Serif;
+	text-align: center;
+	line-height: 48px;
+	overflow: hidden;
+}
+
+div.lower-text{
+	position: absolute;
+	left: 0%;
+	bottom: 0%;
+	height: var(--lower-text-height);
+	width: 100%;
+	line-height: 25px;
+	background: rgba(0, 0, 0, 0.6)!important; 
+}
+
+#circle {
+    background: #f00;
+	position: relative;
+	bottom: 0px;
+    width: 28px;
+    height: 19px;
+    border-radius: 0px 10px 0px 10px;
+	box-shadow: 0px 0px 2px white;
+	display:inline-block;
+    margin: 1.5px;
+    margin-bottom: -4px;
+}
+div.mapscore-right{
+	position: absolute;
+	left: calc(0% + var(--border-radius) + 6px);
+	width: calc(100% - var(--border-radius) - 6px);
+	text-align: center;
+	line-height: 25px;
+	height: 100%;
+}
+
+div.mapscore-left{
+	position: absolute;
+	left: calc(0% + var(--border-radius) + 3px);
+	width: calc(100% - 2 * var(--border-radius) - 3px);
+	text-align: center;
+	line-height: 25px;
+	height: 100%;
+}
+
+.winner {
+   --winner-color: #f29b00;
+   --size: 8px;
+   color: white!important;
+   text-shadow: 0px  0px 2.5px black, 0px 0px 2.5px black, 0px  0px 2.5px black, 0px  0px 2.5px black,
+             0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px  0px var(--size) var(--winner-color), 0px  0px var(--size) var(--winner-color),
+			 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px  0px var(--size) var(--winner-color), 0px  0px var(--size) var(--winner-color),
+             0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px  0px var(--size) var(--winner-color), 0px  0px var(--size) var(--winner-color)!important;
+    -webkit-font-smoothing: antialiased;
+}
+
+.score {
+   --winner-color: white;
+   --size: 5px;
+   color: white!important;
+   text-shadow: 0px  0px 2px black, 0px 0px 2px black, 0px  0px 2px black, 0px  0px 2px black, 0px  0px 2px black, 0px 0px 2px black, 0px  0px 2px black, 0px  0px 2px black,
+             0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px  0px var(--size) var(--winner-color), 0px  0px var(--size) var(--winner-color)!important;
+    -webkit-font-smoothing: antialiased;
+}
