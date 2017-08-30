@@ -122,7 +122,7 @@ class UploaderThread(QtCore.QThread):
         while True:
             try:
                 if(not retry):
-                    work = self.q.get(timeout=3)  
+                    work = self.q.get(timeout=0.5)  
                 retry = False
                 
                 cmd = work[0]
