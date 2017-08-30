@@ -1,7 +1,7 @@
 @import url(http://fonts.googleapis.com/css?family=Orbitron);
 
 :root {
-  --border-size: 3px;
+  --border-size: 2px;
   --border-color: black;
   --total-width: 720px;
   --total-height: 70px;
@@ -58,11 +58,16 @@ div.box_middle{
 	border: var(--border-size) solid var(--border-color);
 	border-radius: 0px var(--border-radius) 0px var(--border-radius);
     background-image: url("./../texture1.jpg");
-    background-size: 128px 128px;
-    background-repeat: repeat;
+    background-size: cover;
 	font: bold 28px Orbitron, Helvetica, Sans-Serif;
 	text-align: center;
 	line-height: calc(var(--total-height) - var(--border-size));
+	--winner-color: white;
+	--size: 5px;
+	color: white!important;
+	text-shadow: 0px  0px 2px black, 0px 0px 2px black, 0px  0px 2px black, 0px  0px 2px black, 0px  0px 2px black, 0px 0px 2px black, 0px  0px 2px black, 0px  0px 2px black,
+             0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px  0px var(--size) var(--winner-color), 0px  0px var(--size) var(--winner-color)!important;
+    -webkit-font-smoothing: antialiased;
 } 
 
 div.box_right{
@@ -79,7 +84,7 @@ div.lower-text{
 	height: var(--lower-text-height);
 	width: 100%;
 	text-align: center;
-	line-height: 25px;
+	line-height: 22px;
 	background: rgba(0, 0, 0, 0.6)!important; 
 }
 
@@ -88,7 +93,7 @@ div.maplabel{
 	left: calc(0% + var(--border-radius) + 6px);
 	width: calc(100% - var(--border-radius) - 6px);
 	text-align: center;
-	line-height: 25px;
+	line-height: 22px;
 	height: 100%;
 }
 
@@ -97,7 +102,7 @@ div.mapname{
 	left: calc(0% + var(--border-radius) + 3px);
 	width: calc(100% - 36px - var(--border-radius) - 3px);
 	text-align: center;
-	line-height: 25px;
+	line-height: 22px;
 	height: 100%;
 }
 

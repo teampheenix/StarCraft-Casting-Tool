@@ -176,6 +176,8 @@ class AlphaController:
                 
             if(scctool.settings.CB_ToggleProd):
                 self.view.cb_autoToggleProduction.setChecked(True)
+                
+            self.view.cb_autoFTP.setChecked(scctool.settings.Config.getboolean("FTP","upload"))
         except Exception as e:
             module_logger.exception("message")    
 
@@ -280,7 +282,7 @@ class AlphaController:
             webbrowser.open(url)
         except Exception as e:
             module_logger.exception("message")    
-    
+
     def runSC2ApiThread(self,task):
         try:
             if(not self.SC2ApiThread.isRunning()):
@@ -312,6 +314,7 @@ class AlphaController:
             scctool.settings.Config.set("Form","scoreupdate",str(self.view.cb_autoUpdate.isChecked()))
             scctool.settings.Config.set("Form","togglescore",str(self.view.cb_autoToggleScore.isChecked()))
             scctool.settings.Config.set("Form","toggleprod",str(self.view.cb_autoToggleProduction.isChecked()))
+            scctool.settings.Config.set("FTP","upload",str(self.view.cb_autoFTP.isChecked()))
             
             cfgfile = open(scctool.settings.configFile,'w')
             scctool.settings.Config.write(cfgfile)    

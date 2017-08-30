@@ -147,7 +147,10 @@ try:
     setDefaultConfig("FTP","server","")
     setDefaultConfig("FTP","user","")
     setDefaultConfig("FTP","passwd","")
+    setDefaultConfig("FTP","dir","")
 
+    def ftpIsValid():
+         return len(Config.get("FTP", "server"))>0
 
     def nightbotIsValid():
         return (len(Config.get("NightBot", "token"))>0 and len(Config.get("NightBot", "command"))>0)

@@ -202,6 +202,7 @@ class matchData:
                 sets.append({'label':label,'map':map,'score':score})
     
             self.__data['no_sets'] = no_sets
+            self.__data['min_sets'] = 0
             self.__data['sets'] = sets
             self.__data['players'] = players
             
@@ -620,6 +621,7 @@ class matchData:
                 self.resetData()
                 bo = int(data['game_format_bo'])
                 self.setNoSets(bo,bo, resetPlayers = True)
+                self.setMinSets(0)
                 self.setLeague(data['tournament']['name'])
                 
                 for set_idx in range(1):

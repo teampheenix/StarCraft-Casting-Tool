@@ -6,12 +6,14 @@ module_logger = logging.getLogger('scctool.view')
 
 try:
     import platform
+    import base64
     from PyQt5.QtWidgets import *
     from PyQt5.QtCore import *
     from PyQt5.QtGui import *
     from PyQt5.QtQml import *
 
     import scctool.settings
+    import time
 
 except Exception as e:
     module_logger.exception("message") 
@@ -71,15 +73,44 @@ class mainWindow(QMainWindow):
     def createMenuBar(self):
         try:
             menubar = self.menuBar()
-            settingsMenu = menubar.addMenu('Settings') 
-            apiAct = QAction('&API-Integration', self)  
-            apiAct.setStatusTip('Edit API-Settings for Twitch and Nightbot')
+            settingsMenu = menubar.addMenu('&Settings') 
+            apiAct = QAction('&FTP, Twitch, NightBot', self)  
+            apiAct.setStatusTip('Edit FTP-Settings and API-Settings for Twitch and Nightbot')
             apiAct.triggered.connect(self.openApiDialog)
             settingsMenu.addAction(apiAct)
+            
+            infoMenu = menubar.addMenu('&Info') 
+            
+            websiteAct = QAction('&StarCraft Casting Tool', self) 
+            websiteAct.triggered.connect(self.openWebsite)
+            infoMenu.addAction(websiteAct)
+            
+            ixAct = QAction('&team pheeniX', self) 
+            ixAct.triggered.connect(self.openIX)
+            infoMenu.addAction(ixAct)
+            
+            alphaAct = QAction('&AlphaTL', self) 
+            alphaAct.triggered.connect(self.openAlpha)
+            infoMenu.addAction(alphaAct)
+            
+            rstlAct = QAction('&RSTL', self) 
+            rstlAct.triggered.connect(self.openRSTL)
+            infoMenu.addAction(rstlAct)
 
         except Exception as e:
             module_logger.exception("message")   
         
+    def openWebsite(self):
+        self.controller.openURL("https://github.com/teampheenix/StarCraft-Casting-Tool")
+        
+    def openIX(self):
+        self.controller.openURL("http://team-pheenix.de")
+        
+    def openAlpha(self):
+        self.controller.openURL("http://alpha.tl")
+        
+    def openRSTL(self):
+        self.controller.openURL("http://hdgame.net/en/")            
              
     def openApiDialog(self):
         self.mySubwindow=subwindow()
@@ -330,19 +361,28 @@ class mainWindow(QMainWindow):
         
     def createSC2APIGroupBox(self):
         try:
-            self.SC2APIGroupBox = QGroupBox("SC2 Client-API")
+            self.SC2APIGroupBox = QGroupBox("Background Task")
             layout = QHBoxLayout()
+            
+            self.cb_autoFTP = QCheckBox("FTP Upload")
+            self.cb_autoFTP.setChecked(False)
+            self.cb_autoFTP.setToolTip('Automatically uploads all streaming data in the background to a specified FTP server.') 
+            self.cb_autoFTP.stateChanged.connect(self.autoFTP_change)
             
             self.cb_autoUpdate = QCheckBox("Score Update")
             self.cb_autoUpdate.setChecked(False)
+            self.cb_autoUpdate.setToolTip('Automatically detects the outcome of SC2 matches that are played/observed'\
+                                          ' in your SC2-client and updates the score accordingly.') 
             self.cb_autoUpdate.stateChanged.connect(self.autoUpdate_change)
             
-            self.cb_autoToggleScore = QCheckBox("Set UI-Ingame Score")
+            self.cb_autoToggleScore = QCheckBox("Ingame Score")
             self.cb_autoToggleScore.setChecked(False)
+            self.cb_autoToggleScore.setToolTip('Automatically sets the score of your ingame UI-interface at the begining of a game.') 
             self.cb_autoToggleScore.stateChanged.connect(self.autoToggleScore_change)
             
-            self.cb_autoToggleProduction = QCheckBox("Toggle Production-Tab")
+            self.cb_autoToggleProduction = QCheckBox("Production Tab")
             self.cb_autoToggleProduction.setChecked(False)
+            self.cb_autoToggleProduction.setToolTip('Automatically toogles the production tab of your ingame UI-interface at the begining of a game.') 
             self.cb_autoToggleProduction.stateChanged.connect(self.autoToggleProduction_change)
             
             if(platform.system()!="Windows"):
@@ -354,6 +394,7 @@ class mainWindow(QMainWindow):
                 self.cb_autoToggleProduction.setToolTip('Only Windows') 
             
             layout.addWidget(QLabel("Automatic:"),3)
+            layout.addWidget(self.cb_autoFTP,3)
             layout.addWidget(self.cb_autoUpdate,3)
             layout.addWidget(self.cb_autoToggleScore,3)
             layout.addWidget(self.cb_autoToggleProduction,3)
@@ -362,6 +403,23 @@ class mainWindow(QMainWindow):
         except Exception as e:
             module_logger.exception("message")
 
+    def autoFTP_change(self):
+        try:
+            scctool.settings.Config.set("FTP","upload",str(self.cb_autoFTP.isChecked()))
+            if(self.cb_autoFTP.isChecked()):
+                signal = self.controller.ftpUploader.connect()
+                signal.connect(self.displayFtpError)
+            else:
+                self.controller.ftpUploader.disconnect()
+        except Exception as e:
+            module_logger.exception("message")
+            
+    def displayFtpError(self, signal):
+        
+        if(signal == -2):
+            QMessageBox.warning(self, "Login error", 'FTP server login incorrect!')
+            self.cb_autoFTP.setChecked(False)
+            
     def autoUpdate_change(self):
         try:
             if(self.cb_autoUpdate.isChecked()):
@@ -499,14 +557,17 @@ class subwindow(QWidget):
             super(subwindow,self).__init__(parent)
             #self.setWindowFlags(Qt.WindowStaysOnTopHint)
             
+            self.mainWindow = mainWindow
             self.passEvent = False
             self.controller = mainWindow.controller
             
+            self.createFormGroupFTP()
             self.createFormGroupTwitch()
             self.createFormGroupNightbot()
             self.createButtonGroup()
             
             mainLayout = QVBoxLayout()
+            mainLayout.addWidget(self.formGroupFTP)
             mainLayout.addWidget(self.formGroupTwitch)
             mainLayout.addWidget(self.formGroupNightbot)
             mainLayout.addLayout(self.buttonGroup)
@@ -516,12 +577,62 @@ class subwindow(QWidget):
             self.move(mainWindow.pos() + QPoint(mainWindow.size().width()/2,mainWindow.size().height()/3)\
                                     - QPoint(self.size().width()/2,self.size().height()/3))
         
-            self.setWindowTitle("API-Integration Settings")
+            self.setWindowTitle("FTP, Twitch and Nightbot Settings")
             
         except Exception as e:
             module_logger.exception("message")
             
+    def createFormGroupFTP(self):
+        self.formGroupFTP = QGroupBox("FTP")
+        layout = QFormLayout()
         
+        self.ftpServer = QLineEdit()
+        self.ftpServer.setText(scctool.settings.Config.get("FTP","server").strip())
+        self.ftpServer.setAlignment(Qt.AlignCenter)
+        self.ftpServer.setPlaceholderText("")
+        self.ftpServer.setToolTip('')
+        layout.addRow(QLabel("Server:"),self.ftpServer)
+        
+        self.ftpUser = QLineEdit()
+        self.ftpUser.setText(scctool.settings.Config.get("FTP","user").strip())
+        self.ftpUser.setAlignment(Qt.AlignCenter)
+        self.ftpUser.setPlaceholderText("")
+        self.ftpUser.setToolTip('')
+        layout.addRow(QLabel("User:"),self.ftpUser)
+        
+        self.ftpPwd = QLineEdit()
+        self.ftpPwd.setText(base64.b64decode(scctool.settings.Config.get("FTP","passwd").strip().encode()).decode("utf8"))
+        self.ftpPwd.setAlignment(Qt.AlignCenter)
+        self.ftpPwd.setPlaceholderText("")
+        self.ftpPwd.setToolTip('')
+        self.ftpPwd.setEchoMode(QLineEdit.PasswordEchoOnEdit)
+        label = QLabel("Password:")
+        label.setFixedWidth(100)
+        layout.addRow(label,self.ftpPwd)
+        
+        self.ftpDir = QLineEdit()
+        self.ftpDir.setText(scctool.settings.Config.get("FTP","dir").strip())
+        self.ftpDir.setAlignment(Qt.AlignCenter)
+        self.ftpDir.setPlaceholderText("currently using root directory")
+        self.ftpDir.setToolTip('')
+        layout.addRow(QLabel("Directory:"),self.ftpDir)
+        
+        container = QHBoxLayout()
+        self.pb_testFTP = QPushButton('Test && Setup')
+        self.pb_testFTP.clicked.connect(self.testFTP)
+        container.addWidget(self.pb_testFTP);
+        
+        layout.addRow(QLabel(""),container)
+        
+        
+        self.formGroupFTP.setLayout(layout)
+        
+    def testFTP(self):
+
+        self.saveFtpData()
+        window = FTPsetup(self.controller, self)
+
+    
     def createFormGroupTwitch(self):
         self.formGroupTwitch = QGroupBox("Twitch")
         layout = QFormLayout()
@@ -544,18 +655,20 @@ class subwindow(QWidget):
         self.twitchToken.setToolTip("Press 'Get' to generate a new token.")
 
         container.addWidget(self.twitchToken);
-        self.pb_getTwitch = QPushButton('Get', self)
-
+        self.pb_getTwitch = QPushButton('Get')
         container.addWidget(self.pb_getTwitch);
         self.pb_getTwitch.clicked.connect(self.controller.getTwitchToken)
         layout.addRow(QLabel("Access-Token:"),container)
-        self.twitchTemplate = QLineEdit()
         
+        self.twitchTemplate = QLineEdit()
         self.twitchTemplate.setText(scctool.settings.Config.get("Twitch", "title_template"))
         self.twitchTemplate.setAlignment(Qt.AlignCenter)
         self.twitchTemplate.setPlaceholderText("(TOUR) – (TEAM1) vs (TEAM2)")
         self.twitchTemplate.setToolTip('Placeholders: (TOUR), (TEAM1), (TEAM2)') 
-        layout.addRow(QLabel("Title-Template:"), self.twitchTemplate)
+        
+        label = QLabel("Title-Template:")
+        label.setFixedWidth(100)
+        layout.addRow(label, self.twitchTemplate)
         
         self.formGroupTwitch.setLayout(layout)
         
@@ -577,13 +690,15 @@ class subwindow(QWidget):
         self.nightbotCommand.setAlignment(Qt.AlignCenter)
         
         container.addWidget(self.nightbotToken);
-        self.pb_getNightbot = QPushButton('Get', self)
+        self.pb_getNightbot = QPushButton('Get')
         self.pb_getNightbot.clicked.connect(self.controller.getNightbotToken)
         #self.pb_getNightbot.setEnabled(False)
         container.addWidget(self.pb_getNightbot);
 
         layout.addRow(QLabel("Access-Token:"),container)
-        layout.addRow(QLabel("Matchlink command:"), self.nightbotCommand)
+        label = QLabel("Matchlink command:")
+        label.setFixedWidth(100)
+        layout.addRow(label, self.nightbotCommand)
         
         self.formGroupNightbot.setLayout(layout)
     
@@ -593,11 +708,11 @@ class subwindow(QWidget):
             
             layout.addWidget(QLabel(""))
             
-            buttonCancel = QPushButton('Cancel', self)
+            buttonCancel = QPushButton('Cancel')
             buttonCancel.clicked.connect(self.closeWindow)
             layout.addWidget(buttonCancel) 
     
-            buttonSave = QPushButton('Save && Close', self)
+            buttonSave = QPushButton('Save && Close')
             buttonSave.clicked.connect(self.saveCloseWindow)
             layout.addWidget(buttonSave) 
             
@@ -606,14 +721,20 @@ class subwindow(QWidget):
             module_logger.exception("message")
       
     def saveData(self):
-        scctool.settings.Config.set("Twitch", "channel", self.twitchChannel.text())
-        scctool.settings.Config.set("Twitch", "oauth", self.twitchToken.text())
-        scctool.settings.Config.set("Twitch", "title_template", self.twitchTemplate.text())
-        scctool.settings.Config.set("NightBot", "token", self.nightbotToken.text())
-        scctool.settings.Config.set("NightBot", "command", self.nightbotCommand.text())
+        self.saveFtpData()
+        scctool.settings.Config.set("Twitch", "channel", self.twitchChannel.text().strip())
+        scctool.settings.Config.set("Twitch", "oauth", self.twitchToken.text().strip())
+        scctool.settings.Config.set("Twitch", "title_template", self.twitchTemplate.text().strip())
+        scctool.settings.Config.set("NightBot", "token", self.nightbotToken.text().strip())
+        scctool.settings.Config.set("NightBot", "command", self.nightbotCommand.text().strip())
         
         self.controller.refreshButtonStatus()
 
+    def saveFtpData(self):
+        scctool.settings.Config.set("FTP", "server", self.ftpServer.text().strip())
+        scctool.settings.Config.set("FTP", "user", self.ftpUser.text().strip())
+        scctool.settings.Config.set("FTP", "passwd", base64.b64encode(self.ftpPwd.text().strip().encode()).decode("utf8"))
+        scctool.settings.Config.set("FTP", "dir", self.ftpDir.text().strip())
       
     def saveCloseWindow(self):
         self.saveData()
@@ -657,4 +778,54 @@ class MapLineEdit(QLineEdit):
             self.setText(after)
             self._before = after
             self.textModified.emit(before, after)
-                
+            
+            
+class FTPsetup(QProgressDialog):
+    
+
+    def __init__(self, controller, mainWindow):
+        QProgressDialog.__init__(self)
+        self.progress = 0
+        self.setWindowTitle("FTP Server Setup")
+        self.setLabelText("Setting up the required file structure on the FTP server...")
+        self.canceled.connect(self.close)
+        self.setRange(0, 100)
+        self.setValue(self.minimum())
+        
+        self.resize(QSize(self.sizeHint().width(),self.sizeHint().height()))
+        self.move(mainWindow.pos() + QPoint(mainWindow.size().width()/2,mainWindow.size().height()/3)\
+                                    - QPoint(self.size().width()/2,self.size().height()/3))
+        self.show()
+        
+        old_bool = mainWindow.mainWindow.cb_autoFTP.isChecked()
+        mainWindow.mainWindow.cb_autoFTP.setChecked(False)
+        controller.ftpUploader.empty_queque()
+        mainWindow.mainWindow.cb_autoFTP.setChecked(True)
+        
+        signal, range = controller.ftpUploader.setup()
+        signal.connect(self.setProgress)
+        self.setRange(0, range)
+        
+        while not self.wasCanceled():
+            QApplication.processEvents()
+            time.sleep(0.05)
+            
+        mainWindow.mainWindow.cb_autoFTP.setChecked(False)
+        
+        if(self.progress != -2):
+            controller.ftpUploader.empty_queque()
+            mainWindow.mainWindow.cb_autoFTP.setChecked(old_bool)
+        else:
+            QMessageBox.warning(self, "Login error", 'FTP server login incorrect!')
+
+        print("Done...")
+        
+    def setProgress(self, progress):
+        self.progress = progress
+        if(progress == -1):
+            self.cancel()
+        elif(progress == -2):
+            print("Wrong login data")
+            self.cancel()
+        else:
+            self.setValue(progress)
