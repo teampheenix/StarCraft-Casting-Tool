@@ -28,6 +28,7 @@ class matchData:
         try:
             with open(scctool.settings.jsonFile) as json_file:  
                 self.__data = json.load(json_file)
+            self.allSetsChanged()
         except Exception as e:
             module_logger.exception("message") 
 
@@ -77,6 +78,31 @@ class matchData:
         self.__data['teams'].append({'name':'TBD','tag': None})
         self.__data['sets'] = []
         self.__data['players'] = [[],[]]
+
+        self.__setsChanged = []
+        self.__metaChanged = False
+        
+    def allSetsChanged(self):
+        self.__setsChanged = [True] * self.getNoSets()
+        
+    def resetChanged(self):
+        self.__setsChanged = [False] * self.getNoSets()
+        self.__metaChanged = False
+        
+    def hasMetaChanged(self):
+        return bool(self.__metaChanged) 
+        
+    def hasAnySetChanged(self):
+        for i in range(self.getNoSets()):
+            if(self.hasSetChanged(i)):
+                return True
+        return False
+    
+    def hasSetChanged(self, set_idx):
+        try:
+            return bool(self.__setsChanged[set_idx])
+        except:
+            return False
     
     def setMinSets(self, minSets):
         if(minSets > 0):
@@ -168,6 +194,7 @@ class matchData:
                 
             
             sets = []
+            changed = []
             players = [[],[]]
         
             for i in range(no_sets):
@@ -200,23 +227,30 @@ class matchData:
                     players[j].append({'name':player_name,'race':player_race})
                     
                 sets.append({'label':label,'map':map,'score':score})
+                changed.append(True)
     
             self.__data['no_sets'] = no_sets
             self.__data['min_sets'] = 0
             self.__data['sets'] = sets
             self.__data['players'] = players
+            self.__setsChanged = changed
             
         except Exception as e:
             module_logger.exception("message") 
             
     def setMyTeam(self, myteam):
         if(isinstance(myteam, str)):
-            self.__data['my_team'] = self.__selectMyTeam(myteam)
+            new =  self.__selectMyTeam(myteam)
         elif(myteam in [-1,0,1]):
-            self.__data['my_team'] = myteam
-            return True
+            new = myteam
         else:
             return False
+        
+        if(new != self.__data['my_team']):
+            self.__data['my_team'] = new
+            for i in range(self.getNoSets()):
+                if(self.getMapScore(i) != 0):
+                    self.__setsChanged[i] = True
             
     def getMyTeam(self):
         try:
@@ -244,8 +278,11 @@ class matchData:
         try:
             if(not (set_idx >= 0 and set_idx < self.__data['no_sets'])):
                 return False
-                
-            self.__data['sets'][set_idx]['map'], _ = autoCorrectMap(map)
+            map, _ = autoCorrectMap(map)
+            if(self.__data['sets'][set_idx]['map'] != map):
+                self.__data['sets'][set_idx]['map'] = map
+                self.__setsChanged[set_idx]
+
             return True
         except:
             return False
@@ -300,7 +337,9 @@ class matchData:
                 return False
             if(score in [-1,0,1]):
                 if(overwrite or self.__data['sets'][set_idx]['score'] == 0):
-                    self.__data['sets'][set_idx]['score'] = score 
+                    if(self.__data['sets'][set_idx]['score'] != score):
+                        self.__data['sets'][set_idx]['score'] = score 
+                        self.__setsChanged[set_idx] = True
                 return True
             else:
                 return False
@@ -342,7 +381,9 @@ class matchData:
                 and team_idx in range(2))):
                 return False
                 
-            self.__data['players'][team_idx][set_idx]['name'] = name
+            if(self.__data['players'][team_idx][set_idx]['name'] != name):
+                self.__data['players'][team_idx][set_idx]['name'] = name
+                self.__setsChanged[set_idx] = True
             
             if(race):
                 self.setRace(team_idx, set_idx, race)
@@ -367,8 +408,12 @@ class matchData:
             if(not (set_idx >= 0 and set_idx < self.__data['no_sets']\
                 and team_idx in range(2))):
                 return False
+                
+            race = getRace(race)
             
-            self.__data['players'][team_idx][set_idx]['race'] = getRace(race)
+            if(self.__data['players'][team_idx][set_idx]['race'] != race):
+                self.__data['players'][team_idx][set_idx]['race'] = race
+                self.__setsChanged[set_idx] = True
             return True
         except:
             return False
@@ -388,7 +433,9 @@ class matchData:
         try:
             if(not (set_idx >= 0 and set_idx < self.__data['no_sets'])):
                 return False
-            self.__data['sets'][set_idx]['label'] = label
+            if(self.__data['sets'][set_idx]['label'] != label):
+                self.__data['sets'][set_idx]['label'] = label
+                self.__setsChanged[set_idx] = True
             return True
         except:
             return False
@@ -404,8 +451,12 @@ class matchData:
     def setTeam(self, team_idx, name, tag = False):
         if( not team_idx in range(2)):
             return False
-
-        self.__data['teams'][team_idx]['name'] = str(name)
+        
+        new = str(name)
+        
+        if(self.__data['teams'][team_idx]['name'] != new):
+            self.__data['teams'][team_idx]['name'] = new
+            self.__metaChanged = True
         
         if(tag):
             self.setTeamTag(team_idx, tag)
@@ -422,7 +473,12 @@ class matchData:
         if( not team_idx in range(2)):
             return False
 
-        self.__data['teams'][team_idx]['tag'] = str(tag)
+        new = str(tag)
+        
+        if(self.__data['teams'][team_idx]['tag'] != new):
+            self.__data['teams'][team_idx]['tag'] = new
+            self.__metaChanged = True
+            
         return True
             
     def getTeamTag(self, team_idx):
@@ -442,7 +498,10 @@ class matchData:
         return int(self.__data['id'])
 
     def setLeague(self,league):
-        self.__data['league'] = str(league)
+        league = str(league)
+        if(self.__data['league']  != league):
+            self.__data['league'] = league
+            self.__metaChanged = True
         return True
         
     def getLeague(self):
@@ -459,9 +518,13 @@ class matchData:
         if(provider):
             matches = difflib.get_close_matches(provider,self.__VALID_PROVIDERS,1) 
             if(len(matches) == 0):
-                self.__data['provider'] = self.__VALID_PROVIDERS[0]
+                new = self.__VALID_PROVIDERS[0]
             else:
-                self.__data['provider'] = matches[0]
+                new = matches[0]
+            
+            if(self.__data['provider']  != new):
+                self.__data['provider'] = new
+                self.__metaChanged = True
         else:
             self.__data['provider'] = self.__VALID_PROVIDERS[0]
             
@@ -728,89 +791,92 @@ class matchData:
         
     def createOBStxtFiles(self, controller):
         try:
-            f = open(scctool.settings.OBSdataDir+"/lineup.txt", mode = 'w')
-            f2 = open(scctool.settings.OBSdataDir+"/maps.txt", mode = 'w')
-            for idx in range(self.getNoSets()):
-                map = self.getMap(idx)
-                f3 = open(scctool.settings.OBSdataDir+"/map"+str(idx+1)+".txt", mode = 'w')
-                f.write(map+"\n")
-                f2.write(map+"\n")
-                f3.write(map+"\n")
+            files2upload = []
+            
+            if(self.hasAnySetChanged()):
+                files2upload = files2upload + ["lineup.txt", "maps.txt", "score.txt", "nextplayer1.txt",\
+                                               "nextplayer2.txt", "nextrace1.txt", "nextrace2.txt"]
+                f = open(scctool.settings.OBSdataDir+"/lineup.txt", mode = 'w')
+                f2 = open(scctool.settings.OBSdataDir+"/maps.txt", mode = 'w')
+                for idx in range(self.getNoSets()):
+                    map = self.getMap(idx)
+                    f.write(map+"\n")
+                    f2.write(map+"\n")
+                    try:
+                        string = self.getPlayer(0,idx)+' vs '+self.getPlayer(1,idx)
+                        f.write(string+"\n\n")
+                    except IndexError:
+                        f.write("\n\n")
+                        pass    
+                f.close()
+                f2.close()
+                
                 try:
-                    string = self.getPlayer(0,idx)+' vs '+self.getPlayer(1,idx)
-                    f.write(string+"\n\n")
-                    f3.write(string+"\n")
-                except IndexError:
-                    f.write("\n\n")
-                    f3.write("\n")
-                    pass 
-                f3.close()    
-            f.close()
-            f2.close()
-
-            f = open(scctool.settings.OBSdataDir+"/teams_vs_long.txt", mode = 'w')
-            f.write(self.getTeam(0)+' vs '+self.getTeam(1)+"\n")
-            f.close()
-            
-            f = open(scctool.settings.OBSdataDir+"/teams_vs_short.txt", mode = 'w')
-            f.write(self.getTeamTag(0)+' vs '+self.getTeamTag(1)+"\n")
-            f.close()
-        
-            f = open(scctool.settings.OBSdataDir+"/team1.txt", mode = 'w')
-            f.write(self.getTeam(0))
-            f.close()
-        
-            f = open(scctool.settings.OBSdataDir+"/team2.txt", mode = 'w')
-            f.write(self.getTeam(1))
-            f.close()
-        
-            f = open(scctool.settings.OBSdataDir+"/tournament.txt", mode = 'w')
-            f.write(self.getLeague())
-            f.close()
-    
-            try:
-                score = self.getScore()
-                score_str = str(score[0])+" - "+str(score[1])
-            except:
-                score_str = "0 - 0"
+                    score = self.getScore()
+                    score_str = str(score[0])+" - "+str(score[1])
+                except:
+                    score_str = "0 - 0"
+                    
+                f = open(scctool.settings.OBSdataDir+"/score.txt", mode = 'w')
+                f.write(score_str)
+                f.close()
                 
-            f = open(scctool.settings.OBSdataDir+"/score.txt", mode = 'w')
-            f.write(score_str)
-            f.close()
+                f = open(scctool.settings.OBSdataDir+"/nextplayer1.txt", mode = 'w')
+                f.write(self.getNextPlayer(0))
+                f.close()
+                
+                f = open(scctool.settings.OBSdataDir+"/nextplayer2.txt", mode = 'w')
+                f.write(self.getNextPlayer(1))
+                f.close()
+                
+                f = open(scctool.settings.OBSdataDir+"/nextrace1.txt", mode = 'w')
+                f.write(self.getNextRace(0))
+                f.close()
+                
+                f = open(scctool.settings.OBSdataDir+"/nextrace2.txt", mode = 'w')
+                f.write(self.getNextRace(1))
+                f.close()
             
-            f = open(scctool.settings.OBSdataDir+"/nextplayer1.txt", mode = 'w')
-            f.write(self.getNextPlayer(0))
-            f.close()
             
-            f = open(scctool.settings.OBSdataDir+"/nextplayer2.txt", mode = 'w')
-            f.write(self.getNextPlayer(1))
-            f.close()
+            if(self.hasMetaChanged()):
+                
+                files2upload = files2upload + ["teams_vs_long.txt", "teams_vs_short.txt", "team1.txt", "team2.txt", "tournament.txt"]
+                
+                f = open(scctool.settings.OBSdataDir+"/teams_vs_long.txt", mode = 'w')
+                f.write(self.getTeam(0)+' vs '+self.getTeam(1)+"\n")
+                f.close()
             
-            f = open(scctool.settings.OBSdataDir+"/nextrace1.txt", mode = 'w')
-            f.write(self.getNextRace(0))
-            f.close()
+                f = open(scctool.settings.OBSdataDir+"/teams_vs_short.txt", mode = 'w')
+                f.write(self.getTeamTag(0)+' vs '+self.getTeamTag(1)+"\n")
+                f.close()
+        
+                f = open(scctool.settings.OBSdataDir+"/team1.txt", mode = 'w')
+                f.write(self.getTeam(0))
+                f.close()
+        
+                f = open(scctool.settings.OBSdataDir+"/team2.txt", mode = 'w')
+                f.write(self.getTeam(1))
+                f.close()
+        
+                f = open(scctool.settings.OBSdataDir+"/tournament.txt", mode = 'w')
+                f.write(self.getLeague())
+                f.close()
             
-            f = open(scctool.settings.OBSdataDir+"/nextrace2.txt", mode = 'w')
-            f.write(self.getNextRace(1))
-            f.close()
             
-            for file in ["lineup.txt", "maps.txt", "teams_vs_long.txt", "teams_vs_short.txt", "team1.txt", "team2.txt",\
-                         "tournament.txt", "score.txt", "nextplayer1.txt", "nextplayer2.txt", "nextrace1.txt", "nextrace2.txt"]:
+            for file in files2upload:
                 controller.ftpUploader.cwd(scctool.settings.OBSdataDir)
                 controller.ftpUploader.upload(scctool.settings.OBSdataDir+"/"+file, file)
                 controller.ftpUploader.cwd("..")
-                
-            for idx in range(self.getNoSets()):
-                file = "map"+str(idx+1)+".txt"
-                controller.ftpUploader.cwd(scctool.settings.OBSdataDir)
-                controller.ftpUploader.upload(scctool.settings.OBSdataDir+"/"+file, file)
-                controller.ftpUploader.cwd("..")
-                
+            
         except Exception as e:
             module_logger.exception("message") 
             
             
     def updateScoreIcon(self, controller):
+        
+        if(not(self.hasMetaChanged() or self.hasAnySetChanged())):
+            return 
+        
         score = [0,0]
         display = []
         winner = ["",""]
@@ -867,6 +933,7 @@ class matchData:
         try:
             team = self.getMyTeam()
             score = [0,0]
+            skip = [False] * self.getNoSets()
             for i in range(self.getNoSets()):
 
                 winner = self.getMapScore(i)
@@ -877,11 +944,14 @@ class matchData:
                 opacity = "0.0"
                 
                 threshold = int(self.getBestOf()/2)
-                
+                if(not self.hasSetChanged(i)):
+                    skip[i] = True
+                    
                 if(max(score) > threshold and i >= self.getMinSets()):
                     border_color=scctool.settings.notplayed_border_color
                     opacity = scctool.settings.notplayed_opacity 
                     winner = 0
+                    skip[i] = False
                 elif(won==1):
                     border_color=scctool.settings.win_border_color 
                 elif(won==-1):
@@ -901,12 +971,15 @@ class matchData:
                     player1status=''
                     player2status=''
                     
+                if(skip[i]):
+                    continue
+                    
                 map=self.getMap(i)
                 mappng=map.replace(" ","_")+".jpg"
                 race1png=self.getRace(0,i)+".png"
                 race2png=self.getRace(1,i)+".png"
                 hidden = ""
-                
+
                 filename=scctool.settings.OBSmapDir+"/icons_box/data/"+str(i+1)+".html"
                 filename2=scctool.settings.OBSmapDir+"/icons_landscape/data/"+str(i+1)+".html"
                 with open(scctool.settings.OBSmapDir+"/icons_box/data/template.html", "rt") as fin:
@@ -952,6 +1025,8 @@ class matchData:
                             
             for type in ["box", "landscape"]:  
                 for i in range(7): 
+                    if(skip[i]):
+                        continue
                     filename=scctool.settings.OBSmapDir+"/icons_"+type+"/data/"+str(i+1)+".html"
                     controller.ftpUploader.cwd(scctool.settings.OBSmapDir+"/icons_"+type+"/data")
                     controller.ftpUploader.upload(filename, str(i+1)+".html")
@@ -963,8 +1038,10 @@ class matchData:
             
     def updateLeagueIcon(self, controller):
         
-        try:
+        if(not self.hasMetaChanged()):
+            return
         
+        try:
             filename_old = scctool.settings.OBShtmlDir+"/data/"+self.getProvider()+".html"
             filename_new = scctool.settings.OBShtmlDir+"/data/league-data.html"
             shutil.copy(filename_old, filename_new)

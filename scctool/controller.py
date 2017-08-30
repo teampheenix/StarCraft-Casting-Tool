@@ -184,11 +184,12 @@ class AlphaController:
     def updateOBS(self):
         try:
             self.updateData()
-            self.matchData.createOBStxtFiles(self)
             self.matchData.updateMapIcons(self)
             self.matchData.updateScoreIcon(self)
+            self.matchData.createOBStxtFiles(self)
             self.matchData.updateLeagueIcon(self)
             self.matchData.writeJsonFile()
+            self.matchData.resetChanged()
         except Exception as e:
             module_logger.exception("message")  
       
