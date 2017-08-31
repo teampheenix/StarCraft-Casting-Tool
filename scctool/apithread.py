@@ -253,8 +253,9 @@ class SC2ApiThread(QThread):
     def parseMatchData(self,newData):
         try:
             if(self.exiting==False and (newData!=self.currentData or newData.time < self.currentData.time)):
-                print("New data:")
-                print(str(newData))
+                
+                self.updatePlayerIntro(newData)
+                
                 if(self.activeTask['updateScore'] and newData.isDecidedGame()):
                     self.controller.requestScoreUpdate(newData)
 
@@ -279,6 +280,24 @@ class SC2ApiThread(QThread):
                     time.sleep(4)
         except:
             module_logger.info("Toggle not working on this OS")
+            
+    def updatePlayerIntro(self, newData):
+        
+        filename=scctool.settings.OBShtmlDir+"/intro1.html"
+        with open(scctool.settings.OBShtmlDir+"/data/intro-template.html", "rt") as fin:
+            with open(filename, "wt") as fout:
+                for line in fin:
+                    line = line.replace('%NAME%', newData.player1)
+                    line = line.replace('%RACE%', newData.race1+".png")
+                    fout.write(line)
+                    
+        filename=scctool.settings.OBShtmlDir+"/intro2.html"
+        with open(scctool.settings.OBShtmlDir+"/data/intro-template.html", "rt") as fin:
+            with open(filename, "wt") as fout:
+                for line in fin:
+                    line = line.replace('%NAME%', newData.player2)
+                    line = line.replace('%RACE%', newData.race2+".png")
+                    fout.write(line)
 
 def isSC2onForeground():
     try:

@@ -1,0 +1,74 @@
+@import url(http://fonts.googleapis.com/css?family=Orbitron);
+		
+:root {
+  --width: 600px;
+  --height: 100px;
+  --border-size: 2px;
+  --border-color: black;
+  --border-radius: 30px;
+}
+body {
+    overflow:hidden;
+}
+
+         /* The animation code */
+@keyframes example {
+    0%   {left: 110%; top: calc((100% - var(--height)) / 2);  opacity:1;}
+    28%  {left: calc((100% - var(--width)) / 2); top: calc((100% - var(--height)) / 2); opacity:1;}
+    90%  {left: calc((100% - var(--width)) / 2); top: calc((100% - var(--height)) / 2); opacity:1;}
+    100% {left: calc((100% - var(--width)) / 2); top: calc((100% - var(--height)) / 2); opacity:0;}
+}
+
+/* The element to apply the animation to */
+div.box {
+    width: var(--width);
+    height: var(--height);
+    position: absolute;
+    text-align: center;
+    left: 110%; 
+    top: calc((100% - var(--height)) / 2); 
+	border: var(--border-size) solid var(--border-color);
+    border-radius: 0px var(--border-radius) 0px var(--border-radius);
+    background-image: url("texture2.jpg");
+    background-size: cover;
+    animation-name: example;
+	animation-timing-function: cubic-bezier(.37,.01,1,.73);
+    animation-duration: 4s;
+} 
+
+#race{
+    position: absolute; 
+    left: -80px; 
+	top: -50px;
+    height: 200px;
+	-webkit-filter: drop-shadow(0px 0px 5px #6BC2F9);
+    filter: drop-shadow(0px 0px 5px #6BC2F9);
+}
+
+div.label {
+	position: absolute; 
+	top: calc((100% - 50px) / 2);
+	width: 100%;
+	height: 50px;
+	background: rgba(0, 0, 0, 0.6)!important; 
+}
+
+div.name {
+	position: absolute; 
+	top: calc((100% - 60px) / 2);
+	left: 15%;
+	width: 70%;
+	height: 55px;
+	text-align: center;
+}
+
+.text-item{
+	color: white;
+	font: bold 44px Orbitron, Helvetica, Sans-Serif;
+	--outline-size: 3px;
+	text-shadow: 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black,
+	0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black,
+	0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black,
+	0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black;
+	-webkit-font-smoothing: antialiased;
+}
