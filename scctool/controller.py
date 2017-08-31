@@ -14,6 +14,7 @@ try:
     import scctool.twitch
     import scctool.nightbot
     import webbrowser
+    from PyQt5.QtGui import QIcon
 except Exception as e:
     module_logger.exception("message") 
     raise  
@@ -97,6 +98,15 @@ class AlphaController:
             module_logger.exception("message")  
             raise  
                 
+    def updateLogos(self):
+
+        pixmap = QIcon(scctool.settings.OBSdataDir+'/logo1.png')
+        self.view.qb_logo1.setIcon(pixmap)
+        
+        pixmap = QIcon(scctool.settings.OBSdataDir+'/logo2.png')
+        self.view.qb_logo2.setIcon(pixmap)
+
+                
     def updateData(self):     
         try:
             self.matchData.setMyTeam(self.view.sl_team.value())
@@ -159,6 +169,7 @@ class AlphaController:
                 self.matchData.downloadMatchBanner(self)
             except:
                 pass
+            self.updateLogos()
             self.updateForms()  
         except Exception as e:
             msg = str(e)

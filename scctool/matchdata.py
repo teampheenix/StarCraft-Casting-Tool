@@ -93,6 +93,9 @@ class matchData:
         self.__setsChanged = [False] * self.getNoSets()
         self.__metaChanged = False
         
+    def metaChanged(self):    
+        self.__metaChanged = True
+        
     def hasMetaChanged(self):
         return bool(self.__metaChanged) 
         
@@ -1029,7 +1032,9 @@ class matchData:
                             
             for type in ["box", "landscape"]:  
                 for i in range(7): 
-                    if(skip[i]):
+                    if(i < self.getNoSets() and skip[i]):
+                        continue
+                    if(i >= self.getNoSets() and not self.hasMetaChanged()):
                         continue
                     filename=scctool.settings.OBSmapDir+"/icons_"+type+"/data/"+str(i+1)+".html"
                     controller.ftpUploader.cwd(scctool.settings.OBSmapDir+"/icons_"+type+"/data")

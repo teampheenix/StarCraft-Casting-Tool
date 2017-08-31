@@ -14,6 +14,7 @@ try:
 
     import scctool.settings
     import time
+    import shutil
 
 except Exception as e:
     module_logger.exception("message") 
@@ -45,7 +46,7 @@ class mainWindow(QMainWindow):
             self.window.setLayout(mainLayout)
             self.setCentralWidget(self.window)
         
-            self.size
+            #self.size
             self.statusBar()
             
             self.progressBar = BusyProgressBar()
@@ -164,7 +165,7 @@ class mainWindow(QMainWindow):
             
             
             self.tab1.layout  = QFormLayout()
-            self.tab1.layout .addRow(container)
+            self.tab1.layout.addRow(container)
             
             container = QHBoxLayout()
             
@@ -213,7 +214,6 @@ class mainWindow(QMainWindow):
             self.cb_allkill = QCheckBox("All-Kill Format")
             self.cb_allkill.setChecked(False)
             self.cb_allkill.setToolTip('Winner stays and is automatically placed into the next set') 
-            #self.cb_allkill.stateChanged.connect(self.autoToggleProduction_change)
             self.tab2.layout.addWidget(self.cb_allkill,3)
             
             self.tab2.layout.addWidget(QLabel(""),0)
@@ -233,6 +233,9 @@ class mainWindow(QMainWindow):
         try:
             
             self.max_no_sets = 7
+            self.scoreWidth = 35
+            self.raceWidth = 45
+            self.labelWidth = 13
             
             self.fromMatchDataBox = QGroupBox("Match Data")
             layout2 = QFormLayout()
@@ -241,14 +244,12 @@ class mainWindow(QMainWindow):
             self.le_league.setText("League TBD")
             self.le_league.setAlignment(Qt.AlignCenter)
             self.le_league.setPlaceholderText("League TBD")
-
-            container = QHBoxLayout()
-            container.addWidget(QLabel("  "),0)
-            label = QLabel("League:")
-            label.setAlignment(Qt.AlignCenter)
-            container.addWidget(label,3)
-            container.addWidget(self.le_league,11)
-            layout2.addRow(container)
+            policy = QSizePolicy()
+            policy.setHorizontalStretch(3)
+            policy.setHorizontalPolicy(QSizePolicy.Expanding)
+            policy.setVerticalStretch(1)
+            policy.setVerticalPolicy(QSizePolicy.Preferred)
+            self.le_league.setSizePolicy(policy)
             
             self.le_team = [QLineEdit() for y in range(2)]
             self.le_player = [[QLineEdit() for x in range(self.max_no_sets)] for y in range(2)] 
@@ -267,27 +268,75 @@ class mainWindow(QMainWindow):
                 completer.setCompletionMode(QCompleter.InlineCompletion)
                 completer.setWrapAround(True)
                 self.le_team[team_idx].setCompleter(completer)
+                policy = QSizePolicy()
+                policy.setHorizontalStretch(4)
+                policy.setHorizontalPolicy(QSizePolicy.Expanding)
+                policy.setVerticalStretch(1)
+                policy.setVerticalPolicy(QSizePolicy.Preferred)
+                self.le_team[team_idx].setSizePolicy(policy)
             
+            self.qb_logo1 = IconPushButton()
+            self.qb_logo1.setFixedWidth(self.raceWidth)
+            self.qb_logo1.clicked.connect(lambda:self.logoDialog(1))
+            pixmap = QIcon(scctool.settings.OBSdataDir+'/logo1.png')
+            self.qb_logo1.setIcon(pixmap)
             
-            #vslabel = QLabel("vs")
-            #vslabel.setAlignment(Qt.AlignCenter)
+            self.qb_logo2 = IconPushButton()
+            self.qb_logo2.setFixedWidth(self.raceWidth)
+            self.qb_logo2.clicked.connect(lambda:self.logoDialog(2))
+            pixmap = QIcon(scctool.settings.OBSdataDir+'/logo2.png')
+            self.qb_logo2.setIcon(pixmap)
             
             self.sl_team = QSlider(Qt.Horizontal)
             self.sl_team.setMinimum(-1)
             self.sl_team.setMaximum(1)
             self.sl_team.setValue(0)
-            self.sl_team.setTickPosition( QSlider.TicksBothSides)
+            self.sl_team.setTickPosition(QSlider.TicksBothSides)
             self.sl_team.setTickInterval(1)
             self.sl_team.valueChanged.connect(self.sl_changed)
             self.sl_team.setToolTip('Choose your team') 
+            self.sl_team.setMinimumHeight(5)
+            self.sl_team.setFixedWidth(self.scoreWidth)
+            policy = QSizePolicy()
+            policy.setHorizontalStretch(0)
+            policy.setHorizontalPolicy(QSizePolicy.Fixed)
+            policy.setVerticalStretch(1)
+            policy.setVerticalPolicy(QSizePolicy.Minimum)
+            self.sl_team.setSizePolicy(policy)
             
-            container.addWidget(QLabel("   "),0)
+            
+            container = QGridLayout()
+            
+            label = QLabel("")
+            label.setFixedWidth(self.labelWidth)
+            container.addWidget(label,0,0,2,1)
+            
+            label = QLabel("League:")
+            label.setAlignment(Qt.AlignCenter)
+            policy = QSizePolicy()
+            policy.setHorizontalStretch(4)
+            policy.setHorizontalPolicy(QSizePolicy.Expanding)
+            policy.setVerticalStretch(1)
+            policy.setVerticalPolicy(QSizePolicy.Preferred)
+            label.setSizePolicy(policy)
+            container.addWidget(label,0,1,1,1)
+            
             label = QLabel("Maps \ Teams:")
             label.setAlignment(Qt.AlignCenter)
-            container.addWidget(label,3)
-            container.addWidget(self.le_team[0],5)    
-            container.addWidget(self.sl_team,1)
-            container.addWidget(self.le_team[1],5) 
+            policy = QSizePolicy()
+            policy.setHorizontalStretch(4)
+            policy.setHorizontalPolicy(QSizePolicy.Expanding)
+            policy.setVerticalStretch(1)
+            policy.setVerticalPolicy(QSizePolicy.Preferred)
+            label.setSizePolicy(policy)
+            container.addWidget(label,1,1,1,1)
+            
+            container.addWidget(self.qb_logo1,0,2,2,1)
+            container.addWidget(self.le_league,0,3,1,3)
+            container.addWidget(self.le_team[0],1,3,1,1)
+            container.addWidget(self.sl_team,1,4,1,1)
+            container.addWidget(self.le_team[1],1,5,1,1)
+            container.addWidget(self.qb_logo2,0,6,2,1)
             
             layout2.addRow(container)
             
@@ -304,6 +353,8 @@ class mainWindow(QMainWindow):
                 
                     for i in range(4):
                         self.cb_race[team_idx][player_idx].addItem(QIcon("src/"+str(i)+".png"),"")
+
+                    self.cb_race[team_idx][player_idx].setFixedWidth(self.raceWidth)
                     
                     
                 self.sl_score[player_idx].setMinimum(-1)
@@ -313,6 +364,7 @@ class mainWindow(QMainWindow):
                 self.sl_score[player_idx].setTickInterval(1)
                 self.sl_score[player_idx].valueChanged.connect(self.sl_changed)
                 self.sl_score[player_idx].setToolTip('Set the score') 
+                self.sl_score[player_idx].setFixedWidth(self.scoreWidth)
             
                 self.le_map[player_idx].setText("TBD")
                 self.le_map[player_idx].setAlignment(Qt.AlignCenter)
@@ -329,13 +381,14 @@ class mainWindow(QMainWindow):
                 container = QHBoxLayout()
                 self.label_set[player_idx].setText("#"+str(player_idx+1))
                 self.label_set[player_idx].setAlignment(Qt.AlignCenter)
+                self.label_set[player_idx].setFixedWidth(self.labelWidth)
                 container.addWidget(self.label_set[player_idx],0)
-                container.addWidget(self.le_map[player_idx],3)
-                container.addWidget(self.cb_race[0][player_idx],1)
+                container.addWidget(self.le_map[player_idx],4)
+                container.addWidget(self.cb_race[0][player_idx],0)
                 container.addWidget(self.le_player[0][player_idx],4)
-                container.addWidget(self.sl_score[player_idx],1)
+                container.addWidget(self.sl_score[player_idx],0)
                 container.addWidget(self.le_player[1][player_idx],4)
-                container.addWidget(self.cb_race[1][player_idx],1)
+                container.addWidget(self.cb_race[1][player_idx],0)
                 layout2.addRow(container)
                 self.fromMatchDataBox.setLayout(layout2)
                 
@@ -563,6 +616,23 @@ class mainWindow(QMainWindow):
         except Exception as e:
             module_logger.exception("message")
             
+    def logoDialog(self, button):
+        
+        #options = QFileDialog.Options()
+        #options |= QFileDialog.DontUseNativeDialog
+        fileName, _ = QFileDialog.getOpenFileName(self,"Select Team Logo", "","PNG images (*.png)")
+        if fileName:
+            fname = scctool.settings.OBSdataDir+'/logo'+str(button)+'.png'
+            shutil.copy(fileName, fname)
+            self.controller.updateLogos()
+            self.controller.ftpUploader.cwd(scctool.settings.OBSdataDir)
+            self.controller.ftpUploader.upload(fname, "logo"+str(button)+".png")
+            self.controller.ftpUploader.cwd("..")
+            self.controller.matchData.metaChanged()
+            self.controller.matchData.updateScoreIcon(self.controller)
+            
+        
+        
 class subwindow(QWidget):
     def createWindow(self,mainWindow):
         
@@ -859,3 +929,39 @@ class BusyProgressBar(QProgressBar):
     def text(self):
         return self._text
 
+class IconPushButton(QPushButton):
+    def __init__(self, label=None, parent=None):
+        super(IconPushButton, self).__init__(label, parent)
+
+        self.pad = 4     # padding between the icon and the button frame
+        self.minSize = 8 # minimum size of the icon
+
+        sizePolicy = QSizePolicy(QSizePolicy.Expanding,
+                                       QSizePolicy.Expanding)
+        self.setSizePolicy(sizePolicy)
+
+    def paintEvent(self, event):
+
+        qp = QPainter()
+        qp.begin(self)
+
+        #---- get default style ----
+
+        opt = QStyleOptionButton()
+        self.initStyleOption(opt)
+
+        #---- scale icon to button size ----
+
+        Rect = opt.rect
+
+        h = Rect.height()
+        w = Rect.width()
+        iconSize = max(min(h, w) - 2 * self.pad, self.minSize)
+
+        opt.iconSize = QSize(iconSize, iconSize)
+
+        #---- draw button ----
+
+        self.style().drawControl(QStyle.CE_PushButton, opt, qp, self)
+
+        qp.end()
