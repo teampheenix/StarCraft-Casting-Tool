@@ -423,7 +423,7 @@ class mainWindow(QMainWindow):
         
     def createSC2APIGroupBox(self):
         try:
-            self.SC2APIGroupBox = QGroupBox("Background Task")
+            self.SC2APIGroupBox = QGroupBox("Automatic Background Tasks")
             layout = QHBoxLayout()
             
             self.cb_autoFTP = QCheckBox("FTP Upload")
@@ -436,6 +436,11 @@ class mainWindow(QMainWindow):
             self.cb_autoUpdate.setToolTip('Automatically detects the outcome of SC2 matches that are played/observed'\
                                           ' in your SC2-client and updates the score accordingly.') 
             self.cb_autoUpdate.stateChanged.connect(self.autoUpdate_change)
+            
+            self.cb_playerIntros = QCheckBox("Player Intros")
+            self.cb_playerIntros.setChecked(False)
+            self.cb_playerIntros.setToolTip('Update player intros files via SC2-Client-API') 
+            self.cb_playerIntros.stateChanged.connect(self.playerIntros_change)
             
             self.cb_autoToggleScore = QCheckBox("Ingame Score")
             self.cb_autoToggleScore.setChecked(False)
@@ -455,9 +460,9 @@ class mainWindow(QMainWindow):
                 self.cb_autoToggleProduction.setAttribute(Qt.WA_AlwaysShowToolTips)
                 self.cb_autoToggleProduction.setToolTip('Only Windows') 
             
-            layout.addWidget(QLabel("Automatic:"),3)
             layout.addWidget(self.cb_autoFTP,3)
             layout.addWidget(self.cb_autoUpdate,3)
+            layout.addWidget(self.cb_playerIntros,3)
             layout.addWidget(self.cb_autoToggleScore,3)
             layout.addWidget(self.cb_autoToggleProduction,3)
             
@@ -495,6 +500,15 @@ class mainWindow(QMainWindow):
                 self.controller.stopSC2ApiThread("updateScore")
         except Exception as e:
             module_logger.exception("message")
+            
+    def playerIntros_change(self):
+        try:
+            if(self.cb_playerIntros.isChecked()):
+                self.controller.runSC2ApiThread("playerIntros")
+            else:
+                self.controller.stopSC2ApiThread("playerIntros")
+        except Exception as e:
+            module_logger.exception("message")    
            
     def autoToggleScore_change(self):
         try:

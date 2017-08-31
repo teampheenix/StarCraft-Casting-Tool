@@ -136,6 +136,7 @@ try:
     setDefaultConfig("Form","scoreupdate","False")
     setDefaultConfig("Form","togglescore","False")
     setDefaultConfig("Form","toggleprod", "False")
+    setDefaultConfig("Form","playerintros", "False")
 
     setDefaultConfig("MapIcons","default_border_color","#f29b00")
     setDefaultConfig("MapIcons","win_border_color","#008000")
@@ -173,6 +174,7 @@ try:
     CB_ScoreUpdate = Config.getboolean("Form","scoreupdate")
     CB_ToggleScore = Config.getboolean("Form","togglescore")
     CB_ToggleProd  = Config.getboolean("Form","toggleprod")
+    CB_PlayerIntros  = Config.getboolean("Form","playerintros")
     
     
     myteams =  list(map(str.strip, str(Config.get("SCT","myteams")).split(',')))

@@ -188,6 +188,9 @@ class AlphaController:
             if(scctool.settings.CB_ToggleProd):
                 self.view.cb_autoToggleProduction.setChecked(True)
                 
+            if(scctool.settings.CB_PlayerIntros):
+                self.view.cb_playerIntros.setChecked(True) 
+                
             self.view.cb_autoFTP.setChecked(scctool.settings.Config.getboolean("FTP","upload"))
         except Exception as e:
             module_logger.exception("message")    

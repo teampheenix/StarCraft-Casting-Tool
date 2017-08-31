@@ -254,7 +254,8 @@ class SC2ApiThread(QThread):
         try:
             if(self.exiting==False and (newData!=self.currentData or newData.time < self.currentData.time)):
                 
-                self.updatePlayerIntro(newData)
+                if(self.activeTask['playerIntros']):
+                    self.updatePlayerIntro(newData)
                 
                 if(self.activeTask['updateScore'] and newData.isDecidedGame()):
                     self.controller.requestScoreUpdate(newData)
