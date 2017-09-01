@@ -1,8 +1,8 @@
 @import url(http://fonts.googleapis.com/css?family=Orbitron);
 		
 :root {
-  --width: 600px;
-  --height: 100px;
+  --width: 800px;
+  --height: 120px;
   --border-size: 2px;
   --border-color: black;
   --border-radius: 30px;
@@ -29,7 +29,7 @@ div.box {
     top: calc((100% - var(--height)) / 2); 
 	border: var(--border-size) solid var(--border-color);
     border-radius: 0px var(--border-radius) 0px var(--border-radius);
-    background-image: url("texture2.jpg");
+    background-image: url("../texture2.jpg");
     background-size: cover;
     animation-name: example;
 	animation-timing-function: cubic-bezier(.37,.01,1,.73);
@@ -38,29 +38,56 @@ div.box {
 
 #race{
     position: absolute; 
-    left: -80px; 
-	top: -50px;
-    height: 200px;
+    left: -100px; 
+	top: -70px;
+    height: 250px;
 	-webkit-filter: drop-shadow(0px 0px 5px #6BC2F9);
     filter: drop-shadow(0px 0px 5px #6BC2F9);
+}
+div.logo {
+	position: absolute; 
+	background-color: white;
+	right: calc(0px - var(--border-size));
+	top: calc(0px - var(--border-size));
+    height: 120px;
+	width: 120px;
+	overflow: hidden;
+	border: var(--border-size) solid var(--border-color);
+    border-radius: 0px var(--border-radius) 0px var(--border-radius);
+}
+
+#logo{
+    display: block; margin-left: auto;margin-right: auto; max-width:100%;max-height:100%;
 }
 
 div.label {
 	position: absolute; 
-	top: calc((100% - 50px) / 2);
+	top: calc(40% - 5px);
 	width: 100%;
-	height: 50px;
+	height: 55px;
 	background: rgba(0, 0, 0, 0.6)!important; 
 }
 
 div.name {
 	position: absolute; 
-	top: calc((100% - 60px) / 2);
+	top: calc(40% - 10px);
 	left: 15%;
-	width: 70%;
-	height: 55px;
+	width: calc(85% - 120px);
+	height: 35px;
 	text-align: center;
 }
+
+div.team {
+	position: absolute; 
+	top: 2px;
+	left: 15%;
+	width: 70%;
+	height: 25px;
+	text-align: center;
+	font: bold 30px Orbitron, Helvetica, Sans-Serif!important;
+}
+
+
 
 .text-item{
 	color: white;

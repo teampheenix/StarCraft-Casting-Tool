@@ -29,6 +29,7 @@ try:
     pip.main(['install', 'requests'])
     pip.main(['install', 'configparser'])
     pip.main(['install', 'flask'])
+    pip.main(['install','obs-ws-rc'])
 
     if(system=="Windows"):
         pip.main(['install', 'pypiwin32'])

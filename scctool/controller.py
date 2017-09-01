@@ -10,16 +10,21 @@ try:
     from scctool.webapp import *
     from scctool.settings import *
     from scctool.ftpuploader import *
+    from scctool.obs import *
     import scctool.settings
     import scctool.twitch
     import scctool.nightbot
+    import scctool.obs
     import webbrowser
+    import base64
+    
     from PyQt5.QtGui import QIcon
+    
 except Exception as e:
     module_logger.exception("message") 
     raise  
 
-class AlphaController:
+class MainController:
     
     def __init__(self):
         try:
@@ -30,6 +35,7 @@ class AlphaController:
             self.webApp.signal_twitch.connect(self.webAppDone_twitch)
             self.webApp.signal_nightbot.connect(self.webAppDone_nightbot)
             self.ftpUploader = FTPUploader()
+            self.websocketThread = WebsocketThread()
             
         except Exception as e:
             module_logger.exception("message")
@@ -215,32 +221,32 @@ class AlphaController:
     
     def webAppDone_nightbot(self):
         try:
-            self.view.mySubwindow.nightbotToken.setText(FlaskThread._single.token_nightbot)
+            self.view.mysubwindow1.nightbotToken.setTextMonitored(FlaskThread._single.token_nightbot)
             
             self.view.raise_()
             self.view.show()
             self.view.activateWindow()
             
             
-            self.view.mySubwindow.raise_()
-            self.view.mySubwindow.show()
-            self.view.mySubwindow.activateWindow()
+            self.view.mysubwindow1.raise_()
+            self.view.mysubwindow1.show()
+            self.view.mysubwindow1.activateWindow()
             
         except Exception as e:
             module_logger.exception("message")  
             
     def webAppDone_twitch(self):
         try:
-            self.view.mySubwindow.twitchToken.setText(FlaskThread._single.token_twitch)
+            self.view.mysubwindow1.twitchToken.setTextMonitored(FlaskThread._single.token_twitch)
             
             self.view.raise_()
             self.view.show()
             self.view.activateWindow()
             
             
-            self.view.mySubwindow.raise_()
-            self.view.mySubwindow.show()
-            self.view.mySubwindow.activateWindow()
+            self.view.mysubwindow1.raise_()
+            self.view.mysubwindow1.show()
+            self.view.mysubwindow1.activateWindow()
             
         except Exception as e:
             module_logger.exception("message")              
@@ -304,6 +310,7 @@ class AlphaController:
                 self.SC2ApiThread.startTask(task)
             else:
                 self.SC2ApiThread.cancelTerminationRequest(task)
+
         except Exception as e:
             module_logger.exception("message")    
           
@@ -314,12 +321,25 @@ class AlphaController:
         except Exception as e:
             module_logger.exception("message")    
         
+    def runWebsocketThread(self):
+        if(not self.websocketThread.isRunning()):
+            self.websocketThread.start()
+        else:
+            self.websocketThread.cancelKillRequest()
+            
+    def stopWebsocketThread(self):
+        try:
+            self.websocketThread.requestKill()
+        except Exception as e:
+            module_logger.exception("message")  
+            
     def cleanUp(self):
         try:
             self.SC2ApiThread.requestTermination("ALL")
             self.webApp.terminate()
             self.saveConfig()
             self.ftpUploader.kill()
+            self.websocketThread.requestKill()
             module_logger.info("cleanUp called")   
         except Exception as e:
             module_logger.exception("message")    
@@ -410,11 +430,53 @@ class AlphaController:
         except Exception as e:
             module_logger.exception("message")    
             
+    def updatePlayerIntros(self, newData):
+        
+        module_logger.info("updatePlayerIntros")  
+        self.updateData()
+        
+        for player_idx in range(2):
+            team1 = newData.playerInList(player_idx, self.matchData.getPlayerList(0))
+            team2 = newData.playerInList(player_idx, self.matchData.getPlayerList(1))
+            
+            if((team1 and team2) or not (team1 or team2)):
+                team = ""
+                logo = ""
+                display = "none"
+            elif(team1):
+                team = self.matchData.getTeam(0)
+                logo = scctool.settings.OBSdataDir+"/"+"logo1.png"
+                display = "block"
+            elif(team2):
+                team = self.matchData.getTeam(1)
+                logo = scctool.settings.OBSdataDir+"/"+"logo2.png"
+                display = "block"
+
+            filename=scctool.settings.OBShtmlDir+"/intro"+str(player_idx+1)+".html"
+            with open(scctool.settings.OBShtmlDir+"/data/intro-template.html", "rt") as fin:
+                with open(filename, "wt") as fout:
+                    for line in fin:
+                        line = line.replace('%NAME%', newData.getPlayer(player_idx))
+                        line = line.replace('%RACE%', newData.getPlayerRace(player_idx)+".png")
+                        line = line.replace('%TEAM%', team)
+                        line = line.replace('%DISPLAY%', display)
+                        line = line.replace('%LOGO%', logo)
+                        fout.write(line)
+
+             
+        self.ftpUploader.cwd(scctool.settings.OBSmapDir)   
+        
+        for file in ["intro1.html", "intro2.html"]:
+             self.ftpUploader.upload(scctool.settings.OBSmapDir+"/"+file, file)
+            
+        self.ftpUploader.cwd("..")
+            
     def testVersion(self):
         self.checkVersionThread.start()
         
         
     def newVersionTrigger(self,version):
-        self.view.statusBar().showMessage("A new version is available at GitHub ("+version+")")
+        self.view.statusBar().showMessage("A new version ("+version+''') is available at https://github.com/teampheenix/StarCraft-Casting-Tool''')
+        
         
                

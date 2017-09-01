@@ -13,8 +13,11 @@ try:
     from PyQt5.QtQml import *
 
     import scctool.settings
+    import scctool.obs
     import time
     import shutil
+    import os
+    import re
 
 except Exception as e:
     module_logger.exception("message") 
@@ -27,8 +30,8 @@ class mainWindow(QMainWindow):
         
             self.trigger = True
          
-            self.createTabs()
             self.createFromMatchDataBox()
+            self.createTabs()
             self.createHorizontalGroupBox()
             self.createSC2APIGroupBox()
             
@@ -71,8 +74,8 @@ class mainWindow(QMainWindow):
     def closeEvent(self, event):
         try:
             try:
-                if(self.mySubwindow.isVisible()):
-                    self.mySubwindow.close()
+                if(self.mysubwindow1.isVisible()):
+                    self.mysubwindow1.close()
             except:
                 pass
             self.controller.cleanUp()
@@ -84,26 +87,35 @@ class mainWindow(QMainWindow):
         try:
             menubar = self.menuBar()
             settingsMenu = menubar.addMenu('&Settings') 
-            apiAct = QAction('&FTP, Twitch, NightBot', self)  
+            apiAct = QAction(QIcon('src/connection.png'), '&Connections', self)  
             apiAct.setStatusTip('Edit FTP-Settings and API-Settings for Twitch and Nightbot')
             apiAct.triggered.connect(self.openApiDialog)
             settingsMenu.addAction(apiAct)
+            styleAct = QAction(QIcon('src/pantone.png'),'&Styles', self)  
+            styleAct.setStatusTip('')
+            styleAct.triggered.connect(self.openStyleDialog)
+            settingsMenu.addAction(styleAct)
+            miscAct = QAction(QIcon('src/settings.png'),'&Misc', self)  
+            miscAct.setStatusTip('')
+            miscAct.triggered.connect(self.openMiscDialog)
+            settingsMenu.addAction(miscAct)
             
-            infoMenu = menubar.addMenu('&Info') 
             
-            websiteAct = QAction('&StarCraft Casting Tool', self) 
+            infoMenu = menubar.addMenu('&Info && Links') 
+            
+            websiteAct = QAction(QIcon('src/github.ico'),'&StarCraft Casting Tool', self) 
             websiteAct.triggered.connect(self.openWebsite)
             infoMenu.addAction(websiteAct)
             
-            ixAct = QAction('&team pheeniX', self) 
+            ixAct = QAction(QIcon('src/icon.png'), '&team pheeniX', self) 
             ixAct.triggered.connect(self.openIX)
             infoMenu.addAction(ixAct)
             
-            alphaAct = QAction('&AlphaTL', self) 
+            alphaAct = QAction(QIcon('src/alphatl.ico'), '&AlphaTL', self) 
             alphaAct.triggered.connect(self.openAlpha)
             infoMenu.addAction(alphaAct)
             
-            rstlAct = QAction('&RSTL', self) 
+            rstlAct = QAction(QIcon('src/rstl.png'),'&RSTL', self) 
             rstlAct.triggered.connect(self.openRSTL)
             infoMenu.addAction(rstlAct)
 
@@ -123,9 +135,19 @@ class mainWindow(QMainWindow):
         self.controller.openURL("http://hdgame.net/en/")            
              
     def openApiDialog(self):
-        self.mySubwindow=subwindow()
-        self.mySubwindow.createWindow(self)
-        self.mySubwindow.show()
+        self.mysubwindow1=subwindow1()
+        self.mysubwindow1.createWindow(self)
+        self.mysubwindow1.show()
+        
+    def openStyleDialog(self):
+        self.mysubwindow2=subwindow2()
+        self.mysubwindow2.createWindow(self)
+        self.mysubwindow2.show()
+        
+    def openMiscDialog(self):
+        self.mysubwindow3=subwindow3()
+        self.mysubwindow3.createWindow(self)
+        self.mysubwindow3.show()
         
     def createTabs(self):
         try:
@@ -152,16 +174,21 @@ class mainWindow(QMainWindow):
             completer.setCompletionMode(QCompleter.UnfilteredPopupCompletion)
             completer.setWrapAround(True)
             self.le_url.setCompleter(completer)
-            
+            self.le_url.setMinimumWidth(self.scoreWidth+2*self.raceWidth+2*self.mimumLineEditWidth+4*6)
+
             self.pb_openBrowser = QPushButton("Open in Browser")
             self.pb_openBrowser.clicked.connect(self.openBrowser_click)
+            self.pb_openBrowser.setMinimumWidth((self.scoreWidth+2*self.raceWidth+2*self.mimumLineEditWidth+4*6)/2-2)
             
             container = QHBoxLayout()
-            container.addWidget(QLabel("  "),0)
+            label = QLabel()
+            label.setFixedWidth(self.labelWidth)
+            container.addWidget(label,0)
             label = QLabel("Match-URL:")
+            label.setMinimumWidth(self.mimumLineEditWidth)
             label.setAlignment(Qt.AlignCenter)
-            container.addWidget(label,6)
-            container.addWidget(self.le_url,22)
+            container.addWidget(label,1)
+            container.addWidget(self.le_url,3)
             
             
             self.tab1.layout  = QFormLayout()
@@ -171,12 +198,17 @@ class mainWindow(QMainWindow):
             
             #self.pb_download = QPushButton("Download Images from URL")
             #container.addWidget(self.pb_download)
-            container.addWidget(QLabel("  "),0)
-            container.addWidget(QLabel(""),6)
+            label = QLabel()
+            label.setFixedWidth(self.labelWidth)
+            container.addWidget(label,0)
+            label = QLabel()
+            label.setMinimumWidth(self.mimumLineEditWidth)
+            container.addWidget(label, 2)
             self.pb_refresh = QPushButton("Load Data from URL")
             self.pb_refresh.clicked.connect(self.refresh_click)
-            container.addWidget(self.pb_openBrowser,11)
-            container.addWidget(self.pb_refresh,11)
+            self.pb_refresh.setMinimumWidth((self.scoreWidth+2*self.raceWidth+2*self.mimumLineEditWidth+4*6)/2-2)
+            container.addWidget(self.pb_openBrowser,3)
+            container.addWidget(self.pb_refresh,3)
 
             
             self.tab1.layout.addRow(container)
@@ -236,6 +268,7 @@ class mainWindow(QMainWindow):
             self.scoreWidth = 35
             self.raceWidth = 45
             self.labelWidth = 13
+            self.mimumLineEditWidth = 130
             
             self.fromMatchDataBox = QGroupBox("Match Data")
             layout2 = QFormLayout()
@@ -263,7 +296,7 @@ class mainWindow(QMainWindow):
                 self.le_team[team_idx].setText("TBD")
                 self.le_team[team_idx].setAlignment(Qt.AlignCenter)
                 self.le_team[team_idx].setPlaceholderText("Team "+str(team_idx+1))
-                completer = QCompleter(scctool.settings.myteams + ["TBD"],self.le_team[team_idx])
+                completer = QCompleter(scctool.settings.getMyTeams() + ["TBD"],self.le_team[team_idx])
                 completer.setCaseSensitivity(Qt.CaseInsensitive)
                 completer.setCompletionMode(QCompleter.InlineCompletion)
                 completer.setWrapAround(True)
@@ -274,6 +307,7 @@ class mainWindow(QMainWindow):
                 policy.setVerticalStretch(1)
                 policy.setVerticalPolicy(QSizePolicy.Preferred)
                 self.le_team[team_idx].setSizePolicy(policy)
+                self.le_team[team_idx].setMinimumWidth(self.mimumLineEditWidth)
             
             self.qb_logo1 = IconPushButton()
             self.qb_logo1.setFixedWidth(self.raceWidth)
@@ -345,11 +379,12 @@ class mainWindow(QMainWindow):
                     self.le_player[team_idx][player_idx].setText("TBD")
                     self.le_player[team_idx][player_idx].setAlignment(Qt.AlignCenter)
                     self.le_player[team_idx][player_idx].setPlaceholderText("Player "+str(player_idx+1)+" of Team "+str(team_idx+1))
-                    completer = QCompleter(scctool.settings.commonplayers, self.le_player[team_idx][player_idx])
+                    completer = QCompleter(scctool.settings.getMyPlayers(True), self.le_player[team_idx][player_idx])
                     completer.setCaseSensitivity(Qt.CaseInsensitive)
                     completer.setCompletionMode(QCompleter.InlineCompletion)
                     completer.setWrapAround(True)
                     self.le_player[team_idx][player_idx].setCompleter(completer)
+                    self.le_player[team_idx][player_idx].setMinimumWidth(self.mimumLineEditWidth)
                 
                     for i in range(4):
                         self.cb_race[team_idx][player_idx].addItem(QIcon("src/"+str(i)+".png"),"")
@@ -369,6 +404,7 @@ class mainWindow(QMainWindow):
                 self.le_map[player_idx].setText("TBD")
                 self.le_map[player_idx].setAlignment(Qt.AlignCenter)
                 self.le_map[player_idx].setPlaceholderText("Map "+str(player_idx+1))
+                self.le_map[player_idx].setMinimumWidth(self.mimumLineEditWidth)
                 completer = QCompleter(scctool.settings.maps,self.le_map[player_idx])
                 completer.setCaseSensitivity(Qt.CaseInsensitive)
                 completer.setCompletionMode(QCompleter.InlineCompletion)
@@ -491,7 +527,7 @@ class mainWindow(QMainWindow):
             self.progressBar.setVisible(False)
         else:
             self.progressBar.setVisible(True)
-            
+         
     def autoUpdate_change(self):
         try:
             if(self.cb_autoUpdate.isChecked()):
@@ -505,8 +541,10 @@ class mainWindow(QMainWindow):
         try:
             if(self.cb_playerIntros.isChecked()):
                 self.controller.runSC2ApiThread("playerIntros")
+                self.controller.runWebsocketThread()
             else:
                 self.controller.stopSC2ApiThread("playerIntros")
+                self.controller.stopWebsocketThread()
         except Exception as e:
             module_logger.exception("message")    
            
@@ -647,25 +685,28 @@ class mainWindow(QMainWindow):
             
         
         
-class subwindow(QWidget):
+class subwindow1(QWidget):
     def createWindow(self,mainWindow):
         
         try:
             parent=None
-            super(subwindow,self).__init__(parent)
+            super(subwindow1,self).__init__(parent)
             #self.setWindowFlags(Qt.WindowStaysOnTopHint)
             
             self.mainWindow = mainWindow
             self.passEvent = False
             self.controller = mainWindow.controller
+            self.__dataChanged = False
             
             self.createFormGroupFTP()
+            self.createFormGroupOBS()
             self.createFormGroupTwitch()
             self.createFormGroupNightbot()
             self.createButtonGroup()
             
             mainLayout = QVBoxLayout()
             mainLayout.addWidget(self.formGroupFTP)
+            mainLayout.addWidget(self.formGroupOBS)
             mainLayout.addWidget(self.formGroupTwitch)
             mainLayout.addWidget(self.formGroupNightbot)
             mainLayout.addLayout(self.buttonGroup)
@@ -675,7 +716,7 @@ class subwindow(QWidget):
             self.move(mainWindow.pos() + QPoint(mainWindow.size().width()/2,mainWindow.size().height()/3)\
                                     - QPoint(self.size().width()/2,self.size().height()/3))
         
-            self.setWindowTitle("FTP, Twitch and Nightbot Settings")
+            self.setWindowTitle("Connections")
             
         except Exception as e:
             module_logger.exception("message")
@@ -684,31 +725,35 @@ class subwindow(QWidget):
         self.formGroupFTP = QGroupBox("FTP")
         layout = QFormLayout()
         
-        self.ftpServer = QLineEdit()
+        self.ftpServer = MonitoredLineEdit()
+        self.ftpServer.textModified.connect(self.changed)
         self.ftpServer.setText(scctool.settings.Config.get("FTP","server").strip())
         self.ftpServer.setAlignment(Qt.AlignCenter)
         self.ftpServer.setPlaceholderText("")
         self.ftpServer.setToolTip('')
         layout.addRow(QLabel("Server:"),self.ftpServer)
         
-        self.ftpUser = QLineEdit()
+        self.ftpUser = MonitoredLineEdit()
+        self.ftpUser.textModified.connect(self.changed)
         self.ftpUser.setText(scctool.settings.Config.get("FTP","user").strip())
         self.ftpUser.setAlignment(Qt.AlignCenter)
         self.ftpUser.setPlaceholderText("")
         self.ftpUser.setToolTip('')
         layout.addRow(QLabel("User:"),self.ftpUser)
         
-        self.ftpPwd = QLineEdit()
+        self.ftpPwd = MonitoredLineEdit()
+        self.ftpPwd.textModified.connect(self.changed)
         self.ftpPwd.setText(base64.b64decode(scctool.settings.Config.get("FTP","passwd").strip().encode()).decode("utf8"))
         self.ftpPwd.setAlignment(Qt.AlignCenter)
         self.ftpPwd.setPlaceholderText("")
         self.ftpPwd.setToolTip('')
-        self.ftpPwd.setEchoMode(QLineEdit.PasswordEchoOnEdit)
+        self.ftpPwd.setEchoMode(QLineEdit.Password)
         label = QLabel("Password:")
         label.setFixedWidth(100)
         layout.addRow(label,self.ftpPwd)
         
-        self.ftpDir = QLineEdit()
+        self.ftpDir = MonitoredLineEdit()
+        self.ftpDir.textModified.connect(self.changed)
         self.ftpDir.setText(scctool.settings.Config.get("FTP","dir").strip())
         self.ftpDir.setAlignment(Qt.AlignCenter)
         self.ftpDir.setPlaceholderText("currently using root directory")
@@ -729,13 +774,68 @@ class subwindow(QWidget):
 
         self.saveFtpData()
         window = FTPsetup(self.controller, self)
+        
+    def testOBS(self):
+        self.saveOBSdata()
+        msg = scctool.obs.testConnection()
+        QMessageBox.warning(self, "OBS Websocket Connection Test", msg)
 
-    
+    def createFormGroupOBS(self):
+        self.formGroupOBS = QGroupBox("OBS via Websocket Plugin")
+        layout = QFormLayout()
+        
+        self.obsPort = MonitoredLineEdit()
+        self.obsPort.textModified.connect(self.changed)
+        self.obsPort.setText(scctool.settings.Config.get("OBS", "port"))
+        self.obsPort.setAlignment(Qt.AlignCenter)
+        self.obsPort.setPlaceholderText("Server Port (Default: 4444)")
+        self.obsPort.setToolTip('')
+        layout.addRow(QLabel("Server Port:"),self.obsPort)
+        
+        self.obsPasswd = MonitoredLineEdit()
+        self.obsPasswd.textModified.connect(self.changed)
+        self.obsPasswd.setText(base64.b64decode(scctool.settings.Config.get("OBS","passwd").strip().encode()).decode("utf8"))
+        self.obsPasswd.setEchoMode(QLineEdit.Password)
+        self.obsPasswd.setAlignment(Qt.AlignCenter)
+        self.obsPasswd.setPlaceholderText("recommended")
+        self.obsPasswd.setToolTip('')
+        label = QLabel("Password:")
+        label.setFixedWidth(100)
+        layout.addRow(label, self.obsPasswd)
+        
+        self.obsSources = MonitoredLineEdit()
+        self.obsSources.textModified.connect(self.changed)
+        self.obsSources.setText(scctool.settings.Config.get("OBS", "sources"))
+        self.obsSources.setAlignment(Qt.AlignCenter)
+        self.obsSources.setPlaceholderText("Intro1, Intro2")
+        self.obsSources.setToolTip('Name of the OBS-sources that should automatically be hidden 4.5 sec after they become visible.')
+        layout.addRow(QLabel("Sources:"),self.obsSources)
+        
+        container = QHBoxLayout()
+        
+        self.obsActive = QCheckBox("")
+        self.obsActive.setChecked(scctool.settings.Config.getboolean("OBS","active"))
+        self.obsActive.setToolTip('') 
+        self.obsActive.stateChanged.connect(self.changed)
+            
+        self.pb_testOBS = QPushButton('Test Connection to OBS')
+        self.pb_testOBS.clicked.connect(self.testOBS)
+        
+        container.addWidget(self.obsActive,1)
+        container.addWidget(self.pb_testOBS,3)
+        
+        
+        layout.addRow(QLabel("Active:"),container)
+        
+        self.formGroupOBS.setLayout(layout)
+        
+        
     def createFormGroupTwitch(self):
         self.formGroupTwitch = QGroupBox("Twitch")
         layout = QFormLayout()
 
-        self.twitchChannel = QLineEdit()
+        self.twitchChannel = MonitoredLineEdit()
+        self.twitchChannel.textModified.connect(self.changed)
         self.twitchChannel.setText(scctool.settings.Config.get("Twitch", "channel"))
         self.twitchChannel.setAlignment(Qt.AlignCenter)
         self.twitchChannel.setPlaceholderText("Name of the Twitch channel that should be updated")
@@ -745,11 +845,12 @@ class subwindow(QWidget):
         
         container = QHBoxLayout()
         
-        self.twitchToken = QLineEdit()
+        self.twitchToken = MonitoredLineEdit()
+        self.twitchToken.textModified.connect(self.changed)
         self.twitchToken.setText(scctool.settings.Config.get("Twitch", "oauth"))
         self.twitchToken.setAlignment(Qt.AlignCenter)
         self.twitchToken.setPlaceholderText("Press 'Get' to generate a token")
-        self.twitchToken.setEchoMode(QLineEdit.PasswordEchoOnEdit)
+        self.twitchToken.setEchoMode(QLineEdit.Password)
         self.twitchToken.setToolTip("Press 'Get' to generate a new token.")
 
         container.addWidget(self.twitchToken);
@@ -758,7 +859,8 @@ class subwindow(QWidget):
         self.pb_getTwitch.clicked.connect(self.controller.getTwitchToken)
         layout.addRow(QLabel("Access-Token:"),container)
         
-        self.twitchTemplate = QLineEdit()
+        self.twitchTemplate = MonitoredLineEdit()
+        self.twitchTemplate.textModified.connect(self.changed)
         self.twitchTemplate.setText(scctool.settings.Config.get("Twitch", "title_template"))
         self.twitchTemplate.setAlignment(Qt.AlignCenter)
         self.twitchTemplate.setPlaceholderText("(TOUR) – (TEAM1) vs (TEAM2)")
@@ -775,14 +877,16 @@ class subwindow(QWidget):
         layout = QFormLayout()
         container = QHBoxLayout()
 
-        self.nightbotToken = QLineEdit()
+        self.nightbotToken = MonitoredLineEdit()
+        self.nightbotToken.textModified.connect(self.changed)
         self.nightbotToken.setText(scctool.settings.Config.get("NightBot", "token"))
         self.nightbotToken.setAlignment(Qt.AlignCenter)
-        self.nightbotToken.setEchoMode(QLineEdit.PasswordEchoOnEdit)
+        self.nightbotToken.setEchoMode(QLineEdit.Password)
         self.nightbotToken.setPlaceholderText("Press 'Get' to generate a token")
         self.nightbotToken.setToolTip("Press 'Get' to generate a new token.")
         
-        self.nightbotCommand = QLineEdit()
+        self.nightbotCommand = MonitoredLineEdit()
+        self.nightbotCommand.textModified.connect(self.changed)
         self.nightbotCommand.setText(scctool.settings.Config.get("NightBot", "command"))
         self.nightbotCommand.setPlaceholderText("!matchlink")
         self.nightbotCommand.setAlignment(Qt.AlignCenter)
@@ -817,22 +921,36 @@ class subwindow(QWidget):
             self.buttonGroup = layout
         except Exception as e:
             module_logger.exception("message")
-      
-    def saveData(self):
-        self.saveFtpData()
-        scctool.settings.Config.set("Twitch", "channel", self.twitchChannel.text().strip())
-        scctool.settings.Config.set("Twitch", "oauth", self.twitchToken.text().strip())
-        scctool.settings.Config.set("Twitch", "title_template", self.twitchTemplate.text().strip())
-        scctool.settings.Config.set("NightBot", "token", self.nightbotToken.text().strip())
-        scctool.settings.Config.set("NightBot", "command", self.nightbotCommand.text().strip())
+            
+    def changed(self):
+        self.__dataChanged = True
         
-        self.controller.refreshButtonStatus()
+    def saveData(self):
+        if(self.__dataChanged):
+            
+            self.saveFtpData()
+            
+            scctool.settings.Config.set("Twitch", "channel", self.twitchChannel.text().strip())
+            scctool.settings.Config.set("Twitch", "oauth", self.twitchToken.text().strip())
+            scctool.settings.Config.set("Twitch", "title_template", self.twitchTemplate.text().strip())
+            scctool.settings.Config.set("NightBot", "token", self.nightbotToken.text().strip())
+            scctool.settings.Config.set("NightBot", "command", self.nightbotCommand.text().strip())
+            
+            self.saveOBSdata()
+            
+            self.controller.refreshButtonStatus()
 
     def saveFtpData(self):
         scctool.settings.Config.set("FTP", "server", self.ftpServer.text().strip())
         scctool.settings.Config.set("FTP", "user", self.ftpUser.text().strip())
         scctool.settings.Config.set("FTP", "passwd", base64.b64encode(self.ftpPwd.text().strip().encode()).decode("utf8"))
         scctool.settings.Config.set("FTP", "dir", self.ftpDir.text().strip())
+        
+    def saveOBSdata(self):
+        scctool.settings.Config.set("OBS", "port", self.obsPort.text().strip())
+        scctool.settings.Config.set("OBS", "passwd", base64.b64encode(self.obsPasswd.text().strip().encode()).decode("utf8"))
+        scctool.settings.Config.set("OBS", "active", str(self.obsActive.isChecked()))
+        scctool.settings.Config.set("OBS", "sources", self.obsSources.text().strip())
       
     def saveCloseWindow(self):
         self.saveData()
@@ -845,6 +963,9 @@ class subwindow(QWidget):
         
     def closeEvent(self, event):
         try:
+            if(not self.__dataChanged):
+                event.accept()
+                return
             if(not self.passEvent):
                 if(self.isMinimized()):
                     self.showNormal()
@@ -855,6 +976,252 @@ class subwindow(QWidget):
         except Exception as e:
             module_logger.exception("message")  
             
+class subwindow2(QWidget):
+    def createWindow(self,mainWindow):
+        
+        try:
+            parent=None
+            super(subwindow2,self).__init__(parent)
+            #self.setWindowFlags(Qt.WindowStaysOnTopHint)
+            
+            self.mainWindow = mainWindow
+            self.passEvent = False
+            self.controller = mainWindow.controller
+            self.__dataChanged = False
+            
+            self.createButtonGroup()
+            self.createColorBox()
+            self.createStyleBox()
+            
+            mainLayout = QVBoxLayout()
+            mainLayout.addWidget(self.styleBox)
+            mainLayout.addWidget(self.colorBox)
+            mainLayout.addLayout(self.buttonGroup)
+            self.setLayout(mainLayout)
+            
+            self.resize(QSize(mainWindow.size().width()*.80,self.sizeHint().height()))
+            self.move(mainWindow.pos() + QPoint(mainWindow.size().width()/2,mainWindow.size().height()/3)\
+                                    - QPoint(self.size().width()/2,self.size().height()/3))
+        
+            self.setWindowTitle("Style Settings")
+            
+        except Exception as e:
+            module_logger.exception("message")
+            
+    def changed(self):
+        self.__dataChanged = True
+        
+    def createButtonGroup(self):
+        try:
+            layout = QHBoxLayout()
+            
+            layout.addWidget(QLabel(""))
+            
+            buttonCancel = QPushButton('Cancel')
+            buttonCancel.clicked.connect(self.closeWindow)
+            layout.addWidget(buttonCancel) 
+    
+            buttonSave = QPushButton('Save && Close')
+            buttonSave.clicked.connect(self.saveCloseWindow)
+            layout.addWidget(buttonSave) 
+            
+            self.buttonGroup = layout
+        except Exception as e:
+            module_logger.exception("message")
+            
+    def createStyleBox(self):
+        self.styleBox = QGroupBox("Styles")
+        layout = QFormLayout()
+        
+        self.qb_boxStyle = StyleComboBox(scctool.settings.OBSmapDir+"/src/css/box_styles", scctool.settings.Config.get("Style", "mapicon_box"))
+        self.qb_boxStyle.currentIndexChanged.connect(self.changed)
+        label = QLabel("Box Map Icons:")
+        label.setMinimumWidth(110)
+        layout.addRow(label, self.qb_boxStyle)
+        
+        self.qb_landscapeStyle = StyleComboBox(scctool.settings.OBSmapDir+"/src/css/landscape_styles", scctool.settings.Config.get("Style", "mapicon_landscape"))
+        self.qb_landscapeStyle.currentIndexChanged.connect(self.changed)
+        layout.addRow(QLabel("Landscape Map Icons:"),self.qb_landscapeStyle)
+        
+        self.qb_scoreStyle = StyleComboBox(scctool.settings.OBShtmlDir+"/src/css/score_styles", scctool.settings.Config.get("Style", "score"))
+        self.qb_scoreStyle.currentIndexChanged.connect(self.changed)
+        layout.addRow(QLabel("Score:"), self.qb_scoreStyle)
+        
+        self.qb_introStyle = StyleComboBox(scctool.settings.OBShtmlDir+"/src/css/intro_styles", scctool.settings.Config.get("Style", "intro"))
+        self.qb_introStyle.currentIndexChanged.connect(self.changed)
+        layout.addRow(QLabel("Intros:"), self.qb_introStyle)
+        
+        self.pb_applyStyles = QPushButton("Apply")
+        self.pb_applyStyles.clicked.connect(self.applyStyles)
+        layout.addRow(QLabel(), self.pb_applyStyles)
+        
+        self.styleBox.setLayout(layout)
+            
+    def applyStyles(self):
+        self.qb_boxStyle.apply(self.controller, scctool.settings.OBSmapDir+"/src/css/box.css")
+        self.qb_landscapeStyle.apply(self.controller, scctool.settings.OBSmapDir+"/src/css/landscape.css")
+        self.qb_scoreStyle.apply(self.controller, scctool.settings.OBShtmlDir+"/src/css/score.css")
+        self.qb_introStyle.apply(self.controller, scctool.settings.OBShtmlDir+"/src/css/intro.css")
+        
+    def createColorBox(self):
+        self.colorBox = QGroupBox("Colors")
+        layout = QVBoxLayout()
+        
+        self.default_color = ColorLayout(self, "Default Border:", scctool.settings.Config.get("MapIcons", "default_border_color"), "#f29b00")
+        layout.addLayout(self.default_color)
+        self. win_color = ColorLayout(self, "Win:", scctool.settings.Config.get("MapIcons", "win_color"), "#008000")
+        layout.addLayout(self.win_color)
+        self.lose_color = ColorLayout(self, "Lose:", scctool.settings.Config.get("MapIcons", "lose_color"), "#f22200")
+        layout.addLayout(self.lose_color)
+        self.undecided_color = ColorLayout(self, "Undecided:", scctool.settings.Config.get("MapIcons", "undecided_color"), "#f29b00")
+        layout.addLayout(self.undecided_color)
+        self.notplayed_color = ColorLayout(self, "Not played:", scctool.settings.Config.get("MapIcons", "notplayed_color"), "#c0c0c0")
+        layout.addLayout(self.notplayed_color)
+        
+        self.colorBox.setLayout(layout)
+        
+    def saveData(self):
+        if(self.__dataChanged):
+            scctool.settings.Config.set("MapIcons", "default_border_color", self.default_color.getColor())
+            scctool.settings.Config.set("MapIcons", "undecided_color", self.undecided_color.getColor())
+            scctool.settings.Config.set("MapIcons", "win_color", self.win_color.getColor())
+            scctool.settings.Config.set("MapIcons", "lose_color", self.lose_color.getColor())
+            scctool.settings.Config.set("MapIcons", "notplayed_color", self.notplayed_color.getColor())
+            
+            scctool.settings.Config.set("Style", "mapicon_landscape", self.qb_landscapeStyle.currentText())
+            scctool.settings.Config.set("Style", "mapicon_box", self.qb_boxStyle.currentText())
+            scctool.settings.Config.set("Style", "score", self.qb_scoreStyle.currentText())
+            scctool.settings.Config.set("Style", "intro", self.qb_introStyle.currentText())
+            
+            self.controller.matchData.allChanged()
+
+    def saveCloseWindow(self):
+        self.saveData()
+        self.passEvent = True
+        self.close()   
+        
+    def closeWindow(self):
+        self.passEvent = True
+        self.close()    
+        
+    def closeEvent(self, event):
+        try:
+            if(not self.__dataChanged):
+                event.accept()
+                return
+            if(not self.passEvent):
+                if(self.isMinimized()):
+                    self.showNormal()
+                buttonReply = QMessageBox.question(self, 'Save data?', "Save data?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+                if buttonReply == QMessageBox.Yes:
+                    self.saveData()
+            event.accept()
+        except Exception as e:
+            module_logger.exception("message") 
+             
+class subwindow3(QWidget):
+    def createWindow(self,mainWindow):
+        
+        try:
+            parent=None
+            super(subwindow3,self).__init__(parent)
+            #self.setWindowFlags(Qt.WindowStaysOnTopHint)
+            
+            self.mainWindow = mainWindow
+            self.passEvent = False
+            self.controller = mainWindow.controller
+            self.__dataChanged = False
+            
+            self.createButtonGroup()
+            self.createFavBox()
+
+            
+            mainLayout = QVBoxLayout()
+
+            mainLayout.addWidget(self.favBox)
+            mainLayout.addLayout(self.buttonGroup)
+            self.setLayout(mainLayout)
+            
+            self.resize(QSize(mainWindow.size().width()*.80,self.sizeHint().height()))
+            self.move(mainWindow.pos() + QPoint(mainWindow.size().width()/2,mainWindow.size().height()/3)\
+                                    - QPoint(self.size().width()/2,self.size().height()/3))
+        
+            self.setWindowTitle("Miscellaneous Settings")
+            
+        except Exception as e:
+            module_logger.exception("message")
+            
+    def changed(self):
+        self.__dataChanged = True
+        
+    def createFavBox(self):
+        self.favBox = QGroupBox("Favorites")
+        layout = QFormLayout()
+        
+        self.list_favPlayers = ListTable(3, scctool.settings.getMyPlayers())
+        self.list_favPlayers.dataModified.connect(self.changed)
+        self.list_favPlayers.setFixedHeight(180)
+        layout.addRow(QLabel("Players:"),self.list_favPlayers)
+        
+
+        self.list_favTeams = ListTable(2, scctool.settings.getMyTeams())
+        self.list_favTeams.dataModified.connect(self.changed)
+        self.list_favTeams.setFixedHeight(90)
+        
+        label = QLabel("Teams:")
+        label.setFixedWidth(100)
+        layout.addRow(label, self.list_favTeams)
+        
+        self.favBox.setLayout(layout)
+        
+
+        
+    def createButtonGroup(self):
+        try:
+            layout = QHBoxLayout()
+            
+            layout.addWidget(QLabel(""))
+            
+            buttonCancel = QPushButton('Cancel')
+            buttonCancel.clicked.connect(self.closeWindow)
+            layout.addWidget(buttonCancel) 
+    
+            buttonSave = QPushButton('Save && Close')
+            buttonSave.clicked.connect(self.saveCloseWindow)
+            layout.addWidget(buttonSave) 
+            
+            self.buttonGroup = layout
+        except Exception as e:
+            module_logger.exception("message")
+            
+    def saveData(self):
+        if(self.__dataChanged):
+            scctool.settings.Config.set("SCT","myteams", ", ".join(self.list_favTeams.getData()))
+            scctool.settings.Config.set("SCT","commonplayers", ", ".join(self.list_favPlayers.getData()))
+
+    def saveCloseWindow(self):
+        self.saveData()
+        self.passEvent = True
+        self.close()   
+        
+    def closeWindow(self):
+        self.passEvent = True
+        self.close()    
+        
+    def closeEvent(self, event):
+        try:
+            if(not self.__dataChanged):
+                event.accept()
+                return
+            if(not self.passEvent):
+                if(self.isMinimized()):
+                    self.showNormal()
+                buttonReply = QMessageBox.question(self, 'Save data?', "Save data?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+                if buttonReply == QMessageBox.Yes:
+                    self.saveData()
+            event.accept()
+        except Exception as e:
+            module_logger.exception("message") 
             
 class MapLineEdit(QLineEdit):
     textModified = pyqtSignal(str, str) # (before, after)
@@ -877,7 +1244,70 @@ class MapLineEdit(QLineEdit):
             self._before = after
             self.textModified.emit(before, after)
             
+class MonitoredLineEdit(QLineEdit):
+    
+    textModified = pyqtSignal()
+    def __init__(self, contents='', parent=None):
+        super(MonitoredLineEdit, self).__init__(contents, parent)
+        self.editingFinished.connect(self.__handleEditingFinished)
+        self.textChanged.connect(self.__handleTextChanged)
+        self._before = contents
+
+    def __handleTextChanged(self, text):
+        if not self.hasFocus():
+            self._before = text
             
+    def setTextMonitored(self, after):
+        if self._before != after:
+            self.textModified.emit()
+            
+        self.setText(after)
+
+    def __handleEditingFinished(self):
+        before, after = self._before, self.text()
+        if before != after:
+            #after, known = scctool.matchdata.autoCorrectMap(after)
+            self.setText(after)
+            self._before = after
+            self.textModified.emit()
+        
+class StyleComboBox(QComboBox):
+    
+    def __init__(self, style_dir, default = "Default"):
+        super(StyleComboBox, self).__init__()
+        
+        self.__style_dir = style_dir
+        
+        for fname in os.listdir(style_dir):
+            full_fname = os.path.join(style_dir, fname)
+            if os.path.isfile(full_fname):
+                label = re.search('^(.+)\.css$', fname).group(1)
+                self.addItem(label)
+                
+        index = self.findText(default, Qt.MatchFixedString)
+        if index >= 0:                                   
+            self.setCurrentIndex(index)
+        else:
+            index = self.findText("Default", Qt.MatchFixedString)
+            if index >= 0:                                   
+                self.setCurrentIndex(index)
+                
+    def apply(self, controller, file):
+         newfile = os.path.join(self.__style_dir, self.currentText()+".css")
+         shutil.copy(newfile, file)
+         
+         fname = os.path.basename(file)
+         dirs = os.path.dirname(file)
+         back = dirs.split("/")
+         for i in range(len(back)):
+            back[i] = ".."
+         back = "/".join(back)
+         
+         controller.ftpUploader.cwd(dirs)
+         controller.ftpUploader.upload(file, fname)
+         controller.ftpUploader.cwd(back)
+
+         
 class FTPsetup(QProgressDialog):
     
 
@@ -942,6 +1372,52 @@ class BusyProgressBar(QProgressBar):
 
     def text(self):
         return self._text
+        
+class ColorLayout(QHBoxLayout):
+    def __init__(self, parent, label = "Color:", color = "#ffffff", default_color = "#ffffff"):
+        super(QHBoxLayout, self).__init__()
+        self.__parent = parent
+        self.__defaultColor = default_color
+        label = QLabel(label)
+        label.setMinimumWidth(110)
+        self.addWidget(label, 1)
+        self.__preview = QLineEdit()
+        self.__preview.setReadOnly(True)
+        self.__preview.setAlignment(Qt.AlignCenter)
+        self.setColor(color, False)
+        self.addWidget(self.__preview, 2)
+        self.__pb_selectColor = QPushButton('Select')
+        self.__pb_selectColor.clicked.connect(self.__openColorDialog)
+        self.addWidget(self.__pb_selectColor, 0)
+        self.__pb_default = QPushButton('Default')
+        self.__pb_default.clicked.connect(self.reset)
+        self.addWidget(self.__pb_default, 0)
+        
+    def __openColorDialog(self):
+        color = QColorDialog.getColor(self.__currentColor)
+ 
+        if color.isValid():
+            self.setColor(color.name())
+            
+    def setColor(self, color, trigger = True):
+        new_color = QColor(color)
+        if(trigger and self.__currentColor != new_color):
+            self.__parent.changed()
+        self.__currentColor = new_color
+        self.__preview.setText(color)
+        self.__preview.setStyleSheet('background: '+color)
+        
+        if(self.__currentColor.lightnessF() >= 0.5):
+            self.__preview.setStyleSheet('background: '+color+';color: black')
+        else:
+            self.__preview.setStyleSheet('background: '+color+';color: white')
+        
+    def reset(self):
+        self.setColor(self.__defaultColor)
+        
+    def getColor(self):
+        return self.__currentColor.name()
+        
 
 class IconPushButton(QPushButton):
     def __init__(self, label=None, parent=None):
@@ -979,3 +1455,66 @@ class IconPushButton(QPushButton):
         self.style().drawControl(QStyle.CE_PushButton, opt, qp, self)
 
         qp.end()
+        
+        
+class ListTable(QTableWidget):
+    dataModified = pyqtSignal()
+    
+    def __init__(self, noColumns = 1, data = []):
+        super(ListTable, self).__init__()
+        
+        data = self.__processData(data)
+        self.__noColumns = noColumns
+        
+        self.setCornerButtonEnabled(False)
+        self.horizontalHeader().hide()
+        self.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.verticalHeader().hide()
+        self.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+        self.setData(data)
+
+        
+    def __handleDataChanged(self, item):
+        self.setData(self.getData())
+        self.dataModified.emit()
+            
+    def __processData(self, data):
+        seen = set()
+        uniq = [x for x in data if x not in seen and not seen.add(x)] 
+        uniq.sort() 
+        return uniq
+            
+    def setData(self, data):
+        try:
+            self.itemChanged.disconnect()
+        except:
+            pass
+        
+        self.setColumnCount(self.__noColumns)
+        self.setRowCount(int(len(data)/self.__noColumns)+1)
+        for idx, entry in enumerate(data):
+            row, column = divmod(idx, self.__noColumns)
+            self.setItem(row ,column, QTableWidgetItem(entry))
+    
+        row = int(len(data)/self.__noColumns)
+        for col in range(len(data)%self.__noColumns, self.__noColumns):
+            self.setItem(row ,col, QTableWidgetItem(""))
+            
+        row = int(len(data)/self.__noColumns)+1
+        for col in range(self.__noColumns):
+            self.setItem(row ,col, QTableWidgetItem(""))
+            
+        self.itemChanged.connect(self.__handleDataChanged)
+            
+    def getData(self):
+        data = []
+        for row in range(self.rowCount()):
+            for col in range(self.columnCount()):
+                try:
+                    element = self.item(row, col).text().strip()
+                    if(element == ""):
+                        continue
+                    data.append(element)
+                except:
+                    pass
+        return self.__processData(data)

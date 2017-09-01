@@ -64,7 +64,10 @@ class FTPUploader:
         self.mkd("src")
         self.cwd("src")
         self.uploadAll('OBS_html/src')
-        self.cwd("..")
+        self.mkd("css")
+        self.cwd("css")
+        self.uploadAll('OBS_html/src/css')
+        self.cwd("../..")
         self.mkd("data")
         self.cwd("..")
         self.mkd("OBS_mapicons")
@@ -97,7 +100,7 @@ class FTPUploader:
         self.cwd("../..")
         self.progress_end()
         
-        return self.__thread.progress, 88
+        return self.__thread.progress, 97
         
     def uploadAll(self, dir):
         for fname in os.listdir(dir):
@@ -133,7 +136,7 @@ class UploaderThread(QtCore.QThread):
                     self.__current_cmd = 0
                     self.progress.emit(0)
                 elif(cmd == "progress_end"):
-                    print("Progress done!")
+                    print("Progress done! "+str(self.__current_cmd))
                     self.progress.emit(-1)
                     self.__progress = False
                 elif(self.__upload and cmd == "connect"):

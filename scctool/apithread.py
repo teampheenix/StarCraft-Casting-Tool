@@ -186,6 +186,7 @@ class SC2ApiThread(QThread):
             self.activeTask['updateScore'] = False
             self.activeTask['toggleScore'] = False
             self.activeTask['toggleProduction'] = False
+            self.activeTask['playerIntros'] = False
             self.currentData = SC2MatchData()
             self.controller = controller
             self.currentÍngameStatus = False
@@ -255,7 +256,7 @@ class SC2ApiThread(QThread):
             if(self.exiting==False and (newData!=self.currentData or newData.time < self.currentData.time)):
                 
                 if(self.activeTask['playerIntros']):
-                    self.updatePlayerIntro(newData)
+                    self.controller.updatePlayerIntros(newData)
                 
                 if(self.activeTask['updateScore'] and newData.isDecidedGame()):
                     self.controller.requestScoreUpdate(newData)
@@ -282,24 +283,7 @@ class SC2ApiThread(QThread):
         except:
             module_logger.info("Toggle not working on this OS")
             
-    def updatePlayerIntro(self, newData):
-        
-        filename=scctool.settings.OBShtmlDir+"/intro1.html"
-        with open(scctool.settings.OBShtmlDir+"/data/intro-template.html", "rt") as fin:
-            with open(filename, "wt") as fout:
-                for line in fin:
-                    line = line.replace('%NAME%', newData.player1)
-                    line = line.replace('%RACE%', newData.race1+".png")
-                    fout.write(line)
-                    
-        filename=scctool.settings.OBShtmlDir+"/intro2.html"
-        with open(scctool.settings.OBShtmlDir+"/data/intro-template.html", "rt") as fin:
-            with open(filename, "wt") as fout:
-                for line in fin:
-                    line = line.replace('%NAME%', newData.player2)
-                    line = line.replace('%RACE%', newData.race2+".png")
-                    fout.write(line)
-
+            
 def isSC2onForeground():
     try:
         return GetWindowText(GetForegroundWindow()).lower()=="StarCraft II".lower()
@@ -314,8 +298,8 @@ class SC2MatchData:
         if(GAMEresponse):
             self.player1 = GAMEresponse["players"][0]["name"]
             self.player2 = GAMEresponse["players"][1]["name"]
-            self.race1   = self.getRace(GAMEresponse["players"][0]["race"])
-            self.race2   = self.getRace(GAMEresponse["players"][1]["race"])
+            self.race1   = self.translateRace(GAMEresponse["players"][0]["race"])
+            self.race2   = self.translateRace(GAMEresponse["players"][1]["race"])
             self.time  = GAMEresponse["displayTime"]
             self.ingame = UIresponse["activeScreens"] == []
             if(GAMEresponse["players"][0]["result"]=="Victory"):
@@ -352,10 +336,19 @@ class SC2MatchData:
             return True, False
         else:
             return False, False
+            
+    def playerInList(self, player_idx, players):
+        
+        for player in players:
+            if(player_idx == 0 and compareStr(self.player1, player)):
+                return True
+            elif(player_idx == 1 and compareStr(self.player2, player)):
+                return True
+        return False
 
             
             
-    def getRace(self,str):
+    def translateRace(self,str):
         try: 
             for idx, race in enumerate(scctool.settings.races):
                 if(str[0].upper()==race[0].upper()):
@@ -382,6 +375,22 @@ class SC2MatchData:
         return (self.player1 == other.player1 and self.player2 == other.player2\
                 and self.race1 == other.race1 and self.race2 == other.race2\
                 and self.result == other.result and self.ingame == other.ingame)
+                
+    def getPlayer(self, idx):
+        if(idx==0):
+            return self.player1
+        elif(idx==1):
+            return self.player2  
+        else:
+            return False
+            
+    def getPlayerRace(self, idx):
+        if(idx==0):
+            return self.race1
+        elif(idx==1):
+            return self.race2  
+        else:
+            return False
                 
                 
 def compareStr(str1,str2):

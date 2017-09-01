@@ -1,7 +1,7 @@
 @import url(http://fonts.googleapis.com/css?family=Orbitron);
 
 :root {
-  --border-size: 2px;
+  --border-size: 3px;
   --border-color: black;
   --total-width: 1280px;
   --total-height: 80px;
@@ -30,6 +30,7 @@ div.box {
     border: var(--border-size) solid var(--border-color);
     border-radius: 0px var(--border-radius) 0px var(--border-radius);
 	overflow: hidden;
+	display: inline-block;
 } 
 
 #logo1 {
@@ -68,8 +69,9 @@ div.box_left{
 	position: absolute;
 	height: 100%;
 	left: var(--logo-width);
-	background-image: url("./background-left.jpg");
-	background-size: cover;
+	background-image: url("../texture2.jpg");
+	background-size: 500px 500px;
+	background-position: 0% 0%; 
     background-repeat: repeat;
 	width: calc(var(--side-width) + var(--border-radius));
 } 
@@ -82,8 +84,9 @@ div.box_middle{
 	top: calc(0px - var(--border-size));
 	border: var(--border-size) solid var(--border-color);
 	border-radius: 0px var(--border-radius) 0px var(--border-radius);
-	background-image: url("./texture1.jpg");
-	background-size: cover;
+    background-image: url("../texture1.jpg");
+    background-size: 128px 128px;
+    background-repeat: repeat;
 	font: bold 36px Orbitron, Helvetica, Sans-Serif;
 	text-align: center;
 	line-height: calc(var(--total-height) - var(--border-size));
@@ -93,9 +96,9 @@ div.box_middle{
 div.box_right{
 	position: absolute;
 	height: 100%;
-	background-image: url("./background-right.jpg");
-	background-size: cover;
-	background-position: right bottom;
+	background-image: url("../texture2.jpg");
+	background-size: 500px 500px;
+	background-position: 30% 20%; 
 	right: var(--logo-width);
 	width: calc(var(--side-width) + var(--border-radius));
 } 
@@ -106,9 +109,9 @@ div.upper-text-right{
 	width: calc(100% - var(--border-radius) - 6px);
 	top: 0%;
 	height: calc(100% - var(--lower-text-height));
-	font: bold 31px Orbitron, Helvetica, Sans-Serif;
+	font: bold 30px Orbitron, Helvetica, Sans-Serif;
 	text-align: center;
-	line-height: 50px;
+	line-height: 48px;
 	overflow: hidden;
 }
 
@@ -119,9 +122,9 @@ div.upper-text-left{
 	height: calc(100% - var(--lower-text-height));
 	left: calc(0% + var(--border-radius) + 3px);
 	width: calc(100% - 2 * var(--border-radius) - 3px);
-	font: bold 31px Orbitron, Helvetica, Sans-Serif;
+	font: bold 30px Orbitron, Helvetica, Sans-Serif;
 	text-align: center;
-	line-height: 50px;
+	line-height: 48px;
 	overflow: hidden;
 }
 

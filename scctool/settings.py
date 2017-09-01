@@ -139,9 +139,10 @@ try:
     setDefaultConfig("Form","playerintros", "False")
 
     setDefaultConfig("MapIcons","default_border_color","#f29b00")
-    setDefaultConfig("MapIcons","win_border_color","#008000")
-    setDefaultConfig("MapIcons","lose_border_color","#f22200")
-    setDefaultConfig("MapIcons","notplayed_border_color","#c0c0c0")
+    setDefaultConfig("MapIcons","undecided_color","#f29b00")
+    setDefaultConfig("MapIcons","win_color","#008000")
+    setDefaultConfig("MapIcons","lose_color","#f22200")
+    setDefaultConfig("MapIcons","notplayed_color","#c0c0c0")
     setDefaultConfig("MapIcons","notplayed_opacity","0.4")
     
     setDefaultConfig("FTP","upload","False")
@@ -149,6 +150,17 @@ try:
     setDefaultConfig("FTP","user","")
     setDefaultConfig("FTP","passwd","")
     setDefaultConfig("FTP","dir","")
+    
+    setDefaultConfig("Style", "mapicon_box", "Default")
+    setDefaultConfig("Style", "mapicon_landscape", "Default")
+    setDefaultConfig("Style", "score", "Default")
+    setDefaultConfig("Style", "intro", "Default")
+    
+    setDefaultConfig("OBS","port", "4444")
+    setDefaultConfig("OBS","active", "False")
+    setDefaultConfig("OBS","passwd","")
+    setDefaultConfig("OBS","sources","Intro1, Intro2")
+    
 
     def ftpIsValid():
          return len(Config.get("FTP", "server"))>0
@@ -165,21 +177,21 @@ try:
     
         
     
-    default_border_color   = Config.get("MapIcons", "default_border_color")
-    win_border_color       = Config.get("MapIcons", "win_border_color")
-    lose_border_color      = Config.get("MapIcons", "lose_border_color")
-    notplayed_border_color = Config.get("MapIcons", "notplayed_border_color")
-    notplayed_opacity      = Config.get("MapIcons", "notplayed_opacity")
-    
     CB_ScoreUpdate = Config.getboolean("Form","scoreupdate")
     CB_ToggleScore = Config.getboolean("Form","togglescore")
     CB_ToggleProd  = Config.getboolean("Form","toggleprod")
     CB_PlayerIntros  = Config.getboolean("Form","playerintros")
     
     
-    myteams =  list(map(str.strip, str(Config.get("SCT","myteams")).split(',')))
-    commonplayers = list(map(str.strip, str(Config.get("SCT","commonplayers")).split(',')))
-    commonplayers.append("TBD")
+    def getMyTeams():
+        return list(map(str.strip, str(Config.get("SCT","myteams")).split(',')))
+        
+    def getMyPlayers(append=False):
+        players = list(map(str.strip, str(Config.get("SCT","commonplayers")).split(',')))
+        if(append):
+            players.append("TBD")
+        return players
+        
     fuzzymatch = Config.getboolean("SCT","fuzzymatch")
 
 except Exception as e:

@@ -1,0 +1,177 @@
+@import url(http://fonts.googleapis.com/css?family=Orbitron);
+
+:root {
+  --border-size: 2px;
+  --border-color: black;
+  --total-width: 720px;
+  --total-height: 70px;
+  --border-radius: 20px;
+  --middle-width: 25%;
+  --lower-text-height: 33%;
+  --side-width: calc((100% - var(--middle-width)) / 2);
+}
+
+.text-item{
+    color: white; 
+    font: bold 18px Orbitron;
+    --outline-size: 2.5px;
+   text-shadow: 0px  0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px  0px var(--outline-size) black,
+                0px  0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px  0px var(--outline-size) black,
+                0px  0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px  0px var(--outline-size) black;
+   -webkit-font-smoothing: antialiased; 
+}
+
+.winner {
+   --winner-color: #f29b00;
+   --size: 8px;
+   color: white!important;
+   text-shadow: 0px  0px 2px black, 0px 0px 2px black, 0px  0px 2px black, 0px  0px 2px black,
+             0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px  0px var(--size) var(--winner-color), 0px  0px var(--size) var(--winner-color),
+			 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px  0px var(--size) var(--winner-color), 0px  0px var(--size) var(--winner-color),
+             0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px  0px var(--size) var(--winner-color), 0px  0px var(--size) var(--winner-color)!important;
+    -webkit-font-smoothing: antialiased;
+}
+
+div.box {
+    position: relative;
+    width: var(--total-width);
+    height: var(--total-height);
+    border: var(--border-size) solid var(--border-color);
+    border-radius: 0px var(--border-radius) 0px var(--border-radius);
+	overflow: hidden;
+} 
+
+
+div.box_left{
+	position: absolute;
+	height: 100%;
+	left: 0%;
+	width: calc(var(--side-width) + var(--border-radius));
+} 
+
+div.box_middle{
+	position: absolute;
+	height: 100%;
+	left: var(--side-width);
+	width: var(--middle-width);
+	top: calc(0px - var(--border-size));
+	border: var(--border-size) solid var(--border-color);
+	border-radius: 0px var(--border-radius) 0px var(--border-radius);
+    background-image: url("./../texture1.jpg");
+    background-size: cover;
+	font: bold 28px Orbitron, Helvetica, Sans-Serif;
+	text-align: center;
+	line-height: calc(var(--total-height) - var(--border-size));
+	--winner-color: white;
+	--size: 5px;
+	color: white!important;
+	text-shadow: 0px  0px 2px black, 0px 0px 2px black, 0px  0px 2px black, 0px  0px 2px black, 0px  0px 2px black, 0px 0px 2px black, 0px  0px 2px black, 0px  0px 2px black,
+             0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px  0px var(--size) var(--winner-color), 0px  0px var(--size) var(--winner-color)!important;
+    -webkit-font-smoothing: antialiased;
+} 
+
+div.box_right{
+	position: absolute;
+	height: 100%;
+	right: 0%;
+	width: calc(var(--side-width) + var(--border-radius));
+} 
+
+div.lower-text{
+	position: absolute;
+	left: 0%;
+	bottom: 0%;
+	height: var(--lower-text-height);
+	width: 100%;
+	text-align: center;
+	line-height: 22px;
+	background: rgba(0, 0, 0, 0.6)!important; 
+}
+
+div.maplabel{
+	position: absolute;
+	left: calc(0% + var(--border-radius) + 6px);
+	width: calc(100% - var(--border-radius) - 6px);
+	text-align: center;
+	line-height: 22px;
+	height: 100%;
+}
+
+div.mapname{
+	position: absolute;
+	left: calc(0% + var(--border-radius) + 3px);
+	width: calc(100% - 36px - var(--border-radius) - 3px);
+	text-align: center;
+	line-height: 22px;
+	height: 100%;
+}
+
+div.upper-text-right{
+	position: absolute;
+	left: calc(0% + var(--border-radius) + 6px);
+	width: calc(100% - var(--border-radius) - 6px);
+	top: 0%;
+	height: calc(100% - var(--lower-text-height));
+	font: bold 28px Orbitron, Helvetica, Sans-Serif;
+	text-align: center;
+	line-height: 40px;
+}
+
+div.upper-text-left{
+	position: absolute;
+	top: 0%;
+	height: calc(100% - var(--lower-text-height));
+	left: 3px;
+	width: calc(100% - var(--border-radius) - 6px);
+	font: bold 28px Orbitron, Helvetica, Sans-Serif;
+	text-align: center;
+	line-height: 40px;
+}
+
+#map1{
+    width: 125%;
+    transform:translate(-5%, -10%);
+}
+
+#map2{
+    width: 125%;
+    transform:translate(-20%, -60%);   
+}
+
+#race1{
+    position: absolute; 
+    left: 0px; 
+	top: 5%;
+    height: 90%;
+	-webkit-filter: drop-shadow(0px 0px 4px #6BC2F9);
+    filter: drop-shadow(0px 0px 4px #6BC2F9);
+}
+
+#race2{
+    position: absolute; 
+    right: 0px;
+	top: 5%;
+    height: 90%;
+	-webkit-filter: drop-shadow(0px 0px 4px #6BC2F9);
+    filter: drop-shadow(0px 0px 4px #6BC2F9);
+}
+
+#circle {
+	position: absolute;
+    background: #f00;
+	right: 8px;
+	bottom: 3px;
+    width: 25px;
+    height: 16px;
+    border-radius: 0px 10px 0px 10px;
+	box-shadow: 0px 0px 2px white;
+}
+
+div.opa{
+   position: absolute; 
+   width: 100%;
+   height: 100%;
+   background-color: #000000;
+   color: white; 
+}
+

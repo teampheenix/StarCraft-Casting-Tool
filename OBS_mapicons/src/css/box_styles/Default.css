@@ -47,10 +47,9 @@ div.data {
    text-align: center!important; 
    right: 5px!important;  
    left:-5px!important;   
-   padding-top: 6px!important;
+   padding-top: 0px!important;
    padding-bottom: 10px!important;
 }
-
 
 .player1{
    font-size: 30px!important;
@@ -75,7 +74,7 @@ div.data {
 
 
 div.image{
-   width: 265px; height:250px;
+   width: 265px; height:250px; border-radius:6%;
    border-style: solid;
    border-width: 6px;
    background-color: #ffffff;
@@ -98,10 +97,11 @@ div.label{
    background: rgb(0, 0, 0); /* fallback color */
    background: rgba(0, 0, 0, 0.6)!important; 
    position: absolute; 
-   width: 160px; height:30px;
+   width: 160px; height:26px;
    border-top-left-radius: 20px;
    bottom: 0px;
    text-align: center;
+   line-height: 25px;
    right: -0px;
    padding:1px;
    padding-bottom: 4px!important;

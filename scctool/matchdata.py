@@ -399,6 +399,15 @@ class matchData:
         except:
             return False
             
+    def getPlayerList(self, team_idx):
+        list = []
+        try:
+            for set_idx in range(self.getNoSets()):
+                list.append(self.getPlayer(team_idx, set_idx))
+            return list
+        except:
+            return []
+            
     def getPlayer(self, team_idx, set_idx):
         try:
             if(not (set_idx >= 0 and set_idx < self.__data['no_sets']\
@@ -870,10 +879,11 @@ class matchData:
                 f.close()
             
             
+            controller.ftpUploader.cwd(scctool.settings.OBSdataDir)
             for file in files2upload:
-                controller.ftpUploader.cwd(scctool.settings.OBSdataDir)
                 controller.ftpUploader.upload(scctool.settings.OBSdataDir+"/"+file, file)
-                controller.ftpUploader.cwd("..")
+                
+            controller.ftpUploader.cwd("..")
             
         except Exception as e:
             module_logger.exception("message") 
@@ -894,24 +904,24 @@ class matchData:
             display.append("inline-block")
             
             if(max(score) > threshold and i >= self.getMinSets()):
-                border_color[0].append(scctool.settings.notplayed_border_color)
-                border_color[1].append(scctool.settings.notplayed_border_color)
+                border_color[0].append(scctool.settings.Config.get("MapIcons", "notplayed_color"))
+                border_color[1].append(scctool.settings.Config.get("MapIcons", "notplayed_color"))
             elif(self.getMapScore(i)==-1):
-                border_color[0].append(scctool.settings.win_border_color)
-                border_color[1].append(scctool.settings.lose_border_color)
+                border_color[0].append(scctool.settings.Config.get("MapIcons", "win_color"))
+                border_color[1].append(scctool.settings.Config.get("MapIcons", "lose_color"))
                 score[0] += 1
             elif(self.getMapScore(i)==1):
-                border_color[0].append(scctool.settings.lose_border_color)
-                border_color[1].append(scctool.settings.win_border_color)
+                border_color[0].append(scctool.settings.Config.get("MapIcons", "lose_color"))
+                border_color[1].append(scctool.settings.Config.get("MapIcons", "win_color"))
                 score[1] += 1
             else:
-                border_color[0].append(scctool.settings.default_border_color)
-                border_color[1].append(scctool.settings.default_border_color)
+                border_color[0].append(scctool.settings.Config.get("MapIcons", "undecided_color"))
+                border_color[1].append(scctool.settings.Config.get("MapIcons", "undecided_color"))
                 
         for i in range(self.getNoSets(),7):
             display.append("none")
-            border_color[0].append(scctool.settings.notplayed_border_color)
-            border_color[1].append(scctool.settings.notplayed_border_color)
+            border_color[0].append(scctool.settings.Config.get("MapIcons", "notplayed_color"))
+            border_color[1].append(scctool.settings.Config.get("MapIcons", "notplayed_color"))
          
         if(score[0] > threshold):
             winner[0] = "winner"
@@ -955,16 +965,21 @@ class matchData:
                     skip[i] = True
                     
                 if(max(score) > threshold and i >= self.getMinSets()):
-                    border_color=scctool.settings.notplayed_border_color
+                    border_color = scctool.settings.scctool.settings.Config.get("MapIcons", "notplayed_color")
+                    score_color  = scctool.settings.scctool.settings.Config.get("MapIcons", "notplayed_color")
                     opacity = scctool.settings.notplayed_opacity 
                     winner = 0
                     skip[i] = False
                 elif(won==1):
-                    border_color=scctool.settings.win_border_color 
+                    border_color = scctool.settings.Config.get("MapIcons", "win_color") 
+                    score_color  = scctool.settings.Config.get("MapIcons", "win_color") 
                 elif(won==-1):
-                    border_color=scctool.settings.lose_border_color
+                    border_color = scctool.settings.Config.get("MapIcons", "lose_color")
+                    score_color  = scctool.settings.Config.get("MapIcons", "lose_color")
                 else:
-                    border_color=scctool.settings.default_border_color 
+                    border_color = scctool.settings.Config.get("MapIcons", "default_border_color")
+                    score_color  = scctool.settings.Config.get("MapIcons", "undecided_color")
+                    
             
                 if(winner==-1):
                     player1status='winner'
@@ -1008,7 +1023,7 @@ class matchData:
                             line = line.replace('%RACE1_PNG%', race1png).replace('%RACE2_PNG%', race2png)
                             line = line.replace('%MAP_PNG%', mappng).replace('%MAP_NAME%', map)
                             line = line.replace('%MAP_ID%',self.getLabel(i))
-                            line = line.replace('%BORDER_COLOR%',border_color).replace('%OPACITY%',opacity)
+                            line = line.replace('%SCORE_COLOR%',score_color).replace('%OPACITY%',opacity)
                             line = line.replace('%HIDDEN%',hidden)
                             line = line.replace('%STATUS1%',player1status).replace('%STATUS2%',player2status)
                             fout.write(line)
@@ -1031,15 +1046,15 @@ class matchData:
                             fout.write(line)
                             
             for type in ["box", "landscape"]:  
+                controller.ftpUploader.cwd(scctool.settings.OBSmapDir+"/icons_"+type+"/data")
                 for i in range(7): 
                     if(i < self.getNoSets() and skip[i]):
                         continue
                     if(i >= self.getNoSets() and not self.hasMetaChanged()):
                         continue
                     filename=scctool.settings.OBSmapDir+"/icons_"+type+"/data/"+str(i+1)+".html"
-                    controller.ftpUploader.cwd(scctool.settings.OBSmapDir+"/icons_"+type+"/data")
                     controller.ftpUploader.upload(filename, str(i+1)+".html")
-                    controller.ftpUploader.cwd("../../..")
+                controller.ftpUploader.cwd("../../..")
                             
                             
         except Exception as e:
@@ -1065,7 +1080,7 @@ class matchData:
         try:
             for team_idx in range(2):
                 team = self.__data['teams'][team_idx]['name']
-                matches = difflib.get_close_matches(team.lower(),scctool.settings.myteams,1) 
+                matches = difflib.get_close_matches(team.lower(),scctool.settings.getMyTeams(),1) 
                 if(len(matches) > 0):
                     self.setMyTeam(team_idx*2-1)
                     return True
