@@ -693,6 +693,7 @@ class subwindow1(QWidget):
             super(subwindow1,self).__init__(parent)
             #self.setWindowFlags(Qt.WindowStaysOnTopHint)
             
+            self.setWindowIcon(QIcon('src/connection.png'))
             self.mainWindow = mainWindow
             self.passEvent = False
             self.controller = mainWindow.controller
@@ -984,6 +985,7 @@ class subwindow2(QWidget):
             super(subwindow2,self).__init__(parent)
             #self.setWindowFlags(Qt.WindowStaysOnTopHint)
             
+            self.setWindowIcon(QIcon('src/pantone.png'))
             self.mainWindow = mainWindow
             self.passEvent = False
             self.controller = mainWindow.controller
@@ -1127,6 +1129,7 @@ class subwindow3(QWidget):
             super(subwindow3,self).__init__(parent)
             #self.setWindowFlags(Qt.WindowStaysOnTopHint)
             
+            self.setWindowIcon(QIcon('src/settings.png'))
             self.mainWindow = mainWindow
             self.passEvent = False
             self.controller = mainWindow.controller
