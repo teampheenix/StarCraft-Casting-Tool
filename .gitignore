@@ -9,3 +9,5 @@ src/data.json
 config.ini
 src/*.log
 OBS_html/data/league-data.html
+OBS_html/data/logo1-data.html
+OBS_html/data/logo2-data.html
