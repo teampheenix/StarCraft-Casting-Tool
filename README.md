@@ -30,7 +30,7 @@ To active the automatic detection of the score via the SC2-Client-API check the 
 
 To automatically hide the browser sources of the player intros (only OBS studio) you have to install the [OBS websocket plugin](https://obsproject.com/forum/resources/obs-websocket-remote-control-of-obs-studio-made-easy.466/), activate it in OBS studio, specify the corresponding SCC-Tool settings under *Settings: Connections*, and name the intro sources accordingly.
 
-### Customization
+## Customization
 
 Some basic options for customization can be found under *Settings: Styles*, for example, alternative stlyes/skins for the map icons and option to specify border colors. For additional **nearly unlimited customization** of the map icons you can make your own custom skins via [CSS](https://www.w3schools.com/css/) by creating new alternative *css*-files and placing them into `OBS_mapicons/src/css/box_styles`, `OBS_mapicons/src/css/landscape_styles`, `OBS_html/src/css/intro_styles`, or `OBS_html/src/css/intro_styles`. If you do so, please share your custom skins with this project.
 
