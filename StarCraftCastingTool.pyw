@@ -23,13 +23,14 @@ try:
     from PyQt5.QtWidgets import QApplication, QStyleFactory
     from PyQt5.QtGui import QIcon
 
+
     def main():
     
         app = QApplication(sys.argv)
         QApplication.setStyle(QStyleFactory.create('Fusion'))
         app.setWindowIcon(QIcon('src/icon.png'))
         controller = MainController()
-        view = mainWindow(controller)
+        view = mainWindow(controller, app)
         logger.info("Starting...")      
         sys.exit(app.exec_())
 

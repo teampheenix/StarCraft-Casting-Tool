@@ -100,6 +100,8 @@ try:
             "Honorgrounds", "Interloper","Mech Depot", "Newkirk Precinct",\
             "Odyssey","Paladino Terminal","Proxima Station",\
             "Sequencer","TBD")
+            
+    max_no_sets = 9
     
     #Creating directories if not exisiting 
     if not os.path.exists(OBSdataDir):

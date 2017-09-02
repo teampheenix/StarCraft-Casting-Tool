@@ -100,7 +100,7 @@ class FTPUploader:
         self.cwd("../..")
         self.progress_end()
         
-        return self.__thread.progress, 97
+        return self.__thread.progress, 99
         
     def uploadAll(self, dir):
         for fname in os.listdir(dir):

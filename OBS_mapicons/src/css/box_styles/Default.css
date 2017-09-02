@@ -53,21 +53,21 @@ div.data {
 
 .player1{
    font-size: 30px!important;
-   top: 40px;
+   top: 37px;
    left: 5px; 
    text-align: left;
 }
 
 .player2{
    font-size: 30px!important;
-   top: 170px;
+   top: 167px;
    right: 5px; 
    text-align: right;
 }
 
 .vs{
    font-size: 40px!important;
-   top: 95px;
+   top: 92px;
    left: 0px; 
    text-align: center;
 }
@@ -109,7 +109,7 @@ div.label{
 
 #firstrace {
    position: absolute; 
-   top: 85px; 
+   top: 82px; 
    left: 0px; 
    height: 95px; 
    -webkit-filter: drop-shadow(0px 0px 3px #FFFFFF);
@@ -118,7 +118,7 @@ div.label{
 
 #secondrace {
    position: absolute; 
-   top: 85px; 
+   top: 82px; 
    right: 0px; 
    height: 95px; 
    -webkit-filter: drop-shadow(0px 0px 3px #FFFFFF);

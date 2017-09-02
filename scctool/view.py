@@ -24,11 +24,12 @@ except Exception as e:
     raise  
     
 class mainWindow(QMainWindow):
-    def __init__(self,controller):
+    def __init__(self, controller, app):
         try:
             super(mainWindow, self).__init__()
         
             self.trigger = True
+            self.controller = controller
          
             self.createFromMatchDataBox()
             self.createTabs()
@@ -61,7 +62,7 @@ class mainWindow(QMainWindow):
             self.progressBar.setVisible(False)
             self.statusBar().addPermanentWidget(self.progressBar)
 
-            self.controller = controller
+            self.app = app
             self.controller.setView(self)
             self.controller.refreshButtonStatus()
 
@@ -86,36 +87,36 @@ class mainWindow(QMainWindow):
     def createMenuBar(self):
         try:
             menubar = self.menuBar()
-            settingsMenu = menubar.addMenu('&Settings') 
-            apiAct = QAction(QIcon('src/connection.png'), '&Connections', self)  
+            settingsMenu = menubar.addMenu('Settings') 
+            apiAct = QAction(QIcon('src/connection.png'), 'Connections', self)  
             apiAct.setStatusTip('Edit FTP-Settings and API-Settings for Twitch and Nightbot')
             apiAct.triggered.connect(self.openApiDialog)
             settingsMenu.addAction(apiAct)
-            styleAct = QAction(QIcon('src/pantone.png'),'&Styles', self)  
+            styleAct = QAction(QIcon('src/pantone.png'),'Styles', self)  
             styleAct.setStatusTip('')
             styleAct.triggered.connect(self.openStyleDialog)
             settingsMenu.addAction(styleAct)
-            miscAct = QAction(QIcon('src/settings.png'),'&Misc', self)  
+            miscAct = QAction(QIcon('src/settings.png'),'Misc', self)  
             miscAct.setStatusTip('')
             miscAct.triggered.connect(self.openMiscDialog)
             settingsMenu.addAction(miscAct)
             
             
-            infoMenu = menubar.addMenu('&Info && Links') 
+            infoMenu = menubar.addMenu('Info && Links') 
             
-            websiteAct = QAction(QIcon('src/github.ico'),'&StarCraft Casting Tool', self) 
+            websiteAct = QAction(QIcon('src/github.ico'),'StarCraft Casting Tool', self) 
             websiteAct.triggered.connect(self.openWebsite)
             infoMenu.addAction(websiteAct)
             
-            ixAct = QAction(QIcon('src/icon.png'), '&team pheeniX', self) 
+            ixAct = QAction(QIcon('src/icon.png'), 'team pheeniX', self) 
             ixAct.triggered.connect(self.openIX)
             infoMenu.addAction(ixAct)
             
-            alphaAct = QAction(QIcon('src/alphatl.ico'), '&AlphaTL', self) 
+            alphaAct = QAction(QIcon('src/alphatl.ico'), 'AlphaTL', self) 
             alphaAct.triggered.connect(self.openAlpha)
             infoMenu.addAction(alphaAct)
             
-            rstlAct = QAction(QIcon('src/rstl.png'),'&RSTL', self) 
+            rstlAct = QAction(QIcon('src/rstl.png'),'RSTL', self) 
             rstlAct.triggered.connect(self.openRSTL)
             infoMenu.addAction(rstlAct)
 
@@ -221,7 +222,7 @@ class mainWindow(QMainWindow):
             self.tab2.layout.addWidget(QLabel("Best of"),2)
             
             self.cb_bestof = QComboBox()
-            for idx in range(0,7):
+            for idx in range(0, scctool.settings.max_no_sets):
                 if(idx==1):
                     continue
                 self.cb_bestof.addItem(str(idx+1))
@@ -234,7 +235,7 @@ class mainWindow(QMainWindow):
             self.tab2.layout.addWidget(QLabel(" but at least"),3)
             
             self.cb_minSets = QComboBox()
-            for idx in range(0,7):
+            for idx in range(0, scctool.settings.max_no_sets):
                 self.cb_minSets.addItem(str(idx+1))
             self.cb_minSets.setCurrentIndex(0)
             
@@ -264,14 +265,14 @@ class mainWindow(QMainWindow):
     def createFromMatchDataBox(self):
         try:
             
-            self.max_no_sets = 7
+            self.max_no_sets = scctool.settings.max_no_sets
             self.scoreWidth = 35
             self.raceWidth = 45
             self.labelWidth = 13
             self.mimumLineEditWidth = 130
             
             self.fromMatchDataBox = QGroupBox("Match Data")
-            layout2 = QFormLayout()
+            layout2 = QVBoxLayout()
             
             self.le_league  = QLineEdit()
             self.le_league.setText("League TBD")
@@ -281,7 +282,7 @@ class mainWindow(QMainWindow):
             policy.setHorizontalStretch(3)
             policy.setHorizontalPolicy(QSizePolicy.Expanding)
             policy.setVerticalStretch(1)
-            policy.setVerticalPolicy(QSizePolicy.Preferred)
+            policy.setVerticalPolicy(QSizePolicy.Fixed)
             self.le_league.setSizePolicy(policy)
             
             self.le_team = [QLineEdit() for y in range(2)]
@@ -290,6 +291,7 @@ class mainWindow(QMainWindow):
             self.sl_score  = [QSlider(Qt.Horizontal)  for y in range(self.max_no_sets)]  
             self.le_map    = [MapLineEdit()  for y in range(self.max_no_sets)]  
             self.label_set = [QLabel()  for y in range(self.max_no_sets)]  
+            self.setContainer = [QHBoxLayout() for y in range(self.max_no_sets)] 
             
             container = QHBoxLayout()
             for team_idx in range(2):
@@ -305,20 +307,20 @@ class mainWindow(QMainWindow):
                 policy.setHorizontalStretch(4)
                 policy.setHorizontalPolicy(QSizePolicy.Expanding)
                 policy.setVerticalStretch(1)
-                policy.setVerticalPolicy(QSizePolicy.Preferred)
+                policy.setVerticalPolicy(QSizePolicy.Fixed)
                 self.le_team[team_idx].setSizePolicy(policy)
                 self.le_team[team_idx].setMinimumWidth(self.mimumLineEditWidth)
             
             self.qb_logo1 = IconPushButton()
             self.qb_logo1.setFixedWidth(self.raceWidth)
             self.qb_logo1.clicked.connect(lambda:self.logoDialog(1))
-            pixmap = QIcon(scctool.settings.OBSdataDir+'/logo1.png')
+            pixmap = QIcon(self.controller.linkFile(scctool.settings.OBSdataDir+'/logo1'))
             self.qb_logo1.setIcon(pixmap)
             
             self.qb_logo2 = IconPushButton()
             self.qb_logo2.setFixedWidth(self.raceWidth)
             self.qb_logo2.clicked.connect(lambda:self.logoDialog(2))
-            pixmap = QIcon(scctool.settings.OBSdataDir+'/logo2.png')
+            pixmap = QIcon(self.controller.linkFile(scctool.settings.OBSdataDir+'/logo2'))
             self.qb_logo2.setIcon(pixmap)
             
             self.sl_team = QSlider(Qt.Horizontal)
@@ -335,7 +337,7 @@ class mainWindow(QMainWindow):
             policy.setHorizontalStretch(0)
             policy.setHorizontalPolicy(QSizePolicy.Fixed)
             policy.setVerticalStretch(1)
-            policy.setVerticalPolicy(QSizePolicy.Minimum)
+            policy.setVerticalPolicy(QSizePolicy.Fixed)
             self.sl_team.setSizePolicy(policy)
             
             
@@ -351,7 +353,7 @@ class mainWindow(QMainWindow):
             policy.setHorizontalStretch(4)
             policy.setHorizontalPolicy(QSizePolicy.Expanding)
             policy.setVerticalStretch(1)
-            policy.setVerticalPolicy(QSizePolicy.Preferred)
+            policy.setVerticalPolicy(QSizePolicy.Fixed)
             label.setSizePolicy(policy)
             container.addWidget(label,0,1,1,1)
             
@@ -361,7 +363,7 @@ class mainWindow(QMainWindow):
             policy.setHorizontalStretch(4)
             policy.setHorizontalPolicy(QSizePolicy.Expanding)
             policy.setVerticalStretch(1)
-            policy.setVerticalPolicy(QSizePolicy.Preferred)
+            policy.setVerticalPolicy(QSizePolicy.Fixed)
             label.setSizePolicy(policy)
             container.addWidget(label,1,1,1,1)
             
@@ -372,7 +374,7 @@ class mainWindow(QMainWindow):
             container.addWidget(self.le_team[1],1,5,1,1)
             container.addWidget(self.qb_logo2,0,6,2,1)
             
-            layout2.addRow(container)
+            layout2.addLayout(container)
             
             for player_idx in range(self.max_no_sets):   
                 for team_idx in range(2):
@@ -414,18 +416,18 @@ class mainWindow(QMainWindow):
                 
                 #self.le_map[player_idx].setReadOnly(True)
                 
-                container = QHBoxLayout()
+                self.setContainer[player_idx] = QHBoxLayout()
                 self.label_set[player_idx].setText("#"+str(player_idx+1))
                 self.label_set[player_idx].setAlignment(Qt.AlignCenter)
                 self.label_set[player_idx].setFixedWidth(self.labelWidth)
-                container.addWidget(self.label_set[player_idx],0)
-                container.addWidget(self.le_map[player_idx],4)
-                container.addWidget(self.cb_race[0][player_idx],0)
-                container.addWidget(self.le_player[0][player_idx],4)
-                container.addWidget(self.sl_score[player_idx],0)
-                container.addWidget(self.le_player[1][player_idx],4)
-                container.addWidget(self.cb_race[1][player_idx],0)
-                layout2.addRow(container)
+                self.setContainer[player_idx].addWidget(self.label_set[player_idx],0)
+                self.setContainer[player_idx].addWidget(self.le_map[player_idx],4)
+                self.setContainer[player_idx].addWidget(self.cb_race[0][player_idx],0)
+                self.setContainer[player_idx].addWidget(self.le_player[0][player_idx],4)
+                self.setContainer[player_idx].addWidget(self.sl_score[player_idx],0)
+                self.setContainer[player_idx].addWidget(self.le_player[1][player_idx],4)
+                self.setContainer[player_idx].addWidget(self.cb_race[1][player_idx],0)
+                layout2.addLayout(self.setContainer[player_idx])
                 self.fromMatchDataBox.setLayout(layout2)
                 
         except Exception as e:
@@ -672,18 +674,33 @@ class mainWindow(QMainWindow):
         
         #options = QFileDialog.Options()
         #options |= QFileDialog.DontUseNativeDialog
-        fileName, _ = QFileDialog.getOpenFileName(self,"Select Team Logo", "","PNG images (*.png)")
+        fileName, _ = QFileDialog.getOpenFileName(self,"Select Team Logo", "","Support Images (*.png *.jpg)")
         if fileName:
-            fname = scctool.settings.OBSdataDir+'/logo'+str(button)+'.png'
+            try:
+                os.remove(scctool.settings.OBSdataDir+"/logo"+str(button)+".png")
+            except:
+                pass
+            try:
+                os.remove(scctool.settings.OBSdataDir+"/logo"+str(button)+".jpg")
+            except:
+                pass
+                
+            base, ext = os.path.splitext(fileName)
+            ext = ext.split("?")[0]
+            fname = scctool.settings.OBSdataDir+"/logo"+str(button)+ext
+            
             shutil.copy(fileName, fname)
             self.controller.updateLogos()
             self.controller.ftpUploader.cwd(scctool.settings.OBSdataDir)
-            self.controller.ftpUploader.upload(fname, "logo"+str(button)+".png")
+            self.controller.ftpUploader.upload(fname, "logo"+str(button)+ext)
             self.controller.ftpUploader.cwd("..")
             self.controller.matchData.metaChanged()
             self.controller.matchData.updateScoreIcon(self.controller)
             
-        
+    def resizeWindow(self):
+        for i in range(0, 10):
+            self.app.processEvents()
+        self.resize(self.width(),self.sizeHint().height())
         
 class subwindow1(QWidget):
     def createWindow(self,mainWindow):
@@ -705,15 +722,16 @@ class subwindow1(QWidget):
             self.createFormGroupNightbot()
             self.createButtonGroup()
             
-            mainLayout = QVBoxLayout()
-            mainLayout.addWidget(self.formGroupFTP)
-            mainLayout.addWidget(self.formGroupOBS)
-            mainLayout.addWidget(self.formGroupTwitch)
-            mainLayout.addWidget(self.formGroupNightbot)
-            mainLayout.addLayout(self.buttonGroup)
+            #mainLayout = QVBoxLayout()
+            mainLayout = QGridLayout()
+            mainLayout.addWidget(self.formGroupFTP,0,0)
+            mainLayout.addWidget(self.formGroupOBS,0,1)
+            mainLayout.addWidget(self.formGroupTwitch,1,0,1,2)
+            mainLayout.addWidget(self.formGroupNightbot,2,0,1,2)
+            mainLayout.addLayout(self.buttonGroup,3,0,1,2)
             self.setLayout(mainLayout)
             
-            self.resize(QSize(mainWindow.size().width()*.80,self.sizeHint().height()))
+            self.resize(QSize(mainWindow.size().width()*0.9,self.sizeHint().height()))
             self.move(mainWindow.pos() + QPoint(mainWindow.size().width()/2,mainWindow.size().height()/3)\
                                     - QPoint(self.size().width()/2,self.size().height()/3))
         
@@ -750,7 +768,7 @@ class subwindow1(QWidget):
         self.ftpPwd.setToolTip('')
         self.ftpPwd.setEchoMode(QLineEdit.Password)
         label = QLabel("Password:")
-        label.setFixedWidth(100)
+        #label.setFixedWidth(100)
         layout.addRow(label,self.ftpPwd)
         
         self.ftpDir = MonitoredLineEdit()
@@ -801,7 +819,7 @@ class subwindow1(QWidget):
         self.obsPasswd.setPlaceholderText("recommended")
         self.obsPasswd.setToolTip('')
         label = QLabel("Password:")
-        label.setFixedWidth(100)
+        #label.setFixedWidth(100)
         layout.addRow(label, self.obsPasswd)
         
         self.obsSources = MonitoredLineEdit()
@@ -812,21 +830,18 @@ class subwindow1(QWidget):
         self.obsSources.setToolTip('Name of the OBS-sources that should automatically be hidden 4.5 sec after they become visible.')
         layout.addRow(QLabel("Sources:"),self.obsSources)
         
-        container = QHBoxLayout()
         
-        self.obsActive = QCheckBox("")
+        
+     
+        self.obsActive = QCheckBox(" Automatic hide sources")
         self.obsActive.setChecked(scctool.settings.Config.getboolean("OBS","active"))
         self.obsActive.setToolTip('') 
         self.obsActive.stateChanged.connect(self.changed)
+        layout.addRow(QLabel("Active:"),self.obsActive)
             
         self.pb_testOBS = QPushButton('Test Connection to OBS')
         self.pb_testOBS.clicked.connect(self.testOBS)
-        
-        container.addWidget(self.obsActive,1)
-        container.addWidget(self.pb_testOBS,3)
-        
-        
-        layout.addRow(QLabel("Active:"),container)
+        layout.addRow(QLabel(),self.pb_testOBS)
         
         self.formGroupOBS.setLayout(layout)
         
@@ -856,6 +871,7 @@ class subwindow1(QWidget):
 
         container.addWidget(self.twitchToken);
         self.pb_getTwitch = QPushButton('Get')
+        self.pb_getTwitch.setFixedWidth(200)
         container.addWidget(self.pb_getTwitch);
         self.pb_getTwitch.clicked.connect(self.controller.getTwitchToken)
         layout.addRow(QLabel("Access-Token:"),container)
@@ -895,6 +911,7 @@ class subwindow1(QWidget):
         container.addWidget(self.nightbotToken);
         self.pb_getNightbot = QPushButton('Get')
         self.pb_getNightbot.clicked.connect(self.controller.getNightbotToken)
+        self.pb_getNightbot.setFixedWidth(200)
         #self.pb_getNightbot.setEnabled(False)
         container.addWidget(self.pb_getNightbot);
 
@@ -1035,29 +1052,52 @@ class subwindow2(QWidget):
         self.styleBox = QGroupBox("Styles")
         layout = QFormLayout()
         
+        container = QHBoxLayout()
         self.qb_boxStyle = StyleComboBox(scctool.settings.OBSmapDir+"/src/css/box_styles", scctool.settings.Config.get("Style", "mapicon_box"))
         self.qb_boxStyle.currentIndexChanged.connect(self.changed)
         label = QLabel("Box Map Icons:")
         label.setMinimumWidth(110)
-        layout.addRow(label, self.qb_boxStyle)
+        button = QPushButton("Show in Browser")
+        button.clicked.connect(lambda:self.openHTML(scctool.settings.OBSmapDir+"/icons_box/all_maps.html"))
+        container.addWidget(self.qb_boxStyle)
+        container.addWidget(button)
+        layout.addRow(label, container)
         
+        container = QHBoxLayout()
         self.qb_landscapeStyle = StyleComboBox(scctool.settings.OBSmapDir+"/src/css/landscape_styles", scctool.settings.Config.get("Style", "mapicon_landscape"))
         self.qb_landscapeStyle.currentIndexChanged.connect(self.changed)
-        layout.addRow(QLabel("Landscape Map Icons:"),self.qb_landscapeStyle)
+        button = QPushButton("Show in Browser")
+        button.clicked.connect(lambda:self.openHTML(scctool.settings.OBSmapDir+"/icons_landscape/all_maps.html"))
+        container.addWidget(self.qb_landscapeStyle)
+        container.addWidget(button)
+        layout.addRow(QLabel("Landscape Map Icons:"), container)
         
+        container = QHBoxLayout()
         self.qb_scoreStyle = StyleComboBox(scctool.settings.OBShtmlDir+"/src/css/score_styles", scctool.settings.Config.get("Style", "score"))
         self.qb_scoreStyle.currentIndexChanged.connect(self.changed)
-        layout.addRow(QLabel("Score:"), self.qb_scoreStyle)
+        button = QPushButton("Show in Browser")
+        button.clicked.connect(lambda:self.openHTML(scctool.settings.OBShtmlDir+"/score.html"))
+        container.addWidget(self.qb_scoreStyle)
+        container.addWidget(button)
+        layout.addRow(QLabel("Score:"), container)
         
+        container = QHBoxLayout()
         self.qb_introStyle = StyleComboBox(scctool.settings.OBShtmlDir+"/src/css/intro_styles", scctool.settings.Config.get("Style", "intro"))
         self.qb_introStyle.currentIndexChanged.connect(self.changed)
-        layout.addRow(QLabel("Intros:"), self.qb_introStyle)
+        button = QPushButton("Show in Browser")
+        button.clicked.connect(lambda:self.openHTML(scctool.settings.OBShtmlDir+"/intro1.html"))
+        container.addWidget(self.qb_introStyle)
+        container.addWidget(button)
+        layout.addRow(QLabel("Intros:"), container)
         
         self.pb_applyStyles = QPushButton("Apply")
         self.pb_applyStyles.clicked.connect(self.applyStyles)
         layout.addRow(QLabel(), self.pb_applyStyles)
         
         self.styleBox.setLayout(layout)
+        
+    def openHTML(self, file):
+        self.controller.openURL(os.path.abspath(file))
             
     def applyStyles(self):
         self.qb_boxStyle.apply(self.controller, scctool.settings.OBSmapDir+"/src/css/box.css")

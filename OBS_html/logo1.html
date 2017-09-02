@@ -1,33 +1,21 @@
-<html>
-<body>
-<div class="box" style="width:300px;height:300px; display: table-cell; vertical-align: middle">
-<img id="img" src="../OBS_data/logo1.png" style="display: block; margin-left: auto;margin-right: auto; max-width:300px;max-height:300px"/>
-<div>
-</body>
-<script>
-function refresh(node)	
-{
-   var times = 3000; // gap in Milli Seconds;
-
-   (function startRefresh()
-   {
-      var address;
-      if(node.src.indexOf('?')>-1)
-       address = node.src.split('?')[0];
-      else 
-       address = node.src;
-      node.src = address+"?time="+new Date().getTime();
-
-      setTimeout(startRefresh,times);
-   })();
-
-}
-
-window.onload = function()
-{
-  var node = document.getElementById('img');
-  refresh(node);
-  // you can refresh as many images you want just repeat above steps
-}
-</script>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+		<meta charset="UTF-8">
+			<title>Score</title>
+			<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+			<script> 
+			$(document).ready(function () {
+				setInterval(function() {
+					$("#content").load("data/logo1-data.html");
+				}, 1000);
+			});
+			</script> 
+	</head>
+	<body>
+		<div id="content">
+		</div>
+	</body>
 </html>
+			
+

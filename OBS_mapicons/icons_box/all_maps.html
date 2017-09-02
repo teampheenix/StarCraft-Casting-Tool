@@ -2,12 +2,12 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-            <title>Alpha Maps</title>
-            <script src="../src/jquery.js"></script> 
+            <title>All Box Map Icons</title>
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
             <script> 
                 $(document).ready(function () {
                     setInterval(function() {
-                        for(i=1; i<=7; i++){
+                        for(i=1; i<=9; i++){
                             $("#mapicon"+i.toString()).load("data/"+i.toString()+".html");
                             if($("#mapicon"+i.toString()).find("div.image").css("visibility") == "hidden"){
                                 $("#mapicon"+i.toString()).css("display","none");
@@ -42,7 +42,7 @@
         </div>
     </body>
     <script> 
-        for(i=1; i<=7; i++){
+        for(i=1; i<=9; i++){
             $('#container').append("<div class='block' id='mapicon"+i.toString()+"'></div>");
         };
     </script>

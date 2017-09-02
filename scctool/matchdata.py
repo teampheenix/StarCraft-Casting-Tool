@@ -13,6 +13,7 @@ try:
     import time
     import difflib
     import shutil
+    import os
 except Exception as e:
     module_logger.exception("message") 
     raise  
@@ -28,9 +29,11 @@ class matchData:
         try:
             with open(scctool.settings.jsonFile) as json_file:  
                 self.__data = json.load(json_file)
-            self.allSetsChanged()
         except Exception as e:
             module_logger.exception("message") 
+            self.setCustom(5, False)
+                
+        self.allSetsChanged()
 
     def writeJsonFile(self):
         try:
@@ -145,6 +148,7 @@ class matchData:
                 return True
             
         return False
+        
     def setCustom(self, bestof, allkill):
         bestof = int(bestof)
         allkill = bool(allkill)
@@ -176,6 +180,11 @@ class matchData:
         ace_start = no_sets-3+2*(best_of%2)
         skip_one = (ace_start+1 == no_sets)
         
+        #print(str(best_of))
+        #print(str(no_sets))
+        #print(str(ace_start))
+        #print(str(skip_one))
+        
         for set_idx in range(ace_start):  
             self.setLabel(set_idx,"Map "+str(set_idx+1))
             
@@ -191,8 +200,8 @@ class matchData:
               
             if(no_sets < 0):
                 no_sets = 0 
-            elif(no_sets > 9):
-                no_sets = 9
+            elif(no_sets > scctool.settings.max_no_sets):
+                no_sets = scctool.settings.max_no_sets
                 
             if((not bestof) or bestof <= 0 or bestof > no_sets):
                 self.__data['best_of'] = no_sets
@@ -695,11 +704,11 @@ class matchData:
                     
                 self.setAllKill(False)
                     
-            elif(data['game_format']=="2"): #All-Kill Bo7
+            elif(data['game_format']=="2"): #All-Kill BoX
             
                 self.resetData()
                 bo = int(data['game_format_bo'])
-                self.setNoSets(bo,bo, resetPlayers = True)
+                self.setNoSets(bo, bo, resetPlayers = True)
                 self.setMinSets(0)
                 self.setLeague(data['tournament']['name'])
                 
@@ -715,17 +724,18 @@ class matchData:
                             pass
                             
                     for set_idx in range(1,bo):
-                        #try:
+                        try:
                             if(not data['result'][str(set_idx*2)]['r_name'+str(team_idx+1)]):
                                 try:
                                     race = data['result'][str(set_idx*2+1)]['r_name'+str(team_idx+1)]
                                 except:
                                     race = "Random"
                             else: 
-                                race = data['result'][str(4+set_idx)]['r_name'+str(team_idx+1)]
-                            self.setPlayer(team_idx, set_idx, data['result'][str(set_idx*2)]['tu_name'+str(team_idx+1)], race)
-                        #except:
-                        #    pass
+                                race = data['result'][str(set_idx*2)]['r_name'+str(team_idx+1)]
+                                
+                            self.setPlayer(team_idx, set_idx, data['result'][str(set_idx*2)]['member_name'+str(team_idx+1)], race)
+                        except:
+                            pass
                             
                     team = data['member'+str(team_idx+1)]
                     self.setTeam(team_idx, team['name'], team['tag'])
@@ -747,6 +757,7 @@ class matchData:
                         score = 0
                         
                     self.setMapScore(set_idx, score)
+                    self.resetLabels()
 
                         
                 self.setAllKill(True)
@@ -788,17 +799,32 @@ class matchData:
                 controller.ftpUploader.cwd(scctool.settings.OBSdataDir)
                 controller.ftpUploader.upload(fname, "logo"+str(i)+".png")
                 controller.ftpUploader.cwd("..")
+                
+            
         except Exception as e:
             module_logger.exception("message") 
         
     def downloadLogosRSTL(self, controller):
         try:
             for i in range(1,3):
-                fname = scctool.settings.OBSdataDir+"/logo"+str(i)+".png"
-                urllib.request.urlretrieve("http://hdgame.net"+self.__rawData['member'+str(i)]['img_m'], fname) 
+                try:
+                    os.remove(scctool.settings.OBSdataDir+"/logo"+str(i)+".png")
+                except:
+                    pass
+                try:
+                    os.remove(scctool.settings.OBSdataDir+"/logo"+str(i)+".jpg")
+                except:
+                    pass
+                
+                url = "http://hdgame.net"+self.__rawData['member'+str(i)]['img_m']
+                base, ext = os.path.splitext(url)
+                ext = ext.split("?")[0]
+                fname = scctool.settings.OBSdataDir+"/logo"+str(i)+ext
+                urllib.request.urlretrieve(url, fname) 
                 controller.ftpUploader.cwd(scctool.settings.OBSdataDir)
-                controller.ftpUploader.upload(fname, "logo"+str(i)+".png")
+                controller.ftpUploader.upload(fname, "logo"+str(i)+ext)
                 controller.ftpUploader.cwd("..")
+                
         except Exception as e:
             module_logger.exception("message") 
         
@@ -918,7 +944,7 @@ class matchData:
                 border_color[0].append(scctool.settings.Config.get("MapIcons", "undecided_color"))
                 border_color[1].append(scctool.settings.Config.get("MapIcons", "undecided_color"))
                 
-        for i in range(self.getNoSets(),7):
+        for i in range(self.getNoSets(),scctool.settings.max_no_sets):
             display.append("none")
             border_color[0].append(scctool.settings.Config.get("MapIcons", "notplayed_color"))
             border_color[1].append(scctool.settings.Config.get("MapIcons", "notplayed_color"))
@@ -928,15 +954,19 @@ class matchData:
         elif(score[1] > threshold):
             winner[1] = "winner"
             
+        logo1 = controller.linkFile(scctool.settings.OBSdataDir+"/logo1")
+        logo2 = controller.linkFile(scctool.settings.OBSdataDir+"/logo2")
+        
         filename=scctool.settings.OBShtmlDir+"/data/score-data.html"
         with open(scctool.settings.OBShtmlDir+"/data/score-template.html", "rt") as fin:
                     with open(filename, "wt") as fout:
                         for line in fin:
                             line = line.replace('%TEAM1%', self.getTeam(0)).replace('%TEAM2%', self.getTeam(1))
+                            line = line.replace('%LOGO1%', logo1).replace('%LOGO2%', logo2)
                             line = line.replace('%WINNER1%', winner[0]).replace('%WINNER2%', winner[1])
                             line = line.replace('%SCORE%',str(score[0])+' - '+str(score[1]))
                             line = line.replace('%TIMESTAMP%',str(time.time()))
-                            for i in range(7):
+                            for i in range(scctool.settings.max_no_sets):
                                 line = line.replace('%SCORE-M'+str(i+1)+'-T1%', border_color[0][i])
                                 line = line.replace('%SCORE-M'+str(i+1)+'-T2%', border_color[1][i])
                                 line = line.replace('%DISPLAY-M'+str(i+1)+'%', display[i])
@@ -965,9 +995,9 @@ class matchData:
                     skip[i] = True
                     
                 if(max(score) > threshold and i >= self.getMinSets()):
-                    border_color = scctool.settings.scctool.settings.Config.get("MapIcons", "notplayed_color")
-                    score_color  = scctool.settings.scctool.settings.Config.get("MapIcons", "notplayed_color")
-                    opacity = scctool.settings.notplayed_opacity 
+                    border_color = scctool.settings.Config.get("MapIcons", "notplayed_color")
+                    score_color  = scctool.settings.Config.get("MapIcons", "notplayed_color")
+                    opacity = scctool.settings.Config.get("MapIcons", "notplayed_opacity")
                     winner = 0
                     skip[i] = False
                 elif(won==1):
@@ -1029,7 +1059,7 @@ class matchData:
                             fout.write(line)
 
                             
-            for i in range(self.getNoSets(),7): 
+            for i in range(self.getNoSets(), scctool.settings.max_no_sets): 
                 filename=scctool.settings.OBSmapDir+"/icons_box/data/"+str(i+1)+".html"    
                 filename2=scctool.settings.OBSmapDir+"/icons_landscape/data/"+str(i+1)+".html"         
                 hidden = "visibility: hidden;"

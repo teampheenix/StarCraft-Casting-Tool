@@ -47,6 +47,7 @@ class MainController:
             self.updateForms()
             self.view.trigger = True
             self.setCBs()
+            self.view.resizeWindow()
         except Exception as e:
             module_logger.exception("message")    
 
@@ -105,12 +106,13 @@ class MainController:
             raise  
                 
     def updateLogos(self):
-
-        pixmap = QIcon(scctool.settings.OBSdataDir+'/logo1.png')
+        pixmap = QIcon(self.linkFile(scctool.settings.OBSdataDir+'/logo1'))
         self.view.qb_logo1.setIcon(pixmap)
         
-        pixmap = QIcon(scctool.settings.OBSdataDir+'/logo2.png')
+        pixmap = QIcon(self.linkFile(scctool.settings.OBSdataDir+'/logo2'))
         self.view.qb_logo2.setIcon(pixmap)
+        
+        self.updateLogosHTML()
 
                 
     def updateData(self):     
@@ -140,6 +142,7 @@ class MainController:
             self.matchData.setMinSets(minSets)
             self.matchData.writeJsonFile()
             self.updateForms()
+            self.view.resizeWindow()
             self.updateOBS()
             
         except Exception as e:
@@ -177,6 +180,7 @@ class MainController:
                 pass
             self.updateLogos()
             self.updateForms()  
+            self.view.resizeWindow()
         except Exception as e:
             msg = str(e)
             module_logger.exception("message")    
@@ -430,6 +434,29 @@ class MainController:
         except Exception as e:
             module_logger.exception("message")    
             
+    def linkFile(self, file):
+        for ext in [".png", ".jpg"]:
+            if(os.path.isfile(file+ext)):
+                return file+ext
+        return ""
+    
+    def updateLogosHTML(self):
+        for idx in range(2):
+            filename=scctool.settings.OBShtmlDir+"/data/logo"+str(idx+1)+"-data.html"
+            with open(scctool.settings.OBShtmlDir+"/data/logo-template.html", "rt") as fin:
+                with open(filename, "wt") as fout:
+                    for line in fin:
+                        line = line.replace('%LOGO%', self.linkFile(scctool.settings.OBSdataDir+"/"+"logo"+str(idx+1)))
+                        fout.write(line)
+
+             
+        self.ftpUploader.cwd(scctool.settings.OBShtmlDir)   
+        
+        for file in ["logo1-data.html", "logo2-data.html"]:
+             self.ftpUploader.upload(scctool.settings.OBShtmlDir+"/data/"+file, file)
+            
+        self.ftpUploader.cwd("..")
+    
     def updatePlayerIntros(self, newData):
         
         module_logger.info("updatePlayerIntros")  
@@ -445,11 +472,11 @@ class MainController:
                 display = "none"
             elif(team1):
                 team = self.matchData.getTeam(0)
-                logo = scctool.settings.OBSdataDir+"/"+"logo1.png"
+                logo = self.linkFile(scctool.settings.OBSdataDir+"/"+"logo1")
                 display = "block"
             elif(team2):
                 team = self.matchData.getTeam(1)
-                logo = scctool.settings.OBSdataDir+"/"+"logo2.png"
+                logo = self.linkFile(scctool.settings.OBSdataDir+"/"+"logo2")
                 display = "block"
 
             filename=scctool.settings.OBShtmlDir+"/intro"+str(player_idx+1)+".html"
@@ -464,10 +491,10 @@ class MainController:
                         fout.write(line)
 
              
-        self.ftpUploader.cwd(scctool.settings.OBSmapDir)   
+        self.ftpUploader.cwd(scctool.settings.OBShtmlDir)   
         
         for file in ["intro1.html", "intro2.html"]:
-             self.ftpUploader.upload(scctool.settings.OBSmapDir+"/"+file, file)
+             self.ftpUploader.upload(scctool.settings.OBShtmlDir+"/"+file, file)
             
         self.ftpUploader.cwd("..")
             
