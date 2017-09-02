@@ -72,6 +72,46 @@ class CheckVersionThread(QThread):
     def run(self):
         if(self.versionc.new_version_avaiable()):
             self.controller.newVersionTrigger(self.versionc.latest)
+            
+class PlaceholderList:
+    
+    def __init__(self):
+         self.__ls  = "("
+         self.__rs  = ")"
+         self.__data = {}
+         self.__type = {}
+         
+    def addConnection(self, placeholder, connection):
+        self.__data[placeholder] = connection
+        self.__type[placeholder] = "connection"
+        
+    def addString(self, placeholder, string):
+        self.__data[placeholder] = string
+        self.__type[placeholder] = "string"
+        
+    def replace(self, string):
+        for placeholder in self.__data:
+            if(self.__type[placeholder] == "string"):
+                replacement = self.__data[placeholder]
+            elif(self.__type[placeholder] == "connection"):
+                replacement = self.__data[placeholder]()
+            else:
+                replacement = ""
+                
+            string = string.replace(self.__ls+placeholder+self.__rs, replacement)
+
+        return string
+        
+    def available(self):
+        
+        placeholders = []
+        
+        for placeholder in self.__data.keys():
+            placeholders.append(self.__ls+placeholder+self.__rs)
+            
+        placeholders.sort()
+        
+        return placeholders
     
 try:
     versioncontrol = VersionControl()
@@ -124,10 +164,11 @@ try:
     
     setDefaultConfig("Twitch","channel","")
     setDefaultConfig("Twitch","oauth","")
-    setDefaultConfig("Twitch","title_template","(TOUR) – (TEAM1) vs (TEAM2)")
+    setDefaultConfig("Twitch","title_template","(League) – (Team1) vs (Team2)")
     
     setDefaultConfig("NightBot","token","")
     setDefaultConfig("NightBot","command","!matchlink")
+    setDefaultConfig("NightBot","message","(URL)")
     
     setDefaultConfig("SCT","myteams","MiXed Minds, team pheeniX")
     setDefaultConfig("SCT","commonplayers","Shakyor, pressure, MarineKing, Moash, Ostseedude, spaz, DERASTAT, FanTasY,"+\

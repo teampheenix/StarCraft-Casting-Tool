@@ -36,9 +36,22 @@ class MainController:
             self.webApp.signal_nightbot.connect(self.webAppDone_nightbot)
             self.ftpUploader = FTPUploader()
             self.websocketThread = WebsocketThread()
+            self.placeholderSetup()
             
         except Exception as e:
             module_logger.exception("message")
+
+    def placeholderSetup(self):
+        
+        self.placeholders = PlaceholderList()
+        self.placeholders.addConnection("Team1", lambda: self.matchData.getTeam(0))
+        self.placeholders.addConnection("Team2", lambda: self.matchData.getTeam(1))
+        self.placeholders.addConnection("URL", self.matchData.getURL)
+        self.placeholders.addConnection("BestOf", lambda: str(self.matchData.getBestOfRaw()))
+        self.placeholders.addConnection("League", self.matchData.getLeague)
+        self.placeholders.addConnection("Score", self.matchData.getScoreString)
+            
+            
     def setView(self,view):
         self.view = view
         try:
@@ -271,7 +284,11 @@ class MainController:
         
     def updateNightbotCommand(self):
         try:
-            msg = scctool.nightbot.updateCommand(self.matchData.getURL())
+            msg = ''
+            self.updateData()
+            message = scctool.settings.Config.get("NightBot","message")
+            message = self.placeholders.replace(message)
+            msg = scctool.nightbot.updateCommand(message)
         except Exception as e:
             msg = str(e)
             module_logger.exception("message") 
@@ -286,9 +303,7 @@ class MainController:
             self.updateData()
             try:
                 title = scctool.settings.Config.get("Twitch","title_template")
-                title = title.replace("(TOUR)",self.matchData.getLeague())
-                title = title.replace("(TEAM1)",self.matchData.getTeam(0))
-                title = title.replace("(TEAM2)",self.matchData.getTeam(1))
+                title = self.placeholders.replace(title)
                 msg = scctool.twitch.updateTitle(title)
             except Exception as e:
                 msg = str(e)

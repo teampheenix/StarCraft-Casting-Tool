@@ -31,7 +31,7 @@ class mainWindow(QMainWindow):
             self.trigger = True
             self.controller = controller
          
-            self.createFromMatchDataBox()
+            self.createFormMatchDataBox()
             self.createTabs()
             self.createHorizontalGroupBox()
             self.createSC2APIGroupBox()
@@ -262,7 +262,7 @@ class mainWindow(QMainWindow):
         except Exception as e:
             module_logger.exception("message")          
         
-    def createFromMatchDataBox(self):
+    def createFormMatchDataBox(self):
         try:
             
             self.max_no_sets = scctool.settings.max_no_sets
@@ -858,7 +858,6 @@ class subwindow1(QWidget):
         self.twitchChannel.setToolTip('The connected twitch user needs to have editor rights for this channel.')
         layout.addRow(QLabel("Twitch-Channel:"),self.twitchChannel)
  
-        
         container = QHBoxLayout()
         
         self.twitchToken = MonitoredLineEdit()
@@ -868,24 +867,38 @@ class subwindow1(QWidget):
         self.twitchToken.setPlaceholderText("Press 'Get' to generate a token")
         self.twitchToken.setEchoMode(QLineEdit.Password)
         self.twitchToken.setToolTip("Press 'Get' to generate a new token.")
-
         container.addWidget(self.twitchToken);
+        
         self.pb_getTwitch = QPushButton('Get')
-        self.pb_getTwitch.setFixedWidth(200)
-        container.addWidget(self.pb_getTwitch);
+        self.pb_getTwitch.setFixedWidth(100)
         self.pb_getTwitch.clicked.connect(self.controller.getTwitchToken)
+        container.addWidget(self.pb_getTwitch)
+        
         layout.addRow(QLabel("Access-Token:"),container)
+        
+        container = QHBoxLayout()
         
         self.twitchTemplate = MonitoredLineEdit()
         self.twitchTemplate.textModified.connect(self.changed)
         self.twitchTemplate.setText(scctool.settings.Config.get("Twitch", "title_template"))
         self.twitchTemplate.setAlignment(Qt.AlignCenter)
-        self.twitchTemplate.setPlaceholderText("(TOUR) – (TEAM1) vs (TEAM2)")
-        self.twitchTemplate.setToolTip('Placeholders: (TOUR), (TEAM1), (TEAM2)') 
+        self.twitchTemplate.setPlaceholderText("(League) – (Team1) vs (Team2)")
+        self.twitchTemplate.setToolTip('Avaiable placeholders: '+', '.join(self.controller.placeholders.available())) 
+        
+        completer = Completer(self.controller.placeholders.available(), self.twitchTemplate)
+
+        self.twitchTemplate.setCompleter(completer)
+        
+        container.addWidget(self.twitchTemplate)
+        
+        button = QPushButton('Test')
+        button.setFixedWidth(100)
+        button.clicked.connect(lambda: self.testPlaceholder(self.twitchTemplate.text()))
+        container.addWidget(button)
         
         label = QLabel("Title-Template:")
         label.setFixedWidth(100)
-        layout.addRow(label, self.twitchTemplate)
+        layout.addRow(label, container)
         
         self.formGroupTwitch.setLayout(layout)
         
@@ -911,14 +924,35 @@ class subwindow1(QWidget):
         container.addWidget(self.nightbotToken);
         self.pb_getNightbot = QPushButton('Get')
         self.pb_getNightbot.clicked.connect(self.controller.getNightbotToken)
-        self.pb_getNightbot.setFixedWidth(200)
+        self.pb_getNightbot.setFixedWidth(100)
         #self.pb_getNightbot.setEnabled(False)
         container.addWidget(self.pb_getNightbot);
 
         layout.addRow(QLabel("Access-Token:"),container)
-        label = QLabel("Matchlink command:")
+        label = QLabel("Command:")
         label.setFixedWidth(100)
         layout.addRow(label, self.nightbotCommand)
+        
+        container = QHBoxLayout()
+        
+        self.nightbotMsg = MonitoredLineEdit()
+        self.nightbotMsg.textModified.connect(self.changed)
+        self.nightbotMsg.setText(scctool.settings.Config.get("NightBot", "message"))
+        self.nightbotMsg.setAlignment(Qt.AlignCenter)
+        self.nightbotMsg.setPlaceholderText("(URL)")
+        self.nightbotMsg.setToolTip('Avaiable placeholders: '+', '.join(self.controller.placeholders.available())) 
+        
+        completer = Completer(self.controller.placeholders.available(), self.nightbotMsg)
+
+        self.nightbotMsg.setCompleter(completer)
+        
+        container.addWidget(self.nightbotMsg)
+        button = QPushButton('Test')
+        button.setFixedWidth(100)
+        button.clicked.connect(lambda: self.testPlaceholder(self.nightbotMsg.text()))
+        container.addWidget(button)
+        
+        layout.addRow(QLabel("Message:"), container)
         
         self.formGroupNightbot.setLayout(layout)
     
@@ -940,6 +974,12 @@ class subwindow1(QWidget):
         except Exception as e:
             module_logger.exception("message")
             
+            
+    def testPlaceholder(self, string):
+        
+        string = self.controller.placeholders.replace(string)
+        QMessageBox.information(self, "Output:", string)
+            
     def changed(self):
         self.__dataChanged = True
         
@@ -953,6 +993,7 @@ class subwindow1(QWidget):
             scctool.settings.Config.set("Twitch", "title_template", self.twitchTemplate.text().strip())
             scctool.settings.Config.set("NightBot", "token", self.nightbotToken.text().strip())
             scctool.settings.Config.set("NightBot", "command", self.nightbotCommand.text().strip())
+            scctool.settings.Config.set("NightBot", "message", self.nightbotMsg.text().strip())
             
             self.saveOBSdata()
             
@@ -1561,3 +1602,29 @@ class ListTable(QTableWidget):
                 except:
                     pass
         return self.__processData(data)
+        
+        
+class Completer(QCompleter):
+
+    def __init__(self, list, parent=None):
+        super(Completer, self).__init__(list, parent)
+
+        self.setCaseSensitivity(Qt.CaseInsensitive)
+        self.setCompletionMode(QCompleter.PopupCompletion)
+        self.setWrapAround(False)
+
+    # Add texts instead of replace
+    def pathFromIndex(self, index):
+        path = QCompleter.pathFromIndex(self, index)
+
+        lst = str(self.widget().text()).split(' ')
+
+        if len(lst) > 1:
+            path = '%s %s' % (' '.join(lst[:-1]), path)
+
+        return path
+
+    # Add operator to separate between texts
+    def splitPath(self, path):
+        path = str(path.split(' ')[-1]).lstrip(' ')
+        return [path]

@@ -312,7 +312,10 @@ class matchData:
         except:
             return False
          
-
+    def getScoreString(self, middleStr = ':'):
+        score = self.getScore()
+        return str(score[0])+middleStr+str(score[1])
+        
     def getScore(self):
         score = [0,0]
         
