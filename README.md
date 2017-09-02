@@ -1,5 +1,5 @@
 # StarCraft Casting Tool
-![streaming-tool](https://user-images.githubusercontent.com/26044736/29880662-9f4548ae-8da8-11e7-87b1-39e664ead5a9.png)
+![streaming-tool](https://user-images.githubusercontent.com/26044736/29998600-a3053222-902f-11e7-99c5-5f3055f9225b.png)
 
 ## General Information
 
@@ -19,11 +19,13 @@ This tool should run on any operating system that supports Python 3, e.g., Windo
 
 Execute `StarCraftCastingTool.pyw` to start the SCC-Tool. Enter the Match-URL of an AlphaTL or RSTL match in the *Match Grabber* tab, e.g., "http://alpha.tl/match/2392", and press *Load Data from URL*. Alternatively one can create a match in the *Custom Match* tab.  Edit the data if necessary. The sliders control the score of each map. Press *Update OBS Data* or alter the score to update the data for streaming, which can be found in the directory `OBS_data` and can be included into OBS (or any similar streaming tool) via *Text read from local file*. If you want to include the team logos and the matchbanner, it is recommended to include them as *browser source from local file* via the html files given in the directory `OBS_html` *(Banner: 1200x740px, Logos: 300x300px)*. The map icons can be found in the directory `OBS_mapicons` and have to be included via *browser source from local file* as well. There are two type of icons: box icons in `OBS_mapicons/icons_box` and landscape icons in `OBS_mapicons/icons_landscape`. One can either include each map icon separatly *(box size: 280x270px, landscape size: 750x75px)* and arrange them freely or one can include them via the single html file `all_maps.html` *(the choosen dimension of the browser source determines the arrangement of the icons)*. Note that you can scale the browser source(s) down/up if you want to make the icons smaller/larger.
 
-To update your [Twitch](https://www.twitch.tv/) title (and set your game to *Starcraft 2*) or [NightBot](https://nightbot.tv/) command via click on *Update Twitch Title* or *Update NightBot* you have to set your Twitch *Channel* and/or generate an corresponding access token. This can be done via *Settings: Connections*. Note that you can also change the title of twitch channels that do not belong to the user you have generated the access token with as long as this user is registered as an editor of corresponding channel. The format of your new title can be customized via the *Title Template* with the use of placeholders and specified under*Settings: Connections*.
+To update your [Twitch](https://www.twitch.tv/) title (and set your game to *Starcraft 2*) or [NightBot](https://nightbot.tv/) command via click on *Update Twitch Title* or *Update NightBot* you have to set your Twitch *Channel* and/or generate an corresponding access token. This can be done via *Settings: Connections*. Note that you can also change the title of twitch channels that do not belong to the user you have generated the access token with as long as this user is registered as an editor of corresponding channel. The format of your new title can be customized via the *Title Template* with the use of placeholders and specified under *Settings: Connections*.
 
 The top slider is to select *your* team. Once selected the border of the map icons turn (by default) green or red depending on the result. To select your team by default you can add it in *Favorit Teams* list under *Settings: Misc*. Similiarly you can enter your players' nicknames into *Favorit Players* for autocompletion.
 
 To active the automatic detection of the score via the SC2-Client-API check the box *Score Update* of the *Automatic Background Tasks*. This score detection does only work if you either play or observe a decided game (game length > 60 seconds) with a pair of players that were specified on one of sets. 
+
+To automatically hide the browser sources of the player intros (only OBS studio) you have to install the OBS websocket plugin (https://obsproject.com/forum/resources/obs-websocket-remote-control-of-obs-studio-made-easy.466/), active it in OBS, specify the corresponding SCC-Tool settings under *Settings: Connections*.
 
 ## Customization
 
