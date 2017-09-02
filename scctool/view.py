@@ -938,7 +938,7 @@ class subwindow1(QWidget):
         button.clicked.connect(lambda: self.testPlaceholder(self.twitchTemplate.text()))
         container.addWidget(button)
         
-        label = QLabel("Title-Template:")
+        label = QLabel("Title Template:")
         label.setFixedWidth(100)
         layout.addRow(label, container)
         

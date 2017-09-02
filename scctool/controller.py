@@ -370,6 +370,7 @@ class MainController:
             scctool.settings.Config.set("Form","scoreupdate",str(self.view.cb_autoUpdate.isChecked()))
             scctool.settings.Config.set("Form","togglescore",str(self.view.cb_autoToggleScore.isChecked()))
             scctool.settings.Config.set("Form","toggleprod",str(self.view.cb_autoToggleProduction.isChecked()))
+            scctool.settings.Config.set("Form","playerintros", str(self.view.cb_playerIntros.isChecked()))
             scctool.settings.Config.set("FTP","upload",str(self.view.cb_autoFTP.isChecked()))
             
             cfgfile = open(scctool.settings.configFile,'w')
