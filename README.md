@@ -25,7 +25,7 @@ The top slider is to select *your* team. Once selected the border of the map ico
 
 To active the automatic detection of the score via the SC2-Client-API check the box *Score Update* of the *Automatic Background Tasks*. This score detection does only work if you either play or observe a decided game (game length > 60 seconds) with a pair of players that were specified on one of sets. 
 
-To automatically hide the browser sources of the player intros (only OBS studio) you have to install the [OBS websocket plugin](https://obsproject.com/forum/resources/obs-websocket-remote-control-of-obs-studio-made-easy.466/), active it in OBS, specify the corresponding SCC-Tool settings under *Settings: Connections*.
+To automatically hide the browser sources of the player intros (only OBS studio) you have to install the [OBS websocket plugin](https://obsproject.com/forum/resources/obs-websocket-remote-control-of-obs-studio-made-easy.466/), activate it in OBS studio, and specify the corresponding SCC-Tool settings under *Settings: Connections*.
 
 ## Customization
 
