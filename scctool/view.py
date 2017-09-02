@@ -183,13 +183,12 @@ class mainWindow(QMainWindow):
             
             container = QHBoxLayout()
             label = QLabel()
-            label.setFixedWidth(self.labelWidth)
+            label.setFixedWidth(self.labelWidth*2)
             container.addWidget(label,0)
             label = QLabel("Match-URL:")
-            label.setMinimumWidth(self.mimumLineEditWidth)
-            label.setAlignment(Qt.AlignCenter)
-            container.addWidget(label,1)
-            container.addWidget(self.le_url,3)
+            label.setMinimumWidth(80)
+            container.addWidget(label,0)
+            container.addWidget(self.le_url,1)
             
             
             self.tab1.layout  = QFormLayout()
@@ -200,14 +199,13 @@ class mainWindow(QMainWindow):
             #self.pb_download = QPushButton("Download Images from URL")
             #container.addWidget(self.pb_download)
             label = QLabel()
-            label.setFixedWidth(self.labelWidth)
+            label.setFixedWidth(self.labelWidth*2)
             container.addWidget(label,0)
             label = QLabel()
-            label.setMinimumWidth(self.mimumLineEditWidth)
-            container.addWidget(label, 2)
+            label.setMinimumWidth(80)
+            container.addWidget(label, 0)
             self.pb_refresh = QPushButton("Load Data from URL")
             self.pb_refresh.clicked.connect(self.refresh_click)
-            self.pb_refresh.setMinimumWidth((self.scoreWidth+2*self.raceWidth+2*self.mimumLineEditWidth+4*6)/2-2)
             container.addWidget(self.pb_openBrowser,3)
             container.addWidget(self.pb_refresh,3)
 
@@ -217,22 +215,31 @@ class mainWindow(QMainWindow):
             
             # Create second tab
             
-            self.tab2.layout = QHBoxLayout()
-            self.tab2.layout.addWidget(QLabel("  "),2)
-            self.tab2.layout.addWidget(QLabel("Best of"),2)
+            self.tab2.layout = QVBoxLayout()
+            
+            container = QHBoxLayout()
+            
+            label = QLabel()
+            label.setMinimumWidth(self.labelWidth*2)
+            container.addWidget(label,0)
+            
+            label = QLabel("Match Format:")
+            label.setMinimumWidth(80)
+            container.addWidget(label,0)
+            
+            container.addWidget(QLabel("Best of"),0)
             
             self.cb_bestof = QComboBox()
             for idx in range(0, scctool.settings.max_no_sets):
-                if(idx==1):
-                    continue
                 self.cb_bestof.addItem(str(idx+1))
             self.cb_bestof.setCurrentIndex(3)
             
             self.cb_bestof.setToolTip('"Best of 6/4": First, a Bo5/3 is played and the ace map gets '+\
-                                       'extended to a Bo3 if needed.') 
-            self.tab2.layout.addWidget(self.cb_bestof,1)
+                                       'extended to a Bo3 if needed; Best of 2: Bo3 with only two maps played.') 
+            self.cb_bestof.setMaximumWidth(40)
+            container.addWidget(self.cb_bestof,0)
             
-            self.tab2.layout.addWidget(QLabel(" but at least"),3)
+            container.addWidget(QLabel(" but at least"),0)
             
             self.cb_minSets = QComboBox()
             for idx in range(0, scctool.settings.max_no_sets):
@@ -240,22 +247,58 @@ class mainWindow(QMainWindow):
             self.cb_minSets.setCurrentIndex(0)
             
             self.cb_minSets.setToolTip('Minimum number of maps played (even if the match is decided already)') 
-            self.tab2.layout.addWidget(self.cb_minSets,1)
-            self.tab2.layout.addWidget(QLabel(" maps"),2)
+            self.cb_minSets.setMaximumWidth(50)
+            container.addWidget(self.cb_minSets,0)
+            container.addWidget(QLabel(" maps "),0)
             
-            self.tab2.layout.addWidget(QLabel(""),1)
             self.cb_allkill = QCheckBox("All-Kill Format")
             self.cb_allkill.setChecked(False)
             self.cb_allkill.setToolTip('Winner stays and is automatically placed into the next set') 
-            self.tab2.layout.addWidget(self.cb_allkill,3)
+            container.addWidget(self.cb_allkill,0)
             
-            self.tab2.layout.addWidget(QLabel(""),0)
-            self.pb_resetdata = QPushButton("Reset")
-            self.pb_resetdata.clicked.connect(self.resetdata_click)
-            self.tab2.layout.addWidget(self.pb_resetdata,4)
-            self.pb_applycustom = QPushButton("Apply")
+            label = QLabel("")
+            container.addWidget(label,1)
+            
+            self.pb_applycustom = QPushButton("Apply Format")
             self.pb_applycustom.clicked.connect(self.applycustom_click)
-            self.tab2.layout.addWidget(self.pb_applycustom,4)
+            self.pb_applycustom.setFixedWidth(150)
+            container.addWidget(self.pb_applycustom,0)
+            
+            self.tab2.layout.addLayout(container)
+            
+            container  = QHBoxLayout()
+            
+            label = QLabel()
+            label.setMinimumWidth(self.labelWidth*2)
+            container.addWidget(label,0)
+            
+            label = QLabel("Match-URL:")
+            label.setMinimumWidth(80)
+            container.addWidget(label,0)
+            
+            self.le_url_custom =  QLineEdit()
+            self.le_url_custom.setAlignment(Qt.AlignCenter)
+            self.le_url_custom.setToolTip('Optionally specify the Match-URL, e.g., for NightBot commands') 
+            self.le_url_custom.setPlaceholderText("Specify the Match-URL of your Custom Match")
+            
+            completer = QCompleter(["http://"], self.le_url_custom)
+            completer.setCaseSensitivity(Qt.CaseInsensitive)
+            completer.setCompletionMode(QCompleter.UnfilteredPopupCompletion)
+            completer.setWrapAround(True)
+            self.le_url_custom.setCompleter(completer)
+            self.le_url_custom.setMinimumWidth(310)
+            
+            container.addWidget(self.le_url_custom,10)
+            
+            label = QLabel("")
+            container.addWidget(label,1)
+            
+            self.pb_resetdata = QPushButton("Reset Match Data")
+            self.pb_resetdata.setFixedWidth(150)
+            self.pb_resetdata.clicked.connect(self.resetdata_click)
+            container.addWidget(self.pb_resetdata,0)
+            
+            self.tab2.layout.addLayout(container)
             
             self.tab2.setLayout(self.tab2.layout)
             
@@ -574,7 +617,8 @@ class mainWindow(QMainWindow):
             url = self.le_url.text()
             self.trigger = False
             self.statusBar().showMessage('Applying Custom Match...')
-            msg = self.controller.applyCustom(int(self.cb_bestof.currentText()),self.cb_allkill.isChecked(),int(self.cb_minSets.currentText()))
+            msg = self.controller.applyCustom(int(self.cb_bestof.currentText()), self.cb_allkill.isChecked(),\
+                                              int(self.cb_minSets.currentText()), self.le_url_custom.text().strip())
             self.statusBar().showMessage(msg)
             self.trigger = True
         except Exception as e:
@@ -582,9 +626,7 @@ class mainWindow(QMainWindow):
             
     def resetdata_click(self):
         try:
-            url = self.le_url.text()
             self.trigger = False
-            self.statusBar().showMessage('Reading '+url+'...')
             msg = self.controller.resetData()
             self.statusBar().showMessage(msg)
             self.trigger = True

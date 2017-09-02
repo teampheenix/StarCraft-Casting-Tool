@@ -116,7 +116,10 @@ class matchData:
     
     def setMinSets(self, minSets):
         if(minSets > 0):
-            self.__data['min_sets'] = int(minSets)
+            if(minSets > self.getBestOfRaw()):
+                self.__data['min_sets'] = self.getBestOfRaw()
+            else:
+                self.__data['min_sets'] = int(minSets)
         else:
             self.__data['min_sets'] = 0
             
@@ -152,7 +155,11 @@ class matchData:
     def setCustom(self, bestof, allkill):
         bestof = int(bestof)
         allkill = bool(allkill)
-        no_sets =  bestof + 1 - bestof%2
+        if(bestof == 2):
+            no_sets = 2
+        else:
+            no_sets =  bestof + 1 - bestof%2
+            
         self.setNoSets(no_sets, bestof)
         self.resetLabels()
         self.setAllKill(allkill)
@@ -175,15 +182,18 @@ class matchData:
         self.setMyTeam(0)
         
     def resetLabels(self):
+        
         best_of = self.__data['best_of']
         no_sets = self.getNoSets()
+        
+        if(best_of == 2):
+            for set_idx in range(no_sets):  
+                self.setLabel(set_idx,"Map "+str(set_idx+1))
+            return
+        
+        
         ace_start = no_sets-3+2*(best_of%2)
         skip_one = (ace_start+1 == no_sets)
-        
-        #print(str(best_of))
-        #print(str(no_sets))
-        #print(str(ace_start))
-        #print(str(skip_one))
         
         for set_idx in range(ace_start):  
             self.setLabel(set_idx,"Map "+str(set_idx+1))
@@ -338,6 +348,10 @@ class matchData:
     def getBestOf(self):
         try:
             best_of = self.__data['best_of']
+            
+            if(best_of == 2):
+                return 3
+            
             if(best_of % 2): #odd, okay
                 return best_of
             else: #even

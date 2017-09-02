@@ -84,6 +84,7 @@ class MainController:
                self.view.cb_minSets.setCurrentIndex(index)
             
             self.view.le_url.setText(self.matchData.getURL())
+            self.view.le_url_custom.setText(self.matchData.getURL())
             self.view.le_league.setText(self.matchData.getLeague())
             self.view.sl_team.setValue(self.matchData.getMyTeam())
             for i in range(2):
@@ -147,12 +148,13 @@ class MainController:
         except Exception as e:
             module_logger.exception("message")    
                     
-    def applyCustom(self,bestof,allkill,minSets):  
+    def applyCustom(self, bestof, allkill, minSets, url):  
         msg = ''
         try: 
         
-            self.matchData.setCustom(bestof,allkill)
+            self.matchData.setCustom(bestof, allkill)
             self.matchData.setMinSets(minSets)
+            self.matchData.setURL(url)
             self.matchData.writeJsonFile()
             self.updateForms()
             self.view.resizeWindow()
