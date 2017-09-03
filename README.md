@@ -40,5 +40,5 @@ If you need help, have bugs to report, have suggestions to make, or want to cont
 
 ## Support
 
-If you want to support this project, consider subscribing to https://www.twitch.tv/teampheenix or donate directly via https://streamlabs.com/scpressure. Alternativly, just follow the team pheeniX and my personal https://www.twitch.tv/scpressure twitch channel!
+If you want to support this project, consider subscribing to https://www.twitch.tv/teampheenix or donate directly via https://streamlabs.com/scpressure. Alternativly and  free of cost - just follow the team pheeniX and my personal https://www.twitch.tv/scpressure twitch channel!
 
