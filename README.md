@@ -1,5 +1,5 @@
 # StarCraft Casting Tool
-StarCraft Casting Tool (SCC-Tool) is a Python 3.6 script that can grab all relevant data of a Stracraft 2 Team League Match from either [Alpha SC2 Teamleague](http://alpha.tl/) (AlphaTL) or [Russian Starcraft Team League](http://hdgame.net/en/tournaments/list/tournament/rstl-12/) (RSTL) and process it such that the information can be readily included for streaming, e.g., in OBS-Studio, X-Split or any other similar streaming tool. Alternatively, the format of a *Custom Match* can be specified. The title of your Twitch stream and your Nightbot chat commands can be updated accordingly by a single click. 
+StarCraft Casting Tool (SCC Tool) is a Python 3.6 script that can grab all relevant data of a Stracraft 2 Team League Match from either [Alpha SC2 Teamleague](http://alpha.tl/) (AlphaTL) or [Russian Starcraft Team League](http://hdgame.net/en/tournaments/list/tournament/rstl-12/) (RSTL) and process it such that the information can be readily included for streaming, e.g., in OBS-Studio, X-Split or any other similar streaming tool. Alternatively, the format of a *Custom Match* can be specified. The title of your Twitch stream and your Nightbot chat commands can be updated accordingly by a single click. 
 
 ![streaming-tool](https://user-images.githubusercontent.com/26044736/29998600-a3053222-902f-11e7-99c5-5f3055f9225b.png)
 
@@ -9,7 +9,7 @@ StarCraft Casting Tool (SCC-Tool) is a Python 3.6 script that can grab all relev
 * **Custom Match Format**: Bo1-Bo9, allkill format
 * Two sets of **Map Icons**: Box and Landscape in `OBS_mapicons/icons_box` and `OBS_mapicons/icons_landscape`
 * **Scoreboard** including team icons in `OBS_html`
-* **Animated Player Intros** in `OBS_html` including playername & race via SC2-Client, team with logo via SCC-Tool 
+* **Animated Player Intros** in `OBS_html` including playername & race via SC2-Client, team with logo via SCC Tool 
 * **TXT-files** with match infos in `OBS_data`
 * **Twitch & Nightbot Integration**: Update your stream title or bot commands via a single click
 * **Automatic Score Detection** via SC2-Client
@@ -30,7 +30,7 @@ This tool should run on any operating system that supports Python 3, e.g., Windo
 
 ## Instructions for Use
 
-Execute `StarCraftCastingTool.pyw` to start the SCC-Tool. Enter the Match-URL of an AlphaTL or RSTL match in the *Match Grabber* tab, e.g., "http://alpha.tl/match/2392", and press *Load Data from URL*. Alternatively one can create a match in the *Custom Match* tab.  Edit the data if necessary. The sliders control the score of each map. Press *Update OBS Data* or alter the score to update the data for streaming. The top slider is to select *your* team. Once selected the border of the map icons turn (by default) green or red depending on the result. To select your team by default you can add it in *Favorit Teams* list under *Settings: Misc*. Similiarly you can enter your players' nicknames into *Favorit Players* for autocompletion.
+Execute `StarCraftCastingTool.pyw` to start the SCC Tool. Enter the Match-URL of an AlphaTL or RSTL match in the *Match Grabber* tab, e.g., "http://alpha.tl/match/2392", and press *Load Data from URL*. Alternatively one can create a match in the *Custom Match* tab.  Edit the data if necessary. The sliders control the score of each map. Press *Update OBS Data* or alter the score to update the data for streaming. The top slider is to select *your* team. Once selected the border of the map icons turn (by default) green or red depending on the result. To select your team by default you can add it in *Favorit Teams* list under *Settings: Misc*. Similiarly you can enter your players' nicknames into *Favorit Players* for autocompletion.
 
 ### Data for Streaming
 can be found in the directory `OBS_data` and be included into OBS (or any similar streaming tool) via *Text read from local file*. If you want to include the team logos and the matchbanner, it is recommended to include them as *browser source from local file* via the html files given in the directory `OBS_html` *(Banner: 1200x740px, Logos: 300x300px)*. The map icons can be found in the directory `OBS_mapicons` and have to be included via *browser source from local file* as well. There are two type of icons: box icons in `OBS_mapicons/icons_box` and landscape icons in `OBS_mapicons/icons_landscape`. One can either include each map icon separatly *(box size: 280x270px, landscape size: 750x75px)* and arrange them freely or one can include them via the single html file `all_maps.html` *(the choosen dimension of the browser source determines the arrangement of the icons)*. Note that you can scale the browser source(s) down/up if you want to make the icons smaller/larger.
