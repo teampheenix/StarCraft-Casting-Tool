@@ -1094,7 +1094,7 @@ class matchData:
                             
             for type in ["box", "landscape"]:  
                 controller.ftpUploader.cwd(scctool.settings.OBSmapDir+"/icons_"+type+"/data")
-                for i in range(7): 
+                for i in range(scctool.settings.max_no_sets): 
                     if(i < self.getNoSets() and skip[i]):
                         continue
                     if(i >= self.getNoSets() and not self.hasMetaChanged()):

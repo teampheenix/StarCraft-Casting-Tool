@@ -146,8 +146,7 @@ class mainWindow(QMainWindow):
             myAct = QAction(QIcon('src/donate.ico'),'Donate', self) 
             myAct.triggered.connect(lambda: self.controller.openURL("https://streamlabs.com/scpressure"))
             infoMenu.addAction(myAct)
-
-
+            
         except Exception as e:
             module_logger.exception("message")   
         
@@ -322,6 +321,14 @@ class mainWindow(QMainWindow):
         except Exception as e:
             module_logger.exception("message")          
         
+    def updateMapCompleters(self):
+        for i in range(self.max_no_sets): 
+            completer = QCompleter(scctool.settings.maps,self.le_map[i])
+            completer.setCaseSensitivity(Qt.CaseInsensitive)
+            completer.setCompletionMode(QCompleter.InlineCompletion)
+            completer.setWrapAround(True)
+            self.le_map[i].setCompleter(completer)
+        
     def createFormMatchDataBox(self):
         try:
             
@@ -467,12 +474,7 @@ class mainWindow(QMainWindow):
                 self.le_map[player_idx].setAlignment(Qt.AlignCenter)
                 self.le_map[player_idx].setPlaceholderText("Map "+str(player_idx+1))
                 self.le_map[player_idx].setMinimumWidth(self.mimumLineEditWidth)
-                completer = QCompleter(scctool.settings.maps,self.le_map[player_idx])
-                completer.setCaseSensitivity(Qt.CaseInsensitive)
-                completer.setCompletionMode(QCompleter.InlineCompletion)
-                completer.setWrapAround(True)
-                self.le_map[player_idx].setCompleter(completer)
- 
+
                 
                 #self.le_map[player_idx].setReadOnly(True)
                 
@@ -490,6 +492,8 @@ class mainWindow(QMainWindow):
                 layout2.addLayout(self.setContainer[player_idx])
                 self.fromMatchDataBox.setLayout(layout2)
                 
+            self.updateMapCompleters()
+            
         except Exception as e:
             module_logger.exception("message")    
         
@@ -1284,11 +1288,13 @@ class subwindow3(QWidget):
             
             self.createButtonGroup()
             self.createFavBox()
+            self.createMapsBox()
 
             
             mainLayout = QVBoxLayout()
 
-            mainLayout.addWidget(self.favBox)
+            mainLayout.addWidget(self.mapsBox)
+            mainLayout.addLayout(self.favBox)
             mainLayout.addLayout(self.buttonGroup)
             self.setLayout(mainLayout)
             
@@ -1305,27 +1311,143 @@ class subwindow3(QWidget):
         self.__dataChanged = True
         
     def createFavBox(self):
-        self.favBox = QGroupBox("Favorites")
-        layout = QFormLayout()
         
-        self.list_favPlayers = ListTable(3, scctool.settings.getMyPlayers())
+        self.favBox = QVBoxLayout()
+        
+        box = QGroupBox("Favorites Players")
+        layout = QHBoxLayout()
+
+        self.list_favPlayers = ListTable(4, scctool.settings.getMyPlayers())
         self.list_favPlayers.dataModified.connect(self.changed)
-        self.list_favPlayers.setFixedHeight(180)
-        layout.addRow(QLabel("Players:"),self.list_favPlayers)
+        self.list_favPlayers.setFixedHeight(100)
+        layout.addWidget(self.list_favPlayers)
+        box.setLayout(layout)
         
-
-        self.list_favTeams = ListTable(2, scctool.settings.getMyTeams())
+        self.favBox.addWidget(box)
+        
+        box = QGroupBox("Favorites Teams")
+        layout = QHBoxLayout()
+         
+        self.list_favTeams = ListTable(3, scctool.settings.getMyTeams())
         self.list_favTeams.dataModified.connect(self.changed)
-        self.list_favTeams.setFixedHeight(90)
+        self.list_favTeams.setFixedHeight(50)
         
-        label = QLabel("Teams:")
-        label.setFixedWidth(100)
-        layout.addRow(label, self.list_favTeams)
+        layout.addWidget(self.list_favTeams)
+        box.setLayout(layout)
+        self.favBox.addWidget(box)
         
-        self.favBox.setLayout(layout)
+    def createMapsBox(self):
         
-
+        self.mapsize = 150
         
+        self.mapsBox = QGroupBox("Map Manager")
+        
+        layout = QGridLayout()
+        
+        self.maplist = QListWidget()
+        self.maplist.setSortingEnabled(True)
+        for map in scctool.settings.maps:
+            self.maplist.addItem(QListWidgetItem(map))
+        self.maplist.setCurrentItem(self.maplist.item(0))
+        self.maplist.currentItemChanged.connect(self.changePreview)
+        self.maplist.setFixedHeight(self.mapsize)
+        self.maplist.setMinimumWidth(150)
+        
+        layout.addWidget(self.maplist,0,1,7,1)
+        self.mapPreview = QLabel()
+        self.mapPreview.setFixedWidth(self.mapsize )
+        self.mapPreview.setFixedHeight(self.mapsize )
+        self.mapPreview.setAlignment(Qt.AlignCenter)
+        layout.addWidget(self.mapPreview,0,0,7,1)
+        
+        self.pb_addMap = QPushButton("Add")
+        self.pb_addMap.clicked.connect(self.addMap)
+        self.pb_renameMap = QPushButton("Rename")
+        self.pb_renameMap.clicked.connect(self.renameMap)
+        self.pb_changeMap = QPushButton("Change Image")
+        self.pb_changeMap.clicked.connect(self.changeMap)
+        self.pb_removeMap = QPushButton("Remove")
+        self.pb_removeMap.clicked.connect(self.deleteMap)
+        
+        layout.addWidget(QLabel(),0,2)
+        layout.addWidget(self.pb_addMap,1,2)
+        layout.addWidget(self.pb_removeMap,2,2)
+        layout.addWidget(QLabel(),3,2)
+        layout.addWidget(self.pb_renameMap,4,2)
+        layout.addWidget(self.pb_changeMap,5,2)
+        layout.addWidget(QLabel(),6,2)
+        
+        self.changePreview()
+        self.mapsBox.setLayout(layout)
+        
+    def renameMap(self):
+        item = self.maplist.currentItem()
+        map  = item.text()
+        text, ok = QInputDialog.getText(self, 'Map Name', 'Map Name:', text = map)
+        if not ok:
+            return
+        text = text.strip()
+        if(text == map):
+            return 
+        if(text in scctool.settings.maps):
+            buttonReply = QMessageBox.warning(self, "Duplicate Entry", "Map is already in list! Overwrite?",\
+                                                QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+            if buttonReply == QMessageBox.No:  
+                return 
+                
+        self.controller.addMap(self.controller.getMapImg(map,True), text)
+        self.controller.deleteMap(map)
+        item.setText(text)
+        
+    def changeMap(self):
+        map = self.maplist.currentItem().text()
+        fileName, ok = QFileDialog.getOpenFileName(self,"Select Map Image (> 500x500px recommended)", "","Support Images (*.png *.jpg)")
+        if ok:
+            base = os.path.basename(fileName)
+            name, ext = os.path.splitext(base)
+            name = name.replace("_"," ")
+            self.controller.addMap(fileName, map)
+            self.changePreview()
+            
+    def addMap(self):
+        fileName, ok = QFileDialog.getOpenFileName(self,"Select Map Image (> 500x500px recommended)", "","Support Images (*.png *.jpg)")
+        if ok:
+            base = os.path.basename(fileName)
+            name, ext = os.path.splitext(base)
+            name = name.replace("_"," ")
+            text, ok = QInputDialog.getText(self, 'Map Name', 'Map Name:', text = name)
+            if ok:
+                if(text.strip() in scctool.settings.maps):
+                    buttonReply = QMessageBox.warning(self, "Duplicate Entry", "Map is already in list! Overwrite?",\
+                                                      QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+                    if buttonReply == QMessageBox.No:  
+                        return 
+                
+                self.controller.addMap(fileName, text)
+                item = QListWidgetItem(text)
+                self.maplist.addItem(item)
+                self.maplist.setCurrentItem(item)
+                
+    def deleteMap(self):
+        item = self.maplist.currentItem()
+        map  = item.text()
+        buttonReply = QMessageBox.question(self, 'Delete map?', "Delete '{}' permanently?".format(map), QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if buttonReply == QMessageBox.Yes:
+            self.controller.deleteMap(map)
+            self.maplist.takeItem(self.maplist.currentRow())
+            
+        
+    def changePreview(self):
+        map = self.maplist.currentItem().text()
+        if(map == "TBD"):
+            self.pb_renameMap.setEnabled(False)
+            self.pb_removeMap.setEnabled(False)
+        else:
+            self.pb_removeMap.setEnabled(True)
+            self.pb_renameMap.setEnabled(True)
+            
+        self.mapPreview.setPixmap(QPixmap(self.controller.getMapImg(map,True)).scaled(self.mapsize, self.mapsize, Qt.KeepAspectRatio))
+    
     def createButtonGroup(self):
         try:
             layout = QHBoxLayout()
@@ -1360,6 +1482,7 @@ class subwindow3(QWidget):
         
     def closeEvent(self, event):
         try:
+            self.mainWindow.updateMapCompleters()
             if(not self.__dataChanged):
                 event.accept()
                 return
@@ -1694,3 +1817,31 @@ class Completer(QCompleter):
     def splitPath(self, path):
         path = str(path.split(' ')[-1]).lstrip(' ')
         return [path]
+        
+class QHLine(QFrame):
+    
+    def __init__(self):
+        super(QHLine, self).__init__()
+        self.setFrameShape(QFrame.HLine)
+        self.setFrameShadow(QFrame.Sunken)
+        
+        
+class MapDialog(QDialog):
+
+    def __init__(self, parent=None):
+        super(Form, self).__init__(parent)
+        # Create widgets
+        self.edit = QLineEdit("Write my name here")
+        self.button = QPushButton("Show Greetings")
+        # Create layout and add widgets
+        layout = QVBoxLayout()
+        layout.addWidget(self.edit)
+        layout.addWidget(self.button)
+        # Set dialog layout
+        self.setLayout(layout)
+        # Add button signal to greetings slot
+        self.button.clicked.connect(self.greetings)
+
+    # Greets the user
+    def greetings(self):
+        print ("Hello %s" % self.edit.text())

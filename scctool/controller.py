@@ -19,6 +19,8 @@ try:
     import base64
     
     from PyQt5.QtGui import QIcon
+    from PyQt5.QtWidgets import QCompleter
+    
     
 except Exception as e:
     module_logger.exception("message") 
@@ -115,7 +117,7 @@ class MainController:
                 self.view.le_map[i].show()    
                 self.view.sl_score[i].show()
                 self.view.label_set[i].show()
-                    
+
         except Exception as e:
             module_logger.exception("message")  
             raise  
@@ -517,13 +519,28 @@ class MainController:
             
         self.ftpUploader.cwd("..")
         
-    def getMapImg(self, map):
+    def getMapImg(self, map, fullpath = False):
         mapimg = os.path.normpath(os.path.join(scctool.settings.OBSmapDir,"src/maps", map.replace(" ","_")))
         mapimg = os.path.basename(self.linkFile(mapimg))
         if not mapimg:
             mapimg = "TBD.jpg"
             self.displayWarning("Warning: Map '{}' not found!".format(map))
-        return  mapimg
+            
+        if(fullpath):
+            return scctool.settings.OBSmapDir+"/src/maps/"+mapimg
+        else:
+            return  mapimg
+            
+    def addMap(self, file, mapname):
+        _, ext = os.path.splitext(file)
+        map = mapname.strip().replace(" ","_")+ext
+        newfile = os.path.normpath(os.path.join(scctool.settings.OBSmapDir, "src/maps", map))
+        shutil.copy(file, newfile)
+        scctool.settings.maps.append(mapname)
+            
+    def deleteMap(self, map):
+        os.remove(self.getMapImg(map,True))
+        scctool.settings.maps.remove(map)
             
     def displayWarning(self, msg = "Warning: Something went wrong..."):
         self._warning = True

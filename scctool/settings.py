@@ -134,12 +134,6 @@ try:
             return races[idx]
         except:
             return races[0]
-    
-    maps = ("Abyssal Reef","Acolyte","Ascension to Aiur","Bel'Shir Vestige",\
-            "Blood Boil","Cactus Valley","Catallena","Defenders Landing",\
-            "Honorgrounds", "Interloper","Mech Depot", "Newkirk Precinct",\
-            "Odyssey","Paladino Terminal","Proxima Station",\
-            "Sequencer","TBD")
             
     max_no_sets = 9
     
@@ -170,6 +164,12 @@ try:
     setDefaultConfig("NightBot","command","!matchlink")
     setDefaultConfig("NightBot","message","(URL)")
     
+    setDefaultConfig("FTP","upload","False")
+    setDefaultConfig("FTP","server","")
+    setDefaultConfig("FTP","user","")
+    setDefaultConfig("FTP","passwd","")
+    setDefaultConfig("FTP","dir","")
+    
     setDefaultConfig("SCT","myteams","MiXed Minds, team pheeniX")
     setDefaultConfig("SCT","commonplayers","Shakyor, pressure, MarineKing, Moash, Ostseedude, spaz, DERASTAT, FanTasY,"+\
                            "chrismaverik, holden, Desolation, RiseOfDeath, TuneTrigger, MoFuJones, Fenix, Hyvaa, snoozle,"+\
@@ -187,12 +187,6 @@ try:
     setDefaultConfig("MapIcons","lose_color","#f22200")
     setDefaultConfig("MapIcons","notplayed_color","#c0c0c0")
     setDefaultConfig("MapIcons","notplayed_opacity","0.4")
-    
-    setDefaultConfig("FTP","upload","False")
-    setDefaultConfig("FTP","server","")
-    setDefaultConfig("FTP","user","")
-    setDefaultConfig("FTP","passwd","")
-    setDefaultConfig("FTP","dir","")
     
     setDefaultConfig("Style", "mapicon_box", "Default")
     setDefaultConfig("Style", "mapicon_landscape", "Default")
@@ -236,6 +230,19 @@ try:
         return players
         
     fuzzymatch = Config.getboolean("SCT","fuzzymatch")
+    
+    def loadMapList():
+        maps = []
+        dir = os.path.normpath(os.path.join(OBSmapDir,"src/maps"))
+        for fname in os.listdir(dir):
+            full_fname = os.path.join(dir, fname)
+            name, ext = os.path.splitext(fname)
+            if os.path.isfile(full_fname) and ext in ['.png', '.jpg']:
+                maps.append(name.replace('_'," "))
+                
+        return maps
+        
+    maps = loadMapList()
 
 except Exception as e:
     module_logger.exception("message") 
