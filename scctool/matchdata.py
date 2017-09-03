@@ -307,7 +307,7 @@ class matchData:
             map, _ = autoCorrectMap(map)
             if(self.__data['sets'][set_idx]['map'] != map):
                 self.__data['sets'][set_idx]['map'] = map
-                self.__setsChanged[set_idx]
+                self.__setsChanged[set_idx] = True
 
             return True
         except:
@@ -1043,10 +1043,10 @@ class matchData:
                 if(skip[i]):
                     continue
                     
-                map=self.getMap(i)
-                mappng=map.replace(" ","_")+".jpg"
-                race1png=self.getRace(0,i)+".png"
-                race2png=self.getRace(1,i)+".png"
+                map = self.getMap(i)
+                mappng = controller.getMapImg(map)
+                race1png = self.getRace(0,i)+".png"
+                race2png = self.getRace(1,i)+".png"
                 hidden = ""
 
                 filename=scctool.settings.OBSmapDir+"/icons_box/data/"+str(i+1)+".html"

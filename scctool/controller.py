@@ -37,6 +37,7 @@ class MainController:
             self.ftpUploader = FTPUploader()
             self.websocketThread = WebsocketThread()
             self.placeholderSetup()
+            self._warning = False
             
         except Exception as e:
             module_logger.exception("message")
@@ -515,6 +516,24 @@ class MainController:
              self.ftpUploader.upload(scctool.settings.OBShtmlDir+"/"+file, file)
             
         self.ftpUploader.cwd("..")
+        
+    def getMapImg(self, map):
+        mapimg = os.path.normpath(os.path.join(scctool.settings.OBSmapDir,"src/maps", map.replace(" ","_")))
+        mapimg = os.path.basename(self.linkFile(mapimg))
+        if not mapimg:
+            mapimg = "TBD.jpg"
+            self.displayWarning("Warning: Map '{}' not found!".format(map))
+        return  mapimg
+            
+    def displayWarning(self, msg = "Warning: Something went wrong..."):
+        self._warning = True
+        self.view.statusBar().showMessage(msg)
+        
+    def resetWarning(self):
+        warning = self._warning
+        print(str(warning))
+        self._warning = False
+        return warning
             
     def testVersion(self):
         self.checkVersionThread.start()

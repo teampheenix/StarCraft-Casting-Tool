@@ -53,14 +53,14 @@ div.data {
 
 .player1{
    font-size: 30px!important;
-   top: 37px;
+   top: 35px;
    left: 5px; 
    text-align: left;
 }
 
 .player2{
    font-size: 30px!important;
-   top: 167px;
+   top: 170px;
    right: 5px; 
    text-align: right;
 }
@@ -97,7 +97,7 @@ div.label{
    background: rgb(0, 0, 0); /* fallback color */
    background: rgba(0, 0, 0, 0.6)!important; 
    position: absolute; 
-   width: 160px; height:26px;
+   width: 175px; height:26px;
    border-top-left-radius: 20px;
    bottom: 0px;
    text-align: center;

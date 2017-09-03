@@ -65,7 +65,16 @@ class mainWindow(QMainWindow):
             self.app = app
             self.controller.setView(self)
             self.controller.refreshButtonStatus()
+            
+            self.processEvents()
+            self.settings = QSettings("team pheeniX", "Starcraft Casting Tool")
+            self.restoreGeometry(self.settings.value("geometry", self.saveGeometry()))
+            self.restoreState(self.settings.value("windowState", self.saveState()))
 
+            self.mysubwindow1 = None
+            self.mysubwindow2 = None
+            self.mysubwindow3 = None
+        
             self.show()
             self.controller.testVersion()
         except Exception as e:
@@ -75,12 +84,18 @@ class mainWindow(QMainWindow):
     def closeEvent(self, event):
         try:
             try:
-                if(self.mysubwindow1.isVisible()):
+                if(self.mysubwindow1 and self.mysubwindow1.isVisible()):
                     self.mysubwindow1.close()
-            except:
-                pass
-            self.controller.cleanUp()
-            event.accept()
+                if(self.mysubwindow2 and self.mysubwindow2.isVisible()):
+                    self.mysubwindow2.close()
+                if(self.mysubwindow3 and self.mysubwindow3.isVisible()):
+                    self.mysubwindow3.close()
+            finally:
+                self.settings.setValue("geometry", self.saveGeometry())
+                self.settings.setValue("windowState", self.saveState())
+                self.controller.cleanUp()
+                QMainWindow.closeEvent(self, event)
+                #event.accept()
         except Exception as e:
             module_logger.exception("message")    
             
@@ -104,37 +119,39 @@ class mainWindow(QMainWindow):
             
             infoMenu = menubar.addMenu('Info && Links') 
             
+            myAct = QAction(QIcon('src/readme.ico'),'Readme', self) 
+            myAct.triggered.connect(lambda: self.controller.openURL("https://github.com/teampheenix/StarCraft-Casting-Tool#starcraft-casting-tool"))
+            infoMenu.addAction(myAct)
+            
             websiteAct = QAction(QIcon('src/github.ico'),'StarCraft Casting Tool', self) 
-            websiteAct.triggered.connect(self.openWebsite)
+            websiteAct.triggered.connect(lambda: self.controller.openURL("https://github.com/teampheenix/StarCraft-Casting-Tool"))
             infoMenu.addAction(websiteAct)
             
+            infoMenu.addSeparator()
+            
             ixAct = QAction(QIcon('src/icon.png'), 'team pheeniX', self) 
-            ixAct.triggered.connect(self.openIX)
+            ixAct.triggered.connect(lambda:  self.controller.openURL("http://team-pheenix.de"))
             infoMenu.addAction(ixAct)
             
             alphaAct = QAction(QIcon('src/alphatl.ico'), 'AlphaTL', self) 
-            alphaAct.triggered.connect(self.openAlpha)
+            alphaAct.triggered.connect(lambda: self.controller.openURL("http://alpha.tl"))
             infoMenu.addAction(alphaAct)
             
             rstlAct = QAction(QIcon('src/rstl.png'),'RSTL', self) 
-            rstlAct.triggered.connect(self.openRSTL)
+            rstlAct.triggered.connect(lambda:self.controller.openURL("http://hdgame.net/en/")  )
             infoMenu.addAction(rstlAct)
+            
+            infoMenu.addSeparator()
+            
+            myAct = QAction(QIcon('src/donate.ico'),'Donate', self) 
+            myAct.triggered.connect(lambda: self.controller.openURL("https://streamlabs.com/scpressure"))
+            infoMenu.addAction(myAct)
+
 
         except Exception as e:
             module_logger.exception("message")   
         
-    def openWebsite(self):
-        self.controller.openURL("https://github.com/teampheenix/StarCraft-Casting-Tool")
-        
-    def openIX(self):
-        self.controller.openURL("http://team-pheenix.de")
-        
-    def openAlpha(self):
-        self.controller.openURL("http://alpha.tl")
-        
-    def openRSTL(self):
-        self.controller.openURL("http://hdgame.net/en/")            
-             
+
     def openApiDialog(self):
         self.mysubwindow1=subwindow1()
         self.mysubwindow1.createWindow(self)
@@ -673,7 +690,8 @@ class mainWindow(QMainWindow):
             url = self.le_url.text()
             self.statusBar().showMessage('Updating OBS Data...')
             self.controller.updateOBS()
-            self.statusBar().showMessage('')
+            if not self.controller.resetWarning():
+                self.statusBar().showMessage('')
         except Exception as e:
             module_logger.exception("message")
         
@@ -684,7 +702,8 @@ class mainWindow(QMainWindow):
             for player_idx in range(self.max_no_sets): 
                 self.sl_score[player_idx].setValue(0)
             self.controller.updateOBS()
-            self.statusBar().showMessage('')
+            if not self.controller.resetWarning():
+                self.statusBar().showMessage('')
             self.trigger = True
         except Exception as e:
             module_logger.exception("message")
@@ -696,7 +715,8 @@ class mainWindow(QMainWindow):
                 self.trigger = False
                 self.sl_score[idx].setValue(score)
                 self.controller.updateOBS()
-                self.statusBar().showMessage('')
+                if not self.controller.resetWarning():
+                    self.statusBar().showMessage('')
                 self.trigger = True 
                 return True
             else:
@@ -740,9 +760,13 @@ class mainWindow(QMainWindow):
             self.controller.matchData.updateScoreIcon(self.controller)
             
     def resizeWindow(self):
+        if(not self.isMaximized()):
+            self.processEvents()
+            self.resize(self.width(),self.sizeHint().height())
+        
+    def processEvents(self):
         for i in range(0, 10):
             self.app.processEvents()
-        self.resize(self.width(),self.sizeHint().height())
         
 class subwindow1(QWidget):
     def createWindow(self,mainWindow):
