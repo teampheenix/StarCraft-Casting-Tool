@@ -11,6 +11,20 @@ StarCraft Casting Tool can monitor your SC2-Client to dectect the score, update 
 
 This tool should run on any operating system that supports Python 3, e.g., Windows, MacOS, and Linux (the interaction with the SC2-Observer-UI is currently only supported on Windows).  
 
+## Feature List
+
+* **Match Grabber** for [RSTL](http://alpha.tl/) and [AlphaTL](http://hdgame.net/en/tournaments/list/tournament/rstl-12/)
+* **Custom Match Format**: Bo1-Bo9, allkill format
+* Two sets of **Map Icons**: Box and Landscape in `OBS_mapicons/icons_box` and `OBS_mapicons/icons_landscape`
+* **Scoreboard** including team icons in `OBS_html`
+* **Animated Player Intros** in `OBS_html` including playername & race via SC2-Client, team with logo via SCC-Tool 
+* **TXT-files** with match infos in `OBS_data`
+* **Twitch & Nightbot Integration**: Update your stream title or bot commands via a single click
+* **Automatic Score Detection** via SC2-Client
+* **Automatic FTP-Upload** of all resources 
+* **Interaction with SC2-Observer-UI**: Automatically toogle Production Tab and set Score at the start of a Map
+* Nearly **unlimited Customization** via Skins and CSS
+
 ## Installation
 
 [Download](https://github.com/teampheenix/StarCraft-Casting-Tool/archive/master.zip) and exctract StarCraft Casting Tool, download the latest version of Python 3.6+ at https://www.python.org/downloads. This tool requires the additional Python Packages *PyQt5*, *requests*, *configparser*, *flask*, *obs-ws-rc* and on Windows additonally *pypiwin32*. To install these packages execute the script `installPackages.py` once or do it manually (e.g., via *pip*).
