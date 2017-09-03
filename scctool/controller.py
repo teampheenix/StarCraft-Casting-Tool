@@ -138,15 +138,16 @@ class MainController:
             self.matchData.setLeague(self.view.le_league.text())
 
             for i in range(2):
-                 self.matchData.setTeam(i,self.view.le_team[i].text())
+                 self.matchData.setTeam(i, self.view.le_team[i].text())
                 
-            for i in range(min(self.view.max_no_sets,self.matchData.getNoSets())):
+            for i in range(min(self.view.max_no_sets, self.matchData.getNoSets())):
                 for j in range(2):
-                     self.matchData.setPlayer(j,i,self.view.le_player[j][i].text())
-                     self.matchData.setRace(j,i,scctool.settings.idx2race(self.view.cb_race[j][i].currentIndex()))
+                     self.matchData.setPlayer(j, i,self.view.le_player[j][i].text())
+                     self.matchData.setRace(j ,i,scctool.settings.idx2race(self.view.cb_race[j][i].currentIndex()))
                 
-                self.matchData.setMap(i,self.view.le_map[i].text())
-                self.matchData.setMapScore(i,self.view.sl_score[i].value(),True)
+                self.matchData.setMap(i, self.view.le_map[i].text())
+                print(self.view.le_map[i].text())
+                self.matchData.setMapScore(i, self.view.sl_score[i].value(),True)
                 
         except Exception as e:
             module_logger.exception("message")    
