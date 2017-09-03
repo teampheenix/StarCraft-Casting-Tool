@@ -1,15 +1,7 @@
 # StarCraft Casting Tool
-![streaming-tool](https://user-images.githubusercontent.com/26044736/29998600-a3053222-902f-11e7-99c5-5f3055f9225b.png)
-
-## General Information
-
 StarCraft Casting Tool (SCC-Tool) is a Python 3.6 script that can grab all relevant data of a Stracraft 2 Team League Match from either [Alpha SC2 Teamleague](http://alpha.tl/) (AlphaTL) or [Russian Starcraft Team League](http://hdgame.net/en/tournaments/list/tournament/rstl-12/) (RSTL) and process it such that the information can be readily included for streaming, e.g., in OBS-Studio, X-Split or any other similar streaming tool. Alternatively, the format of a *Custom Match* can be specified. The title of your Twitch stream and your Nightbot chat commands can be updated accordingly by a single click. 
 
-The tool generates various browser sources (and text-files): Amongst others, two complete sets of corresponding *map icons* (including map, players, races, and score), a score icon (including the score, team names, and logos) and GSL-like *intros* (including player, race and team). All of these files can be included via local files and optionally uploaded to a specified FTP server to provide these files via remotely to others, for example, to your co-caster.
-
-StarCraft Casting Tool can monitor your SC2-Client to dectect the score, update it automatically, and provide corresponding player intros. On Windows, the tool can additionally and automatically set and toogle the score in your SC2-Observer UI and toggle the production tab at the start of a game.
-
-This tool should run on any operating system that supports Python 3, e.g., Windows, MacOS, and Linux (the interaction with the SC2-Observer-UI is currently only supported on Windows).  
+![streaming-tool](https://user-images.githubusercontent.com/26044736/29998600-a3053222-902f-11e7-99c5-5f3055f9225b.png)
 
 ## Feature List
 
@@ -24,6 +16,13 @@ This tool should run on any operating system that supports Python 3, e.g., Windo
 * **Automatic FTP-Upload** of all resources to provide resources to a co-caster
 * **Interaction with SC2-Observer-UI**: Automatically toogle Production Tab and set Score at the start of a Map
 * Nearly **unlimited Customization** via Skins and CSS
+
+## General Information
+The tool generates various browser sources (and text-files): Amongst others, two complete sets of corresponding *map icons* (including map, players, races, and score), a score icon (including the score, team names, and logos) and GSL-like *intros* (including player, race and team). All of these files can be included via local files and optionally uploaded to a specified FTP server to provide these files via remotely to others, for example, to your co-caster.
+
+StarCraft Casting Tool can monitor your SC2-Client to dectect the score, update it automatically, and provide corresponding player intros. On Windows, the tool can additionally and automatically set and toogle the score in your SC2-Observer UI and toggle the production tab at the start of a game.
+
+This tool should run on any operating system that supports Python 3, e.g., Windows, MacOS, and Linux (the interaction with the SC2-Observer-UI is currently only supported on Windows).  
 
 ## Installation
 
