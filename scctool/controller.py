@@ -146,8 +146,7 @@ class MainController:
                      self.matchData.setRace(j ,i,scctool.settings.idx2race(self.view.cb_race[j][i].currentIndex()))
                 
                 self.matchData.setMap(i, self.view.le_map[i].text())
-                print(self.view.le_map[i].text())
-                self.matchData.setMapScore(i, self.view.sl_score[i].value(),True)
+                self.matchData.setMapScore(i, self.view.sl_score[i].value(), True)
                 
         except Exception as e:
             module_logger.exception("message")    
@@ -544,8 +543,17 @@ class MainController:
         newfile = os.path.normpath(os.path.join(scctool.settings.OBSmapDir, "src/maps", map))
         shutil.copy(file, newfile)
         scctool.settings.maps.append(mapname)
+        
+        self.ftpUploader.cwd(scctool.settings.OBSmapDir+"/src/maps")
+        self.ftpUploader.upload(newfile, self.getMapImg(mapname))
+        self.ftpUploader.cwd("../../..")
             
     def deleteMap(self, map):
+        
+        self.ftpUploader.cwd(scctool.settings.OBSmapDir +"/src/maps")
+        self.ftpUploader.delete(self.getMapImg(map))
+        self.ftpUploader.cwd("../../..")
+        
         os.remove(self.getMapImg(map,True))
         scctool.settings.maps.remove(map)
             

@@ -37,6 +37,9 @@ class FTPUploader:
 
     def cwd(self, d):
         self.__thread.q.put_nowait(["cwd",d])
+        
+    def delete(self, d):
+        self.__thread.q.put_nowait(["delete",d])
             
     def mkd(self, d):
         self.__thread.q.put_nowait(["mkd",d])        
@@ -125,10 +128,9 @@ class UploaderThread(QtCore.QThread):
         while True:
             try:
                 if(not retry):
-                    work = self.q.get(timeout=0.5)  
+                    cmd, *args = self.q.get(timeout=0.5)  
                 retry = False
                 
-                cmd = work[0]
                 self.__upload = scctool.settings.Config.getboolean("FTP","upload")
                 
                 if(cmd == "progress_start"):
@@ -144,20 +146,21 @@ class UploaderThread(QtCore.QThread):
                 elif(self.__upload and cmd == "disconnect"):   
                     module_logger.info(self.__ftp.quit())
                 elif(self.__upload and cmd == "upload"):
-                    localFile = work[1]
-                    remoteFile = work[2]
+                    localFile, remoteFile, *_ = args
                     print("Upload request for "+localFile)
                     f = open(localFile, "rb") 
                     module_logger.info(self.__ftp.storbinary("STOR "+remoteFile.strip(), f))
                     f.close()
+                elif(self.__upload and cmd == "delete"):
+                    print("delete "+args[0])
+                    module_logger.info(self.__ftp.delete(args[0]))
                 elif(self.__upload and cmd == "cwd"):
-                    print("Cwd "+work[1])
-                    module_logger.info(self.__ftp.cwd(work[1]))
+                    print("cwd "+args[0])
+                    module_logger.info(self.__ftp.cwd(args[0]))
                 elif(self.__upload and cmd == "mkd"):
-                    print("Mkd "+work[1])
-                    if(not self.directory_exists(work[1])):
-                        print("Already existing "+work[1])
-                        module_logger.info(self.__ftp.mkd(work[1]))
+                    print("mkd "+args[0])
+                    if(not self.directory_exists(args[0])):
+                        module_logger.info(self.__ftp.mkd(args[0]))
                 elif(cmd == "kill"):
                     module_logger.info("Killing FTP Server!")
                     try:
