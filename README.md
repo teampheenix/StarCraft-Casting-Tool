@@ -2,7 +2,7 @@
 StarCraft Casting Tool (SCC Tool) is a Python 3.6 script that can grab all relevant data of a Stracraft 2 Team League Match from either [Alpha SC2 Teamleague](http://alpha.tl/) (AlphaTL) or [Russian Starcraft Team League](http://hdgame.net/en/tournaments/list/tournament/rstl-12/) (RSTL) and process it such that the information can be readily included for streaming, e.g., in OBS-Studio, X-Split or any other similar streaming tool. Alternatively, the format of a *Custom Match* can be specified. The title of your Twitch stream and your Nightbot chat commands can be updated accordingly by a single click. 
 
 ![streaming-tool](https://user-images.githubusercontent.com/26044736/29998600-a3053222-902f-11e7-99c5-5f3055f9225b.png)
-![intro-demo](https://user-images.githubusercontent.com/26044736/30003831-4fe09b14-90c4-11e7-9593-439454d4e324.gif)
+
 ## Feature List
 
 * **Match Grabber** for [RSTL](http://alpha.tl/) and [AlphaTL](http://hdgame.net/en/tournaments/list/tournament/rstl-12/)
@@ -40,6 +40,8 @@ To update your [Twitch](https://www.twitch.tv/) title (and set your game to *Sta
 
 ### Background Tasks
 To active the automatic detection of the score via the SC2-Client-API check the box *Score Update* of the *Automatic Background Tasks*. This score detection does only work if you either play or observe a decided game (game length > 60 seconds) with a pair of players that were specified on one of sets. 
+
+![intro-demo](https://user-images.githubusercontent.com/26044736/30003831-4fe09b14-90c4-11e7-9593-439454d4e324.gif)
 
 Include the player intros as browser sources, active *Shutdown source when not visible* and assign hotkeys to make the sources visible. To automatically hide the browser sources of the player intros afterwards (only OBS studio) you have to install the [OBS websocket plugin](https://obsproject.com/forum/resources/obs-websocket-remote-control-of-obs-studio-made-easy.466/), activate it in OBS studio, specify the corresponding SCC-Tool settings under *Settings: Connections*, and name the intro sources accordingly.
 
