@@ -465,9 +465,12 @@ class MainController:
         for idx in range(2):
             filename=scctool.settings.OBShtmlDir+"/data/logo"+str(idx+1)+"-data.html"
             with open(scctool.settings.OBShtmlDir+"/data/logo-template.html", "rt") as fin:
+                logo = self.linkFile(scctool.settings.OBSdataDir+"/"+"logo"+str(idx+1))
+                if logo == "":
+                    logo = scctool.settings.OBShtmlDir+"/src/SC2.png"
                 with open(filename, "wt") as fout:
                     for line in fin:
-                        line = line.replace('%LOGO%', self.linkFile(scctool.settings.OBSdataDir+"/"+"logo"+str(idx+1)))
+                        line = line.replace('%LOGO%', logo)
                         fout.write(line)
 
              
@@ -499,6 +502,9 @@ class MainController:
                 team = self.matchData.getTeam(1)
                 logo = self.linkFile(scctool.settings.OBSdataDir+"/"+"logo2")
                 display = "block"
+                
+            if logo == "":
+                logo = scctool.settings.OBShtmlDir+"/src/SC2.png"
 
             filename=scctool.settings.OBShtmlDir+"/intro"+str(player_idx+1)+".html"
             with open(scctool.settings.OBShtmlDir+"/data/intro-template.html", "rt") as fin:
@@ -557,7 +563,7 @@ class MainController:
         
         
     def newVersionTrigger(self,version):
-        self.view.statusBar().showMessage("A new version ("+version+''') is available at https://github.com/teampheenix/StarCraft-Casting-Tool''')
+        self.view.statusBar().showMessage("A new version ("+version+''') is available at https://github.com/pheenix/StarCraft-Casting-Tool''')
         
         
                

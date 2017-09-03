@@ -972,7 +972,12 @@ class matchData:
             winner[1] = "winner"
             
         logo1 = controller.linkFile(scctool.settings.OBSdataDir+"/logo1")
+        if logo1 == "":
+            logo1 = scctool.settings.OBShtmlDir+"/src/SC2.png"
+            
         logo2 = controller.linkFile(scctool.settings.OBSdataDir+"/logo2")
+        if logo2  == "":
+            logo2 = scctool.settings.OBShtmlDir+"/src/SC2.png"
         
         filename=scctool.settings.OBShtmlDir+"/data/score-data.html"
         with open(scctool.settings.OBShtmlDir+"/data/score-template.html", "rt") as fin:
