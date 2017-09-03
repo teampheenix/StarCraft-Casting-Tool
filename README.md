@@ -21,7 +21,7 @@ This tool should run on any operating system that supports Python 3, e.g., Windo
 * **TXT-files** with match infos in `OBS_data`
 * **Twitch & Nightbot Integration**: Update your stream title or bot commands via a single click
 * **Automatic Score Detection** via SC2-Client
-* **Automatic FTP-Upload** of all resources 
+* **Automatic FTP-Upload** of all resources to provide resources to a co-caster
 * **Interaction with SC2-Observer-UI**: Automatically toogle Production Tab and set Score at the start of a Map
 * Nearly **unlimited Customization** via Skins and CSS
 
