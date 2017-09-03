@@ -43,7 +43,7 @@ To active the automatic detection of the score via the SC2-Client-API check the 
 
 [![intro-demo](https://user-images.githubusercontent.com/26044736/30003831-4fe09b14-90c4-11e7-9593-439454d4e324.gif)](https://youtu.be/JNuAr63L0wM)
 
-Include the player intros as browser sources, active *Shutdown source when not visible* and assign hotkeys to make the sources visible. To automatically hide the browser sources of the player intros afterwards (only OBS studio) you have to install the [OBS websocket plugin](https://obsproject.com/forum/resources/obs-websocket-remote-control-of-obs-studio-made-easy.466/), activate it in OBS studio, specify the corresponding SCC-Tool settings under *Settings: Connections*, and name the intro sources accordingly.
+Include the player intros as browser sources (using the full height and width of your display), active *Shutdown source when not visible* and assign hotkeys to make the sources visible. To automatically hide the browser sources of the player intros afterwards (only OBS studio) you have to install the [OBS websocket plugin](https://obsproject.com/forum/resources/obs-websocket-remote-control-of-obs-studio-made-easy.466/), activate it in OBS studio, specify the corresponding SCC-Tool settings under *Settings: Connections*, and name the intro sources accordingly.
 
 ## Customization
 
