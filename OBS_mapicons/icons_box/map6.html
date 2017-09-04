@@ -6,12 +6,15 @@
 	<title>Box Map Icon 6</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script>
-		$(document).ready(function() {
-			setInterval(function() {
-				$("#content").load("data/6.html");
-			}, 1000);
-		});
-	</script>
+        function reloadContent() {
+            $("#content").load("data/6.html");
+            setTimeout(reloadContent, 1000);
+        }
+
+        $(document).ready(function() {
+            reloadContent();
+        });
+    </script>
 	<link rel="stylesheet" href="../src/css/box.css">
 </head>
 

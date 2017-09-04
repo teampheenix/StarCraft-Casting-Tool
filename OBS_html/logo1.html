@@ -6,10 +6,13 @@
     <title>Score</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script>
+        function reloadContent() {
+            $("#content").load("data/logo1-data.html");
+            setTimeout(reloadContent, 1000);
+        }
+
         $(document).ready(function() {
-            setInterval(function() {
-                $("#content").load("data/logo1-data.html");
-            }, 1000);
+            reloadContent();
         });
     </script>
 </head>

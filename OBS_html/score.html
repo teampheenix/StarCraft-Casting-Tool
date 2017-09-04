@@ -5,11 +5,19 @@
     <meta charset="UTF-8">
     <title>Score</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="src/jquery.textfill.min.js"></script>
     <script>
+        function fillText() {
+            $("#content").find(".text-fill").textfill();
+        }
+
+        function reloadContent() {
+            $("#content").load("data/score-data.html", fillText);
+            setTimeout(reloadContent, 1000);
+        }
+
         $(document).ready(function() {
-            setInterval(function() {
-                $("#content").load("data/score-data.html");
-            }, 1000);
+            reloadContent();
         });
     </script>
     <link rel="stylesheet" href="src/css/score.css">

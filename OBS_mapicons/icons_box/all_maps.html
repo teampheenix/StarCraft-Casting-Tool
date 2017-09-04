@@ -6,17 +6,25 @@
     <title>All Box Map Icons</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script>
+        function showHide(i) {
+            mapicon = "#mapicon" + i.toString();
+            if ($(mapicon).find("div.image").css("visibility") == "hidden") {
+                $(mapicon).css("display", "none");
+            } else {
+                $(mapicon).css("display", "inline-block");
+            }
+        }
+
+        function reloadContent() {
+            for (i = 1; i <= 9; i++) {
+                mapicon = "#mapicon" + i.toString();
+                $(mapicon).load("data/" + i.toString() + ".html", showHide(i));
+            }
+            setTimeout(reloadContent, 1000);
+        }
+
         $(document).ready(function() {
-            setInterval(function() {
-                for (i = 1; i <= 9; i++) {
-                    $("#mapicon" + i.toString()).load("data/" + i.toString() + ".html");
-                    if ($("#mapicon" + i.toString()).find("div.image").css("visibility") == "hidden") {
-                        $("#mapicon" + i.toString()).css("display", "none");
-                    } else {
-                        $("#mapicon" + i.toString()).css("display", "inline-block");
-                    };
-                };
-            }, 1000);
+            reloadContent();
         });
     </script>
     <link rel="stylesheet" href="../src/css/box.css">
