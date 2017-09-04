@@ -1,24 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-		<meta charset="UTF-8">
-        <title>Intro</title>
-    </head>
-	<link rel="stylesheet" href="src/css/intro.css">
-    <body>
-		<div class="box">
-			<div class="label"></div>
-			<img id="race" src="src/Protoss.png" alt="" />
-			<div class="logo" style="display: none;"><img id="logo" src="../" alt="" /></div>
-			<div class="name text-item">FreDaeGu</div>
-			<div class="team text-item"></div>
-			
-		</div>
-		<audio autoplay>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Intro</title>
+</head>
+<link rel="stylesheet" href="src/css/intro.css">
+
+<body>
+    <div class="box">
+        <div class="label"></div>
+        <img id="race" src="src/Protoss.png" alt="" />
+        <div class="logo" style="display: none;"><img id="logo" src="../" alt="" /></div>
+        <div class="name text-item">FreDaeGu</div>
+        <div class="team text-item"></div>
+
+    </div>
+    <audio autoplay>
 			<source src="src/sound.wav" type="audio/wav">
 		</audio>
-		<audio onloadeddata="var audioPlayer = this; setTimeout(function() { audioPlayer.play(); }, 1200)">
+    <audio onloadeddata="var audioPlayer = this; setTimeout(function() { audioPlayer.play(); }, 1200)">
 			<source src="src/player1.mp3" type="audio/mp3">
 		</audio>
-        </body>
-</html> 
+</body>
+
+</html>

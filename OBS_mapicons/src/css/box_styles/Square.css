@@ -1,126 +1,127 @@
 @import url(http://fonts.googleapis.com/css?family=Orbitron);
-
-.image { 
-   position: relative; 
-   width: 265px; height: 250px; /* for IE 6 */
-   word-wrap: break-word;
+.image {
+    position: relative;
+    width: 265px;
+    height: 250px;
+    /* for IE 6 */
+    word-wrap: break-word;
 }
 
 #map {
-   position: absolute; 
-   width: 266px; height:251px; 
-   top: 0px;
-   left: 0px;
+    position: absolute;
+    width: 266px;
+    height: 251px;
+    top: 0px;
+    left: 0px;
 }
 
 div.data {
-   position: absolute; 
-   width: 255px; 
-   color: white; 
-   font: bold 25px Orbitron, Helvetica, Sans-Serif;  
-   background: none; 
-   padding: 4px; 
+    position: absolute;
+    width: 255px;
+    color: white;
+    font: bold 25px Orbitron, Helvetica, Sans-Serif;
+    background: none;
+    padding: 4px;
     --outline-size: 2.5px;
-   text-shadow: 0px  0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px  0px var(--outline-size) black,
-                0px  0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px  0px var(--outline-size) black,
-                0px  0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px  0px var(--outline-size) black;
-   -webkit-font-smoothing: antialiased; 
-}
-
-.winner {
-   --winner-color: #f29b00;
-   --size: 8px;
-   color: white!important;
-   text-shadow: 0px  0px 2px black, 0px 0px 2px black, 0px  0px 2px black, 0px  0px 2px black,
-             0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px  0px var(--size) var(--winner-color), 0px  0px var(--size) var(--winner-color),
-			 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px  0px var(--size) var(--winner-color), 0px  0px var(--size) var(--winner-color),
-             0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px  0px var(--size) var(--winner-color), 0px  0px var(--size) var(--winner-color)!important;
+    text-shadow: 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black;
     -webkit-font-smoothing: antialiased;
 }
 
-.mapname{
-   background: rgb(0, 0, 0); /* fallback color */	
-   background: rgba(0, 0, 0, 0.6)!important; 
-   height:25px;
-   width: 265px!important; 
-   top: 0px!important;  
-   text-align: center!important; 
-   right: 5px!important;  
-   left:-5px!important;   
-   padding-top: 0px!important;
-   padding-bottom: 10px!important;
+.winner {
+    --winner-color: #f29b00;
+    --size: 8px;
+    color: white!important;
+    text-shadow: 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color)!important;
+    -webkit-font-smoothing: antialiased;
 }
 
-.player1{
-   font-size: 30px!important;
-   top: 35px;
-   left: 5px; 
-   text-align: left;
+.mapname {
+    background: rgb(0, 0, 0);
+    /* fallback color */
+    background: rgba(0, 0, 0, 0.6)!important;
+    height: 25px;
+    width: 265px!important;
+    top: 0px!important;
+    text-align: center!important;
+    right: 5px!important;
+    left: -5px!important;
+    padding-top: 0px!important;
+    padding-bottom: 10px!important;
 }
 
-.player2{
-   font-size: 30px!important;
-   top: 170px;
-   right: 5px; 
-   text-align: right;
+.player1 {
+    font-size: 30px!important;
+    top: 35px;
+    left: 5px;
+    text-align: left;
 }
 
-.vs{
-   font-size: 40px!important;
-   top: 92px;
-   left: 0px; 
-   text-align: center;
+.player2 {
+    font-size: 30px!important;
+    top: 170px;
+    right: 5px;
+    text-align: right;
 }
 
-
-div.image{
-   width: 265px; height:250px;
-   border-style: solid;
-   border-width: 6px;
-   background-color: #ffffff;
-   overflow: hidden;
+.vs {
+    font-size: 40px!important;
+    top: 92px;
+    left: 0px;
+    text-align: center;
 }
 
-div.opa{
-   position: absolute; 
-   width: 265px; height:250px; 
-   background-color: #000000;
-   overflow: hidden;
-   color: white; 
-   font: bold 35px Orbitron, Helvetica, Sans-Serif; 
+div.image {
+    width: 265px;
+    height: 250px;
+    border-style: solid;
+    border-width: 6px;
+    background-color: #ffffff;
+    overflow: hidden;
 }
 
-div.label{
-   color: white; 
-   font: bold 24px Orbitron, Helvetica, Sans-Serif; 
-   letter-spacing: 0px;  
-   background: rgb(0, 0, 0); /* fallback color */
-   background: rgba(0, 0, 0, 0.6)!important; 
-   position: absolute; 
-   width: 175px; height:26px;
-   border-top-left-radius: 20px;
-   bottom: 0px;
-   text-align: center;
-   line-height: 25px;
-   right: -0px;
-   padding:1px;
-   padding-bottom: 4px!important;
+div.opa {
+    position: absolute;
+    width: 265px;
+    height: 250px;
+    background-color: #000000;
+    overflow: hidden;
+    color: white;
+    font: bold 35px Orbitron, Helvetica, Sans-Serif;
+}
+
+div.label {
+    color: white;
+    font: bold 24px Orbitron, Helvetica, Sans-Serif;
+    letter-spacing: 0px;
+    background: rgb(0, 0, 0);
+    /* fallback color */
+    background: rgba(0, 0, 0, 0.6)!important;
+    position: absolute;
+    width: 175px;
+    height: 26px;
+    border-top-left-radius: 20px;
+    bottom: 0px;
+    text-align: center;
+    line-height: 25px;
+    right: -0px;
+    padding: 1px;
+    padding-bottom: 4px!important;
 }
 
 #firstrace {
-   position: absolute; 
-   top: 82px; 
-   left: 0px; 
-   height: 95px; 
-   -webkit-filter: drop-shadow(0px 0px 3px #FFFFFF);
-   filter: drop-shadow(0px 0px 3px #FFFFFF);
+    position: absolute;
+    top: 82px;
+    left: 0px;
+    height: 95px;
+    -webkit-filter: drop-shadow(0px 0px 3px #FFFFFF);
+    filter: drop-shadow(0px 0px 3px #FFFFFF);
 }
 
 #secondrace {
-   position: absolute; 
-   top: 82px; 
-   right: 0px; 
-   height: 95px; 
-   -webkit-filter: drop-shadow(0px 0px 3px #FFFFFF);
-   filter: drop-shadow(0px 0px 3px #FFFFFF);
+    position: absolute;
+    top: 82px;
+    right: 0px;
+    height: 95px;
+    -webkit-filter: drop-shadow(0px 0px 3px #FFFFFF);
+    filter: drop-shadow(0px 0px 3px #FFFFFF);
 }
