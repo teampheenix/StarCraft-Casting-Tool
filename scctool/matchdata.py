@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+"""Matchdata."""
 import logging
 
 # create logger
@@ -15,56 +15,64 @@ try:
     import shutil
     import os
 except Exception as e:
-    module_logger.exception("message") 
-    raise  
+    module_logger.exception("message")
+    raise
+
 
 class matchData:
+    """Matchdata."""
 
     def __init__(self):
-        self.__VALID_PROVIDERS = ['Custom','AlphaSC2','RSTL']
+        """Init and define custom providers."""
+        self.__VALID_PROVIDERS = ['Custom', 'AlphaSC2', 'RSTL']
         self.__rawData = None
         self.__initData()
-        
+
     def readJsonFile(self):
+        """Read json data from file."""
         try:
-            with open(scctool.settings.jsonFile) as json_file:  
+            with open(scctool.settings.jsonFile) as json_file:
                 self.__data = json.load(json_file)
         except Exception as e:
-            module_logger.exception("message") 
+            module_logger.exception("message")
             self.setCustom(5, False)
-                
+
         self.allSetsChanged()
 
     def writeJsonFile(self):
+        """Write json data to file."""
         try:
-            with open(scctool.settings.jsonFile, 'w') as outfile:  
+            with open(scctool.settings.jsonFile, 'w') as outfile:
                 json.dump(self.__data, outfile)
         except Exception as e:
-            module_logger.exception("message") 
-            
+            module_logger.exception("message")
+
     def __str__(self):
+        """Return match data as string."""
         return str(self.__data)
-        
+
     def isValid(self):
-        return not self.__data == None
-        
+        """Check if data is valid."""
+        return self.__data is not None
+
     def parseURL(self, url):
+        """Parse a URL and set provider accordingly."""
         try:
             url = str(url).lower()
-        
+
             if(url.find('alpha') != -1):
                 self.setProvider("AlphaSC2")
             elif(url.find('hdgame') != -1):
                 self.setProvider("RSTL")
             else:
                 self.setProvider("Custom")
-            
-            self.setID(re.findall('\d+', url )[-1])
+
+            self.setID(re.findall('\d+', url)[-1])
         except Exception as e:
             self.setProvider("Custom")
             self.setID(0)
-            module_logger.exception("message") 
-        
+            module_logger.exception("message")
+
     def __initData(self):
         self.__data = {}
         self.__data['provider'] = self.__VALID_PROVIDERS[0]
@@ -77,44 +85,52 @@ class matchData:
         self.__data['allkill'] = False
         self.__data['my_team'] = 0
         self.__data['teams'] = []
-        self.__data['teams'].append({'name':'TBD','tag': None})
-        self.__data['teams'].append({'name':'TBD','tag': None})
+        self.__data['teams'].append({'name': 'TBD', 'tag': None})
+        self.__data['teams'].append({'name': 'TBD', 'tag': None})
         self.__data['sets'] = []
-        self.__data['players'] = [[],[]]
+        self.__data['players'] = [[], []]
 
         self.__setsChanged = []
         self.__metaChanged = False
-        
+
     def allChanged(self):
+        """Mark all data changed."""
         self.allSetsChanged()
         self.__metaChanged = True
-    
+
     def allSetsChanged(self):
+        """Mark all sets changed."""
         self.__setsChanged = [True] * self.getNoSets()
-        
+
     def resetChanged(self):
+        """Reset the changed status of the data."""
         self.__setsChanged = [False] * self.getNoSets()
         self.__metaChanged = False
-        
-    def metaChanged(self):    
+
+    def metaChanged(self):
+        """Mark meta data has changed."""
         self.__metaChanged = True
-        
+
     def hasMetaChanged(self):
-        return bool(self.__metaChanged) 
-        
+        """Check if meta data has changed."""
+        return bool(self.__metaChanged)
+
     def hasAnySetChanged(self):
+        """Check if any set data has changed."""
         for i in range(self.getNoSets()):
             if(self.hasSetChanged(i)):
                 return True
         return False
-    
+
     def hasSetChanged(self, set_idx):
+        """Check if data of a set has changed."""
         try:
             return bool(self.__setsChanged[set_idx])
         except:
             return False
-    
+
     def setMinSets(self, minSets):
+        """Set minium number of sets that are played."""
         if(minSets > 0):
             if(minSets > self.getBestOfRaw()):
                 self.__data['min_sets'] = self.getBestOfRaw()
@@ -122,107 +138,112 @@ class matchData:
                 self.__data['min_sets'] = int(minSets)
         else:
             self.__data['min_sets'] = 0
-            
+
     def getMinSets(self):
+        """Get the minium number of sets that are played."""
         try:
             return int(self.__data['min_sets'])
         except:
             return 0
-    
+
     def setAllKill(self, allkill):
+        """Set allkill format."""
         self.__data['allkill'] = bool(allkill)
-    
-    def getAllKill(self):      
+
+    def getAllKill(self):
+        """Check if format is allkill."""
         return bool(self.__data['allkill'])
-        
+
     def allkillUpdate(self):
+        """Move the winner to the next set in case of allkill format."""
         if(not self.getAllKill()):
             return False
-            
+
         for set_idx in range(self.getNoSets()):
             if self.getMapScore(set_idx) == 0:
                 if(set_idx == 0):
-                    return False 
-                team_idx = int((self.getMapScore(set_idx-1)+1)/2)
-                if(self.getPlayer(team_idx,set_idx) != "TBD"):
                     return False
-                self.setPlayer(team_idx,set_idx,self.getPlayer(team_idx,set_idx-1),\
-                                                self.getRace(team_idx,set_idx-1))
+                team_idx = int((self.getMapScore(set_idx - 1) + 1) / 2)
+                if(self.getPlayer(team_idx, set_idx) != "TBD"):
+                    return False
+                self.setPlayer(team_idx, set_idx, self.getPlayer(team_idx, set_idx - 1),
+                               self.getRace(team_idx, set_idx - 1))
                 return True
-            
+
         return False
-        
+
     def setCustom(self, bestof, allkill):
+        """Set a custom match format."""
         bestof = int(bestof)
         allkill = bool(allkill)
         if(bestof == 2):
             no_sets = 2
         else:
-            no_sets =  bestof + 1 - bestof%2
-            
+            no_sets = bestof + 1 - bestof % 2
+
         self.setNoSets(no_sets, bestof)
         self.resetLabels()
         self.setAllKill(allkill)
         self.setProvider("Custom")
         self.setID(0)
         self.setURL("")
-        
+
     def resetData(self):
-        
+        """Reset all data to default values."""
         for team_idx in range(2):
             for set_idx in range(self.getNoSets()):
                 self.setPlayer(team_idx, set_idx, "TBD", "Random")
-            self.setTeam(team_idx,"TBD", "TBD")
-            
+            self.setTeam(team_idx, "TBD", "TBD")
+
         for set_idx in range(self.getNoSets()):
             self.setMapScore(set_idx, 0)
             self.setMap(set_idx)
-            
+
         self.setLeague("TBD")
         self.setMyTeam(0)
-        
+
     def resetLabels(self):
-        
+        """Reset the map labels."""
         best_of = self.__data['best_of']
         no_sets = self.getNoSets()
-        
+
         if(best_of == 2):
-            for set_idx in range(no_sets):  
-                self.setLabel(set_idx,"Map "+str(set_idx+1))
+            for set_idx in range(no_sets):
+                self.setLabel(set_idx, "Map " + str(set_idx + 1))
             return
-        
-        
-        ace_start = no_sets-3+2*(best_of%2)
-        skip_one = (ace_start+1 == no_sets)
-        
-        for set_idx in range(ace_start):  
-            self.setLabel(set_idx,"Map "+str(set_idx+1))
-            
-        for set_idx in range(ace_start,no_sets):
+
+        ace_start = no_sets - 3 + 2 * (best_of % 2)
+        skip_one = (ace_start + 1 == no_sets)
+
+        for set_idx in range(ace_start):
+            self.setLabel(set_idx, "Map " + str(set_idx + 1))
+
+        for set_idx in range(ace_start, no_sets):
             if(skip_one):
-                self.setLabel(set_idx,"Ace Map")
+                self.setLabel(set_idx, "Ace Map")
             else:
-                self.setLabel(set_idx,"Ace Map "+str(set_idx-ace_start+1))
-    
-    def setNoSets(self,no_sets = 5, bestof = False, resetPlayers = False):
+                self.setLabel(set_idx, "Ace Map " +
+                              str(set_idx - ace_start + 1))
+
+    def setNoSets(self, no_sets=5, bestof=False, resetPlayers=False):
+        """Set the number of sets/maps."""
         try:
             no_sets = int(no_sets)
-              
+
             if(no_sets < 0):
-                no_sets = 0 
+                no_sets = 0
             elif(no_sets > scctool.settings.max_no_sets):
                 no_sets = scctool.settings.max_no_sets
-                
+
             if((not bestof) or bestof <= 0 or bestof > no_sets):
                 self.__data['best_of'] = no_sets
             else:
                 self.__data['best_of'] = int(bestof)
-                
-            
+
             sets = []
             changed = []
-            players = [[],[]]
-        
+            players = [[], []]
+
             for i in range(no_sets):
                 try:
                     map = self.__data['sets'][i]['map']
@@ -235,7 +256,7 @@ class matchData:
                 try:
                     label = self.__data['sets'][i]['label']
                 except:
-                    label = 'Map '+str(i+1)
+                    label = 'Map ' + str(i + 1)
                 for j in range(2):
                     if(not resetPlayers):
                         try:
@@ -243,64 +264,70 @@ class matchData:
                         except:
                             player_name = 'TBD'
                         try:
-                            player_race = getRace(self.__data['players'][j][i]['race'])
+                            player_race = getRace(
+                                self.__data['players'][j][i]['race'])
                         except:
                             player_race = 'Random'
                     else:
                         player_name = 'TBD'
                         player_race = 'Random'
-                        
-                    players[j].append({'name':player_name,'race':player_race})
-                    
-                sets.append({'label':label,'map':map,'score':score})
+
+                    players[j].append(
+                        {'name': player_name, 'race': player_race})
+
+                sets.append({'label': label, 'map': map, 'score': score})
                 changed.append(True)
-    
+
             self.__data['no_sets'] = no_sets
             self.__data['min_sets'] = 0
             self.__data['sets'] = sets
             self.__data['players'] = players
             self.__setsChanged = changed
-            
+
         except Exception as e:
-            module_logger.exception("message") 
-            
+            module_logger.exception("message")
+
     def setMyTeam(self, myteam):
+        """Set "my team"."""
         if(isinstance(myteam, str)):
-            new =  self.__selectMyTeam(myteam)
-        elif(myteam in [-1,0,1]):
+            new = self.__selectMyTeam(myteam)
+        elif(myteam in [-1, 0, 1]):
             new = myteam
         else:
             return False
-        
+
         if(new != self.__data['my_team']):
             self.__data['my_team'] = new
             for i in range(self.getNoSets()):
                 if(self.getMapScore(i) != 0):
                     self.__setsChanged[i] = True
-            
+
     def getMyTeam(self):
+        """Return my team: (-1,0,1)."""
         try:
             return int(self.__data['my_team'])
         except:
             return 0
-            
+
     def __selectMyTeam(self, string):
         teams = [self.getTeam(0).lower(), self.getTeam(1).lower()]
-        matches = difflib.get_close_matches(string.lower(),teams,1) 
+        matches = difflib.get_close_matches(string.lower(), teams, 1)
         if(len(matches) == 0):
             return 0
         elif(matches[0] == teams[0]):
             return -1
         else:
             return 1
-            
+
     def getNoSets(self):
+        """Get number of sets."""
         try:
             return int(self.__data['no_sets'])
         except:
             return 0
 
-    def setMap(self, set_idx, map = "TBD"):
+    def setMap(self, set_idx, map="TBD"):
+        """Set the map of a set."""
         try:
             if(not (set_idx >= 0 and set_idx < self.__data['no_sets'])):
                 return False
@@ -312,23 +339,26 @@ class matchData:
             return True
         except:
             return False
-            
+
     def getMap(self, set_idx):
+        """Get the map of a set."""
         try:
             if(not (set_idx >= 0 and set_idx < self.__data['no_sets'])):
                 return False
-                
+
             return str(self.__data['sets'][set_idx]['map'])
         except:
             return False
-         
-    def getScoreString(self, middleStr = ':'):
+
+    def getScoreString(self, middleStr=':'):
+        """Get the score as a string."""
         score = self.getScore()
-        return str(score[0])+middleStr+str(score[1])
-        
+        return str(score[0]) + middleStr + str(score[1])
+
     def getScore(self):
-        score = [0,0]
-        
+        """Get the score as an list."""
+        score = [0, 0]
+
         for set_idx in range(self.getNoSets()):
             map_score = self.getMapScore(set_idx)
             if(map_score < 0):
@@ -338,94 +368,100 @@ class matchData:
             else:
                 continue
         return score
-           
+
     def getBestOfRaw(self):
+        """Get raw BestOf number."""
         try:
             return int(self.__data['best_of'])
         except:
-            return False  
-            
+            return False
+
     def getBestOf(self):
+        """Get flitered BestOf number (only odd)."""
         try:
             best_of = self.__data['best_of']
-            
+
             if(best_of == 2):
                 return 3
-            
-            if(best_of % 2): #odd, okay
+
+            if(best_of % 2):  # odd, okay
                 return best_of
-            else: #even
+            else:  # even
                 score = self.getScore()
-                if(min(score) < best_of/2-1):
+                if(min(score) < best_of / 2 - 1):
                     return best_of - 1
                 else:
-                    return best_of + 1      
-            return 
+                    return best_of + 1
+            return
         except:
-            return False  
-            
-    def setMapScore(self, set_idx, score, overwrite = False):
+            return False
+
+    def setMapScore(self, set_idx, score, overwrite=False):
+        """Set the score of a set."""
         try:
             if(not (set_idx >= 0 and set_idx < self.__data['no_sets'])):
                 return False
-            if(score in [-1,0,1]):
+            if(score in [-1, 0, 1]):
                 if(overwrite or self.__data['sets'][set_idx]['score'] == 0):
                     if(self.__data['sets'][set_idx]['score'] != score):
-                        self.__data['sets'][set_idx]['score'] = score 
+                        self.__data['sets'][set_idx]['score'] = score
                         self.__setsChanged[set_idx] = True
                 return True
             else:
                 return False
         except:
             return False
-            
+
     def getMapScore(self, set_idx):
+        """Get the score of a set."""
         try:
             if(not (set_idx >= 0 and set_idx < self.__data['no_sets'])):
                 return False
-                
+
             return int(self.__data['sets'][set_idx]['score'])
         except:
             return False
 
     def getNextPlayer(self, team_idx):
-        
+        """Get the player of the next undecided set."""
         player = "TBD"
         for set_idx in range(self.getNoSets()):
             if self.getMapScore(set_idx) == 0:
                 player = self.getPlayer(team_idx, set_idx)
                 break
-        
+
         return player
-        
+
     def getNextRace(self, team_idx):
-        
+        """Get the players race of the next undecided set."""
         player = "Random"
         for set_idx in range(self.getNoSets()):
             if self.getMapScore(set_idx) == 0:
                 player = self.getRace(team_idx, set_idx)
                 break
-        
+
         return player
-            
-    def setPlayer(self, team_idx, set_idx, name = "TBD", race = False):
+
+    def setPlayer(self, team_idx, set_idx, name="TBD", race=False):
+        """Set the player of a set."""
         try:
-            if(not (set_idx >= 0 and set_idx < self.__data['no_sets']\
-                and team_idx in range(2))):
+            if(not (set_idx >= 0 and set_idx < self.__data['no_sets']
+                    and team_idx in range(2))):
                 return False
-                
+
             if(self.__data['players'][team_idx][set_idx]['name'] != name):
                 self.__data['players'][team_idx][set_idx]['name'] = name
                 self.__setsChanged[set_idx] = True
-            
+
             if(race):
                 self.setRace(team_idx, set_idx, race)
-                
-            return True    
+
+            return True
         except:
             return False
-            
+
     def getPlayerList(self, team_idx):
+        """Get complete player list of a team."""
         list = []
         try:
             for set_idx in range(self.getNoSets()):
@@ -433,45 +469,49 @@ class matchData:
             return list
         except:
             return []
-            
+
     def getPlayer(self, team_idx, set_idx):
+        """Get the player of a set."""
         try:
-            if(not (set_idx >= 0 and set_idx < self.__data['no_sets']\
-                and team_idx in range(2))):
+            if(not (set_idx >= 0 and set_idx < self.__data['no_sets']
+                    and team_idx in range(2))):
                 return False
-                
+
             return self.__data['players'][team_idx][set_idx]['name']
-            
+
         except:
             return False
-            
-    def setRace(self, team_idx, set_idx, race = "Random"):
+
+    def setRace(self, team_idx, set_idx, race="Random"):
+        """Set a players race."""
         try:
-            if(not (set_idx >= 0 and set_idx < self.__data['no_sets']\
-                and team_idx in range(2))):
+            if(not (set_idx >= 0 and set_idx < self.__data['no_sets']
+                    and team_idx in range(2))):
                 return False
-                
+
             race = getRace(race)
-            
+
             if(self.__data['players'][team_idx][set_idx]['race'] != race):
                 self.__data['players'][team_idx][set_idx]['race'] = race
                 self.__setsChanged[set_idx] = True
             return True
         except:
             return False
-            
+
     def getRace(self, team_idx, set_idx):
+        """Get a players race."""
         try:
-            if(not (set_idx >= 0 and set_idx < self.__data['no_sets']\
-                and team_idx in range(2))):
+            if(not (set_idx >= 0 and set_idx < self.__data['no_sets']
+                    and team_idx in range(2))):
                 return False
-                
+
             return getRace(self.__data['players'][team_idx][set_idx]['race'])
-            
+
         except:
             return False
-    
+
     def setLabel(self, set_idx, label):
+        """Set a map label."""
         try:
             if(not (set_idx >= 0 and set_idx < self.__data['no_sets'])):
                 return False
@@ -481,236 +521,264 @@ class matchData:
             return True
         except:
             return False
-            
+
     def getLabel(self, set_idx):
+        """Get a map label."""
         try:
             if(not (set_idx >= 0 and set_idx < self.__data['no_sets'])):
                 return False
             return str(self.__data['sets'][set_idx]['label'])
         except:
-            return False    
-            
-    def setTeam(self, team_idx, name, tag = False):
-        if( not team_idx in range(2)):
             return False
-        
+
+    def setTeam(self, team_idx, name, tag=False):
+        """Set a team name."""
+        if team_idx not in range(2):
+            return False
+
         new = str(name)
-        
+
         if(self.__data['teams'][team_idx]['name'] != new):
             self.__data['teams'][team_idx]['name'] = new
             self.__metaChanged = True
-        
+
         if(tag):
             self.setTeamTag(team_idx, tag)
-            
-        return True    
-            
+
+        return True
+
     def getTeam(self, team_idx):
-        if( not team_idx in range(2)):
+        """Get team name."""
+        if team_idx not in range(2):
             return False
 
         return str(self.__data['teams'][team_idx]['name'])
-        
+
     def setTeamTag(self, team_idx, tag):
-        if( not team_idx in range(2)):
+        """Set team tag."""
+        if team_idx not in range(2):
             return False
 
         new = str(tag)
-        
+
         if(self.__data['teams'][team_idx]['tag'] != new):
             self.__data['teams'][team_idx]['tag'] = new
             self.__metaChanged = True
-            
+
         return True
-            
+
     def getTeamTag(self, team_idx):
-        if( not team_idx in range(2)):
+        """Get team tag."""
+        if team_idx not in range(2):
             return False
         name = str(self.__data['teams'][team_idx]['tag'])
         if(name):
             return str(name)
         else:
             return self.getTeam(team_idx)
-            
-    def setID(self,id):
+
+    def setID(self, id):
+        """Set match id."""
         self.__data['id'] = int(id)
         return True
-        
+
     def getID(self):
+        """Get match id."""
         return int(self.__data['id'])
 
-    def setLeague(self,league):
+    def setLeague(self, league):
+        """Set league."""
         league = str(league)
-        if(self.__data['league']  != league):
+        if(self.__data['league'] != league):
             self.__data['league'] = league
             self.__metaChanged = True
         return True
-        
+
     def getLeague(self):
+        """Get league."""
         return self.__data['league']
-        
-    def setURL(self,url):
+
+    def setURL(self, url):
+        """Set URL."""
         self.__data['matchlink'] = str(url)
         return True
-        
+
     def getURL(self):
-        return str(self.__data['matchlink'])        
-        
-    def setProvider(self,provider):
+        """Get league."""
+        return str(self.__data['matchlink'])
+
+    def setProvider(self, provider):
+        """Set the provider."""
         if(provider):
-            matches = difflib.get_close_matches(provider,self.__VALID_PROVIDERS,1) 
+            matches = difflib.get_close_matches(
+                provider, self.__VALID_PROVIDERS, 1)
             if(len(matches) == 0):
                 new = self.__VALID_PROVIDERS[0]
             else:
                 new = matches[0]
-            
-            if(self.__data['provider']  != new):
+
+            if(self.__data['provider'] != new):
                 self.__data['provider'] = new
                 self.__metaChanged = True
         else:
             self.__data['provider'] = self.__VALID_PROVIDERS[0]
-            
-        return True    
-            
+
+        return True
+
     def getProvider(self):
+        """Get the provider."""
         return str(self.__data['provider'])
-        
-     
-    def grabData(self, id = False, provider  = False):
-        
+
+    def grabData(self, id=False, provider=False):
+        """Grab the match data via a provider."""
         if(id):
             self.setID(id)
 
         if(provider):
             self.setProvider(provider)
-            
+
         provider = self.getProvider()
-        grabData = getattr(self, 'grabData'+provider)
-        
+        grabData = getattr(self, 'grabData' + provider)
+
         try:
             return grabData()
         except:
             raise
-        
 
     def grabDataAlphaSC2(self):
-        
+
         self.setProvider("AlphaSC2")
-        url = "http://alpha.tl/api?match="+str(self.getID())
+        url = "http://alpha.tl/api?match=" + str(self.getID())
         data = requests.get(url=url).json()
-            
-        if(data['code']!=200):
-            msg = 'API-Error: '+data['error']
+
+        if(data['code'] != 200):
+            msg = 'API-Error: ' + data['error']
             raise ValueError(msg)
         else:
             self.__rawData = data
-            self.setURL("http://alpha.tl/match/"+str(self.getID()))
-            self.setNoSets(5, resetPlayers = True)
+            self.setURL("http://alpha.tl/match/" + str(self.getID()))
+            self.setNoSets(5, resetPlayers=True)
             self.setMinSets(3)
             self.setLeague(data['tournament'])
-            
+
             for idx, map in enumerate(data['maps']):
-                self.setMap(idx,map)
-            
-            self.setLabel(4,"Ace Map")  
-            
+                self.setMap(idx, map)
+
+            self.setLabel(4, "Ace Map")
+
             for team_idx in range(2):
-                for set_idx, player in enumerate(data['lineup'+str(team_idx+1)]):
-                    self.setPlayer(team_idx, set_idx, player['nickname'], player['race'])  
-                    
-                team = data['team'+str(team_idx+1)]
+                for set_idx, player in enumerate(data['lineup' + str(team_idx + 1)]):
+                    self.setPlayer(team_idx, set_idx,
+                                   player['nickname'], player['race'])
+
+                team = data['team' + str(team_idx + 1)]
                 self.setTeam(team_idx, team['name'], team['tag'])
-            
-            totalScore = [0,0]    
-            
-            
+
+            totalScore = [0, 0]
+
             for set_idx in range(5):
                 try:
-                    score = int(data['games'][set_idx])*2-3
-                except: 
+                    score = int(data['games'][set_idx]) * 2 - 3
+                except:
                     score = 0
-                    
+
                 self.setMapScore(set_idx, score)
-                
+
             self.setAllKill(False)
-            
+
     def grabDataRSTL(self):
-        self.setProvider("RSTL") 
-        url = "http://hdgame.net/index.php?ajax=1&do=tournament&act=api&data_type=json&lang=en&service=match&match_id="+str(self.getID())
+        self.setProvider("RSTL")
+        url = "http://hdgame.net/index.php?ajax=1&do=tournament&act=api" + \
+              "&data_type=json&lang=en&service=match&match_id=" + \
+              str(self.getID())
         data = requests.get(url=url).json()
-        
-        if(data['code']!="200"):
-            msg = 'API-Error: '+data['code']
+
+        if(data['code'] != "200"):
+            msg = 'API-Error: ' + data['code']
             raise ValueError(msg)
         else:
             data = data['data']
             self.__rawData = data
-            self.setURL("http://hdgame.net/en/tournaments/list/tournament/rstl-12/tmenu/tmatches/?match="+str(self.getID()))
-            
-            if(data['game_format']=="3"): #Standard RSTL-Format 4xBo1 and Ace Bo3 (and four maps are played regardless of result)
-            
-                self.setNoSets(7,6, resetPlayers = True)
+            self.setURL(
+                "http://hdgame.net/en/tournaments/list/tournament" +
+                "/rstl-12/tmenu/tmatches/?match=" + str(self.getID()))
+
+            # Standard RSTL-Format 4xBo1 and Ace Bo3 (and four maps are played
+            # regardless of result)
+            if(data['game_format'] == "3"):
+
+                self.setNoSets(7, 6, resetPlayers=True)
                 self.setMinSets(4)
                 self.setLeague(data['tournament']['name'])
-                
+
                 for set_idx in range(7):
-                    self.setMap(set_idx, data['start_maps'][str(set_idx)]['name'])
-                    
-                for team_idx in range(2): 
+                    self.setMap(
+                        set_idx, data['start_maps'][str(set_idx)]['name'])
+
+                for team_idx in range(2):
                     for set_idx in range(4):
                         try:
-                            self.setPlayer(team_idx, set_idx, data['lu'+str(team_idx+1)][str(set_idx)]['member_name'],\
-                                                            data['lu'+str(team_idx+1)][str(set_idx)]['r_name'])
+                            self.setPlayer(
+                                team_idx, set_idx,
+                                data['lu' + str(team_idx + 1)][str(set_idx)]['member_name'],
+                                data['lu' + str(team_idx + 1)][str(set_idx)]['r_name'])
                         except:
                             pass
-                            
-                    for set_idx in range(4,7):
+
+                    for set_idx in range(4, 7):
                         try:
-                            if(not data['result'][str(4+set_idx)]['r_name'+str(team_idx+1)]):
+                            if(not data['result'][str(4 + set_idx)]['r_name' +
+                                                                    str(team_idx + 1)]):
                                 try:
-                                    race = data['result'][str(4+set_idx+1)]['r_name'+str(team_idx+1)]
+                                    race = data['result'][str(
+                                        4 + set_idx + 1)]['r_name' + str(team_idx + 1)]
                                 except:
                                     race = "Random"
-                            else: 
-                                race = data['result'][str(4+set_idx)]['r_name'+str(team_idx+1)]
-                                
-                            self.setPlayer(team_idx, set_idx, data['result'][str(4+set_idx)]['tu_name'+str(team_idx+1)], race)
+                            else:
+                                race = data['result'][str(
+                                    4 + set_idx)]['r_name' + str(team_idx + 1)]
+
+                            self.setPlayer(team_idx, set_idx, data['result'][str(
+                                4 + set_idx)]['tu_name' + str(team_idx + 1)], race)
                         except:
                             pass
-                        
-                    team = data['member'+str(team_idx+1)]
+
+                    team = data['member' + str(team_idx + 1)]
                     self.setTeam(team_idx, team['name'], team['tag'])
-                    
-                self.setLabel(4,"Ace Map 1")  
-                self.setLabel(5,"Ace Map 2") 
-                self.setLabel(6,"Ace Map 3") 
-                
-                    
+
+                self.setLabel(4, "Ace Map 1")
+                self.setLabel(5, "Ace Map 2")
+                self.setLabel(6, "Ace Map 3")
+
                 for set_idx in range(4):
                     try:
-                        score1 = int(data['result'][str(set_idx*2)]['score1'])
-                        score2 = int(data['result'][str(set_idx*2)]['score2'])
+                        score1 = int(
+                            data['result'][str(set_idx * 2)]['score1'])
+                        score2 = int(
+                            data['result'][str(set_idx * 2)]['score2'])
                     except:
                         score1 = 0
                         score2 = 0
-                        
+
                     if(score1 > score2):
                         score = -1
                     elif(score1 < score2):
                         score = 1
                     else:
                         score = 0
-                        
+
                     self.setMapScore(set_idx, score)
-                        
-                for set_idx in range(4,7):
+
+                for set_idx in range(4, 7):
                     try:
-                        score1 = int(data['result'][str(4+set_idx)]['score1'])
-                        score2 = int(data['result'][str(4+set_idx)]['score2'])
+                        score1 = int(
+                            data['result'][str(4 + set_idx)]['score1'])
+                        score2 = int(
+                            data['result'][str(4 + set_idx)]['score2'])
                     except:
                         score1 = 0
                         score2 = 0
-                        
+
                     if(score1 > score2):
                         score = -1
                     elif(score1 < score2):
@@ -718,450 +786,528 @@ class matchData:
                     else:
                         score = 0
                     self.setMapScore(set_idx, score)
-                    
+
                 self.setAllKill(False)
-                    
-            elif(data['game_format']=="2"): #All-Kill BoX
-            
+
+            elif(data['game_format'] == "2"):  # All-Kill BoX
+
                 self.resetData()
                 bo = int(data['game_format_bo'])
-                self.setNoSets(bo, bo, resetPlayers = True)
+                self.setNoSets(bo, bo, resetPlayers=True)
                 self.setMinSets(0)
                 self.setLeague(data['tournament']['name'])
-                
+
                 for set_idx in range(1):
-                    self.setMap(set_idx, data['start_maps'][str(set_idx)]['name'])
-                    
-                for team_idx in range(2): 
+                    self.setMap(
+                        set_idx, data['start_maps'][str(set_idx)]['name'])
+
+                for team_idx in range(2):
                     for set_idx in range(1):
                         try:
-                            self.setPlayer(team_idx, set_idx, data['lu'+str(team_idx+1)][str(set_idx)]['member_name'],\
-                                                            data['lu'+str(team_idx+1)][str(set_idx)]['r_name'])
+                            self.setPlayer(
+                                team_idx, set_idx,
+                                data['lu' + str(team_idx + 1)][str(set_idx)]['member_name'],
+                                data['lu' + str(team_idx + 1)][str(set_idx)]['r_name'])
                         except:
                             pass
-                            
-                    for set_idx in range(1,bo):
+
+                    for set_idx in range(1, bo):
                         try:
-                            if(not data['result'][str(set_idx*2)]['r_name'+str(team_idx+1)]):
+                            if(not data['result'][str(set_idx * 2)]['r_name' +
+                                                                    str(team_idx + 1)]):
                                 try:
-                                    race = data['result'][str(set_idx*2+1)]['r_name'+str(team_idx+1)]
+                                    race = data['result'][str(
+                                        set_idx * 2 + 1)]['r_name' + str(team_idx + 1)]
                                 except:
                                     race = "Random"
-                            else: 
-                                race = data['result'][str(set_idx*2)]['r_name'+str(team_idx+1)]
-                                
-                            self.setPlayer(team_idx, set_idx, data['result'][str(set_idx*2)]['member_name'+str(team_idx+1)], race)
+                            else:
+                                race = data['result'][str(
+                                    set_idx * 2)]['r_name' + str(team_idx + 1)]
+
+                            self.setPlayer(team_idx, set_idx, data['result'][str(
+                                set_idx * 2)]['member_name' + str(team_idx + 1)], race)
                         except:
                             pass
-                            
-                    team = data['member'+str(team_idx+1)]
+
+                    team = data['member' + str(team_idx + 1)]
                     self.setTeam(team_idx, team['name'], team['tag'])
-                    
-                    
+
                 for set_idx in range(bo):
                     try:
-                        score1 = int(data['result'][str(set_idx*2)]['score1'])
-                        score2 = int(data['result'][str(set_idx*2)]['score2'])
+                        score1 = int(
+                            data['result'][str(set_idx * 2)]['score1'])
+                        score2 = int(
+                            data['result'][str(set_idx * 2)]['score2'])
                     except:
                         score1 = 0
                         score2 = 0
-                        
+
                     if(score1 > score2):
                         score = -1
                     elif(score1 < score2):
                         score = 1
                     else:
                         score = 0
-                        
+
                     self.setMapScore(set_idx, score)
                     self.resetLabels()
 
-                        
                 self.setAllKill(True)
             else:
-                module_logger.info("RSTL Format Unkown")     
-        
+                module_logger.info("RSTL Format Unkown")
+
     def grabDataCustom(self):
         raise ValueError("Error: You cannot grab data from a custom provider")
-        
+
     def downloadMatchBanner(self, controller):
-        downloadMatchBanner = getattr(self, 'downloadMatchBanner'+self.getProvider())
+        downloadMatchBanner = getattr(
+            self, 'downloadMatchBanner' + self.getProvider())
         return downloadMatchBanner(controller)
-        
-    def downloadMatchBannerAlphaSC2(self,controller):
+
+    def downloadMatchBannerAlphaSC2(self, controller):
         try:
-            fname = scctool.settings.OBSdataDir+"/matchbanner.png"
-            urllib.request.urlretrieve("http://alpha.tl/announcement/"+str(self.getID())+"?vs", fname) 
+            fname = scctool.settings.OBSdataDir + "/matchbanner.png"
+            urllib.request.urlretrieve(
+                "http://alpha.tl/announcement/" + str(self.getID()) + "?vs", fname)
             controller.ftpUploader.cwd(scctool.settings.OBSdataDir)
             controller.ftpUploader.upload(fname, "matchbanner.png")
             controller.ftpUploader.cwd("..")
         except Exception as e:
-            module_logger.exception("message") 
-        
-    def downloadMatchBannerRSTL(self ,controller):
-        raise UserWarning("Error: You cannot download a match banner from RSTL")
-        
+            module_logger.exception("message")
+
+    def downloadMatchBannerRSTL(self, controller):
+        raise UserWarning(
+            "Error: You cannot download a match banner from RSTL")
+
     def downloadMatchBannerCustom(self, controller):
-        raise UserWarning("Error: You cannot download a match banner from a custom provider")
-        
+        raise UserWarning(
+            "Error: You cannot download a match banner from a custom provider")
+
     def downloadLogos(self, controller):
-        downloadLogos = getattr(self, 'downloadLogos'+self.getProvider())
+        downloadLogos = getattr(self, 'downloadLogos' + self.getProvider())
         return downloadLogos(controller)
-        
+
     def downloadLogosAlphaSC2(self, controller):
         try:
-            for i in range(1,3):
-                fname = scctool.settings.OBSdataDir+"/logo"+str(i)+".png"
-                urllib.request.urlretrieve(self.__rawData['team'+str(i)]['logo'], fname) 
+            for i in range(1, 3):
+                fname = scctool.settings.OBSdataDir + "/logo" + str(i) + ".png"
+                urllib.request.urlretrieve(
+                    self.__rawData['team' + str(i)]['logo'], fname)
                 controller.ftpUploader.cwd(scctool.settings.OBSdataDir)
-                controller.ftpUploader.upload(fname, "logo"+str(i)+".png")
+                controller.ftpUploader.upload(fname, "logo" + str(i) + ".png")
                 controller.ftpUploader.cwd("..")
-                
-            
+
         except Exception as e:
-            module_logger.exception("message") 
-        
+            module_logger.exception("message")
+
     def downloadLogosRSTL(self, controller):
         try:
-            for i in range(1,3):
+            for i in range(1, 3):
                 try:
-                    os.remove(scctool.settings.OBSdataDir+"/logo"+str(i)+".png")
+                    os.remove(scctool.settings.OBSdataDir +
+                              "/logo" + str(i) + ".png")
                 except:
                     pass
                 try:
-                    os.remove(scctool.settings.OBSdataDir+"/logo"+str(i)+".jpg")
+                    os.remove(scctool.settings.OBSdataDir +
+                              "/logo" + str(i) + ".jpg")
                 except:
                     pass
-                
-                url = "http://hdgame.net"+self.__rawData['member'+str(i)]['img_m']
+
+                url = "http://hdgame.net" + \
+                    self.__rawData['member' + str(i)]['img_m']
                 base, ext = os.path.splitext(url)
                 ext = ext.split("?")[0]
-                fname = scctool.settings.OBSdataDir+"/logo"+str(i)+ext
-                urllib.request.urlretrieve(url, fname) 
+                fname = scctool.settings.OBSdataDir + "/logo" + str(i) + ext
+                urllib.request.urlretrieve(url, fname)
                 controller.ftpUploader.cwd(scctool.settings.OBSdataDir)
-                controller.ftpUploader.upload(fname, "logo"+str(i)+ext)
+                controller.ftpUploader.upload(fname, "logo" + str(i) + ext)
                 controller.ftpUploader.cwd("..")
-                
+
         except Exception as e:
-            module_logger.exception("message") 
-        
+            module_logger.exception("message")
+
     def downloadLogosCustom(self, controller):
-        raise UserWarning("Error: You cannot download a logos from a custom provider")
-        
+        raise UserWarning(
+            "Error: You cannot download a logos from a custom provider")
+
     def createOBStxtFiles(self, controller):
         try:
             files2upload = []
-            
+
             if(self.hasAnySetChanged()):
-                files2upload = files2upload + ["lineup.txt", "maps.txt", "score.txt", "nextplayer1.txt",\
-                                               "nextplayer2.txt", "nextrace1.txt", "nextrace2.txt"]
-                f = open(scctool.settings.OBSdataDir+"/lineup.txt", mode = 'w')
-                f2 = open(scctool.settings.OBSdataDir+"/maps.txt", mode = 'w')
+                files2upload = files2upload + ["lineup.txt",
+                                               "maps.txt",
+                                               "score.txt",
+                                               "nextplayer1.txt",
+                                               "nextplayer2.txt",
+                                               "nextrace1.txt",
+                                               "nextrace2.txt"]
+                f = open(scctool.settings.OBSdataDir + "/lineup.txt", mode='w')
+                f2 = open(scctool.settings.OBSdataDir + "/maps.txt", mode='w')
                 for idx in range(self.getNoSets()):
                     map = self.getMap(idx)
-                    f.write(map+"\n")
-                    f2.write(map+"\n")
+                    f.write(map + "\n")
+                    f2.write(map + "\n")
                     try:
-                        string = self.getPlayer(0,idx)+' vs '+self.getPlayer(1,idx)
-                        f.write(string+"\n\n")
+                        string = self.getPlayer(
+                            0, idx) + ' vs ' + self.getPlayer(1, idx)
+                        f.write(string + "\n\n")
                     except IndexError:
                         f.write("\n\n")
-                        pass    
+                        pass
                 f.close()
                 f2.close()
-                
+
                 try:
                     score = self.getScore()
-                    score_str = str(score[0])+" - "+str(score[1])
+                    score_str = str(score[0]) + " - " + str(score[1])
                 except:
                     score_str = "0 - 0"
-                    
-                f = open(scctool.settings.OBSdataDir+"/score.txt", mode = 'w')
+
+                f = open(scctool.settings.OBSdataDir + "/score.txt", mode='w')
                 f.write(score_str)
                 f.close()
-                
-                f = open(scctool.settings.OBSdataDir+"/nextplayer1.txt", mode = 'w')
+
+                f = open(scctool.settings.OBSdataDir +
+                         "/nextplayer1.txt", mode='w')
                 f.write(self.getNextPlayer(0))
                 f.close()
-                
-                f = open(scctool.settings.OBSdataDir+"/nextplayer2.txt", mode = 'w')
+
+                f = open(scctool.settings.OBSdataDir +
+                         "/nextplayer2.txt", mode='w')
                 f.write(self.getNextPlayer(1))
                 f.close()
-                
-                f = open(scctool.settings.OBSdataDir+"/nextrace1.txt", mode = 'w')
+
+                f = open(scctool.settings.OBSdataDir +
+                         "/nextrace1.txt", mode='w')
                 f.write(self.getNextRace(0))
                 f.close()
-                
-                f = open(scctool.settings.OBSdataDir+"/nextrace2.txt", mode = 'w')
+
+                f = open(scctool.settings.OBSdataDir +
+                         "/nextrace2.txt", mode='w')
                 f.write(self.getNextRace(1))
                 f.close()
-            
-            
+
             if(self.hasMetaChanged()):
-                
-                files2upload = files2upload + ["teams_vs_long.txt", "teams_vs_short.txt", "team1.txt", "team2.txt", "tournament.txt"]
-                
-                f = open(scctool.settings.OBSdataDir+"/teams_vs_long.txt", mode = 'w')
-                f.write(self.getTeam(0)+' vs '+self.getTeam(1)+"\n")
+
+                files2upload = files2upload + \
+                    ["teams_vs_long.txt", "teams_vs_short.txt",
+                        "team1.txt", "team2.txt", "tournament.txt"]
+
+                f = open(scctool.settings.OBSdataDir +
+                         "/teams_vs_long.txt", mode='w')
+                f.write(self.getTeam(0) + ' vs ' + self.getTeam(1) + "\n")
                 f.close()
-            
-                f = open(scctool.settings.OBSdataDir+"/teams_vs_short.txt", mode = 'w')
-                f.write(self.getTeamTag(0)+' vs '+self.getTeamTag(1)+"\n")
+
+                f = open(scctool.settings.OBSdataDir +
+                         "/teams_vs_short.txt", mode='w')
+                f.write(self.getTeamTag(0) + ' vs ' +
+                        self.getTeamTag(1) + "\n")
                 f.close()
-        
-                f = open(scctool.settings.OBSdataDir+"/team1.txt", mode = 'w')
+
+                f = open(scctool.settings.OBSdataDir + "/team1.txt", mode='w')
                 f.write(self.getTeam(0))
                 f.close()
-        
-                f = open(scctool.settings.OBSdataDir+"/team2.txt", mode = 'w')
+
+                f = open(scctool.settings.OBSdataDir + "/team2.txt", mode='w')
                 f.write(self.getTeam(1))
                 f.close()
-        
-                f = open(scctool.settings.OBSdataDir+"/tournament.txt", mode = 'w')
+
+                f = open(scctool.settings.OBSdataDir +
+                         "/tournament.txt", mode='w')
                 f.write(self.getLeague())
                 f.close()
-            
-            
+
             controller.ftpUploader.cwd(scctool.settings.OBSdataDir)
             for file in files2upload:
-                controller.ftpUploader.upload(scctool.settings.OBSdataDir+"/"+file, file)
-                
+                controller.ftpUploader.upload(
+                    scctool.settings.OBSdataDir + "/" + file, file)
+
             controller.ftpUploader.cwd("..")
-            
+
         except Exception as e:
-            module_logger.exception("message") 
-            
-            
+            module_logger.exception("message")
+
     def updateScoreIcon(self, controller):
-        
+
         if(not(self.hasMetaChanged() or self.hasAnySetChanged())):
-            return 
-        
-        score = [0,0]
+            return
+
+        score = [0, 0]
         display = []
-        winner = ["",""]
-        border_color = [[],[]]
-        threshold = int(self.getBestOf()/2)
-        
+        winner = ["", ""]
+        border_color = [[], []]
+        threshold = int(self.getBestOf() / 2)
+
         for i in range(self.getNoSets()):
             display.append("inline-block")
-            
+
             if(max(score) > threshold and i >= self.getMinSets()):
-                border_color[0].append(scctool.settings.Config.get("MapIcons", "notplayed_color"))
-                border_color[1].append(scctool.settings.Config.get("MapIcons", "notplayed_color"))
-            elif(self.getMapScore(i)==-1):
-                border_color[0].append(scctool.settings.Config.get("MapIcons", "win_color"))
-                border_color[1].append(scctool.settings.Config.get("MapIcons", "lose_color"))
+                border_color[0].append(scctool.settings.Config.get(
+                    "MapIcons", "notplayed_color"))
+                border_color[1].append(scctool.settings.Config.get(
+                    "MapIcons", "notplayed_color"))
+            elif(self.getMapScore(i) == -1):
+                border_color[0].append(
+                    scctool.settings.Config.get("MapIcons", "win_color"))
+                border_color[1].append(
+                    scctool.settings.Config.get("MapIcons", "lose_color"))
                 score[0] += 1
-            elif(self.getMapScore(i)==1):
-                border_color[0].append(scctool.settings.Config.get("MapIcons", "lose_color"))
-                border_color[1].append(scctool.settings.Config.get("MapIcons", "win_color"))
+            elif(self.getMapScore(i) == 1):
+                border_color[0].append(
+                    scctool.settings.Config.get("MapIcons", "lose_color"))
+                border_color[1].append(
+                    scctool.settings.Config.get("MapIcons", "win_color"))
                 score[1] += 1
             else:
-                border_color[0].append(scctool.settings.Config.get("MapIcons", "undecided_color"))
-                border_color[1].append(scctool.settings.Config.get("MapIcons", "undecided_color"))
-                
-        for i in range(self.getNoSets(),scctool.settings.max_no_sets):
+                border_color[0].append(scctool.settings.Config.get(
+                    "MapIcons", "undecided_color"))
+                border_color[1].append(scctool.settings.Config.get(
+                    "MapIcons", "undecided_color"))
+
+        for i in range(self.getNoSets(), scctool.settings.max_no_sets):
             display.append("none")
-            border_color[0].append(scctool.settings.Config.get("MapIcons", "notplayed_color"))
-            border_color[1].append(scctool.settings.Config.get("MapIcons", "notplayed_color"))
-         
+            border_color[0].append(scctool.settings.Config.get(
+                "MapIcons", "notplayed_color"))
+            border_color[1].append(scctool.settings.Config.get(
+                "MapIcons", "notplayed_color"))
+
         if(score[0] > threshold):
             winner[0] = "winner"
         elif(score[1] > threshold):
             winner[1] = "winner"
-            
-        logo1 = controller.linkFile(scctool.settings.OBSdataDir+"/logo1")
+
+        logo1 = controller.linkFile(scctool.settings.OBSdataDir + "/logo1")
         if logo1 == "":
-            logo1 = scctool.settings.OBShtmlDir+"/src/SC2.png"
-            
-        logo2 = controller.linkFile(scctool.settings.OBSdataDir+"/logo2")
-        if logo2  == "":
-            logo2 = scctool.settings.OBShtmlDir+"/src/SC2.png"
-        
-        filename=scctool.settings.OBShtmlDir+"/data/score-data.html"
-        with open(scctool.settings.OBShtmlDir+"/data/score-template.html", "rt") as fin:
-                    with open(filename, "wt") as fout:
-                        for line in fin:
-                            line = line.replace('%TEAM1%', self.getTeam(0)).replace('%TEAM2%', self.getTeam(1))
-                            line = line.replace('%LOGO1%', logo1).replace('%LOGO2%', logo2)
-                            line = line.replace('%WINNER1%', winner[0]).replace('%WINNER2%', winner[1])
-                            line = line.replace('%SCORE%',str(score[0])+' - '+str(score[1]))
-                            line = line.replace('%TIMESTAMP%',str(time.time()))
-                            for i in range(scctool.settings.max_no_sets):
-                                line = line.replace('%SCORE-M'+str(i+1)+'-T1%', border_color[0][i])
-                                line = line.replace('%SCORE-M'+str(i+1)+'-T2%', border_color[1][i])
-                                line = line.replace('%DISPLAY-M'+str(i+1)+'%', display[i])
-                            fout.write(line)
-                            
-        controller.ftpUploader.cwd(scctool.settings.OBShtmlDir+"/data")
+            logo1 = scctool.settings.OBShtmlDir + "/src/SC2.png"
+
+        logo2 = controller.linkFile(scctool.settings.OBSdataDir + "/logo2")
+        if logo2 == "":
+            logo2 = scctool.settings.OBShtmlDir + "/src/SC2.png"
+
+        filename = scctool.settings.OBShtmlDir + "/data/score-data.html"
+        with open(scctool.settings.OBShtmlDir + "/data/score-template.html", "rt") as fin:
+            with open(filename, "wt") as fout:
+                for line in fin:
+                    line = line.replace('%TEAM1%', self.getTeam(
+                        0)).replace('%TEAM2%', self.getTeam(1))
+                    line = line.replace('%LOGO1%', logo1).replace(
+                        '%LOGO2%', logo2)
+                    line = line.replace('%WINNER1%', winner[0]).replace(
+                        '%WINNER2%', winner[1])
+                    line = line.replace('%SCORE%', str(
+                        score[0]) + ' - ' + str(score[1]))
+                    line = line.replace('%TIMESTAMP%', str(time.time()))
+                    for i in range(scctool.settings.max_no_sets):
+                        line = line.replace(
+                            '%SCORE-M' + str(i + 1) + '-T1%', border_color[0][i])
+                        line = line.replace(
+                            '%SCORE-M' + str(i + 1) + '-T2%', border_color[1][i])
+                        line = line.replace(
+                            '%DISPLAY-M' + str(i + 1) + '%', display[i])
+                    fout.write(line)
+
+        controller.ftpUploader.cwd(scctool.settings.OBShtmlDir + "/data")
         controller.ftpUploader.upload(filename, "score-data.html")
-        controller.ftpUploader.cwd("../../..")        
-                            
+        controller.ftpUploader.cwd("../../..")
+
     def updateMapIcons(self, controller):
         try:
             team = self.getMyTeam()
-            score = [0,0]
+            score = [0, 0]
             skip = [False] * self.getNoSets()
             for i in range(self.getNoSets()):
 
                 winner = self.getMapScore(i)
-                player1 = self.getPlayer(0,i)
-                player2 = self.getPlayer(1,i)
-                    
-                won=winner*team
+                player1 = self.getPlayer(0, i)
+                player2 = self.getPlayer(1, i)
+
+                won = winner * team
                 opacity = "0.0"
-                
-                threshold = int(self.getBestOf()/2)
+
+                threshold = int(self.getBestOf() / 2)
                 if(not self.hasSetChanged(i)):
                     skip[i] = True
-                    
+
                 if(max(score) > threshold and i >= self.getMinSets()):
-                    border_color = scctool.settings.Config.get("MapIcons", "notplayed_color")
-                    score_color  = scctool.settings.Config.get("MapIcons", "notplayed_color")
-                    opacity = scctool.settings.Config.get("MapIcons", "notplayed_opacity")
+                    border_color = scctool.settings.Config.get(
+                        "MapIcons", "notplayed_color")
+                    score_color = scctool.settings.Config.get(
+                        "MapIcons", "notplayed_color")
+                    opacity = scctool.settings.Config.get(
+                        "MapIcons", "notplayed_opacity")
                     winner = 0
                     skip[i] = False
-                elif(won==1):
-                    border_color = scctool.settings.Config.get("MapIcons", "win_color") 
-                    score_color  = scctool.settings.Config.get("MapIcons", "win_color") 
-                elif(won==-1):
-                    border_color = scctool.settings.Config.get("MapIcons", "lose_color")
-                    score_color  = scctool.settings.Config.get("MapIcons", "lose_color")
+                elif(won == 1):
+                    border_color = scctool.settings.Config.get(
+                        "MapIcons", "win_color")
+                    score_color = scctool.settings.Config.get(
+                        "MapIcons", "win_color")
+                elif(won == -1):
+                    border_color = scctool.settings.Config.get(
+                        "MapIcons", "lose_color")
+                    score_color = scctool.settings.Config.get(
+                        "MapIcons", "lose_color")
                 else:
-                    border_color = scctool.settings.Config.get("MapIcons", "default_border_color")
-                    score_color  = scctool.settings.Config.get("MapIcons", "undecided_color")
-                    
-            
-                if(winner==-1):
-                    player1status='winner'
-                    player2status='loser'
-                    score[0] +=  1
-                elif(winner==1):
-                    player1status='loser'
-                    player2status='winner'
-                    score[1] +=  1
+                    border_color = scctool.settings.Config.get(
+                        "MapIcons", "default_border_color")
+                    score_color = scctool.settings.Config.get(
+                        "MapIcons", "undecided_color")
+
+                if(winner == -1):
+                    player1status = 'winner'
+                    player2status = 'loser'
+                    score[0] += 1
+                elif(winner == 1):
+                    player1status = 'loser'
+                    player2status = 'winner'
+                    score[1] += 1
                 else:
-                    player1status=''
-                    player2status=''
-                    
+                    player1status = ''
+                    player2status = ''
+
                 if(skip[i]):
                     continue
-                    
+
                 map = self.getMap(i)
                 mappng = controller.getMapImg(map)
-                race1png = self.getRace(0,i)+".png"
-                race2png = self.getRace(1,i)+".png"
+                race1png = self.getRace(0, i) + ".png"
+                race2png = self.getRace(1, i) + ".png"
                 hidden = ""
 
-                filename=scctool.settings.OBSmapDir+"/icons_box/data/"+str(i+1)+".html"
-                filename2=scctool.settings.OBSmapDir+"/icons_landscape/data/"+str(i+1)+".html"
-                with open(scctool.settings.OBSmapDir+"/icons_box/data/template.html", "rt") as fin:
+                filename = scctool.settings.OBSmapDir + \
+                    "/icons_box/data/" + str(i + 1) + ".html"
+                filename2 = scctool.settings.OBSmapDir + \
+                    "/icons_landscape/data/" + str(i + 1) + ".html"
+                with open(scctool.settings.OBSmapDir +
+                          "/icons_box/data/template.html", "rt") as fin:
                     with open(filename, "wt") as fout:
                         for line in fin:
-                            line = line.replace('%PLAYER1%', player1).replace('%PLAYER2%', player2)
-                            line = line.replace('%RACE1_PNG%', race1png).replace('%RACE2_PNG%', race2png)
-                            line = line.replace('%MAP_PNG%', mappng).replace('%MAP_NAME%', map)
-                            line = line.replace('%MAP_ID%',self.getLabel(i))
-                            line = line.replace('%BORDER_COLOR%',border_color).replace('%OPACITY%',opacity)
-                            line = line.replace('%HIDDEN%',hidden)
-                            line = line.replace('%STATUS1%',player1status).replace('%STATUS2%',player2status)
-                            fout.write(line)
-                        
-                with open(scctool.settings.OBSmapDir+"/icons_landscape/data/template.html", "rt") as fin:
-                    with open(filename2, "wt") as fout:
-                        for line in fin:
-                            line = line.replace('%PLAYER1%', player1).replace('%PLAYER2%', player2)
-                            line = line.replace('%RACE1_PNG%', race1png).replace('%RACE2_PNG%', race2png)
-                            line = line.replace('%MAP_PNG%', mappng).replace('%MAP_NAME%', map)
-                            line = line.replace('%MAP_ID%',self.getLabel(i))
-                            line = line.replace('%SCORE_COLOR%',score_color).replace('%OPACITY%',opacity)
-                            line = line.replace('%HIDDEN%',hidden)
-                            line = line.replace('%STATUS1%',player1status).replace('%STATUS2%',player2status)
+                            line = line.replace('%PLAYER1%', player1).replace(
+                                '%PLAYER2%', player2)
+                            line = line.replace('%RACE1_PNG%', race1png).replace(
+                                '%RACE2_PNG%', race2png)
+                            line = line.replace('%MAP_PNG%', mappng).replace(
+                                '%MAP_NAME%', map)
+                            line = line.replace('%MAP_ID%', self.getLabel(i))
+                            line = line.replace('%BORDER_COLOR%', border_color).replace(
+                                '%OPACITY%', opacity)
+                            line = line.replace('%HIDDEN%', hidden)
+                            line = line.replace('%STATUS1%', player1status).replace(
+                                '%STATUS2%', player2status)
                             fout.write(line)
 
-                            
-            for i in range(self.getNoSets(), scctool.settings.max_no_sets): 
-                filename=scctool.settings.OBSmapDir+"/icons_box/data/"+str(i+1)+".html"    
-                filename2=scctool.settings.OBSmapDir+"/icons_landscape/data/"+str(i+1)+".html"         
+                with open(scctool.settings.OBSmapDir +
+                          "/icons_landscape/data/template.html", "rt") as fin:
+                    with open(filename2, "wt") as fout:
+                        for line in fin:
+                            line = line.replace('%PLAYER1%', player1).replace(
+                                '%PLAYER2%', player2)
+                            line = line.replace('%RACE1_PNG%', race1png).replace(
+                                '%RACE2_PNG%', race2png)
+                            line = line.replace('%MAP_PNG%', mappng).replace(
+                                '%MAP_NAME%', map)
+                            line = line.replace('%MAP_ID%', self.getLabel(i))
+                            line = line.replace('%SCORE_COLOR%', score_color).replace(
+                                '%OPACITY%', opacity)
+                            line = line.replace('%HIDDEN%', hidden)
+                            line = line.replace('%STATUS1%', player1status).replace(
+                                '%STATUS2%', player2status)
+                            fout.write(line)
+
+            for i in range(self.getNoSets(), scctool.settings.max_no_sets):
+                filename = scctool.settings.OBSmapDir + \
+                    "/icons_box/data/" + str(i + 1) + ".html"
+                filename2 = scctool.settings.OBSmapDir + \
+                    "/icons_landscape/data/" + str(i + 1) + ".html"
                 hidden = "visibility: hidden;"
-                with open(scctool.settings.OBSmapDir+"/icons_box/data/template.html", "rt") as fin:
+                with open(scctool.settings.OBSmapDir +
+                          "/icons_box/data/template.html", "rt") as fin:
                     with open(filename, "wt") as fout:
                         for line in fin:
-                            line = line.replace('%HIDDEN%',hidden)
+                            line = line.replace('%HIDDEN%', hidden)
                             fout.write(line)
 
-                with open(scctool.settings.OBSmapDir+"/icons_landscape/data/template.html", "rt") as fin:
+                with open(scctool.settings.OBSmapDir +
+                          "/icons_landscape/data/template.html", "rt") as fin:
                     with open(filename2, "wt") as fout:
                         for line in fin:
-                            line = line.replace('%HIDDEN%',hidden)
+                            line = line.replace('%HIDDEN%', hidden)
                             fout.write(line)
-                            
-            for type in ["box", "landscape"]:  
-                controller.ftpUploader.cwd(scctool.settings.OBSmapDir+"/icons_"+type+"/data")
-                for i in range(scctool.settings.max_no_sets): 
+
+            for type in ["box", "landscape"]:
+                controller.ftpUploader.cwd(
+                    scctool.settings.OBSmapDir + "/icons_" + type + "/data")
+                for i in range(scctool.settings.max_no_sets):
                     if(i < self.getNoSets() and skip[i]):
                         continue
                     if(i >= self.getNoSets() and not self.hasMetaChanged()):
                         continue
-                    filename=scctool.settings.OBSmapDir+"/icons_"+type+"/data/"+str(i+1)+".html"
-                    controller.ftpUploader.upload(filename, str(i+1)+".html")
+                    filename = scctool.settings.OBSmapDir + "/icons_" + \
+                        type + "/data/" + str(i + 1) + ".html"
+                    controller.ftpUploader.upload(
+                        filename, str(i + 1) + ".html")
                 controller.ftpUploader.cwd("../../..")
-                            
-                            
+
         except Exception as e:
-            module_logger.exception("message") 
-            
+            module_logger.exception("message")
+
     def updateLeagueIcon(self, controller):
-        
+
         if(not self.hasMetaChanged()):
             return
-        
+
         try:
-            filename_old = scctool.settings.OBShtmlDir+"/data/"+self.getProvider()+".html"
-            filename_new = scctool.settings.OBShtmlDir+"/data/league-data.html"
+            filename_old = scctool.settings.OBShtmlDir + "/data/" + self.getProvider() + \
+                ".html"
+            filename_new = scctool.settings.OBShtmlDir + "/data/league-data.html"
             shutil.copy(filename_old, filename_new)
-            controller.ftpUploader.cwd(scctool.settings.OBShtmlDir+"/data")
+            controller.ftpUploader.cwd(scctool.settings.OBShtmlDir + "/data")
             controller.ftpUploader.upload(filename_new, "league-data.html")
             controller.ftpUploader.cwd("../..")
-            
+
         except Exception as e:
-            module_logger.exception("message") 
-            
+            module_logger.exception("message")
+
     def autoSetMyTeam(self):
         try:
             for team_idx in range(2):
                 team = self.__data['teams'][team_idx]['name']
-                matches = difflib.get_close_matches(team.lower(),scctool.settings.getMyTeams(),1) 
+                matches = difflib.get_close_matches(
+                    team.lower(), scctool.settings.getMyTeams(), 1)
                 if(len(matches) > 0):
-                    self.setMyTeam(team_idx*2-1)
+                    self.setMyTeam(team_idx * 2 - 1)
                     return True
-            
+
             self.setMyTeam(0)
-            
+
             return False
-         
+
         except Exception as e:
-            module_logger.exception("message")  
+            module_logger.exception("message")
             return False
-      
+
+
 def autoCorrectMap(map):
     try:
-        matches = difflib.get_close_matches(map.lower(),scctool.settings.maps,1) 
+        matches = difflib.get_close_matches(
+            map.lower(), scctool.settings.maps, 1)
         if(len(matches) == 0):
             return map, False
         else:
             return matches[0], True
-            
+
     except Exception as e:
-        module_logger.exception("message") 
+        module_logger.exception("message")
+
 
 def getRace(str):
-    try: 
+    try:
         for idx, race in enumerate(scctool.settings.races):
-            if(str[0].upper()==race[0].upper()):
+            if(str[0].upper() == race[0].upper()):
                 return scctool.settings.races[idx]
     except:
         pass
-    
+
     return "Random"

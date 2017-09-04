@@ -1,4 +1,4 @@
-#!/usr/bin/python
+"""FTP upload via thread."""
 import logging
 
 # create logger
@@ -10,54 +10,53 @@ try:
     from PyQt5 import QtCore
     import queue
     import base64
-    import time
     import os
 except Exception as e:
-    module_logger.exception("message") 
-    raise  
-    
+    module_logger.exception("message")
+    raise
+
+
 class FTPUploader:
-    
+
     def __init__(self):
 
         module_logger.info("Started FTPThread")
         self.__thread = UploaderThread()
         self.__thread.start()
 
-        
     def connect(self):
         self.__thread.q.put_nowait(["connect"])
         return self.__thread.progress
-        
+
     def disconnect(self):
         self.__thread.q.put_nowait(["disconnect"])
-        
+
     def upload(self, localFile, remoteFile):
-        self.__thread.q.put_nowait(["upload",localFile, remoteFile])
+        self.__thread.q.put_nowait(["upload", localFile, remoteFile])
 
     def cwd(self, d):
-        self.__thread.q.put_nowait(["cwd",d])
-        
+        self.__thread.q.put_nowait(["cwd", d])
+
     def delete(self, d):
-        self.__thread.q.put_nowait(["delete",d])
-            
+        self.__thread.q.put_nowait(["delete", d])
+
     def mkd(self, d):
-        self.__thread.q.put_nowait(["mkd",d])        
-            
+        self.__thread.q.put_nowait(["mkd", d])
+
     def kill(self):
         module_logger.info("Terminated FTPThread")
         if(self.__thread.isRunning()):
             self.__thread.q.put_nowait(["kill"])
-            
+
     def progress_start(self):
         self.__thread.q.put_nowait(["progress_start"])
-        
+
     def progress_end(self):
         self.__thread.q.put_nowait(["progress_end"])
-        
+
     def empty_queque(self):
         self.__thread.q = queue.Queue()
-            
+
     def setup(self):
         self.progress_start()
         self.mkd("OBS_data")
@@ -102,20 +101,20 @@ class FTPUploader:
         self.cwd("..")
         self.cwd("../..")
         self.progress_end()
-        
+
         return self.__thread.progress, 99
-        
+
     def uploadAll(self, dir):
         for fname in os.listdir(dir):
             full_fname = os.path.join(dir, fname)
             if os.path.isfile(full_fname):
                 self.upload(full_fname, fname)
 
-            
+
 class UploaderThread(QtCore.QThread):
-    
+
     progress = QtCore.pyqtSignal(int)
-    
+
     def __init__(self):
         QtCore.QThread.__init__(self)
         self.q = queue.Queue()
@@ -128,37 +127,39 @@ class UploaderThread(QtCore.QThread):
         while True:
             try:
                 if(not retry):
-                    cmd, *args = self.q.get(timeout=0.5)  
+                    cmd, *args = self.q.get(timeout=0.5)
                 retry = False
-                
-                self.__upload = scctool.settings.Config.getboolean("FTP","upload")
-                
+
+                self.__upload = scctool.settings.Config.getboolean(
+                    "FTP", "upload")
+
                 if(cmd == "progress_start"):
                     self.__progress = True
                     self.__current_cmd = 0
                     self.progress.emit(0)
                 elif(cmd == "progress_end"):
-                    print("Progress done! "+str(self.__current_cmd))
+                    print("Progress done! " + str(self.__current_cmd))
                     self.progress.emit(-1)
                     self.__progress = False
                 elif(self.__upload and cmd == "connect"):
                     self.__connect()
-                elif(self.__upload and cmd == "disconnect"):   
+                elif(self.__upload and cmd == "disconnect"):
                     module_logger.info(self.__ftp.quit())
                 elif(self.__upload and cmd == "upload"):
                     localFile, remoteFile, *_ = args
-                    print("Upload request for "+localFile)
-                    f = open(localFile, "rb") 
-                    module_logger.info(self.__ftp.storbinary("STOR "+remoteFile.strip(), f))
+                    print("Upload request for " + localFile)
+                    f = open(localFile, "rb")
+                    module_logger.info(self.__ftp.storbinary(
+                        "STOR " + remoteFile.strip(), f))
                     f.close()
                 elif(self.__upload and cmd == "delete"):
-                    print("delete "+args[0])
+                    print("delete " + args[0])
                     module_logger.info(self.__ftp.delete(args[0]))
                 elif(self.__upload and cmd == "cwd"):
-                    print("cwd "+args[0])
+                    print("cwd " + args[0])
                     module_logger.info(self.__ftp.cwd(args[0]))
                 elif(self.__upload and cmd == "mkd"):
-                    print("mkd "+args[0])
+                    print("mkd " + args[0])
                     if(not self.directory_exists(args[0])):
                         module_logger.info(self.__ftp.mkd(args[0]))
                 elif(cmd == "kill"):
@@ -168,43 +169,43 @@ class UploaderThread(QtCore.QThread):
                     except:
                         pass
                     break
-                    
+
                 if(self.__progress and not retry):
                     self.__current_cmd += 1
                     self.progress.emit(self.__current_cmd)
                 else:
                     self.progress.emit(0)
-                    
+
             except ftplib.error_temp:
                 self.__connect()
                 retry = True
             except ftplib.error_perm:
-                module_logger.exception("message") 
+                module_logger.exception("message")
                 self.progress.emit(-2)
                 self.q = queue.Queue()
                 pass
             except queue.Empty:
                 self.progress.emit(-3)
             except Exception as e:
-                module_logger.exception("message")   
+                module_logger.exception("message")
 
         print("FTP Thread finished.")
-        
+
     def __connect(self):
-        self.__server = scctool.settings.Config.get("FTP","server").strip()
-        self.__user   = scctool.settings.Config.get("FTP","user").strip()
-        self.__passwd = base64.b64decode(scctool.settings.Config.get("FTP","passwd").strip().encode()).decode("utf8")
-        self.__dir    = scctool.settings.Config.get("FTP","dir").strip()
+        self.__server = scctool.settings.Config.get("FTP", "server").strip()
+        self.__user = scctool.settings.Config.get("FTP", "user").strip()
+        self.__passwd = base64.b64decode(scctool.settings.Config.get(
+            "FTP", "passwd").strip().encode()).decode("utf8")
+        self.__dir = scctool.settings.Config.get("FTP", "dir").strip()
         self.__ftp = ftplib.FTP(self.__server)
         module_logger.info(self.__ftp.login(self.__user, self.__passwd))
-        
+
         if(self.__dir != "" and self.__dir != "."):
             if(not self.directory_exists(self.__dir)):
                 module_logger.info(self.__ftp.mkd(self.__dir))
             module_logger.info(self.__ftp.cwd(self.__dir))
-        
+
     def directory_exists(self, dir):
         filelist = []
-        self.__ftp.retrlines('LIST',filelist.append)
+        self.__ftp.retrlines('LIST', filelist.append)
         return any(f.split()[-1] == dir and f.upper().startswith('D') for f in filelist)
-    
