@@ -32,7 +32,7 @@ class MainController:
 
     def __init__(self):
         try:
-            self.matchData = matchData()
+            self.matchData = matchData(self)
             self.SC2ApiThread = SC2ApiThread(self)
             self.checkVersionThread = CheckVersionThread(
                 self, scctool.settings.versioncontrol)
@@ -201,8 +201,11 @@ class MainController:
             self.matchData.autoSetMyTeam()
             self.matchData.writeJsonFile()
             try:
-                self.matchData.downloadLogos(self)
-                self.matchData.downloadMatchBanner(self)
+                self.matchData.downloadLogos()
+            except:
+                pass
+            try:
+                self.matchData.downloadBanner()
             except:
                 pass
             self.updateLogos()
@@ -236,10 +239,10 @@ class MainController:
     def updateOBS(self):
         try:
             self.updateData()
-            self.matchData.updateMapIcons(self)
-            self.matchData.updateScoreIcon(self)
-            self.matchData.createOBStxtFiles(self)
-            self.matchData.updateLeagueIcon(self)
+            self.matchData.updateMapIcons()
+            self.matchData.updateScoreIcon()
+            self.matchData.createOBStxtFiles()
+            self.matchData.updateLeagueIcon()
             self.matchData.writeJsonFile()
             self.matchData.resetChanged()
         except Exception as e:
@@ -446,7 +449,7 @@ class MainController:
             self.view.cb_autoFTP.setAttribute(Qt.WA_AlwaysShowToolTips)
             self.view.cb_autoFTP.setToolTip('')
 
-    def requestToggleScore(self, newSC2MatchData):
+    def requestToggleScore(self, newSC2MatchData, swap = False):
 
         try:
             self.updateData()
@@ -455,8 +458,11 @@ class MainController:
                 found, order = newSC2MatchData.compare_returnOrder(
                                 self.matchData.getPlayer(0, i),
                                 self.matchData.getPlayer(1, i))
+
                 if(found):
                     score = self.matchData.getScore()
+                    if(swap):
+                        order = not order
 
                     if(order):
                         ToggleScore(score[0], score[1],
@@ -591,7 +597,7 @@ class MainController:
 
     def resetWarning(self):
         warning = self._warning
-        print(str(warning))
+        #print(str(warning))
         self._warning = False
         return warning
 

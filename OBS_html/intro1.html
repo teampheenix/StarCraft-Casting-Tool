@@ -17,5 +17,8 @@
 		<audio autoplay>
 			<source src="src/sound.wav" type="audio/wav">
 		</audio>
+		<audio onloadeddata="var audioPlayer = this; setTimeout(function() { audioPlayer.play(); }, 1200)">
+			<source src="src/player1.mp3" type="audio/mp3">
+		</audio>
         </body>
 </html> 

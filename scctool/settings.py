@@ -174,7 +174,11 @@ try:
     setDefaultConfig("SCT","commonplayers","Shakyor, pressure, MarineKing, Moash, Ostseedude, spaz, DERASTAT, FanTasY,"+\
                            "chrismaverik, holden, Desolation, RiseOfDeath, TuneTrigger, MoFuJones, Fenix, Hyvaa, snoozle,"+\
                            " CptWobbles, dreign, Sly, Sonarwolf, Unknown, Xoneon")
+                           
     setDefaultConfig("SCT","fuzzymatch","True")
+    
+    setDefaultConfig("SCT","use_ocr","False")
+    setDefaultConfig("SCT","tesseract",'C:\\Program Files (x86)\\Tesseract-OCR\\tesseract')
     
     setDefaultConfig("Form","scoreupdate","False")
     setDefaultConfig("Form","togglescore","False")

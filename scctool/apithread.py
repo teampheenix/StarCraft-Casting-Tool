@@ -11,6 +11,10 @@ try:
     import time
     from difflib import SequenceMatcher
     import scctool.settings
+    from PIL import ImageGrab # pip install Pillow
+    import pytesseract # pip install pytesseract
+    import re
+
 
 except Exception as e:
     module_logger.exception("message")
@@ -282,22 +286,60 @@ class SC2ApiThread(QThread):
                        or self.activeTask['toggleProduction']):
                 if(isSC2onForeground()):
                     if(self.activeTask['toggleScore']):
-                        self.controller.requestToggleScore(data)
+                        swapPlayers = self.swapPlayers(data)
+                        self.controller.requestToggleScore(data, swapPlayers)
                     if(self.activeTask['toggleProduction']):
                         ToggleProduction()
                     break
                 else:
                     print("SC2 not on foreground... waiting.")
-                    time.sleep(4)
+                    time.sleep(2)
         except:
-            module_logger.info("Toggle not working on this OS")
+            module_logger.info("Toggle not working on this OS:")
+            
 
+    def swapPlayers(self, data):
+        
+        try:
+            if(not scctool.settings.Config.getboolean("SCT","use_ocr")):
+                return False
+                
+            pytesseract.pytesseract.tesseract_cmd = scctool.settings.Config.get("SCT","tesseract")
+            
+            players = data.getPlayerList()
+            img = ImageGrab.grab()
+            width, height = img.size
+            positions = [None, None]
+            ratios = [0.0, 0.0]
+            img = img.crop((int(width*0.1), int(height*0.9), int(width*0.5), height))
+            text = pytesseract.image_to_string(img)
+            items = re.split('\s+', text)
+            
+            threshold = 0.5
+            for item_idx, item in enumerate(items):
+                for player_idx, player in enumerate(players):
+                    ratio = SequenceMatcher(None, item.lower(), player.lower()).ratio()
+                    if(ratio >= max(threshold, ratios[player_idx])):
+                        positions[player_idx] = item_idx
+                        ratios[player_idx] = ratio
+                        print("Player {} at postion {}".format(player_idx, item_idx))
+                        
+    
+            if None in positions:
+                return False
+            elif(positions[0] > positions[1]):
+                return True
+            else:
+                return False
+        except Exception as e:
+            module_logger.exception("message")
+            return False
 
 def isSC2onForeground():
     try:
-        fg_window_name = GetForegroundWindow().lower()
+        fg_window_name = GetWindowText(GetForegroundWindow()).lower()
         sc2 = "StarCraft II".lower()
-        return GetWindowText(fg_window_name == sc2)
+        return fg_window_name == sc2
     except Exception as e:
         module_logger.exception("message")
         return False
@@ -391,6 +433,9 @@ class SC2MatchData:
                 and self.race2 == other.race2
                 and self.result == other.result
                 and self.ingame == other.ingame)
+
+    def getPlayerList(self):
+        return [self.player1, self.player2]
 
     def getPlayer(self, idx):
         if(idx == 0):

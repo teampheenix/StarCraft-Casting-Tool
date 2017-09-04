@@ -26,7 +26,7 @@ This tool should run on any operating system that supports Python 3, e.g., Windo
 
 ## Installation
 
-[Download](https://github.com/teampheenix/StarCraft-Casting-Tool/archive/master.zip) and exctract StarCraft Casting Tool, download the latest version of Python 3.6+ at https://www.python.org/downloads. This tool requires the additional Python Packages *PyQt5*, *requests*, *configparser*, *flask*, *obs-ws-rc* and on Windows additonally *pypiwin32*. To install these packages execute the script `installPackages.py` once or do it manually (e.g., via *pip*).
+[Download](https://github.com/teampheenix/StarCraft-Casting-Tool/archive/master.zip) and exctract StarCraft Casting Tool, download the latest version of Python 3.6+ at https://www.python.org/downloads. This tool requires the additional Python Packages *PyQt5*, *requests*, *configparser*, *flask*, *obs-ws-rc*, *Pillow*, *pytesseract*  and on Windows additonally *pypiwin32*. To install these packages execute the script `installPackages.py` once or do it manually (e.g., via *pip*).
 
 ## Instructions for Use
 

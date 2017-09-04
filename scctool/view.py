@@ -1289,13 +1289,16 @@ class subwindow3(QWidget):
             self.createButtonGroup()
             self.createFavBox()
             self.createMapsBox()
+            self.createOcrBox()
 
             
             mainLayout = QVBoxLayout()
 
             mainLayout.addWidget(self.mapsBox)
             mainLayout.addLayout(self.favBox)
+            mainLayout.addWidget(self.ocrBox)
             mainLayout.addLayout(self.buttonGroup)
+            
             self.setLayout(mainLayout)
             
             self.resize(QSize(mainWindow.size().width()*.80,self.sizeHint().height()))
@@ -1335,6 +1338,50 @@ class subwindow3(QWidget):
         layout.addWidget(self.list_favTeams)
         box.setLayout(layout)
         self.favBox.addWidget(box)
+        
+    def createOcrBox(self):
+        
+        self.ocrBox = QGroupBox("Optical Character Recognition for Setting Ingame Score")
+        
+        layout = QGridLayout()
+
+        self.cb_useocr = QCheckBox(" Activate Optical Character Recognition for Automatic Setting of Ingame Score")
+        self.cb_useocr.setChecked(scctool.settings.Config.getboolean("SCT","use_ocr"))
+        self.cb_useocr.stateChanged.connect(self.changed)
+        
+        self.tesseract = MonitoredLineEdit()
+        self.tesseract.setText(scctool.settings.Config.get("SCT", "tesseract"))
+        self.tesseract.textModified.connect(self.changed)
+        self.tesseract.setAlignment(Qt.AlignCenter)
+        self.tesseract.setPlaceholderText("C:\\Program Files (x86)\\Tesseract-OCR\\tesseract")
+        self.tesseract.setReadOnly(True)
+        self.tesseract.setToolTip('Path to Tesseract-OCR')
+        
+        
+        button = QPushButton("Select Folder")
+        button.clicked.connect(self.selectTesseract)
+        
+        text = """Sometimes the order of players given by the SC2-Client-API differs from the order in the Observer-UI resulting in a swaped match score. To correct this via Optical Character Recognition you have to download and install <a href='https://github.com/UB-Mannheim/tesseract/wiki#tesseract-at-ub-mannheim'>Tesseract-OCR</a> and select its folder here:"""
+        
+        label = QLabel(text)
+        label.setOpenExternalLinks(True)
+        label.setWordWrap(True)
+        label.setMargin(5)
+        layout.addWidget(label,1,0,1,3)
+        
+        layout.addWidget(self.cb_useocr,0,0,1,3)
+        layout.addWidget(QLabel("Tesseract-OCR Folder:"),2,0)
+        layout.addWidget(self.tesseract,2,1)
+        layout.addWidget(button,2,2)
+        
+        self.ocrBox.setLayout(layout)
+        
+    def selectTesseract(self):
+        old_dir = self.tesseract.text()
+        dir = QFileDialog.getExistingDirectory(self, "Select Tesseract-OCR Folder", old_dir, QFileDialog.ShowDirsOnly);
+        if(dir != old_dir):
+            self.tesseract.setText(dir)
+            self.changed()
         
     def createMapsBox(self):
         
@@ -1470,6 +1517,8 @@ class subwindow3(QWidget):
         if(self.__dataChanged):
             scctool.settings.Config.set("SCT","myteams", ", ".join(self.list_favTeams.getData()))
             scctool.settings.Config.set("SCT","commonplayers", ", ".join(self.list_favPlayers.getData()))
+            scctool.settings.Config.set("SCT", "tesseract",self.tesseract.text().strip())
+            scctool.settings.Config.set("SCT", "use_ocr", str(self.cb_useocr.checkState()))
 
     def saveCloseWindow(self):
         self.saveData()
