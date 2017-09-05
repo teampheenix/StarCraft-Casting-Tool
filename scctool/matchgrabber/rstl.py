@@ -1,169 +1,20 @@
-"""Grab match data from websites."""
-
-import requests
-from urllib.request import urlretrieve
 import logging
-import os
+# create logger
+module_logger = logging.getLogger('scctool.matchgrabber.rstl')
+
 import scctool.settings
 
-# create logger
-module_logger = logging.getLogger('scctool.matchgabber')
+from urllib.request import urlretrieve
+import os
 
+from scctool.matchgrabber.custom import MatchGrabber as MatchGrabberParent
 
-class MatchGrabber(object):
-    """Parent definition,i.e., for custom matchs."""
-
-    def __init__(self, matchData, controller, id=False):
-        """Init match grabber."""
-        self._id = 0
-        self.setID(id)
-        self._controller = controller
-        self._matchData = matchData
-        self._provider = "Custom"
-        self._urlprefix = ""
-        self._apiprefix = ""
-        self._rawData = None
-
-    def setID(self, id=False):
-        """Set ID."""
-        if id:
-            self._id = int(id)
-
-    def getID(self):
-        """Get ID as int."""
-        return int(self._id)
-
-    def _getAPI(self, id=False):
-        if id:
-            self.setID(id)
-        return self._apiprefix+str(self.getID())
-
-    def getURL(self, id=False):
-        """Get URL."""
-        if id:
-            self.setID(id)
-        return self._urlprefix+str(self.getID())
-
-    def getProvider(self):
-        """Get name of the provider."""
-        return self._provider
-
-    def grabData(self):
-        """Grab match data."""
-        raise ValueError(
-            "Error: Cannot grab data from this provider.")
-
-    def _getJson(self):
-        data = requests.get(url=self._getAPI()).json()
-        return data
-
-    def downloadLogos(self):
-        """Download logos."""
-        raise UserWarning(
-            "Error: Cannot download logos from this provider.")
-
-    def downloadBanner(self):
-        """Download Banner."""
-        raise UserWarning(
-            "Error: Cannot download a match banner from this provider.")
-
-
-class MatchGrabberAlphaTL(MatchGrabber):
+class MatchGrabber(MatchGrabberParent):
     """Grabs match data from Alpha SC2 Teamleague."""
 
     def __init__(self, *args):
         """Init match grabber."""
-        super(MatchGrabberAlphaTL, self).__init__(*args)
-        self._provider = "AlphaSC2"
-        self._urlprefix = "http://alpha.tl/match/"
-        self._apiprefix = "http://alpha.tl/api?match="
-
-    def grabData(self):
-        """Grab match data."""
-        data = self._getJson()
-
-        if(data['code'] != 200):
-            msg = 'API-Error: ' + data['error']
-            raise ValueError(msg)
-        else:
-            self._rawData = data
-            self._matchData.setURL(self.getURL())
-            self._matchData.setNoSets(5, resetPlayers=True)
-            self._matchData.setMinSets(3)
-            self._matchData.setLeague(data['tournament'])
-
-            for idx, map in enumerate(data['maps']):
-                self._matchData.setMap(idx, map)
-
-            self._matchData.setLabel(4, "Ace Map")
-
-            for team_idx in range(2):
-                for set_idx, player in enumerate(data['lineup' +
-                                                      str(team_idx + 1)]):
-                    self._matchData.setPlayer(
-                        team_idx, set_idx,
-                        player['nickname'], player['race'])
-
-                team = data['team' + str(team_idx + 1)]
-                self._matchData.setTeam(team_idx, team['name'], team['tag'])
-
-            for set_idx in range(5):
-                try:
-                    score = int(data['games'][set_idx]) * 2 - 3
-                except:
-                    score = 0
-
-                self._matchData.setMapScore(set_idx, score)
-
-            self._matchData.setAllKill(False)
-
-    def downloadLogos(self):
-        print("Download Alpha Logos")
-        """Download team logos."""
-        dir = scctool.settings.OBSdataDir
-        if self._rawData is None:
-            raise ValueError(
-                "Error: No raw data.")
-
-        for idx in range(2):
-            fname = dir + "/logo" + str(idx+1) + ".png"
-            try:
-                urlretrieve(self._rawData['team' + str(idx+1)]['logo'], fname)
-                self._controller.ftpUploader.cwd(dir)
-                self._controller.ftpUploader.upload(
-                    fname,
-                    "logo" + str(idx+1) + ".png")
-                self._controller.ftpUploader.cwd("..")
-            except Exception as e:
-                module_logger.exception("message")
-
-    def downloadBanner(self):
-        """Download team logos."""
-        dir = scctool.settings.OBSdataDir
-        if self._rawData is None:
-            raise ValueError(
-                "Error: No raw data.")
-
-            fname = dir + "/matchbanner.png"
-            url = "http://alpha.tl/announcement/"\
-                    + str(self.getID()) + "?vs"
-                    
-            try:
-                urlretrieve(url, fname)
-
-                self._controller.ftpUploader.cwd(dir)
-                self._controller.ftpUploader.upload(fname, "matchbanner.png")
-                self._controller.ftpUploader.cwd("..")
-            except Exception as e:
-                module_logger.exception("message")
-
-
-class MatchGrabberRSTL(MatchGrabber):
-    """Grabs match data from Alpha SC2 Teamleague."""
-
-    def __init__(self, *args):
-        """Init match grabber."""
-        super(MatchGrabberRSTL, self).__init__(*args)
+        super(MatchGrabber, self).__init__(*args)
         self._provider = "RSTL"
         self._urlprefix = \
             "http://hdgame.net/en/tournaments/list/tournament"\
@@ -181,7 +32,7 @@ class MatchGrabberRSTL(MatchGrabber):
 
         data = data['data']
         self._rawData = data
-        
+
         if(data['game_format'] == "3"):
             self._matchData.setNoSets(7, 6, resetPlayers=True)
             self._matchData.setMinSets(4)

@@ -2,11 +2,10 @@
 import logging
 
 # create logger
-module_logger = logging.getLogger('scctool.webapp')
+module_logger = logging.getLogger('scctool.tasks.webapp')
 
 try:
     import requests, json
-    import scctool.settings
     import webbrowser
     import requests.auth
     import urllib

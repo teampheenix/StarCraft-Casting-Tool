@@ -11,10 +11,7 @@ try:
     import time
     import difflib
     import shutil
-    from scctool.matchgrabber import \
-        MatchGrabber,\
-        MatchGrabberAlphaTL,\
-        MatchGrabberRSTL
+    from scctool.matchgrabber import *
 
 except Exception as e:
     module_logger.exception("message")
@@ -37,9 +34,9 @@ class matchData:
         (*args,) = (self, self.__controller)
 
         if(provider == "AlphaSC2"):
-            self.__matchGrabber = MatchGrabberAlphaTL(*args)
+            self.__matchGrabber = alpha.MatchGrabber(*args)
         elif(provider == "RSTL"):
-            self.__matchGrabber = MatchGrabberRSTL(*args)
+            self.__matchGrabber = rstl.MatchGrabber(*args)
         else:
             self.__matchGrabber = MatchGrabber(*args)
 
@@ -773,33 +770,33 @@ class matchData:
             display.append("inline-block")
 
             if(max(score) > threshold and i >= self.getMinSets()):
-                border_color[0].append(scctool.settings.Config.get(
+                border_color[0].append(scctool.settings.config.parser.get(
                     "MapIcons", "notplayed_color"))
-                border_color[1].append(scctool.settings.Config.get(
+                border_color[1].append(scctool.settings.config.parser.get(
                     "MapIcons", "notplayed_color"))
             elif(self.getMapScore(i) == -1):
                 border_color[0].append(
-                    scctool.settings.Config.get("MapIcons", "win_color"))
+                    scctool.settings.config.parser.get("MapIcons", "win_color"))
                 border_color[1].append(
-                    scctool.settings.Config.get("MapIcons", "lose_color"))
+                    scctool.settings.config.parser.get("MapIcons", "lose_color"))
                 score[0] += 1
             elif(self.getMapScore(i) == 1):
                 border_color[0].append(
-                    scctool.settings.Config.get("MapIcons", "lose_color"))
+                    scctool.settings.config.parser.get("MapIcons", "lose_color"))
                 border_color[1].append(
-                    scctool.settings.Config.get("MapIcons", "win_color"))
+                    scctool.settings.config.parser.get("MapIcons", "win_color"))
                 score[1] += 1
             else:
-                border_color[0].append(scctool.settings.Config.get(
+                border_color[0].append(scctool.settings.config.parser.get(
                     "MapIcons", "undecided_color"))
-                border_color[1].append(scctool.settings.Config.get(
+                border_color[1].append(scctool.settings.config.parser.get(
                     "MapIcons", "undecided_color"))
 
         for i in range(self.getNoSets(), scctool.settings.max_no_sets):
             display.append("none")
-            border_color[0].append(scctool.settings.Config.get(
+            border_color[0].append(scctool.settings.config.parser.get(
                 "MapIcons", "notplayed_color"))
-            border_color[1].append(scctool.settings.Config.get(
+            border_color[1].append(scctool.settings.config.parser.get(
                 "MapIcons", "notplayed_color"))
 
         if(score[0] > threshold):
@@ -861,28 +858,28 @@ class matchData:
                     skip[i] = True
 
                 if(max(score) > threshold and i >= self.getMinSets()):
-                    border_color = scctool.settings.Config.get(
+                    border_color = scctool.settings.config.parser.get(
                         "MapIcons", "notplayed_color")
-                    score_color = scctool.settings.Config.get(
+                    score_color = scctool.settings.config.parser.get(
                         "MapIcons", "notplayed_color")
-                    opacity = scctool.settings.Config.get(
+                    opacity = scctool.settings.config.parser.get(
                         "MapIcons", "notplayed_opacity")
                     winner = 0
                     skip[i] = False
                 elif(won == 1):
-                    border_color = scctool.settings.Config.get(
+                    border_color = scctool.settings.config.parser.get(
                         "MapIcons", "win_color")
-                    score_color = scctool.settings.Config.get(
+                    score_color = scctool.settings.config.parser.get(
                         "MapIcons", "win_color")
                 elif(won == -1):
-                    border_color = scctool.settings.Config.get(
+                    border_color = scctool.settings.config.parser.get(
                         "MapIcons", "lose_color")
-                    score_color = scctool.settings.Config.get(
+                    score_color = scctool.settings.config.parser.get(
                         "MapIcons", "lose_color")
                 else:
-                    border_color = scctool.settings.Config.get(
+                    border_color = scctool.settings.config.parser.get(
                         "MapIcons", "default_border_color")
-                    score_color = scctool.settings.Config.get(
+                    score_color = scctool.settings.config.parser.get(
                         "MapIcons", "undecided_color")
 
                 if(winner == -1):
@@ -1006,7 +1003,7 @@ class matchData:
             for team_idx in range(2):
                 team = self.__data['teams'][team_idx]['name']
                 matches = difflib.get_close_matches(
-                    team.lower(), scctool.settings.getMyTeams(), 1)
+                    team.lower(), scctool.settings.config.getMyTeams(), 1)
                 if(len(matches) > 0):
                     self.setMyTeam(team_idx * 2 - 1)
                     return True
@@ -1021,7 +1018,7 @@ class matchData:
 
 
 def autoCorrectMap(map):
-    """Corrects map using list in settings."""
+    """Corrects map using list in scctool.settings"""
     try:
         matches = difflib.get_close_matches(
             map.lower(), scctool.settings.maps, 1)

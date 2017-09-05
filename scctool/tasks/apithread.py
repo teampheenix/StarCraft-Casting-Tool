@@ -2,7 +2,7 @@
 import logging
 
 # create logger
-module_logger = logging.getLogger('scctool.apithread')
+module_logger = logging.getLogger('scctool.tasks.apithread')
 
 try:
     from PyQt5.QtCore import QThread
@@ -10,10 +10,9 @@ try:
     import requests
     import time
     from difflib import SequenceMatcher
-    import scctool.settings
-    from PIL import ImageGrab  # pip install Pillow
-    import pytesseract  # pip install pytesseract
     import re
+
+    import scctool.settings
 
 
 except Exception as e:
@@ -22,6 +21,8 @@ except Exception as e:
 
 if(platform.system() == "Windows"):
     try:
+        from PIL import ImageGrab  # pip install Pillow
+        import pytesseract  # pip install pytesseract
         import ctypes
         from win32gui import GetWindowText, GetForegroundWindow
         SendInput = ctypes.windll.user32.SendInput
@@ -105,67 +106,6 @@ if(platform.system() == "Windows"):
             ctypes.windll.user32.SendInput(
                 1, ctypes.pointer(x), ctypes.sizeof(x))
 
-        def ToggleScore(score1_in, score2_in, bestof=5):
-            """Set and toogle SC2-ingame score."""
-            score1, skip1 = int2DIK(score1_in)
-            score2, skip2 = int2DIK(score2_in)
-
-            if(bestof == 3):
-                bestof, skipBestof = int2DIK(bestof)
-                skipBestof = True
-            else:
-                bestof, skipBestof = int2DIK(bestof)
-
-            lag = 0.01
-
-            PressKey(CONTROL)
-            PressKey(SHIFT)
-            PressKey(S)
-            time.sleep(lag)
-            ReleaseKey(S)
-            ReleaseKey(SHIFT)
-            ReleaseKey(CONTROL)
-            time.sleep(lag)
-
-            if(not skipBestof):
-                print("Best of")
-                PressKey(CONTROL)
-                PressKey(SHIFT)
-                PressKey(bestof)
-                time.sleep(lag)
-                ReleaseKey(bestof)
-                ReleaseKey(SHIFT)
-                ReleaseKey(CONTROL)
-                time.sleep(lag)
-
-            if(not skip2):
-                PressKey(CONTROL)
-                PressKey(score2)  # Score player2
-                time.sleep(lag)
-                ReleaseKey(score2)
-                ReleaseKey(CONTROL)
-                time.sleep(lag)
-
-            if(not skip1):
-                PressKey(SHIFT)
-                PressKey(score1)  # Score player1
-                time.sleep(lag)
-                ReleaseKey(score1)
-                ReleaseKey(SHIFT)
-                time.sleep(lag)
-
-            print("Toggled Score")
-
-        def ToggleProduction():
-            """Toogle SC2-ingame production tab."""
-            lag = 0.01
-            time.sleep(lag)
-            PressKey(CONTROL)
-            PressKey(D)
-            time.sleep(lag)
-            ReleaseKey(CONTROL)
-            ReleaseKey(D)
-
         def int2DIK(integer):
             """Convert Integer to KeyBdInput."""
             if(integer == 0):
@@ -193,6 +133,74 @@ if(platform.system() == "Windows"):
 
     except Exception as e:
         module_logger.exception("message")
+
+
+def ToggleScore(score1_in, score2_in, bestof=5):
+    if(platform.system() != "Windows"):
+        raise UserWarning("Only Windows!")
+
+    """Set and toogle SC2-ingame score."""
+    score1, skip1 = int2DIK(score1_in)
+    score2, skip2 = int2DIK(score2_in)
+
+    if(bestof == 3):
+        bestof, skipBestof = int2DIK(bestof)
+        skipBestof = True
+    else:
+        bestof, skipBestof = int2DIK(bestof)
+
+    lag = 0.01
+
+    PressKey(CONTROL)
+    PressKey(SHIFT)
+    PressKey(S)
+    time.sleep(lag)
+    ReleaseKey(S)
+    ReleaseKey(SHIFT)
+    ReleaseKey(CONTROL)
+    time.sleep(lag)
+
+    if(not skipBestof):
+        print("Best of")
+        PressKey(CONTROL)
+        PressKey(SHIFT)
+        PressKey(bestof)
+        time.sleep(lag)
+        ReleaseKey(bestof)
+        ReleaseKey(SHIFT)
+        ReleaseKey(CONTROL)
+        time.sleep(lag)
+
+    if(not skip2):
+        PressKey(CONTROL)
+        PressKey(score2)  # Score player2
+        time.sleep(lag)
+        ReleaseKey(score2)
+        ReleaseKey(CONTROL)
+        time.sleep(lag)
+
+    if(not skip1):
+        PressKey(SHIFT)
+        PressKey(score1)  # Score player1
+        time.sleep(lag)
+        ReleaseKey(score1)
+        ReleaseKey(SHIFT)
+        time.sleep(lag)
+
+    print("Toggled Score")
+
+
+def ToggleProduction():
+    """Toogle SC2-ingame production tab."""
+    if(platform.system() != "Windows"):
+        raise UserWarning("Only Windows!")
+    lag = 0.01
+    time.sleep(lag)
+    PressKey(CONTROL)
+    PressKey(D)
+    time.sleep(lag)
+    ReleaseKey(CONTROL)
+    ReleaseKey(D)
 
 
 class SC2ApiThread(QThread):
@@ -231,7 +239,7 @@ class SC2ApiThread(QThread):
             else:
                 self.activeTask[task] = False
                 module_logger.info(
-                    'Requesting termination fo task "' + task + '"')
+                    'Requesting termination of task "' + task + '"')
 
             if(not any(self.activeTask.values())):
                 self.exiting = True
@@ -322,10 +330,10 @@ class SC2ApiThread(QThread):
     def swapPlayers(self, data):
         """Detect if players are swaped relative to SC2-Client-API data via ocr."""
         try:
-            if(not scctool.settings.Config.getboolean("SCT", "use_ocr")):
+            if(not settings.config.parser.getboolean("SCT", "use_ocr")):
                 return False
 
-            pytesseract.pytesseract.tesseract_cmd = scctool.settings.Config.get(
+            pytesseract.pytesseract.tesseract_cmd = settings.config.parser.get(
                 "SCT", "tesseract")
 
             players = data.getPlayerList()

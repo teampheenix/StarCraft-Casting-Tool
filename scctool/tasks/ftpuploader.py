@@ -2,7 +2,7 @@
 import logging
 
 # create logger
-module_logger = logging.getLogger('scctool.ftpuploader')
+module_logger = logging.getLogger('scctool.tasks.ftpuploader')
 
 try:
     import ftplib
@@ -130,7 +130,7 @@ class UploaderThread(QtCore.QThread):
                     cmd, *args = self.q.get(timeout=0.5)
                 retry = False
 
-                self.__upload = scctool.settings.Config.getboolean(
+                self.__upload = scctool.settings.config.parser.getboolean(
                     "FTP", "upload")
 
                 if(cmd == "progress_start"):
@@ -192,11 +192,11 @@ class UploaderThread(QtCore.QThread):
         print("FTP Thread finished.")
 
     def __connect(self):
-        self.__server = scctool.settings.Config.get("FTP", "server").strip()
-        self.__user = scctool.settings.Config.get("FTP", "user").strip()
-        self.__passwd = base64.b64decode(scctool.settings.Config.get(
+        self.__server = scctool.settings.config.parser.get("FTP", "server").strip()
+        self.__user = scctool.settings.config.parser.get("FTP", "user").strip()
+        self.__passwd = base64.b64decode(scctool.settings.config.parser.get(
             "FTP", "passwd").strip().encode()).decode("utf8")
-        self.__dir = scctool.settings.Config.get("FTP", "dir").strip()
+        self.__dir = scctool.settings.config.parser.get("FTP", "dir").strip()
         self.__ftp = ftplib.FTP(self.__server)
         module_logger.info(self.__ftp.login(self.__user, self.__passwd))
 

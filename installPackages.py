@@ -30,11 +30,11 @@ try:
     pip.main(['install', 'configparser'])
     pip.main(['install', 'flask'])
     pip.main(['install', 'obs-ws-rc'])
-    pip.main(['install', 'pytesseract'])
-    pip.main(['install', 'Pillow'])
 
     if(system == "Windows"):
         pip.main(['install', 'pypiwin32'])
+        pip.main(['install', 'pytesseract'])
+        pip.main(['install', 'Pillow'])
 
 except Exception as e:
     logger.exception("message")

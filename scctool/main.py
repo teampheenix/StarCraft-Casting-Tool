@@ -1,6 +1,4 @@
-__all__ = ["matchgrabber", "settings", "tasks",
-           "view", "controller", "matchdata"]
-
+"""Starcraft Casting Tool."""
 import sys
 import logging
 
@@ -18,14 +16,15 @@ fh.setFormatter(formatter)
 logger.addHandler(fh)
 
 
-def main():
+try:
+
     from scctool.controller import MainController
-    from scctool.view.main import mainWindow
+    from scctool.view import mainWindow
 
     from PyQt5.QtWidgets import QApplication, QStyleFactory
     from PyQt5.QtGui import QIcon
 
-    try:
+    def main():
         """Run the main program."""
         app = QApplication(sys.argv)
         QApplication.setStyle(QStyleFactory.create('Fusion'))
@@ -35,6 +34,9 @@ def main():
         logger.info("Starting...")
         sys.exit(app.exec_())
 
-    except Exception as e:
-        logger.exception("message")
-        raise
+    if __name__ == '__main__':
+        main()
+
+except Exception as e:
+    logger.exception("message")
+    raise

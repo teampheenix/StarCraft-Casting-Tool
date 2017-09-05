@@ -6,15 +6,16 @@ module_logger = logging.getLogger('scctool.controller')
 
 try:
     from scctool.matchdata import matchData
-    from scctool.apithread import SC2ApiThread, ToggleScore
-    from scctool.webapp import FlaskThread
-    from scctool.settings import CheckVersionThread, PlaceholderList
-    from scctool.ftpuploader import FTPUploader
-    from scctool.obs import WebsocketThread
+    from scctool.tasks.apithread import SC2ApiThread, ToggleScore
+    from scctool.tasks.webapp import FlaskThread
+    from scctool.settings.version import CheckVersionThread, VersionControl
+    from scctool.settings.placeholders import PlaceholderList
+    from scctool.tasks.ftpuploader import FTPUploader
+    from scctool.tasks.obs import WebsocketThread
     import scctool.settings
-    import scctool.twitch
-    import scctool.nightbot
-    import scctool.obs
+    import scctool.tasks.twitch
+    import scctool.tasks.nightbot
+    import scctool.tasks.obs
     import webbrowser
     import os
     import shutil
@@ -36,8 +37,7 @@ class MainController:
         try:
             self.matchData = matchData(self)
             self.SC2ApiThread = SC2ApiThread(self)
-            self.checkVersionThread = CheckVersionThread(
-                self, scctool.settings.versioncontrol)
+            self.checkVersionThread = CheckVersionThread(scctool.settings.versionControl)
             self.webApp = FlaskThread()
             self.webApp.signal_twitch.connect(self.webAppDone_twitch)
             self.webApp.signal_nightbot.connect(self.webAppDone_nightbot)
@@ -48,6 +48,7 @@ class MainController:
 
         except Exception as e:
             module_logger.exception("message")
+            raise
 
     def placeholderSetup(self):
         """Define and connect placeholders."""
@@ -229,20 +230,20 @@ class MainController:
     def setCBs(self):
         """Update value of check boxes from config."""
         try:
-            if(scctool.settings.CB_ScoreUpdate):
+            if(scctool.settings.config.scoreUpdate):
                 self.view.cb_autoUpdate.setChecked(True)
 
-            if(scctool.settings.CB_ToggleScore):
+            if(scctool.settings.config.toggleScore):
                 self.view.cb_autoToggleScore.setChecked(True)
 
-            if(scctool.settings.CB_ToggleProd):
+            if(scctool.settings.config.toggleProd):
                 self.view.cb_autoToggleProduction.setChecked(True)
 
-            if(scctool.settings.CB_PlayerIntros):
+            if(scctool.settings.config.playerIntros):
                 self.view.cb_playerIntros.setChecked(True)
 
             self.view.cb_autoFTP.setChecked(
-                scctool.settings.Config.getboolean("FTP", "upload"))
+                scctool.settings.config.parser.getboolean("FTP", "upload"))
         except Exception as e:
             module_logger.exception("message")
 
@@ -320,7 +321,7 @@ class MainController:
         try:
             msg = ''
             self.updateData()
-            message = scctool.settings.Config.get("NightBot", "message")
+            message = scctool.settings.config.parser.get("NightBot", "message")
             message = self.placeholders.replace(message)
             msg = scctool.nightbot.updateCommand(message)
         except Exception as e:
@@ -336,7 +337,7 @@ class MainController:
             msg = ''
             self.updateData()
             try:
-                title = scctool.settings.Config.get("Twitch", "title_template")
+                title = scctool.settings.config.parser.get("Twitch", "title_template")
                 title = self.placeholders.replace(title)
                 msg = scctool.twitch.updateTitle(title)
             except Exception as e:
@@ -405,19 +406,19 @@ class MainController:
     def saveConfig(self):
         """Save the settings to the config file."""
         try:
-            scctool.settings.Config.set("Form", "scoreupdate", str(
+            scctool.settings.config.parser.set("Form", "scoreupdate", str(
                 self.view.cb_autoUpdate.isChecked()))
-            scctool.settings.Config.set("Form", "togglescore", str(
+            scctool.settings.config.parser.set("Form", "togglescore", str(
                 self.view.cb_autoToggleScore.isChecked()))
-            scctool.settings.Config.set("Form", "toggleprod", str(
+            scctool.settings.config.parser.set("Form", "toggleprod", str(
                 self.view.cb_autoToggleProduction.isChecked()))
-            scctool.settings.Config.set("Form", "playerintros", str(
+            scctool.settings.config.parser.set("Form", "playerintros", str(
                 self.view.cb_playerIntros.isChecked()))
-            scctool.settings.Config.set(
+            scctool.settings.config.parser.set(
                 "FTP", "upload", str(self.view.cb_autoFTP.isChecked()))
 
-            cfgfile = open(scctool.settings.configFile, 'w')
-            scctool.settings.Config.write(cfgfile)
+            cfgfile = open(scctool.settings.cfgFile, 'w')
+            scctool.settings.config.parser.write(cfgfile)
             cfgfile.close()
         except Exception as e:
             module_logger.exception("message")
@@ -442,8 +443,8 @@ class MainController:
             module_logger.exception("message")
 
     def refreshButtonStatus(self):
-        """Enable or disable buttons depending on settings."""
-        if(not scctool.settings.twitchIsValid()):
+        """Enable or disable buttons depending on scctool.settings.config"""
+        if(not scctool.settings.config.twitchIsValid()):
             self.view.pb_twitchupdate.setEnabled(False)
             self.view.pb_twitchupdate.setAttribute(Qt.WA_AlwaysShowToolTips)
             self.view.pb_twitchupdate.setToolTip(
@@ -453,7 +454,7 @@ class MainController:
             self.view.pb_twitchupdate.setAttribute(Qt.WA_AlwaysShowToolTips)
             self.view.pb_twitchupdate.setToolTip('')
 
-        if(not scctool.settings.nightbotIsValid()):
+        if(not scctool.settings.config.nightbotIsValid()):
             self.view.pb_nightbotupdate.setEnabled(False)
             self.view.pb_nightbotupdate.setAttribute(Qt.WA_AlwaysShowToolTips)
             self.view.pb_nightbotupdate.setToolTip(
@@ -463,7 +464,7 @@ class MainController:
             self.view.pb_nightbotupdate.setAttribute(Qt.WA_AlwaysShowToolTips)
             self.view.pb_nightbotupdate.setToolTip('')
 
-        if(not scctool.settings.ftpIsValid()):
+        if(not scctool.settings.config.ftpIsValid()):
             self.view.cb_autoFTP.setEnabled(False)
             self.view.cb_autoFTP.setAttribute(Qt.WA_AlwaysShowToolTips)
             self.view.cb_autoFTP.setToolTip(
