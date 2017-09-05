@@ -1,5 +1,5 @@
 scctool/__pycache__/
-scctool/matchgrabber/__pycache__/
+scctool/*/__pycache__/
 OBS_data/
 src/data.json
 src/*.log
