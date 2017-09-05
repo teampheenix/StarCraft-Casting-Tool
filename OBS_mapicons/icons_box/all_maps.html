@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>All Box Map Icons</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="../src/jquery.textfill.min.js"></script>
     <script>
         function showHide(i) {
             mapicon = "#mapicon" + i.toString();
@@ -13,18 +14,20 @@
             } else {
                 $(mapicon).css("display", "inline-block");
             }
+
+            $(mapicon).find(".text-fill").textfill();
+            setTimeout(reloadBox.bind(null, i), 1000);
         }
 
-        function reloadContent() {
-            for (i = 1; i <= 9; i++) {
-                mapicon = "#mapicon" + i.toString();
-                $(mapicon).load("data/" + i.toString() + ".html", showHide(i));
-            }
-            setTimeout(reloadContent, 1000);
+        function reloadBox(i) {
+            mapicon = "#mapicon" + i.toString();
+            $(mapicon).load("data/" + i.toString() + ".html", showHide.bind(null, i));
         }
 
         $(document).ready(function() {
-            reloadContent();
+            for (i = 1; i <= 9; i++) {
+                reloadBox(i);
+            }
         });
     </script>
     <link rel="stylesheet" href="../src/css/box.css">

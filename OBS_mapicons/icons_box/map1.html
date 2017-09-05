@@ -5,10 +5,15 @@
 	<meta charset="UTF-8">
 	<title>Box Map Icon 1</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="../src/jquery.textfill.min.js"></script>
 	<script>
+        function fillText() {
+            $("#content").find(".text-fill").textfill();
+        }
+
         function reloadContent() {
-            $("#content").load("data/1.html");
-            setTimeout(reloadContent, 1000);
+            $("#content").load("data/1.html", fillText);
+            //setTimeout(reloadContent, 1000);
         }
 
         $(document).ready(function() {

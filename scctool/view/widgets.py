@@ -12,6 +12,7 @@ import os
 import re
 import shutil
 import time
+import scctool.matchdata
 
 
 class MapLineEdit(QLineEdit):

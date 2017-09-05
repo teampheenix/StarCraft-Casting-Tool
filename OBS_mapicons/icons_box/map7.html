@@ -5,9 +5,14 @@
 	<meta charset="UTF-8">
 	<title>Box Map Icon 7</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="../src/jquery.textfill.min.js"></script>
 	<script>
+        function fillText() {
+            $("#content").find(".text-fill").textfill();
+        }
+
         function reloadContent() {
-            $("#content").load("data/7.html");
+            $("#content").load("data/7.html", fillText);
             setTimeout(reloadContent, 1000);
         }
 
