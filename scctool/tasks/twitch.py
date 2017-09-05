@@ -17,9 +17,9 @@ def updateTitle(newTitle):
 
    #Updates the twitch title specified in the config file
    try:
-      twitchChannel = settings.config.parser.get("Twitch", "Channel")
-      clientID  = webapp.TWITCH_CLIENT_ID
-      oauth = settings.config.parser.get("Twitch", "oauth")
+      twitchChannel = scctool.settings.config.parser.get("Twitch", "Channel")
+      clientID  = scctool.tasks.webapp.TWITCH_CLIENT_ID
+      oauth = scctool.settings.config.parser.get("Twitch", "oauth")
 
       headers = {'Accept': 'application/vnd.twitchtv.v3+json',\
                'Authorization': 'OAuth ' + oauth,\

@@ -136,10 +136,10 @@ if(platform.system() == "Windows"):
 
 
 def ToggleScore(score1_in, score2_in, bestof=5):
+    """Set and toogle SC2-ingame score."""
     if(platform.system() != "Windows"):
         raise UserWarning("Only Windows!")
 
-    """Set and toogle SC2-ingame score."""
     score1, skip1 = int2DIK(score1_in)
     score2, skip2 = int2DIK(score2_in)
 
@@ -330,10 +330,10 @@ class SC2ApiThread(QThread):
     def swapPlayers(self, data):
         """Detect if players are swaped relative to SC2-Client-API data via ocr."""
         try:
-            if(not settings.config.parser.getboolean("SCT", "use_ocr")):
+            if(not scctool.settings.config.parser.getboolean("SCT", "use_ocr")):
                 return False
 
-            pytesseract.pytesseract.tesseract_cmd = settings.config.parser.get(
+            pytesseract.pytesseract.tesseract_cmd = scctool.settings.config.parser.get(
                 "SCT", "tesseract")
 
             players = data.getPlayerList()
@@ -502,7 +502,7 @@ class SC2MatchData:
 def compareStr(str1, str2):
     """Compare two string (optionally with fuzzy compare)."""
     try:
-        fuzzymatch = scctool.settings.fuzzymatch
+        fuzzymatch = scctool.settings.config.fuzzymatch
         if(fuzzymatch):
             threshold = 0.75
             match = SequenceMatcher(None, str1.upper(), str2.upper()).ratio()

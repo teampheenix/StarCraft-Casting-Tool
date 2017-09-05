@@ -618,7 +618,7 @@ class mainWindow(QMainWindow):
 
     def autoFTP_change(self):
         try:
-            scctool.settings.Config.set(
+            scctool.settings.config.parser.set(
                 "FTP", "upload", str(self.cb_autoFTP.isChecked()))
             if(self.cb_autoFTP.isChecked()):
                 signal = self.controller.ftpUploader.connect()
@@ -810,7 +810,7 @@ class mainWindow(QMainWindow):
                 fname, "logo" + str(button) + ext)
             self.controller.ftpUploader.cwd("..")
             self.controller.matchData.metaChanged()
-            self.controller.matchData.updateScoreIcon(self.controller)
+            self.controller.matchData.updateScoreIcon()
 
     def resizeWindow(self):
         if(not self.isMaximized()):

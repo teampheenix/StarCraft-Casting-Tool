@@ -8,7 +8,7 @@ try:
     from scctool.matchdata import matchData
     from scctool.tasks.apithread import SC2ApiThread, ToggleScore
     from scctool.tasks.webapp import FlaskThread
-    from scctool.settings.version import CheckVersionThread, VersionControl
+    from scctool.settings.version import CheckVersionThread
     from scctool.settings.placeholders import PlaceholderList
     from scctool.tasks.ftpuploader import FTPUploader
     from scctool.tasks.obs import WebsocketThread
@@ -37,7 +37,8 @@ class MainController:
         try:
             self.matchData = matchData(self)
             self.SC2ApiThread = SC2ApiThread(self)
-            self.checkVersionThread = CheckVersionThread(scctool.settings.versionControl)
+            self.checkVersionThread = CheckVersionThread(
+                scctool.settings.versionControl)
             self.webApp = FlaskThread()
             self.webApp.signal_twitch.connect(self.webAppDone_twitch)
             self.webApp.signal_nightbot.connect(self.webAppDone_nightbot)
@@ -323,7 +324,7 @@ class MainController:
             self.updateData()
             message = scctool.settings.config.parser.get("NightBot", "message")
             message = self.placeholders.replace(message)
-            msg = scctool.nightbot.updateCommand(message)
+            msg = scctool.tasks.nightbot.updateCommand(message)
         except Exception as e:
             msg = str(e)
             module_logger.exception("message")
@@ -337,9 +338,10 @@ class MainController:
             msg = ''
             self.updateData()
             try:
-                title = scctool.settings.config.parser.get("Twitch", "title_template")
+                title = scctool.settings.config.parser.get(
+                    "Twitch", "title_template")
                 title = self.placeholders.replace(title)
-                msg = scctool.twitch.updateTitle(title)
+                msg = scctool.tasks.twitch.updateTitle(title)
             except Exception as e:
                 msg = str(e)
                 module_logger.exception("message")
@@ -443,7 +445,7 @@ class MainController:
             module_logger.exception("message")
 
     def refreshButtonStatus(self):
-        """Enable or disable buttons depending on scctool.settings.config"""
+        """Enable or disable buttons depending on config."""
         if(not scctool.settings.config.twitchIsValid()):
             self.view.pb_twitchupdate.setEnabled(False)
             self.view.pb_twitchupdate.setAttribute(Qt.WA_AlwaysShowToolTips)

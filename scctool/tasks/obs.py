@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+"""Interaction with OBS-Websocket."""
 import logging
 
 # create logger
@@ -6,15 +6,12 @@ module_logger = logging.getLogger('scctool.tasks.obs')
 
 try:
     import asyncio
-    import sys
     import time
     import base64
     import scctool.settings
-    import concurrent.futures
     from PyQt5 import QtCore
 
-    #pip install obs-ws-rc
-    from obswsrc import OBSWS
+    from obswsrc import OBSWS  # pip install obs-ws-rc
     from obswsrc.client import AuthError
     from obswsrc.requests import SetSourceRenderRequest, ResponseStatus
 
@@ -25,9 +22,10 @@ except Exception as e:
 
 
 def testConnection():
-
-    passwd = base64.b64decode(settings.config.parser.get("OBS","passwd").strip().encode()).decode("utf8")
-    port = settings.config.parser.getint("OBS","port")
+    """Test connection."""
+    passwd = base64.b64decode(scctool.settings.config.parser.get(
+        "OBS", "passwd").strip().encode()).decode("utf8")
+    port = scctool.settings.config.parser.getint("OBS", "port")
 
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(None)
@@ -38,7 +36,8 @@ def testConnection():
         msg = "Connected!"
 
     except OSError:
-        msg = "{host}:{port} is unreachable. Is OBS Studio with obs-websocket plugin launched?".format(host=obsws.host, port=obsws.port)
+        msg = "{host}:{port} is unreachable. Is OBS Studio with obs-websocket plugin launched?"
+        msg = msg.format(host=obsws.host, port=obsws.port)
 
     except AuthError:
         msg = "Couldn't auth to obs-websocket. Correct password?"
@@ -54,15 +53,16 @@ def testConnection():
 
 
 async def hideIntros(thread):
+    """Hide browser sources of playyer intros."""
+    passwd = base64.b64decode(scctool.settings.config.parser.get(
+        "OBS", "passwd").strip().encode()).decode("utf8")
+    port = scctool.settings.config.parser.getint("OBS", "port")
 
-    passwd = base64.b64decode(settings.config.parser.get("OBS","passwd").strip().encode()).decode("utf8")
-    port = settings.config.parser.getint("OBS","port")
-
-    obsws =  OBSWS("localhost", port, passwd)
+    obsws = OBSWS("localhost", port, passwd)
     try:
         await obsws.connect()
-    except:
-        print("Error!")
+    except Exception as e:
+        module_logger.exception("message")
         return
 
     try:
@@ -79,17 +79,18 @@ async def hideIntros(thread):
                 values = list(event.values())
                 source_name = values[0]
                 visible = values[1]
-                sources = list(map(str.strip, str(settings.config.parser.get("OBS", "sources")).split(',')))
+                sources = list(map(str.strip, str(
+                    scctool.settings.config.parser.get("OBS", "sources")).split(',')))
                 if(visible and source_name in sources):
                     time.sleep(4.5)
-                    response = await obsws.require(SetSourceRenderRequest(source=source_name,render=False))
+                    request = SetSourceRenderRequest(source=source_name, render=False)
+                    response = await obsws.require(request)
 
                     # Check if everything is OK
                     if response.status == ResponseStatus.OK:
-                        print("Source "+source_name+" hidden!")
+                        print("Source " + source_name + " hidden!")
                     else:
                         print("Couldn't hide the source. Reason:", response.error)
-
 
         print("while done")
     finally:
@@ -97,17 +98,20 @@ async def hideIntros(thread):
 
 
 class WebsocketThread(QtCore.QThread):
+    """Thread for websocket interaction."""
 
     requestCancellation = QtCore.pyqtSignal(int)
 
     def __init__(self):
+        """Init thread."""
         QtCore.QThread.__init__(self)
         self.__kill = False
 
     def run(self):
+        """Run thread."""
         self.__kill = False
         while not self.__kill:
-            if(settings.config.parser.getboolean("OBS","active")):
+            if(scctool.settings.config.parser.getboolean("OBS", "active")):
                 loop = asyncio.new_event_loop()
                 loop.run_until_complete(hideIntros(self))
                 loop.close()
@@ -116,11 +120,13 @@ class WebsocketThread(QtCore.QThread):
         print("WebSocketThread finished!")
 
     def getKillStatus(self):
-
+        """Get kill status."""
         return self.__kill
 
     def requestKill(self):
+        """Request kill of thread."""
         self.__kill = True
 
     def cancelKillRequest(self):
+        """Cancel kill request."""
         self.__kill = False

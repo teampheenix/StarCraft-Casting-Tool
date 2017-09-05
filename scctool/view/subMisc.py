@@ -99,12 +99,12 @@ class subwindowMisc(QWidget):
         self.tesseract.setPlaceholderText(
             "C:\\Program Files (x86)\\Tesseract-OCR\\tesseract")
         self.tesseract.setReadOnly(True)
-        self.tesseract.setToolTip('Path to Tesseract-OCR')
+        self.tesseract.setToolTip('Tesseract-OCR Executeable')
 
         button = QPushButton("Select Folder")
         button.clicked.connect(self.selectTesseract)
 
-        text = """Sometimes the order of players given by the SC2-Client-API differs from the order in the Observer-UI resulting in a swaped match score. To correct this via Optical Character Recognition you have to download and install <a href='https://github.com/UB-Mannheim/tesseract/wiki#tesseract-at-ub-mannheim'>Tesseract-OCR</a> and select its folder here:"""
+        text = """Sometimes the order of players given by the SC2-Client-API differs from the order in the Observer-UI resulting in a swaped match score. To correct this via Optical Character Recognition you have to download and install <a href='https://github.com/UB-Mannheim/tesseract/wiki#tesseract-at-ub-mannheim'>Tesseract-OCR</a> and select the exectuable (tesseract.exe) here:"""
 
         label = QLabel(text)
         label.setOpenExternalLinks(True)
@@ -120,11 +120,10 @@ class subwindowMisc(QWidget):
         self.ocrBox.setLayout(layout)
 
     def selectTesseract(self):
-        old_dir = self.tesseract.text()
-        dir = QFileDialog.getExistingDirectory(
-            self, "Select Tesseract-OCR Folder", old_dir, QFileDialog.ShowDirsOnly)
-        if(dir != old_dir):
-            self.tesseract.setText(dir)
+        old_exe = self.tesseract.text()
+        exe, ok = QFileDialog.getOpenFileName(self, "Select Tesseract-OCR Executeable", old_exe, "Tesseract-OCR Executeable (tesseract.exe);; Exectuable (*.exe);; All files (*)")
+        if(ok and exe != old_exe):
+            self.tesseract.setText(exe)
             self.changed()
 
     def createMapsBox(self):
@@ -271,7 +270,7 @@ class subwindowMisc(QWidget):
             scctool.settings.config.parser.set(
                 "SCT", "tesseract", self.tesseract.text().strip())
             scctool.settings.config.parser.set(
-                "SCT", "use_ocr", str(self.cb_useocr.checkState()))
+                "SCT", "use_ocr", str(self.cb_useocr.isChecked()))
 
     def saveCloseWindow(self):
         self.saveData()

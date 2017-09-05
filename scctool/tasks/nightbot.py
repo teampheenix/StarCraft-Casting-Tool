@@ -1,58 +1,63 @@
-#!/usr/bin/env python
+"""Update Nightbot commands."""
 import logging
 
 # create logger
 module_logger = logging.getLogger('scctool.tasks.nightbot')
 
 try:
-    import requests, json
+    import requests
     import scctool.settings
 
 except Exception as e:
     module_logger.exception("message")
     raise
 
+
 def base_headers():
+    """Define header."""
     return {"User-Agent": ""}
 
+
 def updateCommand(message):
+    """Update command to message."""
+    cmd = scctool.settings.config.parser.get("NightBot", "command")
 
-    cmd = settings.config.parser.get("NightBot","command")
-
-    #Updates the twitch title specified in the config file
+    # Updates the twitch title specified in the config file
     try:
         headers = base_headers()
-        headers.update({"Authorization": "Bearer " + settings.config.parser.get("NightBot","token")})
+        headers.update({"Authorization": "Bearer " +
+                        scctool.settings.config.parser.get("NightBot", "token")})
 
-        response = requests.get("https://api.nightbot.tv/1/commands", headers=headers).json()
+        response = requests.get(
+            "https://api.nightbot.tv/1/commands", headers=headers).json()
 
-        if(response['status']!=200):
-            return "NightBot-API: "+str(response['status'])+" - "+response['message']
+        if(response['status'] != 200):
+            return "NightBot-API: " + str(response['status']) + " - " + response['message']
 
         cmdFound, skipUpdate, id = findCmd(response, cmd, message)
 
         if(skipUpdate):
-            return "NightBot Command '"+cmd+"' was already set to '"+message+"'"
+            return "NightBot Command '" + cmd + "' was already set to '" + message + "'"
 
         if(cmdFound):
             put_data = {"message": message}
-            response = requests.put("https://api.nightbot.tv/1/commands/"+id,
-                             headers=headers,
-                             data=put_data)
+            response = requests.put("https://api.nightbot.tv/1/commands/" + id,
+                                    headers=headers,
+                                    data=put_data)
             print(response.json())
 
         else:
             post_data = {"message": message,
-                     "userLevel": "everyone",
-                     "coolDown":"5",
-                     "name": cmd}
+                         "userLevel": "everyone",
+                         "coolDown": "5",
+                         "name": cmd}
 
             response = requests.post("https://api.nightbot.tv/1/commands",
-                             headers=headers,
-                             data=post_data)
+                                     headers=headers,
+                                     data=post_data)
             print(response.json())
 
-        msg = "Updated NightBot Command '"+cmd+"' to '"+message+"'"
+        msg = "Updated NightBot Command '" + cmd + "' to '" + message + "'"
 
     except Exception as e:
         msg = str(e)
@@ -62,12 +67,12 @@ def updateCommand(message):
 
 
 def findCmd(response, cmd, msg):
-    for i in range(0,response['_total']):
+    """Find command in API data."""
+    for i in range(0, response['_total']):
         if(response['commands'][i]['name'] == cmd):
             if(response['commands'][i]['message'] == msg):
                 return True, True, response['commands'][i]['_id']
             else:
                 return True, False, response['commands'][i]['_id']
-
 
     return False, False, ''

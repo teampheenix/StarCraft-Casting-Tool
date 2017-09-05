@@ -11,7 +11,9 @@ try:
     import time
     import difflib
     import shutil
-    from scctool.matchgrabber import *
+    from scctool.matchgrabber import MatchGrabber
+    from scctool.matchgrabber.alpha import MatchGrabber as MatchGrabberAlpha
+    from scctool.matchgrabber.rstl import MatchGrabber as MatchGrabberRSTL
 
 except Exception as e:
     module_logger.exception("message")
@@ -34,12 +36,11 @@ class matchData:
         (*args,) = (self, self.__controller)
 
         if(provider == "AlphaSC2"):
-            self.__matchGrabber = alpha.MatchGrabber(*args)
+            self.__matchGrabber = MatchGrabberAlpha(*args)
         elif(provider == "RSTL"):
-            self.__matchGrabber = rstl.MatchGrabber(*args)
+            self.__matchGrabber = MatchGrabberRSTL(*args)
         else:
             self.__matchGrabber = MatchGrabber(*args)
-
 
     def readJsonFile(self):
         """Read json data from file."""
@@ -81,9 +82,9 @@ class matchData:
 
         self.setID(re.findall('\d+', url)[-1])
     # except Exception as e:
-        #self.setProvider("Custom")
-        #self.setID(0)
-        #module_logger.exception("message")
+        # self.setProvider("Custom")
+        # self.setID(0)
+        # module_logger.exception("message")
 
     def __initData(self):
         self.__data = {}
@@ -745,12 +746,13 @@ class matchData:
                 f.write(self.getLeague())
                 f.close()
 
-            self.__controller.ftpUploader.cwd(scctool.settings.OBSdataDir)
-            for file in files2upload:
-                self.__controller.ftpUploader.upload(
-                    scctool.settings.OBSdataDir + "/" + file, file)
+            if(len(files2upload) > 0):
+                self.__controller.ftpUploader.cwd(scctool.settings.OBSdataDir)
+                for file in files2upload:
+                    self.__controller.ftpUploader.upload(
+                        scctool.settings.OBSdataDir + "/" + file, file)
 
-            self.__controller.ftpUploader.cwd("..")
+                self.__controller.ftpUploader.cwd("..")
 
         except Exception as e:
             module_logger.exception("message")
@@ -804,11 +806,13 @@ class matchData:
         elif(score[1] > threshold):
             winner[1] = "winner"
 
-        logo1 = self.__controller.linkFile(scctool.settings.OBSdataDir + "/logo1")
+        logo1 = self.__controller.linkFile(
+            scctool.settings.OBSdataDir + "/logo1")
         if logo1 == "":
             logo1 = scctool.settings.OBShtmlDir + "/src/SC2.png"
 
-        logo2 = self.__controller.linkFile(scctool.settings.OBSdataDir + "/logo2")
+        logo2 = self.__controller.linkFile(
+            scctool.settings.OBSdataDir + "/logo2")
         if logo2 == "":
             logo2 = scctool.settings.OBShtmlDir + "/src/SC2.png"
 
@@ -834,7 +838,8 @@ class matchData:
                             '%DISPLAY-M' + str(i + 1) + '%', display[i])
                     fout.write(line)
 
-        self.__controller.ftpUploader.cwd(scctool.settings.OBShtmlDir + "/data")
+        self.__controller.ftpUploader.cwd(
+            scctool.settings.OBShtmlDir + "/data")
         self.__controller.ftpUploader.upload(filename, "score-data.html")
         self.__controller.ftpUploader.cwd("../../..")
 
@@ -963,19 +968,22 @@ class matchData:
                             line = line.replace('%HIDDEN%', hidden)
                             fout.write(line)
 
-            for type in ["box", "landscape"]:
-                self.__controller.ftpUploader.cwd(
-                    scctool.settings.OBSmapDir + "/icons_" + type + "/data")
-                for i in range(scctool.settings.max_no_sets):
-                    if(i < self.getNoSets() and skip[i]):
-                        continue
-                    if(i >= self.getNoSets() and not self.hasMetaChanged()):
-                        continue
-                    filename = scctool.settings.OBSmapDir + "/icons_" + \
-                        type + "/data/" + str(i + 1) + ".html"
-                    self.__controller.ftpUploader.upload(
-                        filename, str(i + 1) + ".html")
-                self.__controller.ftpUploader.cwd("../../..")
+            if(False in skip or self.hasMetaChanged()):
+                self.__controller.ftpUploader.cwd(scctool.settings.OBSmapDir)
+                for type in ["box", "landscape"]:
+                    self.__controller.ftpUploader.cwd(
+                        "icons_" + type + "/data")
+                    for i in range(scctool.settings.max_no_sets):
+                        if(i < self.getNoSets() and skip[i]):
+                            continue
+                        if(i >= self.getNoSets() and not self.hasMetaChanged()):
+                            continue
+                        filename = scctool.settings.OBSmapDir + "/icons_" + \
+                            type + "/data/" + str(i + 1) + ".html"
+                        self.__controller.ftpUploader.upload(
+                            filename, str(i + 1) + ".html")
+                    self.__controller.ftpUploader.cwd("../..")
+                self.__controller.ftpUploader.cwd("..")
 
         except Exception as e:
             module_logger.exception("message")
@@ -990,8 +998,10 @@ class matchData:
                 ".html"
             filename_new = scctool.settings.OBShtmlDir + "/data/league-data.html"
             shutil.copy(filename_old, filename_new)
-            self.__controller.ftpUploader.cwd(scctool.settings.OBShtmlDir + "/data")
-            self.__controller.ftpUploader.upload(filename_new, "league-data.html")
+            self.__controller.ftpUploader.cwd(
+                scctool.settings.OBShtmlDir + "/data")
+            self.__controller.ftpUploader.upload(
+                filename_new, "league-data.html")
             self.__controller.ftpUploader.cwd("../..")
 
         except Exception as e:
@@ -1018,7 +1028,7 @@ class matchData:
 
 
 def autoCorrectMap(map):
-    """Corrects map using list in scctool.settings"""
+    """Corrects map using list in config."""
     try:
         matches = difflib.get_close_matches(
             map.lower(), scctool.settings.maps, 1)
@@ -1032,7 +1042,7 @@ def autoCorrectMap(map):
 
 
 def getRace(str):
-    """Sets race by using the first letter."""
+    """Get race by using the first letter."""
     try:
         for idx, race in enumerate(scctool.settings.races):
             if(str[0].upper() == race[0].upper()):

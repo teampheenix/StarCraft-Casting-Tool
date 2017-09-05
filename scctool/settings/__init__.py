@@ -1,13 +1,13 @@
+"""Provide settings for SCCTool."""
 import logging
 import os
 
-__all__ = ["config", "placeholders", "version"]
+from scctool.settings.config import cfgFile as configFile
+from scctool.settings.version import VersionControl
 
 module_logger = logging.getLogger('scctool.settings')
 
-from scctool.settings.version import VersionControl
-
-cfgFile = "config.ini"
+cfgFile = configFile
 jsonFile = "src/data.json"
 OBSdataDir = "OBS_data"
 OBShtmlDir = "OBS_html"
@@ -25,6 +25,7 @@ if not os.path.exists(OBSdataDir):
 
 
 def loadMapList():
+    """Load map list form dir."""
     maps = []
     try:
         dir = os.path.normpath(os.path.join(OBSmapDir, "src/maps"))
@@ -40,13 +41,17 @@ def loadMapList():
 
 maps = loadMapList()
 
+
 def race2idx(str):
+    """Convert race to idx."""
     for idx, race in enumerate(races):
         if(race.lower() == str.lower()):
             return idx
     return 0
 
+
 def idx2race(idx):
+    """Convert idx to race."""
     try:
         return races[idx]
     except:

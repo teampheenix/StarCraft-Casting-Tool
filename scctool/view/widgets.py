@@ -11,6 +11,7 @@ from PyQt5.QtGui import *
 import os
 import re
 import shutil
+import time
 
 
 class MapLineEdit(QLineEdit):

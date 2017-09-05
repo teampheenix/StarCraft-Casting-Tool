@@ -1,9 +1,7 @@
-__all__ = ["custom", "alpha", "rstl", "MatchGrabber"]
+"""Provide match grabbers."""
 
-from scctool.matchgrabber.custom import MatchGrabber as MatchGrabberParent
+from scctool.matchgrabber.custom import MatchGrabber as MatchGrabber
+from scctool.matchgrabber.alpha import MatchGrabber as MatchGrabberAlpha
+from scctool.matchgrabber.rstl import MatchGrabber as MatchGrabberRSTL
 
-class MatchGrabber(MatchGrabberParent):
-
-    def __init__(self, *args):
-        """Init match grabber."""
-        super(MatchGrabber, self).__init__(*args)
+__all__ = ["MatchGrabber", "MatchGrabberAlpha", "MatchGrabberRSTL"]

@@ -1,13 +1,14 @@
-import logging
-# create logger
-module_logger = logging.getLogger('scctool.matchgrabber.alpha')
+"""Provide match grabber for AlphaTL."""
 
+import logging
 import scctool.settings
 
 from urllib.request import urlretrieve
-import os
-
 from scctool.matchgrabber.custom import MatchGrabber as MatchGrabberParent
+
+# create logger
+module_logger = logging.getLogger('scctool.matchgrabber.alpha')
+
 
 class MatchGrabber(MatchGrabberParent):
     """Grabs match data from Alpha SC2 Teamleague."""
@@ -59,7 +60,6 @@ class MatchGrabber(MatchGrabberParent):
             self._matchData.setAllKill(False)
 
     def downloadLogos(self):
-        print("Download Alpha Logos")
         """Download team logos."""
         dir = scctool.settings.OBSdataDir
         if self._rawData is None:
@@ -67,13 +67,14 @@ class MatchGrabber(MatchGrabberParent):
                 "Error: No raw data.")
 
         for idx in range(2):
-            fname = dir + "/logo" + str(idx+1) + ".png"
+            fname = dir + "/logo" + str(idx + 1) + ".png"
             try:
-                urlretrieve(self._rawData['team' + str(idx+1)]['logo'], fname)
+                urlretrieve(
+                    self._rawData['team' + str(idx + 1)]['logo'], fname)
                 self._controller.ftpUploader.cwd(dir)
                 self._controller.ftpUploader.upload(
                     fname,
-                    "logo" + str(idx+1) + ".png")
+                    "logo" + str(idx + 1) + ".png")
                 self._controller.ftpUploader.cwd("..")
             except Exception as e:
                 module_logger.exception("message")
@@ -87,7 +88,7 @@ class MatchGrabber(MatchGrabberParent):
 
             fname = dir + "/matchbanner.png"
             url = "http://alpha.tl/announcement/"\
-                    + str(self.getID()) + "?vs"
+                + str(self.getID()) + "?vs"
 
             try:
                 urlretrieve(url, fname)

@@ -17,47 +17,59 @@ except Exception as e:
 
 
 class FTPUploader:
+    """Provide FTP uploader."""
 
     def __init__(self):
-
+        """Init uploader."""
         module_logger.info("Started FTPThread")
         self.__thread = UploaderThread()
         self.__thread.start()
 
     def connect(self):
+        """Connect to FTP server."""
         self.__thread.q.put_nowait(["connect"])
         return self.__thread.progress
 
     def disconnect(self):
+        """Disconnect from FTP server."""
         self.__thread.q.put_nowait(["disconnect"])
 
     def upload(self, localFile, remoteFile):
+        """Upload a file."""
         self.__thread.q.put_nowait(["upload", localFile, remoteFile])
 
     def cwd(self, d):
+        """Change dir."""
         self.__thread.q.put_nowait(["cwd", d])
 
     def delete(self, d):
+        """Delete file."""
         self.__thread.q.put_nowait(["delete", d])
 
     def mkd(self, d):
+        """Create directory."""
         self.__thread.q.put_nowait(["mkd", d])
 
     def kill(self):
+        """Kill thread."""
         module_logger.info("Terminated FTPThread")
         if(self.__thread.isRunning()):
             self.__thread.q.put_nowait(["kill"])
 
     def progress_start(self):
+        """Start progress."""
         self.__thread.q.put_nowait(["progress_start"])
 
     def progress_end(self):
+        """End progress."""
         self.__thread.q.put_nowait(["progress_end"])
 
     def empty_queque(self):
+        """Empty queque."""
         self.__thread.q = queue.Queue()
 
     def setup(self):
+        """Set up directory on server and upload basic files."""
         self.progress_start()
         self.mkd("OBS_data")
         self.mkd("OBS_html")
@@ -102,9 +114,10 @@ class FTPUploader:
         self.cwd("../..")
         self.progress_end()
 
-        return self.__thread.progress, 99
+        return self.__thread.progress, 102
 
     def uploadAll(self, dir):
+        """Upload all files in a dir."""
         for fname in os.listdir(dir):
             full_fname = os.path.join(dir, fname)
             if os.path.isfile(full_fname):
@@ -112,10 +125,12 @@ class FTPUploader:
 
 
 class UploaderThread(QtCore.QThread):
+    """Thread for FTP actions."""
 
     progress = QtCore.pyqtSignal(int)
 
     def __init__(self):
+        """Init thread."""
         QtCore.QThread.__init__(self)
         self.q = queue.Queue()
         self.__ftp = None
@@ -123,6 +138,7 @@ class UploaderThread(QtCore.QThread):
         self.__current_cmd = 0
 
     def run(self):
+        """Run thread."""
         retry = False
         while True:
             try:
@@ -206,6 +222,7 @@ class UploaderThread(QtCore.QThread):
             module_logger.info(self.__ftp.cwd(self.__dir))
 
     def directory_exists(self, dir):
+        """Check if directory exists on server."""
         filelist = []
         self.__ftp.retrlines('LIST', filelist.append)
         return any(f.split()[-1] == dir and f.upper().startswith('D') for f in filelist)

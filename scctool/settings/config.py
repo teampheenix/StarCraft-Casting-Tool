@@ -1,14 +1,15 @@
+"""Provide config for SCCTool."""
 import logging
 import configparser
 
-from scctool.settings import cfgFile
+module_logger = logging.getLogger('scctool.settings.config')  # create logger
 
-# create logger
-module_logger = logging.getLogger('scctool.settings.config')
-
+cfgFile = "config.ini"
 parser = None
 
+
 def init():
+    """Init config."""
     global parser, scoreUpdate, toggleScore, toggleProd, playerIntros, fuzzymatch
     # Reading the configuration from file
     parser = configparser.ConfigParser()
@@ -27,14 +28,23 @@ def init():
     fuzzymatch = parser.getboolean("SCT", "fuzzymatch")
 
 # Setting default values for config file
+
+
 def setDefaultConfig(sec, opt, value):
+    """Set default value in config."""
     if(not parser.has_section(sec)):
         parser.add_section(sec)
     if(not parser.has_option(sec, opt)):
         parser.set(sec, opt, value)
+    elif(value in ["True", "False"]):
+        try:
+            parser.getboolean(sec, opt)
+        except:
+            parser.set(sec, opt, value)
 
 
 def setDefaultConfigAll():
+    """Define default values and set them."""
     setDefaultConfig("Twitch", "channel", "")
     setDefaultConfig("Twitch", "oauth", "")
     setDefaultConfig("Twitch", "title_template",
@@ -51,15 +61,17 @@ def setDefaultConfigAll():
     setDefaultConfig("FTP", "dir", "")
 
     setDefaultConfig("SCT", "myteams", "MiXed Minds, team pheeniX")
-    setDefaultConfig("SCT", "commonplayers", "Shakyor, pressure, MarineKing, Moash, Ostseedude, spaz, DERASTAT, FanTasY," +
-                     "chrismaverik, holden, Desolation, RiseOfDeath, TuneTrigger, MoFuJones, Fenix, Hyvaa, snoozle," +
-                     " CptWobbles, dreign, Sly, Sonarwolf, Unknown, Xoneon")
+    setDefaultConfig("SCT", "commonplayers", "Shakyor, pressure, MarineKing, Moash," +
+                     "Ostseedude, spaz, DERASTAT, FanTasY," +
+                     "chrismaverik, holden, Desolation, RiseOfDeath," +
+                     "TuneTrigger, MoFuJones, Fenix, Hyvaa, snoozle," +
+                     "CptWobbles, dreign, Sly, Sonarwolf, Unknown, Xoneon")
 
     setDefaultConfig("SCT", "fuzzymatch", "True")
 
     setDefaultConfig("SCT", "use_ocr", "False")
     setDefaultConfig("SCT", "tesseract",
-                     'C:\\Program Files (x86)\\Tesseract-OCR\\tesseract')
+                     'C:\\Program Files (x86)\\Tesseract-OCR\\tesseract\\tesseract.exe')
 
     setDefaultConfig("Form", "scoreupdate", "False")
     setDefaultConfig("Form", "togglescore", "False")
@@ -85,27 +97,35 @@ def setDefaultConfigAll():
 
 
 def ftpIsValid():
+    """Check if FTP data is valid."""
     return len(parser.get("FTP", "server")) > 0
 
 
 def nightbotIsValid():
-    return (len(parser.get("NightBot", "token")) > 0 and len(parser.get("NightBot", "command")) > 0)
+    """Check if nightbot data is valid."""
+    return (len(parser.get("NightBot", "token")) > 0
+            and len(parser.get("NightBot", "command")) > 0)
 
 
 def twitchIsValid():
+    """Check if twitch data is valid."""
     twitchChannel = parser.get("Twitch", "Channel")
     oauth = parser.get("Twitch", "oauth")
     return (len(oauth) > 0 and len(twitchChannel) > 0)
 
 
 def getMyTeams():
+    """Enpack my teams."""
     return list(map(str.strip, str(parser.get("SCT", "myteams")).split(',')))
 
+
 def getMyPlayers(append=False):
+    """Enpack my players."""
     players = list(
         map(str.strip, str(parser.get("SCT", "commonplayers")).split(',')))
     if(append):
         players.append("TBD")
     return players
+
 
 init()

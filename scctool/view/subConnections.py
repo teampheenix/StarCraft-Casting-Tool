@@ -11,6 +11,7 @@ from PyQt5.QtGui import *
 from scctool.view.widgets import *
 
 import scctool.settings
+import scctool.tasks.obs
 import base64
 
 class subwindowConnections(QWidget):
@@ -110,7 +111,7 @@ class subwindowConnections(QWidget):
 
     def testOBS(self):
         self.saveOBSdata()
-        msg = scctool.obs.testConnection()
+        msg = scctool.tasks.obs.testConnection()
         QMessageBox.warning(self, "OBS Websocket Connection Test", msg)
 
     def createFormGroupOBS(self):

@@ -1,7 +1,7 @@
+"""Control version numbers."""
 import urllib.request
 import logging
 from re import search as rsearch
-from threading import Thread
 from PyQt5.QtCore import QThread, pyqtSignal
 
 # create logger
@@ -9,9 +9,13 @@ module_logger = logging.getLogger('scctool.settings.version')
 
 
 class VersionControl(object):
+    """Control version numbers."""
+
     def __init__(self):
+        """Init Controller."""
         self.__version_file = "src/version"
-        self.__url = "https://raw.githubusercontent.com/teampheenix/StarCraft-Casting-Tool/master/src/version"
+        self.__url = "https://raw.githubusercontent.com/teampheenix/" +\
+                     "StarCraft-Casting-Tool/master/src/version"
         self.current, self.major, self.minor, self.patch = self.__get_from_file(
             self.__version_file)
         self.latest = self.current
@@ -39,7 +43,7 @@ class VersionControl(object):
 
     def __latest(self):
         try:
-            with urllib.request.urlopen(self.__url, timeout = 5) as response:
+            with urllib.request.urlopen(self.__url, timeout=5) as response:
                 latest_version = response.read().decode("utf8").strip()
 
             major, minor, patch = self.__parse(latest_version)
@@ -49,6 +53,7 @@ class VersionControl(object):
             return 'v0.0.0', 0, 0, 0
 
     def isNewAvaiable(self):
+        """Check if a newer version is available."""
         self.latest, lmajor, lminor, lpatch = self.__latest()
         if(lmajor > self.major or
             (lmajor == self.major and (lminor > self.minor
@@ -56,14 +61,18 @@ class VersionControl(object):
             return True
         return False
 
+
 class CheckVersionThread(QThread):
+    """Thread to check for new version."""
 
     newVersion = pyqtSignal(str)
 
     def __init__(self, versionc):
+        """Init thread."""
         QThread.__init__(self)
         self.versionc = versionc
 
     def run(self):
+        """Run thread."""
         if(self.versionc.isNewAvaiable()):
             self.newVersion.emit(self.versionc.latest)

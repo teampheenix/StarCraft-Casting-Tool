@@ -1,16 +1,18 @@
-import logging
-# create logger
-module_logger = logging.getLogger('scctool.matchgrabber.rstl')
+"""Provide match grabber for AlphaTL."""
 
+import logging
+import os
 import scctool.settings
 
 from urllib.request import urlretrieve
-import os
-
 from scctool.matchgrabber.custom import MatchGrabber as MatchGrabberParent
 
+# create logger
+module_logger = logging.getLogger('scctool.matchgrabber.rstl')
+
+
 class MatchGrabber(MatchGrabberParent):
-    """Grabs match data from Alpha SC2 Teamleague."""
+    """Grabs match data from Russian Starcraft 2 Teamleague."""
 
     def __init__(self, *args):
         """Init match grabber."""
@@ -70,7 +72,7 @@ class MatchGrabber(MatchGrabberParent):
                         player = data['result'][str(
                             4 + set_idx)]['tu_name' + str(team_idx + 1)]
                         self._matchData.setPlayer(team_idx, set_idx,
-                                                   player, race)
+                                                  player, race)
                     except:
                         pass
 
@@ -160,7 +162,7 @@ class MatchGrabber(MatchGrabberParent):
                         player = data['result'][str(
                             set_idx * 2)]['member_name' + str(team_idx + 1)]
                         self._matchData.setPlayer(team_idx, set_idx,
-                                                   player, race)
+                                                  player, race)
                     except:
                         pass
 
@@ -201,11 +203,11 @@ class MatchGrabber(MatchGrabberParent):
 
         for i in range(1, 3):
             try:
-                os.remove(dir+"/logo" + str(i) + ".png")
+                os.remove(dir + "/logo" + str(i) + ".png")
             except:
                 pass
             try:
-                os.remove(dir+"/logo" + str(i) + ".jpg")
+                os.remove(dir + "/logo" + str(i) + ".jpg")
             except:
                 pass
 
