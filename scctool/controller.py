@@ -5,21 +5,21 @@ import logging
 module_logger = logging.getLogger('scctool.controller')
 
 try:
-    from scctool.matchdata import *
-    from scctool.apithread import *
-    from scctool.webapp import *
-    from scctool.settings import *
-    from scctool.ftpuploader import *
-    from scctool.obs import *
+    from scctool.matchdata import matchData
+    from scctool.apithread import SC2ApiThread, ToggleScore
+    from scctool.webapp import FlaskThread
+    from scctool.settings import CheckVersionThread, PlaceholderList
+    from scctool.ftpuploader import FTPUploader
+    from scctool.obs import WebsocketThread
     import scctool.settings
     import scctool.twitch
     import scctool.nightbot
     import scctool.obs
     import webbrowser
-    import base64
+    import os
+    import shutil
 
     from PyQt5.QtGui import QIcon
-    from PyQt5.QtWidgets import QCompleter
     from PyQt5.QtCore import Qt
 
 
@@ -29,8 +29,10 @@ except Exception as e:
 
 
 class MainController:
+    """Control all other modules."""
 
     def __init__(self):
+        """Init controller and connect them with other modules."""
         try:
             self.matchData = matchData(self)
             self.SC2ApiThread = SC2ApiThread(self)
@@ -48,7 +50,7 @@ class MainController:
             module_logger.exception("message")
 
     def placeholderSetup(self):
-
+        """Define and connect placeholders."""
         self.placeholders = PlaceholderList()
         self.placeholders.addConnection("Team1",
                                         lambda: self.matchData.getTeam(0))
@@ -61,6 +63,7 @@ class MainController:
         self.placeholders.addConnection("Score", self.matchData.getScoreString)
 
     def setView(self, view):
+        """Connect view."""
         self.view = view
         try:
             self.matchData.readJsonFile()
@@ -73,6 +76,7 @@ class MainController:
             module_logger.exception("message")
 
     def updateForms(self):
+        """Update data in froms."""
         try:
             if(self.matchData.getProvider() == "Custom"):
                 self.view.tabs.setCurrentIndex(1)
@@ -130,6 +134,7 @@ class MainController:
             raise
 
     def updateLogos(self):
+        """Updata team logos in  view."""
         pixmap = QIcon(self.linkFile(scctool.settings.OBSdataDir + '/logo1'))
         self.view.qb_logo1.setIcon(pixmap)
 
@@ -139,6 +144,7 @@ class MainController:
         self.updateLogosHTML()
 
     def updateData(self):
+        """Update match data from input of views."""
         try:
             self.matchData.setMyTeam(self.view.sl_team.value())
             self.matchData.setLeague(self.view.le_league.text())
@@ -161,6 +167,7 @@ class MainController:
             module_logger.exception("message")
 
     def applyCustom(self, bestof, allkill, minSets, url):
+        """Apply a custom match format."""
         msg = ''
         try:
 
@@ -179,6 +186,7 @@ class MainController:
         return msg
 
     def resetData(self):
+        """Reset data."""
         msg = ''
         try:
 
@@ -194,6 +202,7 @@ class MainController:
         return msg
 
     def refreshData(self, url):
+        """Load data from match grabber."""
         msg = ''
         try:
             self.matchData.parseURL(url)
@@ -218,6 +227,7 @@ class MainController:
         return msg
 
     def setCBs(self):
+        """Update value of check boxes from config."""
         try:
             if(scctool.settings.CB_ScoreUpdate):
                 self.view.cb_autoUpdate.setChecked(True)
@@ -237,6 +247,7 @@ class MainController:
             module_logger.exception("message")
 
     def updateOBS(self):
+        """Update txt-files and ioncs for OBS."""
         try:
             self.updateData()
             self.matchData.updateMapIcons()
@@ -249,12 +260,13 @@ class MainController:
             module_logger.exception("message")
 
     def allkillUpdate(self):
-
+        """In case of allkill move the winner to the next set."""
         self.updateData()
         if(self.matchData.allkillUpdate()):
             self.updateForms()
 
     def webAppDone_nightbot(self):
+        """Call to return of nightbot token."""
         try:
             self.view.mysubwindow1.nightbotToken.setTextMonitored(
                 FlaskThread._single.token_nightbot)
@@ -271,6 +283,7 @@ class MainController:
             module_logger.exception("message")
 
     def webAppDone_twitch(self):
+        """Call to return of twitch token."""
         try:
             self.view.mysubwindow1.twitchToken.setTextMonitored(
                 FlaskThread._single.token_twitch)
@@ -287,6 +300,7 @@ class MainController:
             module_logger.exception("message")
 
     def getNightbotToken(self):
+        """Get nightbot token."""
         try:
             self.webApp.start()
             webbrowser.open("http://localhost:65010/nightbot")
@@ -294,6 +308,7 @@ class MainController:
             module_logger.exception("message")
 
     def getTwitchToken(self):
+        """Get twitch token."""
         try:
             self.webApp.start()
             webbrowser.open("http://localhost:65010/twitch")
@@ -301,6 +316,7 @@ class MainController:
             module_logger.exception("message")
 
     def updateNightbotCommand(self):
+        """Update nightbot commands."""
         try:
             msg = ''
             self.updateData()
@@ -315,6 +331,7 @@ class MainController:
         return msg
 
     def updateTwitchTitle(self):
+        """Update twitch title."""
         try:
             msg = ''
             self.updateData()
@@ -333,6 +350,7 @@ class MainController:
         return msg
 
     def openURL(self, url):
+        """Open URL in Browser."""
         if(len(url) < 5):
             url = "http://alpha.tl/match/2392"
         try:
@@ -341,6 +359,7 @@ class MainController:
             module_logger.exception("message")
 
     def runSC2ApiThread(self, task):
+        """Start task in thread that monitors SC2-Client-API."""
         try:
             if(not self.SC2ApiThread.isRunning()):
                 self.SC2ApiThread.startTask(task)
@@ -351,24 +370,28 @@ class MainController:
             module_logger.exception("message")
 
     def stopSC2ApiThread(self, task):
+        """Stop task in thread thats monitors SC2-Client-API."""
         try:
             self.SC2ApiThread.requestTermination(task)
         except Exception as e:
             module_logger.exception("message")
 
     def runWebsocketThread(self):
+        """Run OBS websocket thread."""
         if(not self.websocketThread.isRunning()):
             self.websocketThread.start()
         else:
             self.websocketThread.cancelKillRequest()
 
     def stopWebsocketThread(self):
+        """Stop OBS websocket thread."""
         try:
             self.websocketThread.requestKill()
         except Exception as e:
             module_logger.exception("message")
 
     def cleanUp(self):
+        """Clean up all threads and save config to close program."""
         try:
             self.SC2ApiThread.requestTermination("ALL")
             self.webApp.terminate()
@@ -380,6 +403,7 @@ class MainController:
             module_logger.exception("message")
 
     def saveConfig(self):
+        """Save the settings to the config file."""
         try:
             scctool.settings.Config.set("Form", "scoreupdate", str(
                 self.view.cb_autoUpdate.isChecked()))
@@ -399,7 +423,7 @@ class MainController:
             module_logger.exception("message")
 
     def requestScoreUpdate(self, newSC2MatchData):
-
+        """Update score based on result of SC2-Client-API."""
         try:
             print("Trying to update the score")
 
@@ -407,8 +431,8 @@ class MainController:
             newscore = 0
             for i in range(self.matchData.getNoSets()):
                 found, newscore = newSC2MatchData.compare_returnScore(
-                                    self.matchData.getPlayer(0, i),
-                                    self.matchData.getPlayer(1, i))
+                    self.matchData.getPlayer(0, i),
+                    self.matchData.getPlayer(1, i))
                 if(found and newscore != 0):
                     if(self.view.setScore(i, newscore)):
                         break
@@ -418,7 +442,7 @@ class MainController:
             module_logger.exception("message")
 
     def refreshButtonStatus(self):
-
+        """Enable or disable buttons depending on settings."""
         if(not scctool.settings.twitchIsValid()):
             self.view.pb_twitchupdate.setEnabled(False)
             self.view.pb_twitchupdate.setAttribute(Qt.WA_AlwaysShowToolTips)
@@ -449,15 +473,15 @@ class MainController:
             self.view.cb_autoFTP.setAttribute(Qt.WA_AlwaysShowToolTips)
             self.view.cb_autoFTP.setToolTip('')
 
-    def requestToggleScore(self, newSC2MatchData, swap = False):
-
+    def requestToggleScore(self, newSC2MatchData, swap=False):
+        """Check if SC2-Client-API players are present and toogle score accordingly."""
         try:
             self.updateData()
 
             for i in range(self.matchData.getNoSets()):
                 found, order = newSC2MatchData.compare_returnOrder(
-                                self.matchData.getPlayer(0, i),
-                                self.matchData.getPlayer(1, i))
+                    self.matchData.getPlayer(0, i),
+                    self.matchData.getPlayer(1, i))
 
                 if(found):
                     score = self.matchData.getScore()
@@ -479,12 +503,14 @@ class MainController:
             module_logger.exception("message")
 
     def linkFile(self, file):
+        """Return correct img file ending."""
         for ext in [".png", ".jpg"]:
             if(os.path.isfile(file + ext)):
                 return file + ext
         return ""
 
     def updateLogosHTML(self):
+        """Update html files with team logos."""
         for idx in range(2):
             filename = scctool.settings.OBShtmlDir + \
                 "/data/logo" + str(idx + 1) + "-data.html"
@@ -507,7 +533,7 @@ class MainController:
         self.ftpUploader.cwd("..")
 
     def updatePlayerIntros(self, newData):
-
+        """Update player intro files."""
         module_logger.info("updatePlayerIntros")
         self.updateData()
 
@@ -558,6 +584,7 @@ class MainController:
         self.ftpUploader.cwd("..")
 
     def getMapImg(self, map, fullpath=False):
+        """Get map image from map name."""
         mapimg = os.path.normpath(os.path.join(
             scctool.settings.OBSmapDir, "src/maps", map.replace(" ", "_")))
         mapimg = os.path.basename(self.linkFile(mapimg))
@@ -571,6 +598,7 @@ class MainController:
             return mapimg
 
     def addMap(self, file, mapname):
+        """Add a new map via file and name."""
         _, ext = os.path.splitext(file)
         map = mapname.strip().replace(" ", "_") + ext
         newfile = os.path.normpath(os.path.join(
@@ -583,7 +611,7 @@ class MainController:
         self.ftpUploader.cwd("../../..")
 
     def deleteMap(self, map):
-
+        """Delete map and file."""
         self.ftpUploader.cwd(scctool.settings.OBSmapDir + "/src/maps")
         self.ftpUploader.delete(self.getMapImg(map))
         self.ftpUploader.cwd("../../..")
@@ -592,19 +620,23 @@ class MainController:
         scctool.settings.maps.remove(map)
 
     def displayWarning(self, msg="Warning: Something went wrong..."):
+        """Display a warning in status bar."""
         self._warning = True
         self.view.statusBar().showMessage(msg)
 
     def resetWarning(self):
+        """Display or reset warning now."""
         warning = self._warning
-        #print(str(warning))
+        # print(str(warning))
         self._warning = False
         return warning
 
     def testVersion(self):
+        """Run version check."""
         self.checkVersionThread.start()
 
     def newVersionTrigger(self, version):
+        """Call back to display new version in status bar."""
         self.view.statusBar().showMessage("A new version (" + version +
                                           ") is available at" +
                                           "https://github.com/pheenix/StarCraft-Casting-Tool")

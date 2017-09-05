@@ -11,8 +11,8 @@ try:
     import time
     from difflib import SequenceMatcher
     import scctool.settings
-    from PIL import ImageGrab # pip install Pillow
-    import pytesseract # pip install pytesseract
+    from PIL import ImageGrab  # pip install Pillow
+    import pytesseract  # pip install pytesseract
     import re
 
 
@@ -45,6 +45,8 @@ if(platform.system() == "Windows"):
         PUL = ctypes.POINTER(ctypes.c_ulong)
 
         class KeyBdInput(ctypes.Structure):
+            """Keyboard Input."""
+
             _fields_ = [("wVk", ctypes.c_ushort),
                         ("wScan", ctypes.c_ushort),
                         ("dwFlags", ctypes.c_ulong),
@@ -52,11 +54,15 @@ if(platform.system() == "Windows"):
                         ("dwExtraInfo", PUL)]
 
         class HardwareInput(ctypes.Structure):
+            """Hardware Input."""
+
             _fields_ = [("uMsg", ctypes.c_ulong),
                         ("wParamL", ctypes.c_short),
                         ("wParamH", ctypes.c_ushort)]
 
         class MouseInput(ctypes.Structure):
+            """Mouse Input."""
+
             _fields_ = [("dx", ctypes.c_long),
                         ("dy", ctypes.c_long),
                         ("mouseData", ctypes.c_ulong),
@@ -65,17 +71,22 @@ if(platform.system() == "Windows"):
                         ("dwExtraInfo", PUL)]
 
         class Input_I(ctypes.Union):
+            """General Input."""
+
             _fields_ = [("ki", KeyBdInput),
                         ("mi", MouseInput),
                         ("hi", HardwareInput)]
 
         class Input(ctypes.Structure):
+            """General Input."""
+
             _fields_ = [("type", ctypes.c_ulong),
                         ("ii", Input_I)]
 
         # Actuals Functions
 
         def PressKey(hexKeyCode):
+            """Simulate a key press down."""
             extra = ctypes.c_ulong(0)
             ii_ = Input_I()
             ii_.ki = KeyBdInput(0, hexKeyCode, 0x0008,
@@ -85,6 +96,7 @@ if(platform.system() == "Windows"):
                 1, ctypes.pointer(x), ctypes.sizeof(x))
 
         def ReleaseKey(hexKeyCode):
+            """Simulate a key release."""
             extra = ctypes.c_ulong(0)
             ii_ = Input_I()
             ii_.ki = KeyBdInput(0, hexKeyCode, 0x0008 |
@@ -94,7 +106,7 @@ if(platform.system() == "Windows"):
                 1, ctypes.pointer(x), ctypes.sizeof(x))
 
         def ToggleScore(score1_in, score2_in, bestof=5):
-
+            """Set and toogle SC2-ingame score."""
             score1, skip1 = int2DIK(score1_in)
             score2, skip2 = int2DIK(score2_in)
 
@@ -145,6 +157,7 @@ if(platform.system() == "Windows"):
             print("Toggled Score")
 
         def ToggleProduction():
+            """Toogle SC2-ingame production tab."""
             lag = 0.01
             time.sleep(lag)
             PressKey(CONTROL)
@@ -154,6 +167,7 @@ if(platform.system() == "Windows"):
             ReleaseKey(D)
 
         def int2DIK(integer):
+            """Convert Integer to KeyBdInput."""
             if(integer == 0):
                 return DIK_0, True
             elif(integer == 1):
@@ -182,8 +196,10 @@ if(platform.system() == "Windows"):
 
 
 class SC2ApiThread(QThread):
+    """Thread to interact with SC2-Client."""
 
     def __init__(self, controller, parent=None):
+        """Init thread."""
         try:
             QThread.__init__(self, parent)
             self.exiting = False
@@ -199,6 +215,7 @@ class SC2ApiThread(QThread):
             module_logger.exception("message")
 
     def startTask(self, task):
+        """Start a task in thread."""
         try:
             self.activeTask[task] = True
             self.start()
@@ -206,6 +223,7 @@ class SC2ApiThread(QThread):
             module_logger.exception("message")
 
     def requestTermination(self, task):
+        """Request termination of a task in thread."""
         try:
             if(task == 'ALL'):
                 for task in self.activeTask:
@@ -222,12 +240,14 @@ class SC2ApiThread(QThread):
             module_logger.exception("message")
 
     def cancelTerminationRequest(self, task):
+        """Cancel the request to terminate a task."""
         self.activeTask[task] = True
         self.exiting = False
         module_logger.info(
             'Termination request fo task "' + task + '" cancelled')
 
     def run(self):
+        """Run the thread."""
         try:
             module_logger.info("Start  Thread")
             self.exiting = False
@@ -260,6 +280,7 @@ class SC2ApiThread(QThread):
             module_logger.exception("message")
 
     def parseMatchData(self, newData):
+        """Parse SC2-Client-API data and run tasks accordingly."""
         try:
             if(self.exiting is False and
                 (newData != self.currentData or
@@ -272,7 +293,7 @@ class SC2ApiThread(QThread):
                     self.controller.requestScoreUpdate(newData)
 
                 if(newData.isLive() and (self.activeTask['toggleScore']
-                   or self.activeTask['toggleProduction'])):
+                                         or self.activeTask['toggleProduction'])):
                     self.tryToggle(newData)
 
                 self.currentData = newData
@@ -280,10 +301,11 @@ class SC2ApiThread(QThread):
             module_logger.exception("message")
 
     def tryToggle(self, data):
+        """Wait until SC2 is in foreground and toogle production tab and score."""
         try:
             while self.exiting is False\
-                  and (self.activeTask['toggleScore']
-                       or self.activeTask['toggleProduction']):
+                and (self.activeTask['toggleScore']
+                     or self.activeTask['toggleProduction']):
                 if(isSC2onForeground()):
                     if(self.activeTask['toggleScore']):
                         swapPlayers = self.swapPlayers(data)
@@ -296,35 +318,37 @@ class SC2ApiThread(QThread):
                     time.sleep(2)
         except:
             module_logger.info("Toggle not working on this OS:")
-            
 
     def swapPlayers(self, data):
-        
+        """Detect if players are swaped relative to SC2-Client-API data via ocr."""
         try:
-            if(not scctool.settings.Config.getboolean("SCT","use_ocr")):
+            if(not scctool.settings.Config.getboolean("SCT", "use_ocr")):
                 return False
-                
-            pytesseract.pytesseract.tesseract_cmd = scctool.settings.Config.get("SCT","tesseract")
-            
+
+            pytesseract.pytesseract.tesseract_cmd = scctool.settings.Config.get(
+                "SCT", "tesseract")
+
             players = data.getPlayerList()
             img = ImageGrab.grab()
             width, height = img.size
             positions = [None, None]
             ratios = [0.0, 0.0]
-            img = img.crop((int(width*0.1), int(height*0.9), int(width*0.5), height))
+            img = img.crop((int(width * 0.1), int(height * 0.9),
+                            int(width * 0.5), height))
             text = pytesseract.image_to_string(img)
             items = re.split('\s+', text)
-            
+
             threshold = 0.5
             for item_idx, item in enumerate(items):
                 for player_idx, player in enumerate(players):
-                    ratio = SequenceMatcher(None, item.lower(), player.lower()).ratio()
+                    ratio = SequenceMatcher(
+                        None, item.lower(), player.lower()).ratio()
                     if(ratio >= max(threshold, ratios[player_idx])):
                         positions[player_idx] = item_idx
                         ratios[player_idx] = ratio
-                        print("Player {} at postion {}".format(player_idx, item_idx))
-                        
-    
+                        print("Player {} at postion {}".format(
+                            player_idx, item_idx))
+
             if None in positions:
                 return False
             elif(positions[0] > positions[1]):
@@ -335,7 +359,9 @@ class SC2ApiThread(QThread):
             module_logger.exception("message")
             return False
 
+
 def isSC2onForeground():
+    """Detect if SC2-Client is the foreground window (only Windows)."""
     try:
         fg_window_name = GetWindowText(GetForegroundWindow()).lower()
         sc2 = "StarCraft II".lower()
@@ -346,8 +372,10 @@ def isSC2onForeground():
 
 
 class SC2MatchData:
+    """Relevant SC2 data extracted from SC2-Client API."""
 
     def __init__(self, GAMEresponse=False, UIresponse=False):
+        """Init data."""
         if(GAMEresponse):
             self.player1 = GAMEresponse["players"][0]["name"]
             self.player2 = GAMEresponse["players"][1]["name"]
@@ -373,7 +401,7 @@ class SC2MatchData:
             self.ingame = False
 
     def compare_returnScore(self, player1, player2):
-
+        """Fuzzy compare playernames and return their score."""
         if(compareStr(self.player1, player1)
            and compareStr(self.player2, player2)):
             return True, self.result
@@ -384,7 +412,7 @@ class SC2MatchData:
             return False, 0
 
     def compare_returnOrder(self, player1, player2):
-
+        """Fuzzy compare playernames and return the correct order."""
         if(compareStr(self.player1, player1)
            and compareStr(self.player2, player2)):
             return True, True
@@ -395,7 +423,7 @@ class SC2MatchData:
             return False, False
 
     def playerInList(self, player_idx, players):
-
+        """Fuzzy check if player is in list of players."""
         for player in players:
             if(player_idx == 0 and compareStr(self.player1, player)):
                 return True
@@ -404,6 +432,7 @@ class SC2MatchData:
         return False
 
     def translateRace(self, str):
+        """Translate SC2-Client-API race to no normal values."""
         try:
             for idx, race in enumerate(scctool.settings.races):
                 if(str[0].upper() == race[0].upper()):
@@ -415,18 +444,23 @@ class SC2MatchData:
         return ""
 
     def isDecidedGame(self):
+        """Check if the game is decided."""
         return ((self.result == 1 or self.result == -1) and self.time > 60)
 
     def isLive(self):
+        """Check if the game is running (first 30 sec)."""
         return (self.ingame and self.result == 99 and self.time < 30)
 
     def isStarting(self):
+        """Check if the game has started in the past 5 sec."""
         return (self.ingame and self.result == 99 and self.time < 5)
 
     def __str__(self):
+        """Convert data to string."""
         return str(self.__dict__)
 
     def __eq__(self, other):
+        """Compare data."""
         return (self.player1 == other.player1
                 and self.player2 == other.player2
                 and self.race1 == other.race1
@@ -435,9 +469,11 @@ class SC2MatchData:
                 and self.ingame == other.ingame)
 
     def getPlayerList(self):
+        """Get list of players."""
         return [self.player1, self.player2]
 
     def getPlayer(self, idx):
+        """Get player via index."""
         if(idx == 0):
             return self.player1
         elif(idx == 1):
@@ -446,6 +482,7 @@ class SC2MatchData:
             return False
 
     def getPlayerRace(self, idx):
+        """Get races via index."""
         if(idx == 0):
             return self.race1
         elif(idx == 1):
@@ -455,6 +492,7 @@ class SC2MatchData:
 
 
 def compareStr(str1, str2):
+    """Compare two string (optionally with fuzzy compare)."""
     try:
         fuzzymatch = scctool.settings.fuzzymatch
         if(fuzzymatch):

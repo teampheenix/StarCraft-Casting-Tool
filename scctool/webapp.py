@@ -14,22 +14,22 @@ try:
     from PyQt5 import QtCore
     from flask import Flask, abort, request, current_app #pip install flask
     from uuid import uuid4
-   
+
     NIGHTBOT_CLIENT_ID = base64.b64decode(b'YzEyMGE5YWQ0MjM3MGNmNTViYzFhNjA5ZjFjYTM0Y2E=').decode("utf8")
     NIGHTBOT_REDIRECT_URI = "http://localhost:65010/nightbot_callback"
-    
+
     TWITCH_CLIENT_ID = base64.b64decode(b'ZHVhbTRneDlhcnlkNDZ1YjZxY2RqcmN4b2doeWFr').decode("utf8")
     TWITCH_REDIRECT_URI = "http://localhost:65010/twitch_callback"
 
 except Exception as e:
-    module_logger.exception("message") 
-    raise  
-    
+    module_logger.exception("message")
+    raise
+
 def base_headers():
     return {"User-Agent": ""}
-   
-flask_app = Flask(__name__)   
-   
+
+flask_app = Flask(__name__)
+
 @flask_app.route('/nightbot')
 def home_nightbot():
     text = '''<script type="text/javascript">
@@ -55,7 +55,7 @@ def save_created_state(state):
     pass
 def is_valid_state(state):
     return True
-    
+
 def make_authorization_url_nightbot():
     # Generate a random string for the state parameter
     # Save it for use later to prevent xsrf attacks
@@ -68,7 +68,7 @@ def make_authorization_url_nightbot():
               "scope": "commands"}
     url = "https://api.nightbot.tv/oauth2/authorize?" + urllib.parse.urlencode(params)
     return url
-    
+
 def make_authorization_url_twitch():
     # Generate a random string for the state parameter
     # Save it for use later to prevent xsrf attacks
@@ -80,19 +80,19 @@ def make_authorization_url_twitch():
               "redirect_uri": TWITCH_REDIRECT_URI,
               "scope": "channel_editor"}
     url = "https://api.twitch.tv/kraken/oauth2/authorize?" + urllib.parse.urlencode(params)
-    return url    
+    return url
 
 @flask_app.route('/nightbot_callback', methods=['GET'])
 def nightbot_response_code():
     return '''  <script type="text/javascript">
-                var token = window.location.href.split("#")[1]; 
+                var token = window.location.href.split("#")[1];
                 window.location = "/nightbot_callback_token?" + token;
             </script> '''
-            
+
 @flask_app.route('/twitch_callback', methods=['GET'])
 def twitch_response_code():
     return '''  <script type="text/javascript">
-                var token = window.location.href.split("#")[1]; 
+                var token = window.location.href.split("#")[1];
                 window.location = "/twitch_callback_token?" + token;
             </script> '''
 
@@ -107,14 +107,14 @@ def nightbot_callback():
         # Uh-oh, this request wasn't started by us!
         abort(403)
     access_token = request.args.get('access_token')
-    
+
     w = FlaskThread._single
     w.token_nightbot = str(access_token)
     w.signal_nightbot.emit()
     shutdown_server()
-    
+
     return  '''scctool: Succesfully recived access to Nightbot - you can close this tab now.'''
-    
+
 @flask_app.route('/twitch_callback_token')
 def twitch_callback():
     error = request.args.get('error', '')
@@ -125,21 +125,21 @@ def twitch_callback():
         # Uh-oh, this request wasn't started by us!
         abort(403)
     access_token = request.args.get('access_token')
-    
+
     w = FlaskThread._single
     w.token_twitch = str(access_token)
     w.signal_twitch.emit()
     shutdown_server()
-    
+
     return  '''scctool: Succesfully recived access to Twitch - you can close this tab now.'''
-   
+
 class FlaskThread(QtCore.QThread):
     signal_twitch = QtCore.pyqtSignal()
     signal_nightbot = QtCore.pyqtSignal()
     _single = None
     token_twitch = ""
     token_nightbot = ""
-    
+
     def __init__(self):
         QtCore.QThread.__init__(self)
         if FlaskThread._single:
@@ -151,6 +151,6 @@ class FlaskThread(QtCore.QThread):
         self.wait()
 
     def run(self):
-        module_logger.info("WebApp started")  
+        module_logger.info("WebApp started")
         self.application.run(port=65010)
-        module_logger.info("WebApp done") 
+        module_logger.info("WebApp done")
