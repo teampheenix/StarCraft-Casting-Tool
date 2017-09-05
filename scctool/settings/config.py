@@ -1,6 +1,8 @@
 import logging
 import configparser
 
+from scctool.settings import cfgFile
+
 # create logger
 module_logger = logging.getLogger('scctool.settings.config')
 
@@ -11,7 +13,7 @@ def init():
     # Reading the configuration from file
     parser = configparser.ConfigParser()
     try:
-        parser.read(configFile)
+        parser.read(cfgFile)
     except:
         parser.defaults()
 
