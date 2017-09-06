@@ -86,15 +86,15 @@ class MatchGrabber(MatchGrabberParent):
             raise ValueError(
                 "Error: No raw data.")
 
-            fname = dir + "/matchbanner.png"
-            url = "http://alpha.tl/announcement/"\
-                + str(self.getID()) + "?vs"
+        fname = dir + "/matchbanner.png"
+        url = "http://alpha.tl/announcement/"\
+            + str(self.getID()) + "?vs"
 
-            try:
-                urlretrieve(url, fname)
+        try:
+            urlretrieve(url, fname)
 
-                self._controller.ftpUploader.cwd(dir)
-                self._controller.ftpUploader.upload(fname, "matchbanner.png")
-                self._controller.ftpUploader.cwd("..")
-            except Exception as e:
-                module_logger.exception("message")
+            self._controller.ftpUploader.cwd(dir)
+            self._controller.ftpUploader.upload(fname, "matchbanner.png")
+            self._controller.ftpUploader.cwd("..")
+        except Exception as e:
+            module_logger.exception("message")
