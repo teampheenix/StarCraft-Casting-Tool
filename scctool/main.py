@@ -3,7 +3,7 @@ import sys
 import logging
 
 # create logger with 'spam_application'
-module_logger = logging.getLogger('scctool.main')
+logger = logging.getLogger('scctool.main')
 
 
 try:

@@ -5,11 +5,12 @@ import logging
 
 logger = logging.getLogger('scctool')
 
+
 def main():
     """Run Starcraft Casting Tool."""
     from PyQt5.QtWidgets import QApplication, QStyleFactory
     from PyQt5.QtGui import QIcon
-    from scctool.view.main import mainWindow
+    from scctool.view.main import MainWindow
     from scctool.controller import MainController
 
     try:
@@ -18,7 +19,7 @@ def main():
         QApplication.setStyle(QStyleFactory.create('Fusion'))
         app.setWindowIcon(QIcon('src/icon.png'))
         cntlr = MainController()
-        mainWindow(cntlr, app)
+        MainWindow(cntlr, app)
         logger.info("Starting...")
         sys.exit(app.exec_())
 

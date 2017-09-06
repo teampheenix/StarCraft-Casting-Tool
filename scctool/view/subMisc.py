@@ -1,9 +1,5 @@
-#!/usr/bin/env python
+"""Show subwindow with miscellaneous settings."""
 import logging
-
-# create logger
-module_logger = logging.getLogger('scctool.view.subMisc')
-
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -13,16 +9,22 @@ import scctool.settings
 import os.path
 import humanize  # pip install humanize
 
+# create logger
+module_logger = logging.getLogger('scctool.view.subMisc')
 
-class subwindowMisc(QWidget):
+
+class SubwindowMisc(QWidget):
+    """Show subwindow with miscellaneous settings."""
+
     def createWindow(self, mainWindow):
-
+        """Create subwindow with miscellaneous settings."""
         try:
             parent = None
-            super(subwindowMisc, self).__init__(parent)
+            super(SubwindowMisc, self).__init__(parent)
             # self.setWindowFlags(Qt.WindowStaysOnTopHint)
 
-            self.setWindowIcon(QIcon('src/settings.png'))
+            self.setWindowIcon(
+                QIcon(scctool.settings.getAbsPath('src/settings.png')))
             self.setWindowModality(Qt.ApplicationModal)
             self.mainWindow = mainWindow
             self.passEvent = False
@@ -41,8 +43,10 @@ class subwindowMisc(QWidget):
 
             self.resize(QSize(mainWindow.size().width()
                               * .80, self.sizeHint().height()))
-            self.move(mainWindow.pos() + QPoint(mainWindow.size().width() / 2, mainWindow.size().height() / 3)
-                      - QPoint(self.size().width() / 2, self.size().height() / 3))
+            relativeChange = QPoint(mainWindow.size().width() / 2,
+                                    mainWindow.size().height() / 3)\
+                - QPoint(self.size().width() / 2, self.size().height() / 3)
+            self.move(mainWindow.pos() + relativeChange)
 
             self.setWindowTitle("Miscellaneous Settings")
 
@@ -127,7 +131,12 @@ class subwindowMisc(QWidget):
         self.browse = QPushButton("Browse...")
         self.browse.clicked.connect(self.selectTesseract)
 
-        text = """Sometimes the order of players given by the SC2-Client-API differs from the order in the Observer-UI resulting in a swaped match score. To correct this via Optical Character Recognition you have to download and install <a href='https://github.com/UB-Mannheim/tesseract/wiki#tesseract-at-ub-mannheim'>Tesseract-OCR</a> and select the exectuable (tesseract.exe) below, if it is not detected automatically."""
+        text = """Sometimes the order of players given by the SC2-Client-API differs
+ from the order in the Observer-UI resulting in a swaped match score. To correct this via
+ Optical Character Recognition you have to download and install
+ <a href='https://github.com/UB-Mannheim/tesseract/wiki#tesseract-at-ub-mannheim'>
+Tesseract-OCR</a> and select the exectuable (tesseract.exe) below,
+ if it is not detected automatically."""
 
         label = QLabel(text)
         label.setAlignment(Qt.AlignJustify)
@@ -164,8 +173,9 @@ class subwindowMisc(QWidget):
     def selectTesseract(self):
         old_exe = self.tesseract.text()
         default = scctool.settings.config.findTesserAct(old_exe)
-        exe, ok = QFileDialog.getOpenFileName(self, "Select Tesseract-OCR Executeable", default,
-                                              "Tesseract-OCR Executeable (tesseract.exe);; Exectuable (*.exe);; All files (*)")
+        exe, ok = QFileDialog.getOpenFileName(
+            self, "Select Tesseract-OCR Executeable", default,
+            "Tesseract-OCR Executeable (tesseract.exe);; Exectuable (*.exe);; All files (*)")
         if(ok and exe != old_exe):
             self.tesseract.setText(exe)
             self.changed()
@@ -236,8 +246,9 @@ class subwindowMisc(QWidget):
         if(text == map):
             return
         if(text in scctool.settings.maps):
-            buttonReply = QMessageBox.warning(self, "Duplicate Entry", "Map is already in list! Overwrite?",
-                                              QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+            buttonReply = QMessageBox.warning(
+                self, "Duplicate Entry", "Map is already in list! Overwrite?",
+                QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
             if buttonReply == QMessageBox.No:
                 return
 
@@ -248,7 +259,8 @@ class subwindowMisc(QWidget):
     def changeMap(self):
         map = self.maplist.currentItem().text()
         fileName, ok = QFileDialog.getOpenFileName(
-            self, "Select Map Image (> 500x500px recommended)", "", "Support Images (*.png *.jpg)")
+            self, "Select Map Image (> 500x500px recommended)",
+            "", "Support Images (*.png *.jpg)")
         if ok:
             base = os.path.basename(fileName)
             name, ext = os.path.splitext(base)
@@ -258,7 +270,8 @@ class subwindowMisc(QWidget):
 
     def addMap(self):
         fileName, ok = QFileDialog.getOpenFileName(
-            self, "Select Map Image (> 500x500px recommended)", "", "Support Images (*.png *.jpg)")
+            self, "Select Map Image (> 500x500px recommended)",
+            "", "Support Images (*.png *.jpg)")
         if ok:
             base = os.path.basename(fileName)
             name, ext = os.path.splitext(base)
@@ -267,8 +280,9 @@ class subwindowMisc(QWidget):
                 self, 'Map Name', 'Map Name:', text=name)
             if ok:
                 if(text.strip() in scctool.settings.maps):
-                    buttonReply = QMessageBox.warning(self, "Duplicate Entry", "Map is already in list! Overwrite?",
-                                                      QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+                    buttonReply = QMessageBox.warning(
+                        self, "Duplicate Entry", "Map is already in list! Overwrite?",
+                        QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
                     if buttonReply == QMessageBox.No:
                         return
 
@@ -280,8 +294,10 @@ class subwindowMisc(QWidget):
     def deleteMap(self):
         item = self.maplist.currentItem()
         map = item.text()
-        buttonReply = QMessageBox.question(self, 'Delete map?', "Delete '{}' permanently?".format(
-            map), QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        buttonReply = QMessageBox.question(
+            self, 'Delete map?',
+            "Delete '{}' permanently?".format(map),
+            QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
         if buttonReply == QMessageBox.Yes:
             self.controller.deleteMap(map)
             self.maplist.takeItem(self.maplist.currentRow())
@@ -355,7 +371,8 @@ class subwindowMisc(QWidget):
                 if(self.isMinimized()):
                     self.showNormal()
                 buttonReply = QMessageBox.question(
-                    self, 'Save data?', "Save data?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+                    self, 'Save data?', "Save data?",
+                    QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
                 if buttonReply == QMessageBox.Yes:
                     self.saveData()
             event.accept()

@@ -36,6 +36,7 @@ class FTPUploader:
 
     def upload(self, localFile, remoteFile):
         """Upload a file."""
+        localFile = scctool.settings.getAbsPath(localFile)
         self.__thread.q.put_nowait(["upload", localFile, remoteFile])
 
     def cwd(self, d):
@@ -118,6 +119,7 @@ class FTPUploader:
 
     def uploadAll(self, dir):
         """Upload all files in a dir."""
+        dir = scctool.settings.getAbsPath(dir)
         for fname in os.listdir(dir):
             full_fname = os.path.join(dir, fname)
             if os.path.isfile(full_fname):
@@ -208,7 +210,8 @@ class UploaderThread(QtCore.QThread):
         print("FTP Thread finished.")
 
     def __connect(self):
-        self.__server = scctool.settings.config.parser.get("FTP", "server").strip()
+        self.__server = scctool.settings.config.parser.get(
+            "FTP", "server").strip()
         self.__user = scctool.settings.config.parser.get("FTP", "user").strip()
         self.__passwd = base64.b64decode(scctool.settings.config.parser.get(
             "FTP", "passwd").strip().encode()).decode("utf8")

@@ -1,7 +1,6 @@
 """Starcraft Casting Tool."""
 import scctool
 import logging
-
 #create logger with 'spam_application'
 logger = logging.getLogger('scctool')
 logger.setLevel(logging.DEBUG)

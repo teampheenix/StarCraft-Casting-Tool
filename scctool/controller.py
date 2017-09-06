@@ -37,8 +37,8 @@ class MainController:
         try:
             self.matchData = matchData(self)
             self.SC2ApiThread = SC2ApiThread(self)
-            self.checkVersionThread = CheckVersionThread(
-                scctool.settings.versionControl)
+            self.versionControl = scctool.settings.version.VersionControl()
+            self.checkVersionThread = CheckVersionThread(self.versionControl)
             self.webApp = FlaskThread()
             self.webApp.signal_twitch.connect(self.webAppDone_twitch)
             self.webApp.signal_nightbot.connect(self.webAppDone_nightbot)
@@ -419,9 +419,9 @@ class MainController:
             scctool.settings.config.parser.set(
                 "FTP", "upload", str(self.view.cb_autoFTP.isChecked()))
 
-            cfgfile = open(scctool.settings.cfgFile, 'w')
-            scctool.settings.config.parser.write(cfgfile)
-            cfgfile.close()
+            configFile = open(scctool.settings.configFile, 'w')
+            scctool.settings.config.parser.write(configFile)
+            configFile.close()
         except Exception as e:
             module_logger.exception("message")
 
@@ -508,7 +508,7 @@ class MainController:
     def linkFile(self, file):
         """Return correct img file ending."""
         for ext in [".png", ".jpg"]:
-            if(os.path.isfile(file + ext)):
+            if(os.path.isfile(scctool.settings.getAbsPath(file + ext))):
                 return file + ext
         return ""
 
@@ -517,7 +517,10 @@ class MainController:
         for idx in range(2):
             filename = scctool.settings.OBShtmlDir + \
                 "/data/logo" + str(idx + 1) + "-data.html"
-            with open(scctool.settings.OBShtmlDir + "/data/logo-template.html", "rt") as fin:
+            filename = scctool.settings.getAbsPath(filename)
+            template = scctool.settings.getAbsPath(
+                scctool.settings.OBShtmlDir + "/data/logo-template.html")
+            with open(template, "rt") as fin:
                 logo = self.linkFile(
                     scctool.settings.OBSdataDir + "/" + "logo" + str(idx + 1))
                 if logo == "":
@@ -566,7 +569,10 @@ class MainController:
 
             filename = scctool.settings.OBShtmlDir + \
                 "/intro" + str(player_idx + 1) + ".html"
-            with open(scctool.settings.OBShtmlDir + "/data/intro-template.html", "rt") as fin:
+            filename = scctool.settings.getAbsPath(filename)
+            template = scctool.settings.getAbsPath(scctool.settings.OBShtmlDir
+                                                   + "/data/intro-template.html")
+            with open(template, "rt") as fin:
                 with open(filename, "wt") as fout:
                     for line in fin:
                         line = line.replace(
@@ -588,24 +594,25 @@ class MainController:
 
     def getMapImg(self, map, fullpath=False):
         """Get map image from map name."""
+        mapdir = scctool.settings.getAbsPath(scctool.settings.OBSmapDir)
         mapimg = os.path.normpath(os.path.join(
-            scctool.settings.OBSmapDir, "src/maps", map.replace(" ", "_")))
+            mapdir, "src/maps", map.replace(" ", "_")))
         mapimg = os.path.basename(self.linkFile(mapimg))
         if not mapimg:
             mapimg = "TBD.jpg"
             self.displayWarning("Warning: Map '{}' not found!".format(map))
 
         if(fullpath):
-            return scctool.settings.OBSmapDir + "/src/maps/" + mapimg
+            return mapdir + "/src/maps/" + mapimg
         else:
             return mapimg
 
     def addMap(self, file, mapname):
         """Add a new map via file and name."""
         _, ext = os.path.splitext(file)
+        mapdir = scctool.settings.getAbsPath(scctool.settings.OBSmapDir)
         map = mapname.strip().replace(" ", "_") + ext
-        newfile = os.path.normpath(os.path.join(
-            scctool.settings.OBSmapDir, "src/maps", map))
+        newfile = os.path.normpath(os.path.join(mapdir, "src/maps", map))
         shutil.copy(file, newfile)
         scctool.settings.maps.append(mapname)
 
@@ -615,7 +622,8 @@ class MainController:
 
     def deleteMap(self, map):
         """Delete map and file."""
-        self.ftpUploader.cwd(scctool.settings.OBSmapDir + "/src/maps")
+        mapdir = scctool.settings.getAbsPath(scctool.settings.OBSmapDir)
+        self.ftpUploader.cwd(mapdir + "/src/maps")
         self.ftpUploader.delete(self.getMapImg(map))
         self.ftpUploader.cwd("../../..")
 
@@ -642,5 +650,6 @@ class MainController:
     def newVersionTrigger(self, version):
         """Call back to display new version in status bar."""
         version = version.replace("v", "")
-        self.view.statusBar().showMessage("At https://github.com/pheenix/StarCraft-Casting-Tool the new version " + version +
-                                          " is available!")
+        self.view.statusBar().showMessage(
+            "At https://github.com/pheenix/StarCraft-Casting-Tool the new version " +
+            version + " is available!")

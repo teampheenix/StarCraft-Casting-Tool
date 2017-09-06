@@ -408,6 +408,10 @@ class matchData:
             return
         except:
             return False
+            
+    def isDecided(self):
+        """Check if match is decided."""
+        return max(self.getScore()) > int(self.getBestOf() / 2)
 
     def setMapScore(self, set_idx, score, overwrite=False):
         """Set the score of a set."""
@@ -417,6 +421,9 @@ class matchData:
             if(score in [-1, 0, 1]):
                 if(overwrite or self.__data['sets'][set_idx]['score'] == 0):
                     if(self.__data['sets'][set_idx]['score'] != score):
+                        if(self.isDecided()):
+                            print("Metachange")
+                            self.__metaChanged = True
                         self.__data['sets'][set_idx]['score'] = score
                         self.__setsChanged[set_idx] = True
                 return True
@@ -757,6 +764,7 @@ class matchData:
         except Exception as e:
             module_logger.exception("message")
 
+
     def updateScoreIcon(self):
         """Update scor icons."""
         if(not(self.hasMetaChanged() or self.hasAnySetChanged())):
@@ -849,6 +857,8 @@ class matchData:
             team = self.getMyTeam()
             score = [0, 0]
             skip = [False] * self.getNoSets()
+            meta_changed = self.hasMetaChanged();
+
             for i in range(self.getNoSets()):
 
                 winner = self.getMapScore(i)
@@ -859,7 +869,7 @@ class matchData:
                 opacity = "0.0"
 
                 threshold = int(self.getBestOf() / 2)
-                if(not self.hasSetChanged(i)):
+                if(not self.hasSetChanged(i) and not meta_changed):
                     skip[i] = True
 
                 if(max(score) > threshold and i >= self.getMinSets()):

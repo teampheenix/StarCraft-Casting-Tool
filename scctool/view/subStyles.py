@@ -1,8 +1,5 @@
-#!/usr/bin/env python
+"""Show styles settings sub window."""
 import logging
-
-# create logger
-module_logger = logging.getLogger('scctool.view.subStyles')
 
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
@@ -11,15 +8,21 @@ from PyQt5.QtGui import *
 from scctool.view.widgets import *
 import scctool.settings
 
+# create logger
+module_logger = logging.getLogger('scctool.view.subStyles')
 
-class subwindowStyles(QWidget):
+
+class SubwindowStyles(QWidget):
+    """Show styles settings sub window."""
+
     def createWindow(self, mainWindow):
-
+        """Create styles settings sub window."""
         try:
             parent = None
-            super(subwindowStyles, self).__init__(parent)
+            super(SubwindowStyles, self).__init__(parent)
 
-            self.setWindowIcon(QIcon('src/pantone.png'))
+            self.setWindowIcon(
+                QIcon(scctool.settings.getAbsPath('src/pantone.png')))
             self.setWindowModality(Qt.ApplicationModal)
             self.mainWindow = mainWindow
             self.passEvent = False
@@ -33,14 +36,17 @@ class subwindowStyles(QWidget):
             mainLayout = QVBoxLayout()
             mainLayout.addWidget(self.styleBox)
             mainLayout.addWidget(self.colorBox)
-            mainLayout.addItem(QSpacerItem(0, 0, QSizePolicy.Minimum, QSizePolicy.Expanding))
+            mainLayout.addItem(QSpacerItem(
+                0, 0, QSizePolicy.Minimum, QSizePolicy.Expanding))
             mainLayout.addLayout(self.buttonGroup)
             self.setLayout(mainLayout)
 
             self.resize(QSize(mainWindow.size().width()
                               * .80, self.sizeHint().height()))
-            self.move(mainWindow.pos() + QPoint(mainWindow.size().width() / 2, mainWindow.size().height() / 3)
-                      - QPoint(self.size().width() / 2, self.size().height() / 3))
+            relativeChange = + QPoint(mainWindow.size().width() / 2,
+                                      mainWindow.size().height() / 3)\
+                - QPoint(self.size().width() / 2, self.size().height() / 3)
+            self.move(mainWindow.pos() + relativeChange)
 
             self.setWindowTitle("Style Settings")
 
@@ -74,7 +80,8 @@ class subwindowStyles(QWidget):
 
         container = QHBoxLayout()
         self.qb_boxStyle = StyleComboBox(
-            scctool.settings.OBSmapDir + "/src/css/box_styles", scctool.settings.config.parser.get("Style", "mapicon_box"))
+            scctool.settings.OBSmapDir + "/src/css/box_styles",
+            scctool.settings.config.parser.get("Style", "mapicon_box"))
         self.qb_boxStyle.currentIndexChanged.connect(self.changed)
         label = QLabel("Box Map Icons:")
         label.setMinimumWidth(110)
@@ -87,7 +94,8 @@ class subwindowStyles(QWidget):
 
         container = QHBoxLayout()
         self.qb_landscapeStyle = StyleComboBox(
-            scctool.settings.OBSmapDir + "/src/css/landscape_styles", scctool.settings.config.parser.get("Style", "mapicon_landscape"))
+            scctool.settings.OBSmapDir + "/src/css/landscape_styles",
+            scctool.settings.config.parser.get("Style", "mapicon_landscape"))
         self.qb_landscapeStyle.currentIndexChanged.connect(self.changed)
         button = QPushButton("Show in Browser")
         button.clicked.connect(lambda: self.openHTML(
@@ -98,7 +106,8 @@ class subwindowStyles(QWidget):
 
         container = QHBoxLayout()
         self.qb_scoreStyle = StyleComboBox(
-            scctool.settings.OBShtmlDir + "/src/css/score_styles", scctool.settings.config.parser.get("Style", "score"))
+            scctool.settings.OBShtmlDir + "/src/css/score_styles",
+            scctool.settings.config.parser.get("Style", "score"))
         self.qb_scoreStyle.currentIndexChanged.connect(self.changed)
         button = QPushButton("Show in Browser")
         button.clicked.connect(lambda: self.openHTML(
@@ -109,7 +118,8 @@ class subwindowStyles(QWidget):
 
         container = QHBoxLayout()
         self.qb_introStyle = StyleComboBox(
-            scctool.settings.OBShtmlDir + "/src/css/intro_styles", scctool.settings.config.parser.get("Style", "intro"))
+            scctool.settings.OBShtmlDir + "/src/css/intro_styles",
+            scctool.settings.config.parser.get("Style", "intro"))
         self.qb_introStyle.currentIndexChanged.connect(self.changed)
         button = QPushButton("Show in Browser")
         button.clicked.connect(lambda: self.openHTML(
@@ -141,20 +151,25 @@ class subwindowStyles(QWidget):
         self.colorBox = QGroupBox("Colors")
         layout = QVBoxLayout()
 
-        self.default_color = ColorLayout(self, "Default Border:", scctool.settings.config.parser.get(
-            "MapIcons", "default_border_color"), "#f29b00")
+        self.default_color = ColorLayout(
+            self, "Default Border:",
+            scctool.settings.config.parser.get("MapIcons", "default_border_color"), "#f29b00")
         layout.addLayout(self.default_color)
         self. win_color = ColorLayout(
-            self, "Win:", scctool.settings.config.parser.get("MapIcons", "win_color"), "#008000")
+            self, "Win:",
+            scctool.settings.config.parser.get("MapIcons", "win_color"), "#008000")
         layout.addLayout(self.win_color)
-        self.lose_color = ColorLayout(self, "Lose:", scctool.settings.config.parser.get(
-            "MapIcons", "lose_color"), "#f22200")
+        self.lose_color = ColorLayout(
+            self, "Lose:",
+            scctool.settings.config.parser.get("MapIcons", "lose_color"), "#f22200")
         layout.addLayout(self.lose_color)
-        self.undecided_color = ColorLayout(self, "Undecided:", scctool.settings.config.parser.get(
-            "MapIcons", "undecided_color"), "#f29b00")
+        self.undecided_color = ColorLayout(
+            self, "Undecided:",
+            scctool.settings.config.parser.get("MapIcons", "undecided_color"), "#f29b00")
         layout.addLayout(self.undecided_color)
-        self.notplayed_color = ColorLayout(self, "Not played:", scctool.settings.config.parser.get(
-            "MapIcons", "notplayed_color"), "#c0c0c0")
+        self.notplayed_color = ColorLayout(
+            self, "Not played:",
+            scctool.settings.config.parser.get("MapIcons", "notplayed_color"), "#c0c0c0")
         layout.addLayout(self.notplayed_color)
 
         self.colorBox.setLayout(layout)
@@ -201,7 +216,8 @@ class subwindowStyles(QWidget):
                 if(self.isMinimized()):
                     self.showNormal()
                 buttonReply = QMessageBox.question(
-                    self, 'Save data?', "Save data?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+                    self, 'Save data?', "Save data?",
+                    QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
                 if buttonReply == QMessageBox.Yes:
                     self.saveData()
             event.accept()

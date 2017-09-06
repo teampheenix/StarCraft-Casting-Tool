@@ -191,7 +191,7 @@ def ToggleScore(score1_in, score2_in, bestof=5):
 
 
 def ToggleProduction():
-    """toggle SC2-ingame production tab."""
+    """Toggle SC2-ingame production tab."""
     if(not scctool.settings.windows):
         raise UserWarning("Only Windows!")
     lag = 0.01

@@ -4,9 +4,10 @@ import configparser
 
 import os.path
 
+from scctool.settings import configFile, windows
+
 module_logger = logging.getLogger('scctool.settings.config')  # create logger
 
-cfgFile = "config.ini"
 parser = None
 
 
@@ -16,7 +17,7 @@ def init():
     # Reading the configuration from file
     parser = configparser.ConfigParser()
     try:
-        parser.read(cfgFile)
+        parser.read(configFile)
     except:
         parser.defaults()
 
@@ -32,7 +33,7 @@ def init():
 # Setting default values for config file
 
 
-def setDefaultConfig(sec, opt, value, func = None):
+def setDefaultConfig(sec, opt, value, func=None):
     """Set default value in config."""
     if(not parser.has_section(sec)):
         parser.add_section(sec)
@@ -55,16 +56,19 @@ def setDefaultConfig(sec, opt, value, func = None):
                     pass
             parser.set(sec, opt, value)
 
-def findTesserAct(default = "C:\\Program Files (x86)\\Tesseract-OCR\\tesseract.exe"):
+
+def findTesserAct(default="C:\\Program Files (x86)\\Tesseract-OCR\\tesseract.exe"):
     """Search for Tesseract exceutable via registry."""
-    if(not scctool.settings.windows):
+    if(not windows):
         return default
     try:
         import winreg
-        key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, "SOFTWARE\\WOW6432Node\\Tesseract-OCR")
+        key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE,
+                             "SOFTWARE\\WOW6432Node\\Tesseract-OCR")
         return winreg.QueryValueEx(key, "Path")[0] + '\\tesseract.exe'
     except:
         return default
+
 
 def getTesserAct():
     """Get Tesseract exceutable via config or registry."""
@@ -74,7 +78,7 @@ def getTesserAct():
     else:
         new = findTesserAct(tesseract)
         if(new != tesseract):
-             parser.set("SCT", "tesseract", new)
+            parser.set("SCT", "tesseract", new)
         return new
 
 
@@ -162,5 +166,6 @@ def getMyPlayers(append=False):
     if(append):
         players.append("TBD")
     return players
+
 
 init()

@@ -1,12 +1,5 @@
-#!/usr/bin/env python
+"""Define the main window."""
 import logging
-
-# create logger
-module_logger = logging.getLogger('scctool.view.main')
-
-
-
-import base64
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -15,23 +8,24 @@ from PyQt5.QtQml import *
 import scctool.settings
 import scctool.settings.config
 import scctool.tasks.obs
-import time
 import shutil
 import os
-import re
-import markdown2  
+import markdown2
 
 from scctool.view.widgets import *
-from scctool.view.subConnections import *
-from scctool.view.subStyles import *
-from scctool.view.subMisc import *
-from scctool.view.subReadme import *
+from scctool.view.subConnections import SubwindowConnections
+from scctool.view.subStyles import SubwindowStyles
+from scctool.view.subMisc import SubwindowMisc
+from scctool.view.subReadme import SubwindowReadme
+
+# create logger
+module_logger = logging.getLogger('scctool.view.main')
 
 
-class mainWindow(QMainWindow):
+class MainWindow(QMainWindow):
     def __init__(self, controller, app):
         try:
-            super(mainWindow, self).__init__()
+            super(MainWindow, self).__init__()
 
             self.trigger = True
             self.controller = controller
@@ -50,7 +44,7 @@ class mainWindow(QMainWindow):
             mainLayout.addWidget(self.horizontalGroupBox, 1)
 
             self.setWindowTitle("StarCraft Casting Tool " +
-                                scctool.settings.versionControl.current)
+                                controller.versionControl.current)
 
             self.window = QWidget()
             self.window.setLayout(mainLayout)
@@ -91,14 +85,15 @@ class mainWindow(QMainWindow):
 
     def showAbout(self):
 
-        html = markdown2.markdown_path("data/about.md")
-        version = scctool.settings.versionControl.current
+        html = markdown2.markdown_path(
+            scctool.settings.getAbsPath("src/about.md"))
+        version = self.controller.versionControl.current
 
         html = html.replace("%VERSION%", version)
-        if(not scctool.settings.versionControl.isNewAvaiable(False)):
+        if(not self.controller.versionControl.isNewAvaiable(False)):
             new_version = "Starcraft Casting Tool is up to date."
         else:
-            new_version = scctool.settings.versionControl.latest.replace(
+            new_version = self.controller.versionControl.latest.replace(
                 "v", "")
             new_version = "The new version {} is available!".format(
                 new_version)
@@ -131,31 +126,36 @@ class mainWindow(QMainWindow):
         try:
             menubar = self.menuBar()
             settingsMenu = menubar.addMenu('Settings')
-            apiAct = QAction(QIcon('src/connection.png'), 'Connections', self)
+            apiAct = QAction(QIcon(scctool.settings.getAbsPath(
+                'src/connection.png')), 'Connections', self)
             apiAct.setToolTip(
                 'Edit FTP-Settings and API-Settings for Twitch and Nightbot')
             apiAct.triggered.connect(self.openApiDialog)
             settingsMenu.addAction(apiAct)
-            styleAct = QAction(QIcon('src/pantone.png'), 'Styles', self)
+            styleAct = QAction(QIcon(scctool.settings.getAbsPath(
+                'src/pantone.png')), 'Styles', self)
             styleAct.setToolTip('')
             styleAct.triggered.connect(self.openStyleDialog)
             settingsMenu.addAction(styleAct)
-            miscAct = QAction(QIcon('src/settings.png'), 'Misc', self)
+            miscAct = QAction(QIcon(scctool.settings.getAbsPath(
+                'src/settings.png')), 'Misc', self)
             miscAct.setToolTip('')
             miscAct.triggered.connect(self.openMiscDialog)
             settingsMenu.addAction(miscAct)
 
             infoMenu = menubar.addMenu('Info && Links')
 
-            myAct = QAction(QIcon('src/about.png'), 'About', self)
+            myAct = QAction(QIcon(scctool.settings.getAbsPath(
+                'src/about.png')), 'About', self)
             myAct.triggered.connect(self.showAbout)
             infoMenu.addAction(myAct)
 
-            myAct = QAction(QIcon('src/readme.ico'), 'Readme', self)
+            myAct = QAction(QIcon(scctool.settings.getAbsPath(
+                'src/readme.ico')), 'Readme', self)
             myAct.triggered.connect(self.openReadme)
             infoMenu.addAction(myAct)
 
-            websiteAct = QAction(QIcon('src/github.ico'),
+            websiteAct = QAction(QIcon(scctool.settings.getAbsPath('src/github.ico')),
                                  'StarCraft Casting Tool', self)
             websiteAct.triggered.connect(lambda: self.controller.openURL(
                 "https://github.com/teampheenix/StarCraft-Casting-Tool"))
@@ -163,24 +163,28 @@ class mainWindow(QMainWindow):
 
             infoMenu.addSeparator()
 
-            ixAct = QAction(QIcon('src/icon.png'), 'team pheeniX', self)
+            ixAct = QAction(QIcon(scctool.settings.getAbsPath(
+                'src/icon.png')), 'team pheeniX', self)
             ixAct.triggered.connect(
                 lambda:  self.controller.openURL("http://team-pheenix.de"))
             infoMenu.addAction(ixAct)
 
-            alphaAct = QAction(QIcon('src/alphatl.ico'), 'AlphaTL', self)
+            alphaAct = QAction(QIcon(scctool.settings.getAbsPath(
+                               'src/alphatl.ico')), 'AlphaTL', self)
             alphaAct.triggered.connect(
                 lambda: self.controller.openURL("http://alpha.tl"))
             infoMenu.addAction(alphaAct)
 
-            rstlAct = QAction(QIcon('src/rstl.png'), 'RSTL', self)
+            rstlAct = QAction(QIcon(scctool.settings.getAbsPath(
+                              'src/rstl.png')), 'RSTL', self)
             rstlAct.triggered.connect(
                 lambda: self.controller.openURL("http://hdgame.net/en/"))
             infoMenu.addAction(rstlAct)
 
             infoMenu.addSeparator()
 
-            myAct = QAction(QIcon('src/donate.ico'), 'Donate', self)
+            myAct = QAction(QIcon(scctool.settings.getAbsPath(
+                'src/donate.ico')), 'Donate', self)
             myAct.triggered.connect(lambda: self.controller.openURL(
                 "https://streamlabs.com/scpressure"))
             infoMenu.addAction(myAct)
@@ -189,22 +193,22 @@ class mainWindow(QMainWindow):
             module_logger.exception("message")
 
     def openApiDialog(self):
-        self.mysubwindow1 = subwindowConnections()
+        self.mysubwindow1 = SubwindowConnections()
         self.mysubwindow1.createWindow(self)
         self.mysubwindow1.show()
 
     def openStyleDialog(self):
-        self.mysubwindow2 = subwindowStyles()
+        self.mysubwindow2 = SubwindowStyles()
         self.mysubwindow2.createWindow(self)
         self.mysubwindow2.show()
 
     def openMiscDialog(self):
-        self.mysubwindow3 = subwindowMisc()
+        self.mysubwindow3 = SubwindowMisc()
         self.mysubwindow3.createWindow(self)
         self.mysubwindow3.show()
 
     def openReadme(self):
-        self.mysubwindow4 = subwindowReadme()
+        self.mysubwindow4 = SubwindowReadme()
         self.mysubwindow4.createWindow(self)
         self.mysubwindow4.show()
 
@@ -229,18 +233,21 @@ class mainWindow(QMainWindow):
             self.le_url.setPlaceholderText("http://alpha.tl/match/2392")
 
             completer = QCompleter(
-                ["http://alpha.tl/match/", "http://hdgame.net/en/tournaments/list/tournament/rstl-12/"], self.le_url)
+                ["http://alpha.tl/match/",
+                 "http://hdgame.net/en/tournaments/list/tournament/rstl-12/"], self.le_url)
             completer.setCaseSensitivity(Qt.CaseInsensitive)
             completer.setCompletionMode(QCompleter.UnfilteredPopupCompletion)
             completer.setWrapAround(True)
             self.le_url.setCompleter(completer)
-            self.le_url.setMinimumWidth(
-                self.scoreWidth + 2 * self.raceWidth + 2 * self.mimumLineEditWidth + 4 * 6)
+            minWidth = self.scoreWidth + 2 * self.raceWidth + \
+                2 * self.mimumLineEditWidth + 4 * 6
+            self.le_url.setMinimumWidth(minWidth)
 
             self.pb_openBrowser = QPushButton("Open in Browser")
             self.pb_openBrowser.clicked.connect(self.openBrowser_click)
-            self.pb_openBrowser.setMinimumWidth(
-                (self.scoreWidth + 2 * self.raceWidth + 2 * self.mimumLineEditWidth + 4 * 6) / 2 - 2)
+            width = (self.scoreWidth + 2 * self.raceWidth + 2 *
+                     self.mimumLineEditWidth + 4 * 6) / 2 - 2
+            self.pb_openBrowser.setMinimumWidth(width)
 
             container = QHBoxLayout()
             label = QLabel()
@@ -256,7 +263,7 @@ class mainWindow(QMainWindow):
 
             container = QHBoxLayout()
 
-            #self.pb_download = QPushButton("Download Images from URL")
+            # self.pb_download = QPushButton("Download Images from URL")
             # container.addWidget(self.pb_download)
             label = QLabel()
             label.setFixedWidth(self.labelWidth * 2)
@@ -292,9 +299,9 @@ class mainWindow(QMainWindow):
             for idx in range(0, scctool.settings.max_no_sets):
                 self.cb_bestof.addItem(str(idx + 1))
             self.cb_bestof.setCurrentIndex(3)
-
-            self.cb_bestof.setToolTip('"Best of 6/4": First, a Bo5/3 is played and the ace map gets ' +
-                                      'extended to a Bo3 if needed; Best of 2: Bo3 with only two maps played.')
+            string = '"Best of 6/4": First, a Bo5/3 is played and the ace map gets ' +\
+                     'extended to a Bo3 if needed; Best of 2: Bo3 with only two maps played.'
+            self.cb_bestof.setToolTip(string)
             self.cb_bestof.setMaximumWidth(40)
             container.addWidget(self.cb_bestof, 0)
 
@@ -560,7 +567,8 @@ class mainWindow(QMainWindow):
                     self.cb_race[1][player_idx], 0)
                 layout2.addLayout(self.setContainer[player_idx])
 
-            layout2.addItem(QSpacerItem(0, 0, QSizePolicy.Minimum, QSizePolicy.Expanding))
+            layout2.addItem(QSpacerItem(
+                0, 0, QSizePolicy.Minimum, QSizePolicy.Expanding))
             self.fromMatchDataBox.setLayout(layout2)
 
             self.updateMapCompleters()
@@ -601,14 +609,16 @@ class mainWindow(QMainWindow):
 
             self.cb_autoFTP = QCheckBox("FTP Upload")
             self.cb_autoFTP.setChecked(False)
-            self.cb_autoFTP.setToolTip(
-                'Automatically uploads all streaming data in the background to a specified FTP server.')
+            string = 'Automatically uploads all streaming data' +\
+                     ' in the background to a specified FTP server.'
+            self.cb_autoFTP.setToolTip(string)
             self.cb_autoFTP.stateChanged.connect(self.autoFTP_change)
 
             self.cb_autoUpdate = QCheckBox("Score Update")
             self.cb_autoUpdate.setChecked(False)
-            self.cb_autoUpdate.setToolTip('Automatically detects the outcome of SC2 matches that are played/observed'
-                                          ' in your SC2-client and updates the score accordingly.')
+            string = 'Automatically detects the outcome of SC2 matches that are ' + \
+                     'played/observed in your SC2-client and updates the score accordingly.'
+            self.cb_autoUpdate.setToolTip(string)
             self.cb_autoUpdate.stateChanged.connect(self.autoUpdate_change)
 
             self.cb_playerIntros = QCheckBox("Player Intros")
@@ -619,15 +629,17 @@ class mainWindow(QMainWindow):
 
             self.cb_autoToggleScore = QCheckBox("Ingame Score")
             self.cb_autoToggleScore.setChecked(False)
-            self.cb_autoToggleScore.setToolTip(
-                'Automatically sets the score of your ingame UI-interface at the begining of a game.')
+            string = 'Automatically sets the score of your ingame' +\
+                     ' UI-interface at the begining of a game.'
+            self.cb_autoToggleScore.setToolTip(string)
             self.cb_autoToggleScore.stateChanged.connect(
                 self.autoToggleScore_change)
 
             self.cb_autoToggleProduction = QCheckBox("Production Tab")
             self.cb_autoToggleProduction.setChecked(False)
-            self.cb_autoToggleProduction.setToolTip(
-                'Automatically toggles the production tab of your ingame UI-interface at the begining of a game.')
+            string = 'Automatically toggles the production tab of your' + \
+                     ' ingame UI-interface at the begining of a game.'
+            self.cb_autoToggleProduction.setToolTip(string)
             self.cb_autoToggleProduction.stateChanged.connect(
                 self.autoToggleProduction_change)
 
@@ -717,8 +729,10 @@ class mainWindow(QMainWindow):
             url = self.le_url.text()
             self.trigger = False
             self.statusBar().showMessage('Applying Custom Match...')
-            msg = self.controller.applyCustom(int(self.cb_bestof.currentText()), self.cb_allkill.isChecked(),
-                                              int(self.cb_minSets.currentText()), self.le_url_custom.text().strip())
+            msg = self.controller.applyCustom(int(self.cb_bestof.currentText()),
+                                              self.cb_allkill.isChecked(),
+                                              int(self.cb_minSets.currentText()),
+                                              self.le_url_custom.text().strip())
             self.statusBar().showMessage(msg)
             self.trigger = True
         except Exception as e:
@@ -817,8 +831,8 @@ class mainWindow(QMainWindow):
 
     def logoDialog(self, button):
 
-        #options = QFileDialog.Options()
-        #options |= QFileDialog.DontUseNativeDialog
+        # options = QFileDialog.Options()
+        # options |= QFileDialog.DontUseNativeDialog
         fileName, _ = QFileDialog.getOpenFileName(
             self, "Select Team Logo", "", "Support Images (*.png *.jpg)")
         if fileName:

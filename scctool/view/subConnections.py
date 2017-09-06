@@ -1,9 +1,5 @@
-#!/usr/bin/env python
+"""Show connections settings sub window."""
 import logging
-
-# create logger
-module_logger = logging.getLogger('scctool.view.subConnections')
-
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -14,16 +10,22 @@ import scctool.settings
 import scctool.tasks.obs
 import base64
 
+# create logger
+module_logger = logging.getLogger('scctool.view.subConnections')
 
-class subwindowConnections(QWidget):
+
+class SubwindowConnections(QWidget):
+    """Show connections settings sub window."""
+
     def createWindow(self, mainWindow):
 
         try:
             parent = None
-            super(subwindowConnections, self).__init__(parent)
+            super(SubwindowConnections, self).__init__(parent)
             # self.setWindowFlags(Qt.WindowStaysOnTopHint)
 
-            self.setWindowIcon(QIcon('src/connection.png'))
+            self.setWindowIcon(
+                QIcon(scctool.settings.getAbsPath('src/connection.png')))
             self.setWindowModality(Qt.ApplicationModal)
             self.mainWindow = mainWindow
             self.passEvent = False
@@ -42,8 +44,10 @@ class subwindowConnections(QWidget):
 
             self.resize(QSize(mainWindow.size().width()
                               * 0.7, self.sizeHint().height()))
-            self.move(mainWindow.pos() + QPoint(mainWindow.size().width() / 2, mainWindow.size().height() / 3)
-                      - QPoint(self.size().width() / 2, self.size().height() / 3))
+            relativeChange = QPoint(mainWindow.size().width() / 2,
+                                    mainWindow.size().height() / 3) -\
+                QPoint(self.size().width() / 2, self.size().height() / 3)
+            self.move(mainWindow.pos() + relativeChange)
 
             self.setWindowTitle("Connections")
 
@@ -156,8 +160,9 @@ class subwindowConnections(QWidget):
             scctool.settings.config.parser.get("OBS", "sources"))
         self.obsSources.setAlignment(Qt.AlignCenter)
         self.obsSources.setPlaceholderText("Intro1, Intro2")
-        self.obsSources.setToolTip(
-            'Name of the OBS-sources that should automatically be hidden 4.5 sec after they become visible.')
+        string = 'Name of the OBS-sources that should automatically' +\
+                 ' be hidden 4.5 sec after they become visible.'
+        self.obsSources.setToolTip(string)
         layout.addRow(QLabel("Sources:"), self.obsSources)
 
         self.obsActive = QCheckBox(" Automatic hide sources")
@@ -384,7 +389,8 @@ class subwindowConnections(QWidget):
                 if(self.isMinimized()):
                     self.showNormal()
                 buttonReply = QMessageBox.question(
-                    self, 'Save data?', "Save data?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+                    self, 'Save data?', "Do you want to save the data?",
+                    QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
                 if buttonReply == QMessageBox.Yes:
                     self.saveData()
             event.accept()

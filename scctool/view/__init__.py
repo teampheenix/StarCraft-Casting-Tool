@@ -1,2 +1,1 @@
-__all__ = ["main", "subConnections", "subMisc",
-           "subStyles", "widgets"]
+"""Define the PyQt5 windows."""
