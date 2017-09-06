@@ -1,6 +1,8 @@
 """Provide config for SCCTool."""
 import logging
 import configparser
+import platform
+import os.path
 
 module_logger = logging.getLogger('scctool.settings.config')  # create logger
 
@@ -30,18 +32,51 @@ def init():
 # Setting default values for config file
 
 
-def setDefaultConfig(sec, opt, value):
+def setDefaultConfig(sec, opt, value, func = None):
     """Set default value in config."""
     if(not parser.has_section(sec)):
         parser.add_section(sec)
+
     if(not parser.has_option(sec, opt)):
+        if(func):
+            try:
+                value = func
+            except:
+                pass
         parser.set(sec, opt, value)
     elif(value in ["True", "False"]):
         try:
             parser.getboolean(sec, opt)
         except:
+            if(func):
+                try:
+                    value = func
+                except:
+                    pass
             parser.set(sec, opt, value)
 
+def findTesserAct(default = "C:\\Program Files (x86)\\Tesseract-OCR\\tesseract.exe"):
+    """Search for Tesseract exceutable via registry."""
+    if(platform.system() != "Windows"):
+        return default
+    try:
+        import winreg
+        key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, "SOFTWARE\\WOW6432Node\\Tesseract-OCR")
+        return winreg.QueryValueEx(key, "Path")[0] + '\\tesseract.exe'
+    except: 
+        return default
+        
+def getTesserAct():
+    """Get Tesseract exceutable via config or registry."""
+    tesseract = parser.get("SCT", "tesseract")
+    if(os.path.isfile(tesseract)):
+        return tesseract
+    else:
+        new = findTesserAct(tesseract)
+        if(new != tesseract):
+             parser.set("SCT", "tesseract", new)
+        return new
+    
 
 def setDefaultConfigAll():
     """Define default values and set them."""
@@ -70,8 +105,9 @@ def setDefaultConfigAll():
     setDefaultConfig("SCT", "fuzzymatch", "True")
 
     setDefaultConfig("SCT", "use_ocr", "False")
-    setDefaultConfig("SCT", "tesseract",
-                     'C:\\Program Files (x86)\\Tesseract-OCR\\tesseract\\tesseract.exe')
+    
+    tesseract = "C:\\Program Files (x86)\\Tesseract-OCR\\tesseract.exe"
+    setDefaultConfig("SCT", "tesseract", tesseract, findTesserAct)
 
     setDefaultConfig("Form", "scoreupdate", "False")
     setDefaultConfig("Form", "togglescore", "False")
@@ -126,6 +162,5 @@ def getMyPlayers(append=False):
     if(append):
         players.append("TBD")
     return players
-
 
 init()

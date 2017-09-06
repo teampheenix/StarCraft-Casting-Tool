@@ -121,7 +121,9 @@ class subwindowMisc(QWidget):
 
     def selectTesseract(self):
         old_exe = self.tesseract.text()
-        exe, ok = QFileDialog.getOpenFileName(self, "Select Tesseract-OCR Executeable", old_exe, "Tesseract-OCR Executeable (tesseract.exe);; Exectuable (*.exe);; All files (*)")
+        default = scctool.settings.config.findTesserAct(old_exe)
+        exe, ok = QFileDialog.getOpenFileName(self, "Select Tesseract-OCR Executeable", default,
+            "Tesseract-OCR Executeable (tesseract.exe);; Exectuable (*.exe);; All files (*)")
         if(ok and exe != old_exe):
             self.tesseract.setText(exe)
             self.changed()

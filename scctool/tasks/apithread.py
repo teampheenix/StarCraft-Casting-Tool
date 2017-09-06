@@ -333,8 +333,7 @@ class SC2ApiThread(QThread):
             if(not scctool.settings.config.parser.getboolean("SCT", "use_ocr")):
                 return False
 
-            pytesseract.pytesseract.tesseract_cmd = scctool.settings.config.parser.get(
-                "SCT", "tesseract")
+            pytesseract.pytesseract.tesseract_cmd = scctool.settings.config.getTesserAct()
 
             players = data.getPlayerList()
             img = ImageGrab.grab()
