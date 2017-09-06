@@ -1,6 +1,7 @@
 """Provide settings for SCCTool."""
 import logging
 import os
+import platform
 
 from scctool.settings.config import cfgFile as configFile
 from scctool.settings.version import VersionControl
@@ -8,10 +9,12 @@ from scctool.settings.version import VersionControl
 module_logger = logging.getLogger('scctool.settings')
 
 cfgFile = configFile
-jsonFile = "src/data.json"
+matchdata_json_file = "data/matchdata.json"
+nightbot_json_file = "data/nightbot.json"
 OBSdataDir = "OBS_data"
 OBShtmlDir = "OBS_html"
 OBSmapDir = "OBS_mapicons"
+windows = (platform.system().lower() == "windows")
 
 max_no_sets = 9
 

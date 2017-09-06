@@ -5,7 +5,7 @@ import logging
 module_logger = logging.getLogger('scctool.view.main')
 
 
-import platform
+
 import base64
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
@@ -24,6 +24,8 @@ from scctool.view.widgets import *
 from scctool.view.subConnections import *
 from scctool.view.subStyles import *
 from scctool.view.subMisc import *
+from scctool.view.subReadme import *
+
 
 class mainWindow(QMainWindow):
     def __init__(self, controller, app):
@@ -45,7 +47,7 @@ class mainWindow(QMainWindow):
             mainLayout.addWidget(self.fromMatchDataBox, 7)
             mainLayout.addWidget(self.SC2APIGroupBox, 1)
             mainLayout.addWidget(self.horizontalGroupBox, 1)
-            
+
             self.setWindowTitle("StarCraft Casting Tool " +
                                 scctool.settings.versionControl.current)
 
@@ -79,33 +81,36 @@ class mainWindow(QMainWindow):
             self.mysubwindow1 = None
             self.mysubwindow2 = None
             self.mysubwindow3 = None
+            self.mysubwindow4 = None
 
             self.show()
             self.controller.testVersion()
         except Exception as e:
             module_logger.exception("message")
-            
+
     def showAbout(self):
 
-        import markdown2 #pip install markdown2
+        import markdown2  # pip install markdown2
         #import re
         #self.viewer = QTextEdit()
-        #self.viewer.setReadOnly(True)
+        # self.viewer.setReadOnly(True)
         html = markdown2.markdown_path("src/about.md")
         #p = re.compile(r'<img.*?/>')
         #html = p.sub('', html)
         version = scctool.settings.versionControl.current
-        
+
         html = html.replace("%VERSION%", version)
         if(not scctool.settings.versionControl.isNewAvaiable(False)):
             new_version = "Starcraft Casting Tool is up to date."
         else:
-            new_version = scctool.settings.versionControl.latest.replace("v","")
-            new_version = "The new version {} is available!".format(new_version)
-        html = html.replace("%NEW_VERSION%", new_version)
+            new_version = scctool.settings.versionControl.latest.replace(
+                "v", "")
+            new_version = "The new version {} is available!".format(
+                new_version)
+        html = html.replace('%NEW_VERSION%', new_version)
 
-        
-        QMessageBox.about(self, "Starcraft Casting Tool - About", html) # use self as parent here
+        # use self as parent here
+        QMessageBox.about(self, "Starcraft Casting Tool - About", html)
 
     def closeEvent(self, event):
         try:
@@ -116,6 +121,8 @@ class mainWindow(QMainWindow):
                     self.mysubwindow2.close()
                 if(self.mysubwindow3 and self.mysubwindow3.isVisible()):
                     self.mysubwindow3.close()
+                if(self.mysubwindow4 and self.mysubwindow4.isVisible()):
+                    self.mysubwindow4.close()
             finally:
                 self.settings.setValue("geometry", self.saveGeometry())
                 self.settings.setValue("windowState", self.saveState())
@@ -130,16 +137,16 @@ class mainWindow(QMainWindow):
             menubar = self.menuBar()
             settingsMenu = menubar.addMenu('Settings')
             apiAct = QAction(QIcon('src/connection.png'), 'Connections', self)
-            apiAct.setStatusTip(
+            apiAct.setToolTip(
                 'Edit FTP-Settings and API-Settings for Twitch and Nightbot')
             apiAct.triggered.connect(self.openApiDialog)
             settingsMenu.addAction(apiAct)
             styleAct = QAction(QIcon('src/pantone.png'), 'Styles', self)
-            styleAct.setStatusTip('')
+            styleAct.setToolTip('')
             styleAct.triggered.connect(self.openStyleDialog)
             settingsMenu.addAction(styleAct)
             miscAct = QAction(QIcon('src/settings.png'), 'Misc', self)
-            miscAct.setStatusTip('')
+            miscAct.setToolTip('')
             miscAct.triggered.connect(self.openMiscDialog)
             settingsMenu.addAction(miscAct)
 
@@ -148,10 +155,9 @@ class mainWindow(QMainWindow):
             myAct = QAction(QIcon('src/about.png'), 'About', self)
             myAct.triggered.connect(self.showAbout)
             infoMenu.addAction(myAct)
-            
+
             myAct = QAction(QIcon('src/readme.ico'), 'Readme', self)
-            myAct.triggered.connect(lambda: self.controller.openURL(
-                "https://github.com/teampheenix/StarCraft-Casting-Tool#starcraft-casting-tool"))
+            myAct.triggered.connect(self.openReadme)
             infoMenu.addAction(myAct)
 
             websiteAct = QAction(QIcon('src/github.ico'),
@@ -201,6 +207,11 @@ class mainWindow(QMainWindow):
         self.mysubwindow3 = subwindowMisc()
         self.mysubwindow3.createWindow(self)
         self.mysubwindow3.show()
+
+    def openReadme(self):
+        self.mysubwindow4 = subwindowReadme()
+        self.mysubwindow4.createWindow(self)
+        self.mysubwindow4.show()
 
     def createTabs(self):
         try:
@@ -376,7 +387,7 @@ class mainWindow(QMainWindow):
             self.max_no_sets = scctool.settings.max_no_sets
             self.scoreWidth = 35
             self.raceWidth = 45
-            self.labelWidth = 13
+            self.labelWidth = 15
             self.mimumLineEditWidth = 130
 
             self.fromMatchDataBox = QGroupBox("Match Data")
@@ -553,7 +564,9 @@ class mainWindow(QMainWindow):
                 self.setContainer[player_idx].addWidget(
                     self.cb_race[1][player_idx], 0)
                 layout2.addLayout(self.setContainer[player_idx])
-                self.fromMatchDataBox.setLayout(layout2)
+
+            layout2.addItem(QSpacerItem(0, 0, QSizePolicy.Minimum, QSizePolicy.Expanding))
+            self.fromMatchDataBox.setLayout(layout2)
 
             self.updateMapCompleters()
 
@@ -619,11 +632,11 @@ class mainWindow(QMainWindow):
             self.cb_autoToggleProduction = QCheckBox("Production Tab")
             self.cb_autoToggleProduction.setChecked(False)
             self.cb_autoToggleProduction.setToolTip(
-                'Automatically toogles the production tab of your ingame UI-interface at the begining of a game.')
+                'Automatically toggles the production tab of your ingame UI-interface at the begining of a game.')
             self.cb_autoToggleProduction.stateChanged.connect(
                 self.autoToggleProduction_change)
 
-            if(platform.system() != "Windows"):
+            if(not scctool.settings.windows):
                 self.cb_autoToggleScore.setEnabled(False)
                 self.cb_autoToggleScore.setAttribute(Qt.WA_AlwaysShowToolTips)
                 self.cb_autoToggleScore.setToolTip('Only Windows')

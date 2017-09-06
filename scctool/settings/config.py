@@ -1,7 +1,7 @@
 """Provide config for SCCTool."""
 import logging
 import configparser
-import platform
+
 import os.path
 
 module_logger = logging.getLogger('scctool.settings.config')  # create logger
@@ -40,7 +40,7 @@ def setDefaultConfig(sec, opt, value, func = None):
     if(not parser.has_option(sec, opt)):
         if(func):
             try:
-                value = func
+                value = func()
             except:
                 pass
         parser.set(sec, opt, value)
@@ -50,22 +50,22 @@ def setDefaultConfig(sec, opt, value, func = None):
         except:
             if(func):
                 try:
-                    value = func
+                    value = func()
                 except:
                     pass
             parser.set(sec, opt, value)
 
 def findTesserAct(default = "C:\\Program Files (x86)\\Tesseract-OCR\\tesseract.exe"):
     """Search for Tesseract exceutable via registry."""
-    if(platform.system() != "Windows"):
+    if(not scctool.settings.windows):
         return default
     try:
         import winreg
         key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, "SOFTWARE\\WOW6432Node\\Tesseract-OCR")
         return winreg.QueryValueEx(key, "Path")[0] + '\\tesseract.exe'
-    except: 
+    except:
         return default
-        
+
 def getTesserAct():
     """Get Tesseract exceutable via config or registry."""
     tesseract = parser.get("SCT", "tesseract")
@@ -76,7 +76,7 @@ def getTesserAct():
         if(new != tesseract):
              parser.set("SCT", "tesseract", new)
         return new
-    
+
 
 def setDefaultConfigAll():
     """Define default values and set them."""
@@ -105,7 +105,7 @@ def setDefaultConfigAll():
     setDefaultConfig("SCT", "fuzzymatch", "True")
 
     setDefaultConfig("SCT", "use_ocr", "False")
-    
+
     tesseract = "C:\\Program Files (x86)\\Tesseract-OCR\\tesseract.exe"
     setDefaultConfig("SCT", "tesseract", tesseract, findTesserAct)
 

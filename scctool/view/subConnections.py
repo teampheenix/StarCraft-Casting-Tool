@@ -14,6 +14,7 @@ import scctool.settings
 import scctool.tasks.obs
 import base64
 
+
 class subwindowConnections(QWidget):
     def createWindow(self, mainWindow):
 
@@ -23,28 +24,24 @@ class subwindowConnections(QWidget):
             # self.setWindowFlags(Qt.WindowStaysOnTopHint)
 
             self.setWindowIcon(QIcon('src/connection.png'))
+            self.setWindowModality(Qt.ApplicationModal)
             self.mainWindow = mainWindow
             self.passEvent = False
             self.controller = mainWindow.controller
             self.__dataChanged = False
 
-            self.createFormGroupFTP()
-            self.createFormGroupOBS()
-            self.createFormGroupTwitch()
-            self.createFormGroupNightbot()
             self.createButtonGroup()
+            self.createTabs()
 
-            #mainLayout = QVBoxLayout()
-            mainLayout = QGridLayout()
-            mainLayout.addWidget(self.formGroupFTP, 0, 0)
-            mainLayout.addWidget(self.formGroupOBS, 0, 1)
-            mainLayout.addWidget(self.formGroupTwitch, 1, 0, 1, 2)
-            mainLayout.addWidget(self.formGroupNightbot, 2, 0, 1, 2)
-            mainLayout.addLayout(self.buttonGroup, 3, 0, 1, 2)
+            mainLayout = QVBoxLayout()
+
+            mainLayout.addWidget(self.tabs)
+            mainLayout.addLayout(self.buttonGroup)
+
             self.setLayout(mainLayout)
 
             self.resize(QSize(mainWindow.size().width()
-                              * 0.9, self.sizeHint().height()))
+                              * 0.7, self.sizeHint().height()))
             self.move(mainWindow.pos() + QPoint(mainWindow.size().width() / 2, mainWindow.size().height() / 3)
                       - QPoint(self.size().width() / 2, self.size().height() / 3))
 
@@ -53,8 +50,22 @@ class subwindowConnections(QWidget):
         except Exception as e:
             module_logger.exception("message")
 
+    def createTabs(self):
+        self.tabs = QTabWidget()
+
+        self.createFormGroupFTP()
+        self.createFormGroupOBS()
+        self.createFormGroupTwitch()
+        self.createFormGroupNightbot()
+
+        # Add tabs
+        self.tabs.addTab(self.formGroupFTP, "FTP")
+        self.tabs.addTab(self.formGroupNightbot, "Nightbot")
+        self.tabs.addTab(self.formGroupOBS, "OBS via Websocket Plugin")
+        self.tabs.addTab(self.formGroupTwitch, "Twitch")
+
     def createFormGroupFTP(self):
-        self.formGroupFTP = QGroupBox("FTP")
+        self.formGroupFTP = QWidget()
         layout = QFormLayout()
 
         self.ftpServer = MonitoredLineEdit()
@@ -62,25 +73,25 @@ class subwindowConnections(QWidget):
         self.ftpServer.setText(
             scctool.settings.config.parser.get("FTP", "server").strip())
         self.ftpServer.setAlignment(Qt.AlignCenter)
-        self.ftpServer.setPlaceholderText("")
+        self.ftpServer.setPlaceholderText("FTP server address")
         self.ftpServer.setToolTip('')
-        layout.addRow(QLabel("Server:"), self.ftpServer)
+        layout.addRow(QLabel("Host:"), self.ftpServer)
 
         self.ftpUser = MonitoredLineEdit()
         self.ftpUser.textModified.connect(self.changed)
         self.ftpUser.setText(
             scctool.settings.config.parser.get("FTP", "user").strip())
         self.ftpUser.setAlignment(Qt.AlignCenter)
-        self.ftpUser.setPlaceholderText("")
+        self.ftpUser.setPlaceholderText("FTP username")
         self.ftpUser.setToolTip('')
-        layout.addRow(QLabel("User:"), self.ftpUser)
+        layout.addRow(QLabel("Username:"), self.ftpUser)
 
         self.ftpPwd = MonitoredLineEdit()
         self.ftpPwd.textModified.connect(self.changed)
         self.ftpPwd.setText(base64.b64decode(scctool.settings.config.parser.get(
             "FTP", "passwd").strip().encode()).decode("utf8"))
         self.ftpPwd.setAlignment(Qt.AlignCenter)
-        self.ftpPwd.setPlaceholderText("")
+        self.ftpPwd.setPlaceholderText("FTP password")
         self.ftpPwd.setToolTip('')
         self.ftpPwd.setEchoMode(QLineEdit.Password)
         label = QLabel("Password:")
@@ -89,14 +100,15 @@ class subwindowConnections(QWidget):
 
         self.ftpDir = MonitoredLineEdit()
         self.ftpDir.textModified.connect(self.changed)
-        self.ftpDir.setText(scctool.settings.config.parser.get("FTP", "dir").strip())
+        self.ftpDir.setText(
+            scctool.settings.config.parser.get("FTP", "dir").strip())
         self.ftpDir.setAlignment(Qt.AlignCenter)
         self.ftpDir.setPlaceholderText("currently using root directory")
         self.ftpDir.setToolTip('')
         layout.addRow(QLabel("Directory:"), self.ftpDir)
 
         container = QHBoxLayout()
-        self.pb_testFTP = QPushButton('Test && Setup')
+        self.pb_testFTP = QPushButton('Test && Setup FTP server')
         self.pb_testFTP.clicked.connect(self.testFTP)
         container.addWidget(self.pb_testFTP)
 
@@ -115,7 +127,7 @@ class subwindowConnections(QWidget):
         QMessageBox.warning(self, "OBS Websocket Connection Test", msg)
 
     def createFormGroupOBS(self):
-        self.formGroupOBS = QGroupBox("OBS via Websocket Plugin")
+        self.formGroupOBS = QWidget()
         layout = QFormLayout()
 
         self.obsPort = MonitoredLineEdit()
@@ -140,7 +152,8 @@ class subwindowConnections(QWidget):
 
         self.obsSources = MonitoredLineEdit()
         self.obsSources.textModified.connect(self.changed)
-        self.obsSources.setText(scctool.settings.config.parser.get("OBS", "sources"))
+        self.obsSources.setText(
+            scctool.settings.config.parser.get("OBS", "sources"))
         self.obsSources.setAlignment(Qt.AlignCenter)
         self.obsSources.setPlaceholderText("Intro1, Intro2")
         self.obsSources.setToolTip(
@@ -161,7 +174,7 @@ class subwindowConnections(QWidget):
         self.formGroupOBS.setLayout(layout)
 
     def createFormGroupTwitch(self):
-        self.formGroupTwitch = QGroupBox("Twitch")
+        self.formGroupTwitch = QWidget()
         layout = QFormLayout()
 
         self.twitchChannel = MonitoredLineEdit()
@@ -225,7 +238,7 @@ class subwindowConnections(QWidget):
         self.formGroupTwitch.setLayout(layout)
 
     def createFormGroupNightbot(self):
-        self.formGroupNightbot = QGroupBox("Nightbot")
+        self.formGroupNightbot = QWidget()
         layout = QFormLayout()
         container = QHBoxLayout()
 
@@ -336,13 +349,16 @@ class subwindowConnections(QWidget):
     def saveFtpData(self):
         scctool.settings.config.parser.set(
             "FTP", "server", self.ftpServer.text().strip())
-        scctool.settings.config.parser.set("FTP", "user", self.ftpUser.text().strip())
+        scctool.settings.config.parser.set(
+            "FTP", "user", self.ftpUser.text().strip())
         scctool.settings.config.parser.set("FTP", "passwd", base64.b64encode(
             self.ftpPwd.text().strip().encode()).decode("utf8"))
-        scctool.settings.config.parser.set("FTP", "dir", self.ftpDir.text().strip())
+        scctool.settings.config.parser.set(
+            "FTP", "dir", self.ftpDir.text().strip())
 
     def saveOBSdata(self):
-        scctool.settings.config.parser.set("OBS", "port", self.obsPort.text().strip())
+        scctool.settings.config.parser.set(
+            "OBS", "port", self.obsPort.text().strip())
         scctool.settings.config.parser.set("OBS", "passwd", base64.b64encode(
             self.obsPasswd.text().strip().encode()).decode("utf8"))
         scctool.settings.config.parser.set(

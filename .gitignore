@@ -1,8 +1,7 @@
 scctool/__pycache__/
 scctool/*/__pycache__/
 OBS_data/
-src/data.json
-src/*.log
+data/*
 config.ini
 OBS_mapicons/icons_box/data/*
 !OBS_mapicons/icons_box/data/template.html

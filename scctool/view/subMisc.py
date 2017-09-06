@@ -9,8 +9,10 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 
 from scctool.view.widgets import *
-
 import scctool.settings
+import os.path
+import humanize  # pip install humanize
+
 
 class subwindowMisc(QWidget):
     def createWindow(self, mainWindow):
@@ -21,21 +23,18 @@ class subwindowMisc(QWidget):
             # self.setWindowFlags(Qt.WindowStaysOnTopHint)
 
             self.setWindowIcon(QIcon('src/settings.png'))
+            self.setWindowModality(Qt.ApplicationModal)
             self.mainWindow = mainWindow
             self.passEvent = False
             self.controller = mainWindow.controller
             self.__dataChanged = False
 
             self.createButtonGroup()
-            self.createFavBox()
-            self.createMapsBox()
-            self.createOcrBox()
+            self.createTabs()
 
             mainLayout = QVBoxLayout()
 
-            mainLayout.addWidget(self.mapsBox)
-            mainLayout.addLayout(self.favBox)
-            mainLayout.addWidget(self.ocrBox)
+            mainLayout.addWidget(self.tabs)
             mainLayout.addLayout(self.buttonGroup)
 
             self.setLayout(mainLayout)
@@ -50,50 +49,74 @@ class subwindowMisc(QWidget):
         except Exception as e:
             module_logger.exception("message")
 
+    def createTabs(self):
+        self.tabs = QTabWidget()
+
+        self.createFavBox()
+        self.createMapsBox()
+        self.createOcrBox()
+
+        # Add tabs
+        self.tabs.addTab(self.mapsBox, "Map Manager")
+        self.tabs.addTab(self.favBox, "Favorites")
+        self.tabs.addTab(self.ocrBox, "OCR")
+
     def changed(self):
         self.__dataChanged = True
 
     def createFavBox(self):
 
-        self.favBox = QVBoxLayout()
+        self.favBox = QWidget()
+        mainLayout = QVBoxLayout()
 
-        box = QGroupBox("Favorites Players")
+        box = QGroupBox("Players")
         layout = QHBoxLayout()
 
-        self.list_favPlayers = ListTable(4, scctool.settings.config.getMyPlayers())
+        self.list_favPlayers = ListTable(
+            4, scctool.settings.config.getMyPlayers())
         self.list_favPlayers.dataModified.connect(self.changed)
-        self.list_favPlayers.setFixedHeight(100)
+        self.list_favPlayers.setFixedHeight(150)
         layout.addWidget(self.list_favPlayers)
         box.setLayout(layout)
 
-        self.favBox.addWidget(box)
+        mainLayout.addWidget(box)
 
-        box = QGroupBox("Favorites Teams")
+        box = QGroupBox("Teams")
         layout = QHBoxLayout()
 
         self.list_favTeams = ListTable(3, scctool.settings.config.getMyTeams())
         self.list_favTeams.dataModified.connect(self.changed)
-        self.list_favTeams.setFixedHeight(50)
-
+        self.list_favTeams.setFixedHeight(100)
         layout.addWidget(self.list_favTeams)
+
         box.setLayout(layout)
-        self.favBox.addWidget(box)
+        mainLayout.addWidget(box)
+
+        mainLayout.addItem(QSpacerItem(
+            0, 0, QSizePolicy.Minimum, QSizePolicy.Expanding))
+
+        self.favBox.setLayout(mainLayout)
 
     def createOcrBox(self):
 
-        self.ocrBox = QGroupBox(
-            "Optical Character Recognition for Setting Ingame Score")
+        self.ocrBox = QWidget()
+
+        mainLayout = QVBoxLayout()
+
+        box = QGroupBox(
+            "Optical Character Recognition for Automatic Setting of Ingame Score")
 
         layout = QGridLayout()
 
         self.cb_useocr = QCheckBox(
-            " Activate Optical Character Recognition for Automatic Setting of Ingame Score")
+            " Activate Optical Character Recognition")
         self.cb_useocr.setChecked(
             scctool.settings.config.parser.getboolean("SCT", "use_ocr"))
         self.cb_useocr.stateChanged.connect(self.changed)
 
         self.tesseract = MonitoredLineEdit()
-        self.tesseract.setText(scctool.settings.config.parser.get("SCT", "tesseract"))
+        self.tesseract.setText(
+            scctool.settings.config.parser.get("SCT", "tesseract"))
         self.tesseract.textModified.connect(self.changed)
         self.tesseract.setAlignment(Qt.AlignCenter)
         self.tesseract.setPlaceholderText(
@@ -101,38 +124,57 @@ class subwindowMisc(QWidget):
         self.tesseract.setReadOnly(True)
         self.tesseract.setToolTip('Tesseract-OCR Executeable')
 
-        button = QPushButton("Select Folder")
-        button.clicked.connect(self.selectTesseract)
+        self.browse = QPushButton("Browse...")
+        self.browse.clicked.connect(self.selectTesseract)
 
-        text = """Sometimes the order of players given by the SC2-Client-API differs from the order in the Observer-UI resulting in a swaped match score. To correct this via Optical Character Recognition you have to download and install <a href='https://github.com/UB-Mannheim/tesseract/wiki#tesseract-at-ub-mannheim'>Tesseract-OCR</a> and select the exectuable (tesseract.exe) here if it is not detected automatically:"""
+        text = """Sometimes the order of players given by the SC2-Client-API differs from the order in the Observer-UI resulting in a swaped match score. To correct this via Optical Character Recognition you have to download and install <a href='https://github.com/UB-Mannheim/tesseract/wiki#tesseract-at-ub-mannheim'>Tesseract-OCR</a> and select the exectuable (tesseract.exe) below, if it is not detected automatically."""
 
         label = QLabel(text)
+        label.setAlignment(Qt.AlignJustify)
         label.setOpenExternalLinks(True)
         label.setWordWrap(True)
         label.setMargin(5)
-        layout.addWidget(label, 1, 0, 1, 3)
+        layout.addWidget(label, 1, 0, 1, 2)
 
-        layout.addWidget(self.cb_useocr, 0, 0, 1, 3)
-        layout.addWidget(QLabel("Tesseract-OCR Folder:"), 2, 0)
-        layout.addWidget(self.tesseract, 2, 1)
-        layout.addWidget(button, 2, 2)
+        layout.addWidget(self.cb_useocr, 0, 0, 1, 2)
+        layout.addWidget(QLabel("Tesseract-OCR Executeable:"), 2, 0)
+        layout.addWidget(self.tesseract, 3, 0)
+        layout.addWidget(self.browse, 3, 1)
 
-        self.ocrBox.setLayout(layout)
+        box.setLayout(layout)
+        mainLayout.addWidget(box)
+        mainLayout.addItem(QSpacerItem(
+            0, 0, QSizePolicy.Minimum, QSizePolicy.Expanding))
+        self.ocrBox.setLayout(mainLayout)
+
+        if(not scctool.settings.windows):
+            self.cb_useocr.setEnabled(False)
+            self.cb_useocr.setAttribute(Qt.WA_AlwaysShowToolTips)
+            self.cb_useocr.setToolTip(
+                "This feature is only available in Windows.")
+            self.tesseract.setEnabled(False)
+            self.tesseract.setAttribute(Qt.WA_AlwaysShowToolTips)
+            self.tesseract.setToolTip(
+                "This feature is only available in Windows.")
+            self.browse.setEnabled(False)
+            self.browse.setAttribute(Qt.WA_AlwaysShowToolTips)
+            self.browse.setToolTip(
+                "This feature is only available in Windows.")
 
     def selectTesseract(self):
         old_exe = self.tesseract.text()
         default = scctool.settings.config.findTesserAct(old_exe)
         exe, ok = QFileDialog.getOpenFileName(self, "Select Tesseract-OCR Executeable", default,
-            "Tesseract-OCR Executeable (tesseract.exe);; Exectuable (*.exe);; All files (*)")
+                                              "Tesseract-OCR Executeable (tesseract.exe);; Exectuable (*.exe);; All files (*)")
         if(ok and exe != old_exe):
             self.tesseract.setText(exe)
             self.changed()
 
     def createMapsBox(self):
 
-        self.mapsize = 150
+        self.mapsize = 300
 
-        self.mapsBox = QGroupBox("Map Manager")
+        self.mapsBox = QWidget()
 
         layout = QGridLayout()
 
@@ -142,15 +184,17 @@ class subwindowMisc(QWidget):
             self.maplist.addItem(QListWidgetItem(map))
         self.maplist.setCurrentItem(self.maplist.item(0))
         self.maplist.currentItemChanged.connect(self.changePreview)
-        self.maplist.setFixedHeight(self.mapsize)
+        # self.maplist.setFixedHeight(self.mapsize)
         self.maplist.setMinimumWidth(150)
 
-        layout.addWidget(self.maplist, 0, 1, 7, 1)
+        layout.addWidget(self.maplist, 0, 1, 2, 1)
         self.mapPreview = QLabel()
         self.mapPreview.setFixedWidth(self.mapsize)
         self.mapPreview.setFixedHeight(self.mapsize)
         self.mapPreview.setAlignment(Qt.AlignCenter)
-        layout.addWidget(self.mapPreview, 0, 0, 7, 1)
+        layout.addWidget(self.mapPreview, 0, 0)
+        self.mapInfo = QLabel()
+        layout.addWidget(self.mapInfo, 1, 0)
 
         self.pb_addMap = QPushButton("Add")
         self.pb_addMap.clicked.connect(self.addMap)
@@ -161,13 +205,22 @@ class subwindowMisc(QWidget):
         self.pb_removeMap = QPushButton("Remove")
         self.pb_removeMap.clicked.connect(self.deleteMap)
 
-        layout.addWidget(QLabel(), 0, 2)
-        layout.addWidget(self.pb_addMap, 1, 2)
-        layout.addWidget(self.pb_removeMap, 2, 2)
-        layout.addWidget(QLabel(), 3, 2)
-        layout.addWidget(self.pb_renameMap, 4, 2)
-        layout.addWidget(self.pb_changeMap, 5, 2)
-        layout.addWidget(QLabel(), 6, 2)
+        box = QWidget()
+        container = QHBoxLayout()
+        container.addWidget(QLabel(), 4)
+        container.addWidget(self.pb_renameMap, 0)
+        container.addWidget(self.pb_changeMap, 0)
+        label = QLabel()
+        label.setFixedWidth(10)
+        container.addWidget(QLabel(), 0)
+        container.addWidget(self.pb_addMap, 0)
+        container.addWidget(self.pb_removeMap, 0)
+        box.setLayout(container)
+
+        layout.addWidget(box, 2, 0, 1, 2)
+
+        layout.addItem(QSpacerItem(0, 0, QSizePolicy.Minimum,
+                                   QSizePolicy.Expanding), 3, 0, 1, 2)
 
         self.changePreview()
         self.mapsBox.setLayout(layout)
@@ -242,8 +295,17 @@ class subwindowMisc(QWidget):
             self.pb_removeMap.setEnabled(True)
             self.pb_renameMap.setEnabled(True)
 
-        self.mapPreview.setPixmap(QPixmap(self.controller.getMapImg(map, True)).scaled(
-            self.mapsize, self.mapsize, Qt.KeepAspectRatio))
+        file = self.controller.getMapImg(map, True)
+        map = QPixmap(file)
+        width = map.height()
+        height = map.width()
+        ext = os.path.splitext(file)[1].replace(".", "").upper()
+        size = humanize.naturalsize(os.path.getsize(file))
+        map = QPixmap(file).scaled(
+            self.mapsize, self.mapsize, Qt.KeepAspectRatio)
+        self.mapPreview.setPixmap(map)
+        text = "{}x{}px, {}, {}".format(width, height, str(size), ext)
+        self.mapInfo.setText(text)
 
     def createButtonGroup(self):
         try:

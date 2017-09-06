@@ -477,7 +477,7 @@ class MainController:
             self.view.cb_autoFTP.setToolTip('')
 
     def requestToggleScore(self, newSC2MatchData, swap=False):
-        """Check if SC2-Client-API players are present and toogle score accordingly."""
+        """Check if SC2-Client-API players are present and toggle score accordingly."""
         try:
             self.updateData()
 

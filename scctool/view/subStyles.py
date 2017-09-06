@@ -11,15 +11,16 @@ from PyQt5.QtGui import *
 from scctool.view.widgets import *
 import scctool.settings
 
+
 class subwindowStyles(QWidget):
     def createWindow(self, mainWindow):
 
         try:
             parent = None
             super(subwindowStyles, self).__init__(parent)
-            # self.setWindowFlags(Qt.WindowStaysOnTopHint)
 
             self.setWindowIcon(QIcon('src/pantone.png'))
+            self.setWindowModality(Qt.ApplicationModal)
             self.mainWindow = mainWindow
             self.passEvent = False
             self.controller = mainWindow.controller
@@ -32,6 +33,7 @@ class subwindowStyles(QWidget):
             mainLayout = QVBoxLayout()
             mainLayout.addWidget(self.styleBox)
             mainLayout.addWidget(self.colorBox)
+            mainLayout.addItem(QSpacerItem(0, 0, QSizePolicy.Minimum, QSizePolicy.Expanding))
             mainLayout.addLayout(self.buttonGroup)
             self.setLayout(mainLayout)
 

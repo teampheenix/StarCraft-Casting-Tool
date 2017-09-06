@@ -6,7 +6,7 @@ module_logger = logging.getLogger('scctool.tasks.apithread')
 
 try:
     from PyQt5.QtCore import QThread
-    import platform
+
     import requests
     import time
     from difflib import SequenceMatcher
@@ -19,7 +19,7 @@ except Exception as e:
     module_logger.exception("message")
     raise
 
-if(platform.system() == "Windows"):
+if(scctool.settings.windows):
     try:
         from PIL import ImageGrab  # pip install Pillow
         import pytesseract  # pip install pytesseract
@@ -136,8 +136,8 @@ if(platform.system() == "Windows"):
 
 
 def ToggleScore(score1_in, score2_in, bestof=5):
-    """Set and toogle SC2-ingame score."""
-    if(platform.system() != "Windows"):
+    """Set and toggle SC2-ingame score."""
+    if(not scctool.settings.windows):
         raise UserWarning("Only Windows!")
 
     score1, skip1 = int2DIK(score1_in)
@@ -191,8 +191,8 @@ def ToggleScore(score1_in, score2_in, bestof=5):
 
 
 def ToggleProduction():
-    """Toogle SC2-ingame production tab."""
-    if(platform.system() != "Windows"):
+    """toggle SC2-ingame production tab."""
+    if(not scctool.settings.windows):
         raise UserWarning("Only Windows!")
     lag = 0.01
     time.sleep(lag)
@@ -309,7 +309,7 @@ class SC2ApiThread(QThread):
             module_logger.exception("message")
 
     def tryToggle(self, data):
-        """Wait until SC2 is in foreground and toogle production tab and score."""
+        """Wait until SC2 is in foreground and toggle production tab and score."""
         try:
             while self.exiting is False\
                 and (self.activeTask['toggleScore']
