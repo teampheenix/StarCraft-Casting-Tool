@@ -636,10 +636,10 @@ class MainController:
 
     def testVersion(self):
         """Run version check."""
+        self.checkVersionThread.newVersion.connect(self.newVersionTrigger)
         self.checkVersionThread.start()
 
     def newVersionTrigger(self, version):
         """Call back to display new version in status bar."""
-        self.view.statusBar().showMessage("A new version (" + version +
-                                          ") is available at" +
-                                          "https://github.com/pheenix/StarCraft-Casting-Tool")
+        self.view.statusBar().showMessage("At https://github.com/pheenix/StarCraft-Casting-Tool the new version " + version +
+                                          " is available!")
