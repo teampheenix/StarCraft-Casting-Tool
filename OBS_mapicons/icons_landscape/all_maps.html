@@ -9,7 +9,7 @@
     <script>
         function showHide(i) {
             mapicon = "#mapicon" + i.toString();
-            if ($(mapicon).find("div.image").css("visibility") == "hidden") {
+            if($(mapicon).find("div.box").css("visibility") == "hidden") {
                 $(mapicon).css("display", "none");
             } else {
                 $(mapicon).css("display", "inline-block");
