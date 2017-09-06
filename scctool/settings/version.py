@@ -18,7 +18,7 @@ class VersionControl(object):
                      "StarCraft-Casting-Tool/master/src/version"
         self.current, self.major, self.minor, self.patch = self.__get_from_file(
             self.__version_file)
-        self.latest = self.current
+        self.latest, self.lmajor, self.lminor, self.lpatch  = self.current, self.major, self.minor, self.patch
 
     def __parse(self, string):
         string = str(string)
@@ -52,12 +52,13 @@ class VersionControl(object):
             module_logger.exception("message")
             return 'v0.0.0', 0, 0, 0
 
-    def isNewAvaiable(self):
+    def isNewAvaiable(self, check = True):
         """Check if a newer version is available."""
-        self.latest, lmajor, lminor, lpatch = self.__latest()
-        if(lmajor > self.major or
-            (lmajor == self.major and (lminor > self.minor
-                                       or (lminor == self.minor and lpatch > self.patch)))):
+        if(check):
+            self.latest, self.lmajor, self.lminor, self.lpatch = self.__latest()
+        if(self.lmajor > self.major or
+            (self.lmajor == self.major and (self.lminor > self.minor
+                                       or (self.lminor == self.minor and self.lpatch > self.patch)))):
             return True
         return False
 

@@ -641,5 +641,6 @@ class MainController:
 
     def newVersionTrigger(self, version):
         """Call back to display new version in status bar."""
+        version = version.replace("v", "")
         self.view.statusBar().showMessage("At https://github.com/pheenix/StarCraft-Casting-Tool the new version " + version +
                                           " is available!")

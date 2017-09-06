@@ -45,7 +45,7 @@ class mainWindow(QMainWindow):
             mainLayout.addWidget(self.fromMatchDataBox, 7)
             mainLayout.addWidget(self.SC2APIGroupBox, 1)
             mainLayout.addWidget(self.horizontalGroupBox, 1)
-
+            
             self.setWindowTitle("StarCraft Casting Tool " +
                                 scctool.settings.versionControl.current)
 
@@ -84,6 +84,28 @@ class mainWindow(QMainWindow):
             self.controller.testVersion()
         except Exception as e:
             module_logger.exception("message")
+            
+    def showAbout(self):
+
+        import markdown2 #pip install markdown2
+        #import re
+        #self.viewer = QTextEdit()
+        #self.viewer.setReadOnly(True)
+        html = markdown2.markdown_path("src/about.md")
+        #p = re.compile(r'<img.*?/>')
+        #html = p.sub('', html)
+        version = scctool.settings.versionControl.current
+        
+        html = html.replace("%VERSION%", version)
+        if(not scctool.settings.versionControl.isNewAvaiable(False)):
+            new_version = "Starcraft Casting Tool is up to date."
+        else:
+            new_version = scctool.settings.versionControl.latest.replace("v","")
+            new_version = "The new version {} is available!".format(new_version)
+        html = html.replace("%NEW_VERSION%", new_version)
+
+        
+        QMessageBox.about(self, "Starcraft Casting Tool - About", html) # use self as parent here
 
     def closeEvent(self, event):
         try:
@@ -123,6 +145,10 @@ class mainWindow(QMainWindow):
 
             infoMenu = menubar.addMenu('Info && Links')
 
+            myAct = QAction(QIcon('src/about.png'), 'About', self)
+            myAct.triggered.connect(self.showAbout)
+            infoMenu.addAction(myAct)
+            
             myAct = QAction(QIcon('src/readme.ico'), 'Readme', self)
             myAct.triggered.connect(lambda: self.controller.openURL(
                 "https://github.com/teampheenix/StarCraft-Casting-Tool#starcraft-casting-tool"))
