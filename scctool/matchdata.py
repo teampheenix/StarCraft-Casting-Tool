@@ -408,7 +408,7 @@ class matchData:
             return
         except:
             return False
-            
+
     def isDecided(self):
         """Check if match is decided."""
         return max(self.getScore()) > int(self.getBestOf() / 2)
@@ -764,7 +764,6 @@ class matchData:
         except Exception as e:
             module_logger.exception("message")
 
-
     def updateScoreIcon(self):
         """Update scor icons."""
         if(not(self.hasMetaChanged() or self.hasAnySetChanged())):
@@ -857,7 +856,7 @@ class matchData:
             team = self.getMyTeam()
             score = [0, 0]
             skip = [False] * self.getNoSets()
-            meta_changed = self.hasMetaChanged();
+            meta_changed = self.hasMetaChanged()
 
             for i in range(self.getNoSets()):
 
