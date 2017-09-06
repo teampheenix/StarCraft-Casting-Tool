@@ -40,7 +40,7 @@ def setDefaultConfig(sec, opt, value, func = None):
     if(not parser.has_option(sec, opt)):
         if(func):
             try:
-                value = func
+                value = func()
             except:
                 pass
         parser.set(sec, opt, value)
@@ -50,7 +50,7 @@ def setDefaultConfig(sec, opt, value, func = None):
         except:
             if(func):
                 try:
-                    value = func
+                    value = func()
                 except:
                     pass
             parser.set(sec, opt, value)
