@@ -19,6 +19,7 @@ import time
 import shutil
 import os
 import re
+import markdown2  
 
 from scctool.view.widgets import *
 from scctool.view.subConnections import *
@@ -90,13 +91,7 @@ class mainWindow(QMainWindow):
 
     def showAbout(self):
 
-        import markdown2  # pip install markdown2
-        #import re
-        #self.viewer = QTextEdit()
-        # self.viewer.setReadOnly(True)
-        html = markdown2.markdown_path("src/about.md")
-        #p = re.compile(r'<img.*?/>')
-        #html = p.sub('', html)
+        html = markdown2.markdown_path("data/about.md")
         version = scctool.settings.versionControl.current
 
         html = html.replace("%VERSION%", version)

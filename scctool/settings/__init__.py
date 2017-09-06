@@ -9,11 +9,15 @@ from scctool.settings.version import VersionControl
 module_logger = logging.getLogger('scctool.settings')
 
 cfgFile = configFile
-matchdata_json_file = "data/matchdata.json"
-nightbot_json_file = "data/nightbot.json"
+
 OBSdataDir = "OBS_data"
 OBShtmlDir = "OBS_html"
 OBSmapDir = "OBS_mapicons"
+
+dataDir = "data"
+matchdata_json_file = dataDir+"/matchdata.json"
+nightbot_json_file = dataDir+"/nightbot.json"
+
 windows = (platform.system().lower() == "windows")
 
 max_no_sets = 9
@@ -25,7 +29,9 @@ versionControl = VersionControl()
 # Creating directories if not exisiting
 if not os.path.exists(OBSdataDir):
     os.makedirs(OBSdataDir)
-
+# Creating directories if not exisiting
+if not os.path.exists(dataDir):
+    os.makedirs(dataDir)
 
 def loadMapList():
     """Load map list form dir."""
