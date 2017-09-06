@@ -104,7 +104,7 @@ class subwindowMisc(QWidget):
         button = QPushButton("Select Folder")
         button.clicked.connect(self.selectTesseract)
 
-        text = """Sometimes the order of players given by the SC2-Client-API differs from the order in the Observer-UI resulting in a swaped match score. To correct this via Optical Character Recognition you have to download and install <a href='https://github.com/UB-Mannheim/tesseract/wiki#tesseract-at-ub-mannheim'>Tesseract-OCR</a> and select the exectuable (tesseract.exe) here:"""
+        text = """Sometimes the order of players given by the SC2-Client-API differs from the order in the Observer-UI resulting in a swaped match score. To correct this via Optical Character Recognition you have to download and install <a href='https://github.com/UB-Mannheim/tesseract/wiki#tesseract-at-ub-mannheim'>Tesseract-OCR</a> and select the exectuable (tesseract.exe) here if it is not detected automatically:"""
 
         label = QLabel(text)
         label.setOpenExternalLinks(True)
