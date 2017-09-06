@@ -7,6 +7,14 @@
     word-wrap: break-word;
 }
 
+.text-item {
+    color: white;
+    font: bold 25px Orbitron;
+    --outline-size: 2.5px;
+    text-shadow: 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black;
+    -webkit-font-smoothing: antialiased;
+}
+
 #map {
     position: absolute;
     width: 266px;
@@ -15,9 +23,33 @@
     left: 0px;
 }
 
+div.upper-panel {
+    position: absolute;
+    height: 33px;
+    width: 100%;
+    padding-bottom: 2px;
+    background: rgba(0, 0, 0, 0.6);
+    text-align: center;
+}
+
+div.lower-panel {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    height: 33px;
+    min-width: 100px;
+    padding: 0px;
+    padding-left: 15px;
+    padding-right: 10px;
+    padding-bottom: 2px;
+    border-top-left-radius: 20px;
+    white-space: nowrap;
+    background: rgba(0, 0, 0, 0.6);
+    text-align: center;
+}
+
 div.data {
     position: absolute;
-    width: 255px;
     color: white;
     font: bold 25px Orbitron, Helvetica, Sans-Serif;
     background: none;
@@ -35,38 +67,29 @@ div.data {
     -webkit-font-smoothing: antialiased;
 }
 
-.mapname {
-    background: rgb(0, 0, 0);
-    /* fallback color */
-    background: rgba(0, 0, 0, 0.6)!important;
-    height: 25px;
-    width: 265px!important;
-    top: 0px!important;
-    text-align: center!important;
-    right: 5px!important;
-    left: -5px!important;
-    padding-top: 0px!important;
-    padding-bottom: 10px!important;
-}
-
 .player1 {
     font-size: 30px!important;
     top: 35px;
+    width: 245px;
+    height: 39px;
     left: 5px;
     text-align: left;
 }
 
 .player2 {
     font-size: 30px!important;
-    top: 170px;
+    bottom: 35px;
+    width: 245px;
+    height: 39px;
     right: 5px;
     text-align: right;
 }
 
 .vs {
     font-size: 40px!important;
-    top: 92px;
+    top: 88px;
     left: 0px;
+    width: 255px;
     text-align: center;
 }
 
@@ -89,28 +112,9 @@ div.opa {
     font: bold 35px Orbitron, Helvetica, Sans-Serif;
 }
 
-div.label {
-    color: white;
-    font: bold 24px Orbitron, Helvetica, Sans-Serif;
-    letter-spacing: 0px;
-    background: rgb(0, 0, 0);
-    /* fallback color */
-    background: rgba(0, 0, 0, 0.6)!important;
-    position: absolute;
-    width: 175px;
-    height: 26px;
-    border-top-left-radius: 20px;
-    bottom: 0px;
-    text-align: center;
-    line-height: 25px;
-    right: -0px;
-    padding: 1px;
-    padding-bottom: 4px!important;
-}
-
 #firstrace {
     position: absolute;
-    top: 82px;
+    top: 80px;
     left: 0px;
     height: 95px;
     -webkit-filter: drop-shadow(0px 0px 3px #FFFFFF);
@@ -119,7 +123,7 @@ div.label {
 
 #secondrace {
     position: absolute;
-    top: 82px;
+    top: 80px;
     right: 0px;
     height: 95px;
     -webkit-filter: drop-shadow(0px 0px 3px #FFFFFF);
