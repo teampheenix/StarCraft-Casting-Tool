@@ -1,12 +1,14 @@
 """Define the main window."""
 import logging
-from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QWidget, QMessageBox, QAction,\
-    QTabWidget, QLineEdit, QCompleter, QComboBox, QPushButton, QHBoxLayout, QLabel,\
-    QFormLayout, QGroupBox, QSizePolicy, QCheckBox, QSlider, QGridLayout, QSpacerItem,\
-    QFileDialog
-from PyQt5.QtCore import QSettings, Qt
-from PyQt5.QtGui import QIcon
-# from PyQt5.QtQml import *
+# from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QWidget, QMessageBox, QAction,\
+#     QTabWidget, QLineEdit, QCompleter, QComboBox, QPushButton, QHBoxLayout, QLabel,\
+#     QFormLayout, QGroupBox, QSizePolicy, QCheckBox, QSlider, QGridLayout, QSpacerItem,\
+#     QFileDialog
+# from PyQt5.QtCore import QSettings, Qt
+# from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
 
 import scctool.settings
 import scctool.settings.config

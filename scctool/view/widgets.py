@@ -106,14 +106,10 @@ class StyleComboBox(QComboBox):
 
         fname = os.path.basename(file)
         dirs = os.path.dirname(file)
-        back = dirs.split("/")
-        for i in range(len(back)):
-            back[i] = ".."
-        back = "/".join(back)
 
         controller.ftpUploader.cwd(dirs)
         controller.ftpUploader.upload(file, fname)
-        controller.ftpUploader.cwd(back)
+        controller.ftpUploader.cwdback(dirs)
 
 
 class FTPsetup(QProgressDialog):

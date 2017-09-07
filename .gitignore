@@ -2,9 +2,14 @@ scctool/__pycache__/
 scctool/*/__pycache__/
 OBS_data/
 data/*
+build/*
+dist/*
 config.ini
 OBS_mapicons/icons_box/data/*
 !OBS_mapicons/icons_box/data/template.html
 OBS_mapicons/icons_landscape/data/*
 !OBS_mapicons/icons_landscape/data/template.html
 OBS_html/data/*-data.html
+client_config.py
+__pycache__/*
+StarCraftCastingTool.spec

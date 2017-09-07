@@ -68,6 +68,16 @@ class FTPUploader:
     def empty_queque(self):
         """Empty queque."""
         self.__thread.q = queue.Queue()
+        
+    def cwdback(self, d):
+        """Change dir backwards."""
+        dirs = []
+        head = d
+        while head != '':
+            head, tail = os.path.split(head)
+            dirs.append("..")
+        
+        self.cwd("/".join(dirs))
 
     def setup(self):
         """Set up directory on server and upload basic files."""
