@@ -18,52 +18,73 @@ def base_headers():
     return {"User-Agent": ""}
 
 
+previousMsg = None
+
+
 def updateCommand(message):
     """Update command to message."""
-    cmd = scctool.settings.config.parser.get("NightBot", "command")
+    cmd = scctool.settings.config.parser.get("Nightbot", "command")
+    global previousMsg
 
     # Updates the twitch title specified in the config file
     try:
         headers = base_headers()
         headers.update({"Authorization": "Bearer " +
-                        scctool.settings.config.parser.get("NightBot", "token")})
+                        scctool.settings.config.parser.get("Nightbot", "token")})
 
         response = requests.get(
-            "https://api.nightbot.tv/1/commands", headers=headers).json()
+            "https://api.nightbot.tv/1/commands",
+            headers=headers)
 
-        if(response['status'] != 200):
-            return "NightBot-API: " + str(response['status']) + " - " + response['message']
+        response.raise_for_status()
 
-        cmdFound, skipUpdate, id = findCmd(response, cmd, message)
+        cmdFound, skipUpdate, id = findCmd(response.json(), cmd, message)
 
         if(skipUpdate):
-            return "NightBot Command '" + cmd + "' was already set to '" + message + "'"
+            previousMsg = message
+            msg = "Nightbot Command '" + cmd + "' was already set to '" + message + "'"
+            success = True
+            return msg, success
 
         if(cmdFound):
             put_data = {"message": message}
-            response = requests.put("https://api.nightbot.tv/1/commands/" + id,
-                                    headers=headers,
-                                    data=put_data)
-            print(response.json())
-
+            requests.put("https://api.nightbot.tv/1/commands/" + id,
+                         headers=headers,
+                         data=put_data).raise_for_status()
         else:
             post_data = {"message": message,
                          "userLevel": "everyone",
                          "coolDown": "5",
                          "name": cmd}
 
-            response = requests.post("https://api.nightbot.tv/1/commands",
-                                     headers=headers,
-                                     data=post_data)
-            print(response.json())
+            requests.post("https://api.nightbot.tv/1/commands",
+                          headers=headers,
+                          data=post_data).raise_for_status()
 
-        msg = "Updated NightBot Command '" + cmd + "' to '" + message + "'"
+        previousMsg = message
 
+        msg = "Updated Nightbot Command '" + cmd + "' to '" + message + "'"
+        success = True
+
+    except requests.exceptions.HTTPError as e:
+        status_code = e.response.status_code
+        error_msg = "Nightbot API-Error: {}"
+        if(status_code == 403):
+            msg = error_msg.format("Forbidden - Do you have permission?")
+        elif(status_code == 401):
+            msg = error_msg.format("Unauthorized - Refresh your token!")
+        elif(status_code == 429):
+            msg = error_msg.format("Too Many Requests.")
+        else:
+            msg = str(e)
+        success = False
+        module_logger.exception("message")
     except Exception as e:
         msg = str(e)
+        success = False
         module_logger.exception("message")
-
-    return msg
+    finally:
+        return msg, success
 
 
 def findCmd(response, cmd, msg):

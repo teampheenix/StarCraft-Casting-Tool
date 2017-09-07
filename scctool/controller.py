@@ -12,6 +12,7 @@ try:
     from scctool.settings.placeholders import PlaceholderList
     from scctool.tasks.ftpuploader import FTPUploader
     from scctool.tasks.obs import WebsocketThread
+    from scctool.tasks.autorequests import AutoRequestsThread
     import scctool.settings
     import scctool.tasks.twitch
     import scctool.tasks.nightbot
@@ -44,6 +45,7 @@ class MainController:
             self.webApp.signal_nightbot.connect(self.webAppDone_nightbot)
             self.ftpUploader = FTPUploader()
             self.websocketThread = WebsocketThread()
+            self.autoRequestsThread = AutoRequestsThread(self)
             self.placeholderSetup()
             self._warning = False
 
@@ -243,10 +245,22 @@ class MainController:
             if(scctool.settings.config.playerIntros):
                 self.view.cb_playerIntros.setChecked(True)
 
+            self.view.cb_autoTwitch.setChecked(
+                scctool.settings.config.parser.getboolean("Form", "autotwitch"))
+            self.view.cb_autoNightbot.setChecked(
+                scctool.settings.config.parser.getboolean("Form", "autonightbot"))
+
             self.view.cb_autoFTP.setChecked(
                 scctool.settings.config.parser.getboolean("FTP", "upload"))
         except Exception as e:
             module_logger.exception("message")
+
+    def uncheckCB(self, cb):
+        """Uncheck check boxes on error."""
+        if(cb == 'twitch'):
+            self.view.cb_autoTwitch.setChecked(False)
+        elif(cb == 'nightbot'):
+            self.view.cb_autoNightbot.setChecked(False)
 
     def updateOBS(self):
         """Update txt-files and ioncs for OBS."""
@@ -322,9 +336,9 @@ class MainController:
         try:
             msg = ''
             self.updateData()
-            message = scctool.settings.config.parser.get("NightBot", "message")
+            message = scctool.settings.config.parser.get("Nightbot", "message")
             message = self.placeholders.replace(message)
-            msg = scctool.tasks.nightbot.updateCommand(message)
+            msg, _ = scctool.tasks.nightbot.updateCommand(message)
         except Exception as e:
             msg = str(e)
             module_logger.exception("message")
@@ -341,7 +355,7 @@ class MainController:
                 title = scctool.settings.config.parser.get(
                     "Twitch", "title_template")
                 title = self.placeholders.replace(title)
-                msg = scctool.tasks.twitch.updateTitle(title)
+                msg, _ = scctool.tasks.twitch.updateTitle(title)
             except Exception as e:
                 msg = str(e)
                 module_logger.exception("message")
@@ -401,6 +415,7 @@ class MainController:
             self.saveConfig()
             self.ftpUploader.kill()
             self.websocketThread.requestKill()
+            self.autoRequestsThread.terminate()
             module_logger.info("cleanUp called")
         except Exception as e:
             module_logger.exception("message")
@@ -416,6 +431,10 @@ class MainController:
                 self.view.cb_autoToggleProduction.isChecked()))
             scctool.settings.config.parser.set("Form", "playerintros", str(
                 self.view.cb_playerIntros.isChecked()))
+            scctool.settings.config.parser.set("Form", "autotwitch", str(
+                self.view.cb_autoTwitch.isChecked()))
+            scctool.settings.config.parser.set("Form", "autonightbot", str(
+                self.view.cb_autoNightbot.isChecked()))
             scctool.settings.config.parser.set(
                 "FTP", "upload", str(self.view.cb_autoFTP.isChecked()))
 
@@ -444,37 +463,50 @@ class MainController:
         except Exception as e:
             module_logger.exception("message")
 
+    def toggleWidget(self, widget, condition, ttFalse='', ttTrue=''):
+        """Disable or an enable a widget based on a condition."""
+        widget.setAttribute(Qt.WA_AlwaysShowToolTips)
+        if condition:
+            tooltip = ttTrue
+        else:
+            tooltip = ttFalse
+        widget.setToolTip(tooltip)
+        widget.setEnabled(condition)
+
     def refreshButtonStatus(self):
         """Enable or disable buttons depending on config."""
-        if(not scctool.settings.config.twitchIsValid()):
-            self.view.pb_twitchupdate.setEnabled(False)
-            self.view.pb_twitchupdate.setAttribute(Qt.WA_AlwaysShowToolTips)
-            self.view.pb_twitchupdate.setToolTip(
-                'Specify your Twitch Settings to use this feature')
-        else:
-            self.view.pb_twitchupdate.setEnabled(True)
-            self.view.pb_twitchupdate.setAttribute(Qt.WA_AlwaysShowToolTips)
-            self.view.pb_twitchupdate.setToolTip('')
+        self.toggleWidget(
+            self.view.pb_twitchupdate,
+            scctool.settings.config.twitchIsValid(),
+            'Specify your Twitch Settings to use this feature',
+            '')
 
-        if(not scctool.settings.config.nightbotIsValid()):
-            self.view.pb_nightbotupdate.setEnabled(False)
-            self.view.pb_nightbotupdate.setAttribute(Qt.WA_AlwaysShowToolTips)
-            self.view.pb_nightbotupdate.setToolTip(
-                'Specify your NightBot Settings to use this feature')
-        else:
-            self.view.pb_nightbotupdate.setEnabled(True)
-            self.view.pb_nightbotupdate.setAttribute(Qt.WA_AlwaysShowToolTips)
-            self.view.pb_nightbotupdate.setToolTip('')
+        self.toggleWidget(
+            self.view.cb_autoTwitch,
+            scctool.settings.config.twitchIsValid(),
+            'Specify your Twitch Settings to use this feature',
+            'Automatically update the title of your' +
+            ' twitch channel in the background.')
 
-        if(not scctool.settings.config.ftpIsValid()):
-            self.view.cb_autoFTP.setEnabled(False)
-            self.view.cb_autoFTP.setAttribute(Qt.WA_AlwaysShowToolTips)
-            self.view.cb_autoFTP.setToolTip(
-                'Specify your FTP Settings to use this feature')
-        else:
-            self.view.cb_autoFTP.setEnabled(True)
-            self.view.cb_autoFTP.setAttribute(Qt.WA_AlwaysShowToolTips)
-            self.view.cb_autoFTP.setToolTip('')
+        self.toggleWidget(
+            self.view.cb_autoNightbot,
+            scctool.settings.config.nightbotIsValid(),
+            'Specify your Nighbot Settings to use this feature',
+            'Automatically update the commands of your' +
+            ' nightbot in the background.')
+
+        self.toggleWidget(
+            self.view.pb_nightbotupdate,
+            scctool.settings.config.nightbotIsValid(),
+            'Specify your Nightbot Settings to use this feature',
+            '')
+
+        self.toggleWidget(
+            self.view.cb_autoFTP,
+            scctool.settings.config.ftpIsValid(),
+            'Specify your FTP Settings to use this feature',
+            'Automatically uploads all streaming data' +
+            ' in the background to a specified FTP server.')
 
     def requestToggleScore(self, newSC2MatchData, swap=False):
         """Check if SC2-Client-API players are present and toggle score accordingly."""

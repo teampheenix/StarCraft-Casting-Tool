@@ -1,14 +1,14 @@
 """Define the main window."""
 import logging
-# from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QWidget, QMessageBox, QAction,\
-#     QTabWidget, QLineEdit, QCompleter, QComboBox, QPushButton, QHBoxLayout, QLabel,\
-#     QFormLayout, QGroupBox, QSizePolicy, QCheckBox, QSlider, QGridLayout, QSpacerItem,\
-#     QFileDialog
-# from PyQt5.QtCore import QSettings, Qt
-# from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
+from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QWidget, QMessageBox, QAction,\
+    QTabWidget, QLineEdit, QCompleter, QComboBox, QPushButton, QHBoxLayout, QLabel,\
+    QFormLayout, QGroupBox, QSizePolicy, QCheckBox, QSlider, QGridLayout, QSpacerItem,\
+    QFileDialog
+from PyQt5.QtCore import QSettings, Qt
+from PyQt5.QtGui import QIcon
+# from PyQt5.QtWidgets import *
+# from PyQt5.QtCore import *
+# from PyQt5.QtGui import *
 
 import scctool.settings
 import scctool.settings.config
@@ -41,15 +41,15 @@ class MainWindow(QMainWindow):
             self.createFormMatchDataBox()
             self.createTabs()
             self.createHorizontalGroupBox()
-            self.createSC2APIGroupBox()
+            self.createBackgroundTasksBox()
 
             self.createMenuBar()
 
             mainLayout = QVBoxLayout()
-            mainLayout.addWidget(self.tabs, 2)
-            mainLayout.addWidget(self.fromMatchDataBox, 7)
-            mainLayout.addWidget(self.SC2APIGroupBox, 1)
-            mainLayout.addWidget(self.horizontalGroupBox, 1)
+            mainLayout.addWidget(self.tabs, 0)
+            mainLayout.addWidget(self.fromMatchDataBox, 1)
+            mainLayout.addWidget(self.backgroundTasksBox, 0)
+            mainLayout.addWidget(self.horizontalGroupBox, 0)
 
             self.setWindowTitle("StarCraft Casting Tool " +
                                 controller.versionControl.current)
@@ -362,7 +362,7 @@ class MainWindow(QMainWindow):
             self.le_url_custom = QLineEdit()
             self.le_url_custom.setAlignment(Qt.AlignCenter)
             self.le_url_custom.setToolTip(
-                'Optionally specify the Match-URL, e.g., for NightBot commands')
+                'Optionally specify the Match-URL, e.g., for Nightbot commands')
             self.le_url_custom.setPlaceholderText(
                 "Specify the Match-URL of your Custom Match")
 
@@ -602,7 +602,7 @@ class MainWindow(QMainWindow):
             self.pb_twitchupdate = QPushButton("Update Twitch Title")
             self.pb_twitchupdate.clicked.connect(self.updatetwitch_click)
 
-            self.pb_nightbotupdate = QPushButton("Update NightBot")
+            self.pb_nightbotupdate = QPushButton("Update Nightbot")
             self.pb_nightbotupdate.clicked.connect(self.updatenightbot_click)
 
             self.pb_resetscore = QPushButton("Reset Score")
@@ -620,33 +620,25 @@ class MainWindow(QMainWindow):
         except Exception as e:
             module_logger.exception("message")
 
-    def createSC2APIGroupBox(self):
+    def createBackgroundTasksBox(self):
         """Create group box for background tasks."""
         try:
-            self.SC2APIGroupBox = QGroupBox("Automatic Background Tasks")
-            layout = QHBoxLayout()
+            self.backgroundTasksBox = QGroupBox("Background Tasks")
 
-            self.cb_autoFTP = QCheckBox("FTP Upload")
-            self.cb_autoFTP.setChecked(False)
-            string = 'Automatically uploads all streaming data' +\
-                     ' in the background to a specified FTP server.'
-            self.cb_autoFTP.setToolTip(string)
-            self.cb_autoFTP.stateChanged.connect(self.autoFTP_change)
-
-            self.cb_autoUpdate = QCheckBox("Score Update")
+            self.cb_autoUpdate = QCheckBox("Auto Score Update")
             self.cb_autoUpdate.setChecked(False)
             string = 'Automatically detects the outcome of SC2 matches that are ' + \
                      'played/observed in your SC2-client and updates the score accordingly.'
             self.cb_autoUpdate.setToolTip(string)
             self.cb_autoUpdate.stateChanged.connect(self.autoUpdate_change)
 
-            self.cb_playerIntros = QCheckBox("Player Intros")
+            self.cb_playerIntros = QCheckBox("Provide Player Intros")
             self.cb_playerIntros.setChecked(False)
             self.cb_playerIntros.setToolTip(
                 'Update player intros files via SC2-Client-API')
             self.cb_playerIntros.stateChanged.connect(self.playerIntros_change)
 
-            self.cb_autoToggleScore = QCheckBox("Ingame Score")
+            self.cb_autoToggleScore = QCheckBox("Set Ingame Score")
             self.cb_autoToggleScore.setChecked(False)
             string = 'Automatically sets the score of your ingame' +\
                      ' UI-interface at the begining of a game.'
@@ -654,13 +646,26 @@ class MainWindow(QMainWindow):
             self.cb_autoToggleScore.stateChanged.connect(
                 self.autoToggleScore_change)
 
-            self.cb_autoToggleProduction = QCheckBox("Production Tab")
+            self.cb_autoToggleProduction = QCheckBox("Toggle Production Tab")
             self.cb_autoToggleProduction.setChecked(False)
             string = 'Automatically toggles the production tab of your' + \
                      ' ingame UI-interface at the begining of a game.'
             self.cb_autoToggleProduction.setToolTip(string)
             self.cb_autoToggleProduction.stateChanged.connect(
                 self.autoToggleProduction_change)
+
+            self.cb_autoFTP = QCheckBox("FTP Upload")
+            self.cb_autoFTP.setChecked(False)
+            self.cb_autoFTP.stateChanged.connect(self.autoFTP_change)
+
+            self.cb_autoTwitch = QCheckBox("Auto Twitch Update")
+            self.cb_autoTwitch.setChecked(False)
+            self.cb_autoTwitch.stateChanged.connect(self.autoTwitch_change)
+
+            self.cb_autoNightbot = QCheckBox("Auto Nightbot Update")
+            self.cb_autoNightbot.setChecked(False)
+            self.cb_autoNightbot.stateChanged.connect(
+                self.autoNightbot_change)
 
             if(not scctool.settings.windows):
                 self.cb_autoToggleScore.setEnabled(False)
@@ -671,13 +676,22 @@ class MainWindow(QMainWindow):
                     Qt.WA_AlwaysShowToolTips)
                 self.cb_autoToggleProduction.setToolTip('Only Windows')
 
-            layout.addWidget(self.cb_autoFTP, 3)
-            layout.addWidget(self.cb_autoUpdate, 3)
-            layout.addWidget(self.cb_playerIntros, 3)
-            layout.addWidget(self.cb_autoToggleScore, 3)
-            layout.addWidget(self.cb_autoToggleProduction, 3)
+            layout = QGridLayout()
 
-            self.SC2APIGroupBox.setLayout(layout)
+            label = QLabel()
+            label.setFixedWidth(2)
+            layout.addWidget(label, 0, 0)
+            layout.addWidget(self.cb_autoFTP, 0, 1)
+            layout.addWidget(self.cb_autoTwitch, 0, 2)
+            layout.addWidget(self.cb_autoNightbot, 0, 3)
+
+            layout.addWidget(self.cb_autoUpdate, 1, 1)
+            layout.addWidget(self.cb_playerIntros, 1, 2)
+            layout.addWidget(self.cb_autoToggleScore, 1, 3)
+            layout.addWidget(self.cb_autoToggleProduction, 1, 4)
+
+            self.backgroundTasksBox.setLayout(layout)
+
         except Exception as e:
             module_logger.exception("message")
 
@@ -692,6 +706,26 @@ class MainWindow(QMainWindow):
                 self.controller.matchData.allChanged()
             else:
                 self.controller.ftpUploader.disconnect()
+        except Exception as e:
+            module_logger.exception("message")
+
+    def autoTwitch_change(self):
+        """Handle change of auto twitch check box."""
+        try:
+            if(self.cb_autoTwitch.isChecked()):
+                self.controller.autoRequestsThread.activateTask('twitch')
+            else:
+                self.controller.autoRequestsThread.deactivateTask('twitch')
+        except Exception as e:
+            module_logger.exception("message")
+
+    def autoNightbot_change(self):
+        """Handle change of auto twitch check box."""
+        try:
+            if(self.cb_autoNightbot.isChecked()):
+                self.controller.autoRequestsThread.activateTask('nightbot')
+            else:
+                self.controller.autoRequestsThread.deactivateTask('nightbot')
         except Exception as e:
             module_logger.exception("message")
 
@@ -795,7 +829,7 @@ class MainWindow(QMainWindow):
     def updatenightbot_click(self):
         """Handle click to change nightbot command."""
         try:
-            self.statusBar().showMessage('Updating NightBot Command...')
+            self.statusBar().showMessage('Updating Nightbot Command...')
             msg = self.controller.updateNightbotCommand()
             self.statusBar().showMessage(msg)
         except Exception as e:

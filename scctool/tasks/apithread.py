@@ -1,9 +1,6 @@
 """Interact with SC2-Client via thread."""
 import logging
-from PIL import ImageGrab  # pip install Pillow
-import pytesseract  # pip install pytesseract
-import ctypes
-from win32gui import GetWindowText, GetForegroundWindow
+
 # create logger
 module_logger = logging.getLogger('scctool.tasks.apithread')
 
@@ -23,8 +20,11 @@ except Exception as e:
     raise
 
 if(scctool.settings.windows):
-    
-    
+    from PIL import ImageGrab  # pip install Pillow
+    import pytesseract  # pip install pytesseract
+    import ctypes
+    from win32gui import GetWindowText, GetForegroundWindow
+
     try:
         SendInput = ctypes.windll.user32.SendInput
         CONTROL = 0x1D

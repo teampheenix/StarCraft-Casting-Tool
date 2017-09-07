@@ -67,9 +67,9 @@ class SubwindowConnections(QWidget):
 
         # Add tabs
         self.tabs.addTab(self.formGroupFTP, "FTP")
+        self.tabs.addTab(self.formGroupTwitch, "Twitch")
         self.tabs.addTab(self.formGroupNightbot, "Nightbot")
         self.tabs.addTab(self.formGroupOBS, "OBS via Websocket Plugin")
-        self.tabs.addTab(self.formGroupTwitch, "Twitch")
 
     def createFormGroupFTP(self):
         """Create form group for FTP."""
@@ -258,7 +258,7 @@ class SubwindowConnections(QWidget):
         self.nightbotToken = MonitoredLineEdit()
         self.nightbotToken.textModified.connect(self.changed)
         self.nightbotToken.setText(
-            scctool.settings.config.parser.get("NightBot", "token"))
+            scctool.settings.config.parser.get("Nightbot", "token"))
         self.nightbotToken.setAlignment(Qt.AlignCenter)
         self.nightbotToken.setEchoMode(QLineEdit.Password)
         self.nightbotToken.setPlaceholderText(
@@ -268,7 +268,7 @@ class SubwindowConnections(QWidget):
         self.nightbotCommand = MonitoredLineEdit()
         self.nightbotCommand.textModified.connect(self.changed)
         self.nightbotCommand.setText(
-            scctool.settings.config.parser.get("NightBot", "command"))
+            scctool.settings.config.parser.get("Nightbot", "command"))
         self.nightbotCommand.setPlaceholderText("!matchlink")
         self.nightbotCommand.setAlignment(Qt.AlignCenter)
 
@@ -289,7 +289,7 @@ class SubwindowConnections(QWidget):
         self.nightbotMsg = MonitoredLineEdit()
         self.nightbotMsg.textModified.connect(self.changed)
         self.nightbotMsg.setText(
-            scctool.settings.config.parser.get("NightBot", "message"))
+            scctool.settings.config.parser.get("Nightbot", "message"))
         self.nightbotMsg.setAlignment(Qt.AlignCenter)
         self.nightbotMsg.setPlaceholderText("(URL)")
         self.nightbotMsg.setToolTip(
@@ -352,11 +352,11 @@ class SubwindowConnections(QWidget):
             scctool.settings.config.parser.set(
                 "Twitch", "title_template", self.twitchTemplate.text().strip())
             scctool.settings.config.parser.set(
-                "NightBot", "token", self.nightbotToken.text().strip())
+                "Nightbot", "token", self.nightbotToken.text().strip())
             scctool.settings.config.parser.set(
-                "NightBot", "command", self.nightbotCommand.text().strip())
+                "Nightbot", "command", self.nightbotCommand.text().strip())
             scctool.settings.config.parser.set(
-                "NightBot", "message", self.nightbotMsg.text().strip())
+                "Nightbot", "message", self.nightbotMsg.text().strip())
 
             self.saveOBSdata()
 

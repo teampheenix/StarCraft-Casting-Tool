@@ -89,9 +89,9 @@ def setDefaultConfigAll():
     setDefaultConfig("Twitch", "title_template",
                      "(League) – (Team1) vs (Team2)")
 
-    setDefaultConfig("NightBot", "token", "")
-    setDefaultConfig("NightBot", "command", "!matchlink")
-    setDefaultConfig("NightBot", "message", "(URL)")
+    setDefaultConfig("Nightbot", "token", "")
+    setDefaultConfig("Nightbot", "command", "!matchlink")
+    setDefaultConfig("Nightbot", "message", "(URL)")
 
     setDefaultConfig("FTP", "upload", "False")
     setDefaultConfig("FTP", "server", "")
@@ -117,6 +117,8 @@ def setDefaultConfigAll():
     setDefaultConfig("Form", "togglescore", "False")
     setDefaultConfig("Form", "toggleprod", "False")
     setDefaultConfig("Form", "playerintros", "False")
+    setDefaultConfig("Form", "autotwitch", "False")
+    setDefaultConfig("Form", "autonightbot", "False")
 
     setDefaultConfig("MapIcons", "default_border_color", "#f29b00")
     setDefaultConfig("MapIcons", "undecided_color", "#f29b00")
@@ -143,8 +145,8 @@ def ftpIsValid():
 
 def nightbotIsValid():
     """Check if nightbot data is valid."""
-    return (len(parser.get("NightBot", "token")) > 0
-            and len(parser.get("NightBot", "command")) > 0)
+    return (len(parser.get("Nightbot", "token")) > 0
+            and len(parser.get("Nightbot", "command")) > 0)
 
 
 def twitchIsValid():
