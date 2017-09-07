@@ -32,7 +32,6 @@ try:
     pip.main(['install', 'obs-ws-rc'])
     pip.main(['install', 'humanize'])
     pip.main(['install', 'markdown2'])
-    
 
     if(system == "Windows"):
         pip.main(['install', 'pypiwin32'])
