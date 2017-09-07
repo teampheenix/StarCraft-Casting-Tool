@@ -1,10 +1,12 @@
 """Show connections settings sub window."""
 import logging
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
+from PyQt5.QtWidgets import QVBoxLayout, QWidget, QMessageBox,\
+    QTabWidget, QLineEdit, QPushButton, QHBoxLayout, QLabel,\
+    QFormLayout, QCheckBox
+from PyQt5.QtCore import Qt, QSize, QPoint
+from PyQt5.QtGui import QIcon
 
-from scctool.view.widgets import *
+from scctool.view.widgets import MonitoredLineEdit, FTPsetup, Completer
 
 import scctool.settings
 import scctool.tasks.obs
@@ -18,7 +20,7 @@ class SubwindowConnections(QWidget):
     """Show connections settings sub window."""
 
     def createWindow(self, mainWindow):
-
+        """Create window."""
         try:
             parent = None
             super(SubwindowConnections, self).__init__(parent)
@@ -55,6 +57,7 @@ class SubwindowConnections(QWidget):
             module_logger.exception("message")
 
     def createTabs(self):
+        """Create tabs."""
         self.tabs = QTabWidget()
 
         self.createFormGroupFTP()
@@ -69,6 +72,7 @@ class SubwindowConnections(QWidget):
         self.tabs.addTab(self.formGroupTwitch, "Twitch")
 
     def createFormGroupFTP(self):
+        """Create form group for FTP."""
         self.formGroupFTP = QWidget()
         layout = QFormLayout()
 
@@ -121,16 +125,18 @@ class SubwindowConnections(QWidget):
         self.formGroupFTP.setLayout(layout)
 
     def testFTP(self):
-
+        """Test FTP settings."""
         self.saveFtpData()
-        window = FTPsetup(self.controller, self)
+        FTPsetup(self.controller, self)
 
     def testOBS(self):
+        """Test OBS websocket settings."""
         self.saveOBSdata()
         msg = scctool.tasks.obs.testConnection()
         QMessageBox.warning(self, "OBS Websocket Connection Test", msg)
 
     def createFormGroupOBS(self):
+        """Create forms for OBS websocket connection."""
         self.formGroupOBS = QWidget()
         layout = QFormLayout()
 
@@ -179,6 +185,7 @@ class SubwindowConnections(QWidget):
         self.formGroupOBS.setLayout(layout)
 
     def createFormGroupTwitch(self):
+        """Create forms for twitch."""
         self.formGroupTwitch = QWidget()
         layout = QFormLayout()
 
@@ -243,6 +250,7 @@ class SubwindowConnections(QWidget):
         self.formGroupTwitch.setLayout(layout)
 
     def createFormGroupNightbot(self):
+        """Create forms for nightbot."""
         self.formGroupNightbot = QWidget()
         layout = QFormLayout()
         container = QHBoxLayout()
@@ -304,6 +312,7 @@ class SubwindowConnections(QWidget):
         self.formGroupNightbot.setLayout(layout)
 
     def createButtonGroup(self):
+        """Create buttons."""
         try:
             layout = QHBoxLayout()
 
@@ -322,14 +331,16 @@ class SubwindowConnections(QWidget):
             module_logger.exception("message")
 
     def testPlaceholder(self, string):
-
+        """Test placeholders."""
         string = self.controller.placeholders.replace(string)
         QMessageBox.information(self, "Output:", string)
 
     def changed(self):
+        """Handle changed data."""
         self.__dataChanged = True
 
     def saveData(self):
+        """Save the data to config."""
         if(self.__dataChanged):
 
             self.saveFtpData()
@@ -352,6 +363,7 @@ class SubwindowConnections(QWidget):
             self.controller.refreshButtonStatus()
 
     def saveFtpData(self):
+        """Save FTP data."""
         scctool.settings.config.parser.set(
             "FTP", "server", self.ftpServer.text().strip())
         scctool.settings.config.parser.set(
@@ -362,6 +374,7 @@ class SubwindowConnections(QWidget):
             "FTP", "dir", self.ftpDir.text().strip())
 
     def saveOBSdata(self):
+        """Save OBS data."""
         scctool.settings.config.parser.set(
             "OBS", "port", self.obsPort.text().strip())
         scctool.settings.config.parser.set("OBS", "passwd", base64.b64encode(
@@ -372,15 +385,18 @@ class SubwindowConnections(QWidget):
             "OBS", "sources", self.obsSources.text().strip())
 
     def saveCloseWindow(self):
+        """Save and close window."""
         self.saveData()
         self.passEvent = True
         self.close()
 
     def closeWindow(self):
+        """Close window without save."""
         self.passEvent = True
         self.close()
 
     def closeEvent(self, event):
+        """Handle close event."""
         try:
             if(not self.__dataChanged):
                 event.accept()

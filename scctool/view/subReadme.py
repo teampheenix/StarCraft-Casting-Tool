@@ -1,10 +1,10 @@
 """Show readme sub window."""
 import logging
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
+from PyQt5.QtWidgets import QWidget, QGridLayout, QPushButton, QSpacerItem,\
+    QSizePolicy, QTextBrowser
+from PyQt5.QtCore import QSize, QPoint
+from PyQt5.QtGui import QIcon
 
-from scctool.view.widgets import *
 import markdown2
 import scctool.settings
 import re
@@ -43,6 +43,7 @@ class SubwindowReadme(QWidget):
         self.move(mainWindow.pos() + relativeChange)
 
     def createReadmeViewer(self):
+        """Create the readme viewer."""
         self.viewer = QTextBrowser()
         self.viewer.setReadOnly(True)
         self.viewer.setMinimumHeight(400)

@@ -1,12 +1,15 @@
 """Show styles settings sub window."""
 import logging
 
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
+from PyQt5.QtWidgets import QVBoxLayout, QWidget, QMessageBox, QSizePolicy,\
+    QPushButton, QHBoxLayout, QLabel, QGroupBox, QSpacerItem, QFormLayout
+from PyQt5.QtCore import Qt, QSize, QPoint
+from PyQt5.QtGui import QIcon
 
-from scctool.view.widgets import *
+from scctool.view.widgets import StyleComboBox, ColorLayout
 import scctool.settings
+
+import os.path
 
 # create logger
 module_logger = logging.getLogger('scctool.view.subStyles')
@@ -54,9 +57,11 @@ class SubwindowStyles(QWidget):
             module_logger.exception("message")
 
     def changed(self):
+        """Handle data change."""
         self.__dataChanged = True
 
     def createButtonGroup(self):
+        """Create buttons."""
         try:
             layout = QHBoxLayout()
 
@@ -75,6 +80,7 @@ class SubwindowStyles(QWidget):
             module_logger.exception("message")
 
     def createStyleBox(self):
+        """Create style box."""
         self.styleBox = QGroupBox("Styles")
         layout = QFormLayout()
 
@@ -135,9 +141,11 @@ class SubwindowStyles(QWidget):
         self.styleBox.setLayout(layout)
 
     def openHTML(self, file):
+        """Open file in browser."""
         self.controller.openURL(os.path.abspath(file))
 
     def applyStyles(self):
+        """Apply styles."""
         self.qb_boxStyle.apply(
             self.controller, scctool.settings.OBSmapDir + "/src/css/box.css")
         self.qb_landscapeStyle.apply(
@@ -148,6 +156,7 @@ class SubwindowStyles(QWidget):
             self.controller, scctool.settings.OBShtmlDir + "/src/css/intro.css")
 
     def createColorBox(self):
+        """Create box for color selection."""
         self.colorBox = QGroupBox("Colors")
         layout = QVBoxLayout()
 
@@ -175,6 +184,7 @@ class SubwindowStyles(QWidget):
         self.colorBox.setLayout(layout)
 
     def saveData(self):
+        """Save data."""
         if(self.__dataChanged):
             scctool.settings.config.parser.set(
                 "MapIcons", "default_border_color", self.default_color.getColor())
@@ -199,15 +209,18 @@ class SubwindowStyles(QWidget):
             self.controller.matchData.allChanged()
 
     def saveCloseWindow(self):
+        """Save and close window."""
         self.saveData()
         self.passEvent = True
         self.close()
 
     def closeWindow(self):
+        """Close window."""
         self.passEvent = True
         self.close()
 
     def closeEvent(self, event):
+        """Handle close event."""
         try:
             if(not self.__dataChanged):
                 event.accept()

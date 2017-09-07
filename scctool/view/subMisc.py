@@ -1,13 +1,18 @@
 """Show subwindow with miscellaneous settings."""
 import logging
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
+from PyQt5.QtWidgets import QVBoxLayout, QWidget, QMessageBox,\
+    QTabWidget, QPushButton, QHBoxLayout, QLabel, QCheckBox,\
+    QGroupBox, QSpacerItem, QSizePolicy, QGridLayout, QFileDialog,\
+    QListWidget, QListWidgetItem, QInputDialog
+from PyQt5.QtCore import Qt, QSize, QPoint
+from PyQt5.QtGui import QIcon, QPixmap
 
-from scctool.view.widgets import *
-import scctool.settings
 import os.path
 import humanize  # pip install humanize
+
+from scctool.view.widgets import MonitoredLineEdit, ListTable
+import scctool.settings
+
 
 # create logger
 module_logger = logging.getLogger('scctool.view.subMisc')
@@ -54,6 +59,7 @@ class SubwindowMisc(QWidget):
             module_logger.exception("message")
 
     def createTabs(self):
+        """Create tabs."""
         self.tabs = QTabWidget()
 
         self.createFavBox()
@@ -66,10 +72,11 @@ class SubwindowMisc(QWidget):
         self.tabs.addTab(self.ocrBox, "OCR")
 
     def changed(self):
+        """Handle changes."""
         self.__dataChanged = True
 
     def createFavBox(self):
-
+        """Create favorites box."""
         self.favBox = QWidget()
         mainLayout = QVBoxLayout()
 
@@ -102,7 +109,7 @@ class SubwindowMisc(QWidget):
         self.favBox.setLayout(mainLayout)
 
     def createOcrBox(self):
-
+        """Create forms for OCR."""
         self.ocrBox = QWidget()
 
         mainLayout = QVBoxLayout()
@@ -171,6 +178,7 @@ Tesseract-OCR</a> and select the exectuable (tesseract.exe) below,
                 "This feature is only available in Windows.")
 
     def selectTesseract(self):
+        """Create forms for tesseract."""
         old_exe = self.tesseract.text()
         default = scctool.settings.config.findTesserAct(old_exe)
         exe, ok = QFileDialog.getOpenFileName(
@@ -181,7 +189,7 @@ Tesseract-OCR</a> and select the exectuable (tesseract.exe) below,
             self.changed()
 
     def createMapsBox(self):
-
+        """Create box for map manager."""
         self.mapsize = 300
 
         self.mapsBox = QWidget()
@@ -236,6 +244,7 @@ Tesseract-OCR</a> and select the exectuable (tesseract.exe) below,
         self.mapsBox.setLayout(layout)
 
     def renameMap(self):
+        """Rename maps."""
         item = self.maplist.currentItem()
         map = item.text()
         text, ok = QInputDialog.getText(
@@ -257,6 +266,7 @@ Tesseract-OCR</a> and select the exectuable (tesseract.exe) below,
         item.setText(text)
 
     def changeMap(self):
+        """Change a map."""
         map = self.maplist.currentItem().text()
         fileName, ok = QFileDialog.getOpenFileName(
             self, "Select Map Image (> 500x500px recommended)",
@@ -269,6 +279,7 @@ Tesseract-OCR</a> and select the exectuable (tesseract.exe) below,
             self.changePreview()
 
     def addMap(self):
+        """Add a map."""
         fileName, ok = QFileDialog.getOpenFileName(
             self, "Select Map Image (> 500x500px recommended)",
             "", "Support Images (*.png *.jpg)")
@@ -292,6 +303,7 @@ Tesseract-OCR</a> and select the exectuable (tesseract.exe) below,
                 self.maplist.setCurrentItem(item)
 
     def deleteMap(self):
+        """Delete a map."""
         item = self.maplist.currentItem()
         map = item.text()
         buttonReply = QMessageBox.question(
@@ -303,6 +315,7 @@ Tesseract-OCR</a> and select the exectuable (tesseract.exe) below,
             self.maplist.takeItem(self.maplist.currentRow())
 
     def changePreview(self):
+        """Change the map preview."""
         map = self.maplist.currentItem().text()
         if(map == "TBD"):
             self.pb_renameMap.setEnabled(False)
@@ -324,6 +337,7 @@ Tesseract-OCR</a> and select the exectuable (tesseract.exe) below,
         self.mapInfo.setText(text)
 
     def createButtonGroup(self):
+        """Create buttons."""
         try:
             layout = QHBoxLayout()
 
@@ -342,6 +356,7 @@ Tesseract-OCR</a> and select the exectuable (tesseract.exe) below,
             module_logger.exception("message")
 
     def saveData(self):
+        """Save the data."""
         if(self.__dataChanged):
             scctool.settings.config.parser.set(
                 "SCT", "myteams", ", ".join(self.list_favTeams.getData()))
@@ -353,15 +368,18 @@ Tesseract-OCR</a> and select the exectuable (tesseract.exe) below,
                 "SCT", "use_ocr", str(self.cb_useocr.isChecked()))
 
     def saveCloseWindow(self):
+        """Save and close window."""
         self.saveData()
         self.passEvent = True
         self.close()
 
     def closeWindow(self):
+        """Close window."""
         self.passEvent = True
         self.close()
 
     def closeEvent(self, event):
+        """Handle close event."""
         try:
             self.mainWindow.updateMapCompleters()
             if(not self.__dataChanged):

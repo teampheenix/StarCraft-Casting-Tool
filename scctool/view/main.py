@@ -1,9 +1,12 @@
 """Define the main window."""
 import logging
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtQml import *
+from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QWidget, QMessageBox, QAction,\
+    QTabWidget, QLineEdit, QCompleter, QComboBox, QPushButton, QHBoxLayout, QLabel,\
+    QFormLayout, QGroupBox, QSizePolicy, QCheckBox, QSlider, QGridLayout, QSpacerItem,\
+    QFileDialog
+from PyQt5.QtCore import QSettings, Qt
+from PyQt5.QtGui import QIcon
+# from PyQt5.QtQml import *
 
 import scctool.settings
 import scctool.settings.config
@@ -12,7 +15,7 @@ import shutil
 import os
 import markdown2
 
-from scctool.view.widgets import *
+from scctool.view.widgets import BusyProgressBar, MapLineEdit, IconPushButton
 from scctool.view.subConnections import SubwindowConnections
 from scctool.view.subStyles import SubwindowStyles
 from scctool.view.subMisc import SubwindowMisc
@@ -23,7 +26,10 @@ module_logger = logging.getLogger('scctool.view.main')
 
 
 class MainWindow(QMainWindow):
+    """Show the main window of SCCT."""
+
     def __init__(self, controller, app):
+        """Init the main window."""
         try:
             super(MainWindow, self).__init__()
 
@@ -84,7 +90,7 @@ class MainWindow(QMainWindow):
             module_logger.exception("message")
 
     def showAbout(self):
-
+        """Show subwindow with about info."""
         html = markdown2.markdown_path(
             scctool.settings.getAbsPath("src/about.md"))
         version = self.controller.versionControl.current
@@ -103,6 +109,7 @@ class MainWindow(QMainWindow):
         QMessageBox.about(self, "Starcraft Casting Tool - About", html)
 
     def closeEvent(self, event):
+        """Close and clean up window."""
         try:
             try:
                 if(self.mysubwindow1 and self.mysubwindow1.isVisible()):
@@ -123,6 +130,7 @@ class MainWindow(QMainWindow):
             module_logger.exception("message")
 
     def createMenuBar(self):
+        """Create the menu bar."""
         try:
             menubar = self.menuBar()
             settingsMenu = menubar.addMenu('Settings')
@@ -193,26 +201,31 @@ class MainWindow(QMainWindow):
             module_logger.exception("message")
 
     def openApiDialog(self):
+        """Open subwindow with connection settings."""
         self.mysubwindow1 = SubwindowConnections()
         self.mysubwindow1.createWindow(self)
         self.mysubwindow1.show()
 
     def openStyleDialog(self):
+        """Open subwindow with style settings."""
         self.mysubwindow2 = SubwindowStyles()
         self.mysubwindow2.createWindow(self)
         self.mysubwindow2.show()
 
     def openMiscDialog(self):
+        """Open subwindow with misc settings."""
         self.mysubwindow3 = SubwindowMisc()
         self.mysubwindow3.createWindow(self)
         self.mysubwindow3.show()
 
     def openReadme(self):
+        """Open subwindow with readme viewer."""
         self.mysubwindow4 = SubwindowReadme()
         self.mysubwindow4.createWindow(self)
         self.mysubwindow4.show()
 
     def createTabs(self):
+        """Create tabs in main window."""
         try:
             # Initialize tab screen
             self.tabs = QTabWidget()
@@ -376,6 +389,7 @@ class MainWindow(QMainWindow):
             module_logger.exception("message")
 
     def updateMapCompleters(self):
+        """Update the auto completers for maps."""
         for i in range(self.max_no_sets):
             completer = QCompleter(scctool.settings.maps, self.le_map[i])
             completer.setCaseSensitivity(Qt.CaseInsensitive)
@@ -384,6 +398,7 @@ class MainWindow(QMainWindow):
             self.le_map[i].setCompleter(completer)
 
     def createFormMatchDataBox(self):
+        """Create the froms for the match data."""
         try:
 
             self.max_no_sets = scctool.settings.max_no_sets
@@ -577,6 +592,7 @@ class MainWindow(QMainWindow):
             module_logger.exception("message")
 
     def createHorizontalGroupBox(self):
+        """Create horizontal group box for tasks."""
         try:
             self.horizontalGroupBox = QGroupBox("Tasks")
             layout = QHBoxLayout()
@@ -603,6 +619,7 @@ class MainWindow(QMainWindow):
             module_logger.exception("message")
 
     def createSC2APIGroupBox(self):
+        """Create group box for background tasks."""
         try:
             self.SC2APIGroupBox = QGroupBox("Automatic Background Tasks")
             layout = QHBoxLayout()
@@ -663,6 +680,7 @@ class MainWindow(QMainWindow):
             module_logger.exception("message")
 
     def autoFTP_change(self):
+        """Monitor check box for ftp upload."""
         try:
             scctool.settings.config.parser.set(
                 "FTP", "upload", str(self.cb_autoFTP.isChecked()))
@@ -676,7 +694,7 @@ class MainWindow(QMainWindow):
             module_logger.exception("message")
 
     def ftpSignal(self, signal):
-
+        """Define signal handle for ftpUploader."""
         if(signal == -2):
             QMessageBox.warning(self, "Login error",
                                 'FTP server login incorrect!')
@@ -687,6 +705,7 @@ class MainWindow(QMainWindow):
             self.progressBar.setVisible(True)
 
     def autoUpdate_change(self):
+        """Handle change of auto score update check box."""
         try:
             if(self.cb_autoUpdate.isChecked()):
                 self.controller.runSC2ApiThread("updateScore")
@@ -696,6 +715,7 @@ class MainWindow(QMainWindow):
             module_logger.exception("message")
 
     def playerIntros_change(self):
+        """Handle change of player intros check box."""
         try:
             if(self.cb_playerIntros.isChecked()):
                 self.controller.runSC2ApiThread("playerIntros")
@@ -707,6 +727,7 @@ class MainWindow(QMainWindow):
             module_logger.exception("message")
 
     def autoToggleScore_change(self):
+        """Handle change of toggle score check box."""
         try:
             if(self.cb_autoToggleScore.isChecked()):
                 self.controller.runSC2ApiThread("toggleScore")
@@ -716,6 +737,7 @@ class MainWindow(QMainWindow):
             module_logger.exception("message")
 
     def autoToggleProduction_change(self):
+        """Handle change of toggle production tab check box."""
         try:
             if(self.cb_autoToggleProduction.isChecked()):
                 self.controller.runSC2ApiThread("toggleProduction")
@@ -725,8 +747,8 @@ class MainWindow(QMainWindow):
             module_logger.exception("message")
 
     def applycustom_click(self):
+        """Handle click to apply custom match."""
         try:
-            url = self.le_url.text()
             self.trigger = False
             self.statusBar().showMessage('Applying Custom Match...')
             msg = self.controller.applyCustom(int(self.cb_bestof.currentText()),
@@ -739,6 +761,7 @@ class MainWindow(QMainWindow):
             module_logger.exception("message")
 
     def resetdata_click(self):
+        """Handle click to reset the data."""
         try:
             self.trigger = False
             msg = self.controller.resetData()
@@ -748,6 +771,7 @@ class MainWindow(QMainWindow):
             module_logger.exception("message")
 
     def refresh_click(self):
+        """Handle click to refresh/load data from an URL."""
         try:
             url = self.le_url.text()
             self.trigger = False
@@ -759,6 +783,7 @@ class MainWindow(QMainWindow):
             module_logger.exception("message")
 
     def openBrowser_click(self):
+        """Handle request to open URL in browser."""
         try:
             url = self.le_url.text()
             self.controller.openURL(url)
@@ -766,6 +791,7 @@ class MainWindow(QMainWindow):
             module_logger.exception("message")
 
     def updatenightbot_click(self):
+        """Handle click to change nightbot command."""
         try:
             self.statusBar().showMessage('Updating NightBot Command...')
             msg = self.controller.updateNightbotCommand()
@@ -774,8 +800,8 @@ class MainWindow(QMainWindow):
             module_logger.exception("message")
 
     def updatetwitch_click(self):
+        """Handle click to change twitch title."""
         try:
-            url = self.le_url.text()
             self.statusBar().showMessage('Updating Twitch Title...')
             msg = self.controller.updateTwitchTitle()
             self.statusBar().showMessage(msg)
@@ -783,8 +809,8 @@ class MainWindow(QMainWindow):
             module_logger.exception("message")
 
     def updateobs_click(self):
+        """Handle click to apply changes to OBS_data."""
         try:
-            url = self.le_url.text()
             self.statusBar().showMessage('Updating OBS Data...')
             self.controller.updateOBS()
             if not self.controller.resetWarning():
@@ -793,6 +819,7 @@ class MainWindow(QMainWindow):
             module_logger.exception("message")
 
     def resetscore_click(self):
+        """Handle click to reset the score."""
         try:
             self.statusBar().showMessage('Resetting Score...')
             self.trigger = False
@@ -806,6 +833,7 @@ class MainWindow(QMainWindow):
             module_logger.exception("message")
 
     def setScore(self, idx, score):
+        """Handle change of the score."""
         try:
             if(self.sl_score[idx].value() == 0):
                 self.statusBar().showMessage('Updating Score...')
@@ -822,6 +850,7 @@ class MainWindow(QMainWindow):
             module_logger.exception("message")
 
     def sl_changed(self):
+        """Handle a new score value."""
         try:
             if(self.trigger):
                 self.controller.allkillUpdate()
@@ -830,7 +859,7 @@ class MainWindow(QMainWindow):
             module_logger.exception("message")
 
     def logoDialog(self, button):
-
+        """Open dialog for team logo."""
         # options = QFileDialog.Options()
         # options |= QFileDialog.DontUseNativeDialog
         fileName, _ = QFileDialog.getOpenFileName(
@@ -861,10 +890,12 @@ class MainWindow(QMainWindow):
             self.controller.matchData.updateScoreIcon()
 
     def resizeWindow(self):
+        """Resize the window height to size hint."""
         if(not self.isMaximized()):
             self.processEvents()
             self.resize(self.width(), self.sizeHint().height())
 
     def processEvents(self):
+        """Process ten PyQt5 events."""
         for i in range(0, 10):
             self.app.processEvents()

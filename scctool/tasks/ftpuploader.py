@@ -165,7 +165,7 @@ class UploaderThread(QtCore.QThread):
                     module_logger.info(self.__ftp.quit())
                 elif(self.__upload and cmd == "upload"):
                     localFile, remoteFile, *_ = args
-                    print("Upload request for " + localFile)
+                    print("Upload request for " + remoteFile)
                     f = open(localFile, "rb")
                     module_logger.info(self.__ftp.storbinary(
                         "STOR " + remoteFile.strip(), f))
