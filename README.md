@@ -51,7 +51,9 @@ Some basic options for customization can be found under *Settings: Styles*, for 
 
 ## Help, Bug-Report, Suggestions & Contribution
 
-If you need help, have bugs to report, have suggestions to make, or want to contribute to this project in any way go to *#dev* channel of the [Alpha SC2 Discord Server](https://discordapp.com/invite/yRWNYr) and/or message me on [Discord](https://discordapp.com/): *pres.sure#5247*. In the case of a bug report please provide the log-files `data/scctool.log` and `data/installpackages.log`.
+If you need help, have bugs to report, have suggestions to make, or want to contribute to this project in any way message me (*pres.sure#5247*) on [Discord](https://discordapp.com/) or go to *#dev* channel of the [Alpha SC2 Discord Server](https://discord.gg/m8Xx62v).
+
+In the case of a bug report please provide the log-files `data/scctool.log` and `data/installpackages.log`.
 
 ## Support
 
