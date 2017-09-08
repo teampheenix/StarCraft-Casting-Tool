@@ -1,2 +1,2 @@
-{% capture my_include %}{% include README.md %}{% endcapture %}
+{% capture my_include %}{% include_relative README.md %}{% endcapture %}
 {{ my_include | markdownify }}
