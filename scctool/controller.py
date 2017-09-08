@@ -21,8 +21,7 @@ try:
     import os
     import shutil
 
-    from PyQt5.QtGui import QIcon
-    from PyQt5.QtCore import Qt
+    import PyQt5
 
 
 except Exception as e:
@@ -90,12 +89,12 @@ class MainController:
             self.view.cb_allkill.setChecked(self.matchData.getAllKill())
 
             index = self.view.cb_bestof.findText(str(self.matchData.getBestOfRaw()),
-                                                 Qt.MatchFixedString)
+                                                 PyQt5.QtCore.Qt.MatchFixedString)
             if index >= 0:
                 self.view.cb_bestof.setCurrentIndex(index)
 
             index = self.view.cb_minSets.findText(str(self.matchData.getMinSets()),
-                                                  Qt.MatchFixedString)
+                                                  PyQt5.QtCore.Qt.MatchFixedString)
             if index >= 0:
                 self.view.cb_minSets.setCurrentIndex(index)
 
@@ -139,10 +138,12 @@ class MainController:
 
     def updateLogos(self):
         """Updata team logos in  view."""
-        pixmap = QIcon(self.linkFile(scctool.settings.OBSdataDir + '/logo1'))
+        pixmap = PyQt5.QtGui.QIcon(self.linkFile(
+            scctool.settings.OBSdataDir + '/logo1'))
         self.view.qb_logo1.setIcon(pixmap)
 
-        pixmap = QIcon(self.linkFile(scctool.settings.OBSdataDir + '/logo2'))
+        pixmap = PyQt5.QtGui.QIcon(self.linkFile(
+            scctool.settings.OBSdataDir + '/logo2'))
         self.view.qb_logo2.setIcon(pixmap)
 
         self.updateLogosHTML()
@@ -465,7 +466,7 @@ class MainController:
 
     def toggleWidget(self, widget, condition, ttFalse='', ttTrue=''):
         """Disable or an enable a widget based on a condition."""
-        widget.setAttribute(Qt.WA_AlwaysShowToolTips)
+        widget.setAttribute(PyQt5.QtCore.Qt.WA_AlwaysShowToolTips)
         if condition:
             tooltip = ttTrue
         else:

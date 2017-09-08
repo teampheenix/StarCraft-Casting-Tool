@@ -2,7 +2,7 @@
 import urllib.request
 import logging
 from re import search as rsearch
-from PyQt5.QtCore import QThread, pyqtSignal
+import PyQt5
 from scctool.settings import getAbsPath
 # create logger
 module_logger = logging.getLogger('scctool.settings.version')
@@ -68,14 +68,14 @@ class VersionControl(object):
         return False
 
 
-class CheckVersionThread(QThread):
+class CheckVersionThread(PyQt5.QtCore.QThread):
     """Thread to check for new version."""
 
-    newVersion = pyqtSignal(str)
+    newVersion = PyQt5.QtCore.pyqtSignal(str)
 
     def __init__(self, versionc):
         """Init thread."""
-        QThread.__init__(self)
+        PyQt5.QtCore.QThread.__init__(self)
         self.versionc = versionc
 
     def run(self):

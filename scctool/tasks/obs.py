@@ -9,11 +9,11 @@ try:
     import time
     import base64
     import scctool.settings
-    from PyQt5 import QtCore
+    import PyQt5
 
     from obswsrc import OBSWS  # pip install obs-ws-rc
     from obswsrc.client import AuthError
-    from obswsrc.requests import SetSourceRenderRequest, ResponseStatus
+    import obswsrc.requests
 
 except Exception as e:
 
@@ -83,11 +83,12 @@ async def hideIntros(thread):
                     scctool.settings.config.parser.get("OBS", "sources")).split(',')))
                 if(visible and source_name in sources):
                     time.sleep(4.5)
-                    request = SetSourceRenderRequest(source=source_name, render=False)
+                    request = obswsrc.requests.SetSourceRenderRequest(
+                        source=source_name, render=False)
                     response = await obsws.require(request)
 
                     # Check if everything is OK
-                    if response.status == ResponseStatus.OK:
+                    if response.status == obswsrc.requests.ResponseStatus.OK:
                         print("Source " + source_name + " hidden!")
                     else:
                         print("Couldn't hide the source. Reason:", response.error)
@@ -97,14 +98,14 @@ async def hideIntros(thread):
         await obsws.close()
 
 
-class WebsocketThread(QtCore.QThread):
+class WebsocketThread(PyQt5.QtCore.QThread):
     """Thread for websocket interaction."""
 
-    requestCancellation = QtCore.pyqtSignal(int)
+    requestCancellation = PyQt5.QtCore.pyqtSignal(int)
 
     def __init__(self):
         """Init thread."""
-        QtCore.QThread.__init__(self)
+        PyQt5.QtCore.QThread.__init__(self)
         self.__kill = False
 
     def run(self):

@@ -1,6 +1,6 @@
 """Sent request to Nightbot and Twitch if needed."""
 import logging
-from PyQt5.QtCore import pyqtSignal
+import PyQt5
 
 from scctool.tasks.tasksthread import TasksThread
 
@@ -14,7 +14,7 @@ module_logger = logging.getLogger('scctool.tasks.autorequests')
 class AutoRequestsThread(TasksThread):
     """Sent request to Nightbot and Twitch if needed."""
 
-    disableCB = pyqtSignal(str)
+    disableCB = PyQt5.QtCore.pyqtSignal(str)
 
     def __init__(self, controller):
         """Init the thread."""

@@ -7,7 +7,7 @@ module_logger = logging.getLogger('scctool.tasks.ftpuploader')
 try:
     import ftplib
     import scctool.settings
-    from PyQt5 import QtCore
+    import PyQt5
     import queue
     import base64
     import os
@@ -68,7 +68,7 @@ class FTPUploader:
     def empty_queque(self):
         """Empty queque."""
         self.__thread.q = queue.Queue()
-        
+
     def cwdback(self, d):
         """Change dir backwards."""
         dirs = []
@@ -76,7 +76,7 @@ class FTPUploader:
         while head != '':
             head, tail = os.path.split(head)
             dirs.append("..")
-        
+
         self.cwd("/".join(dirs))
 
     def setup(self):
@@ -136,14 +136,14 @@ class FTPUploader:
                 self.upload(full_fname, fname)
 
 
-class UploaderThread(QtCore.QThread):
+class UploaderThread(PyQt5.QtCore.QThread):
     """Thread for FTP actions."""
 
-    progress = QtCore.pyqtSignal(int)
+    progress = PyQt5.QtCore.pyqtSignal(int)
 
     def __init__(self):
         """Init thread."""
-        QtCore.QThread.__init__(self)
+        PyQt5.QtCore.QThread.__init__(self)
         self.q = queue.Queue()
         self.__ftp = None
         self.__progress = False

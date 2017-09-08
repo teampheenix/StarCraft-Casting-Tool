@@ -1,9 +1,6 @@
 """Show readme sub window."""
 import logging
-from PyQt5.QtWidgets import QWidget, QGridLayout, QPushButton, QSpacerItem,\
-    QSizePolicy, QTextBrowser
-from PyQt5.QtCore import QSize, QPoint
-from PyQt5.QtGui import QIcon
+import PyQt5
 
 import markdown2
 import scctool.settings
@@ -12,39 +9,41 @@ import re
 module_logger = logging.getLogger('scctool.view.subReadme')
 
 
-class SubwindowReadme(QWidget):
+class SubwindowReadme(PyQt5.QtWidgets.QWidget):
     """Show readme sub window."""
 
     def createWindow(self, mainWindow):
         """Create readme sub window."""
         super(SubwindowReadme, self).__init__(None)
         self.setWindowIcon(
-            QIcon(scctool.settings.getAbsPath('src/readme.ico')))
+            PyQt5.QtGui.QIcon(scctool.settings.getAbsPath('src/readme.ico')))
         self.mainWindow = mainWindow
 
         self.createReadmeViewer()
 
-        mainLayout = QGridLayout()
+        mainLayout = PyQt5.QtWidgets.QGridLayout()
         mainLayout.addWidget(self.viewer, 0, 0, 1, 3)
-        closeButton = QPushButton("&OK")
+        closeButton = PyQt5.QtWidgets.QPushButton("&OK")
         closeButton.clicked.connect(self.close)
-        mainLayout.addItem(QSpacerItem(
-            0, 0, QSizePolicy.Expanding, QSizePolicy.Minimum), 1, 0)
+        mainLayout.addItem(PyQt5.QtWidgets.QSpacerItem(
+            0, 0, PyQt5.QtWidgets.QSizePolicy.Expanding,
+            PyQt5.QtWidgets.QSizePolicy.Minimum), 1, 0)
         mainLayout.addWidget(closeButton, 1, 1)
         self.setLayout(mainLayout)
 
         self.setWindowTitle("Readme")
 
-        self.resize(QSize(mainWindow.size().width()
-                          * 0.9, self.sizeHint().height()))
-        relativeChange = QPoint(mainWindow.size().width() / 2,
-                                mainWindow.size().height() / 3)\
-            - QPoint(self.size().width() / 2, self.size().height() / 3)
+        self.resize(PyQt5.QtCore.QSize(mainWindow.size().width()
+                                       * 0.9, self.sizeHint().height()))
+        relativeChange = PyQt5.QtCore.QPoint(mainWindow.size().width() / 2,
+                                             mainWindow.size().height() / 3)\
+            - PyQt5.QtCore.QPoint(self.size().width() / 2,
+                                  self.size().height() / 3)
         self.move(mainWindow.pos() + relativeChange)
 
     def createReadmeViewer(self):
         """Create the readme viewer."""
-        self.viewer = QTextBrowser()
+        self.viewer = PyQt5.QtWidgets.QTextBrowser()
         self.viewer.setReadOnly(True)
         self.viewer.setMinimumHeight(400)
         self.viewer.setOpenExternalLinks(True)

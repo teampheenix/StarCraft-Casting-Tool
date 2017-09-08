@@ -2,25 +2,25 @@
 import logging
 import time
 
-from PyQt5.QtCore import QThread, pyqtSignal
+import PyQt5
 
 # create logger
 module_logger = logging.getLogger('scctool.tasks.tasksthread')
 
 
-class TasksThread(QThread):
+class TasksThread(PyQt5.QtCore.QThread):
     """Define generic thread for various tasks."""
 
-    signal0 = pyqtSignal(str)
-    signal1 = pyqtSignal(str)
-    signal2 = pyqtSignal(str)
-    signal3 = pyqtSignal(str)
-    signal4 = pyqtSignal(str)
-    signal5 = pyqtSignal(str)
+    signal0 = PyQt5.QtCore.pyqtSignal(str)
+    signal1 = PyQt5.QtCore.pyqtSignal(str)
+    signal2 = PyQt5.QtCore.pyqtSignal(str)
+    signal3 = PyQt5.QtCore.pyqtSignal(str)
+    signal4 = PyQt5.QtCore.pyqtSignal(str)
+    signal5 = PyQt5.QtCore.pyqtSignal(str)
 
     def __init__(self):
         """Init thread."""
-        QThread.__init__(self)
+        PyQt5.QtCore.QThread.__init__(self)
 
         self.__tasks = {}
         self.__run = {}

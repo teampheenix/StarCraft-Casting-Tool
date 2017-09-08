@@ -1,12 +1,6 @@
 """Define PyQt5 widgets."""
 import logging
-from PyQt5.QtWidgets import QLineEdit, QComboBox, QApplication,\
-    QProgressBar, QLabel, QPushButton, QSizePolicy, QTableWidget,\
-    QHeaderView, QProgressDialog, QMessageBox, QColorDialog, QHBoxLayout,\
-    QTableWidgetItem, QStyleOptionButton, QStyle, QCompleter, QFrame
-from PyQt5.QtCore import pyqtSignal, QSize, QPoint, Qt
-from PyQt5.QtGui import QColor, QPainter
-
+import PyQt5
 import os
 import re
 import shutil
@@ -17,10 +11,10 @@ import scctool.matchdata
 module_logger = logging.getLogger('scctool.view.widgets')
 
 
-class MapLineEdit(QLineEdit):
+class MapLineEdit(PyQt5.QtWidgets.QLineEdit):
     """Define line edit for maps."""
 
-    textModified = pyqtSignal(str, str)  # (before, after)
+    textModified = PyQt5.QtCore.pyqtSignal(str, str)  # (before, after)
 
     def __init__(self, contents='', parent=None):
         """Init lineedit."""
@@ -42,10 +36,10 @@ class MapLineEdit(QLineEdit):
             self.textModified.emit(before, after)
 
 
-class MonitoredLineEdit(QLineEdit):
+class MonitoredLineEdit(PyQt5.QtWidgets.QLineEdit):
     """Define moinitored line edit."""
 
-    textModified = pyqtSignal()
+    textModified = PyQt5.QtCore.pyqtSignal()
 
     def __init__(self, contents='', parent=None):
         """Init moinitored line edit."""
@@ -74,7 +68,7 @@ class MonitoredLineEdit(QLineEdit):
             self.textModified.emit()
 
 
-class StyleComboBox(QComboBox):
+class StyleComboBox(PyQt5.QtWidgets.QComboBox):
     """Define combo box to change the styles."""
 
     def __init__(self, style_dir, default="Default"):
@@ -90,11 +84,11 @@ class StyleComboBox(QComboBox):
                 label = re.search('^(.+)\.css$', fname).group(1)
                 self.addItem(label)
 
-        index = self.findText(default, Qt.MatchFixedString)
+        index = self.findText(default, PyQt5.QtCore.Qt.MatchFixedString)
         if index >= 0:
             self.setCurrentIndex(index)
         else:
-            index = self.findText("Default", Qt.MatchFixedString)
+            index = self.findText("Default", PyQt5.QtCore.Qt.MatchFixedString)
             if index >= 0:
                 self.setCurrentIndex(index)
 
@@ -112,13 +106,13 @@ class StyleComboBox(QComboBox):
         controller.ftpUploader.cwdback(dirs)
 
 
-class FTPsetup(QProgressDialog):
+class FTPsetup(PyQt5.QtWidgets.QProgressDialog):
     """Define FTP setup progress dialog."""
 
     def __init__(self, controller, mainWindow):
         """Init progress dialog."""
-        QProgressDialog.__init__(self)
-        self.setWindowModality(Qt.ApplicationModal)
+        PyQt5.QtWidgets.QProgressDialog.__init__(self)
+        self.setWindowModality(PyQt5.QtCore.Qt.ApplicationModal)
         self.progress = 0
         self.setWindowTitle("FTP Server Setup")
         self.setLabelText(
@@ -127,10 +121,12 @@ class FTPsetup(QProgressDialog):
         self.setRange(0, 100)
         self.setValue(self.minimum())
 
-        self.resize(QSize(self.sizeHint().width(), self.sizeHint().height()))
-        relativeChange = QPoint(mainWindow.size().width() / 2,
-                                mainWindow.size().height() / 3)\
-            - QPoint(self.size().width() / 2, self.size().height() / 3)
+        self.resize(PyQt5.QtCore.QSize(
+            self.sizeHint().width(), self.sizeHint().height()))
+        relativeChange = PyQt5.QtCore.QPoint(mainWindow.size().width() / 2,
+                                             mainWindow.size().height() / 3)\
+            - PyQt5.QtCore.QPoint(self.size().width() / 2,
+                                  self.size().height() / 3)
         self.move(mainWindow.pos() + relativeChange)
         self.show()
 
@@ -144,7 +140,7 @@ class FTPsetup(QProgressDialog):
         self.setRange(0, range)
 
         while not self.wasCanceled():
-            QApplication.processEvents()
+            PyQt5.QtWidgets.QApplication.processEvents()
             time.sleep(0.05)
 
         mainWindow.mainWindow.cb_autoFTP.setChecked(False)
@@ -153,8 +149,8 @@ class FTPsetup(QProgressDialog):
             controller.ftpUploader.empty_queque()
             mainWindow.mainWindow.cb_autoFTP.setChecked(old_bool)
         else:
-            QMessageBox.warning(self, "Login error",
-                                'FTP server login incorrect!')
+            PyQt5.QtWidgets.QMessageBox.warning(self, "Login error",
+                                                'FTP server login incorrect!')
 
         print("Done...")
 
@@ -170,14 +166,14 @@ class FTPsetup(QProgressDialog):
             self.setValue(progress)
 
 
-class BusyProgressBar(QProgressBar):
+class BusyProgressBar(PyQt5.QtWidgets.QProgressBar):
     """Define a busy progress bar."""
 
     def __init__(self):
         """Init the progress of the bar."""
         super().__init__()
         self.setRange(0, 0)
-        self.setAlignment(Qt.AlignCenter)
+        self.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
         self._text = None
 
     def setText(self, text):
@@ -189,38 +185,38 @@ class BusyProgressBar(QProgressBar):
         return self._text
 
 
-class ColorLayout(QHBoxLayout):
+class ColorLayout(PyQt5.QtWidgets.QHBoxLayout):
     """Define box the select colors."""
 
     def __init__(self, parent, label="Color:", color="#ffffff", default_color="#ffffff"):
         """Init box."""
-        super(QHBoxLayout, self).__init__()
+        super(PyQt5.QtWidgets.QHBoxLayout, self).__init__()
         self.__parent = parent
         self.__defaultColor = default_color
-        label = QLabel(label)
+        label = PyQt5.QtWidgets.QLabel(label)
         label.setMinimumWidth(110)
         self.addWidget(label, 1)
-        self.__preview = QLineEdit()
+        self.__preview = PyQt5.QtWidgets.QLineEdit()
         self.__preview.setReadOnly(True)
-        self.__preview.setAlignment(Qt.AlignCenter)
+        self.__preview.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
         self.setColor(color, False)
         self.addWidget(self.__preview, 2)
-        self.__pb_selectColor = QPushButton('Select')
+        self.__pb_selectColor = PyQt5.QtWidgets.QPushButton('Select')
         self.__pb_selectColor.clicked.connect(self.__openColorDialog)
         self.addWidget(self.__pb_selectColor, 0)
-        self.__pb_default = QPushButton('Default')
+        self.__pb_default = PyQt5.QtWidgets.QPushButton('Default')
         self.__pb_default.clicked.connect(self.reset)
         self.addWidget(self.__pb_default, 0)
 
     def __openColorDialog(self):
-        color = QColorDialog.getColor(self.__currentColor)
+        color = PyQt5.QtWidgets.QColorDialog.getColor(self.__currentColor)
 
         if color.isValid():
             self.setColor(color.name())
 
     def setColor(self, color, trigger=True):
         """Set the new color."""
-        new_color = QColor(color)
+        new_color = PyQt5.QtGui.QColor(color)
         if(trigger and self.__currentColor != new_color):
             self.__parent.changed()
         self.__currentColor = new_color
@@ -243,7 +239,7 @@ class ColorLayout(QHBoxLayout):
         return self.__currentColor.name()
 
 
-class IconPushButton(QPushButton):
+class IconPushButton(PyQt5.QtWidgets.QPushButton):
     """Define push button with icon."""
 
     def __init__(self, label=None, parent=None):
@@ -253,18 +249,18 @@ class IconPushButton(QPushButton):
         self.pad = 4     # padding between the icon and the button frame
         self.minSize = 8  # minimum size of the icon
 
-        sizePolicy = QSizePolicy(QSizePolicy.Expanding,
-                                 QSizePolicy.Expanding)
+        sizePolicy = PyQt5.QtWidgets.QSizePolicy(PyQt5.QtWidgets.QSizePolicy.Expanding,
+                                                 PyQt5.QtWidgets.QSizePolicy.Expanding)
         self.setSizePolicy(sizePolicy)
 
     def paintEvent(self, event):
         """Paint event."""
-        qp = QPainter()
+        qp = PyQt5.QtGui.QPainter()
         qp.begin(self)
 
         # ---- get default style ----
 
-        opt = QStyleOptionButton()
+        opt = PyQt5.QtWidgets.QStyleOptionButton()
         self.initStyleOption(opt)
 
         # ---- scale icon to button size ----
@@ -275,19 +271,19 @@ class IconPushButton(QPushButton):
         w = Rect.width()
         iconSize = max(min(h, w) - 2 * self.pad, self.minSize)
 
-        opt.iconSize = QSize(iconSize, iconSize)
+        opt.iconSize = PyQt5.QtCore.QSize(iconSize, iconSize)
 
         # ---- draw button ----
 
-        self.style().drawControl(QStyle.CE_PushButton, opt, qp, self)
+        self.style().drawControl(PyQt5.QtWidgets.QStyle.CE_PushButton, opt, qp, self)
 
         qp.end()
 
 
-class ListTable(QTableWidget):
+class ListTable(PyQt5.QtWidgets.QTableWidget):
     """Define a custom table list."""
 
-    dataModified = pyqtSignal()
+    dataModified = PyQt5.QtCore.pyqtSignal()
 
     def __init__(self, noColumns=1, data=[]):
         """Init table list."""
@@ -298,9 +294,11 @@ class ListTable(QTableWidget):
 
         self.setCornerButtonEnabled(False)
         self.horizontalHeader().hide()
-        self.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.horizontalHeader().setSectionResizeMode(
+            PyQt5.QtWidgets.QHeaderView.Stretch)
         self.verticalHeader().hide()
-        self.verticalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+        self.verticalHeader().setSectionResizeMode(
+            PyQt5.QtWidgets.QHeaderView.ResizeToContents)
         self.setData(data)
 
     def __handleDataChanged(self, item):
@@ -324,15 +322,15 @@ class ListTable(QTableWidget):
         self.setRowCount(int(len(data) / self.__noColumns) + 1)
         for idx, entry in enumerate(data):
             row, column = divmod(idx, self.__noColumns)
-            self.setItem(row, column, QTableWidgetItem(entry))
+            self.setItem(row, column, PyQt5.QtWidgets.QTableWidgetItem(entry))
 
         row = int(len(data) / self.__noColumns)
         for col in range(len(data) % self.__noColumns, self.__noColumns):
-            self.setItem(row, col, QTableWidgetItem(""))
+            self.setItem(row, col, PyQt5.QtWidgets.QTableWidgetItem(""))
 
         row = int(len(data) / self.__noColumns) + 1
         for col in range(self.__noColumns):
-            self.setItem(row, col, QTableWidgetItem(""))
+            self.setItem(row, col, PyQt5.QtWidgets.QTableWidgetItem(""))
 
         self.itemChanged.connect(self.__handleDataChanged)
 
@@ -351,20 +349,20 @@ class ListTable(QTableWidget):
         return self.__processData(data)
 
 
-class Completer(QCompleter):
+class Completer(PyQt5.QtWidgets.QCompleter):
     """Define custom auto completer for multiple words."""
 
     def __init__(self, list, parent=None):
         """Init completer."""
         super(Completer, self).__init__(list, parent)
 
-        self.setCaseSensitivity(Qt.CaseInsensitive)
-        self.setCompletionMode(QCompleter.PopupCompletion)
+        self.setCaseSensitivity(PyQt5.QtCore.Qt.CaseInsensitive)
+        self.setCompletionMode(PyQt5.QtWidgets.QCompleter.PopupCompletion)
         self.setWrapAround(False)
 
     def pathFromIndex(self, index):
         """Add texts instead of replace."""
-        path = QCompleter.pathFromIndex(self, index)
+        path = PyQt5.QtWidgets.QCompleter.pathFromIndex(self, index)
 
         lst = str(self.widget().text()).split(' ')
 
@@ -379,11 +377,11 @@ class Completer(QCompleter):
         return [path]
 
 
-class QHLine(QFrame):
+class QHLine(PyQt5.QtWidgets.QFrame):
     """Define a vertical line."""
 
     def __init__(self):
         """Init frame."""
         super(QHLine, self).__init__()
-        self.setFrameShape(QFrame.HLine)
-        self.setFrameShadow(QFrame.Sunken)
+        self.setFrameShape(PyQt5.QtWidgets.QFrame.HLine)
+        self.setFrameShadow(PyQt5.QtWidgets.QFrame.Sunken)

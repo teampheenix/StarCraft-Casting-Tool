@@ -13,3 +13,4 @@ OBS_html/data/*-data.html
 client_config.py
 __pycache__/*
 StarCraftCastingTool.spec
+*.spec

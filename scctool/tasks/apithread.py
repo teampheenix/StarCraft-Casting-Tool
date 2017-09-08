@@ -5,7 +5,7 @@ import logging
 module_logger = logging.getLogger('scctool.tasks.apithread')
 
 try:
-    from PyQt5.QtCore import QThread
+    import PyQt5
 
     import requests
     import time
@@ -204,13 +204,13 @@ def ToggleProduction():
     ReleaseKey(D)
 
 
-class SC2ApiThread(QThread):
+class SC2ApiThread(PyQt5.QtCore.QThread):
     """Thread to interact with SC2-Client."""
 
     def __init__(self, controller, parent=None):
         """Init thread."""
         try:
-            QThread.__init__(self, parent)
+            PyQt5.QtCore.QThread.__init__(self, parent)
             self.exiting = False
             self.activeTask = {}
             self.activeTask['updateScore'] = False

@@ -8,20 +8,19 @@ logger = logging.getLogger('scctool')
 
 def main():
     """Run Starcraft Casting Tool."""
-    from PyQt5.QtWidgets import QApplication, QStyleFactory
-    from PyQt5.QtGui import QIcon
-    from PyQt5.QtCore import QSize
+    import PyQt5
     from scctool.view.main import MainWindow
     from scctool.controller import MainController
     from scctool.settings import getAbsPath
 
     try:
         """Run the main program."""
-        app = QApplication(sys.argv)
-        QApplication.setStyle(QStyleFactory.create('Fusion'))
-        icon = QIcon()
-        icon.addFile(getAbsPath('src/scct.ico'),QSize(32, 32))
-        icon.addFile(getAbsPath('src/scct.png'),QSize(256, 256))
+        app = PyQt5.QtWidgets.QApplication(sys.argv)
+        PyQt5.QtWidgets.QApplication.setStyle(
+            PyQt5.QtWidgets.QStyleFactory.create('Fusion'))
+        icon = PyQt5.QtGui.QIcon()
+        icon.addFile(getAbsPath('src/scct.ico'), PyQt5.QtCore.QSize(32, 32))
+        icon.addFile(getAbsPath('src/scct.png'), PyQt5.QtCore.QSize(256, 256))
         app.setWindowIcon(icon)
         cntlr = MainController()
         MainWindow(cntlr, app)

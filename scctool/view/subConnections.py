@@ -1,10 +1,6 @@
 """Show connections settings sub window."""
 import logging
-from PyQt5.QtWidgets import QVBoxLayout, QWidget, QMessageBox,\
-    QTabWidget, QLineEdit, QPushButton, QHBoxLayout, QLabel,\
-    QFormLayout, QCheckBox
-from PyQt5.QtCore import Qt, QSize, QPoint
-from PyQt5.QtGui import QIcon
+import PyQt5
 
 from scctool.view.widgets import MonitoredLineEdit, FTPsetup, Completer
 
@@ -16,7 +12,7 @@ import base64
 module_logger = logging.getLogger('scctool.view.subConnections')
 
 
-class SubwindowConnections(QWidget):
+class SubwindowConnections(PyQt5.QtWidgets.QWidget):
     """Show connections settings sub window."""
 
     def createWindow(self, mainWindow):
@@ -24,11 +20,11 @@ class SubwindowConnections(QWidget):
         try:
             parent = None
             super(SubwindowConnections, self).__init__(parent)
-            # self.setWindowFlags(Qt.WindowStaysOnTopHint)
+            # self.setWindowFlags(PyQt5.QtCore.Qt.WindowStaysOnTopHint)
 
             self.setWindowIcon(
-                QIcon(scctool.settings.getAbsPath('src/connection.png')))
-            self.setWindowModality(Qt.ApplicationModal)
+                PyQt5.QtGui.QIcon(scctool.settings.getAbsPath('src/connection.png')))
+            self.setWindowModality(PyQt5.QtCore.Qt.ApplicationModal)
             self.mainWindow = mainWindow
             self.passEvent = False
             self.controller = mainWindow.controller
@@ -37,18 +33,19 @@ class SubwindowConnections(QWidget):
             self.createButtonGroup()
             self.createTabs()
 
-            mainLayout = QVBoxLayout()
+            mainLayout = PyQt5.QtWidgets.QVBoxLayout()
 
             mainLayout.addWidget(self.tabs)
             mainLayout.addLayout(self.buttonGroup)
 
             self.setLayout(mainLayout)
 
-            self.resize(QSize(mainWindow.size().width()
-                              * 0.7, self.sizeHint().height()))
-            relativeChange = QPoint(mainWindow.size().width() / 2,
-                                    mainWindow.size().height() / 3) -\
-                QPoint(self.size().width() / 2, self.size().height() / 3)
+            self.resize(PyQt5.QtCore.QSize(mainWindow.size().width()
+                                           * 0.7, self.sizeHint().height()))
+            relativeChange = PyQt5.QtCore.QPoint(mainWindow.size().width() / 2,
+                                                 mainWindow.size().height() / 3) -\
+                PyQt5.QtCore.QPoint(self.size().width() / 2,
+                                    self.size().height() / 3)
             self.move(mainWindow.pos() + relativeChange)
 
             self.setWindowTitle("Connections")
@@ -58,7 +55,7 @@ class SubwindowConnections(QWidget):
 
     def createTabs(self):
         """Create tabs."""
-        self.tabs = QTabWidget()
+        self.tabs = PyQt5.QtWidgets.QTabWidget()
 
         self.createFormGroupFTP()
         self.createFormGroupOBS()
@@ -73,36 +70,36 @@ class SubwindowConnections(QWidget):
 
     def createFormGroupFTP(self):
         """Create form group for FTP."""
-        self.formGroupFTP = QWidget()
-        layout = QFormLayout()
+        self.formGroupFTP = PyQt5.QtWidgets.QWidget()
+        layout = PyQt5.QtWidgets.QFormLayout()
 
         self.ftpServer = MonitoredLineEdit()
         self.ftpServer.textModified.connect(self.changed)
         self.ftpServer.setText(
             scctool.settings.config.parser.get("FTP", "server").strip())
-        self.ftpServer.setAlignment(Qt.AlignCenter)
+        self.ftpServer.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
         self.ftpServer.setPlaceholderText("FTP server address")
         self.ftpServer.setToolTip('')
-        layout.addRow(QLabel("Host:"), self.ftpServer)
+        layout.addRow(PyQt5.QtWidgets.QLabel("Host:"), self.ftpServer)
 
         self.ftpUser = MonitoredLineEdit()
         self.ftpUser.textModified.connect(self.changed)
         self.ftpUser.setText(
             scctool.settings.config.parser.get("FTP", "user").strip())
-        self.ftpUser.setAlignment(Qt.AlignCenter)
+        self.ftpUser.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
         self.ftpUser.setPlaceholderText("FTP username")
         self.ftpUser.setToolTip('')
-        layout.addRow(QLabel("Username:"), self.ftpUser)
+        layout.addRow(PyQt5.QtWidgets.QLabel("Username:"), self.ftpUser)
 
         self.ftpPwd = MonitoredLineEdit()
         self.ftpPwd.textModified.connect(self.changed)
         self.ftpPwd.setText(base64.b64decode(scctool.settings.config.parser.get(
             "FTP", "passwd").strip().encode()).decode("utf8"))
-        self.ftpPwd.setAlignment(Qt.AlignCenter)
+        self.ftpPwd.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
         self.ftpPwd.setPlaceholderText("FTP password")
         self.ftpPwd.setToolTip('')
-        self.ftpPwd.setEchoMode(QLineEdit.Password)
-        label = QLabel("Password:")
+        self.ftpPwd.setEchoMode(PyQt5.QtWidgets.QLineEdit.Password)
+        label = PyQt5.QtWidgets.QLabel("Password:")
         # label.setFixedWidth(100)
         layout.addRow(label, self.ftpPwd)
 
@@ -110,17 +107,18 @@ class SubwindowConnections(QWidget):
         self.ftpDir.textModified.connect(self.changed)
         self.ftpDir.setText(
             scctool.settings.config.parser.get("FTP", "dir").strip())
-        self.ftpDir.setAlignment(Qt.AlignCenter)
+        self.ftpDir.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
         self.ftpDir.setPlaceholderText("currently using root directory")
         self.ftpDir.setToolTip('')
-        layout.addRow(QLabel("Directory:"), self.ftpDir)
+        layout.addRow(PyQt5.QtWidgets.QLabel("Directory:"), self.ftpDir)
 
-        container = QHBoxLayout()
-        self.pb_testFTP = QPushButton('Test && Setup FTP server')
+        container = PyQt5.QtWidgets.QHBoxLayout()
+        self.pb_testFTP = PyQt5.QtWidgets.QPushButton(
+            'Test && Setup FTP server')
         self.pb_testFTP.clicked.connect(self.testFTP)
         container.addWidget(self.pb_testFTP)
 
-        layout.addRow(QLabel(""), container)
+        layout.addRow(PyQt5.QtWidgets.QLabel(""), container)
 
         self.formGroupFTP.setLayout(layout)
 
@@ -133,30 +131,31 @@ class SubwindowConnections(QWidget):
         """Test OBS websocket settings."""
         self.saveOBSdata()
         msg = scctool.tasks.obs.testConnection()
-        QMessageBox.warning(self, "OBS Websocket Connection Test", msg)
+        PyQt5.QtWidgets.QMessageBox.warning(
+            self, "OBS Websocket Connection Test", msg)
 
     def createFormGroupOBS(self):
         """Create forms for OBS websocket connection."""
-        self.formGroupOBS = QWidget()
-        layout = QFormLayout()
+        self.formGroupOBS = PyQt5.QtWidgets.QWidget()
+        layout = PyQt5.QtWidgets.QFormLayout()
 
         self.obsPort = MonitoredLineEdit()
         self.obsPort.textModified.connect(self.changed)
         self.obsPort.setText(scctool.settings.config.parser.get("OBS", "port"))
-        self.obsPort.setAlignment(Qt.AlignCenter)
+        self.obsPort.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
         self.obsPort.setPlaceholderText("Server Port (Default: 4444)")
         self.obsPort.setToolTip('')
-        layout.addRow(QLabel("Server Port:"), self.obsPort)
+        layout.addRow(PyQt5.QtWidgets.QLabel("Server Port:"), self.obsPort)
 
         self.obsPasswd = MonitoredLineEdit()
         self.obsPasswd.textModified.connect(self.changed)
         self.obsPasswd.setText(base64.b64decode(scctool.settings.config.parser.get(
             "OBS", "passwd").strip().encode()).decode("utf8"))
-        self.obsPasswd.setEchoMode(QLineEdit.Password)
-        self.obsPasswd.setAlignment(Qt.AlignCenter)
+        self.obsPasswd.setEchoMode(PyQt5.QtWidgets.QLineEdit.Password)
+        self.obsPasswd.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
         self.obsPasswd.setPlaceholderText("recommended")
         self.obsPasswd.setToolTip('')
-        label = QLabel("Password:")
+        label = PyQt5.QtWidgets.QLabel("Password:")
         # label.setFixedWidth(100)
         layout.addRow(label, self.obsPasswd)
 
@@ -164,68 +163,69 @@ class SubwindowConnections(QWidget):
         self.obsSources.textModified.connect(self.changed)
         self.obsSources.setText(
             scctool.settings.config.parser.get("OBS", "sources"))
-        self.obsSources.setAlignment(Qt.AlignCenter)
+        self.obsSources.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
         self.obsSources.setPlaceholderText("Intro1, Intro2")
         string = 'Name of the OBS-sources that should automatically' +\
                  ' be hidden 4.5 sec after they become visible.'
         self.obsSources.setToolTip(string)
-        layout.addRow(QLabel("Sources:"), self.obsSources)
+        layout.addRow(PyQt5.QtWidgets.QLabel("Sources:"), self.obsSources)
 
-        self.obsActive = QCheckBox(" Automatic hide sources")
+        self.obsActive = PyQt5.QtWidgets.QCheckBox(" Automatic hide sources")
         self.obsActive.setChecked(
             scctool.settings.config.parser.getboolean("OBS", "active"))
         self.obsActive.setToolTip('')
         self.obsActive.stateChanged.connect(self.changed)
-        layout.addRow(QLabel("Active:"), self.obsActive)
+        layout.addRow(PyQt5.QtWidgets.QLabel("Active:"), self.obsActive)
 
-        self.pb_testOBS = QPushButton('Test Connection to OBS')
+        self.pb_testOBS = PyQt5.QtWidgets.QPushButton('Test Connection to OBS')
         self.pb_testOBS.clicked.connect(self.testOBS)
-        layout.addRow(QLabel(), self.pb_testOBS)
+        layout.addRow(PyQt5.QtWidgets.QLabel(), self.pb_testOBS)
 
         self.formGroupOBS.setLayout(layout)
 
     def createFormGroupTwitch(self):
         """Create forms for twitch."""
-        self.formGroupTwitch = QWidget()
-        layout = QFormLayout()
+        self.formGroupTwitch = PyQt5.QtWidgets.QWidget()
+        layout = PyQt5.QtWidgets.QFormLayout()
 
         self.twitchChannel = MonitoredLineEdit()
         self.twitchChannel.textModified.connect(self.changed)
         self.twitchChannel.setText(
             scctool.settings.config.parser.get("Twitch", "channel"))
-        self.twitchChannel.setAlignment(Qt.AlignCenter)
+        self.twitchChannel.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
         self.twitchChannel.setPlaceholderText(
             "Name of the Twitch channel that should be updated")
         self.twitchChannel.setToolTip(
             'The connected twitch user needs to have editor rights for this channel.')
-        layout.addRow(QLabel("Twitch-Channel:"), self.twitchChannel)
+        layout.addRow(PyQt5.QtWidgets.QLabel(
+            "Twitch-Channel:"), self.twitchChannel)
 
-        container = QHBoxLayout()
+        container = PyQt5.QtWidgets.QHBoxLayout()
 
         self.twitchToken = MonitoredLineEdit()
         self.twitchToken.textModified.connect(self.changed)
         self.twitchToken.setText(
             scctool.settings.config.parser.get("Twitch", "oauth"))
-        self.twitchToken.setAlignment(Qt.AlignCenter)
+        self.twitchToken.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
         self.twitchToken.setPlaceholderText("Press 'Get' to generate a token")
-        self.twitchToken.setEchoMode(QLineEdit.Password)
+        self.twitchToken.setEchoMode(PyQt5.QtWidgets.QLineEdit.Password)
         self.twitchToken.setToolTip("Press 'Get' to generate a new token.")
         container.addWidget(self.twitchToken)
 
-        self.pb_getTwitch = QPushButton('Get')
+        self.pb_getTwitch = PyQt5.QtWidgets.QPushButton('Get')
         self.pb_getTwitch.setFixedWidth(100)
         self.pb_getTwitch.clicked.connect(self.controller.getTwitchToken)
         container.addWidget(self.pb_getTwitch)
 
-        layout.addRow(QLabel("Access-Token:"), container)
+        layout.addRow(PyQt5.QtWidgets.QLabel("Access-Token:"), container)
 
-        container = QHBoxLayout()
+        container = PyQt5.QtWidgets.QHBoxLayout()
 
         self.twitchTemplate = MonitoredLineEdit()
         self.twitchTemplate.textModified.connect(self.changed)
         self.twitchTemplate.setText(
             scctool.settings.config.parser.get("Twitch", "title_template"))
-        self.twitchTemplate.setAlignment(Qt.AlignCenter)
+        self.twitchTemplate.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
         self.twitchTemplate.setPlaceholderText("(League) – (Team1) vs (Team2)")
         self.twitchTemplate.setToolTip(
             'Avaiable placeholders: ' + ', '.join(self.controller.placeholders.available()))
@@ -237,13 +237,13 @@ class SubwindowConnections(QWidget):
 
         container.addWidget(self.twitchTemplate)
 
-        button = QPushButton('Test')
+        button = PyQt5.QtWidgets.QPushButton('Test')
         button.setFixedWidth(100)
         button.clicked.connect(
             lambda: self.testPlaceholder(self.twitchTemplate.text()))
         container.addWidget(button)
 
-        label = QLabel("Title Template:")
+        label = PyQt5.QtWidgets.QLabel("Title Template:")
         label.setFixedWidth(100)
         layout.addRow(label, container)
 
@@ -251,16 +251,16 @@ class SubwindowConnections(QWidget):
 
     def createFormGroupNightbot(self):
         """Create forms for nightbot."""
-        self.formGroupNightbot = QWidget()
-        layout = QFormLayout()
-        container = QHBoxLayout()
+        self.formGroupNightbot = PyQt5.QtWidgets.QWidget()
+        layout = PyQt5.QtWidgets.QFormLayout()
+        container = PyQt5.QtWidgets.QHBoxLayout()
 
         self.nightbotToken = MonitoredLineEdit()
         self.nightbotToken.textModified.connect(self.changed)
         self.nightbotToken.setText(
             scctool.settings.config.parser.get("Nightbot", "token"))
-        self.nightbotToken.setAlignment(Qt.AlignCenter)
-        self.nightbotToken.setEchoMode(QLineEdit.Password)
+        self.nightbotToken.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
+        self.nightbotToken.setEchoMode(PyQt5.QtWidgets.QLineEdit.Password)
         self.nightbotToken.setPlaceholderText(
             "Press 'Get' to generate a token")
         self.nightbotToken.setToolTip("Press 'Get' to generate a new token.")
@@ -270,27 +270,27 @@ class SubwindowConnections(QWidget):
         self.nightbotCommand.setText(
             scctool.settings.config.parser.get("Nightbot", "command"))
         self.nightbotCommand.setPlaceholderText("!matchlink")
-        self.nightbotCommand.setAlignment(Qt.AlignCenter)
+        self.nightbotCommand.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
 
         container.addWidget(self.nightbotToken)
-        self.pb_getNightbot = QPushButton('Get')
+        self.pb_getNightbot = PyQt5.QtWidgets.QPushButton('Get')
         self.pb_getNightbot.clicked.connect(self.controller.getNightbotToken)
         self.pb_getNightbot.setFixedWidth(100)
         # self.pb_getNightbot.setEnabled(False)
         container.addWidget(self.pb_getNightbot)
 
-        layout.addRow(QLabel("Access-Token:"), container)
-        label = QLabel("Command:")
+        layout.addRow(PyQt5.QtWidgets.QLabel("Access-Token:"), container)
+        label = PyQt5.QtWidgets.QLabel("Command:")
         label.setFixedWidth(100)
         layout.addRow(label, self.nightbotCommand)
 
-        container = QHBoxLayout()
+        container = PyQt5.QtWidgets.QHBoxLayout()
 
         self.nightbotMsg = MonitoredLineEdit()
         self.nightbotMsg.textModified.connect(self.changed)
         self.nightbotMsg.setText(
             scctool.settings.config.parser.get("Nightbot", "message"))
-        self.nightbotMsg.setAlignment(Qt.AlignCenter)
+        self.nightbotMsg.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
         self.nightbotMsg.setPlaceholderText("(URL)")
         self.nightbotMsg.setToolTip(
             'Avaiable placeholders: ' + ', '.join(self.controller.placeholders.available()))
@@ -301,28 +301,28 @@ class SubwindowConnections(QWidget):
         self.nightbotMsg.setCompleter(completer)
 
         container.addWidget(self.nightbotMsg)
-        button = QPushButton('Test')
+        button = PyQt5.QtWidgets.QPushButton('Test')
         button.setFixedWidth(100)
         button.clicked.connect(
             lambda: self.testPlaceholder(self.nightbotMsg.text()))
         container.addWidget(button)
 
-        layout.addRow(QLabel("Message:"), container)
+        layout.addRow(PyQt5.QtWidgets.QLabel("Message:"), container)
 
         self.formGroupNightbot.setLayout(layout)
 
     def createButtonGroup(self):
         """Create buttons."""
         try:
-            layout = QHBoxLayout()
+            layout = PyQt5.QtWidgets.QHBoxLayout()
 
-            layout.addWidget(QLabel(""))
+            layout.addWidget(PyQt5.QtWidgets.QLabel(""))
 
-            buttonCancel = QPushButton('Cancel')
+            buttonCancel = PyQt5.QtWidgets.QPushButton('Cancel')
             buttonCancel.clicked.connect(self.closeWindow)
             layout.addWidget(buttonCancel)
 
-            buttonSave = QPushButton('Save && Close')
+            buttonSave = PyQt5.QtWidgets.QPushButton('Save && Close')
             buttonSave.clicked.connect(self.saveCloseWindow)
             layout.addWidget(buttonSave)
 
@@ -333,7 +333,7 @@ class SubwindowConnections(QWidget):
     def testPlaceholder(self, string):
         """Test placeholders."""
         string = self.controller.placeholders.replace(string)
-        QMessageBox.information(self, "Output:", string)
+        PyQt5.QtWidgets.QMessageBox.information(self, "Output:", string)
 
     def changed(self):
         """Handle changed data."""
@@ -404,10 +404,11 @@ class SubwindowConnections(QWidget):
             if(not self.passEvent):
                 if(self.isMinimized()):
                     self.showNormal()
-                buttonReply = QMessageBox.question(
+                buttonReply = PyQt5.QtWidgets.QMessageBox.question(
                     self, 'Save data?', "Do you want to save the data?",
-                    QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
-                if buttonReply == QMessageBox.Yes:
+                    PyQt5.QtWidgets.QMessageBox.Yes | PyQt5.QtWidgets.QMessageBox.No,
+                    PyQt5.QtWidgets.QMessageBox.No)
+                if buttonReply == PyQt5.QtWidgets.QMessageBox.Yes:
                     self.saveData()
             event.accept()
         except Exception as e:

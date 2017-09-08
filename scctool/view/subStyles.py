@@ -1,10 +1,7 @@
 """Show styles settings sub window."""
 import logging
 
-from PyQt5.QtWidgets import QVBoxLayout, QWidget, QMessageBox, QSizePolicy,\
-    QPushButton, QHBoxLayout, QLabel, QGroupBox, QSpacerItem, QFormLayout
-from PyQt5.QtCore import Qt, QSize, QPoint
-from PyQt5.QtGui import QIcon
+import PyQt5
 
 from scctool.view.widgets import StyleComboBox, ColorLayout
 import scctool.settings
@@ -15,7 +12,7 @@ import os.path
 module_logger = logging.getLogger('scctool.view.subStyles')
 
 
-class SubwindowStyles(QWidget):
+class SubwindowStyles(PyQt5.QtWidgets.QWidget):
     """Show styles settings sub window."""
 
     def createWindow(self, mainWindow):
@@ -25,8 +22,8 @@ class SubwindowStyles(QWidget):
             super(SubwindowStyles, self).__init__(parent)
 
             self.setWindowIcon(
-                QIcon(scctool.settings.getAbsPath('src/pantone.png')))
-            self.setWindowModality(Qt.ApplicationModal)
+                PyQt5.QtGui.QIcon(scctool.settings.getAbsPath('src/pantone.png')))
+            self.setWindowModality(PyQt5.QtCore.Qt.ApplicationModal)
             self.mainWindow = mainWindow
             self.passEvent = False
             self.controller = mainWindow.controller
@@ -36,19 +33,21 @@ class SubwindowStyles(QWidget):
             self.createColorBox()
             self.createStyleBox()
 
-            mainLayout = QVBoxLayout()
+            mainLayout = PyQt5.QtWidgets.QVBoxLayout()
             mainLayout.addWidget(self.styleBox)
             mainLayout.addWidget(self.colorBox)
-            mainLayout.addItem(QSpacerItem(
-                0, 0, QSizePolicy.Minimum, QSizePolicy.Expanding))
+            mainLayout.addItem(PyQt5.QtWidgets.QSpacerItem(
+                0, 0, PyQt5.QtWidgets.QSizePolicy.Minimum,
+                PyQt5.QtWidgets.QSizePolicy.Expanding))
             mainLayout.addLayout(self.buttonGroup)
             self.setLayout(mainLayout)
 
-            self.resize(QSize(mainWindow.size().width()
-                              * .80, self.sizeHint().height()))
-            relativeChange = + QPoint(mainWindow.size().width() / 2,
-                                      mainWindow.size().height() / 3)\
-                - QPoint(self.size().width() / 2, self.size().height() / 3)
+            self.resize(PyQt5.QtCore.QSize(mainWindow.size().width()
+                                           * .80, self.sizeHint().height()))
+            relativeChange = + PyQt5.QtCore.QPoint(mainWindow.size().width() / 2,
+                                                   mainWindow.size().height() / 3)\
+                - PyQt5.QtCore.QPoint(self.size().width() / 2,
+                                      self.size().height() / 3)
             self.move(mainWindow.pos() + relativeChange)
 
             self.setWindowTitle("Style Settings")
@@ -63,15 +62,15 @@ class SubwindowStyles(QWidget):
     def createButtonGroup(self):
         """Create buttons."""
         try:
-            layout = QHBoxLayout()
+            layout = PyQt5.QtWidgets.QHBoxLayout()
 
-            layout.addWidget(QLabel(""))
+            layout.addWidget(PyQt5.QtWidgets.QLabel(""))
 
-            buttonCancel = QPushButton('Cancel')
+            buttonCancel = PyQt5.QtWidgets.QPushButton('Cancel')
             buttonCancel.clicked.connect(self.closeWindow)
             layout.addWidget(buttonCancel)
 
-            buttonSave = QPushButton('Save && Close')
+            buttonSave = PyQt5.QtWidgets.QPushButton('Save && Close')
             buttonSave.clicked.connect(self.saveCloseWindow)
             layout.addWidget(buttonSave)
 
@@ -81,62 +80,63 @@ class SubwindowStyles(QWidget):
 
     def createStyleBox(self):
         """Create style box."""
-        self.styleBox = QGroupBox("Styles")
-        layout = QFormLayout()
+        self.styleBox = PyQt5.QtWidgets.QGroupBox("Styles")
+        layout = PyQt5.QtWidgets.QFormLayout()
 
-        container = QHBoxLayout()
+        container = PyQt5.QtWidgets.QHBoxLayout()
         self.qb_boxStyle = StyleComboBox(
             scctool.settings.OBSmapDir + "/src/css/box_styles",
             scctool.settings.config.parser.get("Style", "mapicon_box"))
         self.qb_boxStyle.currentIndexChanged.connect(self.changed)
-        label = QLabel("Box Map Icons:")
+        label = PyQt5.QtWidgets.QLabel("Box Map Icons:")
         label.setMinimumWidth(110)
-        button = QPushButton("Show in Browser")
+        button = PyQt5.QtWidgets.QPushButton("Show in Browser")
         button.clicked.connect(lambda: self.openHTML(
             scctool.settings.OBSmapDir + "/icons_box/all_maps.html"))
         container.addWidget(self.qb_boxStyle)
         container.addWidget(button)
         layout.addRow(label, container)
 
-        container = QHBoxLayout()
+        container = PyQt5.QtWidgets.QHBoxLayout()
         self.qb_landscapeStyle = StyleComboBox(
             scctool.settings.OBSmapDir + "/src/css/landscape_styles",
             scctool.settings.config.parser.get("Style", "mapicon_landscape"))
         self.qb_landscapeStyle.currentIndexChanged.connect(self.changed)
-        button = QPushButton("Show in Browser")
+        button = PyQt5.QtWidgets.QPushButton("Show in Browser")
         button.clicked.connect(lambda: self.openHTML(
             scctool.settings.OBSmapDir + "/icons_landscape/all_maps.html"))
         container.addWidget(self.qb_landscapeStyle)
         container.addWidget(button)
-        layout.addRow(QLabel("Landscape Map Icons:"), container)
+        layout.addRow(PyQt5.QtWidgets.QLabel(
+            "Landscape Map Icons:"), container)
 
-        container = QHBoxLayout()
+        container = PyQt5.QtWidgets.QHBoxLayout()
         self.qb_scoreStyle = StyleComboBox(
             scctool.settings.OBShtmlDir + "/src/css/score_styles",
             scctool.settings.config.parser.get("Style", "score"))
         self.qb_scoreStyle.currentIndexChanged.connect(self.changed)
-        button = QPushButton("Show in Browser")
+        button = PyQt5.QtWidgets.QPushButton("Show in Browser")
         button.clicked.connect(lambda: self.openHTML(
             scctool.settings.OBShtmlDir + "/score.html"))
         container.addWidget(self.qb_scoreStyle)
         container.addWidget(button)
-        layout.addRow(QLabel("Score:"), container)
+        layout.addRow(PyQt5.QtWidgets.QLabel("Score:"), container)
 
-        container = QHBoxLayout()
+        container = PyQt5.QtWidgets.QHBoxLayout()
         self.qb_introStyle = StyleComboBox(
             scctool.settings.OBShtmlDir + "/src/css/intro_styles",
             scctool.settings.config.parser.get("Style", "intro"))
         self.qb_introStyle.currentIndexChanged.connect(self.changed)
-        button = QPushButton("Show in Browser")
+        button = PyQt5.QtWidgets.QPushButton("Show in Browser")
         button.clicked.connect(lambda: self.openHTML(
             scctool.settings.OBShtmlDir + "/intro1.html"))
         container.addWidget(self.qb_introStyle)
         container.addWidget(button)
-        layout.addRow(QLabel("Intros:"), container)
+        layout.addRow(PyQt5.QtWidgets.QLabel("Intros:"), container)
 
-        self.pb_applyStyles = QPushButton("Apply")
+        self.pb_applyStyles = PyQt5.QtWidgets.QPushButton("Apply")
         self.pb_applyStyles.clicked.connect(self.applyStyles)
-        layout.addRow(QLabel(), self.pb_applyStyles)
+        layout.addRow(PyQt5.QtWidgets.QLabel(), self.pb_applyStyles)
 
         self.styleBox.setLayout(layout)
 
@@ -157,8 +157,8 @@ class SubwindowStyles(QWidget):
 
     def createColorBox(self):
         """Create box for color selection."""
-        self.colorBox = QGroupBox("Colors")
-        layout = QVBoxLayout()
+        self.colorBox = PyQt5.QtWidgets.QGroupBox("Colors")
+        layout = PyQt5.QtWidgets.QVBoxLayout()
 
         self.default_color = ColorLayout(
             self, "Default Border:",
@@ -228,10 +228,11 @@ class SubwindowStyles(QWidget):
             if(not self.passEvent):
                 if(self.isMinimized()):
                     self.showNormal()
-                buttonReply = QMessageBox.question(
+                buttonReply = PyQt5.QtWidgets.QMessageBox.question(
                     self, 'Save data?', "Save data?",
-                    QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
-                if buttonReply == QMessageBox.Yes:
+                    PyQt5.QtWidgets.QMessageBox.Yes | PyQt5.QtWidgets.QMessageBox.No,
+                    PyQt5.QtWidgets.QMessageBox.No)
+                if buttonReply == PyQt5.QtWidgets.QMessageBox.Yes:
                     self.saveData()
             event.accept()
         except Exception as e:
