@@ -1,4 +1,4 @@
-"""Install Packages for Starcraft Casting Tool."""
+"""Install Packages for StarCraft Casting Tool."""
 import pip
 import platform
 import logging

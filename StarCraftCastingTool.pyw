@@ -1,4 +1,4 @@
-"""Starcraft Casting Tool."""
+"""StarCraft Casting Tool."""
 import scctool
 import logging
 # create logger with 'spam_application'

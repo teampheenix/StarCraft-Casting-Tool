@@ -71,7 +71,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
 
             self.processEvents()
             self.settings = PyQt5.QtCore.QSettings(
-                "team pheeniX", "Starcraft Casting Tool")
+                "team pheeniX", "StarCraft Casting Tool")
             self.restoreGeometry(self.settings.value(
                 "geometry", self.saveGeometry()))
             self.restoreState(self.settings.value(
@@ -95,7 +95,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
 
         html = html.replace("%VERSION%", version)
         if(not self.controller.versionControl.isNewAvaiable(False)):
-            new_version = "Starcraft Casting Tool is up to date."
+            new_version = "StarCraft Casting Tool is up to date."
         else:
             new_version = self.controller.versionControl.latest.replace(
                 "v", "")
@@ -105,7 +105,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
 
         # use self as parent here
         PyQt5.QtWidgets.QMessageBox.about(
-            self, "Starcraft Casting Tool - About", html)
+            self, "StarCraft Casting Tool - About", html)
 
     def closeEvent(self, event):
         """Close and clean up window."""
@@ -164,7 +164,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
 
             websiteAct = PyQt5.QtWidgets.QAction(
                 PyQt5.QtGui.QIcon(
-                    scctool.settings.getAbsPath('src/github.ico')),
+                    scctool.settings.getAbsPath('src/scct.ico')),
                 'StarCraft Casting Tool', self)
             websiteAct.triggered.connect(lambda: self.controller.openURL(
                 "https://teampheenix.github.io/StarCraft-Casting-Tool/"))

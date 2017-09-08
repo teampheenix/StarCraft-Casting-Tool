@@ -1,4 +1,4 @@
-"""Starcraft Casting Tool."""
+"""StarCraft Casting Tool."""
 
 import sys
 import logging
@@ -7,7 +7,7 @@ logger = logging.getLogger('scctool')
 
 
 def main():
-    """Run Starcraft Casting Tool."""
+    """Run StarCraft Casting Tool."""
     import PyQt5
     from scctool.view.main import MainWindow
     from scctool.controller import MainController

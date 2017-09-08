@@ -12,7 +12,7 @@ module_logger = logging.getLogger('scctool.matchgrabber.rstl')
 
 
 class MatchGrabber(MatchGrabberParent):
-    """Grabs match data from Russian Starcraft 2 Teamleague."""
+    """Grabs match data from Russian StarCraft 2 Teamleague."""
 
     def __init__(self, *args):
         """Init match grabber."""
