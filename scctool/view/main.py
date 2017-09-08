@@ -167,7 +167,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
                     scctool.settings.getAbsPath('src/github.ico')),
                 'StarCraft Casting Tool', self)
             websiteAct.triggered.connect(lambda: self.controller.openURL(
-                "https://github.com/teampheenix/StarCraft-Casting-Tool"))
+                "https://teampheenix.github.io/StarCraft-Casting-Tool/"))
             infoMenu.addAction(websiteAct)
 
             infoMenu.addSeparator()
