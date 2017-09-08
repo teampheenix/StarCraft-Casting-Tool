@@ -10,7 +10,7 @@ StarCraft Casting Tool (SCC Tool) is a Python 3.6 script that can grab all relev
 * **Scoreboard** including team icons in `OBS_html`
 * **Animated Player Intros** in `OBS_html` including playername & race via SC2-Client, team with logo via SCC Tool
 * **TXT-files** with match infos in `OBS_data`
-* **Twitch & Nightbot Integration**: Update your stream title or bot commands via a single click
+* **Twitch & Nightbot Integration**: Update your stream title or bot commands via a single click or automatically
 * **Automatic Score Detection** via SC2-Client
 * **Automatic FTP-Upload** of all resources to provide resources to a co-caster
 * **Interaction with SC2-Observer-UI**: Automatically toggle Production Tab and set Score at the start of a Map
