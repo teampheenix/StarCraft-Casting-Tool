@@ -18,7 +18,7 @@ StarCraft Casting Tool (SCC Tool) is a Python 3.6 script that can grab all relev
 * Nearly **unlimited Customization** via Skins and CSS
 
 ## General Information
-The tool generates various browser sources (and text-files): Amongst others, two complete sets of corresponding *map icons* (including map, players, races, and score), a score icon (including the score, team names, and logos) and GSL-like *intros* (including player, race and team). All of these files can be included via local files and optionally uploaded to a specified FTP server to provide these files via remotely to others, for example, to your co-caster.
+The tool generates various browser sources (and text-files): Amongst others, two complete sets of corresponding *map icons* (including map, players, races, and score), a score icon (including the score, team names, and logos) and GSL-like *intros* (including player, race and team). All of these files can be included via local files and optionally uploaded to a specified FTP server to provide these files remotely to others, for example, to your co-caster.
 
 StarCraft Casting Tool can monitor your SC2-Client to detect the score, update it automatically, and provide corresponding player intros. On Windows, the tool can additionally and automatically set and toggle the score in your SC2-Observer UI and toggle the production tab at the start of a game.
 
