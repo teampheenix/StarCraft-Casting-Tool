@@ -5,7 +5,7 @@ import logging
 
 logger = logging.getLogger('scctool')
 
-__version__ = "0.25.7"
+__version__ = "0.25.8"
 __latest_version__ = __version__
 __new_version__ = False
 

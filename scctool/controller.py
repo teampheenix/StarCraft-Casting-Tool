@@ -56,6 +56,15 @@ class MainController:
 
     def checkVersion(self, force=False):
         """Check for new version."""
+        try:
+            self.versionHandler.disconnect()
+        except:
+            pass
+        try:
+            self.noNewVersion.disconnect()
+        except:
+            pass  
+            
         self.versionHandler.newVersion.connect(
             lambda x: self.newVersion(x, force))
         if force:
@@ -689,9 +698,9 @@ class MainController:
 
     def newVersion(self, version, force=False):
         """Display dialog for new version."""
-        prompt = force or (not scctool.settings.config.parser.getboolean(
-            "SCT", "new_version_prompt"))
-        if hasattr(sys, "frozen") or prompt:
+        prompt = force or scctool.settings.config.parser.getboolean(
+            "SCT", "new_version_prompt")
+        if hasattr(sys, "frozen") and prompt:
             messagebox = PyQt5.QtWidgets.QMessageBox()
             text = "A new version {} is available."
             messagebox.setText(text.format(version))

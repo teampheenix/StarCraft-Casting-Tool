@@ -179,7 +179,7 @@ class ToolUpdater(PyQt5.QtWidgets.QProgressDialog):
         self.setWindowTitle("Updater")
         self.setLabelText(
             "Updating to a new version...")
-        self.canceled.connect(self.close)
+        self.setCancelButton(None)
         self.setRange(0, 1000)
         self.setValue(self.minimum())
 
