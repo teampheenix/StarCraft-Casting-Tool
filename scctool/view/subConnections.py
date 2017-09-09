@@ -125,7 +125,7 @@ class SubwindowConnections(PyQt5.QtWidgets.QWidget):
     def testFTP(self):
         """Test FTP settings."""
         self.saveFtpData()
-        FTPsetup(self.controller, self)
+        FTPsetup(self.controller, self.mainWindow)
 
     def testOBS(self):
         """Test OBS websocket settings."""

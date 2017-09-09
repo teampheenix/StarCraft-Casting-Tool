@@ -113,48 +113,52 @@ class FTPsetup(PyQt5.QtWidgets.QProgressDialog):
 
     def __init__(self, controller, mainWindow):
         """Init progress dialog."""
-        PyQt5.QtWidgets.QProgressDialog.__init__(self)
-        self.setWindowModality(PyQt5.QtCore.Qt.ApplicationModal)
-        self.progress = 0
-        self.setWindowTitle("FTP Server Setup")
-        self.setLabelText(
-            "Setting up the required file structure on the FTP server...")
-        self.canceled.connect(self.close)
-        self.setRange(0, 100)
-        self.setValue(self.minimum())
-
-        self.resize(PyQt5.QtCore.QSize(
-            self.sizeHint().width(), self.sizeHint().height()))
-        relativeChange = PyQt5.QtCore.QPoint(mainWindow.size().width() / 2,
-                                             mainWindow.size().height() / 3)\
-            - PyQt5.QtCore.QPoint(self.size().width() / 2,
-                                  self.size().height() / 3)
-        self.move(mainWindow.pos() + relativeChange)
-        self.show()
-
-        old_bool = mainWindow.mainWindow.cb_autoFTP.isChecked()
-        mainWindow.mainWindow.cb_autoFTP.setChecked(False)
-        controller.ftpUploader.empty_queque()
-        mainWindow.mainWindow.cb_autoFTP.setChecked(True)
-
-        signal, range = controller.ftpUploader.setup()
-        signal.connect(self.setProgress)
-        self.setRange(0, range)
-
-        while not self.wasCanceled():
-            PyQt5.QtWidgets.QApplication.processEvents()
-            time.sleep(0.05)
-
-        mainWindow.cb_autoFTP.setChecked(False)
-
-        if(self.progress != -2):
+        try:
+            PyQt5.QtWidgets.QProgressDialog.__init__(self)
+            self.setWindowModality(PyQt5.QtCore.Qt.ApplicationModal)
+            self.progress = 0
+            self.setWindowTitle("FTP Server Setup")
+            self.setLabelText(
+                "Setting up the required file structure on the FTP server...")
+            self.canceled.connect(self.close)
+            self.setRange(0, 100)
+            self.setValue(self.minimum())
+    
+            self.resize(PyQt5.QtCore.QSize(
+                self.sizeHint().width(), self.sizeHint().height()))
+            relativeChange = PyQt5.QtCore.QPoint(mainWindow.size().width() / 2,
+                                                mainWindow.size().height() / 3)\
+                - PyQt5.QtCore.QPoint(self.size().width() / 2,
+                                    self.size().height() / 3)
+            self.move(mainWindow.pos() + relativeChange)
+            self.show()
+    
+            old_bool = mainWindow.cb_autoFTP.isChecked()
+            mainWindow.cb_autoFTP.setChecked(False)
             controller.ftpUploader.empty_queque()
-            mainWindow.cb_autoFTP.setChecked(old_bool)
-        else:
-            PyQt5.QtWidgets.QMessageBox.warning(self, "Login error",
-                                                'FTP server login incorrect!')
-
-        print("Done...")
+            mainWindow.cb_autoFTP.setChecked(True)
+    
+            signal, range = controller.ftpUploader.setup()
+            signal.connect(self.setProgress)
+            self.setRange(0, range)
+    
+            while not self.wasCanceled():
+                PyQt5.QtWidgets.QApplication.processEvents()
+                time.sleep(0.05)
+    
+            mainWindow.cb_autoFTP.setChecked(False)
+    
+            if(self.progress != -2):
+                controller.ftpUploader.empty_queque()
+                mainWindow.cb_autoFTP.setChecked(old_bool)
+            else:
+                PyQt5.QtWidgets.QMessageBox.warning(self, "Login error",
+                                                    'FTP server login incorrect!')
+    
+            print("Done...")
+        except Exception as e:
+            module_logger.exception("message")
+            mainWindow.cb_autoFTP.setChecked(False)
 
     def setProgress(self, progress):
         """Set the progress of the bar."""
