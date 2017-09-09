@@ -109,62 +109,71 @@ class VersionHandler(TasksThread):
         self.progress.emit(data)
 
     def __version_check(self):
-        self.client.add_progress_hook(self.update_progress)
-        self.client.refresh()
-        self.getDataVersion()
-        self.app_update = self.client.update_check(self.APP_NAME,
-                                                   self.APP_VERSION,
-                                                   channel='stable')
-        self.asset_update = self.client.update_check(self.ASSET_NAME,
-                                                     self.ASSET_VERSION)
-        if self.asset_update is not None:
-            self.newData.emit(self.asset_update.latest)
-            print("Asset: " + self.asset_update.latest)
-            if self.forceDataUpdate():
-                self.activateTask("update_data")
-
-        if self.app_update is not None:
-            scctool.__latest_version__ = self.app_update.latest
-            scctool.__new_version__ = True
-            self.newVersion.emit(self.app_update.latest)
-            print("App: " + self.app_update.latest)
-        else:
-            self.noNewVersion.emit()
-
-        self.deactivateTask('version_check')
+        try:
+            self.client.add_progress_hook(self.update_progress)
+            self.client.refresh()
+            self.getDataVersion()
+            self.app_update = self.client.update_check(self.APP_NAME,
+                                                    self.APP_VERSION,
+                                                    channel='stable')
+            self.asset_update = self.client.update_check(self.ASSET_NAME,
+                                                        self.ASSET_VERSION)
+            if self.asset_update is not None:
+                self.newData.emit(self.asset_update.latest)
+                print("Asset: " + self.asset_update.latest)
+                if self.forceDataUpdate():
+                    self.activateTask("update_data")
+    
+            if self.app_update is not None:
+                scctool.__latest_version__ = self.app_update.latest
+                scctool.__new_version__ = True
+                self.newVersion.emit(self.app_update.latest)
+                print("App: " + self.app_update.latest)
+            else:
+                self.noNewVersion.emit()
+        except Exception as e:
+            module_logger.exception("message")
+        finally:
+            self.deactivateTask('version_check')
 
     def __update_data(self):
-        if self.asset_update is None:
+        try:
+            if self.asset_update is None:
+                self.deactivateTask('update_data')
+                return
+            self.asset_update.download()
+            if self.asset_update.is_downloaded():
+                file = os.path.join(self.asset_update.update_folder,
+                                    self.asset_update.filename)
+                targetdir = scctool.settings.basedir
+                with zipfile.ZipFile(file, "r") as zip:
+                    zip.extractall(targetdir)
+                file = os.path.join(targetdir,
+                                    'SCCT-data.tar')
+                with tarfile.open(file, "r") as tar:
+                    tar.extractall(targetdir)
+    
+                os.remove(file)
+                self.setDataVersion(self.asset_update.latest)
+                self.ASSET_VERSION = self.asset_update.latest
+                self.updated_data.emit("Updated data files!")
+        except Exception as e:
+            module_logger.exception("message")
+        finally:
             self.deactivateTask('update_data')
-            return
-        self.asset_update.download()
-        if self.asset_update.is_downloaded():
-            file = os.path.join(self.asset_update.update_folder,
-                                self.asset_update.filename)
-            targetdir = scctool.settings.basedir
-            with zipfile.ZipFile(file, "r") as zip:
-                zip.extractall(targetdir)
-            file = os.path.join(targetdir,
-                                'SCCT-data.tar')
-            with tarfile.open(file, "r") as tar:
-                tar.extractall(targetdir)
-
-            os.remove(file)
-            self.setDataVersion(self.asset_update.latest)
-            self.ASSET_VERSION = self.asset_update.latest
-            self.updated_data.emit("Updated data files!")
-
-        self.deactivateTask('update_data')
 
     def __update_app(self):
-        if self.app_update is None:
-            self.deactivateTask('update_app')
-            return
-        if hasattr(sys, "frozen"):
-            self.app_update.download(async=False)
-            if self.app_update.is_downloaded():
-                if hasattr(sys, "frozen"):
-                    self.__controller.cleanUp()
-                    self.app_update.extract_restart()
-
+        try:
+            if self.app_update is None:
+                self.deactivateTask('update_app')
+                return
+            if hasattr(sys, "frozen"):
+                self.app_update.download(async=False)
+                if self.app_update.is_downloaded():
+                    if hasattr(sys, "frozen"):
+                        self.__controller.cleanUp()
+                        self.app_update.extract_restart()
+        except Exception as e:
+            module_logger.exception("message")
+        finally:
             self.deactivateTask('update_app')
