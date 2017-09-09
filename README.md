@@ -1,4 +1,4 @@
-![streaming-tool](https://user-images.githubusercontent.com/26044736/29998600-a3053222-902f-11e7-99c5-5f3055f9225b.png)
+![streaming-tool](https://user-images.githubusercontent.com/26044736/30242151-7d5fb0a8-9591-11e7-803f-6cda9bec3fe3.png)
 
 # StarCraft Casting Tool
 StarCraft Casting Tool (SCC Tool) is a Python 3 script that can grab all relevant data of a Stracraft 2 Team League Match from either [Alpha SC2 Teamleague](http://alpha.tl/) (AlphaTL) or [Russian StarCraft Team League](http://hdgame.net/en/tournaments/list/tournament/rstl-12/) (RSTL) and process it such that the information can be readily included for streaming, e.g., in OBS-Studio, X-Split or any other similar streaming tool. Alternatively, the format of a *Custom Match* can be specified. The title of your Twitch stream and your Nightbot chat commands can be updated accordingly by a single click.
