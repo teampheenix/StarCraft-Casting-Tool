@@ -203,11 +203,13 @@ class MatchGrabber(MatchGrabberParent):
 
         for i in range(1, 3):
             try:
-                os.remove(dir + "/logo" + str(i) + ".png")
+                os.remove(scctool.settings.getAbsPath(
+                    dir + "/logo" + str(i) + ".png"))
             except:
                 pass
             try:
-                os.remove(dir + "/logo" + str(i) + ".jpg")
+                os.remove(scctool.settings.getAbsPath(
+                    dir + "/logo" + str(i) + ".jpg"))
             except:
                 pass
 

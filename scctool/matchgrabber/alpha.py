@@ -3,6 +3,7 @@
 import logging
 import scctool.settings
 
+import os
 from urllib.request import urlretrieve
 from scctool.matchgrabber.custom import MatchGrabber as MatchGrabberParent
 
@@ -67,14 +68,27 @@ class MatchGrabber(MatchGrabberParent):
                 "Error: No raw data.")
 
         for idx in range(2):
-            fname = dir + "/logo" + str(idx + 1) + ".png"
             try:
-                urlretrieve(
-                    self._rawData['team' + str(idx + 1)]['logo'], fname)
+                os.remove(scctool.settings.getAbsPath(
+                    dir + "/logo" + str(idx + 1) + ".png"))
+            except:
+                pass
+            try:
+                os.remove(scctool.settings.getAbsPath(
+                    dir + "/logo" + str(idx + 1) + ".jpg"))
+            except:
+                pass
+            try:
+                url = self._rawData['team' + str(idx + 1)]['logo']
+                base, ext = os.path.splitext(url)
+                ext = ext.split("?")[0]
+                fname = dir + "/logo" + str(idx + 1) + ext
+                urlretrieve(url, fname)
+
                 self._controller.ftpUploader.cwd(dir)
                 self._controller.ftpUploader.upload(
                     fname,
-                    "logo" + str(idx + 1) + ".png")
+                    "logo" + str(idx + 1) + ext)
                 self._controller.ftpUploader.cwd("..")
             except Exception as e:
                 module_logger.exception("message")
