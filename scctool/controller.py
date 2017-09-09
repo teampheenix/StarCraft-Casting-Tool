@@ -691,7 +691,7 @@ class MainController:
         """Display dialog for new version."""
         prompt = force or (not scctool.settings.config.parser.getboolean(
             "SCT", "new_version_prompt"))
-        if hasattr(sys, "frozen") and prompt:
+        if hasattr(sys, "frozen") or prompt:
             messagebox = PyQt5.QtWidgets.QMessageBox()
             text = "A new version {} is available."
             messagebox.setText(text.format(version))
