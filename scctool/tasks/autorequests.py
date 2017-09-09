@@ -40,7 +40,7 @@ class AutoRequestsThread(TasksThread):
             scctool.tasks.twitch.previousTitle = title
         elif(scctool.tasks.twitch.previousTitle != title):
             msg, success = scctool.tasks.twitch.updateTitle(title)
-            self.twitchSignal.emit('twitch', msg)
+            self.twitchSignal.emit(msg)
             if not success:
                 self.disableCB.emit('twitch')
                 self.deactivateTask('twitch')
@@ -52,7 +52,7 @@ class AutoRequestsThread(TasksThread):
             scctool.tasks.nightbot.previousMsg = message
         elif(scctool.tasks.nightbot.previousMsg != message):
             msg, success = scctool.tasks.nightbot.updateCommand(message)
-            self.nightbot.emit('nightbot', msg)
+            self.nightbotSignal.emit(msg)
             if not success:
                 self.disableCB.emit('nightbot')
                 self.deactivateTask('nightbot')
