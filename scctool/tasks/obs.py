@@ -11,9 +11,7 @@ try:
     import scctool.settings
     import PyQt5
 
-    from obswsrc import OBSWS  # pip install obs-ws-rc
-    from obswsrc.client import AuthError
-    import obswsrc.requests
+    import obswsrc # pip install obs-ws-rc
 
 except Exception as e:
 
@@ -29,7 +27,7 @@ def testConnection():
 
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(None)
-    obsws = OBSWS("localhost", port, passwd, loop=loop)
+    obsws = obswsrc.OBSWS("localhost", port, passwd, loop=loop)
 
     try:
         loop.run_until_complete(obsws.connect())
@@ -39,7 +37,7 @@ def testConnection():
         msg = "{host}:{port} is unreachable. Is OBS Studio with obs-websocket plugin launched?"
         msg = msg.format(host=obsws.host, port=obsws.port)
 
-    except AuthError:
+    except obswsrc.client.AuthError:
         msg = "Couldn't auth to obs-websocket. Correct password?"
 
     except Exception as e:
@@ -58,7 +56,7 @@ async def hideIntros(thread):
         "OBS", "passwd").strip().encode()).decode("utf8")
     port = scctool.settings.config.parser.getint("OBS", "port")
 
-    obsws = OBSWS("localhost", port, passwd)
+    obsws = obswsrc.OBSWS("localhost", port, passwd)
     try:
         await obsws.connect()
     except Exception as e:

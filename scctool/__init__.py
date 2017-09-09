@@ -5,7 +5,7 @@ import logging
 
 logger = logging.getLogger('scctool')
 
-__version__ = "0.26.3"
+__version__ = "0.26.4"
 __latest_version__ = __version__
 __new_version__ = False
 
@@ -34,3 +34,7 @@ def main():
     except Exception as e:
         logger.exception("message")
         raise
+
+
+def initial_download():
+    """Download the required data at an inital startup."""

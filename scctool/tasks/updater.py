@@ -114,16 +114,16 @@ class VersionHandler(TasksThread):
             self.client.refresh()
             self.getDataVersion()
             self.app_update = self.client.update_check(self.APP_NAME,
-                                                    self.APP_VERSION,
-                                                    channel='stable')
+                                                       self.APP_VERSION,
+                                                       channel='stable')
             self.asset_update = self.client.update_check(self.ASSET_NAME,
-                                                        self.ASSET_VERSION)
+                                                         self.ASSET_VERSION)
             if self.asset_update is not None:
                 self.newData.emit(self.asset_update.latest)
                 print("Asset: " + self.asset_update.latest)
                 if self.forceDataUpdate():
                     self.activateTask("update_data")
-    
+
             if self.app_update is not None:
                 scctool.__latest_version__ = self.app_update.latest
                 scctool.__new_version__ = True
@@ -152,7 +152,7 @@ class VersionHandler(TasksThread):
                                     'SCCT-data.tar')
                 with tarfile.open(file, "r") as tar:
                     tar.extractall(targetdir)
-    
+
                 os.remove(file)
                 self.setDataVersion(self.asset_update.latest)
                 self.ASSET_VERSION = self.asset_update.latest

@@ -180,7 +180,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             infoMenu.addAction(ixAct)
 
             alphaAct = PyQt5.QtWidgets.QAction(PyQt5.QtGui.QIcon(scctool.settings.getAbsPath(
-                'src/alphatl.ico')), 'AlphaTL', self)
+                'src/alpha.png')), 'AlphaTL', self)
             alphaAct.triggered.connect(
                 lambda: self.controller.openURL("http://alpha.tl"))
             infoMenu.addAction(alphaAct)
