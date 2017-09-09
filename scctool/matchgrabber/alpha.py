@@ -33,9 +33,15 @@ class MatchGrabber(MatchGrabberParent):
             self._matchData.setURL(self.getURL())
             self._matchData.setNoSets(5, resetPlayers=True)
             self._matchData.setMinSets(3)
-            self._matchData.setLeague(data['tournament'])
+            league = data['tournament']
+            if not isinstance(league, str):
+                league = "TBD"
+            print(str(league))
+            self._matchData.setLeague(league)
 
             for idx, map in enumerate(data['maps']):
+                if not isinstance(map, str):
+                    map = "TBD"
                 self._matchData.setMap(idx, map)
 
             self._matchData.setLabel(4, "Ace Map")
@@ -43,12 +49,22 @@ class MatchGrabber(MatchGrabberParent):
             for team_idx in range(2):
                 for set_idx, player in enumerate(data['lineup' +
                                                       str(team_idx + 1)]):
-                    self._matchData.setPlayer(
-                        team_idx, set_idx,
-                        player['nickname'], player['race'])
+                    try:
+                        playername = player['nickname']
+                        if not isinstance(playername, str):
+                            playername = "TBD"
+                        self._matchData.setPlayer(
+                            team_idx, set_idx, playername , str(player['race']))
+                    except:
+                        self._matchData.setPlayer(team_idx, set_idx, 'TBD', 'Random')
 
                 team = data['team' + str(team_idx + 1)]
-                self._matchData.setTeam(team_idx, team['name'], team['tag'])
+                name, tag = team['name'], team['tag']
+                if not isinstance(name, str):
+                    name = "TBD"
+                if not isinstance(tag, str):
+                    tag = ""
+                self._matchData.setTeam(team_idx, name, tag)
 
             for set_idx in range(5):
                 try:
