@@ -35,6 +35,53 @@ def compareVersions(v1, v2, maximum=5):
             return 1
     return 0
 
+def needInitialUpdate(version):
+    """Check if data update is needed."""
+    if version== '0.0.0':
+        return True
+    elif not os.path.exists(scctool.settings.getAbsPath("src")):
+        return True
+    elif not os.path.exists(scctool.settings.getAbsPath(scctool.settings.OBShtmlDir)):
+        return True
+    elif not os.path.exists(scctool.settings.getAbsPath(scctool.settings.OBSmapDir)):
+        return True
+    else:
+        return False
+        
+def getDataVersion():
+    """Read data version from json file."""
+    version = '0.0.0'
+    try:
+        with open(scctool.settings.versiondata_json_file, 'r') as f:
+            data = json.load(f)
+            version = data['data_version']
+    finally:
+        return version
+        
+def setDataVersion(version):
+    """Write data version to json file."""
+    data = {}
+    data['data_version'] = version
+    with open(scctool.settings.versiondata_json_file, 'w') as outfile:
+        json.dump(data, outfile)
+        
+def extractData(asset_update, handler):
+    handler(10)
+    if asset_update.is_downloaded():
+        file = os.path.join(asset_update.update_folder,
+                            asset_update.filename)
+        targetdir = scctool.settings.basedir
+        with zipfile.ZipFile(file, "r") as zip:
+            zip.extractall(targetdir)
+        handler(50)
+        file = os.path.join(targetdir,
+                            'SCCT-data.tar')
+        with tarfile.open(file, "r") as tar:
+            tar.extractall(targetdir)
+        handler(90)
+        os.remove(file)
+        handler(100)
+        setDataVersion(asset_update.latest)
 
 class VersionHandler(TasksThread):
     """Check for new version and update or notify."""
@@ -71,38 +118,9 @@ class VersionHandler(TasksThread):
         self.updated_data.connect(controller.displayWarning)
         # self.disableCB.connect(controller.uncheckCB)
 
-    def forceDataUpdate(self):
+    def isCompatible(self):
         """Check if data update is needed."""
-        if self.ASSET_VERSION == '0.0.0':
-            return True
-        elif compareVersions(self.asset_update.latest, self.APP_VERSION, 2) < 1:
-            return True
-        elif not os.path.exists(scctool.settings.getAbsPath("src")):
-            return True
-        elif not os.path.exists(scctool.settings.getAbsPath(scctool.settings.OBShtmlDir)):
-            return True
-        elif not os.path.exists(scctool.settings.getAbsPath(scctool.settings.OBSmapDir)):
-            return True
-        else:
-            return False
-
-    def getDataVersion(self):
-        """Read data version from json file."""
-        self.ASSET_VERSION = '0.0.0'
-        try:
-            with open(scctool.settings.versiondata_json_file, 'r') as f:
-                data = json.load(f)
-                self.ASSET_VERSION = data['data_version']
-        finally:
-            return self.ASSET_VERSION
-
-    def setDataVersion(self, version):
-        """Write data version to json file."""
-        data = {}
-        self.ASSET_VERSION = version
-        data['data_version'] = version
-        with open(scctool.settings.versiondata_json_file, 'w') as outfile:
-            json.dump(data, outfile)
+        return compareVersions(self.asset_update.latest, self.APP_VERSION, 2) < 1
 
     def update_progress(self, data):
         """Process progress updates."""
@@ -112,7 +130,7 @@ class VersionHandler(TasksThread):
         try:
             self.client.add_progress_hook(self.update_progress)
             self.client.refresh()
-            self.getDataVersion()
+            self.ASSET_VERSION = getDataVersion()
             self.app_update = self.client.update_check(self.APP_NAME,
                                                        self.APP_VERSION,
                                                        channel='stable')
@@ -121,7 +139,7 @@ class VersionHandler(TasksThread):
             if self.asset_update is not None:
                 self.newData.emit(self.asset_update.latest)
                 print("Asset: " + self.asset_update.latest)
-                if self.forceDataUpdate():
+                if self.isCompatible():
                     self.activateTask("update_data")
 
             if self.app_update is not None:
@@ -154,7 +172,7 @@ class VersionHandler(TasksThread):
                     tar.extractall(targetdir)
 
                 os.remove(file)
-                self.setDataVersion(self.asset_update.latest)
+                setDataVersion(self.asset_update.latest)
                 self.ASSET_VERSION = self.asset_update.latest
                 self.updated_data.emit("Updated data files!")
         except Exception as e:

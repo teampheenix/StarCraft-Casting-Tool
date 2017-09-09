@@ -82,6 +82,7 @@ def getTesserAct():
         return new
 
 
+
 def setDefaultConfigAll():
     """Define default values and set them."""
     setDefaultConfig("Twitch", "channel", "")

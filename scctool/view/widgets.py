@@ -437,22 +437,56 @@ class QHLine(PyQt5.QtWidgets.QFrame):
         super(QHLine, self).__init__()
         self.setFrameShape(PyQt5.QtWidgets.QFrame.HLine)
         self.setFrameShadow(PyQt5.QtWidgets.QFrame.Sunken)
+        
+        
+        
+class InitialUpdater(PyQt5.QtWidgets.QProgressDialog):
+    """Define FTP setup progress dialog."""
 
+    def __init__(self):
+        """Init progress dialog."""
+        PyQt5.QtWidgets.QProgressDialog.__init__(self)
+        self.setWindowModality(PyQt5.QtCore.Qt.ApplicationModal)
+        self.progress = 0
+        self.setWindowTitle("SCC-Tool")
+        self.setLabelText("Collecting data...")
+        self.setCancelButton(None)
+        self.setRange(0, 1000)
+        self.setValue(50)
+        
+        self.show()
+        for i in range(10):
+            PyQt5.QtWidgets.QApplication.processEvents()
+        self.run()
 
-class DialogWithCheckBox(PyQt5.QtWidgets.QMessageBox):
-    """Define a message box wit a dialog."""
+    def run(self):
 
-    def __init__(self, parent=None):
-        """Init dialog."""
-        super(DialogWithCheckBox, self).__init__()
+        from scctool.settings.client_config import ClientConfig
+        from scctool.tasks.updater import extractData
+        from pyupdater.client import Client
+        client = Client(ClientConfig())
+        client.refresh()
+        client.add_progress_hook(self.setProgress)
+    
+        lib_update = client.update_check(scctool.tasks.updater.VersionHandler.ASSET_NAME, "0.0.0")
+        if lib_update is not None:
+            lib_update.download(async=False)
+            self.setValue(500)
+            self.setLabelText("Extracting data...")
+            extractData(lib_update, self.setCopyProgress)
+            self.setLabelText("Done.")
+        
+    def setCopyProgress(self, int):
+         self.setValue(500+int*5)
 
-        self.checkbox = PyQt5.QtWidgets.QCheckBox()
-        # Access the Layout of the MessageBox to add the Checkbox
-        layout = PyQt5.QtWidgets.QHBoxLayout()
-        layout.addWidget(self.checkbox)
-        self.setLayout(layout)
-
-    def exec_(self, *args, **kwargs):
-        """Override the exec_ method so you can return the value of the checkbox."""
-        return PyQt5.QtWidgets.QMessageBox.exec_(self, *args, **kwargs),\
-            self.checkbox.isChecked()
+    def setProgress(self, data):
+        """Set the progress of the bar."""
+        #TODO: What is the data structure in case of a patch?
+        print("Progress {}".format(data))
+        try:
+            text = 'Downloading required files...: Total file size {}, Time remaining {}.'
+            text = text.format(humanize.naturalsize(data['total']), data['time'])
+            self.setLabelText(text)
+            self.setValue(int(float(data['percent_complete']) * 5))
+        except Exception as e:
+            module_logger.exception("message")

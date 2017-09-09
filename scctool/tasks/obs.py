@@ -11,7 +11,9 @@ try:
     import scctool.settings
     import PyQt5
 
-    import obswsrc # pip install obs-ws-rc
+    from obswsrc import OBSWS  # pip install obs-ws-rc
+    from obswsrc.client import AuthError
+    from obswsrc.requests import SetSourceRenderRequest, ResponseStatus
 
 except Exception as e:
 
@@ -27,7 +29,7 @@ def testConnection():
 
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(None)
-    obsws = obswsrc.OBSWS("localhost", port, passwd, loop=loop)
+    obsws = OBSWS("localhost", port, passwd, loop=loop)
 
     try:
         loop.run_until_complete(obsws.connect())
@@ -37,7 +39,7 @@ def testConnection():
         msg = "{host}:{port} is unreachable. Is OBS Studio with obs-websocket plugin launched?"
         msg = msg.format(host=obsws.host, port=obsws.port)
 
-    except obswsrc.client.AuthError:
+    except AuthError:
         msg = "Couldn't auth to obs-websocket. Correct password?"
 
     except Exception as e:
@@ -56,7 +58,7 @@ async def hideIntros(thread):
         "OBS", "passwd").strip().encode()).decode("utf8")
     port = scctool.settings.config.parser.getint("OBS", "port")
 
-    obsws = obswsrc.OBSWS("localhost", port, passwd)
+    obsws = OBSWS("localhost", port, passwd)
     try:
         await obsws.connect()
     except Exception as e:
@@ -74,24 +76,23 @@ async def hideIntros(thread):
                 continue
 
             if(event.type_name == 'SceneItemVisibilityChanged'):
-                values = list(event.values())
-                source_name = values[0]
-                visible = values[1]
+                source_name = event.get('item-name')
+                visible = event.get('item-visible')
                 sources = list(map(str.strip, str(
                     scctool.settings.config.parser.get("OBS", "sources")).split(',')))
                 if(visible and source_name in sources):
                     time.sleep(4.5)
-                    request = obswsrc.requests.SetSourceRenderRequest(
-                        source=source_name, render=False)
-                    response = await obsws.require(request)
-
+                    response = await obsws.require(SetSourceRenderRequest(
+                        source=source_name, render=False))
                     # Check if everything is OK
-                    if response.status == obswsrc.requests.ResponseStatus.OK:
+                    if response.status == ResponseStatus.OK:
                         print("Source " + source_name + " hidden!")
                     else:
                         print("Couldn't hide the source. Reason:", response.error)
 
         print("while done")
+    except Exception as e:
+        module_logger.exception("message")
     finally:
         await obsws.close()
 
