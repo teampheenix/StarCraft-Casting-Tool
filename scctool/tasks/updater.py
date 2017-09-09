@@ -35,9 +35,10 @@ def compareVersions(v1, v2, maximum=5):
             return 1
     return 0
 
+
 def needInitialUpdate(version):
     """Check if data update is needed."""
-    if version== '0.0.0':
+    if version == '0.0.0':
         return True
     elif not os.path.exists(scctool.settings.getAbsPath("src")):
         return True
@@ -47,7 +48,8 @@ def needInitialUpdate(version):
         return True
     else:
         return False
-        
+
+
 def getDataVersion():
     """Read data version from json file."""
     version = '0.0.0'
@@ -57,15 +59,18 @@ def getDataVersion():
             version = data['data_version']
     finally:
         return version
-        
+
+
 def setDataVersion(version):
     """Write data version to json file."""
     data = {}
     data['data_version'] = version
     with open(scctool.settings.versiondata_json_file, 'w') as outfile:
         json.dump(data, outfile)
-        
+
+
 def extractData(asset_update, handler):
+    """Extract data."""
     handler(10)
     if asset_update.is_downloaded():
         file = os.path.join(asset_update.update_folder,
@@ -82,6 +87,7 @@ def extractData(asset_update, handler):
         os.remove(file)
         handler(100)
         setDataVersion(asset_update.latest)
+
 
 class VersionHandler(TasksThread):
     """Check for new version and update or notify."""

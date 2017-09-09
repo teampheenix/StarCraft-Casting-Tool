@@ -2,6 +2,7 @@
 
 import sys
 import logging
+from PyQt5.QtWidgets import QApplication, QStyleFactory
 
 logger = logging.getLogger('scctool')
 
@@ -9,7 +10,6 @@ __version__ = "0.27.0"
 __latest_version__ = __version__
 __new_version__ = False
 
-from PyQt5.QtWidgets import QApplication, QStyleFactory
 
 def main():
     """Run StarCraft Casting Tool."""
@@ -18,6 +18,7 @@ def main():
     initial_download()
     main_window(app)
     sys.exit(app.exec_())
+
 
 def main_window(app):
     """Run the main exectuable."""
@@ -46,6 +47,6 @@ def initial_download():
     """Download the required data at an inital startup."""
     import scctool.tasks.updater
     from scctool.view.widgets import InitialUpdater
-    
+
     if scctool.tasks.updater.needInitialUpdate(scctool.tasks.updater.getDataVersion()):
         InitialUpdater()

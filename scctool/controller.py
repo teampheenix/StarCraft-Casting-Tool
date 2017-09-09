@@ -63,8 +63,8 @@ class MainController:
         try:
             self.noNewVersion.disconnect()
         except:
-            pass  
-            
+            pass
+
         self.versionHandler.newVersion.connect(
             lambda x: self.newVersion(x, force))
         if force:

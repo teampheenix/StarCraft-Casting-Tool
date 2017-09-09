@@ -123,38 +123,38 @@ class FTPsetup(PyQt5.QtWidgets.QProgressDialog):
             self.canceled.connect(self.close)
             self.setRange(0, 100)
             self.setValue(self.minimum())
-    
+
             self.resize(PyQt5.QtCore.QSize(
                 self.sizeHint().width(), self.sizeHint().height()))
             relativeChange = PyQt5.QtCore.QPoint(mainWindow.size().width() / 2,
-                                                mainWindow.size().height() / 3)\
+                                                 mainWindow.size().height() / 3)\
                 - PyQt5.QtCore.QPoint(self.size().width() / 2,
-                                    self.size().height() / 3)
+                                      self.size().height() / 3)
             self.move(mainWindow.pos() + relativeChange)
             self.show()
-    
+
             old_bool = mainWindow.cb_autoFTP.isChecked()
             mainWindow.cb_autoFTP.setChecked(False)
             controller.ftpUploader.empty_queque()
             mainWindow.cb_autoFTP.setChecked(True)
-    
+
             signal, range = controller.ftpUploader.setup()
             signal.connect(self.setProgress)
             self.setRange(0, range)
-    
+
             while not self.wasCanceled():
                 PyQt5.QtWidgets.QApplication.processEvents()
                 time.sleep(0.05)
-    
+
             mainWindow.cb_autoFTP.setChecked(False)
-    
+
             if(self.progress != -2):
                 controller.ftpUploader.empty_queque()
                 mainWindow.cb_autoFTP.setChecked(old_bool)
             else:
                 PyQt5.QtWidgets.QMessageBox.warning(self, "Login error",
                                                     'FTP server login incorrect!')
-    
+
             print("Done...")
         except Exception as e:
             module_logger.exception("message")
@@ -208,10 +208,11 @@ class ToolUpdater(PyQt5.QtWidgets.QProgressDialog):
 
     def setProgress(self, data):
         """Set the progress of the bar."""
-        #TODO: What is the data structure in case of a patch?
+        # TODO: What is the data structure in case of a patch?
         try:
             text = 'Downloading a new version: Total file size {}, Time remaining {}.'
-            text = text.format(humanize.naturalsize(data['total']), data['time'])
+            text = text.format(humanize.naturalsize(
+                data['total']), data['time'])
             self.setLabelText(text)
             self.setValue(int(float(data['percent_complete']) * 10))
         except Exception as e:
@@ -437,11 +438,10 @@ class QHLine(PyQt5.QtWidgets.QFrame):
         super(QHLine, self).__init__()
         self.setFrameShape(PyQt5.QtWidgets.QFrame.HLine)
         self.setFrameShadow(PyQt5.QtWidgets.QFrame.Sunken)
-        
-        
-        
+
+
 class InitialUpdater(PyQt5.QtWidgets.QProgressDialog):
-    """Define FTP setup progress dialog."""
+    """Define initial progress dialog to download data."""
 
     def __init__(self):
         """Init progress dialog."""
@@ -453,39 +453,42 @@ class InitialUpdater(PyQt5.QtWidgets.QProgressDialog):
         self.setCancelButton(None)
         self.setRange(0, 1000)
         self.setValue(50)
-        
+
         self.show()
         for i in range(10):
             PyQt5.QtWidgets.QApplication.processEvents()
         self.run()
 
     def run(self):
-
+        """Run the initial process."""
         from scctool.settings.client_config import ClientConfig
         from scctool.tasks.updater import extractData
         from pyupdater.client import Client
         client = Client(ClientConfig())
         client.refresh()
         client.add_progress_hook(self.setProgress)
-    
-        lib_update = client.update_check(scctool.tasks.updater.VersionHandler.ASSET_NAME, "0.0.0")
+
+        lib_update = client.update_check(
+            scctool.tasks.updater.VersionHandler.ASSET_NAME, "0.0.0")
         if lib_update is not None:
             lib_update.download(async=False)
             self.setValue(500)
             self.setLabelText("Extracting data...")
             extractData(lib_update, self.setCopyProgress)
             self.setLabelText("Done.")
-        
+
     def setCopyProgress(self, int):
-         self.setValue(500+int*5)
+        """Set progress."""
+        self.setValue(500 + int * 5)
 
     def setProgress(self, data):
         """Set the progress of the bar."""
-        #TODO: What is the data structure in case of a patch?
+        # TODO: What is the data structure in case of a patch?
         print("Progress {}".format(data))
         try:
             text = 'Downloading required files...: Total file size {}, Time remaining {}.'
-            text = text.format(humanize.naturalsize(data['total']), data['time'])
+            text = text.format(humanize.naturalsize(
+                data['total']), data['time'])
             self.setLabelText(text)
             self.setValue(int(float(data['percent_complete']) * 5))
         except Exception as e:
