@@ -199,25 +199,19 @@ class ToolUpdater(PyQt5.QtWidgets.QProgressDialog):
             PyQt5.QtWidgets.QApplication.processEvents()
             time.sleep(0.05)
 
-        # mainWindow.mainWindow.cb_autoFTP.setChecked(False)
-
-        # if(self.progress != -2):
-        #     pass
-        #     # controller.ftpUploader.empty_queque()
-        #     # mainWindow.mainWindow.cb_autoFTP.setChecked(old_bool)
-        # else:
-        #     PyQt5.QtWidgets.QMessageBox.warning(self, "Login error",
-        #                                         'FTP server login incorrect!')
-
         controller.versionHandler.progress.disconnect(self.setProgress)
         print("Done...")
 
     def setProgress(self, data):
         """Set the progress of the bar."""
-        text = 'Downloading a new version: Total file size {}, Time remaining {}.'
-        text = text.format(humanize.naturalsize(data['total']), data['time'])
-        self.setLabelText(text)
-        self.setValue(int(float(data['percent_complete']) * 10))
+        #TODO: What is the data structure in case of a patch?
+        try:
+            text = 'Downloading a new version: Total file size {}, Time remaining {}.'
+            text = text.format(humanize.naturalsize(data['total']), data['time'])
+            self.setLabelText(text)
+            self.setValue(int(float(data['percent_complete']) * 10))
+        except Exception as e:
+            module_logger.exception("message")
 
 
 class BusyProgressBar(PyQt5.QtWidgets.QProgressBar):
