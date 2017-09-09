@@ -125,7 +125,7 @@ class SubwindowMisc(PyQt5.QtWidgets.QWidget):
         self.tesseract.setText(
             scctool.settings.config.parser.get("SCT", "tesseract"))
         self.tesseract.textModified.connect(self.changed)
-        self.tesseract.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
+        # self.tesseract.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
         self.tesseract.setPlaceholderText(
             "C:\\Program Files (x86)\\Tesseract-OCR\\tesseract")
         self.tesseract.setReadOnly(True)
@@ -134,14 +134,15 @@ class SubwindowMisc(PyQt5.QtWidgets.QWidget):
         self.browse = PyQt5.QtWidgets.QPushButton("Browse...")
         self.browse.clicked.connect(self.selectTesseract)
 
-        text = """Sometimes the order of players given by the SC2-Client-API differs
- from the order in the Observer-UI resulting in a swaped match score. To correct this via
- Optical Character Recognition you have to download and install
- <a href='https://github.com/UB-Mannheim/tesseract/wiki#tesseract-at-ub-mannheim'>
-Tesseract-OCR</a> and select the exectuable (tesseract.exe) below,
- if it is not detected automatically."""
+        text = "Sometimes the order of players given by the SC2-Client-API differs" +\
+            " from the order in the Observer-UI resulting in a swaped match score." +\
+            " To correct this via Optical Character Recognition you have to download" +\
+            " {} and install and select the exectuable below, if it is not detected" +\
+            " automatically."""
+        url = 'https://github.com/UB-Mannheim/tesseract/wiki#tesseract-at-ub-mannheim'
+        url = "<a href='{}'>Tesseract-OCR</a>".format(url)
 
-        label = PyQt5.QtWidgets.QLabel(text)
+        label = PyQt5.QtWidgets.QLabel(text.format(url))
         label.setAlignment(PyQt5.QtCore.Qt.AlignJustify)
         label.setOpenExternalLinks(True)
         label.setWordWrap(True)

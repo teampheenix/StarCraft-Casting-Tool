@@ -1,9 +1,11 @@
 scctool/__pycache__/
 scctool/*/__pycache__/
+.pyupdater/
+pyu-data/
+create_data_assets.py
+pyupdater-usage.md
 OBS_data/
 data/*
-build/*
-dist/*
 config.ini
 OBS_mapicons/icons_box/data/*
 !OBS_mapicons/icons_box/data/template.html
@@ -14,3 +16,5 @@ client_config.py
 __pycache__/*
 StarCraftCastingTool.spec
 *.spec
+*.log
+StarCraftCastingTool.py

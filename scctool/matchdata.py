@@ -727,7 +727,7 @@ class matchData:
 
                 files2upload = files2upload + \
                     ["teams_vs_long.txt", "teams_vs_short.txt",
-                        "team1.txt", "team2.txt", "tournament.txt"]
+                        "team1.txt", "team2.txt", "league.txt"]
 
                 f = open(scctool.settings.OBSdataDir +
                          "/teams_vs_long.txt", mode='w')

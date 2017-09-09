@@ -8,17 +8,19 @@ try:
     from scctool.matchdata import matchData
     from scctool.tasks.apithread import SC2ApiThread, ToggleScore
     from scctool.tasks.webapp import FlaskThread
-    from scctool.settings.version import CheckVersionThread
     from scctool.settings.placeholders import PlaceholderList
     from scctool.tasks.ftpuploader import FTPUploader
     from scctool.tasks.obs import WebsocketThread
     from scctool.tasks.autorequests import AutoRequestsThread
+    from scctool.tasks.updater import VersionHandler
+    from scctool.view.widgets import ToolUpdater
     import scctool.settings
     import scctool.tasks.twitch
     import scctool.tasks.nightbot
     import scctool.tasks.obs
     import webbrowser
     import os
+    import sys
     import shutil
 
     import PyQt5
@@ -37,8 +39,7 @@ class MainController:
         try:
             self.matchData = matchData(self)
             self.SC2ApiThread = SC2ApiThread(self)
-            self.versionControl = scctool.settings.version.VersionControl()
-            self.checkVersionThread = CheckVersionThread(self.versionControl)
+            self.versionHandler = VersionHandler(self)
             self.webApp = FlaskThread()
             self.webApp.signal_twitch.connect(self.webAppDone_twitch)
             self.webApp.signal_nightbot.connect(self.webAppDone_nightbot)
@@ -47,10 +48,21 @@ class MainController:
             self.autoRequestsThread = AutoRequestsThread(self)
             self.placeholderSetup()
             self._warning = False
+            self.checkVersion()
 
         except Exception as e:
             module_logger.exception("message")
             raise
+
+    def checkVersion(self, force=False):
+        """Check for new version."""
+        self.versionHandler.newVersion.connect(
+            lambda x: self.newVersion(x, force))
+        if force:
+            self.versionHandler.noNewVersion.connect(
+                lambda: self.displayWarning("This version is up to date."))
+
+        self.versionHandler.activateTask('version_check')
 
     def placeholderSetup(self):
         """Define and connect placeholders."""
@@ -548,7 +560,7 @@ class MainController:
     def updateLogosHTML(self):
         """Update html files with team logos."""
         for idx in range(2):
-            filename = scctool.settings.OBShtmlDir + \
+            filename = scctool.settings.OBShtmlDir +\
                 "/data/logo" + str(idx + 1) + "-data.html"
             filename = scctool.settings.getAbsPath(filename)
             template = scctool.settings.getAbsPath(
@@ -600,7 +612,7 @@ class MainController:
             if logo == "":
                 logo = scctool.settings.OBShtmlDir + "/src/SC2.png"
 
-            filename = scctool.settings.OBShtmlDir + \
+            filename = scctool.settings.OBShtmlDir +\
                 "/intro" + str(player_idx + 1) + ".html"
             filename = scctool.settings.getAbsPath(filename)
             template = scctool.settings.getAbsPath(scctool.settings.OBShtmlDir
@@ -675,14 +687,32 @@ class MainController:
         self._warning = False
         return warning
 
-    def testVersion(self):
-        """Run version check."""
-        self.checkVersionThread.newVersion.connect(self.newVersionTrigger)
-        self.checkVersionThread.start()
-
-    def newVersionTrigger(self, version):
-        """Call back to display new version in status bar."""
-        version = version.replace("v", "")
-        self.view.statusBar().showMessage(
-            "At https://github.com/pheenix/StarCraft-Casting-Tool the new version " +
-            version + " is available!")
+    def newVersion(self, version, force=False):
+        """Display dialog for new version."""
+        prompt = force or (not scctool.settings.config.parser.getboolean(
+            "SCT", "new_version_prompt"))
+        if hasattr(sys, "frozen") and prompt:
+            messagebox = PyQt5.QtWidgets.QMessageBox()
+            text = "A new version {} is available."
+            messagebox.setText(text.format(version))
+            messagebox.setInformativeText("Update to new version?")
+            messagebox.setWindowTitle("New SCC-Tool Version")
+            messagebox.setStandardButtons(
+                PyQt5.QtWidgets.QMessageBox.Yes | PyQt5.QtWidgets.QMessageBox.No)
+            messagebox.setDefaultButton(PyQt5.QtWidgets.QMessageBox.Yes)
+            messagebox.setIcon(PyQt5.QtWidgets.QMessageBox.Information)
+            messagebox.setWindowModality(PyQt5.QtCore.Qt.ApplicationModal)
+            cb = PyQt5.QtWidgets.QCheckBox()
+            cb.setChecked(not scctool.settings.config.parser.getboolean(
+                "SCT", "new_version_prompt"))
+            cb.setText("Don't show on startup.")
+            messagebox.setCheckBox(cb)
+            if messagebox.exec_() == PyQt5.QtWidgets.QMessageBox.Yes:
+                ToolUpdater(self, self.view)
+            scctool.settings.config.parser.set("SCT",
+                                               "new_version_prompt",
+                                               str(not cb.isChecked()))
+        else:
+            self.view.statusBar().showMessage(
+                "A new version " +
+                version + " is available on GitHub!")

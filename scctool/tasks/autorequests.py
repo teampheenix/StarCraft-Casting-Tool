@@ -14,6 +14,8 @@ module_logger = logging.getLogger('scctool.tasks.autorequests')
 class AutoRequestsThread(TasksThread):
     """Sent request to Nightbot and Twitch if needed."""
 
+    twitchSignal = PyQt5.QtCore.pyqtSignal(str)
+    nightbotSignal = PyQt5.QtCore.pyqtSignal(str)
     disableCB = PyQt5.QtCore.pyqtSignal(str)
 
     def __init__(self, controller):
@@ -26,8 +28,8 @@ class AutoRequestsThread(TasksThread):
         self.addTask('twitch', self.__twitchTask)
         self.addTask('nightbot', self.__nightbotTask)
 
-        self.connectSignal('twitch', controller.displayWarning)
-        self.connectSignal('nightbot', controller.displayWarning)
+        self.twitchSignal.connect(controller.displayWarning)
+        self.nightbotSignal.connect(controller.displayWarning)
         self.disableCB.connect(controller.uncheckCB)
 
     def __twitchTask(self):
@@ -38,7 +40,7 @@ class AutoRequestsThread(TasksThread):
             scctool.tasks.twitch.previousTitle = title
         elif(scctool.tasks.twitch.previousTitle != title):
             msg, success = scctool.tasks.twitch.updateTitle(title)
-            self.emit('twitch', msg)
+            self.twitchSignal.emit('twitch', msg)
             if not success:
                 self.disableCB.emit('twitch')
                 self.deactivateTask('twitch')
@@ -50,7 +52,7 @@ class AutoRequestsThread(TasksThread):
             scctool.tasks.nightbot.previousMsg = message
         elif(scctool.tasks.nightbot.previousMsg != message):
             msg, success = scctool.tasks.nightbot.updateCommand(message)
-            self.emit('nightbot', msg)
+            self.nightbot.emit('nightbot', msg)
             if not success:
                 self.disableCB.emit('nightbot')
                 self.deactivateTask('nightbot')

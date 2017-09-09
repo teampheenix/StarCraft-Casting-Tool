@@ -11,13 +11,6 @@ module_logger = logging.getLogger('scctool.tasks.tasksthread')
 class TasksThread(PyQt5.QtCore.QThread):
     """Define generic thread for various tasks."""
 
-    signal0 = PyQt5.QtCore.pyqtSignal(str)
-    signal1 = PyQt5.QtCore.pyqtSignal(str)
-    signal2 = PyQt5.QtCore.pyqtSignal(str)
-    signal3 = PyQt5.QtCore.pyqtSignal(str)
-    signal4 = PyQt5.QtCore.pyqtSignal(str)
-    signal5 = PyQt5.QtCore.pyqtSignal(str)
-
     def __init__(self):
         """Init thread."""
         PyQt5.QtCore.QThread.__init__(self)
@@ -39,24 +32,6 @@ class TasksThread(PyQt5.QtCore.QThread):
             raise UserWarning("Only {} tasks allowed per thread.".format(6))
         self.__tasks[task] = False
         self.__methods[task] = method
-        idx = list(self.__tasks.keys()).index(task)
-        self.signals[task] = getattr(self, 'signal' + str(idx))
-        try:
-            self.signals[task].disconnect()
-        except:
-            pass
-
-    def connectSignal(self, task, connection):
-        """Connect a signal of a task."""
-        if not (task in self.__tasks):
-            raise UserWarning("Task {} is not valid.".format(task))
-        self.signals[task].connect(connection)
-
-    def disconnectSignal(self, task):
-        """Disconnect a signal of a task."""
-        if not (task in self.__tasks):
-            raise UserWarning("Task {} is not valid.".format(task))
-        self.signals[task].disconnect()
 
     def hasActiveTask(self):
         """Check if any task is active."""
@@ -96,9 +71,16 @@ class TasksThread(PyQt5.QtCore.QThread):
 
     def execActiveTasks(self):
         """Exectute all active tasks."""
-        for task, active in self.__tasks.items():
-            if active:
-                self.execTask(task)
+        executedTasks = []
+        continue_loop = True
+
+        while continue_loop and self.hasActiveTask():
+            continue_loop = False
+            for task, active in self.__tasks.items():
+                if active and task not in executedTasks:
+                    self.execTask(task)
+                    executedTasks.append(executedTasks)
+                    continue_loop = True
 
     def __wait(self):
         if(not self.hasActiveTask()):

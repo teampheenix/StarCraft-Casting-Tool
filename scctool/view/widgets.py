@@ -6,6 +6,8 @@ import re
 import shutil
 import time
 import scctool.matchdata
+import scctool.tasks.updater
+import humanize
 
 # create logger
 module_logger = logging.getLogger('scctool.view.widgets')
@@ -143,11 +145,11 @@ class FTPsetup(PyQt5.QtWidgets.QProgressDialog):
             PyQt5.QtWidgets.QApplication.processEvents()
             time.sleep(0.05)
 
-        mainWindow.mainWindow.cb_autoFTP.setChecked(False)
+        mainWindow.cb_autoFTP.setChecked(False)
 
         if(self.progress != -2):
             controller.ftpUploader.empty_queque()
-            mainWindow.mainWindow.cb_autoFTP.setChecked(old_bool)
+            mainWindow.cb_autoFTP.setChecked(old_bool)
         else:
             PyQt5.QtWidgets.QMessageBox.warning(self, "Login error",
                                                 'FTP server login incorrect!')
@@ -164,6 +166,58 @@ class FTPsetup(PyQt5.QtWidgets.QProgressDialog):
             self.cancel()
         else:
             self.setValue(progress)
+
+
+class ToolUpdater(PyQt5.QtWidgets.QProgressDialog):
+    """Define FTP setup progress dialog."""
+
+    def __init__(self, controller, mainWindow):
+        """Init progress dialog."""
+        PyQt5.QtWidgets.QProgressDialog.__init__(self)
+        self.setWindowModality(PyQt5.QtCore.Qt.ApplicationModal)
+        self.progress = 0
+        self.setWindowTitle("Updater")
+        self.setLabelText(
+            "Updating to a new version...")
+        self.canceled.connect(self.close)
+        self.setRange(0, 1000)
+        self.setValue(self.minimum())
+
+        self.resize(PyQt5.QtCore.QSize(
+            mainWindow.size().width() * 0.8, self.sizeHint().height()))
+        relativeChange = PyQt5.QtCore.QPoint(mainWindow.size().width() / 2,
+                                             mainWindow.size().height() / 3)\
+            - PyQt5.QtCore.QPoint(self.size().width() / 2,
+                                  self.size().height() / 3)
+        self.move(mainWindow.pos() + relativeChange)
+        self.show()
+
+        controller.versionHandler.progress.connect(self.setProgress)
+        controller.versionHandler.activateTask('update_app')
+
+        while not self.wasCanceled():
+            PyQt5.QtWidgets.QApplication.processEvents()
+            time.sleep(0.05)
+
+        # mainWindow.mainWindow.cb_autoFTP.setChecked(False)
+
+        # if(self.progress != -2):
+        #     pass
+        #     # controller.ftpUploader.empty_queque()
+        #     # mainWindow.mainWindow.cb_autoFTP.setChecked(old_bool)
+        # else:
+        #     PyQt5.QtWidgets.QMessageBox.warning(self, "Login error",
+        #                                         'FTP server login incorrect!')
+
+        controller.versionHandler.progress.disconnect(self.setProgress)
+        print("Done...")
+
+    def setProgress(self, data):
+        """Set the progress of the bar."""
+        text = 'Downloading a new version: Total file size {}, Time remaining {}.'
+        text = text.format(humanize.naturalsize(data['total']), data['time'])
+        self.setLabelText(text)
+        self.setValue(int(float(data['percent_complete']) * 10))
 
 
 class BusyProgressBar(PyQt5.QtWidgets.QProgressBar):
@@ -385,3 +439,22 @@ class QHLine(PyQt5.QtWidgets.QFrame):
         super(QHLine, self).__init__()
         self.setFrameShape(PyQt5.QtWidgets.QFrame.HLine)
         self.setFrameShadow(PyQt5.QtWidgets.QFrame.Sunken)
+
+
+class DialogWithCheckBox(PyQt5.QtWidgets.QMessageBox):
+    """Define a message box wit a dialog."""
+
+    def __init__(self, parent=None):
+        """Init dialog."""
+        super(DialogWithCheckBox, self).__init__()
+
+        self.checkbox = PyQt5.QtWidgets.QCheckBox()
+        # Access the Layout of the MessageBox to add the Checkbox
+        layout = PyQt5.QtWidgets.QHBoxLayout()
+        layout.addWidget(self.checkbox)
+        self.setLayout(layout)
+
+    def exec_(self, *args, **kwargs):
+        """Override the exec_ method so you can return the value of the checkbox."""
+        return PyQt5.QtWidgets.QMessageBox.exec_(self, *args, **kwargs),\
+            self.checkbox.isChecked()

@@ -10,7 +10,7 @@ system = platform.system()
 logger = logging.getLogger('installpackages')
 logger.setLevel(logging.DEBUG)
 # create file handler which logs even debug messages
-fh = logging.FileHandler('data/installpackages.log', 'w')
+fh = logging.FileHandler('installpackages.log', 'w')
 # create console handler with a higher log level
 ch = logging.StreamHandler()
 # create formatter and add it to the handlers

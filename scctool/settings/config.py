@@ -107,7 +107,7 @@ def setDefaultConfigAll():
                      "CptWobbles, dreign, Sly, Sonarwolf, Unknown, Xoneon")
 
     setDefaultConfig("SCT", "fuzzymatch", "True")
-
+    setDefaultConfig("SCT", "new_version_prompt", "True")
     setDefaultConfig("SCT", "use_ocr", "False")
 
     tesseract = "C:\\Program Files (x86)\\Tesseract-OCR\\tesseract.exe"

@@ -47,7 +47,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             mainLayout.addWidget(self.horizontalGroupBox, 0)
 
             self.setWindowTitle("StarCraft Casting Tool " +
-                                controller.versionControl.current)
+                                scctool.__version__)
 
             self.window = PyQt5.QtWidgets.QWidget()
             self.window.setLayout(mainLayout)
@@ -61,7 +61,6 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             # self.progressBar.setMaximumHeight(20)
             self.progressBar.setMaximumWidth(160)
             self.progressBar.setMinimumWidth(160)
-            self.progressBar.setText("FTP Transfer in progress...")
             self.progressBar.setVisible(False)
             self.statusBar().addPermanentWidget(self.progressBar)
 
@@ -83,7 +82,6 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             self.mysubwindow4 = None
 
             self.show()
-            self.controller.testVersion()
         except Exception as e:
             module_logger.exception("message")
 
@@ -91,16 +89,13 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
         """Show subwindow with about info."""
         html = markdown2.markdown_path(
             scctool.settings.getAbsPath("src/about.md"))
-        version = self.controller.versionControl.current
 
-        html = html.replace("%VERSION%", version)
-        if(not self.controller.versionControl.isNewAvaiable(False)):
+        html = html.replace("%VERSION%", scctool.__version__)
+        if(not scctool.__new_version__):
             new_version = "StarCraft Casting Tool is up to date."
         else:
-            new_version = self.controller.versionControl.latest.replace(
-                "v", "")
             new_version = "The new version {} is available!".format(
-                new_version)
+                scctool.__latest_version__)
         html = html.replace('%NEW_VERSION%', new_version)
 
         # use self as parent here
@@ -160,6 +155,11 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             myAct = PyQt5.QtWidgets.QAction(PyQt5.QtGui.QIcon(scctool.settings.getAbsPath(
                 'src/readme.ico')), 'Readme', self)
             myAct.triggered.connect(self.openReadme)
+            infoMenu.addAction(myAct)
+
+            myAct = PyQt5.QtWidgets.QAction(PyQt5.QtGui.QIcon(scctool.settings.getAbsPath(
+                'src/update.png')), 'Check for new version', self)
+            myAct.triggered.connect(lambda: self.controller.checkVersion(True))
             infoMenu.addAction(myAct)
 
             websiteAct = PyQt5.QtWidgets.QAction(

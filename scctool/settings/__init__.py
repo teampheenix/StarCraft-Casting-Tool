@@ -22,7 +22,7 @@ OBSmapDir = "OBS_mapicons"
 
 dataDir = "data"
 matchdata_json_file = getAbsPath(dataDir + "/matchdata.json")
-nightbot_json_file = getAbsPath(dataDir + "/nightbot.json")
+versiondata_json_file = getAbsPath(dataDir + "/versiondata.json")
 
 windows = (platform.system().lower() == "windows")
 
