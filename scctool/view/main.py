@@ -62,6 +62,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             self.progressBar.setMaximumWidth(160)
             self.progressBar.setMinimumWidth(160)
             self.progressBar.setVisible(False)
+            self.progressBar.setText("FTP Transfer in progress...")
             self.statusBar().addPermanentWidget(self.progressBar)
 
             self.app = app
