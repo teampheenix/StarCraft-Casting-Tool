@@ -5,7 +5,8 @@ StarCraft Casting Tool (SCC Tool) is a Python 3 script that can grab all relevan
 
 ## Download
 
-**[Latest executable](https://github.com/teampheenix/StarCraft-Casting-Tool/releases/latest)** for Windows.
+* **[Latest executable](https://github.com/teampheenix/StarCraft-Casting-Tool/releases/latest)** for Windows
+* **[Source Code](https://github.com/teampheenix/StarCraft-Casting-Tool/archive/master.zip)**
 
 ## Feature List
 
