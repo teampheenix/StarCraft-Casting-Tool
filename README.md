@@ -10,7 +10,7 @@ StarCraft Casting Tool (SCC Tool) is a small program written in Python 3 that ca
 
 ## Feature List
 
-* **Match Grabber** for [RSTL](http://alpha.tl/) and [AlphaTL](http://hdgame.net/en/tournaments/list/tournament/rstl-12/)
+* **Match Grabber** for [AlphaTL](http://alpha.tl/) and [RSTL](http://hdgame.net/en/tournaments/list/tournament/rstl-12/)
 * **Custom Match Format**: Bo1-Bo9, allkill format
 * Two sets of **Map Icons**: Box and Landscape in `OBS_mapicons/icons_box` and `OBS_mapicons/icons_landscape`
 * **Scoreboard** including team icons in `OBS_html`
