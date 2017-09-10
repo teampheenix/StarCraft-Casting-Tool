@@ -22,6 +22,10 @@ StarCraft Casting Tool (SCC Tool) is a small programm written in Python 3 that c
 * **Interaction with SC2-Observer-UI**: Automatically toggle Production Tab and set Score at the start of a Map
 * Nearly **unlimited Customization** via Skins and CSS
 
+## Icon Preview
+
+**[https://teampheenix.github.io/SCCT-archive/](https://teampheenix.github.io/SCCT-archive/)**
+
 ## General Information
 The tool generates various browser sources (and text-files): Amongst others, two complete sets of corresponding *Map Ions* (including map, players, races, and score), a Score Icon (including the score, team names, and logos) and GSL-like *Intros* (including player, race and team). All of these files can be included via local files and optionally uploaded to a specified FTP server to provide these files remotely to others, for example, to your co-caster.
 
