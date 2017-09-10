@@ -155,7 +155,6 @@ class FTPsetup(PyQt5.QtWidgets.QProgressDialog):
                 PyQt5.QtWidgets.QMessageBox.warning(self, "Login error",
                                                     'FTP server login incorrect!')
 
-            print("Done...")
         except Exception as e:
             module_logger.exception("message")
             mainWindow.cb_autoFTP.setChecked(False)
@@ -166,7 +165,7 @@ class FTPsetup(PyQt5.QtWidgets.QProgressDialog):
         if(progress == -1):
             self.cancel()
         elif(progress == -2):
-            print("Wrong login data")
+            module_logger.info("Wrong login data for FTP")
             self.cancel()
         else:
             self.setValue(progress)
@@ -204,7 +203,6 @@ class ToolUpdater(PyQt5.QtWidgets.QProgressDialog):
             time.sleep(0.05)
 
         controller.versionHandler.progress.disconnect(self.setProgress)
-        print("Done...")
 
     def setProgress(self, data):
         """Set the progress of the bar."""
@@ -487,7 +485,7 @@ class InitialUpdater(PyQt5.QtWidgets.QProgressDialog):
     def setProgress(self, data):
         """Set the progress of the bar."""
         # TODO: What is the data structure in case of a patch?
-        print("Progress {}".format(data))
+        module_logger.info("Progress {}".format(data))
         try:
             text = 'Downloading required files...: Total file size {}, Time remaining {}.'
             text = text.format(humanize.naturalsize(

@@ -422,7 +422,6 @@ class matchData:
                 if(overwrite or self.__data['sets'][set_idx]['score'] == 0):
                     if(self.__data['sets'][set_idx]['score'] != score):
                         if(self.isDecided()):
-                            print("Metachange")
                             self.__metaChanged = True
                         self.__data['sets'][set_idx]['score'] = score
                         self.__setsChanged[set_idx] = True

@@ -86,11 +86,12 @@ async def hideIntros(thread):
                         source=source_name, render=False))
                     # Check if everything is OK
                     if response.status == ResponseStatus.OK:
-                        print("Source " + source_name + " hidden!")
+                        module_logger.info(
+                            "Source " + source_name + " hidden!")
                     else:
-                        print("Couldn't hide the source. Reason:", response.error)
+                        module_logger.info(
+                            "Couldn't hide the source. Reason:", response.error)
 
-        print("while done")
     except Exception as e:
         module_logger.exception("message")
     finally:
@@ -117,7 +118,7 @@ class WebsocketThread(PyQt5.QtCore.QThread):
                 loop.close()
             time.sleep(5)
 
-        print("WebSocketThread finished!")
+        module_logger.info("WebSocketThread finished!")
 
     def getKillStatus(self):
         """Get kill status."""

@@ -469,8 +469,6 @@ class MainController:
     def requestScoreUpdate(self, newSC2MatchData):
         """Update score based on result of SC2-Client-API."""
         try:
-            print("Trying to update the score")
-
             self.updateData()
             newscore = 0
             for i in range(self.matchData.getNoSets()):

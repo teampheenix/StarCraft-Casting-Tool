@@ -36,7 +36,6 @@ class MatchGrabber(MatchGrabberParent):
             league = data['tournament']
             if not isinstance(league, str):
                 league = "TBD"
-            print(str(league))
             self._matchData.setLeague(league)
 
             for idx, map in enumerate(data['maps']):
@@ -54,9 +53,10 @@ class MatchGrabber(MatchGrabberParent):
                         if not isinstance(playername, str):
                             playername = "TBD"
                         self._matchData.setPlayer(
-                            team_idx, set_idx, playername , str(player['race']))
+                            team_idx, set_idx, playername, str(player['race']))
                     except:
-                        self._matchData.setPlayer(team_idx, set_idx, 'TBD', 'Random')
+                        self._matchData.setPlayer(
+                            team_idx, set_idx, 'TBD', 'Random')
 
                 team = data['team' + str(team_idx + 1)]
                 name, tag = team['name'], team['tag']

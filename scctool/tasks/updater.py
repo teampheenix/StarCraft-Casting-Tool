@@ -144,7 +144,7 @@ class VersionHandler(TasksThread):
                                                          self.ASSET_VERSION)
             if self.asset_update is not None:
                 self.newData.emit(self.asset_update.latest)
-                print("Asset: " + self.asset_update.latest)
+                module_logger.info("Asset: " + self.asset_update.latest)
                 if self.isCompatible():
                     self.activateTask("update_data")
 
@@ -152,7 +152,7 @@ class VersionHandler(TasksThread):
                 scctool.__latest_version__ = self.app_update.latest
                 scctool.__new_version__ = True
                 self.newVersion.emit(self.app_update.latest)
-                print("App: " + self.app_update.latest)
+                module_logger.info("App: " + self.app_update.latest)
             else:
                 self.noNewVersion.emit()
         except Exception as e:

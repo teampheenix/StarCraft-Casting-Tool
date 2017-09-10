@@ -46,8 +46,8 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             mainLayout.addWidget(self.backgroundTasksBox, 0)
             mainLayout.addWidget(self.horizontalGroupBox, 0)
 
-            self.setWindowTitle("StarCraft Casting Tool " +
-                                scctool.__version__)
+            self.setWindowTitle(
+                "StarCraft Casting Tool v{}".format(scctool.__version__))
 
             self.window = PyQt5.QtWidgets.QWidget()
             self.window.setLayout(mainLayout)

@@ -104,12 +104,10 @@ class TasksThread(PyQt5.QtCore.QThread):
 
     def run(self):
         """Run the thread."""
-        print("Starting")
         module_logger.info("A TasksThread is starting.")
 
         while self.hasActiveTask():
             self.execActiveTasks()
             self.__wait()
 
-        print("Done")
         module_logger.info("A TasksThread is done.")

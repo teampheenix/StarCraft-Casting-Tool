@@ -166,7 +166,8 @@ class UploaderThread(PyQt5.QtCore.QThread):
                     self.__current_cmd = 0
                     self.progress.emit(0)
                 elif(cmd == "progress_end"):
-                    print("Progress done! " + str(self.__current_cmd))
+                    module_logger.info("Progress done! " +
+                                       str(self.__current_cmd))
                     self.progress.emit(-1)
                     self.__progress = False
                 elif(self.__upload and cmd == "connect"):
@@ -175,19 +176,15 @@ class UploaderThread(PyQt5.QtCore.QThread):
                     module_logger.info(self.__ftp.quit())
                 elif(self.__upload and cmd == "upload"):
                     localFile, remoteFile, *_ = args
-                    print("Upload request for " + remoteFile)
                     f = open(localFile, "rb")
                     module_logger.info(self.__ftp.storbinary(
                         "STOR " + remoteFile.strip(), f))
                     f.close()
                 elif(self.__upload and cmd == "delete"):
-                    print("delete " + args[0])
                     module_logger.info(self.__ftp.delete(args[0]))
                 elif(self.__upload and cmd == "cwd"):
-                    print("cwd " + args[0])
                     module_logger.info(self.__ftp.cwd(args[0]))
                 elif(self.__upload and cmd == "mkd"):
-                    print("mkd " + args[0])
                     if(not self.directory_exists(args[0])):
                         module_logger.info(self.__ftp.mkd(args[0]))
                 elif(cmd == "kill"):
@@ -217,7 +214,7 @@ class UploaderThread(PyQt5.QtCore.QThread):
             except Exception as e:
                 module_logger.exception("message")
 
-        print("FTP Thread finished.")
+        module_logger.info("FTP Thread finished.")
 
     def __connect(self):
         self.__server = scctool.settings.config.parser.get(

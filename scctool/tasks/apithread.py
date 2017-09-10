@@ -162,7 +162,6 @@ def ToggleScore(score1_in, score2_in, bestof=5):
     time.sleep(lag)
 
     if(not skipBestof):
-        print("Best of")
         PressKey(CONTROL)
         PressKey(SHIFT)
         PressKey(bestof)
@@ -187,8 +186,6 @@ def ToggleScore(score1_in, score2_in, bestof=5):
         ReleaseKey(score1)
         ReleaseKey(SHIFT)
         time.sleep(lag)
-
-    print("Toggled Score")
 
 
 def ToggleProduction():
@@ -279,12 +276,12 @@ class SC2ApiThread(PyQt5.QtCore.QThread):
                     print("StarCraft 2 not running!")
                     time.sleep(10)
                 except ValueError:
-                    print("StarCraft 2 starting.")
+                    # print("StarCraft 2 starting.")
                     time.sleep(10)
 
                 time.sleep(2)
 
-            print('terminated')
+            # print('terminated')
         except Exception as e:
             module_logger.exception("message")
 
@@ -354,7 +351,7 @@ class SC2ApiThread(PyQt5.QtCore.QThread):
                     if(ratio >= max(threshold, ratios[player_idx])):
                         positions[player_idx] = item_idx
                         ratios[player_idx] = ratio
-                        print("Player {} at postion {}".format(
+                        module_logger.info("Player {} at postion {}".format(
                             player_idx, item_idx))
 
             if None in positions:
