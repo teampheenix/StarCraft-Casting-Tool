@@ -1,4 +1,4 @@
-@import url(http://fonts.googleapis.com/css?family=Orbitron);
+@import url('https://fonts.googleapis.com/css?family=Orbitron:350,400');
 :root {
   --width: 800px;
   --height: 120px;
