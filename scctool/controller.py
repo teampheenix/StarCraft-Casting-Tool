@@ -666,7 +666,8 @@ class MainController:
         map = mapname.strip().replace(" ", "_") + ext
         newfile = os.path.normpath(os.path.join(mapdir, "src/maps", map))
         shutil.copy(file, newfile)
-        scctool.settings.maps.append(mapname)
+        if mapname not in scctool.settings.maps:
+            scctool.settings.maps.append(mapname)
 
         self.ftpUploader.cwd(scctool.settings.OBSmapDir + "/src/maps")
         self.ftpUploader.upload(newfile, self.getMapImg(mapname))
