@@ -461,21 +461,24 @@ class InitialUpdater(PyQt5.QtWidgets.QProgressDialog):
 
     def run(self):
         """Run the initial process."""
-        from scctool.settings.client_config import ClientConfig
-        from scctool.tasks.updater import extractData
-        from pyupdater.client import Client
-        client = Client(ClientConfig())
-        client.refresh()
-        client.add_progress_hook(self.setProgress)
+        try:
+            from scctool.settings.client_config import ClientConfig
+            from scctool.tasks.updater import extractData
+            from pyupdater.client import Client
+            client = Client(ClientConfig())
+            client.refresh()
+            client.add_progress_hook(self.setProgress)
 
-        lib_update = client.update_check(
-            scctool.tasks.updater.VersionHandler.ASSET_NAME, "0.0.0")
-        if lib_update is not None:
-            lib_update.download(async=False)
-            self.setValue(500)
-            self.setLabelText("Extracting data...")
-            extractData(lib_update, self.setCopyProgress)
-            self.setLabelText("Done.")
+            lib_update = client.update_check(
+                scctool.tasks.updater.VersionHandler.ASSET_NAME, "0.0.0")
+            if lib_update is not None:
+                lib_update.download(async=False)
+                self.setValue(500)
+                self.setLabelText("Extracting data...")
+                extractData(lib_update, self.setCopyProgress)
+                self.setLabelText("Done.")
+        except Exception as e:
+            module_logger.exception("message")
 
     def setCopyProgress(self, int):
         """Set progress."""
