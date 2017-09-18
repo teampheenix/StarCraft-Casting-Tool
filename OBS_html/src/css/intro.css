@@ -45,7 +45,7 @@ div.box {
   height: var(--height);
   position: absolute;
   text-align: center;
-  left: 1100%;
+  left: 110%;
   top: calc((100% - var(--height)) / 2);
   border: var(--border-size) solid var(--border-color);
   border-radius: 0px var(--border-radius) 0px var(--border-radius);
@@ -58,9 +58,9 @@ div.box {
 
 #race {
   position: absolute;
-  left: -100px;
-  top: -70px;
-  height: 250px;
+  left: -110px;
+  top: -90px;
+  height: 280px;
   -webkit-filter: drop-shadow(0px 0px 5px #6BC2F9);
   filter: drop-shadow(0px 0px 5px #6BC2F9);
 }
@@ -68,6 +68,8 @@ div.box {
 div.logo {
   position: absolute;
   background-color: white;
+  background-size: contain;
+  background-position: center center;
   right: calc(0px - var(--border-size));
   top: calc(0px - var(--border-size));
   height: 120px;
@@ -75,14 +77,6 @@ div.logo {
   overflow: hidden;
   border: var(--border-size) solid var(--border-color);
   border-radius: 0px var(--border-radius) 0px var(--border-radius);
-}
-
-#logo {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  max-width: 100%;
-  max-height: 100%;
 }
 
 div.label {
