@@ -16,10 +16,10 @@ def init():
     global parser, scoreUpdate, toggleScore, toggleProd, playerIntros, fuzzymatch
     # Reading the configuration from file
     parser = configparser.ConfigParser()
-    try:
-        parser.read(configFile)
-    except:
-        parser.defaults()
+    #try:
+    parser.read(configFile, encoding='utf-8-sig')
+    #except:
+    #    parser.defaults()
 
     setDefaultConfigAll()
 
@@ -101,11 +101,11 @@ def setDefaultConfigAll():
     setDefaultConfig("FTP", "dir", "")
 
     setDefaultConfig("SCT", "myteams", "MiXed Minds, team pheeniX")
-    setDefaultConfig("SCT", "commonplayers", "Shakyor, pressure, MarineKing, Moash," +
-                     "Ostseedude, spaz, DERASTAT, FanTasY," +
-                     "chrismaverik, holden, Desolation, RiseOfDeath," +
-                     "TuneTrigger, MoFuJones, Fenix, Hyvaa, snoozle," +
-                     "CptWobbles, dreign, Sly, Sonarwolf, Unknown, Xoneon")
+    setDefaultConfig("SCT", "commonplayers", "Shakyor, pressure, MarineKing, Moash, " +
+                     "Ostseedude, spaz, DERASTAT, FanTasY, " +
+                     "chrismaverik, holden, Desolation, RiseOfDeath, " +
+                     "TuneTrigger, MoFuJones, Fenix, Hyvaa, snoozle, " +
+                     "CptWobbles, dreign, Sly, Sonarwolf, Unknown, Xoneon ")
 
     setDefaultConfig("SCT", "fuzzymatch", "True")
     setDefaultConfig("SCT", "new_version_prompt", "True")

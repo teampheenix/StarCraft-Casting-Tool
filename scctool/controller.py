@@ -461,7 +461,7 @@ class MainController:
                 "FTP", "upload", str(self.view.cb_autoFTP.isChecked()))
 
             configFile = open(scctool.settings.configFile,
-                              'w', encoding='utf-8')
+                              'w', encoding='utf-8-sig')
             scctool.settings.config.parser.write(configFile)
             configFile.close()
         except Exception as e:
@@ -573,12 +573,12 @@ class MainController:
             filename = scctool.settings.getAbsPath(filename)
             template = scctool.settings.getAbsPath(
                 scctool.settings.OBShtmlDir + "/data/logo-template.html")
-            with open(template, "rt", encoding='utf-8') as fin:
+            with open(template, "rt", encoding='utf-8-sig') as fin:
                 logo = self.linkFile(
                     scctool.settings.OBSdataDir + "/" + "logo" + str(idx + 1))
                 if logo == "":
                     logo = scctool.settings.OBShtmlDir + "/src/SC2.png"
-                with open(filename, "wt", encoding='utf-8') as fout:
+                with open(filename, "wt", encoding='utf-8-sig') as fout:
                     for line in fin:
                         line = line.replace('%LOGO%', logo)
                         fout.write(line)
@@ -625,8 +625,8 @@ class MainController:
             filename = scctool.settings.getAbsPath(filename)
             template = scctool.settings.getAbsPath(scctool.settings.OBShtmlDir
                                                    + "/data/intro-template.html")
-            with open(template, "rt", encoding='utf-8') as fin:
-                with open(filename, "wt", encoding='utf-8') as fout:
+            with open(template, "rt", encoding='utf-8-sig') as fin:
+                with open(filename, "wt", encoding='utf-8-sig') as fout:
                     for line in fin:
                         line = line.replace(
                             '%NAME%', newData.getPlayer(player_idx))
