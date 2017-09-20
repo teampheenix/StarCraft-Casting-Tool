@@ -204,6 +204,10 @@ class UploaderThread(PyQt5.QtCore.QThread):
             except ftplib.error_temp:
                 self.__connect()
                 retry = True
+            except ConnectionAbortedError:
+                self.__ftp.quit()
+                self.__connect()
+                retry = True
             except ftplib.error_perm:
                 module_logger.exception("message")
                 self.progress.emit(-2)
