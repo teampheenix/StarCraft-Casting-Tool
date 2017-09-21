@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QApplication, QStyleFactory
 
 logger = logging.getLogger('scctool')
 
-__version__ = "1.0.8"
+__version__ = "1.0.9"
 __latest_version__ = __version__
 __new_version__ = False
 

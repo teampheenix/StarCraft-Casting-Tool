@@ -11,10 +11,13 @@ try:
     import scctool.settings
     import PyQt5
 
+    import obswsrc
+    obswsrc.struct.SKIP_OPTIONAL_CHECK = True
+    
     from obswsrc import OBSWS  # pip install obs-ws-rc
     from obswsrc.client import AuthError
     from obswsrc.requests import SetSourceRenderRequest, ResponseStatus
-
+    
 except Exception as e:
 
     module_logger.exception("message")

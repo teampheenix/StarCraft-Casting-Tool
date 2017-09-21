@@ -18,7 +18,6 @@ class TasksThread(PyQt5.QtCore.QThread):
         self.__tasks = {}
         self.__run = {}
         self.__methods = {}
-        self.signals = {}
         self.__timeout = 1
         self.__idx = 0
 
@@ -95,12 +94,6 @@ class TasksThread(PyQt5.QtCore.QThread):
             if(not self.hasActiveTask()):
                 return
         time.sleep(rest)
-
-    def emit(self, task, msg):
-        """Emit signal."""
-        if not (task in self.__tasks):
-            raise UserWarning("Task {} is not valid.".format(task))
-        self.signals[task].emit(str(msg))
 
     def run(self):
         """Run the thread."""
