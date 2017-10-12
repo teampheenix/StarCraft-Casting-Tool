@@ -12,7 +12,6 @@ OBS_mapicons/icons_box/data/*
 OBS_mapicons/icons_landscape/data/*
 !OBS_mapicons/icons_landscape/data/template.html
 OBS_html/data/*-data.html
-client_config.py
 __pycache__/*
 StarCraftCastingTool.spec
 *.spec

@@ -56,7 +56,7 @@ class VersionControl(object):
             module_logger.exception("message")
             return 'v0.0.0', 0, 0, 0
 
-    def isNewAvaiable(self, check=True):
+    def isNewAvailable(self, check=True):
         """Check if a newer version is available."""
         if(check):
             self.latest, self.lmajor, self.lminor, self.lpatch = self.__latest()
@@ -80,5 +80,5 @@ class CheckVersionThread(PyQt5.QtCore.QThread):
 
     def run(self):
         """Run thread."""
-        if(self.versionc.isNewAvaiable()):
+        if(self.versionc.isNewAvailable()):
             self.newVersion.emit(self.versionc.latest)

@@ -50,7 +50,7 @@ class SubwindowStyles(PyQt5.QtWidgets.QWidget):
                                       self.size().height() / 3)
             self.move(mainWindow.pos() + relativeChange)
 
-            self.setWindowTitle("Style Settings")
+            self.setWindowTitle(_("Style Settings"))
 
         except Exception as e:
             module_logger.exception("message")
@@ -66,11 +66,11 @@ class SubwindowStyles(PyQt5.QtWidgets.QWidget):
 
             layout.addWidget(PyQt5.QtWidgets.QLabel(""))
 
-            buttonCancel = PyQt5.QtWidgets.QPushButton('Cancel')
+            buttonCancel = PyQt5.QtWidgets.QPushButton(_('Cancel'))
             buttonCancel.clicked.connect(self.closeWindow)
             layout.addWidget(buttonCancel)
 
-            buttonSave = PyQt5.QtWidgets.QPushButton('Save && Close')
+            buttonSave = PyQt5.QtWidgets.QPushButton(_('Save && Close'))
             buttonSave.clicked.connect(self.saveCloseWindow)
             layout.addWidget(buttonSave)
 
@@ -80,7 +80,7 @@ class SubwindowStyles(PyQt5.QtWidgets.QWidget):
 
     def createStyleBox(self):
         """Create style box."""
-        self.styleBox = PyQt5.QtWidgets.QGroupBox("Styles")
+        self.styleBox = PyQt5.QtWidgets.QGroupBox(_("Styles"))
         layout = PyQt5.QtWidgets.QFormLayout()
 
         container = PyQt5.QtWidgets.QHBoxLayout()
@@ -88,9 +88,9 @@ class SubwindowStyles(PyQt5.QtWidgets.QWidget):
             scctool.settings.OBSmapDir + "/src/css/box_styles",
             scctool.settings.config.parser.get("Style", "mapicon_box"))
         self.qb_boxStyle.currentIndexChanged.connect(self.changed)
-        label = PyQt5.QtWidgets.QLabel("Box Map Icons:")
+        label = PyQt5.QtWidgets.QLabel(_("Box Map Icons:"))
         label.setMinimumWidth(110)
-        button = PyQt5.QtWidgets.QPushButton("Show in Browser")
+        button = PyQt5.QtWidgets.QPushButton(_("Show in Browser"))
         button.clicked.connect(lambda: self.openHTML(
             scctool.settings.OBSmapDir + "/icons_box/all_maps.html"))
         container.addWidget(self.qb_boxStyle)
@@ -102,42 +102,48 @@ class SubwindowStyles(PyQt5.QtWidgets.QWidget):
             scctool.settings.OBSmapDir + "/src/css/landscape_styles",
             scctool.settings.config.parser.get("Style", "mapicon_landscape"))
         self.qb_landscapeStyle.currentIndexChanged.connect(self.changed)
-        button = PyQt5.QtWidgets.QPushButton("Show in Browser")
+        button = PyQt5.QtWidgets.QPushButton(_("Show in Browser"))
         button.clicked.connect(lambda: self.openHTML(
             scctool.settings.OBSmapDir + "/icons_landscape/all_maps.html"))
         container.addWidget(self.qb_landscapeStyle)
         container.addWidget(button)
         layout.addRow(PyQt5.QtWidgets.QLabel(
-            "Landscape Map Icons:"), container)
+            _("Landscape Map Icons:")), container)
 
         container = PyQt5.QtWidgets.QHBoxLayout()
         self.qb_scoreStyle = StyleComboBox(
             scctool.settings.OBShtmlDir + "/src/css/score_styles",
             scctool.settings.config.parser.get("Style", "score"))
         self.qb_scoreStyle.currentIndexChanged.connect(self.changed)
-        button = PyQt5.QtWidgets.QPushButton("Show in Browser")
+        button = PyQt5.QtWidgets.QPushButton(_("Show in Browser"))
         button.clicked.connect(lambda: self.openHTML(
             scctool.settings.OBShtmlDir + "/score.html"))
         container.addWidget(self.qb_scoreStyle)
         container.addWidget(button)
-        layout.addRow(PyQt5.QtWidgets.QLabel("Score:"), container)
+        layout.addRow(PyQt5.QtWidgets.QLabel(_("Score:")), container)
 
         container = PyQt5.QtWidgets.QHBoxLayout()
         self.qb_introStyle = StyleComboBox(
             scctool.settings.OBShtmlDir + "/src/css/intro_styles",
             scctool.settings.config.parser.get("Style", "intro"))
         self.qb_introStyle.currentIndexChanged.connect(self.changed)
-        button = PyQt5.QtWidgets.QPushButton("Show in Browser")
+        button = PyQt5.QtWidgets.QPushButton(_("Show in Browser"))
         button.clicked.connect(lambda: self.openHTML(
             scctool.settings.OBShtmlDir + "/intro1.html"))
         container.addWidget(self.qb_introStyle)
         container.addWidget(button)
-        layout.addRow(PyQt5.QtWidgets.QLabel("Intros:"), container)
+        layout.addRow(PyQt5.QtWidgets.QLabel(_("Intros:")), container)
 
-        self.pb_applyStyles = PyQt5.QtWidgets.QPushButton("Apply")
+        self.pb_applyStyles = PyQt5.QtWidgets.QPushButton(_("Apply"))
         self.pb_applyStyles.clicked.connect(self.applyStyles)
         layout.addRow(PyQt5.QtWidgets.QLabel(), self.pb_applyStyles)
-
+        
+        txt = _("Note that to make these changes visible in OBS" +
+                " you have to refresh the cache of your browser sources.")
+        label = PyQt5.QtWidgets.QLabel(txt)
+        label.setWordWrap(True)
+        layout.addRow(PyQt5.QtWidgets.QLabel(), label)
+        
         self.styleBox.setLayout(layout)
 
     def openHTML(self, file):
@@ -157,27 +163,27 @@ class SubwindowStyles(PyQt5.QtWidgets.QWidget):
 
     def createColorBox(self):
         """Create box for color selection."""
-        self.colorBox = PyQt5.QtWidgets.QGroupBox("Colors")
+        self.colorBox = PyQt5.QtWidgets.QGroupBox(_("Colors"))
         layout = PyQt5.QtWidgets.QVBoxLayout()
 
         self.default_color = ColorLayout(
-            self, "Default Border:",
+            self, _("Default Border:"),
             scctool.settings.config.parser.get("MapIcons", "default_border_color"), "#f29b00")
         layout.addLayout(self.default_color)
         self. win_color = ColorLayout(
-            self, "Win:",
+            self, _("Win:"),
             scctool.settings.config.parser.get("MapIcons", "win_color"), "#008000")
         layout.addLayout(self.win_color)
         self.lose_color = ColorLayout(
-            self, "Lose:",
+            self, _("Lose:"),
             scctool.settings.config.parser.get("MapIcons", "lose_color"), "#f22200")
         layout.addLayout(self.lose_color)
         self.undecided_color = ColorLayout(
-            self, "Undecided:",
+            self, _("Undecided:"),
             scctool.settings.config.parser.get("MapIcons", "undecided_color"), "#f29b00")
         layout.addLayout(self.undecided_color)
         self.notplayed_color = ColorLayout(
-            self, "Not played:",
+            self, _("Not played:"),
             scctool.settings.config.parser.get("MapIcons", "notplayed_color"), "#c0c0c0")
         layout.addLayout(self.notplayed_color)
 
@@ -229,7 +235,7 @@ class SubwindowStyles(PyQt5.QtWidgets.QWidget):
                 if(self.isMinimized()):
                     self.showNormal()
                 buttonReply = PyQt5.QtWidgets.QMessageBox.question(
-                    self, 'Save data?', "Save data?",
+                    self, _('Save data?'), _("Save data?"),
                     PyQt5.QtWidgets.QMessageBox.Yes | PyQt5.QtWidgets.QMessageBox.No,
                     PyQt5.QtWidgets.QMessageBox.No)
                 if buttonReply == PyQt5.QtWidgets.QMessageBox.Yes:

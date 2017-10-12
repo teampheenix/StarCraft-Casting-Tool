@@ -49,7 +49,7 @@ class SubwindowMisc(PyQt5.QtWidgets.QWidget):
                                       self.size().height() / 3)
             self.move(mainWindow.pos() + relativeChange)
 
-            self.setWindowTitle("Miscellaneous Settings")
+            self.setWindowTitle(_("Miscellaneous Settings"))
 
         except Exception as e:
             module_logger.exception("message")
@@ -63,9 +63,9 @@ class SubwindowMisc(PyQt5.QtWidgets.QWidget):
         self.createOcrBox()
 
         # Add tabs
-        self.tabs.addTab(self.mapsBox, "Map Manager")
-        self.tabs.addTab(self.favBox, "Favorites")
-        self.tabs.addTab(self.ocrBox, "OCR")
+        self.tabs.addTab(self.mapsBox, _("Map Manager"))
+        self.tabs.addTab(self.favBox, _("Favorites"))
+        self.tabs.addTab(self.ocrBox, _("OCR"))
 
     def changed(self):
         """Handle changes."""
@@ -76,7 +76,7 @@ class SubwindowMisc(PyQt5.QtWidgets.QWidget):
         self.favBox = PyQt5.QtWidgets.QWidget()
         mainLayout = PyQt5.QtWidgets.QVBoxLayout()
 
-        box = PyQt5.QtWidgets.QGroupBox("Players")
+        box = PyQt5.QtWidgets.QGroupBox(_("Players"))
         layout = PyQt5.QtWidgets.QHBoxLayout()
 
         self.list_favPlayers = ListTable(
@@ -88,7 +88,7 @@ class SubwindowMisc(PyQt5.QtWidgets.QWidget):
 
         mainLayout.addWidget(box)
 
-        box = PyQt5.QtWidgets.QGroupBox("Teams")
+        box = PyQt5.QtWidgets.QGroupBox(_("Teams"))
         layout = PyQt5.QtWidgets.QHBoxLayout()
 
         self.list_favTeams = ListTable(3, scctool.settings.config.getMyTeams())
@@ -111,12 +111,12 @@ class SubwindowMisc(PyQt5.QtWidgets.QWidget):
         mainLayout = PyQt5.QtWidgets.QVBoxLayout()
 
         box = PyQt5.QtWidgets.QGroupBox(
-            "Optical Character Recognition for Automatic Setting of Ingame Score")
+            _("Optical Character Recognition for Automatic Setting of Ingame Score"))
 
         layout = PyQt5.QtWidgets.QGridLayout()
 
         self.cb_useocr = PyQt5.QtWidgets.QCheckBox(
-            " Activate Optical Character Recognition")
+            " " + _("Activate Optical Character Recognition"))
         self.cb_useocr.setChecked(
             scctool.settings.config.parser.getboolean("SCT", "use_ocr"))
         self.cb_useocr.stateChanged.connect(self.changed)
@@ -129,18 +129,18 @@ class SubwindowMisc(PyQt5.QtWidgets.QWidget):
         self.tesseract.setPlaceholderText(
             "C:\\Program Files (x86)\\Tesseract-OCR\\tesseract")
         self.tesseract.setReadOnly(True)
-        self.tesseract.setToolTip('Tesseract-OCR Executeable')
+        self.tesseract.setToolTip(_('Tesseract-OCR Executable'))
 
-        self.browse = PyQt5.QtWidgets.QPushButton("Browse...")
+        self.browse = PyQt5.QtWidgets.QPushButton(_("Browse..."))
         self.browse.clicked.connect(self.selectTesseract)
 
-        text = "Sometimes the order of players given by the SC2-Client-API differs" +\
-            " from the order in the Observer-UI resulting in a swaped match score." +\
-            " To correct this via Optical Character Recognition you have to download" +\
-            " {} and install and select the exectuable below, if it is not detected" +\
-            " automatically."""
+        text = _("Sometimes the order of players given by the SC2-Client-API differs" +
+                 " from the order in the Observer-UI resulting in a swaped match score." +
+                 " To correct this via Optical Character Recognition you have to download" +
+                 " {} and install and select the exectuable below, if it is not detected" +
+                 " automatically.")
         url = 'https://github.com/UB-Mannheim/tesseract/wiki#tesseract-at-ub-mannheim'
-        url = "<a href='{}'>Tesseract-OCR</a>".format(url)
+        url = "<a href='{}'>" + "Tesseract-OCR" + "</a>".format(url)
 
         label = PyQt5.QtWidgets.QLabel(text.format(url))
         label.setAlignment(PyQt5.QtCore.Qt.AlignJustify)
@@ -151,7 +151,7 @@ class SubwindowMisc(PyQt5.QtWidgets.QWidget):
 
         layout.addWidget(self.cb_useocr, 0, 0, 1, 2)
         layout.addWidget(PyQt5.QtWidgets.QLabel(
-            "Tesseract-OCR Executeable:"), 2, 0)
+            _("Tesseract-OCR Executable:")), 2, 0)
         layout.addWidget(self.tesseract, 3, 0)
         layout.addWidget(self.browse, 3, 1)
 
@@ -165,23 +165,24 @@ class SubwindowMisc(PyQt5.QtWidgets.QWidget):
             self.cb_useocr.setEnabled(False)
             self.cb_useocr.setAttribute(PyQt5.QtCore.Qt.WA_AlwaysShowToolTips)
             self.cb_useocr.setToolTip(
-                "This feature is only available in Windows.")
+                _("This feature is only available in Windows."))
             self.tesseract.setEnabled(False)
             self.tesseract.setAttribute(PyQt5.QtCore.Qt.WA_AlwaysShowToolTips)
             self.tesseract.setToolTip(
-                "This feature is only available in Windows.")
+                _("This feature is only available in Windows."))
             self.browse.setEnabled(False)
             self.browse.setAttribute(PyQt5.QtCore.Qt.WA_AlwaysShowToolTips)
             self.browse.setToolTip(
-                "This feature is only available in Windows.")
+                _("This feature is only available in Windows."))
 
     def selectTesseract(self):
         """Create forms for tesseract."""
         old_exe = self.tesseract.text()
         default = scctool.settings.config.findTesserAct(old_exe)
         exe, ok = PyQt5.QtWidgets.QFileDialog.getOpenFileName(
-            self, "Select Tesseract-OCR Executeable", default,
-            "Tesseract-OCR Executeable (tesseract.exe);; Exectuable (*.exe);; All files (*)")
+            self, _("Select Tesseract-OCR Executable"), default,
+            _("Tesseract-OCR Executable") + " (tesseract.exe);; " +
+            _("Exectuable") + " (*.exe);; " + _("All files") + " (*)")
         if(ok and exe != old_exe):
             self.tesseract.setText(exe)
             self.changed()
@@ -212,13 +213,13 @@ class SubwindowMisc(PyQt5.QtWidgets.QWidget):
         self.mapInfo = PyQt5.QtWidgets.QLabel()
         layout.addWidget(self.mapInfo, 1, 0)
 
-        self.pb_addMap = PyQt5.QtWidgets.QPushButton("Add")
+        self.pb_addMap = PyQt5.QtWidgets.QPushButton(_("Add"))
         self.pb_addMap.clicked.connect(self.addMap)
-        self.pb_renameMap = PyQt5.QtWidgets.QPushButton("Rename")
+        self.pb_renameMap = PyQt5.QtWidgets.QPushButton(_("Rename"))
         self.pb_renameMap.clicked.connect(self.renameMap)
-        self.pb_changeMap = PyQt5.QtWidgets.QPushButton("Change Image")
+        self.pb_changeMap = PyQt5.QtWidgets.QPushButton(_("Change Image"))
         self.pb_changeMap.clicked.connect(self.changeMap)
-        self.pb_removeMap = PyQt5.QtWidgets.QPushButton("Remove")
+        self.pb_removeMap = PyQt5.QtWidgets.QPushButton(_("Remove"))
         self.pb_removeMap.clicked.connect(self.deleteMap)
 
         box = PyQt5.QtWidgets.QWidget()
@@ -247,7 +248,7 @@ class SubwindowMisc(PyQt5.QtWidgets.QWidget):
         item = self.maplist.currentItem()
         map = item.text()
         text, ok = PyQt5.QtWidgets.QInputDialog.getText(
-            self, 'Map Name', 'Map Name:', text=map)
+            self, _('Map Name'), _('Map Name:'), text=map)
         if not ok:
             return
         text = text.strip()
@@ -255,7 +256,8 @@ class SubwindowMisc(PyQt5.QtWidgets.QWidget):
             return
         if(text in scctool.settings.maps):
             buttonReply = PyQt5.QtWidgets.QMessageBox.warning(
-                self, "Duplicate Entry", "Map is already in list! Overwrite?",
+                self, _("Duplicate Entry"), _(
+                    "Map is already in list! Overwrite?"),
                 PyQt5.QtWidgets.QMessageBox.Yes | PyQt5.QtWidgets.QMessageBox.No,
                 PyQt5.QtWidgets.QMessageBox.No)
             if buttonReply == PyQt5.QtWidgets.QMessageBox.No:
@@ -269,8 +271,8 @@ class SubwindowMisc(PyQt5.QtWidgets.QWidget):
         """Change a map."""
         map = self.maplist.currentItem().text()
         fileName, ok = PyQt5.QtWidgets.QFileDialog.getOpenFileName(
-            self, "Select Map Image (> 500x500px recommended)",
-            "", "Support Images (*.png *.jpg)")
+            self, _("Select Map Image (> 500x500px recommended)"),
+            "", _("Support Images") + " (*.png *.jpg)")
         if ok:
             base = os.path.basename(fileName)
             name, ext = os.path.splitext(base)
@@ -281,18 +283,19 @@ class SubwindowMisc(PyQt5.QtWidgets.QWidget):
     def addMap(self):
         """Add a map."""
         fileName, ok = PyQt5.QtWidgets.QFileDialog.getOpenFileName(
-            self, "Select Map Image (> 500x500px recommended)",
-            "", "Support Images (*.png *.jpg)")
+            self, _("Select Map Image (> 500x500px recommended)"),
+            "", _("Support Images") + " (*.png *.jpg)")
         if ok:
             base = os.path.basename(fileName)
             name, ext = os.path.splitext(base)
             name = name.replace("_", " ")
             text, ok = PyQt5.QtWidgets.QInputDialog.getText(
-                self, 'Map Name', 'Map Name:', text=name)
+                self, _('Map Name'), _('Map Name:'), text=name)
             if ok:
                 if(text.strip() in scctool.settings.maps):
                     buttonReply = PyQt5.QtWidgets.QMessageBox.warning(
-                        self, "Duplicate Entry", "Map is already in list! Overwrite?",
+                        self, _("Duplicate Entry"), _(
+                            "Map is already in list! Overwrite?"),
                         PyQt5.QtWidgets.QMessageBox.Yes | PyQt5.QtWidgets.QMessageBox.No,
                         PyQt5.QtWidgets.QMessageBox.No)
                     if buttonReply == PyQt5.QtWidgets.QMessageBox.No:
@@ -308,8 +311,8 @@ class SubwindowMisc(PyQt5.QtWidgets.QWidget):
         item = self.maplist.currentItem()
         map = item.text()
         buttonReply = PyQt5.QtWidgets.QMessageBox.question(
-            self, 'Delete map?',
-            "Delete '{}' permanently?".format(map),
+            self, _('Delete map?'),
+            _("Delete '{}' permanently?").format(map),
             PyQt5.QtWidgets.QMessageBox.Yes | PyQt5.QtWidgets.QMessageBox.No,
             PyQt5.QtWidgets.QMessageBox.No)
         if buttonReply == PyQt5.QtWidgets.QMessageBox.Yes:
@@ -345,11 +348,11 @@ class SubwindowMisc(PyQt5.QtWidgets.QWidget):
 
             layout.addWidget(PyQt5.QtWidgets.QLabel(""))
 
-            buttonCancel = PyQt5.QtWidgets.QPushButton('Cancel')
+            buttonCancel = PyQt5.QtWidgets.QPushButton(_('Cancel'))
             buttonCancel.clicked.connect(self.closeWindow)
             layout.addWidget(buttonCancel)
 
-            buttonSave = PyQt5.QtWidgets.QPushButton('Save && Close')
+            buttonSave = PyQt5.QtWidgets.QPushButton(_('Save && Close'))
             buttonSave.clicked.connect(self.saveCloseWindow)
             layout.addWidget(buttonSave)
 
@@ -391,7 +394,7 @@ class SubwindowMisc(PyQt5.QtWidgets.QWidget):
                 if(self.isMinimized()):
                     self.showNormal()
                 buttonReply = PyQt5.QtWidgets.QMessageBox.question(
-                    self, 'Save data?', "Save data?",
+                    self, _('Save data?'), _("Save data?"),
                     PyQt5.QtWidgets.QMessageBox.Yes | PyQt5.QtWidgets.QMessageBox.No,
                     PyQt5.QtWidgets.QMessageBox.No)
                 if buttonReply == PyQt5.QtWidgets.QMessageBox.Yes:

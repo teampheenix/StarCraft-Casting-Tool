@@ -117,9 +117,9 @@ class FTPsetup(PyQt5.QtWidgets.QProgressDialog):
             PyQt5.QtWidgets.QProgressDialog.__init__(self)
             self.setWindowModality(PyQt5.QtCore.Qt.ApplicationModal)
             self.progress = 0
-            self.setWindowTitle("FTP Server Setup")
+            self.setWindowTitle(_("FTP Server Setup"))
             self.setLabelText(
-                "Setting up the required file structure on the FTP server...")
+                _("Setting up the required file structure on the FTP server..."))
             self.canceled.connect(self.close)
             self.setRange(0, 100)
             self.setValue(self.minimum())
@@ -152,8 +152,8 @@ class FTPsetup(PyQt5.QtWidgets.QProgressDialog):
                 controller.ftpUploader.empty_queque()
                 mainWindow.cb_autoFTP.setChecked(old_bool)
             else:
-                PyQt5.QtWidgets.QMessageBox.warning(self, "Login error",
-                                                    'FTP server login incorrect!')
+                PyQt5.QtWidgets.QMessageBox.warning(self, _("Login error"),
+                                                    _('FTP server login incorrect!'))
 
         except Exception as e:
             module_logger.exception("message")
@@ -165,7 +165,7 @@ class FTPsetup(PyQt5.QtWidgets.QProgressDialog):
         if(progress == -1):
             self.cancel()
         elif(progress == -2):
-            module_logger.info("Wrong login data for FTP")
+            module_logger.info(_("Wrong login data for FTP"))
             self.cancel()
         else:
             self.setValue(progress)
@@ -179,9 +179,9 @@ class ToolUpdater(PyQt5.QtWidgets.QProgressDialog):
         PyQt5.QtWidgets.QProgressDialog.__init__(self)
         self.setWindowModality(PyQt5.QtCore.Qt.ApplicationModal)
         self.progress = 0
-        self.setWindowTitle("Updater")
+        self.setWindowTitle(_("Updater"))
         self.setLabelText(
-            "Updating to a new version...")
+            _("Updating to a new version..."))
         self.setCancelButton(None)
         self.setRange(0, 1000)
         self.setValue(self.minimum())
@@ -208,7 +208,8 @@ class ToolUpdater(PyQt5.QtWidgets.QProgressDialog):
         """Set the progress of the bar."""
         # TODO: What is the data structure in case of a patch?
         try:
-            text = 'Downloading a new version: Total file size {}, Time remaining {}.'
+            text = _(
+                'Downloading a new version: Total file size {}, Time remaining {}.')
             text = text.format(humanize.naturalsize(
                 data['total']), data['time'])
             self.setLabelText(text)
@@ -252,10 +253,10 @@ class ColorLayout(PyQt5.QtWidgets.QHBoxLayout):
         self.__preview.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
         self.setColor(color, False)
         self.addWidget(self.__preview, 2)
-        self.__pb_selectColor = PyQt5.QtWidgets.QPushButton('Select')
+        self.__pb_selectColor = PyQt5.QtWidgets.QPushButton(_('Select'))
         self.__pb_selectColor.clicked.connect(self.__openColorDialog)
         self.addWidget(self.__pb_selectColor, 0)
-        self.__pb_default = PyQt5.QtWidgets.QPushButton('Default')
+        self.__pb_default = PyQt5.QtWidgets.QPushButton(_('Default'))
         self.__pb_default.clicked.connect(self.reset)
         self.addWidget(self.__pb_default, 0)
 
@@ -272,7 +273,7 @@ class ColorLayout(PyQt5.QtWidgets.QHBoxLayout):
             self.__parent.changed()
         self.__currentColor = new_color
         self.__preview.setText(color)
-        self.__preview.setStyleSheet('background: ' + color)
+        self.__preview.setStyleSheet('background:' + ' ' + color)
 
         if(self.__currentColor.lightnessF() >= 0.5):
             self.__preview.setStyleSheet(
@@ -447,7 +448,7 @@ class InitialUpdater(PyQt5.QtWidgets.QProgressDialog):
         self.setWindowModality(PyQt5.QtCore.Qt.ApplicationModal)
         self.progress = 0
         self.setWindowTitle("SCC-Tool")
-        self.setLabelText("Collecting data...")
+        self.setLabelText(_("Collecting data..."))
         self.setCancelButton(None)
         self.setRange(0, 1000)
         self.setValue(50)
@@ -472,9 +473,9 @@ class InitialUpdater(PyQt5.QtWidgets.QProgressDialog):
             if lib_update is not None:
                 lib_update.download(async=False)
                 self.setValue(500)
-                self.setLabelText("Extracting data...")
+                self.setLabelText(_("Extracting data..."))
                 extractData(lib_update, self.setCopyProgress)
-                self.setLabelText("Done.")
+                self.setLabelText(_("Done."))
         except Exception as e:
             module_logger.exception("message")
 
@@ -487,7 +488,8 @@ class InitialUpdater(PyQt5.QtWidgets.QProgressDialog):
         # TODO: What is the data structure in case of a patch?
         module_logger.info("Progress {}".format(data))
         try:
-            text = 'Downloading required files...: Total file size {}, Time remaining {}.'
+            text = _(
+                'Downloading required files...: Total file size {}, Time remaining {}.')
             text = text.format(humanize.naturalsize(
                 data['total']), data['time'])
             self.setLabelText(text)

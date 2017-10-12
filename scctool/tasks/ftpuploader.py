@@ -11,6 +11,7 @@ try:
     import queue
     import base64
     import os
+    from datetime import datetime
 except Exception as e:
     module_logger.exception("message")
     raise
@@ -148,6 +149,17 @@ class UploaderThread(PyQt5.QtCore.QThread):
         self.__ftp = None
         self.__progress = False
         self.__current_cmd = 0
+        self.__time_last_cmd = datetime.now()
+        self.__upload = False
+        
+    def maintainConnection(self):
+
+        delta = (datetime.now() - self.__time_last_cmd)
+        
+        if(self.__upload and
+            delta.total_seconds() > 30):
+            self.q.put(["noop"])
+        
 
     def run(self):
         """Run thread."""
@@ -160,6 +172,8 @@ class UploaderThread(PyQt5.QtCore.QThread):
 
                 self.__upload = scctool.settings.config.parser.getboolean(
                     "FTP", "upload")
+                    
+                self.__time_last_cmd = datetime.now()
 
                 if(cmd == "progress_start"):
                     self.__progress = True
@@ -172,6 +186,9 @@ class UploaderThread(PyQt5.QtCore.QThread):
                     self.__progress = False
                 elif(self.__upload and cmd == "connect"):
                     self.__connect()
+                elif(self.__upload and cmd == "noop"):
+                    module_logger.info("noop")
+                    self.__ftp.voidcmd('NOOP')
                 elif(self.__upload and cmd == "disconnect"):
                     module_logger.info(self.__ftp.quit())
                 elif(self.__upload and cmd == "upload"):
@@ -215,6 +232,7 @@ class UploaderThread(PyQt5.QtCore.QThread):
                 pass
             except queue.Empty:
                 self.progress.emit(-3)
+                self.maintainConnection()
             except Exception as e:
                 module_logger.exception("message")
 

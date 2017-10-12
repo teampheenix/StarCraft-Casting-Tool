@@ -23,7 +23,7 @@ class SubwindowReadme(PyQt5.QtWidgets.QWidget):
 
         mainLayout = PyQt5.QtWidgets.QGridLayout()
         mainLayout.addWidget(self.viewer, 0, 0, 1, 3)
-        closeButton = PyQt5.QtWidgets.QPushButton("&OK")
+        closeButton = PyQt5.QtWidgets.QPushButton(_("&OK"))
         closeButton.clicked.connect(self.close)
         mainLayout.addItem(PyQt5.QtWidgets.QSpacerItem(
             0, 0, PyQt5.QtWidgets.QSizePolicy.Expanding,
@@ -31,7 +31,7 @@ class SubwindowReadme(PyQt5.QtWidgets.QWidget):
         mainLayout.addWidget(closeButton, 1, 1)
         self.setLayout(mainLayout)
 
-        self.setWindowTitle("Readme")
+        self.setWindowTitle(_("Readme"))
 
         self.resize(PyQt5.QtCore.QSize(mainWindow.size().width()
                                        * 0.9, self.sizeHint().height()))

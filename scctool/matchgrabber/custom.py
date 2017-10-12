@@ -33,13 +33,13 @@ class MatchGrabber(object):
     def _getAPI(self, id=False):
         if id:
             self.setID(id)
-        return self._apiprefix+str(self.getID())
+        return self._apiprefix + str(self.getID())
 
     def getURL(self, id=False):
         """Get URL."""
         if id:
             self.setID(id)
-        return self._urlprefix+str(self.getID())
+        return self._urlprefix + str(self.getID())
 
     def getProvider(self):
         """Get name of the provider."""

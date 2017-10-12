@@ -1,9 +1,9 @@
 @import url('https://fonts.googleapis.com/css?family=Orbitron:350,400');
 :root {
-    --border-size: 2px;
+    --border-size: 3px;
     --border-color: black;
-    --total-width: 720px;
-    --total-height: 70px;
+    --total-width: 1000px;
+    --total-height: 100px;
     --border-radius: 20px;
     --middle-width: 25%;
     --lower-text-height: 33%;
@@ -52,7 +52,7 @@ div.box_middle {
     border-radius: 0px var(--border-radius) 0px var(--border-radius);
     background-image: url("./../texture1.jpg");
     background-size: cover;
-    font: bold 28px Orbitron, Helvetica, Sans-Serif;
+    font: bold 40px Orbitron, Helvetica, Sans-Serif;
     text-align: center;
     line-height: calc(var(--total-height) - var(--border-size));
     --winner-color: white;
@@ -76,7 +76,7 @@ div.lower-text {
     height: var(--lower-text-height);
     width: 100%;
     text-align: center;
-    line-height: 22px;
+    line-height: 40px;
     background: rgba(0, 0, 0, 0.6)!important;
 }
 
@@ -85,7 +85,7 @@ div.maplabel {
     left: calc(0% + var(--border-radius) + 6px);
     width: calc(100% - var(--border-radius) - 6px);
     text-align: center;
-    line-height: 22px;
+    line-height: 30px;
     height: 100%;
 }
 
@@ -94,7 +94,7 @@ div.mapname {
     left: calc(0% + var(--border-radius) + 8px);
     width: calc(100% - 36px - var(--border-radius) - 10px);
     text-align: center;
-    line-height: 22px;
+    line-height: 30px;
     height: 100%;
 }
 
@@ -106,7 +106,7 @@ div.upper-text-right {
     width: calc(100% - var(--border-radius) - 6px);
     font: bold 28px Orbitron, Helvetica, Sans-Serif;
     text-align: center;
-    line-height: 40px;
+    line-height: 60px;
 }
 
 div.upper-text-left {
@@ -117,6 +117,7 @@ div.upper-text-left {
     width: calc(100% - var(--border-radius) - 6px);
     font: bold 28px Orbitron, Helvetica, Sans-Serif;
     text-align: center;
+    line-height: 60px;
 }
 
 #map1 {
@@ -152,8 +153,8 @@ div.upper-text-left {
     background: #f00;
     right: 8px;
     bottom: 3px;
-    width: 25px;
-    height: 16px;
+    width: 35px;
+    height: 25px;
     border-radius: 0px 10px 0px 10px;
     box-shadow: 0px 0px 2px white;
 }

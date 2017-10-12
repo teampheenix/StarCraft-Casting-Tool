@@ -13,26 +13,18 @@ parser = None
 
 def init():
     """Init config."""
-    global parser, scoreUpdate, toggleScore, toggleProd, playerIntros, fuzzymatch
+    global parser, scoreUpdate
     # Reading the configuration from file
     parser = configparser.ConfigParser()
-    #try:
-    parser.read(configFile, encoding='utf-8-sig')
-    #except:
-    #    parser.defaults()
+    try:
+        parser.read(configFile, encoding='utf-8-sig')
+    except:
+        parser.defaults()
 
     setDefaultConfigAll()
 
-    scoreUpdate = parser.getboolean("Form", "scoreupdate")
-    toggleScore = parser.getboolean("Form", "togglescore")
-    toggleProd = parser.getboolean("Form", "toggleprod")
-    playerIntros = parser.getboolean("Form", "playerintros")
-
-    fuzzymatch = parser.getboolean("SCT", "fuzzymatch")
 
 # Setting default values for config file
-
-
 def setDefaultConfig(sec, opt, value, func=None):
     """Set default value in config."""
     if(not parser.has_section(sec)):
@@ -82,7 +74,6 @@ def getTesserAct():
         return new
 
 
-
 def setDefaultConfigAll():
     """Define default values and set them."""
     setDefaultConfig("Twitch", "channel", "")
@@ -110,6 +101,7 @@ def setDefaultConfigAll():
     setDefaultConfig("SCT", "fuzzymatch", "True")
     setDefaultConfig("SCT", "new_version_prompt", "True")
     setDefaultConfig("SCT", "use_ocr", "False")
+    setDefaultConfig("SCT", "language", "en_US")
 
     tesseract = "C:\\Program Files (x86)\\Tesseract-OCR\\tesseract.exe"
     setDefaultConfig("SCT", "tesseract", tesseract, findTesserAct)

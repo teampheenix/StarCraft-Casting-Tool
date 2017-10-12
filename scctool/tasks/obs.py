@@ -13,11 +13,11 @@ try:
 
     import obswsrc
     obswsrc.struct.SKIP_OPTIONAL_CHECK = True
-    
+
     from obswsrc import OBSWS  # pip install obs-ws-rc
     from obswsrc.client import AuthError
     from obswsrc.requests import SetSourceRenderRequest, ResponseStatus
-    
+
 except Exception as e:
 
     module_logger.exception("message")
@@ -39,15 +39,16 @@ def testConnection():
         msg = "Connected!"
 
     except OSError:
-        msg = "{host}:{port} is unreachable. Is OBS Studio with obs-websocket plugin launched?"
+        msg = _(
+            "{host}:{port} is unreachable. Is OBS Studio with obs-websocket plugin launched?")
         msg = msg.format(host=obsws.host, port=obsws.port)
 
     except AuthError:
-        msg = "Couldn't auth to obs-websocket. Correct password?"
+        msg = _("Couldn't auth to obs-websocket. Correct password?")
 
     except Exception as e:
         module_logger.exception("message")
-        msg = "Unkown Error!"
+        msg = _("Unkown Error!")
 
     finally:
         loop.close()

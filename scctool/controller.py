@@ -69,7 +69,7 @@ class MainController:
             lambda x: self.newVersion(x, force))
         if force:
             self.versionHandler.noNewVersion.connect(
-                lambda: self.displayWarning("This version is up to date."))
+                lambda: self.displayWarning(_("This version is up to date.")))
 
         self.versionHandler.activateTask('version_check')
 
@@ -255,17 +255,18 @@ class MainController:
     def setCBs(self):
         """Update value of check boxes from config."""
         try:
-            if(scctool.settings.config.scoreUpdate):
-                self.view.cb_autoUpdate.setChecked(True)
 
-            if(scctool.settings.config.toggleScore):
-                self.view.cb_autoToggleScore.setChecked(True)
+            self.view.cb_autoUpdate.setChecked(
+                scctool.settings.config.parser.getboolean("Form", "scoreupdate"))
 
-            if(scctool.settings.config.toggleProd):
-                self.view.cb_autoToggleProduction.setChecked(True)
+            self.view.cb_autoToggleScore.setChecked(
+                scctool.settings.config.parser.getboolean("Form", "togglescore"))
 
-            if(scctool.settings.config.playerIntros):
-                self.view.cb_playerIntros.setChecked(True)
+            self.view.cb_autoToggleProduction.setChecked(
+                scctool.settings.config.parser.getboolean("Form", "toggleprod"))
+
+            self.view.cb_playerIntros.setChecked(
+                scctool.settings.config.parser.getboolean("Form", "playerintros"))
 
             self.view.cb_autoTwitch.setChecked(
                 scctool.settings.config.parser.getboolean("Form", "autotwitch"))
@@ -499,35 +500,36 @@ class MainController:
         self.toggleWidget(
             self.view.pb_twitchupdate,
             scctool.settings.config.twitchIsValid(),
-            'Specify your Twitch Settings to use this feature',
+            _('Specify your Twitch Settings to use this feature'),
             '')
 
+        txt = _('Automatically update the title of your' +
+                ' twitch channel in the background.')
         self.toggleWidget(
             self.view.cb_autoTwitch,
             scctool.settings.config.twitchIsValid(),
-            'Specify your Twitch Settings to use this feature',
-            'Automatically update the title of your' +
-            ' twitch channel in the background.')
+            _('Specify your Twitch Settings to use this feature'),
+            txt)
 
         self.toggleWidget(
             self.view.cb_autoNightbot,
             scctool.settings.config.nightbotIsValid(),
-            'Specify your Nighbot Settings to use this feature',
-            'Automatically update the commands of your' +
-            ' nightbot in the background.')
+            _('Specify your Nightbot Settings to use this feature'),
+            _('Automatically update the commands of your' +
+              ' nightbot in the background.'))
 
         self.toggleWidget(
             self.view.pb_nightbotupdate,
             scctool.settings.config.nightbotIsValid(),
-            'Specify your Nightbot Settings to use this feature',
+            _('Specify your Nightbot Settings to use this feature'),
             '')
 
         self.toggleWidget(
             self.view.cb_autoFTP,
             scctool.settings.config.ftpIsValid(),
-            'Specify your FTP Settings to use this feature',
-            'Automatically uploads all streaming data' +
-            ' in the background to a specified FTP server.')
+            _('Specify your FTP Settings to use this feature'),
+            _('Automatically uploads all streaming data' +
+              ' in the background to a specified FTP server.'))
 
     def requestToggleScore(self, newSC2MatchData, swap=False):
         """Check if SC2-Client-API players are present and toggle score accordingly."""
@@ -653,7 +655,7 @@ class MainController:
         mapimg = os.path.basename(self.linkFile(mapimg))
         if not mapimg:
             mapimg = "TBD.jpg"
-            self.displayWarning("Warning: Map '{}' not found!".format(map))
+            self.displayWarning(_("Warning: Map '{}' not found!").format(map))
 
         if(fullpath):
             return mapdir + "/src/maps/" + mapimg
@@ -686,6 +688,7 @@ class MainController:
 
     def displayWarning(self, msg="Warning: Something went wrong..."):
         """Display a warning in status bar."""
+        msg = _(msg)
         self._warning = True
         self.view.statusBar().showMessage(msg)
 
@@ -702,10 +705,10 @@ class MainController:
             "SCT", "new_version_prompt")
         if hasattr(sys, "frozen") and prompt:
             messagebox = PyQt5.QtWidgets.QMessageBox()
-            text = "A new version {} is available."
+            text = _("A new version {} is available.")
             messagebox.setText(text.format(version))
-            messagebox.setInformativeText("Update to new version?")
-            messagebox.setWindowTitle("New SCC-Tool Version")
+            messagebox.setInformativeText(_("Update to new version?"))
+            messagebox.setWindowTitle(_("New SCC-Tool Version"))
             messagebox.setStandardButtons(
                 PyQt5.QtWidgets.QMessageBox.Yes | PyQt5.QtWidgets.QMessageBox.No)
             messagebox.setDefaultButton(PyQt5.QtWidgets.QMessageBox.Yes)
@@ -714,7 +717,7 @@ class MainController:
             cb = PyQt5.QtWidgets.QCheckBox()
             cb.setChecked(not scctool.settings.config.parser.getboolean(
                 "SCT", "new_version_prompt"))
-            cb.setText("Don't show on startup.")
+            cb.setText(_("Don't show on startup."))
             messagebox.setCheckBox(cb)
             if messagebox.exec_() == PyQt5.QtWidgets.QMessageBox.Yes:
                 ToolUpdater(self, self.view)
@@ -723,5 +726,4 @@ class MainController:
                                                str(not cb.isChecked()))
         else:
             self.view.statusBar().showMessage(
-                "A new version " +
-                version + " is available on GitHub!")
+                _("A new version {} is available on GitHub!").format(version))

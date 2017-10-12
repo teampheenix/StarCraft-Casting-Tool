@@ -273,7 +273,7 @@ class SC2ApiThread(PyQt5.QtCore.QThread):
                             SC2MatchData(GAMEresponse, UIresponse))
 
                 except requests.exceptions.ConnectionError:
-                    print("StarCraft 2 not running!")
+                    # print("StarCraft 2 not running!")
                     time.sleep(10)
                 except ValueError:
                     # print("StarCraft 2 starting.")
@@ -499,7 +499,8 @@ class SC2MatchData:
 def compareStr(str1, str2):
     """Compare two string (optionally with fuzzy compare)."""
     try:
-        fuzzymatch = scctool.settings.config.fuzzymatch
+        fuzzymatch = scctool.settings.config.parser.getboolean(
+            "SCT", "fuzzymatch")
         if(fuzzymatch):
             threshold = 0.75
             match = SequenceMatcher(None, str1.upper(), str2.upper()).ratio()

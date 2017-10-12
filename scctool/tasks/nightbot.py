@@ -42,7 +42,8 @@ def updateCommand(message):
 
         if(skipUpdate):
             previousMsg = message
-            msg = "Nightbot Command '" + cmd + "' was already set to '" + message + "'"
+            msg = _("Nightbot Command '{}' was already set to '{}'").format(
+                cmd, message)
             success = True
             return msg, success
 
@@ -63,18 +64,18 @@ def updateCommand(message):
 
         previousMsg = message
 
-        msg = "Updated Nightbot Command '" + cmd + "' to '" + message + "'"
+        msg = _("Updated Nightbot Command '{}' to '{}'").format(cmd, message)
         success = True
 
     except requests.exceptions.HTTPError as e:
         status_code = e.response.status_code
         error_msg = "Nightbot API-Error: {}"
         if(status_code == 403):
-            msg = error_msg.format("Forbidden - Do you have permission?")
+            msg = error_msg.format(_("Forbidden - Do you have permission?"))
         elif(status_code == 401):
-            msg = error_msg.format("Unauthorized - Refresh your token!")
+            msg = error_msg.format(_("Unauthorized - Refresh your token!"))
         elif(status_code == 429):
-            msg = error_msg.format("Too Many Requests.")
+            msg = error_msg.format(_("Too Many Requests."))
         else:
             msg = str(e)
         success = False

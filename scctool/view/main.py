@@ -11,6 +11,7 @@ import scctool.tasks.obs
 import shutil
 import os
 import markdown2
+import gettext
 
 from scctool.view.widgets import BusyProgressBar, MapLineEdit, IconPushButton
 from scctool.view.subConnections import SubwindowConnections
@@ -25,13 +26,16 @@ module_logger = logging.getLogger('scctool.view.main')
 class MainWindow(PyQt5.QtWidgets.QMainWindow):
     """Show the main window of SCCT."""
 
-    def __init__(self, controller, app):
+    EXIT_CODE_REBOOT = -123
+
+    def __init__(self, controller, app, translator):
         """Init the main window."""
         try:
             super(MainWindow, self).__init__()
 
             self.trigger = True
             self.controller = controller
+            self.translator = translator
 
             self.createFormMatchDataBox()
             self.createTabs()
@@ -62,7 +66,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             self.progressBar.setMaximumWidth(160)
             self.progressBar.setMinimumWidth(160)
             self.progressBar.setVisible(False)
-            self.progressBar.setText("FTP Transfer in progress...")
+            self.progressBar.setText(_("FTP Transfer in progress..."))
             self.statusBar().addPermanentWidget(self.progressBar)
 
             self.app = app
@@ -93,15 +97,15 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
 
         html = html.replace("%VERSION%", scctool.__version__)
         if(not scctool.__new_version__):
-            new_version = "StarCraft Casting Tool is up to date."
+            new_version = _("StarCraft Casting Tool is up to date.")
         else:
-            new_version = "The new version {} is available!".format(
+            new_version = _("The new version {} is available!").format(
                 scctool.__latest_version__)
         html = html.replace('%NEW_VERSION%', new_version)
 
         # use self as parent here
         PyQt5.QtWidgets.QMessageBox.about(
-            self, "StarCraft Casting Tool - About", html)
+            self, _("StarCraft Casting Tool - About"), html)
 
     def closeEvent(self, event):
         """Close and clean up window."""
@@ -128,38 +132,38 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
         """Create the menu bar."""
         try:
             menubar = self.menuBar()
-            settingsMenu = menubar.addMenu('Settings')
+            settingsMenu = menubar.addMenu(_('Settings'))
             apiAct = PyQt5.QtWidgets.QAction(PyQt5.QtGui.QIcon(scctool.settings.getAbsPath(
-                'src/connection.png')), 'Connections', self)
+                'src/connection.png')), _('Connections'), self)
             apiAct.setToolTip(
-                'Edit FTP-Settings and API-Settings for Twitch and Nightbot')
+                _('Edit FTP-Settings and API-Settings for Twitch and Nightbot'))
             apiAct.triggered.connect(self.openApiDialog)
             settingsMenu.addAction(apiAct)
             styleAct = PyQt5.QtWidgets.QAction(PyQt5.QtGui.QIcon(scctool.settings.getAbsPath(
-                'src/pantone.png')), 'Styles', self)
+                'src/pantone.png')), _('Styles'), self)
             styleAct.setToolTip('')
             styleAct.triggered.connect(self.openStyleDialog)
             settingsMenu.addAction(styleAct)
             miscAct = PyQt5.QtWidgets.QAction(PyQt5.QtGui.QIcon(scctool.settings.getAbsPath(
-                'src/settings.png')), 'Misc', self)
+                'src/settings.png')), _('Misc'), self)
             miscAct.setToolTip('')
             miscAct.triggered.connect(self.openMiscDialog)
             settingsMenu.addAction(miscAct)
 
-            infoMenu = menubar.addMenu('Info && Links')
+            infoMenu = menubar.addMenu(_('Info && Links'))
 
             myAct = PyQt5.QtWidgets.QAction(PyQt5.QtGui.QIcon(scctool.settings.getAbsPath(
-                'src/about.png')), 'About', self)
+                'src/about.png')), _('About'), self)
             myAct.triggered.connect(self.showAbout)
             infoMenu.addAction(myAct)
 
             myAct = PyQt5.QtWidgets.QAction(PyQt5.QtGui.QIcon(scctool.settings.getAbsPath(
-                'src/readme.ico')), 'Readme', self)
+                'src/readme.ico')), _('Readme'), self)
             myAct.triggered.connect(self.openReadme)
             infoMenu.addAction(myAct)
 
             myAct = PyQt5.QtWidgets.QAction(PyQt5.QtGui.QIcon(scctool.settings.getAbsPath(
-                'src/update.png')), 'Check for new version', self)
+                'src/update.png')), _('Check for new version'), self)
             myAct.triggered.connect(lambda: self.controller.checkVersion(True))
             infoMenu.addAction(myAct)
 
@@ -194,10 +198,32 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             infoMenu.addSeparator()
 
             myAct = PyQt5.QtWidgets.QAction(PyQt5.QtGui.QIcon(scctool.settings.getAbsPath(
-                'src/donate.ico')), 'Donate', self)
+                'src/donate.ico')), _('Donate'), self)
             myAct.triggered.connect(lambda: self.controller.openURL(
                 "https://streamlabs.com/scpressure"))
             infoMenu.addAction(myAct)
+
+            langMenu = menubar.addMenu(_('Language'))
+
+            language = scctool.settings.config.parser.get("SCT", "language")
+
+            myAct = PyQt5.QtWidgets.QAction(PyQt5.QtGui.QIcon(scctool.settings.getAbsPath(
+                'src/de.png')), 'Deutsch', self, checkable=True)
+            myAct.setChecked(language == 'de_DE')
+            myAct.triggered.connect(lambda: self.changeLanguage('de_DE'))
+            langMenu.addAction(myAct)
+
+            myAct = PyQt5.QtWidgets.QAction(PyQt5.QtGui.QIcon(scctool.settings.getAbsPath(
+                'src/en.png')), 'English', self, checkable=True)
+            myAct.setChecked(language == 'en_US')
+            myAct.triggered.connect(lambda: self.changeLanguage('en_US'))
+            langMenu.addAction(myAct)
+
+            # myAct = PyQt5.QtWidgets.QAction(PyQt5.QtGui.QIcon(scctool.settings.getAbsPath(
+            #     'src/ru.png')), 'русский', self, checkable=True)
+            # myAct.setChecked(language == 'ru_RU')
+            # myAct.triggered.connect(lambda: self.changeLanguage('ru_RU'))
+            # langMenu.addAction(myAct)
 
         except Exception as e:
             module_logger.exception("message")
@@ -226,6 +252,24 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
         self.mysubwindow4.createWindow(self)
         self.mysubwindow4.show()
 
+    def changeLanguage(self, language):
+        """Change the language."""
+        try:
+            lang = gettext.translation(
+                'messages', localedir='locales', languages=[language])
+            lang.install()
+        except:
+            lang = gettext.NullTranslations()
+
+        self.app.removeTranslator(self.translator)
+        self.translator = PyQt5.QtCore.QTranslator(self.app)
+        self.translator.load(PyQt5.QtCore.QLocale(language),
+                             "qtbase", "_",  scctool.settings.getAbsPath('locales'), ".qm")
+        self.app.installTranslator(self.translator)
+
+        scctool.settings.config.parser.set("SCT", "language", language)
+        self.restart()
+
     def createTabs(self):
         """Create tabs in main window."""
         try:
@@ -236,8 +280,8 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             # self.tabs.resize(300,200)
 
             # Add tabs
-            self.tabs.addTab(self.tab1, "Match Grabber for AlphaTL && RSTL")
-            self.tabs.addTab(self.tab2, "Custom Match")
+            self.tabs.addTab(self.tab1, _("Match Grabber for AlphaTL && RSTL"))
+            self.tabs.addTab(self.tab2, _("Custom Match"))
 
             # Create first tab
             self.tab1.layout = PyQt5.QtWidgets.QVBoxLayout()
@@ -260,7 +304,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             self.le_url.setMinimumWidth(minWidth)
 
             self.pb_openBrowser = PyQt5.QtWidgets.QPushButton(
-                "Open in Browser")
+                _("Open in Browser"))
             self.pb_openBrowser.clicked.connect(self.openBrowser_click)
             width = (self.scoreWidth + 2 * self.raceWidth + 2 *
                      self.mimumLineEditWidth + 4 * 6) / 2 - 2
@@ -268,12 +312,22 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
 
             container = PyQt5.QtWidgets.QHBoxLayout()
             label = PyQt5.QtWidgets.QLabel()
-            label.setFixedWidth(self.labelWidth * 2)
+            label.setFixedWidth(self.labelWidth)
             container.addWidget(label, 0)
-            label = PyQt5.QtWidgets.QLabel("Match-URL:")
+            label = PyQt5.QtWidgets.QLabel(_("Match-URL:"))
             label.setMinimumWidth(80)
             container.addWidget(label, 0)
             container.addWidget(self.le_url, 1)
+            button = PyQt5.QtWidgets.QPushButton()
+            pixmap = PyQt5.QtGui.QIcon(scctool.settings.getAbsPath('src/alpha.png'))
+            button.setIcon(pixmap)
+            button.clicked.connect(lambda: self.controller.openURL("http://alpha.tl/"))
+            container.addWidget(button, 0)
+            button = PyQt5.QtWidgets.QPushButton()
+            pixmap = PyQt5.QtGui.QIcon(scctool.settings.getAbsPath('src/rstl.png'))
+            button.setIcon(pixmap)
+            button.clicked.connect(lambda: self.controller.openURL("http://hdgame.net/en/"))
+            container.addWidget(button, 0)
 
             self.tab1.layout = PyQt5.QtWidgets.QFormLayout()
             self.tab1.layout.addRow(container)
@@ -283,12 +337,13 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             # self.pb_download = PyQt5.QtWidgets.QPushButton("Download Images from URL")
             # container.addWidget(self.pb_download)
             label = PyQt5.QtWidgets.QLabel()
-            label.setFixedWidth(self.labelWidth * 2)
+            label.setFixedWidth(self.labelWidth)
             container.addWidget(label, 0)
             label = PyQt5.QtWidgets.QLabel()
             label.setMinimumWidth(80)
             container.addWidget(label, 0)
-            self.pb_refresh = PyQt5.QtWidgets.QPushButton("Load Data from URL")
+            self.pb_refresh = PyQt5.QtWidgets.QPushButton(
+                _("Load Data from URL"))
             self.pb_refresh.clicked.connect(self.refresh_click)
             container.addWidget(self.pb_openBrowser, 3)
             container.addWidget(self.pb_refresh, 3)
@@ -303,26 +358,27 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             container = PyQt5.QtWidgets.QHBoxLayout()
 
             label = PyQt5.QtWidgets.QLabel()
-            label.setMinimumWidth(self.labelWidth * 2)
+            label.setMinimumWidth(self.labelWidth)
             container.addWidget(label, 0)
 
-            label = PyQt5.QtWidgets.QLabel("Match Format:")
+            label = PyQt5.QtWidgets.QLabel(_("Match Format:"))
             label.setMinimumWidth(80)
             container.addWidget(label, 0)
 
-            container.addWidget(PyQt5.QtWidgets.QLabel("Best of"), 0)
+            container.addWidget(PyQt5.QtWidgets.QLabel(_("Best of")), 0)
 
             self.cb_bestof = PyQt5.QtWidgets.QComboBox()
             for idx in range(0, scctool.settings.max_no_sets):
                 self.cb_bestof.addItem(str(idx + 1))
             self.cb_bestof.setCurrentIndex(3)
-            string = '"Best of 6/4": First, a Bo5/3 is played and the ace map gets ' +\
-                     'extended to a Bo3 if needed; Best of 2: Bo3 with only two maps played.'
+            string = _('"Best of 6/4": First, a Bo5/3 is played and the ace map ' +
+                       'gets extended to a Bo3 if needed; Best of 2: Bo3 with ' +
+                       'only two maps played.')
             self.cb_bestof.setToolTip(string)
             self.cb_bestof.setMaximumWidth(40)
             container.addWidget(self.cb_bestof, 0)
 
-            container.addWidget(PyQt5.QtWidgets.QLabel(" but at least"), 0)
+            container.addWidget(PyQt5.QtWidgets.QLabel(_(" but at least")), 0)
 
             self.cb_minSets = PyQt5.QtWidgets.QComboBox()
             for idx in range(0, scctool.settings.max_no_sets):
@@ -330,21 +386,23 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             self.cb_minSets.setCurrentIndex(0)
 
             self.cb_minSets.setToolTip(
-                'Minimum number of maps played (even if the match is decided already)')
+                _('Minimum number of maps played (even if the match is decided already)'))
             self.cb_minSets.setMaximumWidth(50)
             container.addWidget(self.cb_minSets, 0)
-            container.addWidget(PyQt5.QtWidgets.QLabel(" maps "), 0)
+            container.addWidget(
+                PyQt5.QtWidgets.QLabel(" " + _("maps") + " "), 0)
 
-            self.cb_allkill = PyQt5.QtWidgets.QCheckBox("All-Kill Format")
+            self.cb_allkill = PyQt5.QtWidgets.QCheckBox(_("All-Kill Format"))
             self.cb_allkill.setChecked(False)
             self.cb_allkill.setToolTip(
-                'Winner stays and is automatically placed into the next set')
+                _('Winner stays and is automatically placed into the next set'))
             container.addWidget(self.cb_allkill, 0)
 
             label = PyQt5.QtWidgets.QLabel("")
             container.addWidget(label, 1)
 
-            self.pb_applycustom = PyQt5.QtWidgets.QPushButton("Apply Format")
+            self.pb_applycustom = PyQt5.QtWidgets.QPushButton(
+                _("Apply Format"))
             self.pb_applycustom.clicked.connect(self.applycustom_click)
             self.pb_applycustom.setFixedWidth(150)
             container.addWidget(self.pb_applycustom, 0)
@@ -354,19 +412,19 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             container = PyQt5.QtWidgets.QHBoxLayout()
 
             label = PyQt5.QtWidgets.QLabel()
-            label.setMinimumWidth(self.labelWidth * 2)
+            label.setMinimumWidth(self.labelWidth)
             container.addWidget(label, 0)
 
-            label = PyQt5.QtWidgets.QLabel("Match-URL:")
+            label = PyQt5.QtWidgets.QLabel(_("Match-URL:"))
             label.setMinimumWidth(80)
             container.addWidget(label, 0)
 
             self.le_url_custom = PyQt5.QtWidgets.QLineEdit()
             self.le_url_custom.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
             self.le_url_custom.setToolTip(
-                'Optionally specify the Match-URL, e.g., for Nightbot commands')
+                _('Optionally specify the Match-URL, e.g., for Nightbot commands'))
             self.le_url_custom.setPlaceholderText(
-                "Specify the Match-URL of your Custom Match")
+                _("Specify the Match-URL of your Custom Match"))
 
             completer = PyQt5.QtWidgets.QCompleter(
                 ["http://"], self.le_url_custom)
@@ -382,7 +440,8 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             label = PyQt5.QtWidgets.QLabel("")
             container.addWidget(label, 1)
 
-            self.pb_resetdata = PyQt5.QtWidgets.QPushButton("Reset Match Data")
+            self.pb_resetdata = PyQt5.QtWidgets.QPushButton(
+                _("Reset Match Data"))
             self.pb_resetdata.setFixedWidth(150)
             self.pb_resetdata.clicked.connect(self.resetdata_click)
             container.addWidget(self.pb_resetdata, 0)
@@ -415,7 +474,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             self.labelWidth = 15
             self.mimumLineEditWidth = 130
 
-            self.fromMatchDataBox = PyQt5.QtWidgets.QGroupBox("Match Data")
+            self.fromMatchDataBox = PyQt5.QtWidgets.QGroupBox(_("Match Data"))
             layout2 = PyQt5.QtWidgets.QVBoxLayout()
 
             self.le_league = PyQt5.QtWidgets.QLineEdit()
@@ -487,7 +546,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
                 PyQt5.QtWidgets.QSlider.TicksBothSides)
             self.sl_team.setTickInterval(1)
             self.sl_team.valueChanged.connect(self.sl_changed)
-            self.sl_team.setToolTip('Choose your team')
+            self.sl_team.setToolTip(_('Choose your team'))
             self.sl_team.setMinimumHeight(5)
             self.sl_team.setFixedWidth(self.scoreWidth)
             policy = PyQt5.QtWidgets.QSizePolicy()
@@ -503,7 +562,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             label.setFixedWidth(self.labelWidth)
             container.addWidget(label, 0, 0, 2, 1)
 
-            label = PyQt5.QtWidgets.QLabel("League:")
+            label = PyQt5.QtWidgets.QLabel(_("League:"))
             label.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
             policy = PyQt5.QtWidgets.QSizePolicy()
             policy.setHorizontalStretch(4)
@@ -513,7 +572,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             label.setSizePolicy(policy)
             container.addWidget(label, 0, 1, 1, 1)
 
-            label = PyQt5.QtWidgets.QLabel("Maps \ Teams:")
+            label = PyQt5.QtWidgets.QLabel(_("Maps \ Teams:"))
             label.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
             policy = PyQt5.QtWidgets.QSizePolicy()
             policy.setHorizontalStretch(4)
@@ -538,7 +597,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
                     self.le_player[team_idx][player_idx].setAlignment(
                         PyQt5.QtCore.Qt.AlignCenter)
                     self.le_player[team_idx][player_idx].setPlaceholderText(
-                        "Player " + str(player_idx + 1) + " of Team " + str(team_idx + 1))
+                        _("Player {} of team {}").format(player_idx + 1, team_idx + 1))
                     completer = PyQt5.QtWidgets.QCompleter(
                         scctool.settings.config.getMyPlayers(
                             True), self.le_player[team_idx][player_idx])
@@ -566,14 +625,14 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
                     PyQt5.QtWidgets.QSlider.TicksBothSides)
                 self.sl_score[player_idx].setTickInterval(1)
                 self.sl_score[player_idx].valueChanged.connect(self.sl_changed)
-                self.sl_score[player_idx].setToolTip('Set the score')
+                self.sl_score[player_idx].setToolTip(_('Set the score'))
                 self.sl_score[player_idx].setFixedWidth(self.scoreWidth)
 
                 self.le_map[player_idx].setText("TBD")
                 self.le_map[player_idx].setAlignment(
                     PyQt5.QtCore.Qt.AlignCenter)
                 self.le_map[player_idx].setPlaceholderText(
-                    "Map " + str(player_idx + 1))
+                    _("Map {}").format(player_idx + 1))
                 self.le_map[player_idx].setMinimumWidth(
                     self.mimumLineEditWidth)
 
@@ -613,21 +672,22 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
     def createHorizontalGroupBox(self):
         """Create horizontal group box for tasks."""
         try:
-            self.horizontalGroupBox = PyQt5.QtWidgets.QGroupBox("Tasks")
+            self.horizontalGroupBox = PyQt5.QtWidgets.QGroupBox(_("Tasks"))
             layout = PyQt5.QtWidgets.QHBoxLayout()
 
             self.pb_twitchupdate = PyQt5.QtWidgets.QPushButton(
-                "Update Twitch Title")
+                _("Update Twitch Title"))
             self.pb_twitchupdate.clicked.connect(self.updatetwitch_click)
 
             self.pb_nightbotupdate = PyQt5.QtWidgets.QPushButton(
-                "Update Nightbot")
+                _("Update Nightbot"))
             self.pb_nightbotupdate.clicked.connect(self.updatenightbot_click)
 
-            self.pb_resetscore = PyQt5.QtWidgets.QPushButton("Reset Score")
+            self.pb_resetscore = PyQt5.QtWidgets.QPushButton(_("Reset Score"))
             self.pb_resetscore.clicked.connect(self.resetscore_click)
 
-            self.pb_obsupdate = PyQt5.QtWidgets.QPushButton("Update OBS Data")
+            self.pb_obsupdate = PyQt5.QtWidgets.QPushButton(
+                _("Update OBS Data"))
             self.pb_obsupdate.clicked.connect(self.updateobs_click)
 
             layout.addWidget(self.pb_twitchupdate)
@@ -643,51 +703,52 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
         """Create group box for background tasks."""
         try:
             self.backgroundTasksBox = PyQt5.QtWidgets.QGroupBox(
-                "Background Tasks")
+                _("Background Tasks"))
 
-            self.cb_autoUpdate = PyQt5.QtWidgets.QCheckBox("Auto Score Update")
+            self.cb_autoUpdate = PyQt5.QtWidgets.QCheckBox(
+                _("Auto Score Update"))
             self.cb_autoUpdate.setChecked(False)
-            string = 'Automatically detects the outcome of SC2 matches that are ' + \
-                     'played/observed in your SC2-client and updates the score accordingly.'
+            string = _('Automatically detects the outcome of SC2 matches that are ' +
+                       'played/observed in your SC2-client and updates the score accordingly.')
             self.cb_autoUpdate.setToolTip(string)
             self.cb_autoUpdate.stateChanged.connect(self.autoUpdate_change)
 
             self.cb_playerIntros = PyQt5.QtWidgets.QCheckBox(
-                "Provide Player Intros")
+                _("Provide Player Intros"))
             self.cb_playerIntros.setChecked(False)
             self.cb_playerIntros.setToolTip(
-                'Update player intros files via SC2-Client-API')
+                _('Update player intros files via SC2-Client-API'))
             self.cb_playerIntros.stateChanged.connect(self.playerIntros_change)
 
             self.cb_autoToggleScore = PyQt5.QtWidgets.QCheckBox(
-                "Set Ingame Score")
+                _("Set Ingame Score"))
             self.cb_autoToggleScore.setChecked(False)
-            string = 'Automatically sets the score of your ingame' +\
-                     ' UI-interface at the begining of a game.'
+            string = _('Automatically sets the score of your ingame' +
+                       ' UI-interface at the begining of a game.')
             self.cb_autoToggleScore.setToolTip(string)
             self.cb_autoToggleScore.stateChanged.connect(
                 self.autoToggleScore_change)
 
             self.cb_autoToggleProduction = PyQt5.QtWidgets.QCheckBox(
-                "Toggle Production Tab")
+                _("Toggle Production Tab"))
             self.cb_autoToggleProduction.setChecked(False)
-            string = 'Automatically toggles the production tab of your' + \
-                     ' ingame UI-interface at the begining of a game.'
+            string = _('Automatically toggles the production tab of your' +
+                       ' ingame UI-interface at the begining of a game.')
             self.cb_autoToggleProduction.setToolTip(string)
             self.cb_autoToggleProduction.stateChanged.connect(
                 self.autoToggleProduction_change)
 
-            self.cb_autoFTP = PyQt5.QtWidgets.QCheckBox("FTP Upload")
+            self.cb_autoFTP = PyQt5.QtWidgets.QCheckBox(_("FTP Upload"))
             self.cb_autoFTP.setChecked(False)
             self.cb_autoFTP.stateChanged.connect(self.autoFTP_change)
 
             self.cb_autoTwitch = PyQt5.QtWidgets.QCheckBox(
-                "Auto Twitch Update")
+                _("Auto Twitch Update"))
             self.cb_autoTwitch.setChecked(False)
             self.cb_autoTwitch.stateChanged.connect(self.autoTwitch_change)
 
             self.cb_autoNightbot = PyQt5.QtWidgets.QCheckBox(
-                "Auto Nightbot Update")
+                _("Auto Nightbot Update"))
             self.cb_autoNightbot.setChecked(False)
             self.cb_autoNightbot.stateChanged.connect(
                 self.autoNightbot_change)
@@ -696,11 +757,11 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
                 self.cb_autoToggleScore.setEnabled(False)
                 self.cb_autoToggleScore.setAttribute(
                     PyQt5.QtCore.QtWA_AlwaysShowToolTips)
-                self.cb_autoToggleScore.setToolTip('Only Windows')
+                self.cb_autoToggleScore.setToolTip(_('Only Windows'))
                 self.cb_autoToggleProduction.setEnabled(False)
                 self.cb_autoToggleProduction.setAttribute(
                     PyQt5.QtCore.QtWA_AlwaysShowToolTips)
-                self.cb_autoToggleProduction.setToolTip('Only Windows')
+                self.cb_autoToggleProduction.setToolTip(_('Only Windows'))
 
             layout = PyQt5.QtWidgets.QGridLayout()
 
@@ -758,8 +819,8 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
     def ftpSignal(self, signal):
         """Define signal handle for ftpUploader."""
         if(signal == -2):
-            PyQt5.QtWidgets.QMessageBox.warning(self, "Login error",
-                                                'FTP server login incorrect!')
+            PyQt5.QtWidgets.QMessageBox.warning(self, _("Login error"),
+                                                _('FTP server login incorrect!'))
             self.cb_autoFTP.setChecked(False)
         elif(signal == -3):
             self.progressBar.setVisible(False)
@@ -812,7 +873,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
         """Handle click to apply custom match."""
         try:
             self.trigger = False
-            self.statusBar().showMessage('Applying Custom Match...')
+            self.statusBar().showMessage(_('Applying Custom Match...'))
             msg = self.controller.applyCustom(int(self.cb_bestof.currentText()),
                                               self.cb_allkill.isChecked(),
                                               int(self.cb_minSets.currentText()),
@@ -837,7 +898,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
         try:
             url = self.le_url.text()
             self.trigger = False
-            self.statusBar().showMessage('Reading ' + url + '...')
+            self.statusBar().showMessage(_('Reading {}...').format(url))
             msg = self.controller.refreshData(url)
             self.statusBar().showMessage(msg)
             self.trigger = True
@@ -855,7 +916,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
     def updatenightbot_click(self):
         """Handle click to change nightbot command."""
         try:
-            self.statusBar().showMessage('Updating Nightbot Command...')
+            self.statusBar().showMessage(_('Updating Nightbot Command...'))
             msg = self.controller.updateNightbotCommand()
             self.statusBar().showMessage(msg)
         except Exception as e:
@@ -864,7 +925,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
     def updatetwitch_click(self):
         """Handle click to change twitch title."""
         try:
-            self.statusBar().showMessage('Updating Twitch Title...')
+            self.statusBar().showMessage(_('Updating Twitch Title...'))
             msg = self.controller.updateTwitchTitle()
             self.statusBar().showMessage(msg)
         except Exception as e:
@@ -873,7 +934,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
     def updateobs_click(self):
         """Handle click to apply changes to OBS_data."""
         try:
-            self.statusBar().showMessage('Updating OBS Data...')
+            self.statusBar().showMessage(_('Updating OBS Data...'))
             self.controller.updateOBS()
             if not self.controller.resetWarning():
                 self.statusBar().showMessage('')
@@ -883,7 +944,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
     def resetscore_click(self):
         """Handle click to reset the score."""
         try:
-            self.statusBar().showMessage('Resetting Score...')
+            self.statusBar().showMessage(_('Resetting Score...'))
             self.trigger = False
             for player_idx in range(self.max_no_sets):
                 self.sl_score[player_idx].setValue(0)
@@ -898,7 +959,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
         """Handle change of the score."""
         try:
             if(self.sl_score[idx].value() == 0):
-                self.statusBar().showMessage('Updating Score...')
+                self.statusBar().showMessage(_('Updating Score...'))
                 self.trigger = False
                 self.sl_score[idx].setValue(score)
                 self.controller.updateOBS()
@@ -925,7 +986,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
         # options = PyQt5.QtWidgets.QFileDialog.Options()
         # options |= PyQt5.QtWidgets.QFileDialog.DontUseNativeDialog
         fileName, _ = PyQt5.QtWidgets.QFileDialog.getOpenFileName(
-            self, "Select Team Logo", "", "Support Images (*.png *.jpg)")
+            self, _("Select Team Logo"), "", _("Support Images ({})").format("*.png *.jpg"))
         if fileName:
             try:
                 os.remove(scctool.settings.OBSdataDir +
@@ -961,3 +1022,8 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
         """Process ten PyQt5 events."""
         for i in range(0, 10):
             self.app.processEvents()
+
+    def restart(self):
+        """Restart the main window."""
+        self.close()
+        self.app.exit(self.EXIT_CODE_REBOOT)

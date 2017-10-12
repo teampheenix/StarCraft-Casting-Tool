@@ -41,14 +41,14 @@ def updateTitle(newTitle):
         status_code = e.response.status_code
         error_msg = "Twitch API-Error: {}"
         if(status_code == 404):
-            msg = "Not Found - Channel '{}' not found.".format(twitchChannel)
+            msg = _("Not Found - Channel '{}' not found.").format(twitchChannel)
             msg = error_msg.format(msg)
         elif(status_code == 403):
-            msg = error_msg.format("Forbidden - Do you have permission?")
+            msg = error_msg.format(_("Forbidden - Do you have permission?"))
         elif(status_code == 401):
-            msg = error_msg.format("Unauthorized - Refresh your token!")
+            msg = error_msg.format(_("Unauthorized - Refresh your token!"))
         elif(status_code == 429):
-            msg = error_msg.format("Too Many Requests.")
+            msg = error_msg.format(_("Too Many Requests."))
         else:
             msg = str(e)
         success = False
