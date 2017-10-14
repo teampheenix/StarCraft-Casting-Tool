@@ -985,7 +985,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
         """Open dialog for team logo."""
         # options = PyQt5.QtWidgets.QFileDialog.Options()
         # options |= PyQt5.QtWidgets.QFileDialog.DontUseNativeDialog
-        fileName, _ = PyQt5.QtWidgets.QFileDialog.getOpenFileName(
+        fileName, status = PyQt5.QtWidgets.QFileDialog.getOpenFileName(
             self, _("Select Team Logo"), "", _("Support Images ({})").format("*.png *.jpg"))
         if fileName:
             try:

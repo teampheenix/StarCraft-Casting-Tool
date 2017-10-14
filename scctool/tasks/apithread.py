@@ -320,7 +320,7 @@ class SC2ApiThread(PyQt5.QtCore.QThread):
                         ToggleProduction()
                     break
                 else:
-                    print("SC2 not on foreground... waiting.")
+                    # print("SC2 not on foreground... waiting.")
                     time.sleep(2)
         except:
             module_logger.info("Toggle not working on this OS:")
@@ -334,12 +334,12 @@ class SC2ApiThread(PyQt5.QtCore.QThread):
             pytesseract.pytesseract.tesseract_cmd = scctool.settings.config.getTesserAct()
 
             players = data.getPlayerList()
-            img = ImageGrab.grab()
+            full_img = ImageGrab.grab()
             width, height = img.size
             positions = [None, None]
             ratios = [0.0, 0.0]
-            img = img.crop((int(width * 0.1), int(height * 0.9),
-                            int(width * 0.5), height))
+            img = full_img.crop((int(width * 0.1), int(height * 0.8),
+                                 int(width * 0.5), height))
             text = pytesseract.image_to_string(img)
             items = re.split('\s+', text)
 
@@ -354,6 +354,23 @@ class SC2ApiThread(PyQt5.QtCore.QThread):
                         module_logger.info("Player {} at postion {}".format(
                             player_idx, item_idx))
 
+            if None in positions: # Retry with full image.
+                positions = [None, None]
+                ratios = [0.0, 0.0]
+                text = pytesseract.image_to_string(full_img)
+                items = re.split('\s+', text)
+    
+                threshold = 0.5
+                for item_idx, item in enumerate(items):
+                    for player_idx, player in enumerate(players):
+                        ratio = SequenceMatcher(
+                            None, item.lower(), player.lower()).ratio()
+                        if(ratio >= max(threshold, ratios[player_idx])):
+                            positions[player_idx] = item_idx
+                            ratios[player_idx] = ratio
+                            module_logger.info("Player {} at postion {}".format(
+                                player_idx, item_idx))
+                                
             if None in positions:
                 return False
             elif(positions[0] > positions[1]):
