@@ -219,11 +219,11 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             myAct.triggered.connect(lambda: self.changeLanguage('en_US'))
             langMenu.addAction(myAct)
 
-            # myAct = PyQt5.QtWidgets.QAction(PyQt5.QtGui.QIcon(scctool.settings.getAbsPath(
-            #     'src/ru.png')), 'русский', self, checkable=True)
-            # myAct.setChecked(language == 'ru_RU')
-            # myAct.triggered.connect(lambda: self.changeLanguage('ru_RU'))
-            # langMenu.addAction(myAct)
+            myAct = PyQt5.QtWidgets.QAction(PyQt5.QtGui.QIcon(scctool.settings.getAbsPath(
+                'src/ru.png')), 'Pусский', self, checkable=True)
+            myAct.setChecked(language == 'ru_RU')
+            myAct.triggered.connect(lambda: self.changeLanguage('ru_RU'))
+            langMenu.addAction(myAct)
 
         except Exception as e:
             module_logger.exception("message")

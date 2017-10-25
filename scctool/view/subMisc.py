@@ -135,7 +135,7 @@ class SubwindowMisc(PyQt5.QtWidgets.QWidget):
         self.browse.clicked.connect(self.selectTesseract)
 
         text = _("Sometimes the order of players given by the SC2-Client-API differs" +
-                 " from the order in the Observer-UI resulting in a swaped match score." +
+                 " from the order in the Observer-UI resulting in a swapped match score." +
                  " To correct this via Optical Character Recognition you have to download" +
                  " {} and install and select the exectuable below, if it is not detected" +
                  " automatically.")
@@ -182,7 +182,7 @@ class SubwindowMisc(PyQt5.QtWidgets.QWidget):
         exe, ok = PyQt5.QtWidgets.QFileDialog.getOpenFileName(
             self, _("Select Tesseract-OCR Executable"), default,
             _("Tesseract-OCR Executable") + " (tesseract.exe);; " +
-            _("Exectuable") + " (*.exe);; " + _("All files") + " (*)")
+            _("Executable") + " (*.exe);; " + _("All files") + " (*)")
         if(ok and exe != old_exe):
             self.tesseract.setText(exe)
             self.changed()

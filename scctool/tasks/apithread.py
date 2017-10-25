@@ -326,7 +326,7 @@ class SC2ApiThread(PyQt5.QtCore.QThread):
             module_logger.info("Toggle not working on this OS:")
 
     def swapPlayers(self, data):
-        """Detect if players are swaped relative to SC2-Client-API data via ocr."""
+        """Detect if players are swapped relative to SC2-Client-API data via ocr."""
         try:
             if(not scctool.settings.config.parser.getboolean("SCT", "use_ocr")):
                 return False

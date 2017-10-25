@@ -611,7 +611,7 @@ msgstr "Durchsuchen..."
 #: view/subMisc.py:137
 msgid ""
 "Sometimes the order of players given by the SC2-Client-API differs from the "
-"order in the Observer-UI resulting in a swaped match score. To correct this "
+"order in the Observer-UI resulting in a swapped match score. To correct this "
 "via Optical Character Recognition you have to download {} and install and "
 "select the exectuable below, if it is not detected automatically."
 msgstr ""
@@ -634,7 +634,7 @@ msgid "Select Tesseract-OCR Executable"
 msgstr "Tesseract-OCR Programmdatei auswählen"
 
 #: view/subMisc.py:185
-msgid "Exectuable"
+msgid "Executable"
 msgstr "Programmdatei"
 
 #: view/subMisc.py:185

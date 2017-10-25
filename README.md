@@ -61,7 +61,7 @@ To update your [Twitch](https://www.twitch.tv/) title (and set your game to *Sta
 To active the automatic detection of the score via the SC2-Client-API check the box *Auto Score Update* of the *Background Tasks*. This score detection does only work if you either play or observe a decided game (game length > 60 seconds) with a pair of players that were specified on one of sets.
 
 #### Set Ingame Score
-Sometimes the order of players given by the SC2-Client-API differs from the order in the Observer-UI resulting in a swaped match score when using *Set Ingame Score*. To correct this you can activate Optical Character Recognition once you have to downloaded and installed [Tesseract-OCR](https://github.com/UB-Mannheim/tesseract/wiki#tesseract-at-ub-mannheim).
+Sometimes the order of players given by the SC2-Client-API differs from the order in the Observer-UI resulting in a swapped match score when using *Set Ingame Score*. To correct this you can activate Optical Character Recognition once you have to downloaded and installed [Tesseract-OCR](https://github.com/UB-Mannheim/tesseract/wiki#tesseract-at-ub-mannheim).
 
 #### Player Intros
 [![intro-demo](https://user-images.githubusercontent.com/26044736/30003831-4fe09b14-90c4-11e7-9593-439454d4e324.gif)](https://youtu.be/JNuAr63L0wM)
