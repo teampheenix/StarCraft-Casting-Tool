@@ -21,6 +21,7 @@ StarCraft Casting Tool (SCC Tool) is a small program written in Python 3 that ca
 * **Automatic FTP-Upload** of all resources to provide resources to a co-caster
 * **Interaction with SC2-Observer-UI**: Automatically toggle Production Tab and set Score at the start of a Map
 * Nearly **unlimited Customization** via Skins and CSS
+* German and Russian language support.
 
 ## Icon Preview
 
