@@ -8,6 +8,7 @@ import os
 import zipfile
 import sys
 import json
+import shutil
 import tarfile
 import PyQt5
 from scctool.tasks.tasksthread import TasksThread
@@ -85,8 +86,39 @@ def extractData(asset_update, handler):
             tar.extractall(targetdir)
         handler(90)
         os.remove(file)
-        handler(100)
+        handler(95)
         setDataVersion(asset_update.latest)
+        
+        copyStyleFile(scctool.settings.OBSmapDir + "/src/css/box_styles",
+                      scctool.settings.OBSmapDir + "/src/css/box.css",
+                      scctool.settings.config.parser.get("Style", "mapicon_box"))
+                      
+        copyStyleFile(scctool.settings.OBSmapDir + "/src/css/landscape_styles",
+                      scctool.settings.OBSmapDir + "/src/css/landscape.css",
+                      scctool.settings.config.parser.get("Style", "mapicon_landscape"))
+                      
+        copyStyleFile(scctool.settings.OBShtmlDir + "/src/css/intro_styles",
+                      scctool.settings.OBShtmlDir + "/src/css/intro.css",
+                      scctool.settings.config.parser.get("Style", "intro"))
+                      
+        copyStyleFile(scctool.settings.OBShtmlDir + "/src/css/intro_styles",
+                      scctool.settings.OBShtmlDir + "/src/css/score.css",
+                      scctool.settings.config.parser.get("Style", "score"))
+            
+        handler(100)
+        
+def copyStyleFile(style_dir, css_file, value):
+    newfile = os.path.join(scctool.settings.basedir,
+                            style_dir, value + ".css")
+    shutil.copy(newfile, css_file)
+
+    fname = os.path.basename(css_file)
+    dirs = os.path.dirname(css_file)
+
+    controller.ftpUploader.cwd(dirs)
+    controller.ftpUploader.upload(css_file, fname)
+    controller.ftpUploader.cwdback(dirs)
+    
 
 
 class VersionHandler(TasksThread):
