@@ -62,6 +62,8 @@ To update your [Twitch](https://www.twitch.tv/) title (and set your game to *Sta
 To active the automatic detection of the score via the SC2-Client-API check the box *Auto Score Update* of the *Background Tasks*. This score detection does only work if you either play or observe a decided game (game length > 60 seconds) with a pair of players that were specified on one of sets.
 
 #### Set Ingame Score
+By default SCC-Tool presses Strg+Shift+S to toggle the Score in the Observer-UI. For an Oberserver-UI like WCS that has no toggle-able score and doesn't have assigned this hot-key combination it will be interpreted as Strg+S and typically disable your sound. To prevent this, you can disable SCC-Tool pressing Strg+Shift+S by setting `strgshifts = False` in your `config.ini` file while SCC-Tool is not running.
+
 Sometimes the order of players given by the SC2-Client-API differs from the order in the Observer-UI resulting in a swapped match score when using *Set Ingame Score*. To correct this you can activate Optical Character Recognition once you have to downloaded and installed [Tesseract-OCR](https://github.com/UB-Mannheim/tesseract/wiki#tesseract-at-ub-mannheim).
 
 #### Player Intros
