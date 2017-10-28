@@ -152,14 +152,15 @@ def ToggleScore(score1_in, score2_in, bestof=5):
 
     lag = 0.01
 
-    PressKey(CONTROL)
-    PressKey(SHIFT)
-    PressKey(S)
-    time.sleep(lag)
-    ReleaseKey(S)
-    ReleaseKey(SHIFT)
-    ReleaseKey(CONTROL)
-    time.sleep(lag)
+    if scctool.settings.config.parser.getboolean("SCT", "StrgShiftS"):
+        PressKey(CONTROL)
+        PressKey(SHIFT)
+        PressKey(S)
+        time.sleep(lag)
+        ReleaseKey(S)
+        ReleaseKey(SHIFT)
+        ReleaseKey(CONTROL)
+        time.sleep(lag)
 
     if(not skipBestof):
         PressKey(CONTROL)
@@ -335,7 +336,7 @@ class SC2ApiThread(PyQt5.QtCore.QThread):
 
             players = data.getPlayerList()
             full_img = ImageGrab.grab()
-            width, height = img.size
+            width, height = full_img.size
             positions = [None, None]
             ratios = [0.0, 0.0]
             img = full_img.crop((int(width * 0.1), int(height * 0.8),
