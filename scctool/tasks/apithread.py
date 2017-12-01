@@ -292,6 +292,11 @@ class SC2ApiThread(PyQt5.QtCore.QThread):
             if(self.exiting is False and
                 (newData != self.currentData or
                  newData.time < self.currentData.time)):
+                     
+                # Skip initial data
+                if(self.currentData == SC2MatchData()):
+                    self.currentData = newData
+                    return
 
                 if(self.activeTask['playerIntros']):
                     self.controller.updatePlayerIntros(newData)
@@ -488,8 +493,7 @@ class SC2MatchData:
                 and self.player2 == other.player2
                 and self.race1 == other.race1
                 and self.race2 == other.race2
-                and self.result == other.result
-                and self.ingame == other.ingame)
+                and self.result == other.result)
 
     def getPlayerList(self):
         """Get list of players."""

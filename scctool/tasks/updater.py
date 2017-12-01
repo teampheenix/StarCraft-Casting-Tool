@@ -180,7 +180,7 @@ class VersionHandler(TasksThread):
                 if self.isCompatible():
                     self.activateTask("update_data")
 
-            if self.app_update is not None:
+           #   if self.app_update is not None:
                 scctool.__latest_version__ = self.app_update.latest
                 scctool.__new_version__ = True
                 self.newVersion.emit(self.app_update.latest)

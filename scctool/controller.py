@@ -49,6 +49,7 @@ class MainController:
             self.placeholderSetup()
             self._warning = False
             self.checkVersion()
+            pass
 
         except Exception as e:
             module_logger.exception("message")

@@ -11,7 +11,7 @@ from scctool.settings import getAbsPath
 
 logger = logging.getLogger('scctool')
 
-__version__ = "1.2.2"
+__version__ = "1.2.3"
 __latest_version__ = __version__
 __new_version__ = False
 
@@ -22,7 +22,7 @@ try:
         'messages', localedir='locales', languages=[language])
 except:
     lang = gettext.NullTranslations()
-    
+
 lang.install()
 
 
@@ -37,7 +37,6 @@ def main():
         try:
             app = QApplication(sys.argv)
             app.setStyle(QStyleFactory.create('Fusion'))
-
             translator = QTranslator(app)
             translator.load(QLocale(language), "qtbase",
                             "_",  getAbsPath('locales'), ".qm")
