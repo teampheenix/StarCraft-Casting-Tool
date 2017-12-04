@@ -96,6 +96,7 @@ class matchData:
         self.__data['best_of'] = 0
         self.__data['min_sets'] = 0
         self.__data['allkill'] = False
+        self.__data['solo'] = False
         self.__data['my_team'] = 0
         self.__data['teams'] = []
         self.__data['teams'].append({'name': 'TBD', 'tag': None})
@@ -158,6 +159,14 @@ class matchData:
             return int(self.__data['min_sets'])
         except:
             return 0
+            
+    def setSolo(self, solo):
+        """Set allkill format."""
+        self.__data['solo'] = bool(solo)
+
+    def getSolo(self):
+        """Check if format is solo (or team)."""
+        return bool(self.__data['solo'])
 
     def setAllKill(self, allkill):
         """Set allkill format."""
@@ -185,7 +194,7 @@ class matchData:
 
         return False
 
-    def setCustom(self, bestof, allkill):
+    def setCustom(self, bestof, allkill, solo):
         """Set a custom match format."""
         bestof = int(bestof)
         allkill = bool(allkill)
@@ -200,6 +209,7 @@ class matchData:
         self.setProvider("Custom")
         self.setID(0)
         self.setURL("")
+        self.setSolo(solo)
 
     def resetData(self):
         """Reset all data to default values."""
@@ -214,6 +224,8 @@ class matchData:
 
         self.setLeague("TBD")
         self.setMyTeam(0)
+        self.setAllKill(False)
+        self.setSolo(False)
 
     def resetLabels(self):
         """Reset the map labels."""
@@ -832,8 +844,11 @@ class matchData:
                   "rt", encoding='utf-8-sig') as fin:
             with open(filename, "wt", encoding='utf-8-sig') as fout:
                 for line in fin:
-                    line = line.replace('%TEAM1%', self.getTeam(
-                        0)).replace('%TEAM2%', self.getTeam(1))
+                    if self.getSolo():
+                        line = line.replace('%TEAM1%', self.getPlayer(0,0)).replace('%TEAM2%', self.getPlayer(1,0))
+                    else:
+                        line = line.replace('%TEAM1%', self.getTeam(
+                            0)).replace('%TEAM2%', self.getTeam(1))
                     line = line.replace('%LOGO1%', logo1).replace(
                         '%LOGO2%', logo2)
                     line = line.replace('%WINNER1%', winner[0]).replace(

@@ -109,6 +109,8 @@ class MainController:
                 self.view.tabs.setCurrentIndex(0)
 
             self.view.cb_allkill.setChecked(self.matchData.getAllKill())
+            
+            self.view.cb_solo.setChecked(self.matchData.getSolo())
 
             index = self.view.cb_bestof.findText(str(self.matchData.getBestOfRaw()),
                                                  PyQt5.QtCore.Qt.MatchFixedString)
@@ -126,6 +128,11 @@ class MainController:
             self.view.sl_team.setValue(self.matchData.getMyTeam())
             for i in range(2):
                 self.view.le_team[i].setText(self.matchData.getTeam(i))
+              
+            for j in range(2):
+                for i in range(1,self.matchData.getNoSets()):
+                    self.view.le_player[j][i].setReadOnly(self.matchData.getSolo())
+            
 
             for i in range(min(self.view.max_no_sets, self.matchData.getNoSets())):
                 for j in range(2):
@@ -193,12 +200,12 @@ class MainController:
         except Exception as e:
             module_logger.exception("message")
 
-    def applyCustom(self, bestof, allkill, minSets, url):
+    def applyCustom(self, bestof, allkill, solo, minSets, url):
         """Apply a custom match format."""
         msg = ''
         try:
 
-            self.matchData.setCustom(bestof, allkill)
+            self.matchData.setCustom(bestof, allkill, solo)
             self.matchData.setMinSets(minSets)
             self.matchData.setURL(url)
             self.matchData.writeJsonFile()

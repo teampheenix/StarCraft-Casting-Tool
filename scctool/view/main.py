@@ -397,6 +397,12 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             self.cb_allkill.setToolTip(
                 _('Winner stays and is automatically placed into the next set'))
             container.addWidget(self.cb_allkill, 0)
+            
+            self.cb_solo = PyQt5.QtWidgets.QCheckBox(_("1vs1"))
+            self.cb_solo.setChecked(False)
+            self.cb_solo.setToolTip(
+                _('Select for solo (non-team matches)'))
+            container.addWidget(self.cb_solo, 0)
 
             label = PyQt5.QtWidgets.QLabel("")
             container.addWidget(label, 1)
@@ -433,9 +439,9 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
                 PyQt5.QtWidgets.QCompleter.UnfilteredPopupCompletion)
             completer.setWrapAround(True)
             self.le_url_custom.setCompleter(completer)
-            self.le_url_custom.setMinimumWidth(310)
+            self.le_url_custom.setMinimumWidth(360)
 
-            container.addWidget(self.le_url_custom, 10)
+            container.addWidget(self.le_url_custom, 11)
 
             label = PyQt5.QtWidgets.QLabel("")
             container.addWidget(label, 1)
@@ -590,6 +596,10 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             container.addWidget(self.qb_logo2, 0, 6, 2, 1)
 
             layout2.addLayout(container)
+            
+            for team_idx in range(2):
+                self.le_player[team_idx][0].editingFinished.connect(lambda team_idx=team_idx: self.player_changed(team_idx))
+                self.cb_race[team_idx][0].currentIndexChanged.connect(lambda value, team_idx=team_idx, func=self.race_changed: func(team_idx))
 
             for player_idx in range(self.max_no_sets):
                 for team_idx in range(2):
@@ -876,6 +886,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             self.statusBar().showMessage(_('Applying Custom Match...'))
             msg = self.controller.applyCustom(int(self.cb_bestof.currentText()),
                                               self.cb_allkill.isChecked(),
+                                              self.cb_solo.isChecked(),
                                               int(self.cb_minSets.currentText()),
                                               self.le_url_custom.text().strip())
             self.statusBar().showMessage(msg)
@@ -978,6 +989,28 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             if(self.trigger):
                 self.controller.allkillUpdate()
                 self.controller.updateOBS()
+        except Exception as e:
+            module_logger.exception("message")
+            
+    def player_changed(self, team_idx):
+        """Handle a change of player names."""
+        try:
+            if(self.controller.matchData.getSolo()):
+                text = self.le_player[team_idx][0].text()
+                for player_idx in range(1, self.max_no_sets):
+                    self.le_player[team_idx][player_idx].setText(text)
+            
+        except Exception as e:
+            module_logger.exception("message")
+            
+    def race_changed(self, team_idx):
+        """Handle a change of player names."""
+        try:
+            if(self.controller.matchData.getSolo()):
+                idx = self.cb_race[team_idx][0].currentIndex()
+                for player_idx in range(1, self.max_no_sets):
+                    self.cb_race[team_idx][player_idx].setCurrentIndex(idx)
+            
         except Exception as e:
             module_logger.exception("message")
 
