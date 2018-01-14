@@ -20,7 +20,7 @@ class MatchGrabber(MatchGrabberParent):
         self._provider = "RSTL"
         self._urlprefix = \
             "http://hdgame.net/en/tournaments/list/tournament"\
-            + "/rstl-12/tmenu/tmatches/?match="
+            + "/rstl-13/tmenu/tmatches/?match="
         self._apiprefix = \
             "http://hdgame.net/index.php?ajax=1&do=tournament&act=api"\
             + "&data_type=json&lang=en&service=match&match_id="

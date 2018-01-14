@@ -78,9 +78,9 @@ class MainController:
         """Define and connect placeholders."""
         self.placeholders = PlaceholderList()
         self.placeholders.addConnection("Team1",
-                                        lambda: self.matchData.getTeam(0))
+                                        lambda: self.matchData.getTeamOrPlayer(0))
         self.placeholders.addConnection("Team2",
-                                        lambda: self.matchData.getTeam(1))
+                                        lambda: self.matchData.getTeamOrPlayer(1))
         self.placeholders.addConnection("URL", self.matchData.getURL)
         self.placeholders.addConnection(
             "BestOf", lambda: str(self.matchData.getBestOfRaw()))

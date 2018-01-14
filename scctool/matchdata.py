@@ -163,6 +163,9 @@ class matchData:
     def setSolo(self, solo):
         """Set allkill format."""
         self.__data['solo'] = bool(solo)
+        for set_idx in range(self.getNoSets()):
+            for team_idx in range(2):
+                self.setPlayer(team_idx, set_idx, self.getPlayer(team_idx, 0))
 
     def getSolo(self):
         """Check if format is solo (or team)."""
@@ -502,7 +505,7 @@ class matchData:
             return []
 
     def getPlayer(self, team_idx, set_idx):
-        """Get the player of a set."""
+        """Get the player (name) of a set."""
         try:
             if(not (set_idx >= 0 and set_idx < self.__data['no_sets']
                     and team_idx in range(2))):
@@ -584,6 +587,14 @@ class matchData:
             return False
 
         return str(self.__data['teams'][team_idx]['name'])
+        
+    def getTeamOrPlayer(self, team_idx):
+        """Get team name or player name depending on mode."""
+        
+        if self.getSolo():
+            return self.getPlayer(team_idx, 0)
+        else:
+            return self.getTeam(team_idx)
 
     def setTeamTag(self, team_idx, tag):
         """Set team tag."""
