@@ -33,6 +33,7 @@ class MatchGrabber(MatchGrabberParent):
             self._matchData.setURL(self.getURL())
             self._matchData.setNoSets(5, resetPlayers=True)
             self._matchData.setMinSets(3)
+            self._matchData.setSolo(False)
             league = data['tournament']
             if not isinstance(league, str):
                 league = "TBD"
