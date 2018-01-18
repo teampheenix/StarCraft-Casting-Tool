@@ -113,13 +113,20 @@ class MatchGrabber(MatchGrabberParent):
     def downloadBanner(self):
         """Download team logos."""
         dir = scctool.settings.OBSdataDir
+        transparent = scctool.settings.config.parser.getboolean("SCT", "transparent_match_banner")
+        
         if self._rawData is None:
             raise ValueError(
                 "Error: No raw data.")
 
         fname = dir + "/matchbanner.png"
         url = "http://alpha.tl/announcement/"\
-            + str(self.getID()) + "?vs"
+            + str(self.getID()) 
+        
+        if transparent:
+            url = url + "?transparent"
+        else:
+            url = url + "?vs"
 
         try:
             urlretrieve(url, fname)

@@ -61,15 +61,35 @@ class SubwindowMisc(PyQt5.QtWidgets.QWidget):
         self.createFavBox()
         self.createMapsBox()
         self.createOcrBox()
+        self.createAlphaBox()
 
         # Add tabs
         self.tabs.addTab(self.mapsBox, _("Map Manager"))
         self.tabs.addTab(self.favBox, _("Favorites"))
         self.tabs.addTab(self.ocrBox, _("OCR"))
+        self.tabs.addTab(self.alphaBox, _("AlphaTL"))
 
     def changed(self):
         """Handle changes."""
         self.__dataChanged = True
+        
+    def createAlphaBox(self):
+        self.alphaBox = PyQt5.QtWidgets.QWidget()
+        mainLayout = PyQt5.QtWidgets.QVBoxLayout()
+        
+        
+        self.cb_trans_banner = PyQt5.QtWidgets.QCheckBox(
+            " " + _("Download transparent Banner of the Match"))
+        self.cb_trans_banner.setChecked(
+            scctool.settings.config.parser.getboolean("SCT", "transparent_match_banner"))
+        self.cb_trans_banner.stateChanged.connect(self.changed)
+        
+        mainLayout.addWidget(self.cb_trans_banner)
+        
+        mainLayout.addItem(PyQt5.QtWidgets.QSpacerItem(
+            0, 0, PyQt5.QtWidgets.QSizePolicy.Minimum, PyQt5.QtWidgets.QSizePolicy.Expanding))
+        
+        self.alphaBox.setLayout(mainLayout)
 
     def createFavBox(self):
         """Create favorites box."""
@@ -371,6 +391,8 @@ class SubwindowMisc(PyQt5.QtWidgets.QWidget):
                 "SCT", "tesseract", self.tesseract.text().strip())
             scctool.settings.config.parser.set(
                 "SCT", "use_ocr", str(self.cb_useocr.isChecked()))
+            scctool.settings.config.parser.set(
+                "SCT", "transparent_match_banner", str(self.cb_trans_banner.isChecked()))
 
     def saveCloseWindow(self):
         """Save and close window."""

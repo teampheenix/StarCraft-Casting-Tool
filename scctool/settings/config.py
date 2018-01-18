@@ -103,6 +103,7 @@ def setDefaultConfigAll():
     setDefaultConfig("SCT", "use_ocr", "False")
     setDefaultConfig("SCT", "StrgShiftS", "True")
     setDefaultConfig("SCT", "language", "en_US")
+    setDefaultConfig("SCT", "transparent_match_banner", "False")
 
     tesseract = "C:\\Program Files (x86)\\Tesseract-OCR\\tesseract.exe"
     setDefaultConfig("SCT", "tesseract", tesseract, findTesserAct)

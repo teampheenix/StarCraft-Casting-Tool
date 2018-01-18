@@ -193,7 +193,7 @@ class MatchGrabber(MatchGrabberParent):
 
             self._matchData.setAllKill(True)
         else:
-            module_logger.info("RSTL Format Unkown")
+            module_logger.info("RSTL Format Unknown")
 
     def downloadLogos(self):
         """Download team logos."""

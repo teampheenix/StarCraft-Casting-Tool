@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2017-12-04 19:42+0100\n"
-"PO-Revision-Date: 2017-12-04 19:43+0100\n"
+"POT-Creation-Date: 2018-01-18 09:30+0100\n"
+"PO-Revision-Date: 2018-01-18 09:31+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de\n"
@@ -556,11 +556,11 @@ msgstr "Kommando:"
 msgid "Message:"
 msgstr "Nachricht:"
 
-#: view/subConnections.py:327 view/subMisc.py:351 view/subStyles.py:69
+#: view/subConnections.py:327 view/subMisc.py:371 view/subStyles.py:69
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: view/subConnections.py:331 view/subMisc.py:355 view/subStyles.py:73
+#: view/subConnections.py:331 view/subMisc.py:375 view/subStyles.py:73
 msgid "Save && Close"
 msgstr "Speichern && Schließen"
 
@@ -568,7 +568,7 @@ msgstr "Speichern && Schließen"
 msgid "Output:"
 msgstr "Ausgabe:"
 
-#: view/subConnections.py:414 view/subMisc.py:397 view/subStyles.py:238
+#: view/subConnections.py:414 view/subMisc.py:419 view/subStyles.py:238
 msgid "Save data?"
 msgstr "Daten speichern?"
 
@@ -580,43 +580,51 @@ msgstr "Möchten Sie die Daten speichern?"
 msgid "Miscellaneous Settings"
 msgstr "Verschiedene Einstellungen"
 
-#: view/subMisc.py:66
+#: view/subMisc.py:67
 msgid "Map Manager"
 msgstr "Karten Manager"
 
-#: view/subMisc.py:67
+#: view/subMisc.py:68
 msgid "Favorites"
 msgstr "Favoriten"
 
-#: view/subMisc.py:68
+#: view/subMisc.py:69
 msgid "OCR"
 msgstr "OCR"
 
-#: view/subMisc.py:79
+#: view/subMisc.py:70
+msgid "AlphaTL"
+msgstr ""
+
+#: view/subMisc.py:82
+msgid "Download transparent Banner of the Match"
+msgstr "Transparentes Match Banner herunterladen"
+
+#: view/subMisc.py:99
 msgid "Players"
 msgstr "Spieler"
 
-#: view/subMisc.py:91
+#: view/subMisc.py:111
 msgid "Teams"
 msgstr "Teams"
 
-#: view/subMisc.py:114
+#: view/subMisc.py:134
 msgid "Optical Character Recognition for Automatic Setting of Ingame Score"
 msgstr "Optische Zeichenerkennung zum automatischen Setzen des Spielstandes"
 
-#: view/subMisc.py:119
+#: view/subMisc.py:139
 msgid "Activate Optical Character Recognition"
 msgstr "Optische Zeichenerkennung aktivieren"
 
-#: view/subMisc.py:132 view/subMisc.py:184
+#: view/subMisc.py:152 view/subMisc.py:204
 msgid "Tesseract-OCR Executable"
 msgstr "Tesseract-OCR Programmdatei"
 
-#: view/subMisc.py:134
+#: view/subMisc.py:154
 msgid "Browse..."
 msgstr "Durchsuchen..."
 
-#: view/subMisc.py:137
+#: view/subMisc.py:157
 msgid ""
 "Sometimes the order of players given by the SC2-Client-API differs from the "
 "order in the Observer-UI resulting in a swapped match score. To correct this "
@@ -629,71 +637,71 @@ msgstr ""
 "{} heruntergeladen, installiert und unten ausgewählt werden, sofern nicht "
 "automatisch geschehen. "
 
-#: view/subMisc.py:154
+#: view/subMisc.py:174
 msgid "Tesseract-OCR Executable:"
 msgstr "Tesseract-OCR Programmdatei:"
 
-#: view/subMisc.py:168 view/subMisc.py:172 view/subMisc.py:176
+#: view/subMisc.py:188 view/subMisc.py:192 view/subMisc.py:196
 msgid "This feature is only available in Windows."
 msgstr "Nur für Windows verfügbar."
 
-#: view/subMisc.py:183
+#: view/subMisc.py:203
 msgid "Select Tesseract-OCR Executable"
 msgstr "Tesseract-OCR Programmdatei auswählen"
 
-#: view/subMisc.py:185
+#: view/subMisc.py:205
 msgid "Executable"
 msgstr "Programmdatei"
 
-#: view/subMisc.py:185
+#: view/subMisc.py:205
 msgid "All files"
 msgstr "Alle Dateien"
 
-#: view/subMisc.py:216
+#: view/subMisc.py:236
 msgid "Add"
 msgstr "Hinzufügen"
 
-#: view/subMisc.py:218
+#: view/subMisc.py:238
 msgid "Rename"
 msgstr "Ändern"
 
-#: view/subMisc.py:220
+#: view/subMisc.py:240
 msgid "Change Image"
 msgstr "Ändere Bild"
 
-#: view/subMisc.py:222
+#: view/subMisc.py:242
 msgid "Remove"
 msgstr "Löschen"
 
-#: view/subMisc.py:251 view/subMisc.py:293
+#: view/subMisc.py:271 view/subMisc.py:313
 msgid "Map Name"
 msgstr "Karten-Name"
 
-#: view/subMisc.py:251 view/subMisc.py:293
+#: view/subMisc.py:271 view/subMisc.py:313
 msgid "Map Name:"
 msgstr "Karten-Name:"
 
-#: view/subMisc.py:259 view/subMisc.py:297
+#: view/subMisc.py:279 view/subMisc.py:317
 msgid "Duplicate Entry"
 msgstr "Doppelter Eintragf"
 
-#: view/subMisc.py:260 view/subMisc.py:298
+#: view/subMisc.py:280 view/subMisc.py:318
 msgid "Map is already in list! Overwrite?"
 msgstr "Karte ist bereits in der Liste! Überschreiben?"
 
-#: view/subMisc.py:274 view/subMisc.py:286
+#: view/subMisc.py:294 view/subMisc.py:306
 msgid "Select Map Image (> 500x500px recommended)"
 msgstr "Wähe Karten-Bild aus (> 500x500px empfohlen)"
 
-#: view/subMisc.py:275 view/subMisc.py:287
+#: view/subMisc.py:295 view/subMisc.py:307
 msgid "Support Images"
 msgstr "Unterstütze Bild-Formate"
 
-#: view/subMisc.py:314
+#: view/subMisc.py:334
 msgid "Delete map?"
 msgstr "Karte löschen?"
 
-#: view/subMisc.py:315
+#: view/subMisc.py:335
 msgid "Delete '{}' permanently?"
 msgstr "Soll '{}' permanent gelöscht werden?"
 
