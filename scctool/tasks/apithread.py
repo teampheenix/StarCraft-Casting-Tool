@@ -288,24 +288,33 @@ class SC2ApiThread(PyQt5.QtCore.QThread):
 
     def parseMatchData(self, newData):
         """Parse SC2-Client-API data and run tasks accordingly."""
+        #print("Prasing")
+        #print(newData)
+        #print(self.currentData)
+        #print(newData.time)
+        #print(self.currentData.time)
         try:
             if(self.exiting is False and
                 (newData != self.currentData or
                  newData.time < self.currentData.time)):
                      
                 # Skip initial data
-                if(self.currentData == SC2MatchData()):
-                    self.currentData = newData
-                    return
+                #if(self.currentData == SC2MatchData()):
+                #    print("Skipping initial")
+                #    self.currentData = newData
+                #    return
 
                 if(self.activeTask['playerIntros']):
+                    print("Providing player intros...")
                     self.controller.updatePlayerIntros(newData)
 
-                if(self.activeTask['updateScore'] and newData.isDecidedGame()):
+                if(self.activeTask['updateScore'] and newData.isDecidedGame() and self.currentData != SC2MatchData()):
+                    print("Updating Score")
                     self.controller.requestScoreUpdate(newData)
 
                 if(newData.isLive() and (self.activeTask['toggleScore']
                                          or self.activeTask['toggleProduction'])):
+                    print("Toggling")
                     self.tryToggle(newData)
 
                 self.currentData = newData
