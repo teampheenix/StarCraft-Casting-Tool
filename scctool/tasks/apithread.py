@@ -305,16 +305,16 @@ class SC2ApiThread(PyQt5.QtCore.QThread):
                 #    return
 
                 if(self.activeTask['playerIntros']):
-                    print("Providing player intros...")
+                    #print("Providing player intros...")
                     self.controller.updatePlayerIntros(newData)
 
                 if(self.activeTask['updateScore'] and newData.isDecidedGame() and self.currentData != SC2MatchData()):
-                    print("Updating Score")
+                    #print("Updating Score")
                     self.controller.requestScoreUpdate(newData)
 
                 if(newData.isLive() and (self.activeTask['toggleScore']
                                          or self.activeTask['toggleProduction'])):
-                    print("Toggling")
+                    #print("Toggling")
                     self.tryToggle(newData)
 
                 self.currentData = newData
@@ -358,7 +358,7 @@ class SC2ApiThread(PyQt5.QtCore.QThread):
             text = pytesseract.image_to_string(img)
             items = re.split('\s+', text)
 
-            threshold = 0.5
+            threshold = 0.35
             for item_idx, item in enumerate(items):
                 for player_idx, player in enumerate(players):
                     ratio = SequenceMatcher(
@@ -375,7 +375,7 @@ class SC2ApiThread(PyQt5.QtCore.QThread):
                 text = pytesseract.image_to_string(full_img)
                 items = re.split('\s+', text)
     
-                threshold = 0.5
+                threshold = 0.35
                 for item_idx, item in enumerate(items):
                     for player_idx, player in enumerate(players):
                         ratio = SequenceMatcher(
