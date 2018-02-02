@@ -77,10 +77,10 @@ Some basic options for customization can be found under *Settings: Styles*, for 
 
 ## Help, Bug-Report, Suggestions & Contribution
 
-If you need help, have bugs to report, have suggestions to make, or want to contribute to this project in any way message me (*pres.sure#5247*) on [Discord](https://discordapp.com/) or go to *#dev* channel of the [Alpha SC2 Discord Server](https://discord.gg/m8Xx62v).
+If you need help, have bugs to report, have suggestions to make, or want to contribute to this project in any way message me (*pres.sure#5247*) on [Discord](https://discordapp.com/) or join the Discord Server of this project via https://discord.gg/G9hFEfh.
 
 In the case of a bug report please provide the log-file `scctool.log` (and `installpackages.log` if applicable).
 
 ## Support
 
-If you want to support this project, consider subscribing to [twitch.tv/teampheenix](https://www.twitch.tv/teampheenix) or [donate directly](https://streamlabs.com/scpressure). Alternatively and free of cost - just follow the team pheeniX and my personal [twitch.tv/scpressure](https://www.twitch.tv/scpressure) twitch channel!
+If you want to support this project join our [Discord Server](https://discord.gg/G9hFEfh) and consider subscribing to [twitch.tv/teampheenix](https://www.twitch.tv/teampheenix) or [donate directly](https://streamlabs.com/scpressure). Alternatively and free of cost - just follow the team pheeniX and my personal [twitch.tv/scpressure](https://www.twitch.tv/scpressure) twitch channel!
