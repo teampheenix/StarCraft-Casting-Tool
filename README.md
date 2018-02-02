@@ -38,7 +38,7 @@ This tool should run on any operating system that supports Python 3, e.g., Windo
 
 ### Executable with Updater
 
-**Only Windows: [Download the latest executable](https://github.com/teampheenix/StarCraft-Casting-Tool/releases/latest)** `StarCraft-Casting-Tool.exe`, place it in the desired folder and execute it.
+**Only Windows: [Download the latest executable](https://github.com/teampheenix/StarCraft-Casting-Tool/releases/latest)** `StarCraft-Casting-Tool.exe`, place it in an preferable empty folder folder with sufficient write-privileges and execute it. After the first start a subfolder structure is generated and all additional data is downloaded - do not move or alter this data structure relative to the executable.
 
 ### Alternativ: Python Script
 
@@ -46,7 +46,7 @@ This tool should run on any operating system that supports Python 3, e.g., Windo
 
 ## Instructions for Use
 
-Run StarCraft Casting Tool via `StarCraft-Casting-Tool.exe` or `StarCraftCastingTool.pyw`. Enter the Match-URL of an AlphaTL or RSTL match in the *Match Grabber* tab, e.g., "http://alpha.tl/match/2392", and press *Load Data from URL*. Alternatively one can create a match in the *Custom Match* tab.  Edit the data if necessary. The sliders control the score of each map. Press *Update OBS Data* or alter the score to update the data for streaming. The top slider is to select *your* team. Once selected the border of the Map Icons turn (by default) green or red depending on the result. To select your team by default you can add it in *Favorite Teams* list under *Settings: Misc*. Similarly you can enter your players' nicknames into *Favorite Players* for auto completion.
+Run StarCraft Casting Tool via `StarCraft-Casting-Tool.exe` (or `StarCraftCastingTool.pyw`). Enter the Match-URL of an AlphaTL or RSTL match in the *Match Grabber* tab, e.g., "http://alpha.tl/match/2392", and press *Load Data from URL*. Alternatively one can create a match in the *Custom Match* tab.  Edit the data if necessary. The sliders control the score of each map. Press *Update OBS Data* or alter the score to update the data for streaming. The top slider is to select *your* team. Once selected the border of the Map Icons turn (by default) green or red depending on the result. To select your team by default you can add it in *Favorite Teams* list under *Settings: Misc*. Similarly you can enter your players' nicknames into *Favorite Players* for auto completion.
 
 ### Data for Streaming
 can be found in the directory `OBS_data` and be included into OBS (or any similar streaming tool) via *Text read from local file*. If you want to include the team logos and the matchbanner, it is recommended to include them as *browser source from local file* via the HTML files given in the directory `OBS_html` *(Score Icon: 1280x100px, Logos: 300x300px, Intros: Your Screen Resolution)*. The Map Icons can be found in the directory `OBS_mapicons` and have to be included via *browser source from local file* as well. There are two type of icons: box icons in `OBS_mapicons/icons_box` and landscape icons in `OBS_mapicons/icons_landscape`. One can either include each Map Icon separately *(box size: 280x270px, landscape size: 1010x110px)* and arrange them freely or one can include them via the single html file `all_maps.html` *(the chosen dimension of the browser source determines the arrangement of the icons)*. Note that you can scale the browser source(s) down/up if you want to make the icons smaller/larger.
@@ -69,11 +69,11 @@ Sometimes the order of players given by the SC2-Client-API differs from the orde
 #### Player Intros
 [![intro-demo](https://user-images.githubusercontent.com/26044736/30003831-4fe09b14-90c4-11e7-9593-439454d4e324.gif)](https://youtu.be/JNuAr63L0wM)
 
-Include the player Intros as browser sources (using the full height and width of your display), active *Shutdown source when not visible* and assign hot-keys to make the sources visible. To automatically hide the browser sources of the player Intros afterwards (only OBS studio) you have to install the [OBS websocket plugin](https://obsproject.com/forum/resources/obs-websocket-remote-control-of-obs-studio-made-easy.466/), activate it in OBS studio, specify the corresponding SCC-Tool settings under *Settings: Connections*, and name the Intro sources accordingly.
+Include the player Intros as browser sources (using the full height and width of your display), active *Shutdown source when not visible* and assign hot-keys to make the sources visible. The content of the intros refresh accordingly if the task *Provide Player Intros* is activated and a game or replay is started in the StarCraft 2 client. To automatically hide the browser sources of the player Intros afterwards (only OBS studio) you have to install the [OBS websocket plugin](https://obsproject.com/forum/resources/obs-websocket-remote-control-of-obs-studio-made-easy.466/), activate it in OBS studio, specify the corresponding SCC-Tool settings under *Settings: Connections*, and name the Intro sources accordingly.
 
 ## Customization
 
-Some basic options for customization can be found under *Settings: Styles*, for example, alternative stlyes/skins for the Map Icons and option to specify border colors. For additional **nearly unlimited customization** of the Map Icons you can make your own custom skins via [CSS](https://www.w3schools.com/css/) by creating new alternative *css*-files and placing them into `OBS_mapicons/src/css/box_styles`, `OBS_mapicons/src/css/landscape_styles`, `OBS_html/src/css/intro_styles`, or `OBS_html/src/css/intro_styles`. If you do so, please share your custom skins with this project.
+Some basic options for customization can be found under *Settings: Styles*, for example, alternative stlyes/skins for the Map Icons and option to specify border colors. For additional **nearly unlimited customization** of the Map Icons you can make your own custom skins via [CSS](https://www.w3schools.com/css/) by creating new alternative *css*-files and placing them into `OBS_mapicons/src/css/box_styles`, `OBS_mapicons/src/css/landscape_styles`, `OBS_html/src/css/score_styles`, or `OBS_html/src/css/intro_styles`. If you do so, please share your custom skins with this project.
 
 ## Help, Bug-Report, Suggestions & Contribution
 
