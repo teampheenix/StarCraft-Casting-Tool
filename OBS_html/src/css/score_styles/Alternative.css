@@ -29,8 +29,8 @@ div.box {
     height: var(--total-height);
     border: var(--border-size) solid var(--border-color);
     border-radius: 0px var(--border-radius) 0px var(--border-radius);
-	overflow: hidden;
-	display: inline-block;
+    overflow: hidden;
+    display: inline-block;
 }
 
 #logo1 {
@@ -68,10 +68,10 @@ div.box_veryright{
 div.box_left{
 	position: absolute;
 	height: 100%;
-    background-image: url("../texture2.jpg");
-    background-size: 500px 500px;
-    background-position: 0% 0%;
-    left: var(--logo-width);
+        background-image: url("../texture2.jpg");
+        background-size: 500px 500px;
+        background-position: 0% 0%;
+        left: var(--logo-width);
 	width: calc(var(--side-width) + var(--border-radius));
 }
 
@@ -85,25 +85,55 @@ div.box_middle{
 	border-radius: 0px var(--border-radius) 0px var(--border-radius);
 	background-image: url("../texture1.jpg");
 	background-size: cover;
-	font: bold 36px Orbitron, Helvetica, Sans-Serif;
+	overflow: hidden;
+}
+
+div.score_left{
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 50px;
+        height: 100%;
+        font: bold 36px Orbitron, Helvetica, Sans-Serif;
 	text-align: center;
 	line-height: calc(var(--total-height) - var(--border-size));
-	overflow: hidden;
+}
+
+div.score_right{
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        width: 50px;
+        height: 100%;
+        font: bold 36px Orbitron, Helvetica, Sans-Serif;
+	text-align: center;
+	line-height: calc(var(--total-height) - var(--border-size));
+}
+
+div.score_middle{
+        position: absolute;
+        top: 0px;
+        left: 50px;
+        width: calc(var(--middle-width)-100px);
+        height: 100%;
+        font: bold 36px Orbitron, Helvetica, Sans-Serif;
+	text-align: center;
+	line-height: calc(var(--total-height) - var(--border-size));
 }
 
 div.box_right{
 	position: absolute;
 	height: var(--total-height);
-    background-image: url("../texture2.jpg");
-    background-size: 500px 500px;
-    background-position: 0% 0%;
+        background-image: url("../texture2.jpg");
+        background-size: 500px 500px;
+        background-position: 0% 0%;
 	right: var(--logo-width);
 	width: calc(var(--side-width) + var(--border-radius));
 }
 
 div.upper-text-right{
 	position: absolute;
-    top: 0%;
+        top: 0%;
 	height: calc(100% - var(--lower-text-height));
 	right: calc(0% + var(--border-radius) + 15px);
 	width: calc(100% - 2 * var(--border-radius) - 30px);

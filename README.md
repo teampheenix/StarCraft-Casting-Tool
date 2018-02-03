@@ -6,11 +6,7 @@ StarCraft Casting Tool (SCC Tool) is a small program written in Python 3 that ca
 ## Download
 
 * **[Latest executable](https://github.com/teampheenix/StarCraft-Casting-Tool/releases/latest)** for Windows
-* **[Source Code](https://github.com/teampheenix/StarCraft-Casting-Tool/archive/master.zip)**
-
-## Discord Server
-
-If you need support, have questions, want to be up-to-date on, or like to contribute to this project, join our [Discord Server](https://discord.gg/G9hFEfh).
+* **[Source code](https://github.com/teampheenix/StarCraft-Casting-Tool/archive/master.zip)**
 
 ## Feature List
 
@@ -26,6 +22,10 @@ If you need support, have questions, want to be up-to-date on, or like to contri
 * **Interaction with SC2-Observer-UI**: Automatically toggle Production Tab and set Score at the start of a Map
 * Nearly **unlimited Customization** via Skins and CSS
 * German and Russian language support.
+
+## Discord Server
+
+If you need support, have questions, want to be up-to-date on, or like to contribute to this project, join our [Discord Server](https://discord.gg/G9hFEfh).
 
 ## Icon Preview
 

@@ -1,0 +1,144 @@
+@import url('https://fonts.googleapis.com/css?family=Orbitron:350,400');
+
+.text-item{
+    color: white;
+    font: bold 150px Orbitron, Helvetica, Sans-Serif;
+    --outline-size: 3px;
+   text-shadow: 0px  0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px  0px var(--outline-size) black,
+                0px  0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px  0px var(--outline-size) black,
+                0px  0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px  0px var(--outline-size) black,
+                0px  0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px  0px var(--outline-size) black;
+   -webkit-font-smoothing: antialiased;
+}
+
+div.box {
+        position: relative;
+        width: 1000px;
+        height: 300px;
+        overflow: hidden;
+        display: inline-block;
+}
+
+div.box_veryleft{
+        position: absolute;
+        top: 30px;
+        left: 180px;
+        width: 200px;
+        heigh: 200px;
+}
+
+div.box_veryright{
+        position: absolute;
+        top: 30px;
+        right: 180px;
+        width: 200px;
+        heigh: 200px;
+}
+
+
+div.box_left{
+        position: absolute;
+        width: 450px;
+        height: 60px;
+        bottom: 0px;
+        left: 0px;
+}
+
+div.upper-text-left{
+        visibility: hidden;
+}
+
+div.mapscore-left{
+	position: absolute;
+        bottom: 20px;
+        left: 40px;
+	width: 350px;
+	text-align: center;
+	line-height: 25px;
+	height: 25px;
+}
+
+div.box_right{
+        position: absolute;
+        width: 450px;
+        height: 60px;
+        bottom: 0px;
+        right: 0px;
+}
+
+div.upper-text-right{
+        visibility: hidden;
+}
+
+div.mapscore-right{
+	position: absolute;
+        bottom: 20px;
+        right: 40px;
+	width: 350px;
+	text-align: center;
+	line-height: 25px;
+	height: 25px;
+}
+
+#circle {
+    background: #f00;
+    position: relative;
+    bottom: 65px;
+    width: 28px;
+    height: 20px;
+    border-radius: 0px 10px 0px 10px;
+    box-shadow: 0px 0px 2px white;
+    display:inline-block;
+    margin: -15px;
+}
+
+div.box_middle{
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        height: 100%;
+        width: 100%;
+        background-image: url("../vs.png");
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: contain;
+}
+
+div.score_middle{
+        visibility: hidden;
+}
+
+div.score_left{
+        position: absolute;
+        left: 0px;
+        top: 35px;
+        text-align: center;
+        height: 180px;
+        width: 180px;
+}
+
+div.score_right{
+        position: absolute;
+        right: 0px;
+        top: 35px;
+        text-align: center;
+        height: 180px;
+        width: 180px;
+}
+
+.score {
+   --winner-color: white;
+   --size: 5px;
+   color: white!important;
+   text-shadow: 0px  0px 2px black, 0px 0px 2px black, 0px  0px 2px black, 0px  0px 2px black, 0px  0px 2px black, 0px 0px 2px black, 0px  0px 2px black, 0px  0px 2px black,
+             0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px  0px var(--size) var(--winner-color), 0px  0px var(--size) var(--winner-color)!important;
+    -webkit-font-smoothing: antialiased;
+}
+
+#logo1 {
+	display: block; margin-left: auto;margin-right: auto; max-width:100%;max-height:100%;
+}
+
+#logo2 {
+	display: block; margin-left: auto;margin-right: auto; max-width:100%;max-height:100%;
+}

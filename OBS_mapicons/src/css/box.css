@@ -98,9 +98,10 @@ div.data {
 div.image {
     width: 265px;
     height: 250px;
+    border-radius: 6%;
     border-style: solid;
     border-width: 6px;
-    background-color: #ffffff;
+    background-color: #3d3d3d;
     overflow: hidden;
 }
 

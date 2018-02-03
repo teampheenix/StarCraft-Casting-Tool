@@ -864,6 +864,8 @@ class matchData:
                         '%LOGO2%', logo2)
                     line = line.replace('%WINNER1%', winner[0]).replace(
                         '%WINNER2%', winner[1])
+                    line = line.replace('%SCORE-T1%', str(score[0]))
+                    line = line.replace('%SCORE-T2%', str(score[1]))
                     line = line.replace('%SCORE%', str(
                         score[0]) + ' - ' + str(score[1]))
                     line = line.replace('%TIMESTAMP%', str(time.time()))
