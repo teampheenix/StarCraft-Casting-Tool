@@ -101,7 +101,7 @@ def extractData(asset_update, handler):
                       scctool.settings.OBShtmlDir + "/src/css/intro.css",
                       scctool.settings.config.parser.get("Style", "intro"))
 
-        copyStyleFile(scctool.settings.OBShtmlDir + "/src/css/intro_styles",
+        copyStyleFile(scctool.settings.OBShtmlDir + "/src/css/score_styles",
                       scctool.settings.OBShtmlDir + "/src/css/score.css",
                       scctool.settings.config.parser.get("Style", "score"))
 

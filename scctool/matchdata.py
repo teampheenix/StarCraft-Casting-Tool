@@ -49,7 +49,7 @@ class matchData:
                 self.__data = json.load(json_file)
         except Exception as e:
             module_logger.exception("message")
-            self.setCustom(5, False)
+            self.setCustom(5, False, False)
         self.allSetsChanged()
 
     def writeJsonFile(self):

@@ -195,10 +195,11 @@ def ToggleProduction():
         raise UserWarning("Only Windows!")
     lag = 0.01
     time.sleep(lag)
-    PressKey(CONTROL)
+    # Production tab only needs 'D' and not 'CTRL+D'
+    # PressKey(CONTROL)
     PressKey(D)
     time.sleep(lag)
-    ReleaseKey(CONTROL)
+    # ReleaseKey(CONTROL)
     ReleaseKey(D)
 
 
