@@ -297,7 +297,8 @@ class SC2ApiThread(PyQt5.QtCore.QThread):
         try:
             if(self.exiting is False and
                 (newData != self.currentData or
-                 newData.time < self.currentData.time)):
+                 newData.time < self.currentData.time or 
+                 newData.isLive() != self.currentData.isLive())):
                      
                 # Skip initial data
                 #if(self.currentData == SC2MatchData()):
@@ -305,7 +306,7 @@ class SC2ApiThread(PyQt5.QtCore.QThread):
                 #    self.currentData = newData
                 #    return
 
-                if(self.activeTask['playerIntros']):
+                if(self.activeTask['playerIntros'] and self.currentData.isLive()):
                     #print("Providing player intros...")
                     self.controller.updatePlayerIntros(newData)
 
