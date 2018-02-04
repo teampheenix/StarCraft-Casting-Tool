@@ -306,7 +306,7 @@ class SC2ApiThread(PyQt5.QtCore.QThread):
                 #    self.currentData = newData
                 #    return
 
-                if(self.activeTask['playerIntros'] and self.currentData.isLive()):
+                if(self.activeTask['playerIntros']):
                     #print("Providing player intros...")
                     self.controller.updatePlayerIntros(newData)
 
