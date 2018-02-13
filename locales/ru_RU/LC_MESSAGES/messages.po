@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: 2018-02-13 18:23+0100\n"
-"PO-Revision-Date: 2018-02-13 18:30+0100\n"
+"PO-Revision-Date: 2018-02-13 21:19+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ru\n"
@@ -597,7 +597,7 @@ msgstr "OCR"
 
 #: scctool/view/subMisc.py:70
 msgid "AlphaTL && Ingame Score"
-msgstr "AlphaTL && Ingame Score"
+msgstr "AlphaTL и счет в игре"
 
 #: scctool/view/subMisc.py:80
 msgid "AlphaTL"
@@ -608,14 +608,12 @@ msgid "Download transparent Banner of the Match"
 msgstr "Скачать прозрачный баннер матча"
 
 #: scctool/view/subMisc.py:94
-#, fuzzy
-#| msgid "Set Ingame Score"
 msgid "Set Ingame Score Task"
-msgstr "Задать счет"
+msgstr "Настройка счета в игре"
 
 #: scctool/view/subMisc.py:98
 msgid "Automatically press Ctrl+Shift+S to display the ingame score"
-msgstr ""
+msgstr "Автоматически нажимать Ctrl+Shift+S для вывода счета в игре"
 
 #: scctool/view/subMisc.py:119
 msgid "Players"
