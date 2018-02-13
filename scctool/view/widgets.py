@@ -96,9 +96,9 @@ class StyleComboBox(PyQt5.QtWidgets.QComboBox):
 
     def apply(self, controller, file):
         """Apply the changes to the css files."""
-        newfile = os.path.join(scctool.settings.basedir,
-                               self.__style_dir, self.currentText() + ".css")
-        shutil.copy(newfile, file)
+        new_file = os.path.join(self.__style_dir, self.currentText() + ".css")
+        new_file = scctool.settings.getAbsPath(new_file)
+        shutil.copy(new_file, scctool.settings.getAbsPath(file))
 
         fname = os.path.basename(file)
         dirs = os.path.dirname(file)

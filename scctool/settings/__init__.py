@@ -11,7 +11,7 @@ basedir = os.path.dirname(sys.modules['__main__'].__file__)
 
 def getAbsPath(file):
     """Link to absolute path of a file."""
-    return os.path.join(basedir, file)
+    return os.path.normpath(os.path.join(basedir, file))
 
 
 configFile = getAbsPath("config.ini")

@@ -152,7 +152,7 @@ def ToggleScore(score1_in, score2_in, bestof=5):
 
     lag = 0.01
 
-    if scctool.settings.config.parser.getboolean("SCT", "StrgShiftS"):
+    if scctool.settings.config.parser.getboolean("SCT", "CtrlShiftS"):
         PressKey(CONTROL)
         PressKey(SHIFT)
         PressKey(S)

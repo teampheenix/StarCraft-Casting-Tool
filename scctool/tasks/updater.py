@@ -109,12 +109,20 @@ def extractData(asset_update, handler):
 
 
 def copyStyleFile(style_dir, css_file, value):
-    newfile = os.path.join(scctool.settings.basedir,
-                           style_dir, value + ".css")
-    shutil.copy(newfile, css_file)
-
-    fname = os.path.basename(css_file)
-    dirs = os.path.dirname(css_file)
+    
+    try:
+        new_file = os.path.join(style_dir, value + ".css")
+                            
+        new_file = scctool.settings.getAbsPath(new_file)
+        css_file = scctool.settings.getAbsPath(css_file)
+        
+        shutil.copy(new_file, css_file)
+    
+        fname = os.path.basename(css_file)
+        dirs = os.path.dirname(css_file)
+        
+    except Exception as e:
+        module_logger.exception("message")
 
     # controller.ftpUploader.cwd(dirs)
     # controller.ftpUploader.upload(css_file, fname)

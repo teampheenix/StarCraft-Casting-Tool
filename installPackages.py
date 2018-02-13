@@ -25,18 +25,18 @@ logger.addHandler(ch)
 logger.info("system: " + system)
 
 try:
-    pip.main(['install', 'pyqt5'])
-    pip.main(['install', 'requests'])
-    pip.main(['install', 'configparser'])
-    pip.main(['install', 'flask'])
-    pip.main(['install', 'obs-ws-rc'])
-    pip.main(['install', 'humanize'])
-    pip.main(['install', 'markdown2'])
+    pip.main(['install', 'pyqt5', '--upgrade'])
+    pip.main(['install', 'requests', '--upgrade'])
+    pip.main(['install', 'configparser', '--upgrade'])
+    pip.main(['install', 'flask', '--upgrade'])
+    pip.main(['install', 'obs-ws-rc', '--upgrade'])
+    pip.main(['install', 'humanize', '--upgrade'])
+    pip.main(['install', 'markdown2', '--upgrade'])
 
     if(system == "Windows"):
-        pip.main(['install', 'pypiwin32'])
-        pip.main(['install', 'pytesseract'])
-        pip.main(['install', 'Pillow'])
+        pip.main(['install', 'pypiwin32', '--upgrade'])
+        pip.main(['install', 'pytesseract', '--upgrade'])
+        pip.main(['install', 'Pillow', '--upgrade'])
 
 except Exception as e:
     logger.exception("message")

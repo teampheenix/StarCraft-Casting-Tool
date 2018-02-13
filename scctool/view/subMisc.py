@@ -67,7 +67,7 @@ class SubwindowMisc(PyQt5.QtWidgets.QWidget):
         self.tabs.addTab(self.mapsBox, _("Map Manager"))
         self.tabs.addTab(self.favBox, _("Favorites"))
         self.tabs.addTab(self.ocrBox, _("OCR"))
-        self.tabs.addTab(self.alphaBox, _("AlphaTL"))
+        self.tabs.addTab(self.alphaBox, _("AlphaTL && Ingame Score"))
 
     def changed(self):
         """Handle changes."""
@@ -77,6 +77,8 @@ class SubwindowMisc(PyQt5.QtWidgets.QWidget):
         self.alphaBox = PyQt5.QtWidgets.QWidget()
         mainLayout = PyQt5.QtWidgets.QVBoxLayout()
         
+        box = PyQt5.QtWidgets.QGroupBox(_("AlphaTL"))
+        layout = PyQt5.QtWidgets.QHBoxLayout()
         
         self.cb_trans_banner = PyQt5.QtWidgets.QCheckBox(
             " " + _("Download transparent Banner of the Match"))
@@ -84,7 +86,25 @@ class SubwindowMisc(PyQt5.QtWidgets.QWidget):
             scctool.settings.config.parser.getboolean("SCT", "transparent_match_banner"))
         self.cb_trans_banner.stateChanged.connect(self.changed)
         
-        mainLayout.addWidget(self.cb_trans_banner)
+        layout.addWidget(self.cb_trans_banner)
+        box.setLayout(layout)
+        
+        mainLayout.addWidget(box)
+        
+        box = PyQt5.QtWidgets.QGroupBox(_("Set Ingame Score Task"))
+        layout = PyQt5.QtWidgets.QHBoxLayout()
+        
+        self.cb_ctrlshifts = PyQt5.QtWidgets.QCheckBox(
+            " " + _('Automatically press Ctrl+Shift+S to display the ingame score'))
+        self.cb_ctrlshifts.setToolTip("Ctrl+Shift+S is need for the WCS-Gameheart Oberserver Overlay, but disables the sound for other overlays.")
+        self.cb_ctrlshifts.setChecked(
+            scctool.settings.config.parser.getboolean("SCT", "CtrlShiftS"))
+        self.cb_ctrlshifts.stateChanged.connect(self.changed)
+        
+        layout.addWidget(self.cb_ctrlshifts)
+        box.setLayout(layout)
+        
+        mainLayout.addWidget(box)
         
         mainLayout.addItem(PyQt5.QtWidgets.QSpacerItem(
             0, 0, PyQt5.QtWidgets.QSizePolicy.Minimum, PyQt5.QtWidgets.QSizePolicy.Expanding))
@@ -393,6 +413,8 @@ class SubwindowMisc(PyQt5.QtWidgets.QWidget):
                 "SCT", "use_ocr", str(self.cb_useocr.isChecked()))
             scctool.settings.config.parser.set(
                 "SCT", "transparent_match_banner", str(self.cb_trans_banner.isChecked()))
+            scctool.settings.config.parser.set(
+                "SCT", "CtrlShiftS", str(self.cb_ctrlshifts.isChecked()))
 
     def saveCloseWindow(self):
         """Save and close window."""

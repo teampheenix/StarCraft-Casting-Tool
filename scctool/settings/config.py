@@ -22,6 +22,7 @@ def init():
         parser.defaults()
 
     setDefaultConfigAll()
+    renameConfigOptions()
 
 
 # Setting default values for config file
@@ -101,7 +102,7 @@ def setDefaultConfigAll():
     setDefaultConfig("SCT", "fuzzymatch", "True")
     setDefaultConfig("SCT", "new_version_prompt", "True")
     setDefaultConfig("SCT", "use_ocr", "False")
-    setDefaultConfig("SCT", "StrgShiftS", "True")
+    setDefaultConfig("SCT", "CtrlShiftS", "False")
     setDefaultConfig("SCT", "language", "en_US")
     setDefaultConfig("SCT", "transparent_match_banner", "False")
 
@@ -131,7 +132,15 @@ def setDefaultConfigAll():
     setDefaultConfig("OBS", "active", "False")
     setDefaultConfig("OBS", "passwd", "")
     setDefaultConfig("OBS", "sources", "Intro1, Intro2")
-
+    
+def renameConfigOptions():
+    """Delete and rename old config options."""
+    try:
+        value = parser.getboolean("SCT", "StrgShiftS")
+        parser.set("SCT", "CtrlShiftS", str(value))
+        parser.remove_option("SCT", "StrgShiftS")
+    except:
+        pass
 
 def ftpIsValid():
     """Check if FTP data is valid."""
