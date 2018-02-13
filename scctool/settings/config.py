@@ -79,7 +79,7 @@ def setDefaultConfigAll():
     setDefaultConfig("Twitch", "channel", "")
     setDefaultConfig("Twitch", "oauth", "")
     setDefaultConfig("Twitch", "title_template",
-                     "(League) – (Team1) vs (Team2)")
+                     "(League) – (Team1) vs. (Team2)")
 
     setDefaultConfig("Nightbot", "token", "")
     setDefaultConfig("Nightbot", "command", "!matchlink")
@@ -92,7 +92,7 @@ def setDefaultConfigAll():
     setDefaultConfig("FTP", "dir", "")
 
     setDefaultConfig("SCT", "myteams", "MiXed Minds, team pheeniX")
-    setDefaultConfig("SCT", "commonplayers", "Shakyor, pressure, MarineKing, Moash, " +
+    setDefaultConfig("SCT", "commonplayers", "Shakyor, pressure, Moash, " +
                      "Ostseedude, spaz, DERASTAT, FanTasY, " +
                      "chrismaverik, holden, Desolation, RiseOfDeath, " +
                      "TuneTrigger, MoFuJones, Fenix, Hyvaa, snoozle, " +
