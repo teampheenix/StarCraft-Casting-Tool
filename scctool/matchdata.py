@@ -48,7 +48,7 @@ class matchData:
             with open(scctool.settings.matchdata_json_file) as json_file:
                 self.__data = json.load(json_file)
         except Exception as e:
-            module_logger.exception("message")
+            # module_logger.exception("message")
             self.setCustom(5, False, False)
         self.allSetsChanged()
 
@@ -159,7 +159,7 @@ class matchData:
             return int(self.__data['min_sets'])
         except:
             return 0
-            
+
     def setSolo(self, solo):
         """Set allkill format."""
         self.__data['solo'] = bool(solo)
@@ -587,10 +587,9 @@ class matchData:
             return False
 
         return str(self.__data['teams'][team_idx]['name'])
-        
+
     def getTeamOrPlayer(self, team_idx):
         """Get team name or player name depending on mode."""
-        
         if self.getSolo():
             return self.getPlayer(team_idx, 0)
         else:
@@ -856,7 +855,8 @@ class matchData:
             with open(filename, "wt", encoding='utf-8-sig') as fout:
                 for line in fin:
                     if self.getSolo():
-                        line = line.replace('%TEAM1%', self.getPlayer(0,0)).replace('%TEAM2%', self.getPlayer(1,0))
+                        line = line.replace('%TEAM1%', self.getPlayer(
+                            0, 0)).replace('%TEAM2%', self.getPlayer(1, 0))
                     else:
                         line = line.replace('%TEAM1%', self.getTeam(
                             0)).replace('%TEAM2%', self.getTeam(1))

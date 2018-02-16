@@ -35,7 +35,7 @@ class MatchGrabber(MatchGrabberParent):
             self._matchData.setMinSets(3)
             self._matchData.setSolo(False)
             league = data['tournament']
-            league = league.replace('Non-pro','Non-Pro')
+            league = league.replace('Non-pro', 'Non-Pro')
             if not isinstance(league, str):
                 league = "TBD"
             self._matchData.setLeague(league)
@@ -114,16 +114,17 @@ class MatchGrabber(MatchGrabberParent):
     def downloadBanner(self):
         """Download team logos."""
         dir = scctool.settings.OBSdataDir
-        transparent = scctool.settings.config.parser.getboolean("SCT", "transparent_match_banner")
-        
+        transparent = scctool.settings.config.parser.getboolean(
+            "SCT", "transparent_match_banner")
+
         if self._rawData is None:
             raise ValueError(
                 "Error: No raw data.")
 
         fname = dir + "/matchbanner.png"
         url = "http://alpha.tl/announcement/"\
-            + str(self.getID()) 
-        
+            + str(self.getID())
+
         if transparent:
             url = url + "?transparent"
         else:

@@ -96,7 +96,7 @@ class SubwindowMisc(PyQt5.QtWidgets.QWidget):
         
         self.cb_ctrlshifts = PyQt5.QtWidgets.QCheckBox(
             " " + _('Automatically press Ctrl+Shift+S to display the ingame score'))
-        self.cb_ctrlshifts.setToolTip("Ctrl+Shift+S is need for the WCS-Gameheart Oberserver Overlay, but disables the sound for other overlays.")
+        self.cb_ctrlshifts.setToolTip(_("Ctrl+Shift+S is needed for the WCS-Gameheart Oberserver Overlay, but disables the sound for other overlays."))
         self.cb_ctrlshifts.setChecked(
             scctool.settings.config.parser.getboolean("SCT", "CtrlShiftS"))
         self.cb_ctrlshifts.stateChanged.connect(self.changed)
@@ -361,6 +361,9 @@ class SubwindowMisc(PyQt5.QtWidgets.QWidget):
 
     def changePreview(self):
         """Change the map preview."""
+        if self.maplist.count() < 1:
+            return
+            
         map = self.maplist.currentItem().text()
         if(map == "TBD"):
             self.pb_renameMap.setEnabled(False)

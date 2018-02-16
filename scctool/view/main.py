@@ -319,14 +319,18 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             container.addWidget(label, 0)
             container.addWidget(self.le_url, 1)
             button = PyQt5.QtWidgets.QPushButton()
-            pixmap = PyQt5.QtGui.QIcon(scctool.settings.getAbsPath('src/alpha.png'))
+            pixmap = PyQt5.QtGui.QIcon(
+                scctool.settings.getAbsPath('src/alpha.png'))
             button.setIcon(pixmap)
-            button.clicked.connect(lambda: self.controller.openURL("http://alpha.tl/"))
+            button.clicked.connect(
+                lambda: self.controller.openURL("http://alpha.tl/"))
             container.addWidget(button, 0)
             button = PyQt5.QtWidgets.QPushButton()
-            pixmap = PyQt5.QtGui.QIcon(scctool.settings.getAbsPath('src/rstl.png'))
+            pixmap = PyQt5.QtGui.QIcon(
+                scctool.settings.getAbsPath('src/rstl.png'))
             button.setIcon(pixmap)
-            button.clicked.connect(lambda: self.controller.openURL("http://hdgame.net/en/"))
+            button.clicked.connect(
+                lambda: self.controller.openURL("http://hdgame.net/en/"))
             container.addWidget(button, 0)
 
             self.tab1.layout = PyQt5.QtWidgets.QFormLayout()
@@ -397,7 +401,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             self.cb_allkill.setToolTip(
                 _('Winner stays and is automatically placed into the next set'))
             container.addWidget(self.cb_allkill, 0)
-            
+
             self.cb_solo = PyQt5.QtWidgets.QCheckBox(_("1vs1"))
             self.cb_solo.setChecked(False)
             self.cb_solo.setToolTip(
@@ -596,10 +600,12 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             container.addWidget(self.qb_logo2, 0, 6, 2, 1)
 
             layout2.addLayout(container)
-            
+
             for team_idx in range(2):
-                self.le_player[team_idx][0].editingFinished.connect(lambda team_idx=team_idx: self.player_changed(team_idx))
-                self.cb_race[team_idx][0].currentIndexChanged.connect(lambda value, team_idx=team_idx, func=self.race_changed: func(team_idx))
+                self.le_player[team_idx][0].editingFinished.connect(
+                    lambda team_idx=team_idx: self.player_changed(team_idx))
+                self.cb_race[team_idx][0].currentIndexChanged.connect(
+                    lambda value, team_idx=team_idx, func=self.race_changed: func(team_idx))
 
             for player_idx in range(self.max_no_sets):
                 for team_idx in range(2):
@@ -991,7 +997,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
                 self.controller.updateOBS()
         except Exception as e:
             module_logger.exception("message")
-            
+
     def player_changed(self, team_idx):
         """Handle a change of player names."""
         try:
@@ -999,10 +1005,10 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
                 text = self.le_player[team_idx][0].text()
                 for player_idx in range(1, self.max_no_sets):
                     self.le_player[team_idx][player_idx].setText(text)
-            
+
         except Exception as e:
             module_logger.exception("message")
-            
+
     def race_changed(self, team_idx):
         """Handle a change of player names."""
         try:
@@ -1010,7 +1016,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
                 idx = self.cb_race[team_idx][0].currentIndex()
                 for player_idx in range(1, self.max_no_sets):
                     self.cb_race[team_idx][player_idx].setCurrentIndex(idx)
-            
+
         except Exception as e:
             module_logger.exception("message")
 

@@ -450,7 +450,7 @@ class InitialUpdater(PyQt5.QtWidgets.QProgressDialog):
         self.setWindowTitle("SCC-Tool")
         self.setLabelText(_("Collecting data..."))
         self.setCancelButton(None)
-        self.setRange(0, 1000)
+        self.setRange(0, 1010)
         self.setValue(50)
 
         self.show()
@@ -476,6 +476,8 @@ class InitialUpdater(PyQt5.QtWidgets.QProgressDialog):
                 self.setLabelText(_("Extracting data..."))
                 extractData(lib_update, self.setCopyProgress)
                 self.setLabelText(_("Done."))
+                time.sleep(1)
+                self.setValue(1010)
         except Exception as e:
             module_logger.exception("message")
 

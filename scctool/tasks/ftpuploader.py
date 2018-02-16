@@ -151,15 +151,14 @@ class UploaderThread(PyQt5.QtCore.QThread):
         self.__current_cmd = 0
         self.__time_last_cmd = datetime.now()
         self.__upload = False
-        
-    def maintainConnection(self):
 
+    def maintainConnection(self):
+        """Send empty command to maintain the connection."""
         delta = (datetime.now() - self.__time_last_cmd)
-        
+
         if(self.__upload and
-            delta.total_seconds() > 30):
+                delta.total_seconds() > 30):
             self.q.put(["noop"])
-        
 
     def run(self):
         """Run thread."""
@@ -172,7 +171,7 @@ class UploaderThread(PyQt5.QtCore.QThread):
 
                 self.__upload = scctool.settings.config.parser.getboolean(
                     "FTP", "upload")
-                    
+
                 self.__time_last_cmd = datetime.now()
 
                 if(cmd == "progress_start"):

@@ -137,13 +137,13 @@ class SubwindowStyles(PyQt5.QtWidgets.QWidget):
         self.pb_applyStyles = PyQt5.QtWidgets.QPushButton(_("Apply"))
         self.pb_applyStyles.clicked.connect(self.applyStyles)
         layout.addRow(PyQt5.QtWidgets.QLabel(), self.pb_applyStyles)
-        
+
         txt = _("Note that to make these changes visible in OBS" +
                 " you have to refresh the cache of your browser sources.")
         label = PyQt5.QtWidgets.QLabel(txt)
         label.setWordWrap(True)
         layout.addRow(PyQt5.QtWidgets.QLabel(), label)
-        
+
         self.styleBox.setLayout(layout)
 
     def openHTML(self, file):

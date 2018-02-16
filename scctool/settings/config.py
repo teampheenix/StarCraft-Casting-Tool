@@ -132,7 +132,8 @@ def setDefaultConfigAll():
     setDefaultConfig("OBS", "active", "False")
     setDefaultConfig("OBS", "passwd", "")
     setDefaultConfig("OBS", "sources", "Intro1, Intro2")
-    
+
+
 def renameConfigOptions():
     """Delete and rename old config options."""
     try:
@@ -141,6 +142,7 @@ def renameConfigOptions():
         parser.remove_option("SCT", "StrgShiftS")
     except:
         pass
+
 
 def ftpIsValid():
     """Check if FTP data is valid."""

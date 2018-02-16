@@ -289,34 +289,35 @@ class SC2ApiThread(PyQt5.QtCore.QThread):
 
     def parseMatchData(self, newData):
         """Parse SC2-Client-API data and run tasks accordingly."""
-        #print("Prasing")
-        #print(newData)
-        #print(self.currentData)
-        #print(newData.time)
-        #print(self.currentData.time)
+        # print("Prasing")
+        # print(newData)
+        # print(self.currentData)
+        # print(newData.time)
+        # print(self.currentData.time)
         try:
             if(self.exiting is False and
                 (newData != self.currentData or
-                 newData.time < self.currentData.time or 
+                 newData.time < self.currentData.time or
                  newData.isLive() != self.currentData.isLive())):
-                     
+
                 # Skip initial data
-                #if(self.currentData == SC2MatchData()):
+                # if(self.currentData == SC2MatchData()):
                 #    print("Skipping initial")
                 #    self.currentData = newData
                 #    return
 
                 if(self.activeTask['playerIntros']):
-                    #print("Providing player intros...")
+                    # print("Providing player intros...")
                     self.controller.updatePlayerIntros(newData)
 
-                if(self.activeTask['updateScore'] and newData.isDecidedGame() and self.currentData != SC2MatchData()):
-                    #print("Updating Score")
+                if(self.activeTask['updateScore'] and newData.isDecidedGame()
+                   and self.currentData != SC2MatchData()):
+                    # print("Updating Score")
                     self.controller.requestScoreUpdate(newData)
 
                 if(newData.isLive() and (self.activeTask['toggleScore']
                                          or self.activeTask['toggleProduction'])):
-                    #print("Toggling")
+                    # print("Toggling")
                     self.tryToggle(newData)
 
                 self.currentData = newData
@@ -371,12 +372,12 @@ class SC2ApiThread(PyQt5.QtCore.QThread):
                         module_logger.info("Player {} at postion {}".format(
                             player_idx, item_idx))
 
-            if None in positions: # Retry with full image.
+            if None in positions:  # Retry with full image.
                 positions = [None, None]
                 ratios = [0.0, 0.0]
                 text = pytesseract.image_to_string(full_img)
                 items = re.split('\s+', text)
-    
+
                 threshold = 0.35
                 for item_idx, item in enumerate(items):
                     for player_idx, player in enumerate(players):
@@ -387,7 +388,7 @@ class SC2ApiThread(PyQt5.QtCore.QThread):
                             ratios[player_idx] = ratio
                             module_logger.info("Player {} at postion {}".format(
                                 player_idx, item_idx))
-                                
+
             if None in positions:
                 return False
             elif(positions[0] > positions[1]):

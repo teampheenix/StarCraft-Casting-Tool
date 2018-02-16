@@ -53,7 +53,7 @@ def loadMapList():
         return maps
 
 
-maps = loadMapList()
+maps = []
 
 
 def race2idx(str):
