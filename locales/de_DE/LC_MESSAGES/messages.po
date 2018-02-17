@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2018-02-13 18:20+0100\n"
-"PO-Revision-Date: 2018-02-13 18:22+0100\n"
+"POT-Creation-Date: 2018-02-17 15:19+0100\n"
+"PO-Revision-Date: 2018-02-17 15:20+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de\n"
@@ -14,79 +14,79 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: controller.py:73
+#: controller.py:74
 msgid "This version is up to date."
 msgstr "Diese Version ist aktuell."
 
-#: controller.py:511 controller.py:519
+#: controller.py:512 controller.py:520
 msgid "Specify your Twitch Settings to use this feature"
 msgstr "Geben Sie Ihre Twitch-Einstellungen an, um diese Funktion zu verwenden"
 
-#: controller.py:514
+#: controller.py:515
 msgid ""
 "Automatically update the title of your twitch channel in the background."
 msgstr "Automatische Hintergrund-Aktualisierung des Twitch Titel."
 
-#: controller.py:525 controller.py:532
+#: controller.py:526 controller.py:533
 msgid "Specify your Nightbot Settings to use this feature"
 msgstr "Geben Sie Ihre Nightbot-Einstellungen an, um diese Funktion zu nutzen"
 
-#: controller.py:526
+#: controller.py:527
 msgid "Automatically update the commands of your nightbot in the background."
 msgstr "Automatische Hintergrund-Aktualisierung der Nightbot Kommandos."
 
-#: controller.py:538
+#: controller.py:539
 msgid "Specify your FTP Settings to use this feature"
 msgstr "Geben Sie Ihre FTP-Einstellungen an, um diese Funktion zu verwenden"
 
-#: controller.py:539
+#: controller.py:540
 msgid ""
 "Automatically uploads all streaming data in the background to a specified "
 "FTP server."
 msgstr ""
 "Lädt automatisch alle relevanten Daten im Hintergrund auf einen FTP-Server."
 
-#: controller.py:666
+#: controller.py:667
 msgid "Warning: Map '{}' not found!"
 msgstr "Warnung: Karte '{}' nicht gefunden!"
 
-#: controller.py:716
+#: controller.py:717
 msgid "A new version {} is available."
 msgstr "Eine neue Version {} ist verfügbar."
 
-#: controller.py:718
+#: controller.py:719
 msgid "Update to new version?"
 msgstr "Auf die neue Version aktualisieren?"
 
-#: controller.py:719
+#: controller.py:720
 msgid "New SCC-Tool Version"
 msgstr "Neue SCC-Tool Version"
 
-#: controller.py:728
+#: controller.py:729
 msgid "Don't show on startup."
 msgstr "Nicht mehr beim Programm-Start zeigen."
 
-#: controller.py:737
+#: controller.py:738
 msgid "A new version {} is available on GitHub!"
 msgstr "Die neue Version {} ist bei GitHub verfügbar!"
 
 #: tasks/nightbot.py:45
-msgid "Nightbot Command '{}' was already set to '{}'"
+msgid "Nightbot command '{}' was already set to '{}'"
 msgstr "Nightbot Kommando '{}' war bereits auf '{}' gesetzt"
 
 #: tasks/nightbot.py:67
-msgid "Updated Nightbot Command '{}' to '{}'"
+msgid "Updated Nightbot command '{}' to '{}'"
 msgstr "Nightbot Kommand '{}' auf '{}' aktualisiert"
 
-#: tasks/nightbot.py:74 tasks/twitch.py:47
+#: tasks/nightbot.py:74 tasks/twitch.py:46
 msgid "Forbidden - Do you have permission?"
 msgstr "Nicht erlaubt - Rechte vorhanden?"
 
-#: tasks/nightbot.py:76 tasks/twitch.py:49
+#: tasks/nightbot.py:76 tasks/twitch.py:48
 msgid "Unauthorized - Refresh your token!"
 msgstr "Nicht autorisiert - Erneure deinen Token!"
 
-#: tasks/nightbot.py:78 tasks/twitch.py:51
+#: tasks/nightbot.py:78 tasks/twitch.py:50
 msgid "Too Many Requests."
 msgstr "Zu viele Anfragen."
 
@@ -108,9 +108,17 @@ msgstr ""
 msgid "Unkown Error!"
 msgstr "Unbekannter Fehler!"
 
-#: tasks/twitch.py:44
+#: tasks/twitch.py:35
+msgid "Updated Twitch title of {} to: \"{}\""
+msgstr "Aktualisiere Twitch Titel von {} auf \"{}\""
+
+#: tasks/twitch.py:43
 msgid "Not Found - Channel '{}' not found."
 msgstr "Nicht gefunden - Kanal '{}' nicht gefunden."
+
+#: tasks/updater.py:210
+msgid "Updated data files!"
+msgstr "Daten aktualisiert!"
 
 #: tasks/webapp.py:140
 msgid ""
@@ -198,23 +206,23 @@ msgstr "Benutzerdefinierte Partie"
 msgid "Open in Browser"
 msgstr "Im Browser öffnen"
 
-#: view/main.py:317 view/main.py:424
+#: view/main.py:317 view/main.py:428
 msgid "Match-URL:"
 msgstr "Partie-URL:"
 
-#: view/main.py:346
+#: view/main.py:350
 msgid "Load Data from URL"
 msgstr "Daten von URL laden"
 
-#: view/main.py:364
+#: view/main.py:368
 msgid "Match Format:"
 msgstr "Partie-Format:"
 
-#: view/main.py:368
+#: view/main.py:372
 msgid "Best of"
 msgstr "Best of"
 
-#: view/main.py:374
+#: view/main.py:378
 msgid ""
 "\"Best of 6/4\": First, a Bo5/3 is played and the ace map gets extended to a "
 "Bo3 if needed; Best of 2: Bo3 with only two maps played."
@@ -223,109 +231,109 @@ msgstr ""
 "Entscheidungs-Partie benötigt wird, wird diese zu einem Bo3 ausgeweitet; "
 "Best of 2: Bo3, wobei nur zwei Karten gespielt werden."
 
-#: view/main.py:381
+#: view/main.py:385
 msgid " but at least"
 msgstr " aber mind."
 
-#: view/main.py:389
+#: view/main.py:393
 msgid "Minimum number of maps played (even if the match is decided already)"
 msgstr ""
 "Mindestanzahl an Karten die gespielt werden (selbst, wenn die Partie schon "
 "entschieden ist)"
 
-#: view/main.py:393
+#: view/main.py:397
 msgid "maps"
 msgstr "Karten"
 
-#: view/main.py:395
+#: view/main.py:399
 msgid "All-Kill Format"
 msgstr "All-Kill Format"
 
-#: view/main.py:398
+#: view/main.py:402
 msgid "Winner stays and is automatically placed into the next set"
 msgstr "Gewinner bleibt und wir automatisch in das nächste Set plaziert"
 
-#: view/main.py:401
+#: view/main.py:405
 msgid "1vs1"
 msgstr "1vs1"
 
-#: view/main.py:404
+#: view/main.py:408
 msgid "Select for solo (non-team matches)"
 msgstr "Für Solo-Spiele auswählen"
 
-#: view/main.py:411
+#: view/main.py:415
 msgid "Apply Format"
 msgstr "Format anwenden"
 
-#: view/main.py:431
+#: view/main.py:435
 msgid "Optionally specify the Match-URL, e.g., for Nightbot commands"
 msgstr "Gib optional eine URL, z.B. für Nightbot Kommandos an"
 
-#: view/main.py:433
+#: view/main.py:437
 msgid "Specify the Match-URL of your Custom Match"
 msgstr "Gib die URL deiner benutzerdefinierten Partie an"
 
-#: view/main.py:450
+#: view/main.py:454
 msgid "Reset Match Data"
 msgstr "Daten zurücksetzten"
 
-#: view/main.py:483
+#: view/main.py:487
 msgid "Match Data"
 msgstr "Daten der Partie"
 
-#: view/main.py:555
+#: view/main.py:559
 msgid "Choose your team"
 msgstr "Wähle dein Team"
 
-#: view/main.py:571
+#: view/main.py:575
 msgid "League:"
 msgstr "Liga:"
 
-#: view/main.py:581
+#: view/main.py:585
 msgid "Maps \\ Teams:"
 msgstr "Karten \\ Teams:"
 
-#: view/main.py:610
+#: view/main.py:616
 msgid "Player {} of team {}"
 msgstr "Spieler {} von Team {}"
 
-#: view/main.py:638
+#: view/main.py:644
 msgid "Set the score"
 msgstr "Änder das Ergebnis"
 
-#: view/main.py:645
+#: view/main.py:651
 msgid "Map {}"
 msgstr "Karte {}"
 
-#: view/main.py:685
+#: view/main.py:691
 msgid "Tasks"
 msgstr "Aufgaben"
 
-#: view/main.py:689
+#: view/main.py:695
 msgid "Update Twitch Title"
 msgstr "Aktualisiere Twitch Titel"
 
-#: view/main.py:693
+#: view/main.py:699
 msgid "Update Nightbot"
 msgstr "Aktualisere Nightbot"
 
-#: view/main.py:696
+#: view/main.py:702
 msgid "Reset Score"
 msgstr "Setze Ergebnisse zurück"
 
-#: view/main.py:700
+#: view/main.py:706
 msgid "Update OBS Data"
 msgstr "Aktualisiere OBS-Daten"
 
-#: view/main.py:716
+#: view/main.py:722
 msgid "Background Tasks"
 msgstr "Hintergrund-Aufgaben"
 
-#: view/main.py:719
+#: view/main.py:725
 msgid "Auto Score Update"
 msgstr "Auto Ergebnis Aktual."
 
-#: view/main.py:721
+#: view/main.py:727
 msgid ""
 "Automatically detects the outcome of SC2 matches that are played/observed in "
 "your SC2-client and updates the score accordingly."
@@ -334,92 +342,92 @@ msgstr ""
 "gespielt oder beobachtet werden, und aktualisiert den Spielstand "
 "entsprechend."
 
-#: view/main.py:727
+#: view/main.py:733
 msgid "Provide Player Intros"
 msgstr "Stelle Spieler-Intros bereit"
 
-#: view/main.py:730
+#: view/main.py:736
 msgid "Update player intros files via SC2-Client-API"
 msgstr "Aktualisiere die Player-Intro Dateien via SC2-Client API"
 
-#: view/main.py:734
+#: view/main.py:740
 msgid "Set Ingame Score"
 msgstr "Setzte Spielstand im Spiel"
 
-#: view/main.py:736
+#: view/main.py:742
 msgid ""
 "Automatically sets the score of your ingame UI-interface at the begining of "
 "a game."
 msgstr ""
 "Setzt automatisch den Spielstand des UI-Interface zu Beginn einer Partie."
 
-#: view/main.py:743
+#: view/main.py:749
 msgid "Toggle Production Tab"
 msgstr "Produktions-Tab einblenden"
 
-#: view/main.py:745
+#: view/main.py:751
 msgid ""
 "Automatically toggles the production tab of your ingame UI-interface at the "
 "begining of a game."
 msgstr "Zeigt automatisch das Produktions-Tab zu Beginn eines Spieles an."
 
-#: view/main.py:751
+#: view/main.py:757
 msgid "FTP Upload"
 msgstr "FTP Upload"
 
-#: view/main.py:756
+#: view/main.py:762
 msgid "Auto Twitch Update"
 msgstr "Auto Twitch Aktual."
 
-#: view/main.py:761
+#: view/main.py:767
 msgid "Auto Nightbot Update"
 msgstr "Auto Nightbot Aktual."
 
-#: view/main.py:770 view/main.py:774
+#: view/main.py:776 view/main.py:780
 msgid "Only Windows"
 msgstr "Nur für Windows verfügbar"
 
-#: view/main.py:832 view/widgets.py:155
+#: view/main.py:838 view/widgets.py:155
 msgid "Login error"
 msgstr "Anmeldungsfehler"
 
-#: view/main.py:833 view/widgets.py:156
+#: view/main.py:839 view/widgets.py:156
 msgid "FTP server login incorrect!"
 msgstr "Anmeldung zum FTP-Server fehlerhaft!"
 
-#: view/main.py:886
+#: view/main.py:892
 msgid "Applying Custom Match..."
 msgstr "Wende benutzerdefinierte Partie an..."
 
-#: view/main.py:912
+#: view/main.py:918
 msgid "Reading {}..."
 msgstr "Lese {}..."
 
-#: view/main.py:930
+#: view/main.py:936
 msgid "Updating Nightbot Command..."
 msgstr "Aktulisiere Nightbot Kommando..."
 
-#: view/main.py:939
+#: view/main.py:945
 msgid "Updating Twitch Title..."
 msgstr "Aktualisiere Twitch Titel..."
 
-#: view/main.py:948
+#: view/main.py:954
 msgid "Updating OBS Data..."
 msgstr "Aktualisiere OBS-Daten..."
 
-#: view/main.py:958
+#: view/main.py:964
 msgid "Resetting Score..."
 msgstr "Setze Ergebnisse zurück..."
 
-#: view/main.py:973
+#: view/main.py:979
 msgid "Updating Score..."
 msgstr "Aktualisiere Ergebnisstand..."
 
-#: view/main.py:1022
+#: view/main.py:1028
 msgid "Select Team Logo"
 msgstr "Wähle das Team Logo aus"
 
-#: view/main.py:1022
+#: view/main.py:1028
 msgid "Support Images ({})"
 msgstr "Unterstütze Bild-Formate ({})"
 
@@ -556,11 +564,11 @@ msgstr "Kommando:"
 msgid "Message:"
 msgstr "Nachricht:"
 
-#: view/subConnections.py:327 view/subMisc.py:391 view/subStyles.py:69
+#: view/subConnections.py:327 view/subMisc.py:394 view/subStyles.py:69
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: view/subConnections.py:331 view/subMisc.py:395 view/subStyles.py:73
+#: view/subConnections.py:331 view/subMisc.py:398 view/subStyles.py:73
 msgid "Save && Close"
 msgstr "Speichern && Schließen"
 
@@ -568,7 +576,7 @@ msgstr "Speichern && Schließen"
 msgid "Output:"
 msgstr "Ausgabe:"
 
-#: view/subConnections.py:414 view/subMisc.py:441 view/subStyles.py:238
+#: view/subConnections.py:414 view/subMisc.py:444 view/subStyles.py:238
 msgid "Save data?"
 msgstr "Daten speichern?"
 
@@ -612,6 +620,14 @@ msgstr "Setzte Spielstand im Spiel"
 msgid "Automatically press Ctrl+Shift+S to display the ingame score"
 msgstr ""
 "Drücke automatisch Strg+Shift+S um den Spielstand im Spiel anzuzuzeigen"
+
+#: view/subMisc.py:99
+msgid ""
+"Ctrl+Shift+S is needed for the WCS-Gameheart Oberserver Overlay, but "
+"disables the sound for other overlays."
+msgstr ""
+"Strg+Shift+S wird für das WCS-GameHeart Overlay benötigt, aber deaktiviert "
+"den Ton bei Verwendung anderer Overlays."
 
 #: view/subMisc.py:119
 msgid "Players"
@@ -827,7 +843,7 @@ msgstr "Extrahiere Daten..."
 msgid "Done."
 msgstr "Fertig."
 
-#: view/widgets.py:492
+#: view/widgets.py:494
 msgid "Downloading required files...: Total file size {}, Time remaining {}."
 msgstr ""
 "Lade benötigte Dateien herunter...:  {} Gesamtgröße, {} Zeit verbleibend."

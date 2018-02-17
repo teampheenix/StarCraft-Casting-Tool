@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2018-02-16 16:16+0100\n"
-"PO-Revision-Date: 2018-02-16 16:18+0100\n"
+"POT-Creation-Date: 2018-02-17 15:22+0100\n"
+"PO-Revision-Date: 2018-02-17 15:24+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ru\n"
@@ -76,22 +76,22 @@ msgid "A new version {} is available on GitHub!"
 msgstr "Новая версия {} доступна на GitHub!"
 
 #: scctool/tasks/nightbot.py:45
-msgid "Nightbot Command '{}' was already set to '{}'"
+msgid "Nightbot command '{}' was already set to '{}'"
 msgstr "Nightbot команда '{}' уже установлена в '{}'"
 
 #: scctool/tasks/nightbot.py:67
-msgid "Updated Nightbot Command '{}' to '{}'"
+msgid "Updated Nightbot command '{}' to '{}'"
 msgstr "Обновить команду Nightbot '{}' на '{}'"
 
-#: scctool/tasks/nightbot.py:74 scctool/tasks/twitch.py:47
+#: scctool/tasks/nightbot.py:74 scctool/tasks/twitch.py:46
 msgid "Forbidden - Do you have permission?"
 msgstr "Запрещено! У вас есть разрешение?"
 
-#: scctool/tasks/nightbot.py:76 scctool/tasks/twitch.py:49
+#: scctool/tasks/nightbot.py:76 scctool/tasks/twitch.py:48
 msgid "Unauthorized - Refresh your token!"
 msgstr "Неавторизован - обновите ваш токен!"
 
-#: scctool/tasks/nightbot.py:78 scctool/tasks/twitch.py:51
+#: scctool/tasks/nightbot.py:78 scctool/tasks/twitch.py:50
 msgid "Too Many Requests."
 msgstr "Слишком много запросов."
 
@@ -112,9 +112,17 @@ msgstr "Не удалось войти в obs-websocket. Пароль верен
 msgid "Unkown Error!"
 msgstr "Неизвестная ошибка!"
 
-#: scctool/tasks/twitch.py:44
+#: scctool/tasks/twitch.py:35
+msgid "Updated Twitch title of {} to: \"{}\""
+msgstr ""
+
+#: scctool/tasks/twitch.py:43
 msgid "Not Found - Channel '{}' not found."
 msgstr "Не найдено - канал '{}' не найден."
+
+#: scctool/tasks/updater.py:210
+msgid "Updated data files!"
+msgstr ""
 
 #: scctool/tasks/webapp.py:140
 msgid ""

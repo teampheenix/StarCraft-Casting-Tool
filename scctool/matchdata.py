@@ -163,9 +163,11 @@ class matchData:
     def setSolo(self, solo):
         """Set allkill format."""
         self.__data['solo'] = bool(solo)
-        for set_idx in range(self.getNoSets()):
-            for team_idx in range(2):
-                self.setPlayer(team_idx, set_idx, self.getPlayer(team_idx, 0))
+        
+        if self.__data['solo']:
+            for set_idx in range(self.getNoSets()):
+                for team_idx in range(2):
+                    self.setPlayer(team_idx, set_idx, self.getPlayer(team_idx, 0))
 
     def getSolo(self):
         """Check if format is solo (or team)."""

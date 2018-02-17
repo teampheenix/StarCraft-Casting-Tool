@@ -70,7 +70,7 @@ def setDataVersion(version):
         json.dump(data, outfile)
 
 
-def extractData(asset_update, handler):
+def extractData(asset_update, handler = lambda x: None):
     """Extract data."""
     handler(10)
     if asset_update.is_downloaded():
@@ -206,21 +206,8 @@ class VersionHandler(TasksThread):
                 self.deactivateTask('update_data')
                 return
             self.asset_update.download()
-            if self.asset_update.is_downloaded():
-                file = os.path.join(self.asset_update.update_folder,
-                                    self.asset_update.filename)
-                targetdir = scctool.settings.basedir
-                with zipfile.ZipFile(file, "r") as zip:
-                    zip.extractall(targetdir)
-                file = os.path.join(targetdir,
-                                    'SCCT-data.tar')
-                with tarfile.open(file, "r") as tar:
-                    tar.extractall(targetdir)
-
-                os.remove(file)
-                setDataVersion(self.asset_update.latest)
-                self.ASSET_VERSION = self.asset_update.latest
-                self.updated_data.emit("Updated data files!")
+            extractData(self.asset_update)
+            self.updated_data.emit(_("Updated data files!"))
         except Exception as e:
             module_logger.exception("message")
         finally:

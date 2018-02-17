@@ -42,7 +42,7 @@ def updateCommand(message):
 
         if(skipUpdate):
             previousMsg = message
-            msg = _("Nightbot Command '{}' was already set to '{}'").format(
+            msg = _("Nightbot command '{}' was already set to '{}'").format(
                 cmd, message)
             success = True
             return msg, success
@@ -64,7 +64,7 @@ def updateCommand(message):
 
         previousMsg = message
 
-        msg = _("Updated Nightbot Command '{}' to '{}'").format(cmd, message)
+        msg = _("Updated Nightbot command '{}' to '{}'").format(cmd, message)
         success = True
 
     except requests.exceptions.HTTPError as e:

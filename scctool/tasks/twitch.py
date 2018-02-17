@@ -32,8 +32,7 @@ def updateTitle(newTitle):
 
         requests.put('https://api.twitch.tv/kraken/channels/' + twitchChannel,
                      headers=headers, params=params).raise_for_status()
-        msg = "Updated twitch title of " + twitchChannel + ' to: "'\
-              + newTitle.encode("ascii", "ignore").decode() + '"'
+        msg = _('Updated Twitch title of {} to: "{}"').format(twitchChannel, newTitle)
         success = True
         previousTitle = newTitle
 
