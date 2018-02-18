@@ -380,6 +380,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
                        'only two maps played.')
             self.cb_bestof.setToolTip(string)
             self.cb_bestof.setMaximumWidth(40)
+            self.cb_bestof.currentIndexChanged.connect(self.changeBestOf)
             container.addWidget(self.cb_bestof, 0)
 
             container.addWidget(PyQt5.QtWidgets.QLabel(_(" but at least")), 0)
@@ -462,6 +463,17 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
 
         except Exception as e:
             module_logger.exception("message")
+            
+    def changeBestOf(self, bestof):
+        bestof = bestof + 1
+        self.cb_minSets.clear()
+        for idx in range(0, bestof):
+            self.cb_minSets.addItem(str(idx + 1))
+            if bestof == 2:
+                self.cb_minSets.setCurrentIndex(1)
+            else:
+                self.cb_minSets.setCurrentIndex((bestof-1)/2)
+        
 
     def updateMapCompleters(self):
         """Update the auto completers for maps."""
