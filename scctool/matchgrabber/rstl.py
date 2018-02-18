@@ -57,25 +57,33 @@ class MatchGrabber(MatchGrabberParent):
                         pass
 
                 for set_idx in range(4, 7):
+                    player = data['result']['8']['member_name' + str(team_idx + 1)]
+                    race = data['result']['8']['r_name' + str(team_idx + 1)]
+                    
                     try:
                         idx = str(4 + set_idx)
-                        if(not data['result'][idx]['r_name'
-                                                   + str(team_idx + 1)]):
-                            try:
-                                idx = str(4 + set_idx)
-                                race = data['result'][idx]['r_name' +
+
+                        try:
+                            idx = str(5 + set_idx)
+                            temp_race = data['result'][idx]['r_name' +
                                                            str(team_idx + 1)]
-                            except:
+                            if temp_race is not None:
+                                race = temp_race
+                        finally:
+                            if race is None:
                                 race = "Random"
-                        else:
-                            race = data['result'][str(
-                                4 + set_idx)]['r_name' + str(team_idx + 1)]
-                        player = data['result'][str(
-                            4 + set_idx)]['tu_name' + str(team_idx + 1)]
+                        try:
+                            temp_player = data['result'][str(5 + set_idx)]['member_name' + str(team_idx + 1)]
+                            if temp_player is not None:
+                                player = temp_player
+                        finally:
+                            if temp_player is None:
+                                player = "TBD"
+                                
                         self._matchData.setPlayer(team_idx, set_idx,
-                                                  player, race)
+                                                    player, race)
                     except:
-                        pass
+                         pass
 
                 team = data['member' + str(team_idx + 1)]
                 self._matchData.setTeam(team_idx, team['name'], team['tag'])
@@ -106,9 +114,9 @@ class MatchGrabber(MatchGrabberParent):
             for set_idx in range(4, 7):
                 try:
                     score1 = int(
-                        data['result'][str(4 + set_idx)]['score1'])
+                        data['result'][str(5 + set_idx)]['score1'])
                     score2 = int(
-                        data['result'][str(4 + set_idx)]['score2'])
+                        data['result'][str(5 + set_idx)]['score2'])
                 except:
                     score1 = 0
                     score2 = 0

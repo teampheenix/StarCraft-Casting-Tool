@@ -386,13 +386,10 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             container.addWidget(PyQt5.QtWidgets.QLabel(_(" but at least")), 0)
 
             self.cb_minSets = PyQt5.QtWidgets.QComboBox()
-            for idx in range(0, scctool.settings.max_no_sets):
-                self.cb_minSets.addItem(str(idx + 1))
-            self.cb_minSets.setCurrentIndex(0)
 
             self.cb_minSets.setToolTip(
                 _('Minimum number of maps played (even if the match is decided already)'))
-            self.cb_minSets.setMaximumWidth(50)
+            self.cb_minSets.setMaximumWidth(40)
             container.addWidget(self.cb_minSets, 0)
             container.addWidget(
                 PyQt5.QtWidgets.QLabel(" " + _("maps") + " "), 0)
@@ -465,6 +462,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             module_logger.exception("message")
             
     def changeBestOf(self, bestof):
+        """Change the minimum sets combo box on change of BoX."""
         bestof = bestof + 1
         self.cb_minSets.clear()
         for idx in range(0, bestof):
