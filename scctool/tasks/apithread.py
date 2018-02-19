@@ -359,7 +359,7 @@ class SC2ApiThread(PyQt5.QtCore.QThread):
             img = full_img.crop((int(width * 0.1), int(height * 0.8),
                                  int(width * 0.5), height))
             text = pytesseract.image_to_string(img)
-            items = re.split('\s+', text)
+            items = re.split(r'\s+', text)
 
             threshold = 0.35
             for item_idx, item in enumerate(items):
@@ -376,7 +376,7 @@ class SC2ApiThread(PyQt5.QtCore.QThread):
                 positions = [None, None]
                 ratios = [0.0, 0.0]
                 text = pytesseract.image_to_string(full_img)
-                items = re.split('\s+', text)
+                items = re.split(r'\s+', text)
 
                 threshold = 0.35
                 for item_idx, item in enumerate(items):
