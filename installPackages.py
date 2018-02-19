@@ -32,6 +32,7 @@ try:
     pip.main(['install', 'obs-ws-rc', '--upgrade'])
     pip.main(['install', 'humanize', '--upgrade'])
     pip.main(['install', 'markdown2', '--upgrade'])
+    pip.main(['install', 'pyupdater', '--upgrade'])
 
     if(system == "Windows"):
         pip.main(['install', 'pypiwin32', '--upgrade'])
