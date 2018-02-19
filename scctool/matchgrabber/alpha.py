@@ -35,9 +35,9 @@ class MatchGrabber(MatchGrabberParent):
             self._matchData.setMinSets(3)
             self._matchData.setSolo(False)
             league = data['tournament']
-            league = league.replace('Non-pro', 'Non-Pro')
             if not isinstance(league, str):
                 league = "TBD"
+            league = league.replace('Non-pro', 'Non-Pro')
             self._matchData.setLeague(league)
 
             for idx, map in enumerate(data['maps']):
