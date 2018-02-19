@@ -782,11 +782,11 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             if(not scctool.settings.windows):
                 self.cb_autoToggleScore.setEnabled(False)
                 self.cb_autoToggleScore.setAttribute(
-                    PyQt5.QtCore.QtWA_AlwaysShowToolTips)
+                    PyQt5.QtCore.Qt.WA_AlwaysShowToolTips)
                 self.cb_autoToggleScore.setToolTip(_('Only Windows'))
                 self.cb_autoToggleProduction.setEnabled(False)
                 self.cb_autoToggleProduction.setAttribute(
-                    PyQt5.QtCore.QtWA_AlwaysShowToolTips)
+                    PyQt5.QtCore.Qt.WA_AlwaysShowToolTips)
                 self.cb_autoToggleProduction.setToolTip(_('Only Windows'))
 
             layout = PyQt5.QtWidgets.QGridLayout()
