@@ -5,4 +5,4 @@ python:
 # command to install dependencies
 install: python installPackages.py
 # command to run tests
-script: python StarCraftCastingTool.pyw
+script: xvfb-run python StarCraftCastingTool.pyw
