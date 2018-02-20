@@ -1,0 +1,8 @@
+language: python
+python:
+  - "3.5"
+  - "3.6"
+# command to install dependencies
+install: python installPackages.py
+# command to run tests
+script: python StarCraftCastingTool.pyw
