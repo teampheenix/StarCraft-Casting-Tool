@@ -47,8 +47,10 @@ def loadMapList():
         for fname in os.listdir(dir):
             full_fname = os.path.join(dir, fname)
             name, ext = os.path.splitext(fname)
-            if os.path.isfile(full_fname) and ext in ['.png', '.jpg']:
-                maps.append(name.replace('_', " "))
+            if os.path.isfile(full_fname) and ext in ['.jpg', '.png']:
+                mapName = name.replace('_', " ")
+                if mapName not in maps:
+                    maps.append(mapName)
     finally:
         return maps
 

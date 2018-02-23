@@ -571,7 +571,7 @@ class MainController:
 
     def linkFile(self, file):
         """Return correct img file ending."""
-        for ext in [".png", ".jpg"]:
+        for ext in [".jpg", ".png"]:
             if(os.path.isfile(scctool.settings.getAbsPath(file + ext))):
                 return file + ext
         return ""
@@ -642,7 +642,7 @@ class MainController:
                         line = line.replace(
                             '%NAME%', newData.getPlayer(player_idx))
                         line = line.replace(
-                            '%RACE%', newData.getPlayerRace(player_idx) + ".png")
+                            '%RACE%', newData.getPlayerRace(player_idx).lower())
                         line = line.replace('%TEAM%', team)
                         line = line.replace('%DISPLAY%', display)
                         line = line.replace('%LOGO%', logo)
