@@ -348,6 +348,11 @@ class SC2ApiThread(PyQt5.QtCore.QThread):
         try:
             if(not scctool.settings.config.parser.getboolean("SCT", "use_ocr")):
                 return False
+            
+            # Don't use OCR if the score is tied.
+            score = self.controller.matchData.getScore();
+            if(score[0]==score[1]):
+                return False
 
             pytesseract.pytesseract.tesseract_cmd = scctool.settings.config.getTesserAct()
 
