@@ -1,5 +1,14 @@
 @import url('https://fonts.googleapis.com/css?family=Orbitron:350,400');
 
+/* latin */
+@font-face {
+  font-family: 'OrbitronAdv';
+  font-style: normal;
+  font-weight: 400;
+  src: local('OrbitronAdv Regular'), local('OrbitronAdv-Regular'), url(https://fonts.gstatic.com/s/orbitron/v9/yMJRMIlzdpvBhQQL_Qq7dy0.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 :root {
   --border-size: 2px;
   --border-color: black;
@@ -14,7 +23,7 @@
 
 .text-item{
     color: white;
-    font: bold 18px Orbitron, Helvetica, Sans-Serif;
+    font: bold 18px OrbitronAdv, Orbitron, Helvetica, Sans-Serif;
     --outline-size: 3px;
    text-shadow: 0px  0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px  0px var(--outline-size) black,
                 0px  0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px  0px var(--outline-size) black,
@@ -95,7 +104,7 @@ div.score_left{
         left: 0px;
         width: 50px;
         height: 100%;
-        font: bold 36px Orbitron, Helvetica, Sans-Serif;
+        font: bold 36px OrbitronAdv, Orbitron, Helvetica, Sans-Serif;
 	text-align: center;
 	line-height: calc(var(--total-height) - var(--border-size));
 }
@@ -106,7 +115,7 @@ div.score_right{
         right: 0px;
         width: 50px;
         height: 100%;
-        font: bold 36px Orbitron, Helvetica, Sans-Serif;
+        font: bold 36px OrbitronAdv, Orbitron, Helvetica, Sans-Serif;
 	text-align: center;
 	line-height: calc(var(--total-height) - var(--border-size));
 }
@@ -117,7 +126,7 @@ div.score_middle{
         left: 50px;
         width: calc(var(--middle-width)-100px);
         height: 100%;
-        font: bold 36px Orbitron, Helvetica, Sans-Serif;
+        font: bold 36px OrbitronAdv, Orbitron, Helvetica, Sans-Serif;
 	text-align: center;
 	line-height: calc(var(--total-height) - var(--border-size));
 }
@@ -138,7 +147,7 @@ div.upper-text-right{
 	height: calc(100% - var(--lower-text-height));
 	right: calc(0% + var(--border-radius) + 15px);
 	width: calc(100% - 2 * var(--border-radius) - 30px);
-	font: bold 36px Orbitron, Helvetica, Sans-Serif;
+	font: bold 36px OrbitronAdv, Orbitron, Helvetica, Sans-Serif;
 	text-align: center;
 	line-height: 60px;
 	overflow: hidden;
@@ -151,7 +160,7 @@ div.upper-text-left{
 	height: calc(100% - var(--lower-text-height));
 	left: calc(0% + var(--border-radius) + 15px);
 	width: calc(100% - 2 * var(--border-radius) - 30px);
-	font: bold 36px Orbitron, Helvetica, Sans-Serif;
+	font: bold 36px OrbitronAdv, Orbitron, Helvetica, Sans-Serif;
 	text-align: center;
 	line-height: 60px;
 	overflow: hidden;
