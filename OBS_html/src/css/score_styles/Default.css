@@ -23,7 +23,7 @@
 
 .text-item{
     color: white;
-    font: bold 18px Orbitron, Helvetica, Sans-Serif;
+    font: bold 18px OrbitronAdv, Orbitron, Helvetica, Sans-Serif;
     --outline-size: 3px;
    text-shadow: 0px  0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px  0px var(--outline-size) black,
                 0px  0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px  0px var(--outline-size) black,
