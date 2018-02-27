@@ -25,14 +25,14 @@ StarCraft Casting Tool (SCC Tool) is a small program written in Python 3 that ca
 
 ## Discord Server
 
-If you need support, have questions, want to be up-to-date on, or like to contribute to this project, join our [Discord Server](https://discord.gg/G9hFEfh).
+If you need support, have questions, want to be up-to-date on, or like to contribute to this project, join our [Discord server](https://discord.gg/G9hFEfh).
 
 ## Icon Preview
 
 **[https://teampheenix.github.io/SCCT-archive/](https://teampheenix.github.io/SCCT-archive/)**
 
 ## General Information
-The tool generates various browser sources (and text-files): Amongst others, two complete sets of corresponding *Map Ions* (including map, players, races, and score), a Score Icon (including the score, team names, and logos) and GSL-like *Intros* (including player, race and team). All of these files can be included via local files and optionally uploaded to a specified FTP server to provide these files remotely to others, for example, to your co-caster.
+The tool generates various browser sources (and text-files): Amongst others, two complete sets of corresponding *Map Icons* (including map, players, races, and score), a Score Icon (including the score, team names, and logos) and GSL-like *Intros* (including player, race and team). All of these files can be included via local files and optionally uploaded to a specified FTP server to provide these files remotely to others, for example, to your co-caster.
 
 StarCraft Casting Tool can monitor your SC2-Client to detect the score, update it automatically, and provide corresponding player Intros. On Windows, the tool can additionally and automatically set and toggle the score in your SC2-Observer UI and toggle the production tab at the start of a game.
 
@@ -50,7 +50,7 @@ This tool should run on any operating system that supports Python 3, e.g., Windo
 
 ## Instructions for Use
 
-Run StarCraft Casting Tool via `StarCraft-Casting-Tool.exe` (or `StarCraftCastingTool.pyw`). Enter the Match-URL of an AlphaTL or RSTL match in the *Match Grabber* tab, e.g., "http://alpha.tl/match/2392", and press *Load Data from URL*. Alternatively one can create a match in the *Custom Match* tab.  Edit the data if necessary. The sliders control the score of each map. Press *Update OBS Data* or alter the score to update the data for streaming. The top slider is to select *your* team. Once selected the border of the Map Icons turn (by default) green or red depending on the result. To select your team automatically you can add it to *Favorite Teams* list under *Settings: Misc*. Similarly you can enter your players' nicknames into *Favorite Players* for auto completion.
+Run StarCraft Casting Tool via `StarCraft-Casting-Tool.exe` (or `StarCraftCastingTool.pyw`). Enter the Match-URL of an AlphaTL or RSTL match in the *Match Grabber* tab, e.g., "http://alpha.tl/match/3000", and press *Load Data from URL*. Alternatively one can create a match in the *Custom Match* tab.  Edit the data if necessary. The sliders control the score of each map. Press *Update OBS Data* or alter the score to update the data for streaming. The top slider is to select *your* team. Once selected the border of the Map Icons turn (by default) green or red depending on the result. To select your team automatically you can add it to *Favorite Teams* list under *Settings: Misc*. Similarly you can enter your players' nicknames into *Favorite Players* for auto completion.
 
 ### Data for Streaming
 can be found in the directory `OBS_data` and be included into OBS (or any similar streaming tool) via *Text read from local file*. If you want to include the team logos and the matchbanner, it is recommended to include them as *browser source from local file* via the HTML files given in the directory `OBS_html` *(Score Icon size: 1280x100px, Logo sizes: 300x300px, Intro sizes: Your screen resolution)*. The Map Icons can be found in the directory `OBS_mapicons` and have to be included via *browser source from local file* as well. There are two type of icons: box icons in `OBS_mapicons/icons_box` and landscape icons in `OBS_mapicons/icons_landscape`. One can either include each Map Icon separately *(box size: 280x270px, landscape size: 1010x110px)* and arrange them freely or one can include them via the single html file `all_maps.html` *(the chosen dimension of the browser source determines the arrangement of the icons)*. Note that you can scale the browser source(s) down/up if you want to make the icons smaller/larger. Except of the intros all browser sources refresh automatically - you should have to refresh the cache of this browser sources only if you select a different skin/style or a new update has been applied.
@@ -73,11 +73,11 @@ Sometimes the order of players given by the SC2-Client-API differs from the orde
 #### Player Intros
 [![intro-demo](https://user-images.githubusercontent.com/26044736/30003831-4fe09b14-90c4-11e7-9593-439454d4e324.gif)](https://youtu.be/JNuAr63L0wM)
 
-Include the Player Intros as browser sources (using the full height and width of your display), activate the option *Shutdown source when not visible* and assign hot-keys to make the sources visible. The content of the intros refresh accordingly if the task *Provide Player Intros* is activated and a game or replay is started in the StarCraft 2 client. To automatically hide the browser sources of the Player Intros afterwards (only OBS studio) you have to install the [OBS websocket plugin](https://obsproject.com/forum/resources/obs-websocket-remote-control-of-obs-studio-made-easy.466/), activate it in OBS studio, specify the corresponding SCC-Tool settings under *Settings: Connections*, and name the Intro sources accordingly (default names are"Intro1" and "Intro2"). The first intro, `intro1.html`, is always corresponding to the player your observer camera is centered on at start of a game.
+Include the Player Intros as browser sources (using the full height and width of your display), activate the option *Shutdown source when not visible* and assign hot-keys to make the sources visible. The content of the intros refresh accordingly if the task *Provide Player Intros* is activated and a game or replay is started in the StarCraft 2 client. To automatically hide the browser sources of the Player Intros afterwards (only OBS studio) you have to install the [OBS websocket plugin](https://github.com/Palakis/obs-websocket/releases/latest), activate it in OBS studio, specify the corresponding SCC-Tool settings under *Settings: Connections*, and name the Intro sources accordingly (default names are "Intro1" and "Intro2"). The first intro, `intro1.html`, is always corresponding to the player your observer camera is centered on at start of a game.
 
 ## Customization
 
-Some basic options for customization can be found under *Settings: Styles*, for example, alternative stlyes/skins for the Map Icons and option to specify border colors. For additional **nearly unlimited customization** of the Map Icons you can make your own custom skins via [CSS](https://www.w3schools.com/css/) by creating new alternative *css*-files and placing them into `OBS_mapicons/src/css/box_styles`, `OBS_mapicons/src/css/landscape_styles`, `OBS_html/src/css/score_styles`, or `OBS_html/src/css/intro_styles`. If you do so, please share your custom skins with this project.
+Some basic options for customization can be found under *Settings: Styles*, for example, alternative styles/skins for the Map Icons, Score Icon, Intros and option to specify border colors. For additional **nearly unlimited customization** of the Icons you can make your own custom skins via [CSS](https://www.w3schools.com/css/) by creating new alternative *css*-files and placing them into `OBS_mapicons/src/css/box_styles`, `OBS_mapicons/src/css/landscape_styles`, `OBS_html/src/css/score_styles`, or `OBS_html/src/css/intro_styles` respectively. If you do so, please share your custom skins with this project. If you want help implementing your own icon skin with CSS or just want to share an idea for a skin join the [Discord server](https://discord.gg/G9hFEfh).
 
 ## Help, Bug-Report, Suggestions & Contribution
 
@@ -87,4 +87,4 @@ In the case of a bug report please provide the log-file `scctool.log` (and `inst
 
 ## Support
 
-If you want to support this project join our [Discord Server](https://discord.gg/G9hFEfh) and consider subscribing to [twitch.tv/teampheenix](https://www.twitch.tv/teampheenix) or [donate directly](https://streamlabs.com/scpressure). Alternatively and free of cost - just follow the team pheeniX and my personal [twitch.tv/scpressure](https://www.twitch.tv/scpressure) twitch channel!
+If you want to support this project join our [Discord Server](https://discord.gg/G9hFEfh) and consider subscribing to [twitch.tv/teampheenix](https://www.twitch.tv/teampheenix) or [donate directly](https://streamlabs.com/scpressure). Alternatively and free of cost - just follow the team pheeniX and my personal [twitch.tv/scpressure](https://www.twitch.tv/scpressure) Twitch channel!

@@ -85,7 +85,7 @@ async def hideIntros(thread):
                 sources = list(map(str.strip, str(
                     scctool.settings.config.parser.get("OBS", "sources")).split(',')))
                 if(visible and source_name in sources):
-                    time.sleep(4.5)
+                    time.sleep(5.2)
                     response = await obsws.require(SetSourceRenderRequest(
                         source=source_name, render=False))
                     # Check if everything is OK
