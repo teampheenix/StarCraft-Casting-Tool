@@ -8,7 +8,7 @@ module_logger = logging.getLogger('scctool.settings')
 
 if getattr(sys, 'frozen', False):
     basedir = os.path.dirname(sys.executable)
-elif __file__:
+else:
     basdir = os.path.dirname(sys.modules['__main__'].__file__)
 
 def getAbsPath(file):
