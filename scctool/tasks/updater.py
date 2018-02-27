@@ -70,7 +70,7 @@ def setDataVersion(version):
         json.dump(data, outfile)
 
 
-def extractData(asset_update, handler = lambda x: None):
+def extractData(asset_update, handler=lambda x: None):
     """Extract data."""
     handler(10)
     if asset_update.is_downloaded():

@@ -146,7 +146,7 @@ class SubwindowStyles(PyQt5.QtWidgets.QWidget):
 
     def openHTML(self, file):
         """Open file in browser."""
-        self.controller.openURL(scctool.getAbsPath(file))
+        self.controller.openURL(scctool.settings.getAbsPath(file))
 
     def applyStyles(self):
         """Apply styles."""

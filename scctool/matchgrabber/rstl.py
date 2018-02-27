@@ -57,33 +57,35 @@ class MatchGrabber(MatchGrabberParent):
                         pass
 
                 for set_idx in range(4, 7):
-                    player = data['result']['8']['member_name' + str(team_idx + 1)]
+                    player = data['result']['8']['member_name' +
+                                                 str(team_idx + 1)]
                     race = data['result']['8']['r_name' + str(team_idx + 1)]
-                    
+
                     try:
                         idx = str(4 + set_idx)
 
                         try:
                             idx = str(5 + set_idx)
                             temp_race = data['result'][idx]['r_name' +
-                                                           str(team_idx + 1)]
+                                                            str(team_idx + 1)]
                             if temp_race is not None:
                                 race = temp_race
                         finally:
                             if race is None:
                                 race = "Random"
                         try:
-                            temp_player = data['result'][str(5 + set_idx)]['member_name' + str(team_idx + 1)]
+                            temp_player = data['result'][str(
+                                5 + set_idx)]['member_name' + str(team_idx + 1)]
                             if temp_player is not None:
                                 player = temp_player
                         finally:
                             if temp_player is None:
                                 player = "TBD"
-                                
+
                         self._matchData.setPlayer(team_idx, set_idx,
-                                                    player, race)
+                                                  player, race)
                     except:
-                         pass
+                        pass
 
                 team = data['member' + str(team_idx + 1)]
                 self._matchData.setTeam(team_idx, team['name'], team['tag'])
@@ -228,7 +230,7 @@ class MatchGrabber(MatchGrabberParent):
             base, ext = os.path.splitext(url)
             ext = ext.split("?")[0]
             fname = dir + "/logo" + str(i) + ext
-            urlretrieve(url, fname)
+            urlretrieve(url, scctool.settings.getAbsPath(fname))
             self._controller.ftpUploader.cwd(dir)
             self._controller.ftpUploader.upload(fname, "logo" + str(i) + ext)
             self._controller.ftpUploader.cwd("..")

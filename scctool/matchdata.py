@@ -701,10 +701,12 @@ class matchData:
                                                "nextplayer2.txt",
                                                "nextrace1.txt",
                                                "nextrace2.txt"]
-                f = open(scctool.getAbsPath(scctool.settings.OBSdataDir +
-                                            "/lineup.txt"), mode='w', encoding='utf-8-sig')
-                f2 = open(scctool.getAbsPath(scctool.settings.OBSdataDir +
-                                             "/maps.txt"), mode='w', encoding='utf-8-sig')
+                f = open(scctool.settings.getAbsPath(scctool.settings.OBSdataDir +
+                                                     "/lineup.txt"),
+                         mode='w', encoding='utf-8-sig')
+                f2 = open(scctool.settings.getAbsPath(scctool.settings.OBSdataDir +
+                                                      "/maps.txt"),
+                          mode='w', encoding='utf-8-sig')
                 for idx in range(self.getNoSets()):
                     map = self.getMap(idx)
                     f.write(map + "\n")
@@ -725,32 +727,32 @@ class matchData:
                 except:
                     score_str = "0 - 0"
 
-                f = open(scctool.getAbsPath(scctool.settings.OBSdataDir +
-                                            "/score.txt"), mode='w',
+                f = open(scctool.settings.getAbsPath(scctool.settings.OBSdataDir +
+                                                     "/score.txt"), mode='w',
                          encoding='utf-8-sig')
                 f.write(score_str)
                 f.close()
 
-                f = open(scctool.getAbsPath(scctool.settings.OBSdataDir +
-                                            "/nextplayer1.txt"), mode='w',
+                f = open(scctool.settings.getAbsPath(scctool.settings.OBSdataDir +
+                                                     "/nextplayer1.txt"), mode='w',
                          encoding='utf-8-sig')
                 f.write(self.getNextPlayer(0))
                 f.close()
 
-                f = open(scctool.getAbsPath(scctool.settings.OBSdataDir +
-                                            "/nextplayer2.txt"), mode='w',
+                f = open(scctool.settings.getAbsPath(scctool.settings.OBSdataDir +
+                                                     "/nextplayer2.txt"), mode='w',
                          encoding='utf-8-sig')
                 f.write(self.getNextPlayer(1))
                 f.close()
 
-                f = open(scctool.getAbsPath(scctool.settings.OBSdataDir +
-                                            "/nextrace1.txt"), mode='w',
+                f = open(scctool.settings.getAbsPath(scctool.settings.OBSdataDir +
+                                                     "/nextrace1.txt"), mode='w',
                          encoding='utf-8-sig')
                 f.write(self.getNextRace(0))
                 f.close()
 
-                f = open(scctool.getAbsPath(scctool.settings.OBSdataDir +
-                                            "/nextrace2.txt"), mode='w',
+                f = open(scctool.settings.getAbsPath(scctool.settings.OBSdataDir +
+                                                     "/nextrace2.txt"), mode='w',
                          encoding='utf-8-sig')
                 f.write(self.getNextRace(1))
                 f.close()
@@ -761,31 +763,34 @@ class matchData:
                     ["teams_vs_long.txt", "teams_vs_short.txt",
                         "team1.txt", "team2.txt", "tournament.txt"]
 
-                f = open(scctool.getAbsPath(scctool.settings.OBSdataDir +
-                                            "/teams_vs_long.txt"),
+                f = open(scctool.settings.getAbsPath(scctool.settings.OBSdataDir +
+                                                     "/teams_vs_long.txt"),
                          mode='w', encoding='utf-8-sig')
                 f.write(self.getTeam(0) + ' vs ' + self.getTeam(1) + "\n")
                 f.close()
 
-                f = open(scctool.getAbsPath(scctool.settings.OBSdataDir +
-                                            "/teams_vs_short.txt"),
+                f = open(scctool.settings.getAbsPath(scctool.settings.OBSdataDir +
+                                                     "/teams_vs_short.txt"),
                          mode='w', encoding='utf-8-sig')
                 f.write(self.getTeamTag(0) + ' vs ' +
                         self.getTeamTag(1) + "\n")
                 f.close()
 
-                f = open(scctool.getAbsPath(scctool.settings.OBSdataDir +
-                                            "/team1.txt"), mode='w', encoding='utf-8-sig')
+                f = open(scctool.settings.getAbsPath(scctool.settings.OBSdataDir +
+                                                     "/team1.txt"),
+                         mode='w', encoding='utf-8-sig')
                 f.write(self.getTeam(0))
                 f.close()
 
-                f = open(scctool.getAbsPath(scctool.settings.OBSdataDir +
-                                            "/team2.txt"), mode='w', encoding='utf-8-sig')
+                f = open(scctool.settings.getAbsPath(scctool.settings.OBSdataDir +
+                                                     "/team2.txt"),
+                         mode='w', encoding='utf-8-sig')
                 f.write(self.getTeam(1))
                 f.close()
 
-                f = open(scctool.getAbsPath(scctool.settings.OBSdataDir +
-                                            "/tournament.txt"), mode='w', encoding='utf-8-sig')
+                f = open(scctool.settings.getAbsPath(scctool.settings.OBSdataDir +
+                                                     "/tournament.txt"),
+                         mode='w', encoding='utf-8-sig')
                 f.write(self.getLeague())
                 f.close()
 
@@ -859,10 +864,10 @@ class matchData:
         if logo2 == "":
             logo2 = scctool.settings.OBShtmlDir + "/src/SC2.png"
 
-        filename = scctool.getAbsPath(
+        filename = scctool.settings.getAbsPath(
             scctool.settings.OBShtmlDir + "/data/score-data.html")
-        with open(scctool.getAbsPath(scctool.settings.OBShtmlDir +
-                                     "/data/score-template.html"),
+        with open(scctool.settings.getAbsPath(scctool.settings.OBShtmlDir +
+                                              "/data/score-template.html"),
                   "rt", encoding='utf-8-sig') as fin:
             with open(filename, "wt", encoding='utf-8-sig') as fout:
                 for line in fin:
@@ -962,12 +967,14 @@ class matchData:
                 race2png = self.getRace(1, i) + ".png"
                 hidden = ""
 
-                filename = scctool.getAbsPath(scctool.settings.OBSmapDir +
-                                              "/icons_box/data/" + str(i + 1) + ".html")
-                filename2 = scctool.getAbsPath(scctool.settings.OBSmapDir +
-                                               "/icons_landscape/data/" + str(i + 1) + ".html")
-                with open(scctool.getAbsPath(scctool.settings.OBSmapDir +
-                                             "/icons_box/data/template.html"),
+                filename = scctool.settings.getAbsPath(scctool.settings.OBSmapDir +
+                                                       "/icons_box/data/"
+                                                       + str(i + 1) + ".html")
+                filename2 = scctool.settings.getAbsPath(scctool.settings.OBSmapDir +
+                                                        "/icons_landscape/data/"
+                                                        + str(i + 1) + ".html")
+                with open(scctool.settings.getAbsPath(scctool.settings.OBSmapDir +
+                                                      "/icons_box/data/template.html"),
                           "rt", encoding='utf-8-sig') as fin:
                     with open(filename, "wt", encoding='utf-8-sig') as fout:
                         for line in fin:
@@ -985,9 +992,9 @@ class matchData:
                                 '%STATUS2%', player2status)
                             fout.write(line)
 
-                with open(scctool.getAbsPath(scctool.settings.OBSmapDir +
-                                             "/icons_landscape/data/template.html"), "rt",
-                          encoding='utf-8-sig') as fin:
+                with open(scctool.settings.getAbsPath(scctool.settings.OBSmapDir +
+                                                      "/icons_landscape/data/template.html"),
+                          "rt", encoding='utf-8-sig') as fin:
                     with open(filename2, "wt", encoding='utf-8-sig') as fout:
                         for line in fin:
                             line = line.replace('%PLAYER1%', player1).replace(
@@ -1005,21 +1012,23 @@ class matchData:
                             fout.write(line)
 
             for i in range(self.getNoSets(), scctool.settings.max_no_sets):
-                filename = scctool.getAbsPath(scctool.settings.OBSmapDir +
-                                              "/icons_box/data/" + str(i + 1) + ".html")
-                filename2 = scctool.getAbsPath(scctool.settings.OBSmapDir +
-                                               "/icons_landscape/data/" + str(i + 1) + ".html")
+                filename = scctool.settings.getAbsPath(scctool.settings.OBSmapDir +
+                                                       "/icons_box/data/" + str(i + 1) +
+                                                       ".html")
+                filename2 = scctool.settings.getAbsPath(scctool.settings.OBSmapDir +
+                                                        "/icons_landscape/data/" + str(i + 1) +
+                                                        ".html")
                 hidden = "visibility: hidden;"
-                with open(scctool.getAbsPath(scctool.settings.OBSmapDir +
-                                             "/icons_box/data/template.html"),
+                with open(scctool.settings.getAbsPath(scctool.settings.OBSmapDir +
+                                                      "/icons_box/data/template.html"),
                           "rt", encoding='utf-8-sig') as fin:
                     with open(filename, "wt", encoding='utf-8-sig') as fout:
                         for line in fin:
                             line = line.replace('%HIDDEN%', hidden)
                             fout.write(line)
 
-                with open(scctool.getAbsPath(scctool.settings.OBSmapDir +
-                                             "/icons_landscape/data/template.html"),
+                with open(scctool.settings.getAbsPath(scctool.settings.OBSmapDir +
+                                                      "/icons_landscape/data/template.html"),
                           "rt") as fin:
                     with open(filename2, "wt", encoding='utf-8-sig') as fout:
                         for line in fin:
@@ -1055,8 +1064,8 @@ class matchData:
             filename_old = scctool.settings.OBShtmlDir + "/data/" + self.getProvider() + \
                 ".html"
             filename_new = scctool.settings.OBShtmlDir + "/data/league-data.html"
-            shutil.copy(scctool.getAbsPath(filename_old),
-                        scctool.getAbsPath(filename_new))
+            shutil.copy(scctool.settings.getAbsPath(filename_old),
+                        scctool.settings.getAbsPath(filename_new))
             self.__controller.ftpUploader.cwd(
                 scctool.settings.OBShtmlDir + "/data")
             self.__controller.ftpUploader.upload(

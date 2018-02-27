@@ -99,9 +99,9 @@ class MatchGrabber(MatchGrabberParent):
             try:
                 url = self._rawData['team' + str(idx + 1)]['logo']
                 base, ext = os.path.splitext(url)
-                ext = ext.split("?")[0]
+                ext = ext.split("?")[0].lower()
                 fname = dir + "/logo" + str(idx + 1) + ext
-                urlretrieve(url, fname)
+                urlretrieve(url, scctool.settings.getAbsPath(fname))
 
                 self._controller.ftpUploader.cwd(dir)
                 self._controller.ftpUploader.upload(
@@ -131,7 +131,7 @@ class MatchGrabber(MatchGrabberParent):
             url = url + "?vs"
 
         try:
-            urlretrieve(url, fname)
+            urlretrieve(url, scctool.settings.getAbsPath(fname))
 
             self._controller.ftpUploader.cwd(dir)
             self._controller.ftpUploader.upload(fname, "matchbanner.png")
