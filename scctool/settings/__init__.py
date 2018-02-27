@@ -6,8 +6,10 @@ import sys
 
 module_logger = logging.getLogger('scctool.settings')
 
-basedir = os.path.dirname(sys.modules['__main__'].__file__)
-
+if getattr(sys, 'frozen', False):
+    basedir = os.path.dirname(sys.executable)
+elif __file__:
+    basdir = os.path.dirname(sys.modules['__main__'].__file__)
 
 def getAbsPath(file):
     """Link to absolute path of a file."""
