@@ -33,7 +33,7 @@ div.box_veryleft{
         top: 30px;
         left: 180px;
         width: 200px;
-        heigh: 200px;
+        height: 200px;
 }
 
 div.box_veryright{
@@ -41,7 +41,7 @@ div.box_veryright{
         top: 30px;
         right: 180px;
         width: 200px;
-        heigh: 200px;
+        height: 200px;
 }
 
 
@@ -144,10 +144,8 @@ div.score_right{
     -webkit-font-smoothing: antialiased;
 }
 
-#logo1 {
-	display: block; margin-left: auto;margin-right: auto; max-width:100%;max-height:100%;
-}
-
-#logo2 {
-	display: block; margin-left: auto;margin-right: auto; max-width:100%;max-height:100%;
+div.logo{
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
 }

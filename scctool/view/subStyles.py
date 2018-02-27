@@ -6,8 +6,6 @@ import PyQt5
 from scctool.view.widgets import StyleComboBox, ColorLayout
 import scctool.settings
 
-import os.path
-
 # create logger
 module_logger = logging.getLogger('scctool.view.subStyles')
 
@@ -148,7 +146,7 @@ class SubwindowStyles(PyQt5.QtWidgets.QWidget):
 
     def openHTML(self, file):
         """Open file in browser."""
-        self.controller.openURL(os.path.abspath(file))
+        self.controller.openURL(scctool.getAbsPath(file))
 
     def applyStyles(self):
         """Apply styles."""

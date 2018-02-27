@@ -168,12 +168,12 @@ class MainController:
 
     def updateLogos(self):
         """Updata team logos in  view."""
-        pixmap = PyQt5.QtGui.QIcon(self.linkFile(
-            scctool.settings.OBSdataDir + '/logo1'))
+        pixmap = PyQt5.QtGui.QIcon(scctool.settings.getAbsPath(self.linkFile(
+            scctool.settings.OBSdataDir + '/logo1')))
         self.view.qb_logo1.setIcon(pixmap)
 
-        pixmap = PyQt5.QtGui.QIcon(self.linkFile(
-            scctool.settings.OBSdataDir + '/logo2'))
+        pixmap = PyQt5.QtGui.QIcon(scctool.settings.getAbsPath(self.linkFile(
+            scctool.settings.OBSdataDir + '/logo2')))
         self.view.qb_logo2.setIcon(pixmap)
 
         self.updateLogosHTML()
@@ -675,7 +675,7 @@ class MainController:
         """Add a new map via file and name."""
         _, ext = os.path.splitext(file)
         mapdir = scctool.settings.getAbsPath(scctool.settings.OBSmapDir)
-        map = mapname.strip().replace(" ", "_") + ext
+        map = mapname.strip().replace(" ", "_") + ext.lower()
         newfile = os.path.normpath(os.path.join(mapdir, "src/maps", map))
         shutil.copy(file, newfile)
         if mapname not in scctool.settings.maps:

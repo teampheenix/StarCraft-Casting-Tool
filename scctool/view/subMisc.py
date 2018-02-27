@@ -72,43 +72,46 @@ class SubwindowMisc(PyQt5.QtWidgets.QWidget):
     def changed(self):
         """Handle changes."""
         self.__dataChanged = True
-        
+
     def createAlphaBox(self):
+        """Create Alpha QWidget."""
         self.alphaBox = PyQt5.QtWidgets.QWidget()
         mainLayout = PyQt5.QtWidgets.QVBoxLayout()
-        
+
         box = PyQt5.QtWidgets.QGroupBox(_("AlphaTL"))
         layout = PyQt5.QtWidgets.QHBoxLayout()
-        
+
         self.cb_trans_banner = PyQt5.QtWidgets.QCheckBox(
             " " + _("Download transparent Banner of the Match"))
         self.cb_trans_banner.setChecked(
             scctool.settings.config.parser.getboolean("SCT", "transparent_match_banner"))
         self.cb_trans_banner.stateChanged.connect(self.changed)
-        
+
         layout.addWidget(self.cb_trans_banner)
         box.setLayout(layout)
-        
+
         mainLayout.addWidget(box)
-        
+
         box = PyQt5.QtWidgets.QGroupBox(_("Set Ingame Score Task"))
         layout = PyQt5.QtWidgets.QHBoxLayout()
-        
+
         self.cb_ctrlshifts = PyQt5.QtWidgets.QCheckBox(
             " " + _('Automatically press Ctrl+Shift+S to display the ingame score'))
-        self.cb_ctrlshifts.setToolTip(_("Ctrl+Shift+S is needed for the WCS-Gameheart Oberserver Overlay, but disables the sound for other overlays."))
+        self.cb_ctrlshifts.setToolTip(
+            _("Ctrl+Shift+S is needed for the WCS-Gameheart Oberserver Overlay," +
+              " but disables the sound for other overlays."))
         self.cb_ctrlshifts.setChecked(
             scctool.settings.config.parser.getboolean("SCT", "CtrlShiftS"))
         self.cb_ctrlshifts.stateChanged.connect(self.changed)
-        
+
         layout.addWidget(self.cb_ctrlshifts)
         box.setLayout(layout)
-        
+
         mainLayout.addWidget(box)
-        
+
         mainLayout.addItem(PyQt5.QtWidgets.QSpacerItem(
             0, 0, PyQt5.QtWidgets.QSizePolicy.Minimum, PyQt5.QtWidgets.QSizePolicy.Expanding))
-        
+
         self.alphaBox.setLayout(mainLayout)
 
     def createFavBox(self):
@@ -363,7 +366,7 @@ class SubwindowMisc(PyQt5.QtWidgets.QWidget):
         """Change the map preview."""
         if self.maplist.count() < 1:
             return
-            
+
         map = self.maplist.currentItem().text()
         if(map == "TBD"):
             self.pb_renameMap.setEnabled(False)

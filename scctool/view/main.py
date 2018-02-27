@@ -460,7 +460,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
 
         except Exception as e:
             module_logger.exception("message")
-            
+
     def changeBestOf(self, bestof):
         """Change the minimum sets combo box on change of BoX."""
         bestof = bestof + 1
@@ -470,8 +470,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             if bestof == 2:
                 self.cb_minSets.setCurrentIndex(1)
             else:
-                self.cb_minSets.setCurrentIndex((bestof-1)/2)
-        
+                self.cb_minSets.setCurrentIndex((bestof - 1) / 2)
 
     def updateMapCompleters(self):
         """Update the auto completers for maps."""
@@ -547,15 +546,15 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             self.qb_logo1 = IconPushButton()
             self.qb_logo1.setFixedWidth(self.raceWidth)
             self.qb_logo1.clicked.connect(lambda: self.logoDialog(1))
-            pixmap = PyQt5.QtGui.QIcon(self.controller.linkFile(
-                scctool.settings.OBSdataDir + '/logo1'))
+            pixmap = PyQt5.QtGui.QIcon(scctool.settings.getAbsPath(self.controller.linkFile(
+                scctool.settings.OBSdataDir + '/logo1')))
             self.qb_logo1.setIcon(pixmap)
 
             self.qb_logo2 = IconPushButton()
             self.qb_logo2.setFixedWidth(self.raceWidth)
             self.qb_logo2.clicked.connect(lambda: self.logoDialog(2))
-            pixmap = PyQt5.QtGui.QIcon(self.controller.linkFile(
-                scctool.settings.OBSdataDir + '/logo2'))
+            pixmap = PyQt5.QtGui.QIcon(scctool.settings.getAbsPath(self.controller.linkFile(
+                scctool.settings.OBSdataDir + '/logo2')))
             self.qb_logo2.setIcon(pixmap)
 
             self.sl_team = PyQt5.QtWidgets.QSlider(PyQt5.QtCore.Qt.Horizontal)
@@ -639,7 +638,8 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
 
                     for i in range(4):
                         self.cb_race[team_idx][player_idx].addItem(
-                            PyQt5.QtGui.QIcon("src/" + str(i) + ".png"), "")
+                            PyQt5.QtGui.QIcon(scctool.settings.getAbsPath(
+                                "src/" + str(i) + ".png")), "")
 
                     self.cb_race[team_idx][player_idx].setFixedWidth(
                         self.raceWidth)
@@ -1038,13 +1038,13 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             self, _("Select Team Logo"), "", _("Support Images ({})").format("*.png *.jpg"))
         if fileName:
             try:
-                os.remove(scctool.settings.OBSdataDir +
-                          "/logo" + str(button) + ".png")
+                os.remove(scctool.settings.getAbsPath(scctool.settings.OBSdataDir +
+                                                      "/logo" + str(button) + ".png"))
             except:
                 pass
             try:
-                os.remove(scctool.settings.OBSdataDir +
-                          "/logo" + str(button) + ".jpg")
+                os.remove(scctool.settings.getAbsPath(scctool.settings.OBSdataDir +
+                                                      "/logo" + str(button) + ".jpg"))
             except:
                 pass
 
@@ -1052,7 +1052,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             ext = ext.split("?")[0]
             fname = scctool.settings.OBSdataDir + "/logo" + str(button) + ext
 
-            shutil.copy(fileName, fname)
+            shutil.copy(fileName, scctool.settings.getAbsPath(fname))
             self.controller.updateLogos()
             self.controller.ftpUploader.cwd(scctool.settings.OBSdataDir)
             self.controller.ftpUploader.upload(

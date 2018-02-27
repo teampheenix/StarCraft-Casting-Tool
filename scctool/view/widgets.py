@@ -78,10 +78,10 @@ class StyleComboBox(PyQt5.QtWidgets.QComboBox):
         super(StyleComboBox, self).__init__()
 
         self.__style_dir = style_dir
+        style_dir = scctool.getAbsPath(style_dir)
 
         for fname in os.listdir(style_dir):
-            full_fname = os.path.join(
-                scctool.settings.basedir, style_dir, fname)
+            full_fname = os.path.join(style_dir, fname)
             if os.path.isfile(full_fname):
                 label = re.search('^(.+)\.css$', fname).group(1)
                 self.addItem(label)

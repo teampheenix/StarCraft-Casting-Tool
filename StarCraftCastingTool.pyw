@@ -5,7 +5,7 @@ import logging
 logger = logging.getLogger('scctool')
 logger.setLevel(logging.DEBUG)
 # create file handler which logs even debug messages
-fh = logging.FileHandler('scctool.log', 'w')
+fh = logging.FileHandler(scctool.settings.getAbsPath('scctool.log'), 'w')
 # create console handler with a higher log level
 # create formatter and add it to the handlers
 formatter = logging.Formatter(
