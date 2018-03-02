@@ -33,6 +33,7 @@
      border-radius: 0px var(--border-radius) 0px var(--border-radius);
      overflow: hidden;
      display: inline-block;
+	 box-shadow: 0px 1px 1px rgba(000,000,000,0.5), inset 1px 1px 0px rgba(255,255,255,0.4);
 }
  div.logo{
      background-color: white;
@@ -63,12 +64,12 @@
  div.box_left{
      position: absolute;
      height: 100%;
-     background-image: url("../background-left.jpg");
+     left: var(--logo-width);
+     width: calc(var(--side-width) + var(--border-radius));
+	 background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0, 0, 0, 0.4)), color-stop(8%, rgba(0, 0, 0, 0.05)), color-stop(50%, rgba(0, 0, 0, 0.0)), color-stop(92%, rgba(0, 0, 0, 0.40)), color-stop(100%, rgba(0, 0, 0, 0.20))), url("../background-left.jpg"); 
      background-size: cover;
      background-repeat: repeat;
      background-position: -100px 0px;
-     left: var(--logo-width);
-     width: calc(var(--side-width) + var(--border-radius));
 }
  div.box_middle{
      position: absolute;
@@ -79,6 +80,7 @@
      border: var(--border-size) solid var(--border-color);
      border-radius: 0px var(--border-radius) 0px var(--border-radius);
      background-image: url("../texture1.jpg");
+	      background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0, 0, 0, 0.4)), color-stop(8%, rgba(0, 0, 0, 0.05)), color-stop(50%, rgba(0, 0, 0, 0.0)), color-stop(92%, rgba(0, 0, 0, 0.40)), color-stop(100%, rgba(0, 0, 0, 0.20))), url("../texture1.jpg"); 
      background-size: cover;
      overflow: hidden;
 }
@@ -115,11 +117,11 @@
  div.box_right{
      position: absolute;
      height: var(--total-height);
-     background-image: url("../background-right.jpg");
-     background-size: cover;
-     background-position: right bottom;
      right: var(--logo-width);
      width: calc(var(--side-width) + var(--border-radius));
+	 background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0, 0, 0, 0.4)), color-stop(8%, rgba(0, 0, 0, 0.05)), color-stop(50%, rgba(0, 0, 0, 0.0)), color-stop(92%, rgba(0, 0, 0, 0.40)), color-stop(100%, rgba(0, 0, 0, 0.20))), url("../background-right.jpg"); 
+	 background-size: cover;
+     background-position: right bottom;
 }
  div.upper-text-right{
      position: absolute;
