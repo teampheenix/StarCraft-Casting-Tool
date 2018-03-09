@@ -32,6 +32,8 @@ if(scctool.settings.windows):
         S = 0x1F
         D = 0x20
         X = 0x2D
+        R = 0x13
+        C = 0x2E
         DIK_1 = 0x02
         DIK_2 = 0x03
         DIK_3 = 0x04
@@ -161,6 +163,33 @@ def ToggleScore(score1_in, score2_in, bestof=5):
         ReleaseKey(SHIFT)
         ReleaseKey(CONTROL)
         time.sleep(lag)
+        
+    if scctool.settings.config.parser.getboolean("SCT", "CtrlShiftC"):
+        PressKey(CONTROL)
+        PressKey(SHIFT)
+        PressKey(C)
+        time.sleep(lag)
+        ReleaseKey(C)
+        ReleaseKey(SHIFT)
+        ReleaseKey(CONTROL)
+        time.sleep(lag)
+        
+    times = scctool.settings.config.parser.getint("SCT", "CtrlShiftR")
+    if times > 0:
+        PressKey(CONTROL)
+        PressKey(SHIFT)
+        
+        # For some reason the first time pressing CTRL+SHIFT+R does nothing.
+        for x in range(0, times+1):
+            PressKey(R)
+            time.sleep(lag)
+            ReleaseKey(R)
+            time.sleep(lag)
+        
+        ReleaseKey(SHIFT)
+        ReleaseKey(CONTROL)
+        time.sleep(lag)
+
 
     if(not skipBestof):
         PressKey(CONTROL)

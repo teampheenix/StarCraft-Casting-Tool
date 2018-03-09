@@ -103,6 +103,8 @@ def setDefaultConfigAll():
     setDefaultConfig("SCT", "new_version_prompt", "True")
     setDefaultConfig("SCT", "use_ocr", "False")
     setDefaultConfig("SCT", "CtrlShiftS", "False")
+    setDefaultConfig("SCT", "CtrlShiftC", "False")
+    setDefaultConfig("SCT", "CtrlShiftR", "0")
     setDefaultConfig("SCT", "language", "en_US")
     setDefaultConfig("SCT", "transparent_match_banner", "False")
 

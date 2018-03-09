@@ -93,7 +93,7 @@ class SubwindowMisc(PyQt5.QtWidgets.QWidget):
         mainLayout.addWidget(box)
 
         box = PyQt5.QtWidgets.QGroupBox(_("Set Ingame Score Task"))
-        layout = PyQt5.QtWidgets.QHBoxLayout()
+        layout = PyQt5.QtWidgets.QVBoxLayout()
 
         self.cb_ctrlshifts = PyQt5.QtWidgets.QCheckBox(
             " " + _('Automatically press Ctrl+Shift+S to display the ingame score'))
@@ -103,8 +103,31 @@ class SubwindowMisc(PyQt5.QtWidgets.QWidget):
         self.cb_ctrlshifts.setChecked(
             scctool.settings.config.parser.getboolean("SCT", "CtrlShiftS"))
         self.cb_ctrlshifts.stateChanged.connect(self.changed)
-
         layout.addWidget(self.cb_ctrlshifts)
+        
+        self.cb_ctrlshiftc = PyQt5.QtWidgets.QCheckBox(
+            " " + _('Automatically press Ctrl+Shift+C to toogle the clan tag'))
+        self.cb_ctrlshiftc.setChecked(
+            scctool.settings.config.parser.getboolean("SCT", "CtrlShiftC"))
+        self.cb_ctrlshiftc.stateChanged.connect(self.changed)
+        layout.addWidget(self.cb_ctrlshiftc)
+        
+        container = PyQt5.QtWidgets.QHBoxLayout()
+        self.cb_ctrlshiftr = PyQt5.QtWidgets.QComboBox()
+        self.cb_ctrlshiftr.addItem("0")
+        self.cb_ctrlshiftr.addItem("1")
+        self.cb_ctrlshiftr.addItem("2")
+        try:
+            self.cb_ctrlshiftr.setCurrentIndex(scctool.settings.config.parser.getint("SCT", "CtrlShiftR"))
+        except:
+            self.cb_ctrlshiftr.setCurrentIndex(0)
+        self.cb_ctrlshiftr.setMaximumWidth(40)
+        self.cb_ctrlshiftr.currentIndexChanged.connect(self.changed)
+        container.addWidget(PyQt5.QtWidgets.QLabel(_('Automatically press Ctrl+Shift+R to toogle the race icon ')))
+        container.addWidget(self.cb_ctrlshiftr)
+        container.addWidget(PyQt5.QtWidgets.QLabel(_(' time(s)')))
+        layout.addLayout(container)
+        
         box.setLayout(layout)
 
         mainLayout.addWidget(box)
@@ -421,6 +444,10 @@ class SubwindowMisc(PyQt5.QtWidgets.QWidget):
                 "SCT", "transparent_match_banner", str(self.cb_trans_banner.isChecked()))
             scctool.settings.config.parser.set(
                 "SCT", "CtrlShiftS", str(self.cb_ctrlshifts.isChecked()))
+            scctool.settings.config.parser.set(
+                "SCT", "CtrlShiftC", str(self.cb_ctrlshiftc.isChecked()))
+            scctool.settings.config.parser.set(
+                "SCT", "CtrlShiftR", str(self.cb_ctrlshiftr.currentText()))
 
     def saveCloseWindow(self):
         """Save and close window."""
