@@ -48,7 +48,11 @@ class WebsocketThread(PyQt5.QtCore.QThread):
         asyncio.set_event_loop(self.__loop)
 
         # Create the server.
-        start_server = websockets.serve(self.handler, 'localhost', 4489)
+        start_server = websockets.serve(self.handler, host='localhost', port=4489,
+                                        max_queue=16,
+                                        max_size=10240,
+                                        read_limit=10240,
+                                        write_limit=10240)
         self.__server = self.__loop.run_until_complete(start_server)
         self.register_hotkeys()
         self.__loop.run_forever()
@@ -88,6 +92,9 @@ class WebsocketThread(PyQt5.QtCore.QThread):
         keyboard.unhook_all()
 
     async def handler(self, websocket, path):
+        if path not in ['/intro']:
+            module_logger.info("Client with incorrect path.")
+            return
         self.connected.add(websocket)
         module_logger.info("Client connected!")
         self.changeStyle()

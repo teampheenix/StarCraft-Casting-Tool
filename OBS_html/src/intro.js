@@ -10,7 +10,7 @@ myAudio.volume = volume;
 
 function Connect() {
 
-        socket = new WebSocket("ws://127.0.0.1:4489");
+        socket = new WebSocket("ws://127.0.0.1:4489/intro");
 
         socket.onopen = function() {
                 console.log("Connected!");
