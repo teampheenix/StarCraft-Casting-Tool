@@ -2,7 +2,6 @@ scctool/__pycache__/
 scctool/*/__pycache__/
 .pyupdater/
 pyu-data/
-create_data_assets.py
 pyupdater-usage.md
 OBS_data/
 data/*
