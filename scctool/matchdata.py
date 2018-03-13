@@ -330,8 +330,7 @@ class matchData:
         if(new != self.__data['my_team']):
             self.__data['my_team'] = new
             for i in range(self.getNoSets()):
-                if(self.getMapScore(i) != 0):
-                    self.__setsChanged[i] = True
+                self.__setsChanged[i] = True
 
     def getMyTeam(self):
         """Return my team: (-1,0,1)."""
@@ -908,6 +907,11 @@ class matchData:
             skip = [False] * self.getNoSets()
             meta_changed = self.hasMetaChanged()
 
+            if(team == 0):
+                landscape_score_hide = ";display: none"
+            else:
+                landscape_score_hide = ""
+
             for i in range(self.getNoSets()):
 
                 winner = self.getMapScore(i)
@@ -1004,8 +1008,9 @@ class matchData:
                             line = line.replace('%MAP_PNG%', mappng).replace(
                                 '%MAP_NAME%', map)
                             line = line.replace('%MAP_ID%', self.getLabel(i))
-                            line = line.replace('%SCORE_COLOR%', score_color).replace(
-                                '%OPACITY%', opacity)
+                            line = line.replace('%SCORE_COLOR%',
+                                                score_color + landscape_score_hide)
+                            line = line.replace('%OPACITY%', opacity)
                             line = line.replace('%HIDDEN%', hidden)
                             line = line.replace('%STATUS1%', player1status).replace(
                                 '%STATUS2%', player2status)

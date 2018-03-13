@@ -2,6 +2,7 @@ var socket = null;
 var isopen = false;
 var reconnectIntervalMs = 5000;
 var volume = 1.0;
+var debug = false;
 var displayTime = 3.0;
 var tween = new TimelineMax()
 var myAudio = new Audio("src/sound.wav");
@@ -56,13 +57,24 @@ function Connect() {
                         changeCSS(jsonObject.data.file, 0);
                         fillText();
                 } else if (jsonObject.event == 'DEBUG_MODE') {
-                        tween.kill()
-                        var intro = document.getElementById("intro");
-                        var offset = (window.innerWidth - intro.offsetWidth) / 2;
-                        TweenLite.to(intro, 0, {
-                                opacity: 1,
-                                left: offset + "px"
-                        });
+                        if(!debug){
+                                tween.kill()
+                                var intro = document.getElementById("intro");
+                                var offset = (window.innerWidth - intro.offsetWidth) / 2;
+                                TweenLite.to(intro, 0, {
+                                        opacity: 1,
+                                        left: offset + "px"
+                                });
+                                debug = true;
+                        }else{
+                                tween.kill()
+                                var intro = document.getElementById("intro");
+                                TweenLite.to(intro, 0, {
+                                        opacity: 0
+                                });
+                                debug = false;
+                        }
+
                 }
         }
 

@@ -74,39 +74,46 @@ def deleteObsoleteFiles():
     """Remove obsolete files."""
     # mv OBS_html/src/css/intro_styles to OBS_html/src/css/intro
     try:
-        old = scctool.settings.getAbsPath(os.path.join(scctool.settings.OBShtmlDir, 'src/css/intro_styles'))
-        new = scctool.settings.getAbsPath(os.path.join(scctool.settings.OBShtmlDir, 'src/css/intro')) 
+        old = scctool.settings.getAbsPath(os.path.join(
+            scctool.settings.OBShtmlDir, 'src/css/intro_styles'))
+        new = scctool.settings.getAbsPath(os.path.join(
+            scctool.settings.OBShtmlDir, 'src/css/intro'))
         os.rename(old, new)
     except Exception as e:
         pass
-        
+
     # rm OBS_html/src/css/intro.css
     try:
-        file = scctool.settings.getAbsPath(os.path.join(scctool.settings.OBShtmlDir, 'src/css/intro.css'))
+        file = scctool.settings.getAbsPath(os.path.join(
+            scctool.settings.OBShtmlDir, 'src/css/intro.css'))
         os.remove(file)
     except Exception as e:
         pass
-        
+
     # rm OBS_html/intro1.html
     try:
-        file = scctool.settings.getAbsPath(os.path.join(scctool.settings.OBShtmlDir, 'intro1.html'))
+        file = scctool.settings.getAbsPath(os.path.join(
+            scctool.settings.OBShtmlDir, 'intro1.html'))
         os.remove(file)
     except Exception as e:
         pass
-        
+
     # rm OBS_html/intro2.html
     try:
-        file = scctool.settings.getAbsPath(os.path.join(scctool.settings.OBShtmlDir, 'intro2.html'))
+        file = scctool.settings.getAbsPath(os.path.join(
+            scctool.settings.OBShtmlDir, 'intro2.html'))
         os.remove(file)
     except Exception as e:
         pass
-        
+
     # rm OBS_html/data/intro-template.html
     try:
-        file = scctool.settings.getAbsPath(os.path.join(scctool.settings.OBShtmlDir, 'data/intro-template.html'))
+        file = scctool.settings.getAbsPath(os.path.join(
+            scctool.settings.OBShtmlDir, 'data/intro-template.html'))
         os.remove(file)
     except Exception as e:
         pass
+
 
 def extractData(asset_update, handler=lambda x: None):
     """Extract data."""
@@ -238,11 +245,13 @@ class VersionHandler(TasksThread):
 
     def __update_data(self):
         try:
+            module_logger.info("Start to update data files!")
             if self.asset_update is None:
                 self.deactivateTask('update_data')
                 return
             self.asset_update.download()
             extractData(self.asset_update)
+            module_logger.info("Updated data files!")
             self.updated_data.emit(_("Updated data files!"))
         except Exception as e:
             module_logger.exception("message")
@@ -255,11 +264,13 @@ class VersionHandler(TasksThread):
                 self.deactivateTask('update_app')
                 return
             if hasattr(sys, "frozen"):
+                module_logger.info("Start to update app!")
                 self.app_update.download(async=False)
                 if self.app_update.is_downloaded():
                     module_logger.info("Download sucessfull.")
                     if hasattr(sys, "frozen"):
                         self.__controller.cleanUp()
+                        module_logger.info("Restarting...")
                         self.app_update.extract_restart()
         except Exception as e:
             module_logger.exception("message")
