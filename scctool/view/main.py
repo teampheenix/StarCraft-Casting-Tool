@@ -7,7 +7,6 @@ import PyQt5
 
 import scctool.settings
 import scctool.settings.config
-import scctool.tasks.obs
 import shutil
 import os
 import markdown2
@@ -258,7 +257,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             lang = gettext.translation(
                 'messages', localedir='locales', languages=[language])
             lang.install()
-        except:
+        except Exception:
             lang = gettext.NullTranslations()
 
         self.app.removeTranslator(self.translator)
@@ -1040,12 +1039,12 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             try:
                 os.remove(scctool.settings.getAbsPath(scctool.settings.OBSdataDir +
                                                       "/logo" + str(button) + ".png"))
-            except:
+            except Exception:
                 pass
             try:
                 os.remove(scctool.settings.getAbsPath(scctool.settings.OBSdataDir +
                                                       "/logo" + str(button) + ".jpg"))
-            except:
+            except Exception:
                 pass
 
             base, ext = os.path.splitext(fileName)

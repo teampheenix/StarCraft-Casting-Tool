@@ -10,14 +10,13 @@ try:
     from scctool.tasks.webapp import FlaskThread
     from scctool.settings.placeholders import PlaceholderList
     from scctool.tasks.ftpuploader import FTPUploader
-    from scctool.tasks.obs import WebsocketThread
+    from scctool.tasks.websocket import WebsocketThread
     from scctool.tasks.autorequests import AutoRequestsThread
     from scctool.tasks.updater import VersionHandler
     from scctool.view.widgets import ToolUpdater
     import scctool.settings
     import scctool.tasks.twitch
     import scctool.tasks.nightbot
-    import scctool.tasks.obs
     import webbrowser
     import os
     import sys
@@ -44,11 +43,12 @@ class MainController:
             self.webApp.signal_twitch.connect(self.webAppDone_twitch)
             self.webApp.signal_nightbot.connect(self.webAppDone_nightbot)
             self.ftpUploader = FTPUploader()
-            self.websocketThread = WebsocketThread()
+            self.websocketThread = WebsocketThread(self)
             self.autoRequestsThread = AutoRequestsThread(self)
             self.placeholderSetup()
             self._warning = False
             self.checkVersion()
+            self.initPlayerIntroData()
             scctool.settings.maps = scctool.settings.loadMapList()
             pass
 
@@ -60,11 +60,11 @@ class MainController:
         """Check for new version."""
         try:
             self.versionHandler.disconnect()
-        except:
+        except Exception:
             pass
         try:
             self.noNewVersion.disconnect()
-        except:
+        except Exception:
             pass
 
         self.versionHandler.newVersion.connect(
@@ -246,11 +246,11 @@ class MainController:
             self.matchData.writeJsonFile()
             try:
                 self.matchData.downloadLogos()
-            except:
+            except Exception:
                 pass
             try:
                 self.matchData.downloadBanner()
-            except:
+            except Exception:
                 pass
             self.updateLogos()
             self.updateForms()
@@ -430,12 +430,12 @@ class MainController:
         if(not self.websocketThread.isRunning()):
             self.websocketThread.start()
         else:
-            self.websocketThread.cancelKillRequest()
+            module_logger.exception("Thread is still running")
 
     def stopWebsocketThread(self):
         """Stop OBS websocket thread."""
         try:
-            self.websocketThread.requestKill()
+            self.websocketThread.stop()
         except Exception as e:
             module_logger.exception("message")
 
@@ -446,7 +446,7 @@ class MainController:
             self.webApp.terminate()
             self.saveConfig()
             self.ftpUploader.kill()
-            self.websocketThread.requestKill()
+            self.websocketThread.stop()
             self.autoRequestsThread.terminate()
             module_logger.info("cleanUp called")
         except Exception as e:
@@ -602,6 +602,33 @@ class MainController:
 
         self.ftpUploader.cwd("..")
 
+    def updateHotkeys(self):
+        """Refresh hotkeys."""
+        if(self.websocketThread.isRunning()):
+            self.websocketThread.unregister_hotkeys()
+            self.websocketThread.register_hotkeys()
+
+    def initPlayerIntroData(self):
+        """Initalize player intro data."""
+        self.__playerIntroData = dict()
+        for player_idx in range(2):
+            data = dict()
+            data['name'] = ""
+            data['race'] = "random"
+            data['logo'] = ""
+            data['team'] = ""
+            data['display'] = "none"
+            self.__playerIntroData[player_idx] = data
+
+    def getPlayerIntroData(self, idx):
+        """Return player intro."""
+        data = self.__playerIntroData[idx]
+        data['volume'] = scctool.settings.config.parser.getint(
+            "Intros", "sound_volume")
+        data['display_time'] = scctool.settings.config.parser.getfloat(
+            "Intros", "display_time")
+        return data
+
     def updatePlayerIntros(self, newData):
         """Update player intro files."""
         module_logger.info("updatePlayerIntros")
@@ -631,30 +658,13 @@ class MainController:
             if logo == "":
                 logo = scctool.settings.OBShtmlDir + "/src/SC2.png"
 
-            filename = scctool.settings.OBShtmlDir +\
-                "/intro" + str(player_idx + 1) + ".html"
-            filename = scctool.settings.getAbsPath(filename)
-            template = scctool.settings.getAbsPath(scctool.settings.OBShtmlDir
-                                                   + "/data/intro-template.html")
-            with open(template, "rt", encoding='utf-8-sig') as fin:
-                with open(filename, "wt", encoding='utf-8-sig') as fout:
-                    for line in fin:
-                        line = line.replace(
-                            '%NAME%', newData.getPlayer(player_idx))
-                        line = line.replace(
-                            '%RACE%', newData.getPlayerRace(player_idx).lower())
-                        line = line.replace('%TEAM%', team)
-                        line = line.replace('%DISPLAY%', display)
-                        line = line.replace('%LOGO%', logo)
-                        fout.write(line)
-
-        self.ftpUploader.cwd(scctool.settings.OBShtmlDir)
-
-        for file in ["intro1.html", "intro2.html"]:
-            self.ftpUploader.upload(
-                scctool.settings.OBShtmlDir + "/" + file, file)
-
-        self.ftpUploader.cwd("..")
+            self.__playerIntroData[player_idx]['name'] = newData.getPlayer(
+                player_idx)
+            self.__playerIntroData[player_idx]['team'] = team
+            self.__playerIntroData[player_idx]['race'] = newData.getPlayerRace(
+                player_idx).lower()
+            self.__playerIntroData[player_idx]['logo'] = "../" + logo
+            self.__playerIntroData[player_idx]['display'] = display
 
     def getMapImg(self, map, fullpath=False):
         """Get map image from map name."""

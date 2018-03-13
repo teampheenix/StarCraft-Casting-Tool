@@ -2,11 +2,11 @@
 import logging
 import PyQt5
 
-from scctool.view.widgets import MonitoredLineEdit, FTPsetup, Completer
+from scctool.view.widgets import MonitoredLineEdit, FTPsetup, Completer, HotkeyLayout
 
 import scctool.settings
-import scctool.tasks.obs
 import base64
+import keyboard
 
 # create logger
 module_logger = logging.getLogger('scctool.view.subConnections')
@@ -58,15 +58,15 @@ class SubwindowConnections(PyQt5.QtWidgets.QWidget):
         self.tabs = PyQt5.QtWidgets.QTabWidget()
 
         self.createFormGroupFTP()
-        self.createFormGroupOBS()
+        self.createFormGroupWebsocket()
         self.createFormGroupTwitch()
         self.createFormGroupNightbot()
 
         # Add tabs
-        self.tabs.addTab(self.formGroupFTP, _("FTP"))
+        self.tabs.addTab(self.formGroupWebsocket, _("Intros && Hotkeys"))
         self.tabs.addTab(self.formGroupTwitch, _("Twitch"))
         self.tabs.addTab(self.formGroupNightbot, _("Nightbot"))
-        self.tabs.addTab(self.formGroupOBS, _("OBS via Websocket Plugin"))
+        self.tabs.addTab(self.formGroupFTP, _("FTP"))
 
     def createFormGroupFTP(self):
         """Create form group for FTP."""
@@ -127,63 +127,65 @@ class SubwindowConnections(PyQt5.QtWidgets.QWidget):
         self.saveFtpData()
         FTPsetup(self.controller, self.mainWindow)
 
-    def testOBS(self):
-        """Test OBS websocket settings."""
-        self.saveOBSdata()
-        msg = scctool.tasks.obs.testConnection()
-        PyQt5.QtWidgets.QMessageBox.warning(
-            self, "OBS Websocket Connection Test", msg)
+    def addHotkey(self, ident, label):
+        element = HotkeyLayout(
+            self, label,
+            scctool.settings.config.parser.get("Intros", ident))
+        self.hotkeys[ident] = element
+        return element
 
-    def createFormGroupOBS(self):
+    def connectHotkeys(self):
+        for ident, key in self.hotkeys.items():
+            for ident2, key2 in self.hotkeys.items():
+                if ident == ident2:
+                    continue
+                key.modified.connect(key2.check_dublicate)
+            key.modified.connect(self.changed)
+
+    def createFormGroupWebsocket(self):
         """Create forms for OBS websocket connection."""
-        self.formGroupOBS = PyQt5.QtWidgets.QWidget()
+        self.formGroupWebsocket = PyQt5.QtWidgets.QWidget()
+        mainLayout = PyQt5.QtWidgets.QVBoxLayout()
+
+        self.hotkeyBox = PyQt5.QtWidgets.QGroupBox(_("Intro Hotkeys"))
+        layout = PyQt5.QtWidgets.QVBoxLayout()
+
+        keyboard.unhook_all()
+        self.hotkeys = dict()
+        layout.addLayout(self.addHotkey("hotkey_player1", _("Player 1")))
+        layout.addLayout(self.addHotkey("hotkey_player2", _("Player 2")))
+        layout.addLayout(self.addHotkey("hotkey_debug", _("Debug")))
+        self.connectHotkeys()
+        self.hotkeyBox.setLayout(layout)
+        mainLayout.addWidget(self.hotkeyBox)
+
+        self.introBox = PyQt5.QtWidgets.QGroupBox(_("Intro Settings"))
         layout = PyQt5.QtWidgets.QFormLayout()
+        self.sl_sound = PyQt5.QtWidgets.QSlider(PyQt5.QtCore.Qt.Horizontal)
+        self.sl_sound.setMinimum(0)
+        self.sl_sound.setMaximum(10)
+        self.sl_sound.setValue(
+            scctool.settings.config.parser.getint("Intros", "sound_volume"))
+        self.sl_sound.setTickPosition(PyQt5.QtWidgets.QSlider.TicksBothSides)
+        self.sl_sound.setTickInterval(1)
+        self.sl_sound.valueChanged.connect(self.changed)
+        layout.addRow(PyQt5.QtWidgets.QLabel(
+            _("Sound Volume:") + " "), self.sl_sound)
+        self.sb_displaytime = PyQt5.QtWidgets.QDoubleSpinBox()
+        self.sb_displaytime.setRange(0, 10)
+        self.sb_displaytime.setDecimals(1)
+        self.sb_displaytime.setValue(
+            scctool.settings.config.parser.getfloat("Intros", "display_time"))
+        self.sb_displaytime.setSuffix(" " + _("Seconds"))
+        self.sb_displaytime.valueChanged.connect(self.changed)
+        layout.addRow(PyQt5.QtWidgets.QLabel(
+            _("Display Duration:") + " "), self.sb_displaytime)
+        self.introBox.setLayout(layout)
+        mainLayout.addWidget(self.introBox)
 
-        self.obsPort = MonitoredLineEdit()
-        self.obsPort.textModified.connect(self.changed)
-        self.obsPort.setText(scctool.settings.config.parser.get("OBS", "port"))
-        self.obsPort.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
-        self.obsPort.setPlaceholderText(_("Server Port (Default: 4444)"))
-        self.obsPort.setToolTip('')
-        layout.addRow(PyQt5.QtWidgets.QLabel(_("Server Port:")), self.obsPort)
-
-        self.obsPasswd = MonitoredLineEdit()
-        self.obsPasswd.textModified.connect(self.changed)
-        self.obsPasswd.setText(base64.b64decode(scctool.settings.config.parser.get(
-            "OBS", "passwd").strip().encode()).decode("utf8"))
-        self.obsPasswd.setEchoMode(PyQt5.QtWidgets.QLineEdit.Password)
-        self.obsPasswd.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
-        self.obsPasswd.setPlaceholderText(_("recommended"))
-        self.obsPasswd.setToolTip('')
-        label = PyQt5.QtWidgets.QLabel(_("Password:"))
-        # label.setFixedWidth(100)
-        layout.addRow(label, self.obsPasswd)
-
-        self.obsSources = MonitoredLineEdit()
-        self.obsSources.textModified.connect(self.changed)
-        self.obsSources.setText(
-            scctool.settings.config.parser.get("OBS", "sources"))
-        self.obsSources.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
-        self.obsSources.setPlaceholderText("Intro1, Intro2")
-        string = _('Name of the OBS-sources that should automatically' +
-                   ' be hidden 4.5 sec after they become visible.')
-        self.obsSources.setToolTip(string)
-        layout.addRow(PyQt5.QtWidgets.QLabel(_("Sources:")), self.obsSources)
-
-        self.obsActive = PyQt5.QtWidgets.QCheckBox(
-            " " + _("Automatic hide sources"))
-        self.obsActive.setChecked(
-            scctool.settings.config.parser.getboolean("OBS", "active"))
-        self.obsActive.setToolTip('')
-        self.obsActive.stateChanged.connect(self.changed)
-        layout.addRow(PyQt5.QtWidgets.QLabel(_("Active:")), self.obsActive)
-
-        self.pb_testOBS = PyQt5.QtWidgets.QPushButton(
-            _('Test Connection to OBS'))
-        self.pb_testOBS.clicked.connect(self.testOBS)
-        layout.addRow(PyQt5.QtWidgets.QLabel(), self.pb_testOBS)
-
-        self.formGroupOBS.setLayout(layout)
+        mainLayout.addItem(PyQt5.QtWidgets.QSpacerItem(
+            0, 0, PyQt5.QtWidgets.QSizePolicy.Minimum, PyQt5.QtWidgets.QSizePolicy.Expanding))
+        self.formGroupWebsocket.setLayout(mainLayout)
 
     def createFormGroupTwitch(self):
         """Create forms for twitch."""
@@ -341,7 +343,7 @@ class SubwindowConnections(PyQt5.QtWidgets.QWidget):
         string = self.controller.placeholders.replace(string)
         PyQt5.QtWidgets.QMessageBox.information(self, _("Output:"), string)
 
-    def changed(self):
+    def changed(self, *values):
         """Handle changed data."""
         self.__dataChanged = True
 
@@ -364,7 +366,7 @@ class SubwindowConnections(PyQt5.QtWidgets.QWidget):
             scctool.settings.config.parser.set(
                 "Nightbot", "message", self.nightbotMsg.text().strip())
 
-            self.saveOBSdata()
+            self.saveWebsocketdata()
 
             self.controller.refreshButtonStatus()
 
@@ -379,32 +381,31 @@ class SubwindowConnections(PyQt5.QtWidgets.QWidget):
         scctool.settings.config.parser.set(
             "FTP", "dir", self.ftpDir.text().strip())
 
-    def saveOBSdata(self):
-        """Save OBS data."""
+    def saveWebsocketdata(self):
+        """Save Websocket data."""
+        for ident, key in self.hotkeys.items():
+            scctool.settings.config.parser.set("Intros", ident, key.getKey())
         scctool.settings.config.parser.set(
-            "OBS", "port", self.obsPort.text().strip())
-        scctool.settings.config.parser.set("OBS", "passwd", base64.b64encode(
-            self.obsPasswd.text().strip().encode()).decode("utf8"))
+            "Intros", "display_time", str(self.sb_displaytime.value()))
         scctool.settings.config.parser.set(
-            "OBS", "active", str(self.obsActive.isChecked()))
-        scctool.settings.config.parser.set(
-            "OBS", "sources", self.obsSources.text().strip())
+            "Intros", "sound_volume", str(self.sl_sound.value()))
 
     def saveCloseWindow(self):
         """Save and close window."""
         self.saveData()
-        self.passEvent = True
-        self.close()
+        self.closeWindow()
 
     def closeWindow(self):
         """Close window without save."""
         self.passEvent = True
+        self.controller.updateHotkeys()
         self.close()
 
     def closeEvent(self, event):
         """Handle close event."""
         try:
             if(not self.__dataChanged):
+                self.controller.updateHotkeys()
                 event.accept()
                 return
             if(not self.passEvent):
@@ -416,6 +417,7 @@ class SubwindowConnections(PyQt5.QtWidgets.QWidget):
                     PyQt5.QtWidgets.QMessageBox.No)
                 if buttonReply == PyQt5.QtWidgets.QMessageBox.Yes:
                     self.saveData()
+            self.controller.updateHotkeys()
             event.accept()
         except Exception as e:
             module_logger.exception("message")

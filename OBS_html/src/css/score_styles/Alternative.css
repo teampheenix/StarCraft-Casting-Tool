@@ -1,217 +1,217 @@
 @import url('https://fonts.googleapis.com/css?family=Orbitron:350,400');
 /* latin */
+
 @font-face {
-  font-family: 'OrbitronAdv';
-  font-style: normal;
-  font-weight: 400;
-  src: local('OrbitronAdv Regular'), local('OrbitronAdv-Regular'), url(https://fonts.gstatic.com/s/orbitron/v9/yMJRMIlzdpvBhQQL_Qq7dy0.woff2) format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        font-family: 'OrbitronAdv';
+        font-style: normal;
+        font-weight: 400;
+        src: local('OrbitronAdv Regular'), local('OrbitronAdv-Regular'), url(https://fonts.gstatic.com/s/orbitron/v9/yMJRMIlzdpvBhQQL_Qq7dy0.woff2) format('woff2');
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+
 :root {
-  --border-size: 2px;
-  --border-color: black;
-  --total-width: calc(1280px - 2 * var(--border-size));
-  --total-height: calc(100px - 2 * var(--border-size));
-  --border-radius: 20px;
-  --middle-width: 120px;
-  --logo-width: 80px;
-  --lower-text-height: 33%;
-  --side-width: calc((100% - var(--middle-width) - 2 * var(--logo-width)) / 2);
+        --border-size: 2px;
+        --border-color: black;
+        --total-width: calc(1280px - 2 * var(--border-size));
+        --total-height: calc(100px - 2 * var(--border-size));
+        --border-radius: 20px;
+        --middle-width: 120px;
+        --logo-width: 80px;
+        --lower-text-height: 33%;
+        --side-width: calc((100% - var(--middle-width) - 2 * var(--logo-width)) / 2);
 }
-.text-item{
-    color: white;
-    font: bold 18px OrbitronAdv, Orbitron, Helvetica, Sans-Serif;
-    --outline-size: 3px;
-   text-shadow: 0px  0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px  0px var(--outline-size) black,
-                0px  0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px  0px var(--outline-size) black,
-                0px  0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px  0px var(--outline-size) black,
-                0px  0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px  0px var(--outline-size) black;
-   -webkit-font-smoothing: antialiased;
+
+.text-item {
+        color: white;
+        font: bold 18px OrbitronAdv, Orbitron, Helvetica, Sans-Serif;
+        --outline-size: 3px;
+        text-shadow: 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black;
+        -webkit-font-smoothing: antialiased;
 }
 
 div.box {
-    position: relative;
-    width: var(--total-width);
-    height: var(--total-height);
-    border: var(--border-size) solid var(--border-color);
-    border-radius: 0px var(--border-radius) 0px var(--border-radius);
-    overflow: hidden;
-    display: inline-block;
-	box-shadow: 0px 1px 1px rgba(000,000,000,0.5), inset 1px 1px 0px rgba(255,255,255,0.4);
-}
-div.logo{
-    background-color: white;
-    background-size: contain;
-    background-position: center center;
-    background-repeat: no-repeat;
-}
-div.box_veryleft{
-    position: absolute;
-    height: var(--total-height);
-    top: calc(0px - var(--border-size));
-    left: calc(0px - var(--border-size));
-    width: calc(var(--logo-width) + var(--border-radius) - 2 * var(--border-size));
-    border: var(--border-size) solid var(--border-color);
-    border-radius: 0px var(--border-radius) 0px var(--border-radius);
-    overflow: hidden;
-}
-div.box_veryright{
-    position: absolute;
-    height: var(--total-height);
-    top: calc(0px - var(--border-size));
-    right: calc(0px - var(--border-size));
-    width: calc(var(--logo-width) + var(--border-radius) - 2 * var(--border-size));
-    border: var(--border-size) solid var(--border-color);
-    border-radius: 0px var(--border-radius) 0px var(--border-radius);
-    overflow: hidden;
-}
-div.box_left{
-	position: absolute;
-	height: 100%;
-    left: var(--logo-width);
-	width: calc(var(--side-width) + var(--border-radius));
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0, 0, 0, 0.4)), color-stop(2%, rgba(0, 0, 0, 0.05)), color-stop(20%, rgba(0, 0, 0, 0.0)), color-stop(92%, rgba(0, 0, 0, 0.40)), color-stop(100%, rgba(0, 0, 0, 0.20))), url("../texture2.jpg"); 
-	background-size: cover;
-	background-position: 270px 0px;
+        position: relative;
+        width: var(--total-width);
+        height: var(--total-height);
+        border: var(--border-size) solid var(--border-color);
+        border-radius: 0px var(--border-radius) 0px var(--border-radius);
+        overflow: hidden;
+        display: inline-block;
+        box-shadow: 0px 1px 1px rgba(000, 000, 000, 0.5), inset 1px 1px 0px rgba(255, 255, 255, 0.4);
 }
 
-div.box_middle{
-	position: absolute;
-	height: 100%;
-	left: calc(50% - var(--middle-width) / 2 - var(--border-size));
-	width: var(--middle-width);
-	top: calc(0px - var(--border-size));
-	border: var(--border-size) solid var(--border-color);
-	border-radius: 0px var(--border-radius) 0px var(--border-radius);
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0, 0, 0, 0.4)), color-stop(2%, rgba(0, 0, 0, 0.05)), color-stop(20%, rgba(0, 0, 0, 0.0)), color-stop(92%, rgba(0, 0, 0, 0.20)), color-stop(100%, rgba(0, 0, 0, 0.20))), url("../texture1.jpg"); 
-	background-image: url("../texture1.jpg");
-	background-size: cover;
-	overflow: hidden;
+div.logo {
+        background-color: white;
+        background-size: contain;
+        background-position: center center;
+        background-repeat: no-repeat;
 }
 
-div.score_left{
+div.box_veryleft {
+        position: absolute;
+        height: var(--total-height);
+        top: calc(0px - var(--border-size));
+        left: calc(0px - var(--border-size));
+        width: calc(var(--logo-width) + var(--border-radius) - 2 * var(--border-size));
+        border: var(--border-size) solid var(--border-color);
+        border-radius: 0px var(--border-radius) 0px var(--border-radius);
+        overflow: hidden;
+}
+
+div.box_veryright {
+        position: absolute;
+        height: var(--total-height);
+        top: calc(0px - var(--border-size));
+        right: calc(0px - var(--border-size));
+        width: calc(var(--logo-width) + var(--border-radius) - 2 * var(--border-size));
+        border: var(--border-size) solid var(--border-color);
+        border-radius: 0px var(--border-radius) 0px var(--border-radius);
+        overflow: hidden;
+}
+
+div.box_left {
+        position: absolute;
+        height: 100%;
+        left: var(--logo-width);
+        width: calc(var(--side-width) + var(--border-radius));
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0, 0, 0, 0.4)), color-stop(2%, rgba(0, 0, 0, 0.05)), color-stop(20%, rgba(0, 0, 0, 0.0)), color-stop(92%, rgba(0, 0, 0, 0.40)), color-stop(100%, rgba(0, 0, 0, 0.20))), url("../texture2.jpg");
+        background-size: cover;
+        background-position: 270px 0px;
+}
+
+div.box_middle {
+        position: absolute;
+        height: 100%;
+        left: calc(50% - var(--middle-width) / 2 - var(--border-size));
+        width: var(--middle-width);
+        top: calc(0px - var(--border-size));
+        border: var(--border-size) solid var(--border-color);
+        border-radius: 0px var(--border-radius) 0px var(--border-radius);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0, 0, 0, 0.4)), color-stop(2%, rgba(0, 0, 0, 0.05)), color-stop(20%, rgba(0, 0, 0, 0.0)), color-stop(92%, rgba(0, 0, 0, 0.20)), color-stop(100%, rgba(0, 0, 0, 0.20))), url("../texture1.jpg");
+        background-image: url("../texture1.jpg");
+        background-size: cover;
+        overflow: hidden;
+}
+
+div.score_left {
         position: absolute;
         top: 0px;
         left: 0px;
         width: 50px;
         height: 100%;
         font: bold 36px OrbitronAdv, Orbitron, Helvetica, Sans-Serif;
-	text-align: center;
-	line-height: calc(var(--total-height) - var(--border-size));
+        text-align: center;
+        line-height: calc(var(--total-height) - var(--border-size));
 }
 
-div.score_right{
+div.score_right {
         position: absolute;
         top: 0px;
         right: 0px;
         width: 50px;
         height: 100%;
         font: bold 36px OrbitronAdv, Orbitron, Helvetica, Sans-Serif;
-	text-align: center;
-	line-height: calc(var(--total-height) - var(--border-size));
+        text-align: center;
+        line-height: calc(var(--total-height) - var(--border-size));
 }
 
-div.score_middle{
+div.score_middle {
         position: absolute;
         top: 0px;
         left: 50px;
         width: calc(var(--middle-width)-100px);
         height: 100%;
         font: bold 36px OrbitronAdv, Orbitron, Helvetica, Sans-Serif;
-	text-align: center;
-	line-height: calc(var(--total-height) - var(--border-size));
+        text-align: center;
+        line-height: calc(var(--total-height) - var(--border-size));
 }
 
-div.box_right{
-	position: absolute;
-	height: var(--total-height);       
-	right: var(--logo-width);
-	width: calc(var(--side-width) + var(--border-radius));
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0, 0, 0, 0.4)), color-stop(2%, rgba(0, 0, 0, 0.05)), color-stop(20%, rgba(0, 0, 0, 0.0)), color-stop(92%, rgba(0, 0, 0, 0.40)), color-stop(100%, rgba(0, 0, 0, 0.20))), url("../texture2.jpg"); 
-	background-size: cover;
+div.box_right {
+        position: absolute;
+        height: var(--total-height);
+        right: var(--logo-width);
+        width: calc(var(--side-width) + var(--border-radius));
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0, 0, 0, 0.4)), color-stop(2%, rgba(0, 0, 0, 0.05)), color-stop(20%, rgba(0, 0, 0, 0.0)), color-stop(92%, rgba(0, 0, 0, 0.40)), color-stop(100%, rgba(0, 0, 0, 0.20))), url("../texture2.jpg");
+        background-size: cover;
 }
 
-div.upper-text-right{
-	position: absolute;
+div.upper-text-right {
+        position: absolute;
         top: 0%;
-	height: calc(100% - var(--lower-text-height));
-	right: calc(0% + var(--border-radius) + 15px);
-	width: calc(100% - 2 * var(--border-radius) - 30px);
-	font: bold 36px OrbitronAdv, Orbitron, Helvetica, Sans-Serif;
-	text-align: center;
-	line-height: 60px;
-	overflow: hidden;
+        height: calc(100% - var(--lower-text-height));
+        right: calc(0% + var(--border-radius) + 15px);
+        width: calc(100% - 2 * var(--border-radius) - 30px);
+        font: bold 36px OrbitronAdv, Orbitron, Helvetica, Sans-Serif;
+        text-align: center;
+        line-height: 60px;
+        overflow: hidden;
 }
 
-
-div.upper-text-left{
-	position: absolute;
-	top: 0%;
-	height: calc(100% - var(--lower-text-height));
-	left: calc(0% + var(--border-radius) + 15px);
-	width: calc(100% - 2 * var(--border-radius) - 30px);
-	font: bold 36px OrbitronAdv, Orbitron, Helvetica, Sans-Serif;
-	text-align: center;
-	line-height: 60px;
-	overflow: hidden;
+div.upper-text-left {
+        position: absolute;
+        top: 0%;
+        height: calc(100% - var(--lower-text-height));
+        left: calc(0% + var(--border-radius) + 15px);
+        width: calc(100% - 2 * var(--border-radius) - 30px);
+        font: bold 36px OrbitronAdv, Orbitron, Helvetica, Sans-Serif;
+        text-align: center;
+        line-height: 60px;
+        overflow: hidden;
 }
 
-div.lower-text{
-	position: absolute;
-	left: 0%;
-	bottom: 0%;
-	height: var(--lower-text-height);
-	width: 100%;
-	line-height: 25px;
-	background: rgba(0, 0, 0, 0.6)!important;
+div.lower-text {
+        position: absolute;
+        left: 0%;
+        bottom: 0%;
+        height: var(--lower-text-height);
+        width: 100%;
+        line-height: 25px;
+        background: rgba(0, 0, 0, 0.6) !important;
 }
 
 #circle {
-    background: #f00;
-	position: relative;
-	bottom: 0px;
-    width: 28px;
-    height: 20px;
-    border-radius: 0px 10px 0px 10px;
-	box-shadow: 0px 0px 2px white;
-	display:inline-block;
-    margin: 1.5px;
-    margin-bottom: -6px;
-}
-div.mapscore-right{
-	position: absolute;
-	left: calc(0% + var(--border-radius) + 6px);
-	width: calc(100% - var(--border-radius) - 6px);
-	text-align: center;
-	line-height: 25px;
-	height: 100%;
+        background: #f00;
+        position: relative;
+        bottom: 0px;
+        width: 28px;
+        height: 20px;
+        border-radius: 0px 10px 0px 10px;
+        box-shadow: 0px 0px 2px white;
+        display: inline-block;
+        margin: 1.5px;
+        margin-bottom: -6px;
 }
 
-div.mapscore-left{
-	position: absolute;
-	left: calc(0% + var(--border-radius) + 3px);
-	width: calc(100% - 2 * var(--border-radius) - 3px);
-	text-align: center;
-	line-height: 25px;
-	height: 100%;
+div.mapscore-right {
+        position: absolute;
+        left: calc(0% + var(--border-radius) + 6px);
+        width: calc(100% - var(--border-radius) - 6px);
+        text-align: center;
+        line-height: 25px;
+        height: 100%;
+}
+
+div.mapscore-left {
+        position: absolute;
+        left: calc(0% + var(--border-radius) + 3px);
+        width: calc(100% - 2 * var(--border-radius) - 3px);
+        text-align: center;
+        line-height: 25px;
+        height: 100%;
 }
 
 .winner {
-   --winner-color: #f29b00;
-   --size: 8px;
-   color: white!important;
-   text-shadow: 0px  0px 2.5px black, 0px 0px 2.5px black, 0px  0px 2.5px black, 0px  0px 2.5px black,
-             0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px  0px var(--size) var(--winner-color), 0px  0px var(--size) var(--winner-color),
-			 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px  0px var(--size) var(--winner-color), 0px  0px var(--size) var(--winner-color),
-             0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px  0px var(--size) var(--winner-color), 0px  0px var(--size) var(--winner-color)!important;
-    -webkit-font-smoothing: antialiased;
+        --winner-color: #f29b00;
+        --size: 8px;
+        color: white !important;
+        text-shadow: 0px 0px 2.5px black, 0px 0px 2.5px black, 0px 0px 2.5px black, 0px 0px 2.5px black, 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color) !important;
+        -webkit-font-smoothing: antialiased;
 }
 
 .score {
-   --winner-color: white;
-   --size: 5px;
-   color: white!important;
-   text-shadow: 0px  0px 2px black, 0px 0px 2px black, 0px  0px 2px black, 0px  0px 2px black, 0px  0px 2px black, 0px 0px 2px black, 0px  0px 2px black, 0px  0px 2px black,
-             0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px  0px var(--size) var(--winner-color), 0px  0px var(--size) var(--winner-color)!important;
-    -webkit-font-smoothing: antialiased;
+        --winner-color: white;
+        --size: 5px;
+        color: white !important;
+        text-shadow: 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color) !important;
+        -webkit-font-smoothing: antialiased;
 }

@@ -207,7 +207,7 @@ class UploaderThread(PyQt5.QtCore.QThread):
                     module_logger.info("Killing FTP Server!")
                     try:
                         module_logger.info(self.__ftp.quit())
-                    except:
+                    except Exception:
                         pass
                     break
 

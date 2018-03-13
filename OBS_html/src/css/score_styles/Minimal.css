@@ -1,23 +1,20 @@
 @import url('https://fonts.googleapis.com/css?family=Orbitron:350,400');
-
 /* latin */
+
 @font-face {
-  font-family: 'OrbitronAdv';
-  font-style: normal;
-  font-weight: 400;
-  src: local('OrbitronAdv Regular'), local('OrbitronAdv-Regular'), url(https://fonts.gstatic.com/s/orbitron/v9/yMJRMIlzdpvBhQQL_Qq7dy0.woff2) format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        font-family: 'OrbitronAdv';
+        font-style: normal;
+        font-weight: 400;
+        src: local('OrbitronAdv Regular'), local('OrbitronAdv-Regular'), url(https://fonts.gstatic.com/s/orbitron/v9/yMJRMIlzdpvBhQQL_Qq7dy0.woff2) format('woff2');
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
-.text-item{
-    color: white;
-    font: bold 150px OrbitronAdv, Orbitron, Helvetica, Sans-Serif;
-    --outline-size: 3px;
-   text-shadow: 0px  0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px  0px var(--outline-size) black,
-                0px  0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px  0px var(--outline-size) black,
-                0px  0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px  0px var(--outline-size) black,
-                0px  0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px  0px var(--outline-size) black;
-   -webkit-font-smoothing: antialiased;
+.text-item {
+        color: white;
+        font: bold 150px OrbitronAdv, Orbitron, Helvetica, Sans-Serif;
+        --outline-size: 3px;
+        text-shadow: 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black;
+        -webkit-font-smoothing: antialiased;
 }
 
 div.box {
@@ -28,7 +25,7 @@ div.box {
         display: inline-block;
 }
 
-div.box_veryleft{
+div.box_veryleft {
         position: absolute;
         top: 30px;
         left: 180px;
@@ -36,7 +33,7 @@ div.box_veryleft{
         height: 200px;
 }
 
-div.box_veryright{
+div.box_veryright {
         position: absolute;
         top: 30px;
         right: 180px;
@@ -44,8 +41,7 @@ div.box_veryright{
         height: 200px;
 }
 
-
-div.box_left{
+div.box_left {
         position: absolute;
         width: 450px;
         height: 60px;
@@ -53,21 +49,21 @@ div.box_left{
         left: 0px;
 }
 
-div.upper-text-left{
+div.upper-text-left {
         visibility: hidden;
 }
 
-div.mapscore-left{
-	position: absolute;
+div.mapscore-left {
+        position: absolute;
         bottom: 20px;
         left: 40px;
-	width: 350px;
-	text-align: center;
-	line-height: 25px;
-	height: 25px;
+        width: 350px;
+        text-align: center;
+        line-height: 25px;
+        height: 25px;
 }
 
-div.box_right{
+div.box_right {
         position: absolute;
         width: 450px;
         height: 60px;
@@ -75,33 +71,33 @@ div.box_right{
         right: 0px;
 }
 
-div.upper-text-right{
+div.upper-text-right {
         visibility: hidden;
 }
 
-div.mapscore-right{
-	position: absolute;
+div.mapscore-right {
+        position: absolute;
         bottom: 20px;
         right: 40px;
-	width: 350px;
-	text-align: center;
-	line-height: 25px;
-	height: 25px;
+        width: 350px;
+        text-align: center;
+        line-height: 25px;
+        height: 25px;
 }
 
 #circle {
-    background: #f00;
-    position: relative;
-    bottom: 65px;
-    width: 28px;
-    height: 20px;
-    border-radius: 0px 10px 0px 10px;
-    box-shadow: 0px 0px 2px white;
-    display:inline-block;
-    margin: -15px;
+        background: #f00;
+        position: relative;
+        bottom: 65px;
+        width: 28px;
+        height: 20px;
+        border-radius: 0px 10px 0px 10px;
+        box-shadow: 0px 0px 2px white;
+        display: inline-block;
+        margin: -15px;
 }
 
-div.box_middle{
+div.box_middle {
         position: absolute;
         left: 0px;
         top: 0px;
@@ -113,11 +109,11 @@ div.box_middle{
         background-size: contain;
 }
 
-div.score_middle{
+div.score_middle {
         visibility: hidden;
 }
 
-div.score_left{
+div.score_left {
         position: absolute;
         left: 0px;
         top: 35px;
@@ -126,7 +122,7 @@ div.score_left{
         width: 180px;
 }
 
-div.score_right{
+div.score_right {
         position: absolute;
         right: 0px;
         top: 35px;
@@ -136,16 +132,15 @@ div.score_right{
 }
 
 .score {
-   --winner-color: white;
-   --size: 5px;
-   color: white!important;
-   text-shadow: 0px  0px 2px black, 0px 0px 2px black, 0px  0px 2px black, 0px  0px 2px black, 0px  0px 2px black, 0px 0px 2px black, 0px  0px 2px black, 0px  0px 2px black,
-             0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px  0px var(--size) var(--winner-color), 0px  0px var(--size) var(--winner-color)!important;
-    -webkit-font-smoothing: antialiased;
+        --winner-color: white;
+        --size: 5px;
+        color: white !important;
+        text-shadow: 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color) !important;
+        -webkit-font-smoothing: antialiased;
 }
 
-div.logo{
-    background-size: contain;
-    background-position: center center;
-    background-repeat: no-repeat;
+div.logo {
+        background-size: contain;
+        background-position: center center;
+        background-repeat: no-repeat;
 }

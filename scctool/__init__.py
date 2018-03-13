@@ -11,7 +11,7 @@ from scctool.settings import getAbsPath
 
 logger = logging.getLogger('scctool')
 
-__version__ = "1.5.2"
+__version__ = "1.6.0"
 __latest_version__ = __version__
 __new_version__ = False
 
@@ -20,7 +20,7 @@ language = scctool.settings.config.parser.get("SCT", "language")
 try:
     lang = gettext.translation(
         'messages', localedir='locales', languages=[language])
-except:
+except Exception:
     lang = gettext.NullTranslations()
 
 lang.install()

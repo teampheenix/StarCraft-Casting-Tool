@@ -18,11 +18,27 @@ def init():
     parser = configparser.ConfigParser()
     try:
         parser.read(configFile, encoding='utf-8-sig')
-    except:
+    except Exception:
         parser.defaults()
 
     setDefaultConfigAll()
     renameConfigOptions()
+
+
+def representsInt(s):
+    try:
+        int(s)
+        return True
+    except ValueError:
+        return False
+
+
+def representsFloat(s):
+    try:
+        float(s)
+        return True
+    except ValueError:
+        return False
 
 
 # Setting default values for config file
@@ -35,17 +51,37 @@ def setDefaultConfig(sec, opt, value, func=None):
         if(func):
             try:
                 value = func()
-            except:
+            except Exception:
                 pass
         parser.set(sec, opt, value)
     elif(value in ["True", "False"]):
         try:
             parser.getboolean(sec, opt)
-        except:
+        except Exception:
             if(func):
                 try:
                     value = func()
-                except:
+                except Exception:
+                    pass
+            parser.set(sec, opt, value)
+    elif(representsInt(value)):
+        try:
+            parser.getint(sec, opt)
+        except Exception:
+            if(func):
+                try:
+                    value = func()
+                except Exception:
+                    pass
+            parser.set(sec, opt, value)
+    elif(representsFloat(value)):
+        try:
+            parser.getfloat(sec, opt)
+        except Exception:
+            if(func):
+                try:
+                    value = func()
+                except Exception:
                     pass
             parser.set(sec, opt, value)
 
@@ -59,7 +95,7 @@ def findTesserAct(default="C:\\Program Files (x86)\\Tesseract-OCR\\tesseract.exe
         key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE,
                              "SOFTWARE\\WOW6432Node\\Tesseract-OCR")
         return winreg.QueryValueEx(key, "Path")[0] + '\\tesseract.exe'
-    except:
+    except Exception:
         return default
 
 
@@ -97,7 +133,7 @@ def setDefaultConfigAll():
                      "Ostseedude, spaz, DERASTAT, FanTasY, " +
                      "chrismaverik, holden, Desolation, RiseOfDeath, " +
                      "Tune-Trigger, MoFuJones, Fenix, Hyvaa, snoozle, " +
-                     "CptWobbles, dreign, Sly, Sonarwolf, Unknown, Xoneon ")
+                     "CptWobbles, dreign, SLY, Sonarwolf, Unknown, Xoneon ")
 
     setDefaultConfig("SCT", "fuzzymatch", "True")
     setDefaultConfig("SCT", "new_version_prompt", "True")
@@ -130,10 +166,11 @@ def setDefaultConfigAll():
     setDefaultConfig("Style", "score", "Default")
     setDefaultConfig("Style", "intro", "Default")
 
-    setDefaultConfig("OBS", "port", "4444")
-    setDefaultConfig("OBS", "active", "False")
-    setDefaultConfig("OBS", "passwd", "")
-    setDefaultConfig("OBS", "sources", "Intro1, Intro2")
+    setDefaultConfig("Intros", "hotkey_player1", "")
+    setDefaultConfig("Intros", "hotkey_player2", "")
+    setDefaultConfig("Intros", "hotkey_debug", "")
+    setDefaultConfig("Intros", "sound_volume", "5")
+    setDefaultConfig("Intros", "display_time", "3.0")
 
 
 def renameConfigOptions():
@@ -142,8 +179,10 @@ def renameConfigOptions():
         value = parser.getboolean("SCT", "StrgShiftS")
         parser.set("SCT", "CtrlShiftS", str(value))
         parser.remove_option("SCT", "StrgShiftS")
-    except:
+    except Exception:
         pass
+
+    parser.remove_section("OBS")
 
 
 def ftpIsValid():

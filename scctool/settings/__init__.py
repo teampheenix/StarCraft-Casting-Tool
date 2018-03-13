@@ -74,5 +74,5 @@ def idx2race(idx):
     """Convert idx to race."""
     try:
         return races[idx]
-    except:
+    except Exception:
         return races[0]

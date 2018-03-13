@@ -163,7 +163,7 @@ def ToggleScore(score1_in, score2_in, bestof=5):
         ReleaseKey(SHIFT)
         ReleaseKey(CONTROL)
         time.sleep(lag)
-        
+
     if scctool.settings.config.parser.getboolean("SCT", "CtrlShiftC"):
         PressKey(CONTROL)
         PressKey(SHIFT)
@@ -173,23 +173,22 @@ def ToggleScore(score1_in, score2_in, bestof=5):
         ReleaseKey(SHIFT)
         ReleaseKey(CONTROL)
         time.sleep(lag)
-        
+
     times = scctool.settings.config.parser.getint("SCT", "CtrlShiftR")
     if times > 0:
         PressKey(CONTROL)
         PressKey(SHIFT)
-        
+
         # For some reason the first time pressing CTRL+SHIFT+R does nothing.
-        for x in range(0, times+1):
+        for x in range(0, times + 1):
             PressKey(R)
             time.sleep(lag)
             ReleaseKey(R)
             time.sleep(lag)
-        
+
         ReleaseKey(SHIFT)
         ReleaseKey(CONTROL)
         time.sleep(lag)
-
 
     if(not skipBestof):
         PressKey(CONTROL)
@@ -369,7 +368,7 @@ class SC2ApiThread(PyQt5.QtCore.QThread):
                 else:
                     # print("SC2 not on foreground... waiting.")
                     time.sleep(2)
-        except:
+        except Exception:
             module_logger.info("Toggle not working on this OS:")
 
     def swapPlayers(self, data):

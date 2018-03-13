@@ -2,63 +2,63 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <title>All Box Map Icons</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="../src/jquery.textfill.min.js"></script>
-    <script>
-        function showHide(i) {
-            mapicon = "#mapicon" + i.toString();
-            if ($(mapicon).find("div.image").css("visibility") == "hidden") {
-                $(mapicon).css("display", "none");
-            } else {
-                $(mapicon).css("display", "inline-block");
-            }
+        <meta charset="UTF-8">
+        <title>All Box Map Icons</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="../src/jquery.textfill.min.js"></script>
+        <script>
+                function showHide(i) {
+                        mapicon = "#mapicon" + i.toString();
+                        if ($(mapicon).find("div.image").css("visibility") == "hidden") {
+                                $(mapicon).css("display", "none");
+                        } else {
+                                $(mapicon).css("display", "inline-block");
+                        }
 
-            $(mapicon).find(".text-fill").textfill();
-            setTimeout(reloadBox.bind(null, i), 1000);
-        }
+                        $(mapicon).find(".text-fill").textfill();
+                        setTimeout(reloadBox.bind(null, i), 1000);
+                }
 
-        function reloadBox(i) {
-            mapicon = "#mapicon" + i.toString();
-            $(mapicon).load("data/" + i.toString() + ".html", showHide.bind(null, i));
-        }
+                function reloadBox(i) {
+                        mapicon = "#mapicon" + i.toString();
+                        $(mapicon).load("data/" + i.toString() + ".html", showHide.bind(null, i));
+                }
 
-        $(document).ready(function() {
-            for (i = 1; i <= 9; i++) {
-                reloadBox(i);
-            }
-        });
-    </script>
-    <link rel="stylesheet" href="../src/css/box.css">
-    <style>
-        .container {
-            top: 0px;
-            left: 0px;
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            text-align: center;
-        }
+                $(document).ready(function() {
+                        for (i = 1; i <= 9; i++) {
+                                reloadBox(i);
+                        }
+                });
+        </script>
+        <link rel="stylesheet" href="../src/css/box.css">
+        <style>
+                .container {
+                        top: 0px;
+                        left: 0px;
+                        width: 100%;
+                        height: 100%;
+                        position: absolute;
+                        text-align: center;
+                }
 
-        .block {
-            height: 262px;
-            width: 277px;
-            display: inline-block;
-            margin: 4px;
-            margin-bottom: 2px;
-        }
-    </style>
+                .block {
+                        height: 262px;
+                        width: 277px;
+                        display: inline-block;
+                        margin: 4px;
+                        margin-bottom: 2px;
+                }
+        </style>
 </head>
 
 <body>
-    <div class="container" id="container">
-    </div>
+        <div class="container" id="container">
+        </div>
 </body>
 <script>
-    for (i = 1; i <= 9; i++) {
-        $('#container').append("<div class='block' id='mapicon" + i.toString() + "'></div>");
-    };
+        for (i = 1; i <= 9; i++) {
+                $('#container').append("<div class='block' id='mapicon" + i.toString() + "'></div>");
+        };
 </script>
 
 </html>

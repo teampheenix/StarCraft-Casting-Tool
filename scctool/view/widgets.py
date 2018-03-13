@@ -8,6 +8,7 @@ import time
 import scctool.matchdata
 import scctool.tasks.updater
 import humanize
+import keyboard
 
 # create logger
 module_logger = logging.getLogger('scctool.view.widgets')
@@ -106,6 +107,9 @@ class StyleComboBox(PyQt5.QtWidgets.QComboBox):
         controller.ftpUploader.cwd(dirs)
         controller.ftpUploader.upload(file, fname)
         controller.ftpUploader.cwdback(dirs)
+
+    def applyWebsocket(self, controller):
+        controller.websocketThread.changeStyle(self.currentText())
 
 
 class FTPsetup(PyQt5.QtWidgets.QProgressDialog):
@@ -235,6 +239,61 @@ class BusyProgressBar(PyQt5.QtWidgets.QProgressBar):
     def text(self):
         """Return the text of the bar."""
         return self._text
+
+
+class HotkeyLayout(PyQt5.QtWidgets.QHBoxLayout):
+
+    modified = PyQt5.QtCore.pyqtSignal(str)
+
+    def __init__(self, parent, label="Hotkey", hotkey=""):
+        """Init box."""
+        super(PyQt5.QtWidgets.QHBoxLayout, self).__init__()
+        self.__parent = parent
+        label = PyQt5.QtWidgets.QLabel(label + ":")
+        label.setMinimumWidth(50)
+        self.addWidget(label, 1)
+        self.__preview = PyQt5.QtWidgets.QLineEdit()
+        self.__preview.setReadOnly(True)
+        self.__preview.setText(hotkey)
+        self.__preview.setPlaceholderText(_("Not set"))
+        self.__preview.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
+        self.addWidget(self.__preview, 0)
+        self.__pb_setHotKey = PyQt5.QtWidgets.QPushButton(_('Set Hotkey'))
+        self.__pb_setHotKey.clicked.connect(self.setHotkey)
+        self.addWidget(self.__pb_setHotKey, 0)
+        self.__pb_set = PyQt5.QtWidgets.QPushButton(_('Set Key'))
+        self.__pb_set.clicked.connect(self.setKey)
+        self.addWidget(self.__pb_set, 0)
+        self.__pb_clear = PyQt5.QtWidgets.QPushButton(_('Clear'))
+        self.__pb_clear.clicked.connect(self.clear)
+        self.addWidget(self.__pb_clear, 0)
+
+    def setKey(self):
+        event = keyboard.read_key()
+
+        # print(event.event_type)
+        # print(event.scan_code)
+        # print(event.name)
+        # print(event.is_keypad)
+        key = hex(event.scan_code)
+        self.__preview.setText(key)
+        self.modified.emit(key)
+
+    def setHotkey(self):
+        key = keyboard.read_hotkey()
+        self.__preview.setText(key)
+        self.modified.emit(key)
+
+    def clear(self):
+        self.__preview.setText("")
+        self.modified.emit("")
+
+    def getKey(self):
+        return str(self.__preview.text()).strip()
+
+    def check_dublicate(self, key):
+        if str(key) and key == self.getKey():
+            self.clear()
 
 
 class ColorLayout(PyQt5.QtWidgets.QHBoxLayout):
@@ -367,7 +426,7 @@ class ListTable(PyQt5.QtWidgets.QTableWidget):
         """Set the data."""
         try:
             self.itemChanged.disconnect()
-        except:
+        except Exception:
             pass
 
         self.setColumnCount(self.__noColumns)
@@ -396,7 +455,7 @@ class ListTable(PyQt5.QtWidgets.QTableWidget):
                     if(element == ""):
                         continue
                     data.append(element)
-                except:
+                except Exception:
                     pass
         return self.__processData(data)
 

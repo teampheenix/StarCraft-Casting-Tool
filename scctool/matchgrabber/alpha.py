@@ -56,7 +56,7 @@ class MatchGrabber(MatchGrabberParent):
                             playername = "TBD"
                         self._matchData.setPlayer(
                             team_idx, set_idx, playername, str(player['race']))
-                    except:
+                    except Exception:
                         self._matchData.setPlayer(
                             team_idx, set_idx, 'TBD', 'Random')
 
@@ -71,7 +71,7 @@ class MatchGrabber(MatchGrabberParent):
             for set_idx in range(5):
                 try:
                     score = int(data['games'][set_idx]) * 2 - 3
-                except:
+                except Exception:
                     score = 0
 
                 self._matchData.setMapScore(set_idx, score)
@@ -89,12 +89,12 @@ class MatchGrabber(MatchGrabberParent):
             try:
                 os.remove(scctool.settings.getAbsPath(
                     dir + "/logo" + str(idx + 1) + ".png"))
-            except:
+            except Exception:
                 pass
             try:
                 os.remove(scctool.settings.getAbsPath(
                     dir + "/logo" + str(idx + 1) + ".jpg"))
-            except:
+            except Exception:
                 pass
             try:
                 url = self._rawData['team' + str(idx + 1)]['logo']

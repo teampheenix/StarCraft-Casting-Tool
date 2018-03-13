@@ -2,24 +2,24 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Score</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script>
-        function reloadContent() {
-            $("#content").load("data/logo1-data.html");
-            setTimeout(reloadContent, 1000);
-        }
+        <meta charset="UTF-8">
+        <title>Score</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script>
+                function reloadContent() {
+                        $("#content").load("data/logo1-data.html");
+                        setTimeout(reloadContent, 1000);
+                }
 
-        $(document).ready(function() {
-            reloadContent();
-        });
-    </script>
+                $(document).ready(function() {
+                        reloadContent();
+                });
+        </script>
 </head>
 
 <body>
-    <div id="content">
-    </div>
+        <div id="content">
+        </div>
 </body>
 
 </html>

@@ -40,7 +40,7 @@ class TasksThread(PyQt5.QtCore.QThread):
         """Check if a sepcific task is active."""
         try:
             return self.__tasks[task]
-        except:
+        except Exception:
             return False
 
     def activateTask(self, task):

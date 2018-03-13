@@ -122,12 +122,12 @@ class SubwindowStyles(PyQt5.QtWidgets.QWidget):
 
         container = PyQt5.QtWidgets.QHBoxLayout()
         self.qb_introStyle = StyleComboBox(
-            scctool.settings.OBShtmlDir + "/src/css/intro_styles",
+            scctool.settings.OBShtmlDir + "/src/css/intro",
             scctool.settings.config.parser.get("Style", "intro"))
         self.qb_introStyle.currentIndexChanged.connect(self.changed)
         button = PyQt5.QtWidgets.QPushButton(_("Show in Browser"))
         button.clicked.connect(lambda: self.openHTML(
-            scctool.settings.OBShtmlDir + "/intro1.html"))
+            scctool.settings.OBShtmlDir + "/intro.html"))
         container.addWidget(self.qb_introStyle)
         container.addWidget(button)
         layout.addRow(PyQt5.QtWidgets.QLabel(_("Intros:")), container)
@@ -156,8 +156,7 @@ class SubwindowStyles(PyQt5.QtWidgets.QWidget):
             self.controller, scctool.settings.OBSmapDir + "/src/css/landscape.css")
         self.qb_scoreStyle.apply(
             self.controller, scctool.settings.OBShtmlDir + "/src/css/score.css")
-        self.qb_introStyle.apply(
-            self.controller, scctool.settings.OBShtmlDir + "/src/css/intro.css")
+        self.qb_introStyle.applyWebsocket(self.controller)
 
     def createColorBox(self):
         """Create box for color selection."""

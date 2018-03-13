@@ -24,11 +24,11 @@ def compareVersions(v1, v2, maximum=5):
     for idx in range(max_idx):
         try:
             n1 = int(v1[idx])
-        except:
+        except Exception:
             n1 = 0
         try:
             n2 = int(v2[idx])
-        except:
+        except Exception:
             n2 = 0
         if n1 > n2:
             return -1
@@ -70,8 +70,48 @@ def setDataVersion(version):
         json.dump(data, outfile)
 
 
+def deleteObsoleteFiles():
+    """Remove obsolete files."""
+    # mv OBS_html/src/css/intro_styles to OBS_html/src/css/intro
+    try:
+        old = scctool.settings.getAbsPath(os.path.join(scctool.settings.OBShtmlDir, 'src/css/intro_styles'))
+        new = scctool.settings.getAbsPath(os.path.join(scctool.settings.OBShtmlDir, 'src/css/intro')) 
+        os.rename(old, new)
+    except Exception as e:
+        pass
+        
+    # rm OBS_html/src/css/intro.css
+    try:
+        file = scctool.settings.getAbsPath(os.path.join(scctool.settings.OBShtmlDir, 'src/css/intro.css'))
+        os.remove(file)
+    except Exception as e:
+        pass
+        
+    # rm OBS_html/intro1.html
+    try:
+        file = scctool.settings.getAbsPath(os.path.join(scctool.settings.OBShtmlDir, 'intro1.html'))
+        os.remove(file)
+    except Exception as e:
+        pass
+        
+    # rm OBS_html/intro2.html
+    try:
+        file = scctool.settings.getAbsPath(os.path.join(scctool.settings.OBShtmlDir, 'intro2.html'))
+        os.remove(file)
+    except Exception as e:
+        pass
+        
+    # rm OBS_html/data/intro-template.html
+    try:
+        file = scctool.settings.getAbsPath(os.path.join(scctool.settings.OBShtmlDir, 'data/intro-template.html'))
+        os.remove(file)
+    except Exception as e:
+        pass
+
 def extractData(asset_update, handler=lambda x: None):
     """Extract data."""
+    handler(5)
+    deleteObsoleteFiles()
     handler(10)
     if asset_update.is_downloaded():
         file = os.path.join(asset_update.update_folder,
@@ -96,10 +136,6 @@ def extractData(asset_update, handler=lambda x: None):
         copyStyleFile(scctool.settings.OBSmapDir + "/src/css/landscape_styles",
                       scctool.settings.OBSmapDir + "/src/css/landscape.css",
                       scctool.settings.config.parser.get("Style", "mapicon_landscape"))
-
-        copyStyleFile(scctool.settings.OBShtmlDir + "/src/css/intro_styles",
-                      scctool.settings.OBShtmlDir + "/src/css/intro.css",
-                      scctool.settings.config.parser.get("Style", "intro"))
 
         copyStyleFile(scctool.settings.OBShtmlDir + "/src/css/score_styles",
                       scctool.settings.OBShtmlDir + "/src/css/score.css",

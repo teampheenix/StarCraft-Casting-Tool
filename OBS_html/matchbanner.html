@@ -1,30 +1,30 @@
 <html>
 
 <body>
-    <img id="img" src="../OBS_data/matchbanner.png" style="position:absolute;top:0;left:0;border-radius:50px;" />
+        <img id="img" src="../OBS_data/matchbanner.png" style="position:absolute;top:0;left:0;border-radius:50px;" />
 </body>
 <script>
-    function refresh(node) {
-        var times = 3000; // gap in Milli Seconds;
+        function refresh(node) {
+                var times = 3000; // gap in Milli Seconds;
 
-        (function startRefresh() {
-            var address;
-            if (node.src.indexOf('?') > -1)
-                address = node.src.split('?')[0];
-            else
-                address = node.src;
-            node.src = address + "?time=" + new Date().getTime();
+                (function startRefresh() {
+                        var address;
+                        if (node.src.indexOf('?') > -1)
+                                address = node.src.split('?')[0];
+                        else
+                                address = node.src;
+                        node.src = address + "?time=" + new Date().getTime();
 
-            setTimeout(startRefresh, times);
-        })();
+                        setTimeout(startRefresh, times);
+                })();
 
-    }
+        }
 
-    window.onload = function() {
-        var node = document.getElementById('img');
-        refresh(node);
-        // you can refresh as many images you want just repeat above steps
-    }
+        window.onload = function() {
+                var node = document.getElementById('img');
+                refresh(node);
+                // you can refresh as many images you want just repeat above steps
+        }
 </script>
 
 </html>

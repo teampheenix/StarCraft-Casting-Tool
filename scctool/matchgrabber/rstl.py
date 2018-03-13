@@ -53,7 +53,7 @@ class MatchGrabber(MatchGrabberParent):
                             team_idx, set_idx,
                             data[lu][str(set_idx)]['member_name'],
                             data[lu][str(set_idx)]['r_name'])
-                    except:
+                    except Exception:
                         pass
 
                 for set_idx in range(4, 7):
@@ -84,7 +84,7 @@ class MatchGrabber(MatchGrabberParent):
 
                         self._matchData.setPlayer(team_idx, set_idx,
                                                   player, race)
-                    except:
+                    except Exception:
                         pass
 
                 team = data['member' + str(team_idx + 1)]
@@ -100,7 +100,7 @@ class MatchGrabber(MatchGrabberParent):
                         data['result'][str(set_idx * 2)]['score1'])
                     score2 = int(
                         data['result'][str(set_idx * 2)]['score2'])
-                except:
+                except Exception:
                     score1 = 0
                     score2 = 0
 
@@ -119,7 +119,7 @@ class MatchGrabber(MatchGrabberParent):
                         data['result'][str(5 + set_idx)]['score1'])
                     score2 = int(
                         data['result'][str(5 + set_idx)]['score2'])
-                except:
+                except Exception:
                     score1 = 0
                     score2 = 0
 
@@ -154,7 +154,7 @@ class MatchGrabber(MatchGrabberParent):
                             team_idx, set_idx,
                             data[lu][str(set_idx)]['member_name'],
                             data[lu][str(set_idx)]['r_name'])
-                    except:
+                    except Exception:
                         pass
 
                 for set_idx in range(1, bo):
@@ -166,7 +166,7 @@ class MatchGrabber(MatchGrabberParent):
                                 idx = str(set_idx * 2 + 1)
                                 race = data['result'][idx]['r_name'
                                                            + str(team_idx + 1)]
-                            except:
+                            except Exception:
                                 race = "Random"
                         else:
                             race = data['result'][str(
@@ -175,7 +175,7 @@ class MatchGrabber(MatchGrabberParent):
                             set_idx * 2)]['member_name' + str(team_idx + 1)]
                         self._matchData.setPlayer(team_idx, set_idx,
                                                   player, race)
-                    except:
+                    except Exception:
                         pass
 
                 team = data['member' + str(team_idx + 1)]
@@ -187,7 +187,7 @@ class MatchGrabber(MatchGrabberParent):
                         data['result'][str(set_idx * 2)]['score1'])
                     score2 = int(
                         data['result'][str(set_idx * 2)]['score2'])
-                except:
+                except Exception:
                     score1 = 0
                     score2 = 0
 
@@ -217,12 +217,12 @@ class MatchGrabber(MatchGrabberParent):
             try:
                 os.remove(scctool.settings.getAbsPath(
                     dir + "/logo" + str(i) + ".png"))
-            except:
+            except Exception:
                 pass
             try:
                 os.remove(scctool.settings.getAbsPath(
                     dir + "/logo" + str(i) + ".jpg"))
-            except:
+            except Exception:
                 pass
 
             url = "http://hdgame.net" + \

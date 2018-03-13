@@ -140,7 +140,7 @@ class matchData:
         """Check if data of a set has changed."""
         try:
             return bool(self.__setsChanged[set_idx])
-        except:
+        except Exception:
             return False
 
     def setMinSets(self, minSets):
@@ -157,7 +157,7 @@ class matchData:
         """Get the minium number of sets that are played."""
         try:
             return int(self.__data['min_sets'])
-        except:
+        except Exception:
             return 0
 
     def setSolo(self, solo):
@@ -278,26 +278,26 @@ class matchData:
             for i in range(no_sets):
                 try:
                     map = self.__data['sets'][i]['map']
-                except:
+                except Exception:
                     map = "TBD"
                 try:
                     score = self.__data['sets'][i]['score']
-                except:
+                except Exception:
                     score = 0
                 try:
                     label = self.__data['sets'][i]['label']
-                except:
+                except Exception:
                     label = 'Map ' + str(i + 1)
                 for j in range(2):
                     if(not resetPlayers):
                         try:
                             player_name = self.__data['players'][j][i]['name']
-                        except:
+                        except Exception:
                             player_name = 'TBD'
                         try:
                             player_race = getRace(
                                 self.__data['players'][j][i]['race'])
-                        except:
+                        except Exception:
                             player_race = 'Random'
                     else:
                         player_name = 'TBD'
@@ -337,7 +337,7 @@ class matchData:
         """Return my team: (-1,0,1)."""
         try:
             return int(self.__data['my_team'])
-        except:
+        except Exception:
             return 0
 
     def __selectMyTeam(self, string):
@@ -354,7 +354,7 @@ class matchData:
         """Get number of sets."""
         try:
             return int(self.__data['no_sets'])
-        except:
+        except Exception:
             return 0
 
     def setMap(self, set_idx, map="TBD"):
@@ -368,7 +368,7 @@ class matchData:
                 self.__setsChanged[set_idx] = True
 
             return True
-        except:
+        except Exception:
             return False
 
     def getMap(self, set_idx):
@@ -378,7 +378,7 @@ class matchData:
                 return False
 
             return str(self.__data['sets'][set_idx]['map'])
-        except:
+        except Exception:
             return False
 
     def getScoreString(self, middleStr=':'):
@@ -404,7 +404,7 @@ class matchData:
         """Get raw BestOf number."""
         try:
             return int(self.__data['best_of'])
-        except:
+        except Exception:
             return False
 
     def getBestOf(self):
@@ -424,7 +424,7 @@ class matchData:
                 else:
                     return best_of + 1
             return
-        except:
+        except Exception:
             return False
 
     def isDecided(self):
@@ -446,7 +446,7 @@ class matchData:
                 return True
             else:
                 return False
-        except:
+        except Exception:
             return False
 
     def getMapScore(self, set_idx):
@@ -456,7 +456,7 @@ class matchData:
                 return False
 
             return int(self.__data['sets'][set_idx]['score'])
-        except:
+        except Exception:
             return False
 
     def getNextPlayer(self, team_idx):
@@ -494,7 +494,7 @@ class matchData:
                 self.setRace(team_idx, set_idx, race)
 
             return True
-        except:
+        except Exception:
             return False
 
     def getPlayerList(self, team_idx):
@@ -504,7 +504,7 @@ class matchData:
             for set_idx in range(self.getNoSets()):
                 list.append(self.getPlayer(team_idx, set_idx))
             return list
-        except:
+        except Exception:
             return []
 
     def getPlayer(self, team_idx, set_idx):
@@ -516,7 +516,7 @@ class matchData:
 
             return self.__data['players'][team_idx][set_idx]['name']
 
-        except:
+        except Exception:
             return False
 
     def setRace(self, team_idx, set_idx, race="Random"):
@@ -532,7 +532,7 @@ class matchData:
                 self.__data['players'][team_idx][set_idx]['race'] = race
                 self.__setsChanged[set_idx] = True
             return True
-        except:
+        except Exception:
             return False
 
     def getRace(self, team_idx, set_idx):
@@ -544,7 +544,7 @@ class matchData:
 
             return getRace(self.__data['players'][team_idx][set_idx]['race'])
 
-        except:
+        except Exception:
             return False
 
     def setLabel(self, set_idx, label):
@@ -556,7 +556,7 @@ class matchData:
                 self.__data['sets'][set_idx]['label'] = label
                 self.__setsChanged[set_idx] = True
             return True
-        except:
+        except Exception:
             return False
 
     def getLabel(self, set_idx):
@@ -565,7 +565,7 @@ class matchData:
             if(not (set_idx >= 0 and set_idx < self.__data['no_sets'])):
                 return False
             return str(self.__data['sets'][set_idx]['label'])
-        except:
+        except Exception:
             return False
 
     def setTeam(self, team_idx, name, tag=False):
@@ -724,7 +724,7 @@ class matchData:
                 try:
                     score = self.getScore()
                     score_str = str(score[0]) + " - " + str(score[1])
-                except:
+                except Exception:
                     score_str = "0 - 0"
 
                 f = open(scctool.settings.getAbsPath(scctool.settings.OBSdataDir +
@@ -1115,7 +1115,7 @@ def getRace(str):
         for idx, race in enumerate(scctool.settings.races):
             if(str[0].upper() == race[0].upper()):
                 return scctool.settings.races[idx]
-    except:
+    except Exception:
         pass
 
     return "Random"

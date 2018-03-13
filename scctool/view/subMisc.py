@@ -104,30 +104,32 @@ class SubwindowMisc(PyQt5.QtWidgets.QWidget):
             scctool.settings.config.parser.getboolean("SCT", "CtrlShiftS"))
         self.cb_ctrlshifts.stateChanged.connect(self.changed)
         layout.addWidget(self.cb_ctrlshifts)
-        
+
         self.cb_ctrlshiftc = PyQt5.QtWidgets.QCheckBox(
             " " + _('Automatically press Ctrl+Shift+C to toogle the clan tag'))
         self.cb_ctrlshiftc.setChecked(
             scctool.settings.config.parser.getboolean("SCT", "CtrlShiftC"))
         self.cb_ctrlshiftc.stateChanged.connect(self.changed)
         layout.addWidget(self.cb_ctrlshiftc)
-        
+
         container = PyQt5.QtWidgets.QHBoxLayout()
         self.cb_ctrlshiftr = PyQt5.QtWidgets.QComboBox()
         self.cb_ctrlshiftr.addItem("0")
         self.cb_ctrlshiftr.addItem("1")
         self.cb_ctrlshiftr.addItem("2")
         try:
-            self.cb_ctrlshiftr.setCurrentIndex(scctool.settings.config.parser.getint("SCT", "CtrlShiftR"))
-        except:
+            self.cb_ctrlshiftr.setCurrentIndex(
+                scctool.settings.config.parser.getint("SCT", "CtrlShiftR"))
+        except Exception:
             self.cb_ctrlshiftr.setCurrentIndex(0)
         self.cb_ctrlshiftr.setMaximumWidth(40)
         self.cb_ctrlshiftr.currentIndexChanged.connect(self.changed)
-        container.addWidget(PyQt5.QtWidgets.QLabel(_('Automatically press Ctrl+Shift+R to toogle the race icon ')))
+        container.addWidget(PyQt5.QtWidgets.QLabel(
+            _('Automatically press Ctrl+Shift+R to toogle the race icon ')))
         container.addWidget(self.cb_ctrlshiftr)
         container.addWidget(PyQt5.QtWidgets.QLabel(_(' time(s)')))
         layout.addLayout(container)
-        
+
         box.setLayout(layout)
 
         mainLayout.addWidget(box)
@@ -206,7 +208,8 @@ class SubwindowMisc(PyQt5.QtWidgets.QWidget):
                  " {} and install and select the exectuable below, if it is not detected" +
                  " automatically.")
         url = 'https://github.com/UB-Mannheim/tesseract/wiki#tesseract-at-ub-mannheim'
-        url = "<a href='{}'>" + "Tesseract-OCR" + "</a>".format(url)
+        url = "<a href='{}'>" + "Tesseract-OCR" + "</a>"
+        url = url.format(url)
 
         label = PyQt5.QtWidgets.QLabel(text.format(url))
         label.setAlignment(PyQt5.QtCore.Qt.AlignJustify)
