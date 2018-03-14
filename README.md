@@ -73,7 +73,9 @@ Sometimes the order of players given by the SC2-Client-API differs from the orde
 #### Player Intros
 [![intro-demo](https://user-images.githubusercontent.com/26044736/30003831-4fe09b14-90c4-11e7-9593-439454d4e324.gif)](https://youtu.be/JNuAr63L0wM)
 
-Include the Player Intro `OBS_html/intro.html` as browser sources (using the full height and width of your display). The intros will only work if the task *Provide Player Intros* is activated in SCC-Tool. The data will be updated when a game or replay is started in the StarCraft 2 client. You have to assign hotkeys to trigger the intros in *Settings: Connections: Intros & Hotkeys*. The first player is always corresponding to the player your observer camera is centered on at start of a game. The sound volume of the intros as well as the duration of the intros can be adjusted in *Settings: Connections: Intros & Hotkeys*.
+Include the Player Intro `OBS_html/intro.html` as browser sources (using the full height and width of your display). The intros will only work if the task *Provide Player Intros* is activated in SCC-Tool. The data will be updated when a game or replay is started in the StarCraft 2 client. You have to assign hotkeys to trigger the intros in *Settings: Connections: Intros & Hotkeys* - if you want to assign a key on the num pad use *Set Key* instead of *Set Hotkey* to avoid triggers caused by the corresponding regular key. *Set Hotkey* can be used assign hotkey combinations.
+
+The first player is always corresponding to the player your observer camera is centered on at start of a game. The sound volume of the intros as well as the duration of the intros can be adjusted in *Settings: Connections: Intros & Hotkeys*.
 
 ## Customization
 
