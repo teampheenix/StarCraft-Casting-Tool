@@ -78,7 +78,7 @@ class TasksThread(PyQt5.QtCore.QThread):
             for task, active in self.__tasks.items():
                 if active and task not in executedTasks:
                     self.execTask(task)
-                    executedTasks.append(executedTasks)
+                    executedTasks.append(task)
                     continue_loop = True
 
     def __wait(self):

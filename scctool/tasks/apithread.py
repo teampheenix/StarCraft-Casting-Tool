@@ -11,6 +11,7 @@ try:
     import time
     from difflib import SequenceMatcher
     import re
+    import keyboard
 
     import scctool.settings
 
@@ -22,213 +23,45 @@ except Exception as e:
 if(scctool.settings.windows):
     from PIL import ImageGrab  # pip install Pillow
     import pytesseract  # pip install pytesseract
-    import ctypes
     from win32gui import GetWindowText, GetForegroundWindow
 
-    try:
-        SendInput = ctypes.windll.user32.SendInput
-        CONTROL = 0x1D
-        SHIFT = 0x2A
-        S = 0x1F
-        D = 0x20
-        X = 0x2D
-        R = 0x13
-        C = 0x2E
-        DIK_1 = 0x02
-        DIK_2 = 0x03
-        DIK_3 = 0x04
-        DIK_4 = 0x05
-        DIK_5 = 0x06
-        DIK_6 = 0x07
-        DIK_7 = 0x08
-        DIK_8 = 0x09
-        DIK_9 = 0x0A
-        DIK_0 = 0x0B
 
-        # C struct redefinitions
-        PUL = ctypes.POINTER(ctypes.c_ulong)
-
-        class KeyBdInput(ctypes.Structure):
-            """Keyboard Input."""
-
-            _fields_ = [("wVk", ctypes.c_ushort),
-                        ("wScan", ctypes.c_ushort),
-                        ("dwFlags", ctypes.c_ulong),
-                        ("time", ctypes.c_ulong),
-                        ("dwExtraInfo", PUL)]
-
-        class HardwareInput(ctypes.Structure):
-            """Hardware Input."""
-
-            _fields_ = [("uMsg", ctypes.c_ulong),
-                        ("wParamL", ctypes.c_short),
-                        ("wParamH", ctypes.c_ushort)]
-
-        class MouseInput(ctypes.Structure):
-            """Mouse Input."""
-
-            _fields_ = [("dx", ctypes.c_long),
-                        ("dy", ctypes.c_long),
-                        ("mouseData", ctypes.c_ulong),
-                        ("dwFlags", ctypes.c_ulong),
-                        ("time", ctypes.c_ulong),
-                        ("dwExtraInfo", PUL)]
-
-        class Input_I(ctypes.Union):
-            """General Input."""
-
-            _fields_ = [("ki", KeyBdInput),
-                        ("mi", MouseInput),
-                        ("hi", HardwareInput)]
-
-        class Input(ctypes.Structure):
-            """General Input."""
-
-            _fields_ = [("type", ctypes.c_ulong),
-                        ("ii", Input_I)]
-
-        # Actuals Functions
-
-        def PressKey(hexKeyCode):
-            """Simulate a key press down."""
-            extra = ctypes.c_ulong(0)
-            ii_ = Input_I()
-            ii_.ki = KeyBdInput(0, hexKeyCode, 0x0008,
-                                0, ctypes.pointer(extra))
-            x = Input(ctypes.c_ulong(1), ii_)
-            ctypes.windll.user32.SendInput(
-                1, ctypes.pointer(x), ctypes.sizeof(x))
-
-        def ReleaseKey(hexKeyCode):
-            """Simulate a key release."""
-            extra = ctypes.c_ulong(0)
-            ii_ = Input_I()
-            ii_.ki = KeyBdInput(0, hexKeyCode, 0x0008 |
-                                0x0002, 0, ctypes.pointer(extra))
-            x = Input(ctypes.c_ulong(1), ii_)
-            ctypes.windll.user32.SendInput(
-                1, ctypes.pointer(x), ctypes.sizeof(x))
-
-        def int2DIK(integer):
-            """Convert Integer to KeyBdInput."""
-            if(integer == 0):
-                return DIK_0, True
-            elif(integer == 1):
-                return DIK_1, False
-            elif(integer == 2):
-                return DIK_2, False
-            elif(integer == 3):
-                return DIK_3, False
-            elif(integer == 4):
-                return DIK_4, False
-            elif(integer == 5):
-                return DIK_5, False
-            elif(integer == 6):
-                return DIK_6, False
-            elif(integer == 7):
-                return DIK_7, False
-            elif(integer == 8):
-                return DIK_8, False
-            elif(integer == 9):
-                return DIK_9, False
-            else:
-                raise ValueError('The integer has to be in the range 0 to 9')
-
-    except Exception as e:
-        module_logger.exception("message")
+def skipScore(score):
+    return score == 0
 
 
-def ToggleScore(score1_in, score2_in, bestof=5):
+def skipBestOf(bo):
+    return bo == 3
+
+
+def ToggleScore(score1=0, score2=0, bestof=5):
     """Set and toggle SC2-ingame score."""
-    if(not scctool.settings.windows):
-        raise UserWarning("Only Windows!")
-
-    score1, skip1 = int2DIK(score1_in)
-    score2, skip2 = int2DIK(score2_in)
-
-    if(bestof == 3):
-        bestof, skipBestof = int2DIK(bestof)
-        skipBestof = True
-    else:
-        bestof, skipBestof = int2DIK(bestof)
-
-    lag = 0.01
 
     if scctool.settings.config.parser.getboolean("SCT", "CtrlShiftS"):
-        PressKey(CONTROL)
-        PressKey(SHIFT)
-        PressKey(S)
-        time.sleep(lag)
-        ReleaseKey(S)
-        ReleaseKey(SHIFT)
-        ReleaseKey(CONTROL)
-        time.sleep(lag)
+        keyboard.send("ctrl+shift+s")
 
     if scctool.settings.config.parser.getboolean("SCT", "CtrlShiftC"):
-        PressKey(CONTROL)
-        PressKey(SHIFT)
-        PressKey(C)
-        time.sleep(lag)
-        ReleaseKey(C)
-        ReleaseKey(SHIFT)
-        ReleaseKey(CONTROL)
-        time.sleep(lag)
+        keyboard.send("ctrl+shift+c")
 
     times = scctool.settings.config.parser.getint("SCT", "CtrlShiftR")
     if times > 0:
-        PressKey(CONTROL)
-        PressKey(SHIFT)
-
         # For some reason the first time pressing CTRL+SHIFT+R does nothing.
         for x in range(0, times + 1):
-            PressKey(R)
-            time.sleep(lag)
-            ReleaseKey(R)
-            time.sleep(lag)
+            keyboard.send("ctrl+shift+r")
 
-        ReleaseKey(SHIFT)
-        ReleaseKey(CONTROL)
-        time.sleep(lag)
+    if(not skipBestOf(bestof)):
+        keyboard.send("ctrl+shift+{}".format(bestof))
 
-    if(not skipBestof):
-        PressKey(CONTROL)
-        PressKey(SHIFT)
-        PressKey(bestof)
-        time.sleep(lag)
-        ReleaseKey(bestof)
-        ReleaseKey(SHIFT)
-        ReleaseKey(CONTROL)
-        time.sleep(lag)
+    if(not skipScore(score2)):
+        keyboard.send("ctrl+{}".format(score2))
 
-    if(not skip2):
-        PressKey(CONTROL)
-        PressKey(score2)  # Score player2
-        time.sleep(lag)
-        ReleaseKey(score2)
-        ReleaseKey(CONTROL)
-        time.sleep(lag)
-
-    if(not skip1):
-        PressKey(SHIFT)
-        PressKey(score1)  # Score player1
-        time.sleep(lag)
-        ReleaseKey(score1)
-        ReleaseKey(SHIFT)
-        time.sleep(lag)
+    if(not skipScore(score1)):
+        keyboard.send("shift+{}".format(score1))
 
 
 def ToggleProduction():
     """Toggle SC2-ingame production tab."""
-    if(not scctool.settings.windows):
-        raise UserWarning("Only Windows!")
-    lag = 0.01
-    time.sleep(lag)
-    # Production tab only needs 'D' and not 'CTRL+D'
-    # PressKey(CONTROL)
-    PressKey(D)
-    time.sleep(lag)
-    # ReleaseKey(CONTROL)
-    ReleaseKey(D)
+    keyboard.send("d")
 
 
 class SC2ApiThread(PyQt5.QtCore.QThread):
@@ -294,11 +127,10 @@ class SC2ApiThread(PyQt5.QtCore.QThread):
             while self.exiting is False:
                 # See: https://us.battle.net/forums/en/sc2/topic/20748195420
                 try:
-                    GAMEresponse = requests.get(GAMEurl, timeout=100).json()
-                    UIresponse = requests.get(UIurl, timeout=100).json()
-
+                    GAMEresponse = requests.get(GAMEurl, timeout=30).json()
                     # activate script if 2 players are playing right now
                     if(len(GAMEresponse["players"]) == 2):
+                        UIresponse = requests.get(UIurl, timeout=30).json()
                         self.parseMatchData(
                             SC2MatchData(GAMEresponse, UIresponse))
 
@@ -309,7 +141,7 @@ class SC2ApiThread(PyQt5.QtCore.QThread):
                     # print("StarCraft 2 starting.")
                     time.sleep(10)
 
-                time.sleep(2)
+                time.sleep(1)
 
             # print('terminated')
         except Exception as e:
@@ -367,7 +199,7 @@ class SC2ApiThread(PyQt5.QtCore.QThread):
                     break
                 else:
                     # print("SC2 not on foreground... waiting.")
-                    time.sleep(2)
+                    time.sleep(1)
         except Exception:
             module_logger.info("Toggle not working on this OS:")
 

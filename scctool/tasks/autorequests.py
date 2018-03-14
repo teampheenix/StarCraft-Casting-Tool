@@ -6,6 +6,7 @@ from scctool.tasks.tasksthread import TasksThread
 
 import scctool.settings
 import scctool.tasks.twitch
+import scctool.tasks.nightbot
 
 # create logger
 module_logger = logging.getLogger('scctool.tasks.autorequests')
@@ -26,7 +27,9 @@ class AutoRequestsThread(TasksThread):
         self.setTimeout(10)
 
         self.addTask('twitch', self.__twitchTask)
+        self.addTask('twitch_once', self.__twitchOnceTask)
         self.addTask('nightbot', self.__nightbotTask)
+        self.addTask('nightbot_once', self.__nightbotOnceTask)
 
         self.twitchSignal.connect(controller.displayWarning)
         self.nightbotSignal.connect(controller.displayWarning)
@@ -45,14 +48,37 @@ class AutoRequestsThread(TasksThread):
                 self.disableCB.emit('twitch')
                 self.deactivateTask('twitch')
 
+    def __twitchOnceTask(self):
+        try:
+            self.__controller.updateData()
+            title = scctool.settings.config.parser.get(
+                "Twitch", "title_template")
+            title = self.__controller.placeholders.replace(title)
+            msg, success = scctool.tasks.twitch.updateTitle(title)
+            self.twitchSignal.emit(msg)
+        finally:
+            self.deactivateTask('twitch_once')
+
     def __nightbotTask(self):
-        message = scctool.settings.config.parser.get("Nightbot", "message")
-        message = self.__controller.placeholders.replace(message)
-        if(scctool.tasks.nightbot.previousMsg is None):
-            scctool.tasks.nightbot.previousMsg = message
-        elif(scctool.tasks.nightbot.previousMsg != message):
-            msg, success = scctool.tasks.nightbot.updateCommand(message)
-            self.nightbotSignal.emit(msg)
-            if not success:
-                self.disableCB.emit('nightbot')
-                self.deactivateTask('nightbot')
+        for command, message in scctool.settings.nightbot_commands.items():
+            message = self.__controller.placeholders.replace(message)
+            if(scctool.tasks.nightbot.previousMsg.get(command, None) is None):
+                scctool.tasks.nightbot.previousMsg[command] = message
+            elif(scctool.tasks.nightbot.previousMsg[command] != message):
+                msg, success = scctool.tasks.nightbot.updateCommand(
+                    command, message)
+                self.nightbotSignal.emit(msg)
+                if not success:
+                    self.disableCB.emit('nightbot')
+                    self.deactivateTask('nightbot')
+                    break
+
+    def __nightbotOnceTask(self):
+        try:
+            self.__controller.updateData()
+            for command, message in scctool.settings.nightbot_commands.items():
+                message = self.__controller.placeholders.replace(message)
+                msg, _ = scctool.tasks.nightbot.updateCommand(command, message)
+                self.nightbotSignal.emit(msg)
+        finally:
+            self.deactivateTask('nightbot_once')

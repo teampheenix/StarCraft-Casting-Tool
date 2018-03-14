@@ -3,6 +3,7 @@ import logging
 import os
 import platform
 import sys
+import json
 
 module_logger = logging.getLogger('scctool.settings')
 
@@ -27,6 +28,7 @@ OBSmapDir = "OBS_mapicons"
 dataDir = "data"
 matchdata_json_file = getAbsPath(dataDir + "/matchdata.json")
 versiondata_json_file = getAbsPath(dataDir + "/versiondata.json")
+nightbot_json_file = getAbsPath(dataDir + "/nightbot.json")
 
 windows = (platform.system().lower() == "windows")
 
@@ -61,6 +63,31 @@ def loadMapList():
 
 maps = []
 
+nightbot_commands = []
+
+
+def loadNightbotCommands():
+    """Read json data from file."""
+    global nightbot_commands
+    try:
+        with open(nightbot_json_file) as json_file:
+            data = json.load(json_file)
+    except Exception as e:
+        data = dict()
+
+    nightbot_commands = data
+    return data
+
+
+def saveNightbotCommands():
+    """Write json data to file."""
+    global nightbot_commands
+    try:
+        with open(nightbot_json_file, 'w') as outfile:
+            json.dump(nightbot_commands, outfile)
+    except Exception as e:
+        module_logger.exception("message")
+
 
 def race2idx(str):
     """Convert race to idx."""
@@ -76,3 +103,6 @@ def idx2race(idx):
         return races[idx]
     except Exception:
         return races[0]
+
+
+loadNightbotCommands()

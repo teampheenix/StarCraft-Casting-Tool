@@ -119,8 +119,6 @@ def setDefaultConfigAll():
                      "(League) – (Team1) vs (Team2)")
 
     setDefaultConfig("Nightbot", "token", "")
-    setDefaultConfig("Nightbot", "command", "!matchlink")
-    setDefaultConfig("Nightbot", "message", "(URL)")
 
     setDefaultConfig("FTP", "upload", "False")
     setDefaultConfig("FTP", "server", "")
@@ -175,6 +173,7 @@ def setDefaultConfigAll():
 
 def renameConfigOptions():
     """Delete and rename old config options."""
+    from scctool.settings import nightbot_commands
     try:
         value = parser.getboolean("SCT", "StrgShiftS")
         parser.set("SCT", "CtrlShiftS", str(value))
@@ -184,6 +183,19 @@ def renameConfigOptions():
 
     parser.remove_section("OBS")
 
+    try:
+        command = parser.get("Nightbot", "command")
+        message = parser.get("Nightbot", "message")
+        nightbot_commands[command] = message
+    except Exception:
+        pass
+
+    try:
+        parser.remove_option("Nightbot", "command")
+        parser.remove_option("Nightbot", "message")
+    except Exception:
+        pass
+
 
 def ftpIsValid():
     """Check if FTP data is valid."""
@@ -192,8 +204,8 @@ def ftpIsValid():
 
 def nightbotIsValid():
     """Check if nightbot data is valid."""
-    return (len(parser.get("Nightbot", "token")) > 0
-            and len(parser.get("Nightbot", "command")) > 0)
+    from scctool.settings import nightbot_commands
+    return (len(parser.get("Nightbot", "token")) > 0 and len(nightbot_commands) > 0)
 
 
 def twitchIsValid():

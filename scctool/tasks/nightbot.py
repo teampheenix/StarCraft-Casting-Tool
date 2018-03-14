@@ -18,12 +18,11 @@ def base_headers():
     return {"User-Agent": ""}
 
 
-previousMsg = None
+previousMsg = dict()
 
 
-def updateCommand(message):
+def updateCommand(cmd, message):
     """Update command to message."""
-    cmd = scctool.settings.config.parser.get("Nightbot", "command")
     global previousMsg
 
     # Updates the twitch title specified in the config file
@@ -41,7 +40,7 @@ def updateCommand(message):
         cmdFound, skipUpdate, id = findCmd(response.json(), cmd, message)
 
         if(skipUpdate):
-            previousMsg = message
+            previousMsg[cmd] = message
             msg = _("Nightbot command '{}' was already set to '{}'").format(
                 cmd, message)
             success = True
@@ -62,7 +61,7 @@ def updateCommand(message):
                           headers=headers,
                           data=post_data).raise_for_status()
 
-        previousMsg = message
+        previousMsg[cmd] = message
 
         msg = _("Updated Nightbot command '{}' to '{}'").format(cmd, message)
         success = True

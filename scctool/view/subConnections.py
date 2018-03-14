@@ -7,6 +7,7 @@ from scctool.view.widgets import MonitoredLineEdit, FTPsetup, Completer, HotkeyL
 import scctool.settings
 import base64
 import keyboard
+import weakref
 
 # create logger
 module_logger = logging.getLogger('scctool.view.subConnections')
@@ -41,7 +42,7 @@ class SubwindowConnections(PyQt5.QtWidgets.QWidget):
             self.setLayout(mainLayout)
 
             self.resize(PyQt5.QtCore.QSize(mainWindow.size().width()
-                                           * 0.7, self.sizeHint().height()))
+                                           * 0.8, self.sizeHint().height()))
             relativeChange = PyQt5.QtCore.QPoint(mainWindow.size().width() / 2,
                                                  mainWindow.size().height() / 3) -\
                 PyQt5.QtCore.QPoint(self.size().width() / 2,
@@ -258,7 +259,8 @@ class SubwindowConnections(PyQt5.QtWidgets.QWidget):
     def createFormGroupNightbot(self):
         """Create forms for nightbot."""
         self.formGroupNightbot = PyQt5.QtWidgets.QWidget()
-        layout = PyQt5.QtWidgets.QFormLayout()
+        mainLayout = PyQt5.QtWidgets.QVBoxLayout()
+        tokenBox = PyQt5.QtWidgets.QGroupBox("Access-Token")
         container = PyQt5.QtWidgets.QHBoxLayout()
 
         self.nightbotToken = MonitoredLineEdit()
@@ -270,15 +272,7 @@ class SubwindowConnections(PyQt5.QtWidgets.QWidget):
         self.nightbotToken.setPlaceholderText(
             _("Press 'Get' to generate a token"))
         self.nightbotToken.setToolTip(
-            _("Press 'Get' to generate a new token."))
-
-        self.nightbotCommand = MonitoredLineEdit()
-        self.nightbotCommand.textModified.connect(self.changed)
-        self.nightbotCommand.setText(
-            scctool.settings.config.parser.get("Nightbot", "command"))
-        self.nightbotCommand.setPlaceholderText("!matchlink")
-        self.nightbotCommand.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
-
+            _("Press 'Get' to generate a token."))
         container.addWidget(self.nightbotToken)
         self.pb_getNightbot = PyQt5.QtWidgets.QPushButton(_('Get'))
         self.pb_getNightbot.clicked.connect(self.controller.getNightbotToken)
@@ -286,38 +280,52 @@ class SubwindowConnections(PyQt5.QtWidgets.QWidget):
         # self.pb_getNightbot.setEnabled(False)
         container.addWidget(self.pb_getNightbot)
 
-        layout.addRow(PyQt5.QtWidgets.QLabel(_("Access-Token:")), container)
-        label = PyQt5.QtWidgets.QLabel(_("Command:"))
-        label.setFixedWidth(100)
-        layout.addRow(label, self.nightbotCommand)
+        tokenBox.setLayout(container)
 
-        container = PyQt5.QtWidgets.QHBoxLayout()
+        mainLayout.addWidget(tokenBox, 0)
 
-        self.nightbotMsg = MonitoredLineEdit()
-        self.nightbotMsg.textModified.connect(self.changed)
-        self.nightbotMsg.setText(
-            scctool.settings.config.parser.get("Nightbot", "message"))
-        self.nightbotMsg.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
-        self.nightbotMsg.setPlaceholderText("(URL)")
-        self.nightbotMsg.setToolTip(
-            _('Available placeholders:') + ' ' +
-            ', '.join(self.controller.placeholders.available()))
+        # scroll area widget contents - layout
+        self.scrollLayout = PyQt5.QtWidgets.QVBoxLayout()
+        self.scrollLayout.setDirection(PyQt5.QtWidgets.QBoxLayout.BottomToTop)
+        self.scrollLayout.addStretch(0)
+        buttonLayout = PyQt5.QtWidgets.QHBoxLayout()
+        buttonLayout.addStretch(0)
+        self.scrollLayout.addLayout(buttonLayout)
 
-        completer = Completer(
-            self.controller.placeholders.available(), self.nightbotMsg)
+        # scroll area widget contents
+        self.scrollWidget = PyQt5.QtWidgets.QWidget()
+        self.scrollWidget.setLayout(self.scrollLayout)
 
-        self.nightbotMsg.setCompleter(completer)
+        # scroll area
+        self.scrollArea = PyQt5.QtWidgets.QScrollArea()
+        self.scrollArea.setWidgetResizable(True)
+        self.scrollArea.setWidget(self.scrollWidget)
+        self.scrollArea.setFixedHeight(180)
 
-        container.addWidget(self.nightbotMsg)
-        button = PyQt5.QtWidgets.QPushButton(_('Test'))
-        button.setFixedWidth(100)
-        button.clicked.connect(
-            lambda: self.testPlaceholder(self.nightbotMsg.text()))
-        container.addWidget(button)
+        mainLayout.addWidget(self.scrollArea, 1)
 
-        layout.addRow(PyQt5.QtWidgets.QLabel(_("Message:")), container)
+        layout = PyQt5.QtWidgets.QHBoxLayout()
+        layout.addWidget(PyQt5.QtWidgets.QLabel(""))
+        addButton = PyQt5.QtWidgets.QPushButton(_('Add Command'))
+        addButton.clicked.connect(lambda: self.addCommand())
+        layout.addWidget(addButton)
 
-        self.formGroupNightbot.setLayout(layout)
+        mainLayout.addLayout(layout, 0)
+
+        data = scctool.settings.nightbot_commands
+
+        if len(data) == 0:
+            self.addCommand()
+        else:
+            for cmd, msg in data.items():
+                self.addCommand(cmd, msg)
+
+        self.formGroupNightbot.setLayout(mainLayout)
+
+    def addCommand(self, cmd="", msg=""):
+        dropbox = CommandDropBox(self.controller, cmd=cmd, msg=msg)
+        dropbox.connect(self.changed)
+        self.scrollLayout.insertWidget(1, dropbox)
 
     def createButtonGroup(self):
         """Create buttons."""
@@ -338,37 +346,27 @@ class SubwindowConnections(PyQt5.QtWidgets.QWidget):
         except Exception as e:
             module_logger.exception("message")
 
-    def testPlaceholder(self, string):
-        """Test placeholders."""
-        string = self.controller.placeholders.replace(string)
-        PyQt5.QtWidgets.QMessageBox.information(self, _("Output:"), string)
-
     def changed(self, *values):
         """Handle changed data."""
         self.__dataChanged = True
 
     def saveData(self):
         """Save the data to config."""
-        if(self.__dataChanged):
 
-            self.saveFtpData()
+        self.saveFtpData()
 
-            scctool.settings.config.parser.set(
-                "Twitch", "channel", self.twitchChannel.text().strip())
-            scctool.settings.config.parser.set(
-                "Twitch", "oauth", self.twitchToken.text().strip())
-            scctool.settings.config.parser.set(
-                "Twitch", "title_template", self.twitchTemplate.text().strip())
-            scctool.settings.config.parser.set(
-                "Nightbot", "token", self.nightbotToken.text().strip())
-            scctool.settings.config.parser.set(
-                "Nightbot", "command", self.nightbotCommand.text().strip())
-            scctool.settings.config.parser.set(
-                "Nightbot", "message", self.nightbotMsg.text().strip())
+        scctool.settings.config.parser.set(
+            "Twitch", "channel", self.twitchChannel.text().strip())
+        scctool.settings.config.parser.set(
+            "Twitch", "oauth", self.twitchToken.text().strip())
+        scctool.settings.config.parser.set(
+            "Twitch", "title_template", self.twitchTemplate.text().strip())
 
-            self.saveWebsocketdata()
+        scctool.settings.nightbot_commands = CommandDropBox.getData()
 
-            self.controller.refreshButtonStatus()
+        self.saveWebsocketdata()
+
+        self.controller.refreshButtonStatus()
 
     def saveFtpData(self):
         """Save FTP data."""
@@ -421,3 +419,88 @@ class SubwindowConnections(PyQt5.QtWidgets.QWidget):
             event.accept()
         except Exception as e:
             module_logger.exception("message")
+
+
+class CommandDropBox(PyQt5.QtWidgets.QGroupBox):
+    _instances = set()
+
+    def __init__(self, controller, cmd="", msg="", parent=None):
+        super(CommandDropBox, self).__init__(parent)
+        self.controller = controller
+        self._instances.add(weakref.ref(self))
+        self.ident = len(self._instances)
+        layout = PyQt5.QtWidgets.QHBoxLayout()
+
+        self.command = MonitoredLineEdit()
+        self.command.setText(cmd)
+        self.command.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
+        self.command.setPlaceholderText(("!command"))
+        layout.addWidget(self.command)
+
+        self.message = MonitoredLineEdit()
+        self.message.setText(msg)
+        self.message.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
+        self.message.setPlaceholderText(_('message, e.g.,') + ' (URL)')
+        self.message.setToolTip(
+            _('Available placeholders:') + ' ' +
+            ', '.join(self.controller.placeholders.available()))
+        completer = Completer(
+            self.controller.placeholders.available(), self.message)
+
+        self.message.setCompleter(completer)
+        layout.addWidget(self.message)
+
+        self.pushButton1 = PyQt5.QtWidgets.QPushButton(_('Test'))
+        self.pushButton1.clicked.connect(
+            lambda: self.testPlaceholder(self.message.text()))
+        layout.addWidget(self.pushButton1)
+
+        self.pushButton2 = PyQt5.QtWidgets.QPushButton(_('Delete'))
+        self.pushButton2.clicked.connect(self.remove)
+        layout.addWidget(self.pushButton2)
+        self.setLayout(layout)
+
+        for ref in self._instances:
+            obj = ref()
+            if obj is not None:
+                obj.setTitle()
+
+    def connect(self, handler):
+        self.command.textModified.connect(handler)
+        self.message.textModified.connect(handler)
+
+    def setTitle(self):
+        title = "Command {}".format(self.ident)
+        super(CommandDropBox, self).setTitle(title)
+        self.pushButton2.setDisabled(len(self._instances) == 1)
+
+    def adjustIdent(self, removedIdent):
+        if removedIdent < self.ident:
+            self.ident -= 1
+        self.setTitle()
+
+    def remove(self):
+        self.parent().layout().removeWidget(self)
+        self.deleteLater()
+        self._instances.remove(weakref.ref(self))
+        for ref in self._instances:
+            obj = ref()
+            if obj is not None:
+                obj.adjustIdent(self.ident)
+
+    def testPlaceholder(self, string):
+        """Test placeholders."""
+        string = self.controller.placeholders.replace(string)
+        PyQt5.QtWidgets.QMessageBox.information(self, _("Output:"), string)
+
+    @classmethod
+    def getData(cls):
+        data = dict()
+        for inst_ref in cls._instances:
+            inst = inst_ref()
+            if inst is not None:
+                cmd = inst.command.text().strip()
+                msg = inst.message.text().strip()
+                if cmd and msg:
+                    data[cmd] = msg
+        return data

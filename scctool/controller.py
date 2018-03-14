@@ -178,7 +178,7 @@ class MainController:
 
         self.updateLogosHTML()
 
-    def updateData(self):
+    def updateData(self, writeJson=True):
         """Update match data from input of views."""
         try:
             self.matchData.setMyTeam(self.view.sl_team.value())
@@ -200,6 +200,9 @@ class MainController:
 
         except Exception as e:
             module_logger.exception("message")
+        finally:
+            if writeJson:
+                self.matchData.writeJsonFile()
 
     def applyCustom(self, bestof, allkill, solo, minSets, url):
         """Apply a custom match format."""
@@ -268,11 +271,12 @@ class MainController:
             self.view.cb_autoUpdate.setChecked(
                 scctool.settings.config.parser.getboolean("Form", "scoreupdate"))
 
-            self.view.cb_autoToggleScore.setChecked(
-                scctool.settings.config.parser.getboolean("Form", "togglescore"))
+            if scctool.settings.windows:
+                self.view.cb_autoToggleScore.setChecked(
+                    scctool.settings.config.parser.getboolean("Form", "togglescore"))
 
-            self.view.cb_autoToggleProduction.setChecked(
-                scctool.settings.config.parser.getboolean("Form", "toggleprod"))
+                self.view.cb_autoToggleProduction.setChecked(
+                    scctool.settings.config.parser.getboolean("Form", "toggleprod"))
 
             self.view.cb_playerIntros.setChecked(
                 scctool.settings.config.parser.getboolean("Form", "playerintros"))
@@ -297,7 +301,7 @@ class MainController:
     def updateOBS(self):
         """Update txt-files and ioncs for OBS."""
         try:
-            self.updateData()
+            self.updateData(False)
             self.matchData.updateMapIcons()
             self.matchData.updateScoreIcon()
             self.matchData.createOBStxtFiles()
@@ -365,38 +369,11 @@ class MainController:
 
     def updateNightbotCommand(self):
         """Update nightbot commands."""
-        try:
-            msg = ''
-            self.updateData()
-            message = scctool.settings.config.parser.get("Nightbot", "message")
-            message = self.placeholders.replace(message)
-            msg, _ = scctool.tasks.nightbot.updateCommand(message)
-        except Exception as e:
-            msg = str(e)
-            module_logger.exception("message")
-            pass
-
-        return msg
+        self.autoRequestsThread.activateTask('nightbot_once')
 
     def updateTwitchTitle(self):
         """Update twitch title."""
-        try:
-            msg = ''
-            self.updateData()
-            try:
-                title = scctool.settings.config.parser.get(
-                    "Twitch", "title_template")
-                title = self.placeholders.replace(title)
-                msg, _ = scctool.tasks.twitch.updateTitle(title)
-            except Exception as e:
-                msg = str(e)
-                module_logger.exception("message")
-                pass
-            self.matchData.writeJsonFile()
-        except Exception as e:
-            module_logger.exception("message")
-
-        return msg
+        self.autoRequestsThread.activateTask('twitch_once')
 
     def openURL(self, url):
         """Open URL in Browser."""
@@ -448,6 +425,7 @@ class MainController:
             self.ftpUploader.kill()
             self.websocketThread.stop()
             self.autoRequestsThread.terminate()
+            scctool.settings.saveNightbotCommands()
             module_logger.info("cleanUp called")
         except Exception as e:
             module_logger.exception("message")
@@ -543,7 +521,7 @@ class MainController:
     def requestToggleScore(self, newSC2MatchData, swap=False):
         """Check if SC2-Client-API players are present and toggle score accordingly."""
         try:
-            self.updateData()
+            self.updateData(False)
 
             for i in range(self.matchData.getNoSets()):
                 found, order = newSC2MatchData.compare_returnOrder(
@@ -632,7 +610,7 @@ class MainController:
     def updatePlayerIntros(self, newData):
         """Update player intro files."""
         module_logger.info("updatePlayerIntros")
-        self.updateData()
+        self.updateData(False)
 
         for player_idx in range(2):
             team1 = newData.playerInList(
