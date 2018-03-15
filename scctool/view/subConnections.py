@@ -382,7 +382,8 @@ class SubwindowConnections(PyQt5.QtWidgets.QWidget):
     def saveWebsocketdata(self):
         """Save Websocket data."""
         for ident, key in self.hotkeys.items():
-            scctool.settings.config.parser.set("Intros", ident, key.getKey())
+            string = scctool.settings.config.dumpHotkey(key.getKey())
+            scctool.settings.config.parser.set("Intros", ident, string)
         scctool.settings.config.parser.set(
             "Intros", "display_time", str(self.sb_displaytime.value()))
         scctool.settings.config.parser.set(

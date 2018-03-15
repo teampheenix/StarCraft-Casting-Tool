@@ -18,18 +18,6 @@ except Exception as e:
     raise
 
 
-def convert_hotkey(input_str):
-    try:
-        input_str = str(input_str)
-        raw_hex = int(input_str, 16)
-        hex_data = hex(raw_hex)
-        if str(hex_data).lower() == input_str.lower():
-            return raw_hex
-    except Exception:
-        pass
-    return input_str
-
-
 class WebsocketThread(PyQt5.QtCore.QThread):
     """Thread for websocket interaction."""
 
@@ -69,24 +57,27 @@ class WebsocketThread(PyQt5.QtCore.QThread):
             module_logger.info("Requesting stop of WebsocketThread.")
             self.__loop.call_soon_threadsafe(self.__loop.stop)
 
+    def __register_hotkey(self, string, callback):
+        data = scctool.settings.config.loadHotkey(string)
+        if not data['name']:
+            return
+        if data['scan_code'] == 0:
+            return
+
+        keyboard.hook_key(data['scan_code'], lambda e: e.event_type == keyboard.KEY_UP
+                          and e.is_keypad == data['is_keypad']
+                          and callback()
+                          )
+
     def register_hotkeys(self):
-        key = convert_hotkey(scctool.settings.config.parser.get(
-            "Intros", "hotkey_player1").strip())
-        if key:
-            keyboard.add_hotkey(key, self.showIntro, args=[
-                0], trigger_on_release=True)
+        self.__register_hotkey(scctool.settings.config.parser.get(
+            "Intros", "hotkey_player1"), lambda: self.showIntro(0))
 
-        key = convert_hotkey(scctool.settings.config.parser.get(
-            "Intros", "hotkey_player2").strip())
-        if key:
-            keyboard.add_hotkey(key, self.showIntro, args=[
-                1], trigger_on_release=True)
+        self.__register_hotkey(scctool.settings.config.parser.get(
+            "Intros", "hotkey_player2"), lambda: self.showIntro(1))
 
-        key = convert_hotkey(scctool.settings.config.parser.get(
-            "Intros", "hotkey_debug").strip())
-        if key:
-            keyboard.add_hotkey(key, self.sendData, args=[
-                "DEBUG_MODE", dict()], trigger_on_release=True)
+        self.__register_hotkey(scctool.settings.config.parser.get(
+            "Intros", "hotkey_debug"), lambda: self.sendData("DEBUG_MODE", dict()))
 
     def unregister_hotkeys(self):
         keyboard.unhook_all()

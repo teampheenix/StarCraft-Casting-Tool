@@ -229,4 +229,23 @@ def getMyPlayers(append=False):
     return players
 
 
+def loadHotkey(string):
+    try:
+        name, scan_code, is_keypad = str(string).split(',')
+        data = dict()
+        data['name'] = name.strip().upper()
+        data['scan_code'] = int(scan_code.strip())
+        data['is_keypad'] = is_keypad.strip().lower() == "true"
+        return data
+    except Exception:
+        return {'name': '', 'scan_code': 0, 'is_keypad': False}
+
+
+def dumpHotkey(data):
+    try:
+        return "{name}, {scan_code}, {is_keypad}".format(**data)
+    except Exception:
+        return ""
+
+
 init()

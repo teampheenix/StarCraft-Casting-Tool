@@ -6,9 +6,11 @@ import re
 import shutil
 import time
 import scctool.matchdata
+import scctool.settings.config
 import scctool.tasks.updater
 import humanize
 import keyboard
+import json
 
 # create logger
 module_logger = logging.getLogger('scctool.view.widgets')
@@ -248,19 +250,20 @@ class HotkeyLayout(PyQt5.QtWidgets.QHBoxLayout):
     def __init__(self, parent, label="Hotkey", hotkey=""):
         """Init box."""
         super(PyQt5.QtWidgets.QHBoxLayout, self).__init__()
+        self.data = scctool.settings.config.loadHotkey(hotkey)
         self.__parent = parent
         label = PyQt5.QtWidgets.QLabel(label + ":")
         label.setMinimumWidth(50)
         self.addWidget(label, 1)
         self.__preview = PyQt5.QtWidgets.QLineEdit()
         self.__preview.setReadOnly(True)
-        self.__preview.setText(hotkey)
+        self.__preview.setText(self.data['name'])
         self.__preview.setPlaceholderText(_("Not set"))
         self.__preview.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
-        self.addWidget(self.__preview, 0)
-        self.__pb_setHotKey = PyQt5.QtWidgets.QPushButton(_('Set Hotkey'))
-        self.__pb_setHotKey.clicked.connect(self.setHotkey)
-        self.addWidget(self.__pb_setHotKey, 0)
+        self.addWidget(self.__preview, 1)
+        # self.__pb_setHotKey = PyQt5.QtWidgets.QPushButton(_('Set Hotkey'))
+        # self.__pb_setHotKey.clicked.connect(self.setHotkey)
+        # self.addWidget(self.__pb_setHotKey, 0)
         self.__pb_set = PyQt5.QtWidgets.QPushButton(_('Set Key'))
         self.__pb_set.clicked.connect(self.setKey)
         self.addWidget(self.__pb_set, 0)
@@ -268,16 +271,18 @@ class HotkeyLayout(PyQt5.QtWidgets.QHBoxLayout):
         self.__pb_clear.clicked.connect(self.clear)
         self.addWidget(self.__pb_clear, 0)
 
+        
     def setKey(self):
-        event = keyboard.read_key()
+        event = keyboard.read_event()
 
-        # print(event.event_type)
-        # print(event.scan_code)
-        # print(event.name)
-        # print(event.is_keypad)
-        key = hex(event.scan_code)
-        self.__preview.setText(key)
-        self.modified.emit(key)
+        self.data['scan_code'] = event.scan_code
+        self.data['is_keypad'] = event.is_keypad
+        self.data['name'] = event.name
+        if event.is_keypad:
+            self.data['name'] = "num "+self.data['name']
+        self.data['name'] = self.data['name'].upper().replace("LEFT ",'').replace("RIGHT ",'')
+        self.__preview.setText(self.data['name'])
+        self.modified.emit(self.data['name'])
 
     def setHotkey(self):
         key = keyboard.read_hotkey()
@@ -286,13 +291,14 @@ class HotkeyLayout(PyQt5.QtWidgets.QHBoxLayout):
 
     def clear(self):
         self.__preview.setText("")
+        self.data = {'name': '','scan_code': 0, 'is_keypad': False}
         self.modified.emit("")
 
     def getKey(self):
-        return str(self.__preview.text()).strip()
+        return self.data
 
     def check_dublicate(self, key):
-        if str(key) and key == self.getKey():
+        if str(key) and key == self.data['name']:
             self.clear()
 
 
