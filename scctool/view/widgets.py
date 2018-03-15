@@ -264,7 +264,7 @@ class HotkeyLayout(PyQt5.QtWidgets.QHBoxLayout):
         # self.__pb_setHotKey = PyQt5.QtWidgets.QPushButton(_('Set Hotkey'))
         # self.__pb_setHotKey.clicked.connect(self.setHotkey)
         # self.addWidget(self.__pb_setHotKey, 0)
-        self.__pb_set = PyQt5.QtWidgets.QPushButton(_('Set Key'))
+        self.__pb_set = PyQt5.QtWidgets.QPushButton(_('Set Hotkey'))
         self.__pb_set.clicked.connect(self.setKey)
         self.addWidget(self.__pb_set, 0)
         self.__pb_clear = PyQt5.QtWidgets.QPushButton(_('Clear'))
