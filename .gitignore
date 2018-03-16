@@ -5,6 +5,7 @@ pyu-data/
 pyupdater-usage.md
 OBS_data/
 data/*
+mykeyboard/
 config.ini
 OBS_mapicons/icons_box/data/*
 !OBS_mapicons/icons_box/data/template.html

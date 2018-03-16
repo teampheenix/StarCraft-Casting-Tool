@@ -6,7 +6,7 @@ from scctool.view.widgets import MonitoredLineEdit, FTPsetup, Completer, HotkeyL
 
 import scctool.settings
 import base64
-import keyboard
+import mykeyboard
 import weakref
 
 # create logger
@@ -151,7 +151,7 @@ class SubwindowConnections(PyQt5.QtWidgets.QWidget):
         self.hotkeyBox = PyQt5.QtWidgets.QGroupBox(_("Intro Hotkeys"))
         layout = PyQt5.QtWidgets.QVBoxLayout()
 
-        keyboard.unhook_all()
+        mykeyboard.unhook_all()
         self.hotkeys = dict()
         layout.addLayout(self.addHotkey("hotkey_player1", _("Player 1")))
         layout.addLayout(self.addHotkey("hotkey_player2", _("Player 2")))

@@ -9,7 +9,7 @@ import scctool.matchdata
 import scctool.settings.config
 import scctool.tasks.updater
 import humanize
-import keyboard
+import mykeyboard
 import json
 
 # create logger
@@ -273,7 +273,7 @@ class HotkeyLayout(PyQt5.QtWidgets.QHBoxLayout):
 
         
     def setKey(self):
-        event = keyboard.read_event()
+        event = mykeyboard.read_event()
 
         self.data['scan_code'] = event.scan_code
         self.data['is_keypad'] = event.is_keypad
@@ -285,7 +285,7 @@ class HotkeyLayout(PyQt5.QtWidgets.QHBoxLayout):
         self.modified.emit(self.data['name'])
 
     def setHotkey(self):
-        key = keyboard.read_hotkey()
+        key = mykeyboard.read_hotkey()
         self.__preview.setText(key)
         self.modified.emit(key)
 

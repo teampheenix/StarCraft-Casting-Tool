@@ -8,7 +8,7 @@ try:
     import asyncio
     import websockets
     import json
-    import keyboard
+    import mykeyboard
     import scctool.settings
     import PyQt5
 
@@ -64,7 +64,7 @@ class WebsocketThread(PyQt5.QtCore.QThread):
         if data['scan_code'] == 0:
             return
 
-        keyboard.hook_key(data['scan_code'], lambda e: e.event_type == keyboard.KEY_UP
+        mykeyboard.hook_key(data['scan_code'], lambda e: e.event_type == mykeyboard.KEY_UP
                           and e.is_keypad == data['is_keypad']
                           and callback()
                           )
@@ -80,7 +80,10 @@ class WebsocketThread(PyQt5.QtCore.QThread):
             "Intros", "hotkey_debug"), lambda: self.sendData("DEBUG_MODE", dict()))
 
     def unregister_hotkeys(self):
-        keyboard.unhook_all()
+        try:
+            mykeyboard.unhook_all()
+        except AttributeError:
+            pass
 
     async def handler(self, websocket, path):
         if path not in ['/intro']:
