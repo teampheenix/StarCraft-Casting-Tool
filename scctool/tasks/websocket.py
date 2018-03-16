@@ -21,6 +21,8 @@ except Exception as e:
 class WebsocketThread(PyQt5.QtCore.QThread):
     """Thread for websocket interaction."""
 
+    keyboard_state = dict()
+
     def __init__(self, controller):
         """Init thread."""
         PyQt5.QtCore.QThread.__init__(self)
@@ -57,6 +59,19 @@ class WebsocketThread(PyQt5.QtCore.QThread):
             module_logger.info("Requesting stop of WebsocketThread.")
             self.__loop.call_soon_threadsafe(self.__loop.stop)
 
+    def __callback_on_hook(self, scan_code, is_keypad, e, callback):
+        if e.is_keypad == is_keypad:
+            if e.event_type == mykeyboard.KEY_DOWN:
+                if((scan_code, is_keypad) not in self.keyboard_stateor
+                        or self.keyboard_state[(scan_code, is_keypad)]):
+                    try:
+                        callback()
+                    except Exception as e:
+                        module_logger.exception("message")
+                self.keyboard_state[(scan_code, is_keypad)] = False
+            if e.event_type == mykeyboard.KEY_UP:
+                self.keyboard_state[(scan_code, is_keypad)] = True
+
     def __register_hotkey(self, string, callback):
         data = scctool.settings.config.loadHotkey(string)
         if not data['name']:
@@ -64,10 +79,8 @@ class WebsocketThread(PyQt5.QtCore.QThread):
         if data['scan_code'] == 0:
             return
 
-        mykeyboard.hook_key(data['scan_code'], lambda e: e.event_type == mykeyboard.KEY_UP
-                          and e.is_keypad == data['is_keypad']
-                          and callback()
-                          )
+        mykeyboard.hook_key(data['scan_code'], lambda e: self.__callback_on_hook(
+            data['scan_code'], data['is_keypad'], e, callback))
 
     def register_hotkeys(self):
         self.__register_hotkey(scctool.settings.config.parser.get(
@@ -84,6 +97,8 @@ class WebsocketThread(PyQt5.QtCore.QThread):
             mykeyboard.unhook_all()
         except AttributeError:
             pass
+        finally:
+            self.keyboard_state = dict()
 
     async def handler(self, websocket, path):
         if path not in ['/intro']:

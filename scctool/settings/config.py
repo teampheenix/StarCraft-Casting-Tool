@@ -139,6 +139,7 @@ def setDefaultConfigAll():
     setDefaultConfig("SCT", "CtrlShiftS", "False")
     setDefaultConfig("SCT", "CtrlShiftC", "False")
     setDefaultConfig("SCT", "CtrlShiftR", "0")
+    setDefaultConfig("SCT", "CtrlN", "False")
     setDefaultConfig("SCT", "language", "en_US")
     setDefaultConfig("SCT", "transparent_match_banner", "False")
 

@@ -95,6 +95,15 @@ class SubwindowMisc(PyQt5.QtWidgets.QWidget):
         box = PyQt5.QtWidgets.QGroupBox(_("Set Ingame Score Task"))
         layout = PyQt5.QtWidgets.QVBoxLayout()
 
+        self.cb_ctrln = PyQt5.QtWidgets.QCheckBox(
+            " " + _('Automatically press Ctrl+N before OCR to display player names.'))
+        self.cb_ctrln.setToolTip(
+            _("This is recommended for Standard and Gawliq Observer UI."))
+        self.cb_ctrln.setChecked(
+            scctool.settings.config.parser.getboolean("SCT", "CtrlN"))
+        self.cb_ctrln.stateChanged.connect(self.changed)
+        layout.addWidget(self.cb_ctrln)
+
         self.cb_ctrlshifts = PyQt5.QtWidgets.QCheckBox(
             " " + _('Automatically press Ctrl+Shift+S to display the ingame score'))
         self.cb_ctrlshifts.setToolTip(
@@ -449,6 +458,8 @@ class SubwindowMisc(PyQt5.QtWidgets.QWidget):
                 "SCT", "CtrlShiftS", str(self.cb_ctrlshifts.isChecked()))
             scctool.settings.config.parser.set(
                 "SCT", "CtrlShiftC", str(self.cb_ctrlshiftc.isChecked()))
+            scctool.settings.config.parser.set(
+                "SCT", "CtrlN", str(self.cb_ctrln.isChecked()))
             scctool.settings.config.parser.set(
                 "SCT", "CtrlShiftR", str(self.cb_ctrlshiftr.currentText()))
 

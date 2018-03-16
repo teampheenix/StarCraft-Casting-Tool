@@ -59,6 +59,12 @@ def ToggleScore(score1=0, score2=0, bestof=5):
         mykeyboard.send("shift+{}".format(score1))
 
 
+def TogglePlayerNames():
+    """Toggle Score ahead of OCR."""
+    if scctool.settings.config.parser.getboolean("SCT", "CtrlN"):
+        mykeyboard.send("ctrl+n")
+
+
 def ToggleProduction():
     """Toggle SC2-ingame production tab."""
     mykeyboard.send("d")
@@ -192,6 +198,7 @@ class SC2ApiThread(PyQt5.QtCore.QThread):
                      or self.activeTask['toggleProduction']):
                 if(isSC2onForeground()):
                     if(self.activeTask['toggleScore']):
+                        TogglePlayerNames()
                         swapPlayers = self.swapPlayers(data)
                         self.controller.requestToggleScore(data, swapPlayers)
                     if(self.activeTask['toggleProduction']):
@@ -199,7 +206,7 @@ class SC2ApiThread(PyQt5.QtCore.QThread):
                     break
                 else:
                     # print("SC2 not on foreground... waiting.")
-                    time.sleep(1)
+                    time.sleep(0.1)
         except Exception:
             module_logger.info("Toggle not working on this OS:")
 
