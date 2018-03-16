@@ -62,7 +62,7 @@ class WebsocketThread(PyQt5.QtCore.QThread):
     def __callback_on_hook(self, scan_code, is_keypad, e, callback):
         if e.is_keypad == is_keypad:
             if e.event_type == mykeyboard.KEY_DOWN:
-                if((scan_code, is_keypad) not in self.keyboard_stateor
+                if((scan_code, is_keypad) not in self.keyboard_state
                         or self.keyboard_state[(scan_code, is_keypad)]):
                     try:
                         callback()
