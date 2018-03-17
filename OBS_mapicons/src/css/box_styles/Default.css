@@ -106,39 +106,62 @@ div.data {
 }
 
 div.image {
-        width: 265px;
-        height: 250px;
+        width: 277px;
+        height: 262px;
         border-radius: 6%;
         border-style: solid;
         border-width: 6px;
         background-color: #3d3d3d;
         overflow: hidden;
+        box-sizing: border-box;
 }
 
 div.opa {
         position: absolute;
-        width: 265px;
-        height: 250px;
+        width: 100%;
+        height: 100%;
+        top: 0px;
+        left: 0px;
         background-color: #000000;
         overflow: hidden;
-        color: white;
-        font: bold 35px OrbitronAdv, Orbitron, Helvetica, Sans-Serif;
 }
 
-#firstrace {
+div.race-left {
         position: absolute;
-        top: 80px;
-        left: 0px;
-        height: 95px;
-        -webkit-filter: drop-shadow(0px 0px 3px #FFFFFF);
-        filter: drop-shadow(0px 0px 3px #FFFFFF);
+        top: 75px;
+        left: 2px;
+        height: 100px;
+        width: 100px;
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: contain;
+        filter: drop-shadow(0px 0px 3px white);
 }
 
-#secondrace {
+div.race-right {
         position: absolute;
-        top: 80px;
-        right: 0px;
-        height: 95px;
-        -webkit-filter: drop-shadow(0px 0px 3px #FFFFFF);
-        filter: drop-shadow(0px 0px 3px #FFFFFF);
+        top: 75px;
+        right: 2px;
+        height: 100px;
+        width: 100px;
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: contain;
+        filter: drop-shadow(0px 0px 3px white);
+}
+
+#protoss {
+        background-image: url('../races/Protoss.png');
+}
+
+#zerg {
+        background-image: url('../races/Zerg.png');
+}
+
+#terran {
+        background-image: url('../races/Terran.png');
+}
+
+#random {
+        background-image: url('../races/Random.png');
 }

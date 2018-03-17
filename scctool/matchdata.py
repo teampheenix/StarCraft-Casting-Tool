@@ -966,9 +966,9 @@ class matchData:
                     continue
 
                 map = self.getMap(i)
-                mappng = self.__controller.getMapImg(map)
-                race1png = self.getRace(0, i) + ".png"
-                race2png = self.getRace(1, i) + ".png"
+                map_img = self.__controller.getMapImg(map)
+                race1 = self.getRace(0, i).lower()
+                race2 = self.getRace(1, i).lower()
                 hidden = ""
 
                 filename = scctool.settings.getAbsPath(scctool.settings.OBSmapDir +
@@ -984,9 +984,9 @@ class matchData:
                         for line in fin:
                             line = line.replace('%PLAYER1%', player1).replace(
                                 '%PLAYER2%', player2)
-                            line = line.replace('%RACE1_PNG%', race1png).replace(
-                                '%RACE2_PNG%', race2png)
-                            line = line.replace('%MAP_PNG%', mappng).replace(
+                            line = line.replace('%RACE1%', race1).replace(
+                                '%RACE2%', race2)
+                            line = line.replace('%MAP_IMG%', map_img).replace(
                                 '%MAP_NAME%', map)
                             line = line.replace('%MAP_ID%', self.getLabel(i))
                             line = line.replace('%BORDER_COLOR%', border_color).replace(
@@ -1003,9 +1003,9 @@ class matchData:
                         for line in fin:
                             line = line.replace('%PLAYER1%', player1).replace(
                                 '%PLAYER2%', player2)
-                            line = line.replace('%RACE1_PNG%', race1png).replace(
-                                '%RACE2_PNG%', race2png)
-                            line = line.replace('%MAP_PNG%', mappng).replace(
+                            line = line.replace('%RACE1%', race1).replace(
+                                '%RACE2%', race2)
+                            line = line.replace('%MAP_IMG%', map_img).replace(
                                 '%MAP_NAME%', map)
                             line = line.replace('%MAP_ID%', self.getLabel(i))
                             line = line.replace('%SCORE_COLOR%',

@@ -60,25 +60,28 @@ class AutoRequestsThread(TasksThread):
             self.deactivateTask('twitch_once')
 
     def __nightbotTask(self):
+        data = dict()
         for command, message in scctool.settings.nightbot_commands.items():
             message = self.__controller.placeholders.replace(message)
             if(scctool.tasks.nightbot.previousMsg.get(command, None) is None):
                 scctool.tasks.nightbot.previousMsg[command] = message
             elif(scctool.tasks.nightbot.previousMsg[command] != message):
-                msg, success = scctool.tasks.nightbot.updateCommand(
-                    command, message)
-                self.nightbotSignal.emit(msg)
-                if not success:
-                    self.disableCB.emit('nightbot')
-                    self.deactivateTask('nightbot')
-                    break
+                data[command] = message
+
+        for msg, success in scctool.tasks.nightbot.updateCommand(data):
+            self.nightbotSignal.emit(msg)
+            if not success:
+                self.disableCB.emit('nightbot')
+                self.deactivateTask('nightbot')
 
     def __nightbotOnceTask(self):
         try:
             self.__controller.updateData()
+            data = dict()
             for command, message in scctool.settings.nightbot_commands.items():
                 message = self.__controller.placeholders.replace(message)
-                msg, _ = scctool.tasks.nightbot.updateCommand(command, message)
+                data[command] = message
+            for msg, _ in scctool.tasks.nightbot.updateCommand(data):
                 self.nightbotSignal.emit(msg)
         finally:
             self.deactivateTask('nightbot_once')

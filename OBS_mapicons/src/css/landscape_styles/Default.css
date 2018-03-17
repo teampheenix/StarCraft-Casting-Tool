@@ -12,8 +12,8 @@
 :root {
         --border-size: 3px;
         --border-color: black;
-        --total-width: 1000px;
-        --total-height: 100px;
+        --total-width: 1005px;
+        --total-height: 105px;
         --border-radius: 20px;
         --middle-width: 25%;
         --lower-text-height: 33%;
@@ -40,8 +40,6 @@ div.box {
         position: relative;
         width: var(--total-width);
         height: var(--total-height);
-        border: var(--border-size) solid var(--border-color);
-        border-radius: 0px var(--border-radius) 0px var(--border-radius);
         overflow: hidden;
 }
 
@@ -50,6 +48,13 @@ div.box_left {
         height: 100%;
         left: 0%;
         width: calc(var(--side-width) + var(--border-radius));
+        background-color: gray;
+        background-size: 125%;
+        background-position: 15% 15%;
+        border: var(--border-size) solid var(--border-color);
+        border-radius: 0px 0px 0px var(--border-radius);
+        box-sizing: border-box;
+        overflow: hidden;
 }
 
 div.box_middle {
@@ -57,7 +62,7 @@ div.box_middle {
         height: 100%;
         left: var(--side-width);
         width: var(--middle-width);
-        top: calc(0px - var(--border-size));
+        top: 0px;
         border: var(--border-size) solid var(--border-color);
         border-radius: 0px var(--border-radius) 0px var(--border-radius);
         background-image: url("./../texture1.jpg");
@@ -70,6 +75,7 @@ div.box_middle {
         color: white !important;
         text-shadow: 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color) !important;
         -webkit-font-smoothing: antialiased;
+        box-sizing: border-box;
 }
 
 div.box_right {
@@ -77,6 +83,13 @@ div.box_right {
         height: 100%;
         right: 0%;
         width: calc(var(--side-width) + var(--border-radius));
+        background-color: gray;
+        background-size: 125%;
+        background-position: 80% 80%;
+        border: var(--border-size) solid var(--border-color);
+        border-radius: 0px var(--border-radius) 0px 0px;
+        box-sizing: border-box;
+        overflow: hidden
 }
 
 div.lower-text {
@@ -130,39 +143,55 @@ div.upper-text-left {
         line-height: 60px;
 }
 
-#map1 {
-        width: 125%;
-        transform: translate(-5%, -10%);
-}
-
-#map2 {
-        width: 125%;
-        transform: translate(-20%, -60%);
-}
-
-#race1 {
+div.race-left {
         position: absolute;
         left: 0px;
-        top: 5%;
-        height: 90%;
-        -webkit-filter: drop-shadow(0px 0px 4px #6BC2F9);
+        top: 0px;
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: contain;
         filter: drop-shadow(0px 0px 4px #6BC2F9);
 }
 
-#race2 {
+div.race-right {
         position: absolute;
         right: 0px;
-        top: 5%;
-        height: 90%;
-        -webkit-filter: drop-shadow(0px 0px 4px #6BC2F9);
+        top: 0px;
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: contain;
         filter: drop-shadow(0px 0px 4px #6BC2F9);
+}
+
+#protoss {
+        width: 35%;
+        height: 100%;
+        background-image: url('../races/Protoss.png');
+}
+
+#zerg {
+        width: 35%;
+        height: 100%;
+        background-image: url('../races/Zerg.png');
+}
+
+#terran {
+        width: 35%;
+        height: 100%;
+        background-image: url('../races/Terran.png');
+}
+
+#random {
+        width: 35%;
+        height: 100%;
+        background-image: url('../races/Random.png');
 }
 
 #circle {
         position: absolute;
         background: #f00;
-        right: 4px;
-        bottom: 3px;
+        right: 5px;
+        bottom: 5px;
         width: 35px;
         height: 25px;
         border-radius: 0px 10px 0px 10px;
@@ -175,4 +204,6 @@ div.opa {
         height: 100%;
         background-color: #000000;
         color: white;
+        border-radius: 0px var(--border-radius) 0px var(--border-radius);
+        box-sizing: border-box;
 }

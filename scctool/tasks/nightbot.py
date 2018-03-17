@@ -21,7 +21,7 @@ def base_headers():
 previousMsg = dict()
 
 
-def updateCommand(cmd, message):
+def updateCommand(data):
     """Update command to message."""
     global previousMsg
 
@@ -36,36 +36,6 @@ def updateCommand(cmd, message):
             headers=headers)
 
         response.raise_for_status()
-
-        cmdFound, skipUpdate, id = findCmd(response.json(), cmd, message)
-
-        if(skipUpdate):
-            previousMsg[cmd] = message
-            msg = _("Nightbot command '{}' was already set to '{}'").format(
-                cmd, message)
-            success = True
-            return msg, success
-
-        if(cmdFound):
-            put_data = {"message": message}
-            requests.put("https://api.nightbot.tv/1/commands/" + id,
-                         headers=headers,
-                         data=put_data).raise_for_status()
-        else:
-            post_data = {"message": message,
-                         "userLevel": "everyone",
-                         "coolDown": "5",
-                         "name": cmd}
-
-            requests.post("https://api.nightbot.tv/1/commands",
-                          headers=headers,
-                          data=post_data).raise_for_status()
-
-        previousMsg[cmd] = message
-
-        msg = _("Updated Nightbot command '{}' to '{}'").format(cmd, message)
-        success = True
-
     except requests.exceptions.HTTPError as e:
         status_code = e.response.status_code
         error_msg = "Nightbot API-Error: {}"
@@ -79,21 +49,77 @@ def updateCommand(cmd, message):
             msg = str(e)
         success = False
         module_logger.exception("message")
+        yield msg, success
+        return
     except Exception as e:
         msg = str(e)
         success = False
         module_logger.exception("message")
-    finally:
-        return msg, success
+        yield msg, success
+        return
 
-
-def findCmd(response, cmd, msg):
-    """Find command in API data."""
-    for i in range(0, response['_total']):
-        if(response['commands'][i]['name'] == cmd):
-            if(response['commands'][i]['message'] == msg):
-                return True, True, response['commands'][i]['_id']
+    for cmdFound, skipUpdate, id, cmd, message in findCommands(response.json(), data):
+        try:
+            if(skipUpdate):
+                previousMsg[cmd] = message
+                msg = _("Nightbot command '{}' was already set to '{}'").format(
+                    cmd, message)
+                success = True
+                yield msg, success
+                continue
+            elif(cmdFound):
+                put_data = {"message": message}
+                requests.put("https://api.nightbot.tv/1/commands/" + id,
+                             headers=headers,
+                             data=put_data).raise_for_status()
             else:
-                return True, False, response['commands'][i]['_id']
+                post_data = {"message": message,
+                             "userLevel": "everyone",
+                             "coolDown": "5",
+                             "name": cmd}
 
-    return False, False, ''
+                requests.post("https://api.nightbot.tv/1/commands",
+                              headers=headers,
+                              data=post_data).raise_for_status()
+
+            previousMsg[cmd] = message
+
+            msg = _("Updated Nightbot command '{}' to '{}'").format(
+                cmd, message)
+            success = True
+
+        except requests.exceptions.HTTPError as e:
+            status_code = e.response.status_code
+            error_msg = "Nightbot API-Error: {}"
+            if(status_code == 403):
+                msg = error_msg.format(
+                    _("Forbidden - Do you have permission?"))
+            elif(status_code == 401):
+                msg = error_msg.format(_("Unauthorized - Refresh your token!"))
+            elif(status_code == 429):
+                msg = error_msg.format(_("Too Many Requests."))
+            else:
+                msg = str(e)
+            success = False
+            module_logger.exception("message")
+        except Exception as e:
+            msg = str(e)
+            success = False
+            module_logger.exception("message")
+        finally:
+            yield msg, success
+
+
+def findCommands(response, data):
+    commands_found = dict()
+    for i in range(0, response['_total']):
+        commands_found[response['commands'][i]['name']] = i
+    for cmd, msg in data.items():
+        if cmd in commands_found:
+            idx = commands_found[cmd]
+            if response['commands'][idx]['message'] == msg:
+                yield True, True, response['commands'][idx]['_id'], cmd, msg
+            else:
+                yield True, False, response['commands'][idx]['_id'], cmd, msg
+        else:
+            yield False, False, '', cmd, msg
