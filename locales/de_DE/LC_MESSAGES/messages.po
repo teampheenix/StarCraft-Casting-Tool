@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2018-03-13 18:50+0100\n"
-"PO-Revision-Date: 2018-03-13 18:52+0100\n"
+"POT-Creation-Date: 2018-03-18 17:21+0100\n"
+"PO-Revision-Date: 2018-03-18 17:23+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de\n"
@@ -18,77 +18,77 @@ msgstr ""
 msgid "This version is up to date."
 msgstr "Diese Version ist aktuell."
 
-#: controller.py:512 controller.py:520
+#: controller.py:490 controller.py:498
 msgid "Specify your Twitch Settings to use this feature"
 msgstr "Geben Sie Ihre Twitch-Einstellungen an, um diese Funktion zu verwenden"
 
-#: controller.py:515
+#: controller.py:493
 msgid ""
 "Automatically update the title of your twitch channel in the background."
 msgstr "Automatische Hintergrund-Aktualisierung des Twitch Titel."
 
-#: controller.py:526 controller.py:533
+#: controller.py:504 controller.py:511
 msgid "Specify your Nightbot Settings to use this feature"
 msgstr "Geben Sie Ihre Nightbot-Einstellungen an, um diese Funktion zu nutzen"
 
-#: controller.py:527
+#: controller.py:505
 msgid "Automatically update the commands of your nightbot in the background."
 msgstr "Automatische Hintergrund-Aktualisierung der Nightbot Kommandos."
 
-#: controller.py:539
+#: controller.py:517
 msgid "Specify your FTP Settings to use this feature"
 msgstr "Geben Sie Ihre FTP-Einstellungen an, um diese Funktion zu verwenden"
 
-#: controller.py:540
+#: controller.py:518
 msgid ""
 "Automatically uploads all streaming data in the background to a specified "
 "FTP server."
 msgstr ""
 "Lädt automatisch alle relevanten Daten im Hintergrund auf einen FTP-Server."
 
-#: controller.py:677
+#: controller.py:655
 msgid "Warning: Map '{}' not found!"
 msgstr "Warnung: Karte '{}' nicht gefunden!"
 
-#: controller.py:727
+#: controller.py:705
 msgid "A new version {} is available."
 msgstr "Eine neue Version {} ist verfügbar."
 
-#: controller.py:729
+#: controller.py:707
 msgid "Update to new version?"
 msgstr "Auf die neue Version aktualisieren?"
 
-#: controller.py:730
+#: controller.py:708
 msgid "New SCC-Tool Version"
 msgstr "Neue SCC-Tool Version"
 
-#: controller.py:739
+#: controller.py:717
 msgid "Don't show on startup."
 msgstr "Nicht mehr beim Programm-Start zeigen."
 
-#: controller.py:748
+#: controller.py:726
 msgid "A new version {} is available on GitHub!"
 msgstr "Die neue Version {} ist bei GitHub verfügbar!"
 
-#: tasks/nightbot.py:45
-msgid "Nightbot command '{}' was already set to '{}'"
-msgstr "Nightbot Kommando '{}' war bereits auf '{}' gesetzt"
-
-#: tasks/nightbot.py:67
-msgid "Updated Nightbot command '{}' to '{}'"
-msgstr "Nightbot Kommand '{}' auf '{}' aktualisiert"
-
-#: tasks/nightbot.py:74 tasks/twitch.py:47
+#: tasks/nightbot.py:43 tasks/nightbot.py:96 tasks/twitch.py:47
 msgid "Forbidden - Do you have permission?"
 msgstr "Nicht erlaubt - Rechte vorhanden?"
 
-#: tasks/nightbot.py:76 tasks/twitch.py:49
+#: tasks/nightbot.py:45 tasks/nightbot.py:98 tasks/twitch.py:49
 msgid "Unauthorized - Refresh your token!"
 msgstr "Nicht autorisiert - Erneure deinen Token!"
 
-#: tasks/nightbot.py:78 tasks/twitch.py:51
+#: tasks/nightbot.py:47 tasks/nightbot.py:100 tasks/twitch.py:51
 msgid "Too Many Requests."
 msgstr "Zu viele Anfragen."
+
+#: tasks/nightbot.py:65
+msgid "Nightbot command '{}' was already set to '{}'"
+msgstr "Nightbot Kommando '{}' war bereits auf '{}' gesetzt"
+
+#: tasks/nightbot.py:87
+msgid "Updated Nightbot command '{}' to '{}'"
+msgstr "Nightbot Kommand '{}' auf '{}' aktualisiert"
 
 #: tasks/twitch.py:35
 msgid "Updated Twitch title of {} to: \"{}\""
@@ -98,7 +98,7 @@ msgstr "Aktualisiere Twitch Titel von {} auf \"{}\""
 msgid "Not Found - Channel '{}' not found."
 msgstr "Nicht gefunden - Kanal '{}' nicht gefunden."
 
-#: tasks/updater.py:220
+#: tasks/updater.py:255
 msgid "Updated data files!"
 msgstr "Daten aktualisiert!"
 
@@ -136,7 +136,7 @@ msgstr "StarCraft Casting Tool - Über"
 msgid "Settings"
 msgstr "Einstellungen"
 
-#: view/main.py:136 view/subConnections.py:51
+#: view/main.py:136 view/subConnections.py:52
 msgid "Connections"
 msgstr "Verbinndungen"
 
@@ -369,11 +369,11 @@ msgstr "Auto Nightbot Aktual."
 msgid "Only Windows"
 msgstr "Nur für Windows verfügbar"
 
-#: view/main.py:847 view/widgets.py:159
+#: view/main.py:847 view/widgets.py:161
 msgid "Login error"
 msgstr "Anmeldungsfehler"
 
-#: view/main.py:848 view/widgets.py:160
+#: view/main.py:848 view/widgets.py:162
 msgid "FTP server login incorrect!"
 msgstr "Anmeldung zum FTP-Server fehlerhaft!"
 
@@ -413,155 +413,163 @@ msgstr "Wähle das Team Logo aus"
 msgid "Support Images ({})"
 msgstr "Unterstütze Bild-Formate ({})"
 
-#: view/subConnections.py:66
+#: view/subConnections.py:67
 msgid "Intros && Hotkeys"
 msgstr "Intros && Tastenkürzel"
 
-#: view/subConnections.py:67
+#: view/subConnections.py:68
 msgid "Twitch"
 msgstr "Twitch"
 
-#: view/subConnections.py:68
+#: view/subConnections.py:69
 msgid "Nightbot"
 msgstr "Nightbot"
 
-#: view/subConnections.py:69
+#: view/subConnections.py:70
 msgid "FTP"
 msgstr "FTP"
 
-#: view/subConnections.py:81
+#: view/subConnections.py:82
 msgid "FTP server address"
 msgstr "FTP Server Adresse"
 
-#: view/subConnections.py:83
+#: view/subConnections.py:84
 msgid "Host:"
 msgstr "Host:"
 
-#: view/subConnections.py:90
+#: view/subConnections.py:91
 msgid "FTP username"
 msgstr "FTP Benutzername"
 
-#: view/subConnections.py:92
+#: view/subConnections.py:93
 msgid "Username:"
 msgstr "Benutzername:"
 
-#: view/subConnections.py:99
+#: view/subConnections.py:100
 msgid "FTP password"
 msgstr "FTP Passwort"
 
-#: view/subConnections.py:102
+#: view/subConnections.py:103
 msgid "Password:"
 msgstr "Passwort:"
 
-#: view/subConnections.py:111
+#: view/subConnections.py:112
 msgid "currently using root directory"
 msgstr "Verwende Hauptverzeichnis momentan"
 
-#: view/subConnections.py:113
+#: view/subConnections.py:114
 msgid "Directory:"
 msgstr "Verzeichnis:"
 
-#: view/subConnections.py:117
+#: view/subConnections.py:118
 msgid "Test && Setup FTP server"
 msgstr "Teste && setze FTP Server auf"
 
-#: view/subConnections.py:150
+#: view/subConnections.py:151
 msgid "Intro Hotkeys"
 msgstr "Intros Tastenkürzel"
 
-#: view/subConnections.py:155
+#: view/subConnections.py:156
 msgid "Player 1"
 msgstr "Spieler 1"
 
-#: view/subConnections.py:156
+#: view/subConnections.py:157
 msgid "Player 2"
 msgstr "Spieler 2"
 
-#: view/subConnections.py:157
+#: view/subConnections.py:158
 msgid "Debug"
 msgstr "Debug"
 
-#: view/subConnections.py:162
+#: view/subConnections.py:163
 msgid "Intro Settings"
 msgstr "Intro Einstellungen"
 
-#: view/subConnections.py:173
+#: view/subConnections.py:174
 msgid "Sound Volume:"
 msgstr "Lautstärke"
 
-#: view/subConnections.py:179
+#: view/subConnections.py:180
 msgid "Seconds"
 msgstr "Sekunden"
 
-#: view/subConnections.py:182
+#: view/subConnections.py:183
 msgid "Display Duration:"
 msgstr "Anzeigedauer:"
 
-#: view/subConnections.py:201
+#: view/subConnections.py:202
 msgid "Name of the Twitch channel that should be updated"
 msgstr "Name des Twitch-Kanal der aktualisiert werden soll"
 
-#: view/subConnections.py:203
+#: view/subConnections.py:204
 msgid "The connected twitch user needs to have editor rights for this channel."
 msgstr ""
 "Der verbundene Twitch-Benutzer muss Editoren-Rechte für den angegeben Kanal "
 "haben."
 
-#: view/subConnections.py:215 view/subConnections.py:271
+#: view/subConnections.py:216 view/subConnections.py:273
 msgid "Press 'Get' to generate a token"
 msgstr "Drücke 'Erzeugen' um einen Token zu generieren"
 
-#: view/subConnections.py:217 view/subConnections.py:273
+#: view/subConnections.py:218
 msgid "Press 'Get' to generate a new token."
 msgstr "Drücke 'Erzeugen' um einen neuen Token zu generieren."
 
-#: view/subConnections.py:220 view/subConnections.py:283
+#: view/subConnections.py:221 view/subConnections.py:277
 msgid "Get"
 msgstr "Erzeugen"
 
-#: view/subConnections.py:225 view/subConnections.py:289
+#: view/subConnections.py:226
 msgid "Access-Token:"
 msgstr "Zugangs-Token:"
 
-#: view/subConnections.py:236 view/subConnections.py:303
+#: view/subConnections.py:237 view/subConnections.py:446
 msgid "Available placeholders:"
 msgstr "Verfügbare Platzhalter:"
 
-#: view/subConnections.py:246 view/subConnections.py:312
+#: view/subConnections.py:247 view/subConnections.py:454
 msgid "Test"
 msgstr "Testen"
 
-#: view/subConnections.py:252
+#: view/subConnections.py:253
 msgid "Title Template:"
 msgstr "Titel Vorlage:"
 
-#: view/subConnections.py:290
-msgid "Command:"
-msgstr "Kommando:"
+#: view/subConnections.py:275
+msgid "Press 'Get' to generate a token."
+msgstr "Drücke 'Erzeugen' um einen Token zu generieren."
 
-#: view/subConnections.py:318
-msgid "Message:"
-msgstr "Nachricht:"
+#: view/subConnections.py:309
+msgid "Add Command"
+msgstr "Kommando hinzufügen:"
 
-#: view/subConnections.py:329 view/subMisc.py:423 view/subStyles.py:67
+#: view/subConnections.py:337 view/subMisc.py:432 view/subStyles.py:67
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: view/subConnections.py:333 view/subMisc.py:427 view/subStyles.py:71
+#: view/subConnections.py:341 view/subMisc.py:436 view/subStyles.py:71
 msgid "Save && Close"
 msgstr "Speichern && Schließen"
 
-#: view/subConnections.py:344
-msgid "Output:"
-msgstr "Ausgabe:"
-
-#: view/subConnections.py:415 view/subMisc.py:477 view/subStyles.py:235
+#: view/subConnections.py:414 view/subMisc.py:488 view/subStyles.py:235
 msgid "Save data?"
 msgstr "Daten speichern?"
 
-#: view/subConnections.py:415
+#: view/subConnections.py:414
 msgid "Do you want to save the data?"
 msgstr "Möchten Sie die Daten speichern?"
+
+#: view/subConnections.py:444
+msgid "message, e.g.,"
+msgstr "Nachricht, z.B."
+
+#: view/subConnections.py:459
+msgid "Delete"
+msgstr "Löschen"
+
+#: view/subConnections.py:495
+msgid "Output:"
+msgstr "Ausgabe:"
 
 #: view/subMisc.py:52
 msgid "Miscellaneous Settings"
@@ -596,10 +604,18 @@ msgid "Set Ingame Score Task"
 msgstr "Setzte Spielstand im Spiel"
 
 #: view/subMisc.py:99
+msgid "Automatically press Ctrl+N before OCR to display player names."
+msgstr "Drücke automatisch Strg+N, um die Spielernamen anzuzeigen."
+
+#: view/subMisc.py:101
+msgid "This is recommended for Standard and Gawliq Observer UI."
+msgstr "Diese Option ist für das Standard und Gawliq Observer UI empfohlen."
+
+#: view/subMisc.py:108
 msgid "Automatically press Ctrl+Shift+S to display the ingame score"
 msgstr "Drücke automatisch Strg+Shift+S, um den Spielstand im Spiel anzuzeigen"
 
-#: view/subMisc.py:101
+#: view/subMisc.py:110
 msgid ""
 "Ctrl+Shift+S is needed for the WCS-Gameheart Oberserver Overlay, but "
 "disables the sound for other overlays."
@@ -607,43 +623,43 @@ msgstr ""
 "Strg+Shift+S wird für das WCS-GameHeart Overlay benötigt, aber deaktiviert "
 "den Ton bei Verwendung anderer Overlays."
 
-#: view/subMisc.py:109
+#: view/subMisc.py:118
 msgid "Automatically press Ctrl+Shift+C to toogle the clan tag"
 msgstr "Drücke automatisch Strg+Shift+C, um den Clantag auszublenden"
 
-#: view/subMisc.py:128
+#: view/subMisc.py:137
 msgid "Automatically press Ctrl+Shift+R to toogle the race icon "
 msgstr "Drücke automatisch Strg+Shift+R "
 
-#: view/subMisc.py:130
+#: view/subMisc.py:139
 msgid " time(s)"
 msgstr " mal, um das Rasse-Icon zu wechseln"
 
-#: view/subMisc.py:147
+#: view/subMisc.py:156
 msgid "Players"
 msgstr "Spieler"
 
-#: view/subMisc.py:159
+#: view/subMisc.py:168
 msgid "Teams"
 msgstr "Teams"
 
-#: view/subMisc.py:182
+#: view/subMisc.py:191
 msgid "Optical Character Recognition for Automatic Setting of Ingame Score"
 msgstr "Optische Zeichenerkennung zum automatischen Setzen des Spielstandes"
 
-#: view/subMisc.py:187
+#: view/subMisc.py:196
 msgid "Activate Optical Character Recognition"
 msgstr "Optische Zeichenerkennung aktivieren"
 
-#: view/subMisc.py:200 view/subMisc.py:253
+#: view/subMisc.py:209 view/subMisc.py:262
 msgid "Tesseract-OCR Executable"
 msgstr "Tesseract-OCR Programmdatei"
 
-#: view/subMisc.py:202
+#: view/subMisc.py:211
 msgid "Browse..."
 msgstr "Durchsuchen..."
 
-#: view/subMisc.py:205
+#: view/subMisc.py:214
 msgid ""
 "Sometimes the order of players given by the SC2-Client-API differs from the "
 "order in the Observer-UI resulting in a swapped match score. To correct this "
@@ -656,71 +672,71 @@ msgstr ""
 "{} heruntergeladen, installiert und unten ausgewählt werden, sofern nicht "
 "automatisch geschehen."
 
-#: view/subMisc.py:223
+#: view/subMisc.py:232
 msgid "Tesseract-OCR Executable:"
 msgstr "Tesseract-OCR Programmdatei:"
 
-#: view/subMisc.py:237 view/subMisc.py:241 view/subMisc.py:245
+#: view/subMisc.py:246 view/subMisc.py:250 view/subMisc.py:254
 msgid "This feature is only available in Windows."
 msgstr "Nur für Windows verfügbar."
 
-#: view/subMisc.py:252
+#: view/subMisc.py:261
 msgid "Select Tesseract-OCR Executable"
 msgstr "Tesseract-OCR Programmdatei auswählen"
 
-#: view/subMisc.py:254
+#: view/subMisc.py:263
 msgid "Executable"
 msgstr "Programmdatei"
 
-#: view/subMisc.py:254
+#: view/subMisc.py:263
 msgid "All files"
 msgstr "Alle Dateien"
 
-#: view/subMisc.py:285
+#: view/subMisc.py:294
 msgid "Add"
 msgstr "Hinzufügen"
 
-#: view/subMisc.py:287
+#: view/subMisc.py:296
 msgid "Rename"
 msgstr "Ändern"
 
-#: view/subMisc.py:289
+#: view/subMisc.py:298
 msgid "Change Image"
 msgstr "Ändere Bild"
 
-#: view/subMisc.py:291
+#: view/subMisc.py:300
 msgid "Remove"
 msgstr "Löschen"
 
-#: view/subMisc.py:320 view/subMisc.py:362
+#: view/subMisc.py:329 view/subMisc.py:371
 msgid "Map Name"
 msgstr "Karten-Name"
 
-#: view/subMisc.py:320 view/subMisc.py:362
+#: view/subMisc.py:329 view/subMisc.py:371
 msgid "Map Name:"
 msgstr "Karten-Name:"
 
-#: view/subMisc.py:328 view/subMisc.py:366
+#: view/subMisc.py:337 view/subMisc.py:375
 msgid "Duplicate Entry"
 msgstr "Doppelter Eintragf"
 
-#: view/subMisc.py:329 view/subMisc.py:367
+#: view/subMisc.py:338 view/subMisc.py:376
 msgid "Map is already in list! Overwrite?"
 msgstr "Karte ist bereits in der Liste! Überschreiben?"
 
-#: view/subMisc.py:343 view/subMisc.py:355
+#: view/subMisc.py:352 view/subMisc.py:364
 msgid "Select Map Image (> 500x500px recommended)"
 msgstr "Wähe Karten-Bild aus (> 500x500px empfohlen)"
 
-#: view/subMisc.py:344 view/subMisc.py:356
+#: view/subMisc.py:353 view/subMisc.py:365
 msgid "Support Images"
 msgstr "Unterstütze Bild-Formate"
 
-#: view/subMisc.py:383
+#: view/subMisc.py:392
 msgid "Delete map?"
 msgstr "Karte löschen?"
 
-#: view/subMisc.py:384
+#: view/subMisc.py:393
 msgid "Delete '{}' permanently?"
 msgstr "Soll '{}' permanent gelöscht werden?"
 
@@ -789,70 +805,72 @@ msgstr "Unentschieden:"
 msgid "Not played:"
 msgstr "Nicht gespielt:"
 
-#: view/widgets.py:124
+#: view/widgets.py:126
 msgid "FTP Server Setup"
 msgstr "FTP Server Einrichtung"
 
-#: view/widgets.py:126
+#: view/widgets.py:128
 msgid "Setting up the required file structure on the FTP server..."
 msgstr "Richte die benötigte Datei-Struktur auf dem FTP-Server ein..."
 
-#: view/widgets.py:172
+#: view/widgets.py:174
 msgid "Wrong login data for FTP"
 msgstr "Ungültige Login-Daten für FTP"
 
-#: view/widgets.py:186
+#: view/widgets.py:188
 msgid "Updater"
 msgstr "Aktualisierer"
 
-#: view/widgets.py:188
+#: view/widgets.py:190
 msgid "Updating to a new version..."
 msgstr "Aktualisiere auf eine neue Version..."
 
-#: view/widgets.py:216
+#: view/widgets.py:218
 msgid "Downloading a new version: Total file size {}, Time remaining {}."
 msgstr "Lade eine neue Version herunter: {} Gesamtgröße, {} Zeit verbleibend."
 
-#: view/widgets.py:258
+#: view/widgets.py:261
 msgid "Not set"
 msgstr "Nicht gesetzt"
 
-#: view/widgets.py:261
+#: view/widgets.py:267
 msgid "Set Hotkey"
 msgstr "Setze Kürzel"
 
-#: view/widgets.py:264
-msgid "Set Key"
-msgstr "Setze Taste"
-
-#: view/widgets.py:267
+#: view/widgets.py:270
 msgid "Clear"
 msgstr "Löschen"
 
-#: view/widgets.py:315
+#: view/widgets.py:321
 msgid "Select"
 msgstr "Auswählen"
 
-#: view/widgets.py:318
+#: view/widgets.py:324
 msgid "Default"
 msgstr "Voreinstellung"
 
-#: view/widgets.py:510
+#: view/widgets.py:516
 msgid "Collecting data..."
 msgstr "Sammele Daten..."
 
-#: view/widgets.py:535
+#: view/widgets.py:541
 msgid "Extracting data..."
 msgstr "Extrahiere Daten..."
 
-#: view/widgets.py:537
+#: view/widgets.py:543
 msgid "Done."
 msgstr "Fertig."
 
-#: view/widgets.py:553
+#: view/widgets.py:559
 msgid "Downloading required files...: Total file size {}, Time remaining {}."
 msgstr ""
 "Lade benötigte Dateien herunter...:  {} Gesamtgröße, {} Zeit verbleibend."
+
+#~ msgid "Message:"
+#~ msgstr "Nachricht:"
+
+#~ msgid "Set Key"
+#~ msgstr "Setze Taste"
 
 #~ msgid ""
 #~ "{host}:{port} is unreachable. Is OBS Studio with obs-websocket plugin "

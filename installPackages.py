@@ -25,6 +25,7 @@ logger.addHandler(ch)
 logger.info("system: " + system)
 
 try:
+    pip.main(['install', 'pip', '--upgrade'])
     pip.main(['install', 'pyqt5', '--upgrade'])
     pip.main(['install', 'requests', '--upgrade'])
     pip.main(['install', 'configparser', '--upgrade'])
