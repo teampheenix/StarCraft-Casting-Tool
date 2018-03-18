@@ -128,8 +128,8 @@ div.opa {
 div.race-left {
         position: absolute;
         top: 75px;
-        left: 2px;
         height: 100px;
+        left: 2px;
         width: 100px;
         background-repeat: no-repeat;
         background-position: center center;
@@ -140,8 +140,8 @@ div.race-left {
 div.race-right {
         position: absolute;
         top: 75px;
-        right: 2px;
         height: 100px;
+        right: 2px;
         width: 100px;
         background-repeat: no-repeat;
         background-position: center center;
@@ -155,12 +155,18 @@ div.race-right {
 
 #zerg {
         background-image: url('../races/Zerg.png');
+        top: 77.5px !important;
+        height: 95px !important;
 }
 
 #terran {
         background-image: url('../races/Terran.png');
+        top: 85px !important;
+        height: 80px !important;
 }
 
 #random {
         background-image: url('../races/Random.png');
+        top: 85px !important;
+        height: 80px !important;
 }

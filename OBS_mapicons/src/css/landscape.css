@@ -71,9 +71,9 @@ div.box_middle {
         text-align: center;
         line-height: calc(var(--total-height) - var(--border-size));
         --winner-color: white;
-        --size: 5px;
+        --size: 4px;
         color: white !important;
-        text-shadow: 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color) !important;
+        text-shadow: 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color) !important;
         -webkit-font-smoothing: antialiased;
         box-sizing: border-box;
 }
@@ -145,8 +145,10 @@ div.upper-text-left {
 
 div.race-left {
         position: absolute;
-        left: 0px;
-        top: 0px;
+        left: 5px;
+        width: 80px;
+        top: 2.5%;
+        height: 95%;
         background-repeat: no-repeat;
         background-position: center center;
         background-size: contain;
@@ -155,8 +157,10 @@ div.race-left {
 
 div.race-right {
         position: absolute;
-        right: 0px;
-        top: 0px;
+        right: 5px;
+        width: 80px;
+        top: 2.5%;
+        height: 95%;
         background-repeat: no-repeat;
         background-position: center center;
         background-size: contain;
@@ -164,27 +168,25 @@ div.race-right {
 }
 
 #protoss {
-        width: 35%;
-        height: 100%;
+        height: calc(100% - 2px);
+        top: 1px !important;
         background-image: url('../races/Protoss.png');
 }
 
 #zerg {
-        width: 35%;
-        height: 100%;
         background-image: url('../races/Zerg.png');
 }
 
 #terran {
-        width: 35%;
-        height: 100%;
         background-image: url('../races/Terran.png');
+        height: calc(100% - 24px);
+        top: 12px !important;
 }
 
 #random {
-        width: 35%;
-        height: 100%;
         background-image: url('../races/Random.png');
+        height: calc(100% - 20px);
+        top: 13px !important;
 }
 
 #circle {
