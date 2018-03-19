@@ -507,7 +507,7 @@ class QHLine(PyQt5.QtWidgets.QFrame):
 class InitialUpdater(PyQt5.QtWidgets.QProgressDialog):
     """Define initial progress dialog to download data."""
 
-    def __init__(self):
+    def __init__(self, version='0.0.0'):
         """Init progress dialog."""
         PyQt5.QtWidgets.QProgressDialog.__init__(self)
         self.setWindowModality(PyQt5.QtCore.Qt.ApplicationModal)
@@ -517,6 +517,7 @@ class InitialUpdater(PyQt5.QtWidgets.QProgressDialog):
         self.setCancelButton(None)
         self.setRange(0, 1010)
         self.setValue(50)
+        self.version = version
 
         self.show()
         for i in range(10):
@@ -534,7 +535,7 @@ class InitialUpdater(PyQt5.QtWidgets.QProgressDialog):
             client.add_progress_hook(self.setProgress)
 
             lib_update = client.update_check(
-                scctool.tasks.updater.VersionHandler.ASSET_NAME, "0.0.0")
+                scctool.tasks.updater.VersionHandler.ASSET_NAME, self.version)
             if lib_update is not None:
                 lib_update.download(async=False)
                 self.setValue(500)

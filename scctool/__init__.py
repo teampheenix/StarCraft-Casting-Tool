@@ -11,7 +11,7 @@ from scctool.settings import getAbsPath
 
 logger = logging.getLogger('scctool')
 
-__version__ = "1.7.0"
+__version__ = "1.7.1"
 __latest_version__ = __version__
 __new_version__ = False
 
@@ -30,6 +30,8 @@ def main():
     """Run StarCraft Casting Tool."""
     global language
     from scctool.view.main import MainWindow
+    from PyQt5.QtCore import QSize
+    from PyQt5.QtGui import QIcon
 
     currentExitCode = MainWindow.EXIT_CODE_REBOOT
     cntlr = None
@@ -41,9 +43,13 @@ def main():
             translator.load(QLocale(language), "qtbase",
                             "_",  getAbsPath('locales'), ".qm")
             app.installTranslator(translator)
+            
+            icon = QIcon()
+            icon.addFile(getAbsPath('src/scct.ico'), QSize(32, 32))
+            app.setWindowIcon(icon)
 
-            initial_download()
-            cntlr = main_window(app, translator, cntlr)
+            showChangelog = initial_download()
+            cntlr = main_window(app, translator, cntlr, showChangelog)
             currentExitCode = app.exec_()
             app = None
         except Exception as e:
@@ -52,7 +58,7 @@ def main():
     sys.exit(currentExitCode)
 
 
-def main_window(app, translator, cntlr=None):
+def main_window(app, translator, cntlr=None, showChangelog=False):
     """Run the main exectuable."""
     from PyQt5.QtCore import QSize
     from PyQt5.QtGui import QIcon
@@ -67,7 +73,7 @@ def main_window(app, translator, cntlr=None):
         app.setWindowIcon(icon)
         if cntlr is None:
             cntlr = MainController()
-        MainWindow(cntlr, app, translator)
+        MainWindow(cntlr, app, translator, showChangelog)
         logger.info("Starting...")
         return cntlr
 
@@ -81,5 +87,14 @@ def initial_download():
     import scctool.tasks.updater
     from scctool.view.widgets import InitialUpdater
 
-    if scctool.tasks.updater.needInitialUpdate(scctool.tasks.updater.getDataVersion()):
+    version = scctool.tasks.updater.getDataVersion()
+    restart_flag = scctool.tasks.updater.getRestartFlag()
+    
+    if scctool.tasks.updater.needInitialUpdate(version):
         InitialUpdater()
+    elif restart_flag:
+        InitialUpdater(version)
+        
+    scctool.tasks.updater.setRestartFlag(False)
+    
+    return restart_flag

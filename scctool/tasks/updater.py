@@ -57,7 +57,7 @@ def getDataVersion():
     try:
         with open(scctool.settings.versiondata_json_file, 'r') as f:
             data = json.load(f)
-            version = data['data_version']
+            version = data.get('data_version', version)
     finally:
         return version
 
@@ -68,6 +68,24 @@ def setDataVersion(version):
     data['data_version'] = version
     with open(scctool.settings.versiondata_json_file, 'w') as outfile:
         json.dump(data, outfile)
+        
+
+def getRestartFlag():
+    flag = False
+    try:
+        with open(scctool.settings.versiondata_json_file, 'r') as f:
+            data = json.load(f)
+            flag = data.get('restart_flag', False)
+    finally:
+        return flag
+        
+def setRestartFlag(flag=True):
+        with open(scctool.settings.versiondata_json_file, 'r') as f:
+            data = json.load(f)
+        data['restart_flag'] = bool(flag)
+        with open(scctool.settings.versiondata_json_file, 'w') as outfile:
+            json.dump(data, outfile)
+    
 
 
 def deleteObsoleteFiles():
@@ -268,10 +286,9 @@ class VersionHandler(TasksThread):
                 self.app_update.download(async=False)
                 if self.app_update.is_downloaded():
                     module_logger.info("Download sucessfull.")
-                    if hasattr(sys, "frozen"):
-                        self.__controller.cleanUp()
-                        module_logger.info("Restarting...")
-                        self.app_update.extract_restart()
+                    self.__controller.cleanUp()
+                    module_logger.info("Restarting...")
+                    self.app_update.extract_restart()
         except Exception as e:
             module_logger.exception("message")
         finally:

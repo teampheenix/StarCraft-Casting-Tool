@@ -68,11 +68,13 @@ class AutoRequestsThread(TasksThread):
             elif(scctool.tasks.nightbot.previousMsg[command] != message):
                 data[command] = message
 
-        for msg, success in scctool.tasks.nightbot.updateCommand(data):
+        for cmd, msg, _, deleted in scctool.tasks.nightbot.updateCommand(data):
             self.nightbotSignal.emit(msg)
             if not success:
                 self.disableCB.emit('nightbot')
                 self.deactivateTask('nightbot')
+            if deleted:
+                scctool.settings.nightbot_commands.pop(cmd, None)
 
     def __nightbotOnceTask(self):
         try:
@@ -81,7 +83,9 @@ class AutoRequestsThread(TasksThread):
             for command, message in scctool.settings.nightbot_commands.items():
                 message = self.__controller.placeholders.replace(message)
                 data[command] = message
-            for msg, _ in scctool.tasks.nightbot.updateCommand(data):
+            for cmd, msg, _, deleted in scctool.tasks.nightbot.updateCommand(data):
                 self.nightbotSignal.emit(msg)
+                if deleted:
+                    scctool.settings.nightbot_commands.pop(cmd, None)
         finally:
             self.deactivateTask('nightbot_once')

@@ -49,30 +49,34 @@ def updateCommand(data):
             msg = str(e)
         success = False
         module_logger.exception("message")
-        yield msg, success
-        return
+        yield '', msg, success, False
     except Exception as e:
         msg = str(e)
         success = False
         module_logger.exception("message")
-        yield msg, success
-        return
+        yield '', msg, success, False
 
     for cmdFound, skipUpdate, id, cmd, message in findCommands(response.json(), data):
         try:
+            deleted = False
             if(skipUpdate):
                 previousMsg[cmd] = message
                 msg = _("Nightbot command '{}' was already set to '{}'").format(
                     cmd, message)
                 success = True
-                yield msg, success
+                yield cmd, msg, success, False
                 continue
             elif(cmdFound):
-                put_data = {"message": message}
-                requests.put("https://api.nightbot.tv/1/commands/" + id,
-                             headers=headers,
-                             data=put_data).raise_for_status()
-            else:
+                if message != "__DELETE__":
+                    put_data = {"message": message}
+                    requests.put("https://api.nightbot.tv/1/commands/" + id,
+                                headers=headers,
+                                data=put_data).raise_for_status()
+                else:
+                    requests.delete("https://api.nightbot.tv/1/commands/" + id,
+                                headers=headers).raise_for_status()
+                    deleted = True
+            elif(message != "__DELETE__"):
                 post_data = {"message": message,
                              "userLevel": "everyone",
                              "coolDown": "5",
@@ -81,10 +85,15 @@ def updateCommand(data):
                 requests.post("https://api.nightbot.tv/1/commands",
                               headers=headers,
                               data=post_data).raise_for_status()
+            else:
+                deleted = True
 
             previousMsg[cmd] = message
-
-            msg = _("Updated Nightbot command '{}' to '{}'").format(
+            
+            if deleted:
+                msg = _("Deleted command '{}'").format(cmd)
+            else:
+                msg = _("Updated Nightbot command '{}' to '{}'").format(
                 cmd, message)
             success = True
 
@@ -107,7 +116,9 @@ def updateCommand(data):
             success = False
             module_logger.exception("message")
         finally:
-            yield msg, success
+            yield cmd, msg, success, deleted
+            
+    return
 
 
 def findCommands(response, data):
@@ -117,7 +128,7 @@ def findCommands(response, data):
     for cmd, msg in data.items():
         if cmd in commands_found:
             idx = commands_found[cmd]
-            if response['commands'][idx]['message'] == msg:
+            if response['commands'][idx]['message'] == msg and msg != "__DELETE__":
                 yield True, True, response['commands'][idx]['_id'], cmd, msg
             else:
                 yield True, False, response['commands'][idx]['_id'], cmd, msg

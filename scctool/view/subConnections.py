@@ -323,9 +323,12 @@ class SubwindowConnections(PyQt5.QtWidgets.QWidget):
         self.formGroupNightbot.setLayout(mainLayout)
 
     def addCommand(self, cmd="", msg=""):
-        dropbox = CommandDropBox(self.controller, cmd=cmd, msg=msg)
-        dropbox.connect(self.changed)
-        self.scrollLayout.insertWidget(1, dropbox)
+        if msg != "__DELETE__":
+            dropbox = CommandDropBox(self.controller, cmd=cmd, msg=msg)
+            dropbox.connect(self.changed)
+            self.scrollLayout.insertWidget(1, dropbox)
+        else:
+            CommandDropBox.addDeletedCommand(cmd)
 
     def createButtonGroup(self):
         """Create buttons."""
@@ -397,7 +400,6 @@ class SubwindowConnections(PyQt5.QtWidgets.QWidget):
     def closeWindow(self):
         """Close window without save."""
         self.passEvent = True
-        self.controller.updateHotkeys()
         self.close()
 
     def closeEvent(self, event):
@@ -405,6 +407,7 @@ class SubwindowConnections(PyQt5.QtWidgets.QWidget):
         try:
             if(not self.__dataChanged):
                 self.controller.updateHotkeys()
+                CommandDropBox.clean()
                 event.accept()
                 return
             if(not self.passEvent):
@@ -417,6 +420,7 @@ class SubwindowConnections(PyQt5.QtWidgets.QWidget):
                 if buttonReply == PyQt5.QtWidgets.QMessageBox.Yes:
                     self.saveData()
             self.controller.updateHotkeys()
+            CommandDropBox.clean()
             event.accept()
         except Exception as e:
             module_logger.exception("message")
@@ -424,6 +428,7 @@ class SubwindowConnections(PyQt5.QtWidgets.QWidget):
 
 class CommandDropBox(PyQt5.QtWidgets.QGroupBox):
     _instances = set()
+    _todelete = set()
 
     def __init__(self, controller, cmd="", msg="", parent=None):
         super(CommandDropBox, self).__init__(parent)
@@ -482,6 +487,9 @@ class CommandDropBox(PyQt5.QtWidgets.QGroupBox):
 
     def remove(self):
         self.parent().layout().removeWidget(self)
+        cmd = self.command.text().strip()
+        if cmd:
+            self._todelete.add(cmd)
         self.deleteLater()
         self._instances.remove(weakref.ref(self))
         for ref in self._instances:
@@ -495,8 +503,14 @@ class CommandDropBox(PyQt5.QtWidgets.QGroupBox):
         PyQt5.QtWidgets.QMessageBox.information(self, _("Output:"), string)
 
     @classmethod
+    def addDeletedCommand(cls, cmd):
+        cls._todelete.add(cmd.strip())
+        
+    @classmethod
     def getData(cls):
         data = dict()
+        for cmd in cls._todelete:
+            data[cmd] = "__DELETE__"
         for inst_ref in cls._instances:
             inst = inst_ref()
             if inst is not None:
@@ -505,3 +519,8 @@ class CommandDropBox(PyQt5.QtWidgets.QGroupBox):
                 if cmd and msg:
                     data[cmd] = msg
         return data
+        
+    @classmethod
+    def clean(cls):
+        cls._instances = set()
+        cls._todelete = set()

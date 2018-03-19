@@ -6,20 +6,20 @@ import markdown2
 import scctool.settings
 import re
 # create logger
-module_logger = logging.getLogger('scctool.view.subReadme')
+module_logger = logging.getLogger('scctool.view.subMarkdown')
 
 
-class SubwindowReadme(PyQt5.QtWidgets.QWidget):
+class SubwindowMarkdown(PyQt5.QtWidgets.QWidget):
     """Show readme sub window."""
 
-    def createWindow(self, mainWindow):
+    def createWindow(self, mainWindow, title, icon, markdown):
         """Create readme sub window."""
-        super(SubwindowReadme, self).__init__(None)
+        super(SubwindowMarkdown, self).__init__(None)
         self.setWindowIcon(
-            PyQt5.QtGui.QIcon(scctool.settings.getAbsPath('src/readme.ico')))
+            PyQt5.QtGui.QIcon(scctool.settings.getAbsPath(icon)))
         self.mainWindow = mainWindow
 
-        self.createReadmeViewer()
+        self.createMarkdownViewer(markdown)
 
         mainLayout = PyQt5.QtWidgets.QGridLayout()
         mainLayout.addWidget(self.viewer, 0, 0, 1, 3)
@@ -31,7 +31,7 @@ class SubwindowReadme(PyQt5.QtWidgets.QWidget):
         mainLayout.addWidget(closeButton, 1, 1)
         self.setLayout(mainLayout)
 
-        self.setWindowTitle(_("Readme"))
+        self.setWindowTitle(title)
 
         self.resize(PyQt5.QtCore.QSize(mainWindow.size().width()
                                        * 0.9, self.sizeHint().height()))
@@ -41,7 +41,7 @@ class SubwindowReadme(PyQt5.QtWidgets.QWidget):
                                   self.size().height() / 3)
         self.move(mainWindow.pos() + relativeChange)
 
-    def createReadmeViewer(self):
+    def createMarkdownViewer(self, markdown):
         """Create the readme viewer."""
         self.viewer = PyQt5.QtWidgets.QTextBrowser()
         self.viewer.setReadOnly(True)
@@ -49,7 +49,7 @@ class SubwindowReadme(PyQt5.QtWidgets.QWidget):
         self.viewer.setOpenExternalLinks(True)
         # self.viewer.setAlignment(Qt.AlignJustify)
         html = markdown2.markdown_path(
-            scctool.settings.getAbsPath("README.md"))
+            scctool.settings.getAbsPath(markdown))
         p = re.compile(r'<img.*?/>')
         html = p.sub('', html)
 

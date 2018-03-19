@@ -27,6 +27,10 @@ StarCraft Casting Tool (SCC Tool) is a small program written in Python 3 that ca
 
 If you need support, have questions, want to be up-to-date on, or like to contribute to this project, join our [Discord server](https://discord.gg/G9hFEfh).
 
+## Changelog
+
+[Click here for the changelog.](https://github.com/teampheenix/StarCraft-Casting-Tool/blob/master/CHANGELOG.md)
+
 ## Icon Preview
 
 **[https://teampheenix.github.io/SCCT-archive/](https://teampheenix.github.io/SCCT-archive/)**

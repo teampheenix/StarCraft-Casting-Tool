@@ -16,7 +16,7 @@ from scctool.view.widgets import BusyProgressBar, MapLineEdit, IconPushButton
 from scctool.view.subConnections import SubwindowConnections
 from scctool.view.subStyles import SubwindowStyles
 from scctool.view.subMisc import SubwindowMisc
-from scctool.view.subReadme import SubwindowReadme
+from scctool.view.subMarkdown import SubwindowMarkdown
 
 # create logger
 module_logger = logging.getLogger('scctool.view.main')
@@ -27,7 +27,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
 
     EXIT_CODE_REBOOT = -123
 
-    def __init__(self, controller, app, translator):
+    def __init__(self, controller, app, translator, showChangelog):
         """Init the main window."""
         try:
             super(MainWindow, self).__init__()
@@ -80,12 +80,13 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             self.restoreState(self.settings.value(
                 "windowState", self.saveState()))
 
-            self.mysubwindow1 = None
-            self.mysubwindow2 = None
-            self.mysubwindow3 = None
-            self.mysubwindow4 = None
+            self.mysubwindows = dict()
 
             self.show()
+            
+            if showChangelog:
+                self.openChangelog()
+                
         except Exception as e:
             module_logger.exception("message")
 
@@ -110,14 +111,9 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
         """Close and clean up window."""
         try:
             try:
-                if(self.mysubwindow1 and self.mysubwindow1.isVisible()):
-                    self.mysubwindow1.close()
-                if(self.mysubwindow2 and self.mysubwindow2.isVisible()):
-                    self.mysubwindow2.close()
-                if(self.mysubwindow3 and self.mysubwindow3.isVisible()):
-                    self.mysubwindow3.close()
-                if(self.mysubwindow4 and self.mysubwindow4.isVisible()):
-                    self.mysubwindow4.close()
+                for name, window in self.mysubwindows.items():
+                    if(window and window.isVisible()):
+                        window.close()
             finally:
                 self.settings.setValue("geometry", self.saveGeometry())
                 self.settings.setValue("windowState", self.saveState())
@@ -155,16 +151,25 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
                 'src/about.png')), _('About'), self)
             myAct.triggered.connect(self.showAbout)
             infoMenu.addAction(myAct)
+            
 
             myAct = PyQt5.QtWidgets.QAction(PyQt5.QtGui.QIcon(scctool.settings.getAbsPath(
                 'src/readme.ico')), _('Readme'), self)
             myAct.triggered.connect(self.openReadme)
             infoMenu.addAction(myAct)
-
+            
             myAct = PyQt5.QtWidgets.QAction(PyQt5.QtGui.QIcon(scctool.settings.getAbsPath(
                 'src/update.png')), _('Check for new version'), self)
             myAct.triggered.connect(lambda: self.controller.checkVersion(True))
             infoMenu.addAction(myAct)
+            
+            myAct = PyQt5.QtWidgets.QAction(PyQt5.QtGui.QIcon(scctool.settings.getAbsPath(
+                'src/changelog.png')), _('Changelog'), self)
+            myAct.triggered.connect(self.openChangelog)
+            infoMenu.addAction(myAct)
+            
+            
+            infoMenu.addSeparator()
 
             websiteAct = PyQt5.QtWidgets.QAction(
                 PyQt5.QtGui.QIcon(
@@ -174,7 +179,6 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
                 "https://teampheenix.github.io/StarCraft-Casting-Tool/"))
             infoMenu.addAction(websiteAct)
 
-            infoMenu.addSeparator()
 
             ixAct = PyQt5.QtWidgets.QAction(PyQt5.QtGui.QIcon(scctool.settings.getAbsPath(
                 'src/icon.png')), 'team pheeniX', self)
@@ -229,27 +233,33 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
 
     def openApiDialog(self):
         """Open subwindow with connection settings."""
-        self.mysubwindow1 = SubwindowConnections()
-        self.mysubwindow1.createWindow(self)
-        self.mysubwindow1.show()
+        self.mysubwindows['1'] = SubwindowConnections()
+        self.mysubwindows['1'].createWindow(self)
+        self.mysubwindows['1'].show()
 
     def openStyleDialog(self):
         """Open subwindow with style settings."""
-        self.mysubwindow2 = SubwindowStyles()
-        self.mysubwindow2.createWindow(self)
-        self.mysubwindow2.show()
+        self.mysubwindows['2'] = SubwindowStyles()
+        self.mysubwindows['2'].createWindow(self)
+        self.mysubwindows['2'].show()
 
     def openMiscDialog(self):
         """Open subwindow with misc settings."""
-        self.mysubwindow3 = SubwindowMisc()
-        self.mysubwindow3.createWindow(self)
-        self.mysubwindow3.show()
+        self.mysubwindows['3'] = SubwindowMisc()
+        self.mysubwindows['3'].createWindow(self)
+        self.mysubwindows['3'].show()
 
     def openReadme(self):
         """Open subwindow with readme viewer."""
-        self.mysubwindow4 = SubwindowReadme()
-        self.mysubwindow4.createWindow(self)
-        self.mysubwindow4.show()
+        self.mysubwindows['4'] = SubwindowMarkdown()
+        self.mysubwindows['4'].createWindow(self, _("Readme"), "src/readme.ico", "README.md")
+        self.mysubwindows['4'].show()
+        
+    def openChangelog(self):
+        """Open subwindow with readme viewer."""
+        self.mysubwindows['5'] = SubwindowMarkdown()
+        self.mysubwindows['5'].createWindow(self, "StarCraft Casting Tool "+_("Changelog"), "src/changelog.png", "CHANGELOG.md")
+        self.mysubwindows['5'].show()
 
     def changeLanguage(self, language):
         """Change the language."""
