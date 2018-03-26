@@ -38,6 +38,7 @@ class MatchGrabber(MatchGrabberParent):
         if(data['game_format'] == "3"):
             self._matchData.setNoSets(7, 6, resetPlayers=True)
             self._matchData.setMinSets(4)
+            self._matchData.resetLabels()
             self._matchData.setSolo(False)
             self._matchData.setLeague(data['tournament']['name'])
 

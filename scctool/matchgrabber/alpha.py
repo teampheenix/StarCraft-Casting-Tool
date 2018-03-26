@@ -34,6 +34,7 @@ class MatchGrabber(MatchGrabberParent):
             self._matchData.setNoSets(5, resetPlayers=True)
             self._matchData.setMinSets(3)
             self._matchData.setSolo(False)
+            self._matchData.resetLabels()
             league = data['tournament']
             if not isinstance(league, str):
                 league = "TBD"
