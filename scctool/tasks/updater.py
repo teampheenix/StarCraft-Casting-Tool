@@ -287,6 +287,7 @@ class VersionHandler(TasksThread):
                 if self.app_update.is_downloaded():
                     module_logger.info("Download sucessfull.")
                     self.__controller.cleanUp()
+                    setRestartFlag()
                     module_logger.info("Restarting...")
                     self.app_update.extract_restart()
         except Exception as e:
