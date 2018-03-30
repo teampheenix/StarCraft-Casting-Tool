@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: SCCT\n"
-"POT-Creation-Date: 2018-03-18 17:23+0100\n"
-"PO-Revision-Date: 2018-03-18 17:24+0100\n"
+"POT-Creation-Date: 2018-03-30 18:24+0200\n"
+"PO-Revision-Date: 2018-03-30 18:26+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en\n"
@@ -18,77 +18,69 @@ msgstr ""
 msgid "This version is up to date."
 msgstr "This version is up to date."
 
-#: controller.py:490 controller.py:498
+#: controller.py:486 controller.py:494
 msgid "Specify your Twitch Settings to use this feature"
 msgstr "Specify your Twitch Settings to use this feature"
 
-#: controller.py:493
+#: controller.py:489
 msgid ""
 "Automatically update the title of your twitch channel in the background."
 msgstr ""
 "Automatically update the title of your twitch channel in the background."
 
-#: controller.py:504 controller.py:511
+#: controller.py:500 controller.py:507
 msgid "Specify your Nightbot Settings to use this feature"
 msgstr "Specify your Nightbot Settings to use this feature"
 
-#: controller.py:505
+#: controller.py:501
 msgid "Automatically update the commands of your nightbot in the background."
 msgstr "Automatically update the commands of your nightbot in the background."
 
-#: controller.py:517
-msgid "Specify your FTP Settings to use this feature"
-msgstr "Specify your FTP Settings to use this feature"
-
-#: controller.py:518
-msgid ""
-"Automatically uploads all streaming data in the background to a specified "
-"FTP server."
-msgstr ""
-"Automatically uploads all streaming data in the background to a specified "
-"FTP server."
-
-#: controller.py:655
+#: controller.py:628
 msgid "Warning: Map '{}' not found!"
 msgstr "Warning: Map '{}' not found!"
 
-#: controller.py:705
+#: controller.py:669
 msgid "A new version {} is available."
 msgstr "A new version {} is available."
 
-#: controller.py:707
+#: controller.py:671
 msgid "Update to new version?"
 msgstr "Update to new version?"
 
-#: controller.py:708
+#: controller.py:672
 msgid "New SCC-Tool Version"
 msgstr "New SCC-Tool Version"
 
-#: controller.py:717
+#: controller.py:681
 msgid "Don't show on startup."
 msgstr "Don't show on startup."
 
-#: controller.py:726
+#: controller.py:690
 msgid "A new version {} is available on GitHub!"
 msgstr "A new version {} is available on GitHub!"
 
-#: tasks/nightbot.py:43 tasks/nightbot.py:96 tasks/twitch.py:47
+#: tasks/nightbot.py:43 tasks/nightbot.py:105 tasks/twitch.py:47
 msgid "Forbidden - Do you have permission?"
 msgstr "Forbidden - Do you have permission?"
 
-#: tasks/nightbot.py:45 tasks/nightbot.py:98 tasks/twitch.py:49
+#: tasks/nightbot.py:45 tasks/nightbot.py:107 tasks/twitch.py:49
 msgid "Unauthorized - Refresh your token!"
 msgstr "Unauthorized - Refresh your token!"
 
-#: tasks/nightbot.py:47 tasks/nightbot.py:100 tasks/twitch.py:51
+#: tasks/nightbot.py:47 tasks/nightbot.py:109 tasks/twitch.py:51
 msgid "Too Many Requests."
 msgstr "Too Many Requests."
 
-#: tasks/nightbot.py:65
+#: tasks/nightbot.py:64
 msgid "Nightbot command '{}' was already set to '{}'"
 msgstr "Nightbot command '{}' was already set to '{}'"
 
-#: tasks/nightbot.py:87
+#: tasks/nightbot.py:94
+msgid "Deleted command '{}'"
+msgstr "Deleted command '{}'"
+
+#: tasks/nightbot.py:96
 msgid "Updated Nightbot command '{}' to '{}'"
 msgstr "Updated Nightbot command '{}' to '{}'"
 
@@ -100,7 +92,7 @@ msgstr "Updated Twitch title of {} to: \"{}\""
 msgid "Not Found - Channel '{}' not found."
 msgstr "Not Found - Channel '{}' not found."
 
-#: tasks/updater.py:255
+#: tasks/updater.py:266
 msgid "Updated data files!"
 msgstr "Updated data files!"
 
@@ -116,10 +108,6 @@ msgid ""
 msgstr ""
 "scctool: Succesfully recived access to Twitch - you can close this tab now."
 
-#: view/main.py:68
-msgid "FTP Transfer in progress..."
-msgstr "FTP Transfer in progress..."
-
 #: view/main.py:99
 msgid "StarCraft Casting Tool is up to date."
 msgstr "StarCraft Casting Tool is up to date."
@@ -132,41 +120,45 @@ msgstr "The new version {} is available!"
 msgid "StarCraft Casting Tool - About"
 msgstr "StarCraft Casting Tool - About"
 
-#: view/main.py:134
+#: view/main.py:129
 msgid "Settings"
 msgstr "Settings"
 
-#: view/main.py:136 view/subConnections.py:52
+#: view/main.py:131 view/subConnections.py:51
 msgid "Connections"
 msgstr "Connections"
 
-#: view/main.py:138
-msgid "Edit FTP-Settings and API-Settings for Twitch and Nightbot"
-msgstr "Edit FTP-Settings and API-Settings for Twitch and Nightbot"
+#: view/main.py:133
+msgid "Edit Intro-Settings and API-Settings for Twitch and Nightbot"
+msgstr "Edit Intro-Settings and API-Settings for Twitch and Nightbot"
 
-#: view/main.py:142 view/subStyles.py:81
+#: view/main.py:137 view/subStyles.py:81
 msgid "Styles"
 msgstr "Styles"
 
-#: view/main.py:147
+#: view/main.py:142
 msgid "Misc"
 msgstr "Misc"
 
-#: view/main.py:152
+#: view/main.py:147
 msgid "Info && Links"
 msgstr "Info && Links"
 
-#: view/main.py:155
+#: view/main.py:150
 msgid "About"
 msgstr "About"
 
-#: view/main.py:160 view/subReadme.py:34
+#: view/main.py:155 view/main.py:252
 msgid "Readme"
 msgstr "Readme"
 
-#: view/main.py:165
+#: view/main.py:160
 msgid "Check for new version"
 msgstr "Check for new version"
+
+#: view/main.py:165 view/main.py:259
+msgid "Changelog"
+msgstr "Changelog"
 
 #: view/main.py:200
 msgid "Donate"
@@ -176,35 +168,35 @@ msgstr "Donate"
 msgid "Language"
 msgstr "Language"
 
-#: view/main.py:282
+#: view/main.py:291
 msgid "Match Grabber for AlphaTL && RSTL"
 msgstr "Match Grabber for AlphaTL && RSTL"
 
-#: view/main.py:283
+#: view/main.py:292
 msgid "Custom Match"
 msgstr "Custom Match"
 
-#: view/main.py:306
+#: view/main.py:315
 msgid "Open in Browser"
 msgstr "Open in Browser"
 
-#: view/main.py:316 view/main.py:425
+#: view/main.py:325 view/main.py:434
 msgid "Match-URL:"
 msgstr "Match-URL:"
 
-#: view/main.py:349
+#: view/main.py:358
 msgid "Load Data from URL"
 msgstr "Load Data from URL"
 
-#: view/main.py:367
+#: view/main.py:376
 msgid "Match Format:"
 msgstr "Match Format:"
 
-#: view/main.py:371
+#: view/main.py:380
 msgid "Best of"
 msgstr "Best of"
 
-#: view/main.py:377
+#: view/main.py:386
 msgid ""
 "\"Best of 6/4\": First, a Bo5/3 is played and the ace map gets extended to a "
 "Bo3 if needed; Best of 2: Bo3 with only two maps played."
@@ -212,107 +204,107 @@ msgstr ""
 "\"Best of 6/4\": First, a Bo5/3 is played and the ace map gets extended to a "
 "Bo3 if needed; Best of 2: Bo3 with only two maps played."
 
-#: view/main.py:385
+#: view/main.py:394
 msgid " but at least"
 msgstr " but at least"
 
-#: view/main.py:390
+#: view/main.py:399
 msgid "Minimum number of maps played (even if the match is decided already)"
 msgstr "Minimum number of maps played (even if the match is decided already)"
 
-#: view/main.py:394
+#: view/main.py:403
 msgid "maps"
 msgstr "maps"
 
-#: view/main.py:396
+#: view/main.py:405
 msgid "All-Kill Format"
 msgstr "All-Kill Format"
 
-#: view/main.py:399
+#: view/main.py:408
 msgid "Winner stays and is automatically placed into the next set"
 msgstr "Winner stays and is automatically placed into the next set"
 
-#: view/main.py:402
+#: view/main.py:411
 msgid "1vs1"
 msgstr "1vs1"
 
-#: view/main.py:405
+#: view/main.py:414
 msgid "Select for solo (non-team matches)"
 msgstr "Select for solo (non-team matches)"
 
-#: view/main.py:412
+#: view/main.py:421
 msgid "Apply Format"
 msgstr "Apply Format"
 
-#: view/main.py:432
+#: view/main.py:441
 msgid "Optionally specify the Match-URL, e.g., for Nightbot commands"
 msgstr "Optionally specify the Match-URL, e.g., for Nightbot commands"
 
-#: view/main.py:434
+#: view/main.py:443
 msgid "Specify the Match-URL of your Custom Match"
 msgstr "Specify the Match-URL of your Custom Match"
 
-#: view/main.py:451
+#: view/main.py:460
 msgid "Reset Match Data"
 msgstr "Reset Match Data"
 
-#: view/main.py:495
+#: view/main.py:504
 msgid "Match Data"
 msgstr "Match Data"
 
-#: view/main.py:567
+#: view/main.py:574
 msgid "Choose your team"
 msgstr "Choose your team"
 
-#: view/main.py:583
+#: view/main.py:590
 msgid "League:"
 msgstr "League:"
 
-#: view/main.py:593
+#: view/main.py:600
 msgid "Maps \\ Teams:"
 msgstr "Maps \\ Teams:"
 
-#: view/main.py:624
+#: view/main.py:631
 msgid "Player {} of team {}"
 msgstr "Player {} of team {}"
 
-#: view/main.py:653
+#: view/main.py:660
 msgid "Set the score"
 msgstr "Set the score"
 
-#: view/main.py:660
+#: view/main.py:667
 msgid "Map {}"
 msgstr "Map {}"
 
-#: view/main.py:700
+#: view/main.py:707
 msgid "Tasks"
 msgstr "Tasks"
 
-#: view/main.py:704
+#: view/main.py:711
 msgid "Update Twitch Title"
 msgstr "Update Twitch Title"
 
-#: view/main.py:708
+#: view/main.py:715
 msgid "Update Nightbot"
 msgstr "Update Nightbot"
 
-#: view/main.py:711
+#: view/main.py:718
 msgid "Reset Score"
 msgstr "Reset Score"
 
-#: view/main.py:715
+#: view/main.py:722
 msgid "Update OBS Data"
 msgstr "Update OBS Data"
 
-#: view/main.py:731
+#: view/main.py:738
 msgid "Background Tasks"
 msgstr "Background Tasks"
 
-#: view/main.py:734
+#: view/main.py:741
 msgid "Auto Score Update"
 msgstr "Auto Score Update"
 
-#: view/main.py:736
+#: view/main.py:743
 msgid ""
 "Automatically detects the outcome of SC2 matches that are played/observed in "
 "your SC2-client and updates the score accordingly."
@@ -320,19 +312,19 @@ msgstr ""
 "Automatically detects the outcome of SC2 matches that are played/observed in "
 "your SC2-client and updates the score accordingly."
 
-#: view/main.py:742
+#: view/main.py:749
 msgid "Provide Player Intros"
 msgstr "Provide Player Intros"
 
-#: view/main.py:745
+#: view/main.py:752
 msgid "Update player intros files via SC2-Client-API"
 msgstr "Update player intros files via SC2-Client-API"
 
-#: view/main.py:749
+#: view/main.py:756
 msgid "Set Ingame Score"
 msgstr "Set Ingame Score"
 
-#: view/main.py:751
+#: view/main.py:758
 msgid ""
 "Automatically sets the score of your ingame UI-interface at the begining of "
 "a game."
@@ -340,11 +332,11 @@ msgstr ""
 "Automatically sets the score of your ingame UI-interface at the begining of "
 "a game."
 
-#: view/main.py:758
+#: view/main.py:765
 msgid "Toggle Production Tab"
 msgstr "Toggle Production Tab"
 
-#: view/main.py:760
+#: view/main.py:767
 msgid ""
 "Automatically toggles the production tab of your ingame UI-interface at the "
 "begining of a game."
@@ -352,222 +344,226 @@ msgstr ""
 "Automatically toggles the production tab of your ingame UI-interface at the "
 "begining of a game."
 
-#: view/main.py:766
-msgid "FTP Upload"
-msgstr "FTP Upload"
-
-#: view/main.py:771
+#: view/main.py:774
 msgid "Auto Twitch Update"
 msgstr "Auto Twitch Update"
 
-#: view/main.py:776
+#: view/main.py:779
 msgid "Auto Nightbot Update"
 msgstr "Auto Nightbot Update"
 
-#: view/main.py:785 view/main.py:789
+#: view/main.py:788 view/main.py:792
 msgid "Only Windows"
 msgstr "Only Windows"
 
-#: view/main.py:847 view/widgets.py:161
-msgid "Login error"
-msgstr "Login error"
-
-#: view/main.py:848 view/widgets.py:162
-msgid "FTP server login incorrect!"
-msgstr "FTP server login incorrect!"
-
-#: view/main.py:901
+#: view/main.py:875
 msgid "Applying Custom Match..."
 msgstr "Applying Custom Match..."
 
-#: view/main.py:927
+#: view/main.py:901
 msgid "Reading {}..."
 msgstr "Reading {}..."
 
-#: view/main.py:945
+#: view/main.py:919
 msgid "Updating Nightbot Command..."
 msgstr "Updating Nightbot Command..."
 
-#: view/main.py:954
+#: view/main.py:928
 msgid "Updating Twitch Title..."
 msgstr "Updating Twitch Title..."
 
-#: view/main.py:963
+#: view/main.py:937
 msgid "Updating OBS Data..."
 msgstr "Updating OBS Data..."
 
-#: view/main.py:973
+#: view/main.py:947
 msgid "Resetting Score..."
 msgstr "Resetting Score..."
 
-#: view/main.py:988
+#: view/main.py:962
 msgid "Updating Score..."
 msgstr "Updating Score..."
 
-#: view/main.py:1037
-msgid "Select Team Logo"
-msgstr "Select Team Logo"
-
-#: view/main.py:1037
-msgid "Support Images ({})"
-msgstr "Support Images ({})"
-
-#: view/subConnections.py:67
+#: view/subConnections.py:65
 msgid "Intros && Hotkeys"
 msgstr "Intros && Hotkeys"
 
-#: view/subConnections.py:68
+#: view/subConnections.py:66
 msgid "Twitch"
 msgstr "Twitch"
 
-#: view/subConnections.py:69
+#: view/subConnections.py:67
 msgid "Nightbot"
 msgstr "Nightbot"
 
-#: view/subConnections.py:70
-msgid "FTP"
-msgstr "FTP"
-
-#: view/subConnections.py:82
-msgid "FTP server address"
-msgstr "FTP server address"
-
-#: view/subConnections.py:84
-msgid "Host:"
-msgstr "Host:"
-
-#: view/subConnections.py:91
-msgid "FTP username"
-msgstr "FTP username"
-
-#: view/subConnections.py:93
-msgid "Username:"
-msgstr "Username:"
-
-#: view/subConnections.py:100
-msgid "FTP password"
-msgstr "FTP password"
-
-#: view/subConnections.py:103
-msgid "Password:"
-msgstr "Password:"
-
-#: view/subConnections.py:112
-msgid "currently using root directory"
-msgstr "currently using root directory"
-
-#: view/subConnections.py:114
-msgid "Directory:"
-msgstr "Directory:"
-
-#: view/subConnections.py:118
-msgid "Test && Setup FTP server"
-msgstr "Test && Setup FTP server"
-
-#: view/subConnections.py:151
+#: view/subConnections.py:89
 msgid "Intro Hotkeys"
 msgstr "Intro Hotkeys"
 
-#: view/subConnections.py:156
+#: view/subConnections.py:97
 msgid "Player 1"
 msgstr "Player 1"
 
-#: view/subConnections.py:157
+#: view/subConnections.py:98
 msgid "Player 2"
 msgstr "Player 2"
 
-#: view/subConnections.py:158
+#: view/subConnections.py:99
 msgid "Debug"
 msgstr "Debug"
 
-#: view/subConnections.py:163
+#: view/subConnections.py:104
 msgid "Intro Settings"
 msgstr "Intro Settings"
 
-#: view/subConnections.py:174
+#: view/subConnections.py:115
 msgid "Sound Volume:"
 msgstr "Sound Volume:"
 
-#: view/subConnections.py:180
+#: view/subConnections.py:121
 msgid "Seconds"
 msgstr "Seconds"
 
-#: view/subConnections.py:183
+#: view/subConnections.py:124
 msgid "Display Duration:"
 msgstr "Display Duration:"
 
-#: view/subConnections.py:202
+#: view/subConnections.py:143
 msgid "Name of the Twitch channel that should be updated"
 msgstr "Name of the Twitch channel that should be updated"
 
-#: view/subConnections.py:204
+#: view/subConnections.py:145
 msgid "The connected twitch user needs to have editor rights for this channel."
 msgstr ""
 "The connected twitch user needs to have editor rights for this channel."
 
-#: view/subConnections.py:216 view/subConnections.py:273
+#: view/subConnections.py:157 view/subConnections.py:214
 msgid "Press 'Get' to generate a token"
 msgstr "Press 'Get' to generate a token"
 
-#: view/subConnections.py:218
+#: view/subConnections.py:159
 msgid "Press 'Get' to generate a new token."
 msgstr "Press 'Get' to generate a new token."
 
-#: view/subConnections.py:221 view/subConnections.py:277
+#: view/subConnections.py:162 view/subConnections.py:218
 msgid "Get"
 msgstr "Get"
 
-#: view/subConnections.py:226
+#: view/subConnections.py:167
 msgid "Access-Token:"
 msgstr "Access-Token:"
 
-#: view/subConnections.py:237 view/subConnections.py:446
+#: view/subConnections.py:178 view/subConnections.py:379
 msgid "Available placeholders:"
 msgstr "Available placeholders:"
 
-#: view/subConnections.py:247 view/subConnections.py:454
+#: view/subConnections.py:188 view/subConnections.py:387
 msgid "Test"
 msgstr "Test"
 
-#: view/subConnections.py:253
+#: view/subConnections.py:194
 msgid "Title Template:"
 msgstr "Title Template:"
 
-#: view/subConnections.py:275
+#: view/subConnections.py:216
 msgid "Press 'Get' to generate a token."
 msgstr "Press 'Get' to generate a token."
 
-#: view/subConnections.py:309
+#: view/subConnections.py:250
 msgid "Add Command"
 msgstr "Add Command"
 
-#: view/subConnections.py:337 view/subMisc.py:432 view/subStyles.py:67
+#: view/subConnections.py:281 view/subMisc.py:432 view/subStyles.py:67
 msgid "Cancel"
 msgstr "Cancel"
 
-#: view/subConnections.py:341 view/subMisc.py:436 view/subStyles.py:71
+#: view/subConnections.py:285 view/subMisc.py:436 view/subStyles.py:71
 msgid "Save && Close"
 msgstr "Save && Close"
 
-#: view/subConnections.py:414 view/subMisc.py:488 view/subStyles.py:235
+#: view/subConnections.py:345 view/subMisc.py:488 view/subStyles.py:235
 msgid "Save data?"
 msgstr "Save data?"
 
-#: view/subConnections.py:414
+#: view/subConnections.py:345
 msgid "Do you want to save the data?"
 msgstr "Do you want to save the data?"
 
-#: view/subConnections.py:444
+#: view/subConnections.py:377
 msgid "message, e.g.,"
 msgstr "message, e.g.,"
 
-#: view/subConnections.py:459
+#: view/subConnections.py:392
 msgid "Delete"
 msgstr "Delete"
 
-#: view/subConnections.py:495
+#: view/subConnections.py:431
 msgid "Output:"
 msgstr "Output:"
+
+#: view/subIcons.py:28
+msgid "Logo Team 1"
+msgstr "Logo Team 1"
+
+#: view/subIcons.py:33 view/subIcons.py:78
+msgid "Load from File"
+msgstr "Load from File"
+
+#: view/subIcons.py:36 view/subIcons.py:81
+msgid "Load from URL"
+msgstr "Load from URL"
+
+#: view/subIcons.py:39 view/subIcons.py:84
+msgid "Search Liquipedia"
+msgstr "Search Liquipedia"
+
+#: view/subIcons.py:42 view/subIcons.py:87 view/subIcons.py:181
+msgid "Add to Favorites"
+msgstr "Add to Favorites"
+
+#: view/subIcons.py:45 view/subIcons.py:90 view/subMisc.py:300
+msgid "Remove"
+msgstr "Remove"
+
+#: view/subIcons.py:72
+msgid "Logo Team 2"
+msgstr "Logo Team 2"
+
+#: view/subIcons.py:96 view/subMisc.py:68
+msgid "Favorites"
+msgstr "Favorites"
+
+#: view/subIcons.py:120
+msgid "Last Used"
+msgstr "Last Used"
+
+#: view/subIcons.py:143 view/subMarkdown.py:26
+msgid "&OK"
+msgstr "&OK"
+
+#: view/subIcons.py:151
+msgid "Logo Manager"
+msgstr "Logo Manager"
+
+#: view/subIcons.py:163 view/subIcons.py:175
+msgid "Set Team 1 Logo"
+msgstr "Set Team 1 Logo"
+
+#: view/subIcons.py:165 view/subIcons.py:178
+msgid "Set Team 2 Logo"
+msgstr "Set Team 2 Logo"
+
+#: view/subIcons.py:167
+msgid "Remove from Favorites"
+msgstr "Remove from Favorites"
+
+#: view/subIcons.py:282
+msgid "Select Team Logo"
+msgstr "Select Team Logo"
+
+#: view/subIcons.py:282
+msgid "Support Images ({})"
+msgstr "Support Images ({})"
 
 #: view/subMisc.py:52
 msgid "Miscellaneous Settings"
@@ -576,10 +572,6 @@ msgstr "Miscellaneous Settings"
 #: view/subMisc.py:67
 msgid "Map Manager"
 msgstr "Map Manager"
-
-#: view/subMisc.py:68
-msgid "Favorites"
-msgstr "Favorites"
 
 #: view/subMisc.py:69
 msgid "OCR"
@@ -701,10 +693,6 @@ msgstr "Rename"
 msgid "Change Image"
 msgstr "Change Image"
 
-#: view/subMisc.py:300
-msgid "Remove"
-msgstr "Remove"
-
 #: view/subMisc.py:329 view/subMisc.py:371
 msgid "Map Name"
 msgstr "Map Name"
@@ -736,10 +724,6 @@ msgstr "Delete map?"
 #: view/subMisc.py:393
 msgid "Delete '{}' permanently?"
 msgstr "Delete '{}' permanently?"
-
-#: view/subReadme.py:26
-msgid "&OK"
-msgstr "&OK"
 
 #: view/subStyles.py:51
 msgid "Style Settings"
@@ -802,65 +786,114 @@ msgstr "Undecided:"
 msgid "Not played:"
 msgstr "Not played:"
 
-#: view/widgets.py:126
-msgid "FTP Server Setup"
-msgstr "FTP Server Setup"
-
-#: view/widgets.py:128
-msgid "Setting up the required file structure on the FTP server..."
-msgstr "Setting up the required file structure on the FTP server..."
-
-#: view/widgets.py:174
-msgid "Wrong login data for FTP"
-msgstr "Wrong login data for FTP"
-
-#: view/widgets.py:188
+#: view/widgets.py:117
 msgid "Updater"
 msgstr "Updater"
 
-#: view/widgets.py:190
+#: view/widgets.py:119
 msgid "Updating to a new version..."
 msgstr "Updating to a new version..."
 
-#: view/widgets.py:218
+#: view/widgets.py:147
 msgid "Downloading a new version: Total file size {}, Time remaining {}."
 msgstr "Downloading a new version: Total file size {}, Time remaining {}."
 
-#: view/widgets.py:261
+#: view/widgets.py:190
 msgid "Not set"
 msgstr "Not set"
 
-#: view/widgets.py:267
+#: view/widgets.py:196
 msgid "Set Hotkey"
 msgstr "Set Hotkey"
 
-#: view/widgets.py:270
+#: view/widgets.py:199
 msgid "Clear"
 msgstr "Clear"
 
-#: view/widgets.py:321
+#: view/widgets.py:250
 msgid "Select"
 msgstr "Select"
 
-#: view/widgets.py:324
+#: view/widgets.py:253
 msgid "Default"
 msgstr "Default"
 
-#: view/widgets.py:516
+#: view/widgets.py:445
 msgid "Collecting data..."
 msgstr "Collecting data..."
 
-#: view/widgets.py:541
+#: view/widgets.py:471
 msgid "Extracting data..."
 msgstr "Extracting data..."
 
-#: view/widgets.py:543
+#: view/widgets.py:473
 msgid "Done."
 msgstr "Done."
 
-#: view/widgets.py:559
+#: view/widgets.py:489
 msgid "Downloading required files...: Total file size {}, Time remaining {}."
 msgstr "Downloading required files...: Total file size {}, Time remaining {}."
+
+#~ msgid "Specify your FTP Settings to use this feature"
+#~ msgstr "Specify your FTP Settings to use this feature"
+
+#~ msgid ""
+#~ "Automatically uploads all streaming data in the background to a specified "
+#~ "FTP server."
+#~ msgstr ""
+#~ "Automatically uploads all streaming data in the background to a specified "
+#~ "FTP server."
+
+#~ msgid "FTP Transfer in progress..."
+#~ msgstr "FTP Transfer in progress..."
+
+#~ msgid "FTP Upload"
+#~ msgstr "FTP Upload"
+
+#~ msgid "Login error"
+#~ msgstr "Login error"
+
+#~ msgid "FTP server login incorrect!"
+#~ msgstr "FTP server login incorrect!"
+
+#~ msgid "FTP"
+#~ msgstr "FTP"
+
+#~ msgid "FTP server address"
+#~ msgstr "FTP server address"
+
+#~ msgid "Host:"
+#~ msgstr "Host:"
+
+#~ msgid "FTP username"
+#~ msgstr "FTP username"
+
+#~ msgid "Username:"
+#~ msgstr "Username:"
+
+#~ msgid "FTP password"
+#~ msgstr "FTP password"
+
+#~ msgid "Password:"
+#~ msgstr "Password:"
+
+#~ msgid "currently using root directory"
+#~ msgstr "currently using root directory"
+
+#~ msgid "Directory:"
+#~ msgstr "Directory:"
+
+#~ msgid "Test && Setup FTP server"
+#~ msgstr "Test && Setup FTP server"
+
+#~ msgid "FTP Server Setup"
+#~ msgstr "FTP Server Setup"
+
+#~ msgid "Setting up the required file structure on the FTP server..."
+#~ msgstr "Setting up the required file structure on the FTP server..."
+
+#~ msgid "Wrong login data for FTP"
+#~ msgstr "Wrong login data for FTP"
 
 #~ msgid "Message:"
 #~ msgstr "Message:"
