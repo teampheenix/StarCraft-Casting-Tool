@@ -53,15 +53,15 @@ class SubwindowIcons(PyQt5.QtWidgets.QWidget):
         button = PyQt5.QtWidgets.QPushButton("↔")
         button.clicked.connect(self.swapLogos)
         layout.addWidget(button)
-        
+
         button = PyQt5.QtWidgets.QPushButton("→")
         button.clicked.connect(self.one2two)
         layout.addWidget(button)
-        
+
         button = PyQt5.QtWidgets.QPushButton("←")
         button.clicked.connect(self.two2one)
         layout.addWidget(button)
-        
+
         box.setLayout(layout)
         mainLayout.addWidget(box, 0, 1)
 
@@ -210,7 +210,7 @@ class SubwindowIcons(PyQt5.QtWidgets.QWidget):
         self.controller.logoManager.setTeam2Logo(logo)
         self.team2_icon.setPixmap(map)
         self.refreshLastUsed()
-        
+
     def removeLogo(self, team):
         if team == 1:
             self.controller.logoManager.resetTeam1Logo()
@@ -220,25 +220,24 @@ class SubwindowIcons(PyQt5.QtWidgets.QWidget):
             self.team2_icon.setLogo(self.controller.logoManager.getTeam2())
         else:
             return
-        
+
         self.refreshLastUsed()
-            
+
     def addFavorite(self, team):
         if team == 1:
             map = self.team1_icon.pixmap()
         elif team == 2:
             map = self.team2_icon.pixmap()
         else:
-            return 
-            
+            return
+
         ident = self.controller.logoManager.pixmap2ident(map)
         logo = self.controller.logoManager.findLogo(ident)
         item = PyQt5.QtWidgets.QListWidgetItem(
             PyQt5.QtGui.QIcon(map), logo.getDesc())
-    
+
         if self.controller.logoManager.addFavorite(ident):
             self.fav_list.addItem(item)
-        
 
     def addFavoriteLastUsed(self):
         item = self.lastused_list.currentItem()
@@ -248,8 +247,7 @@ class SubwindowIcons(PyQt5.QtWidgets.QWidget):
         ident = self.controller.logoManager.pixmap2ident(map)
         if self.controller.logoManager.addFavorite(ident):
             self.fav_list.addItem(item)
-        
-        
+
     def refreshLastUsed(self):
         self.lastused_list.clear()
         for logo in self.controller.logoManager.getLastUsed():
@@ -257,34 +255,36 @@ class SubwindowIcons(PyQt5.QtWidgets.QWidget):
             item = PyQt5.QtWidgets.QListWidgetItem(
                 PyQt5.QtGui.QIcon(map), logo.getDesc())
             self.lastused_list.addItem(item)
-            
-    def swapLogos(self):        
+
+    def swapLogos(self):
         self.controller.logoManager.swapTeamLogos()
         self.team1_icon.setLogo(self.controller.logoManager.getTeam1())
         self.team2_icon.setLogo(self.controller.logoManager.getTeam2())
-        
+
     def one2two(self):
-        self.controller.logoManager.setTeam2Logo(self.controller.logoManager.getTeam1())
+        self.controller.logoManager.setTeam2Logo(
+            self.controller.logoManager.getTeam1())
         self.team2_icon.setLogo(self.controller.logoManager.getTeam2())
         self.refreshLastUsed()
-        
+
     def two2one(self):
-        self.controller.logoManager.setTeam1Logo(self.controller.logoManager.getTeam2())
+        self.controller.logoManager.setTeam1Logo(
+            self.controller.logoManager.getTeam2())
         self.team1_icon.setLogo(self.controller.logoManager.getTeam1())
         self.refreshLastUsed()
-            
+
     def logoFromFileDialog(self, team):
         """Open dialog for team logo."""
         options = PyQt5.QtWidgets.QFileDialog.Options()
         options |= PyQt5.QtWidgets.QFileDialog.DontUseNativeDialog
-        
+
         fileName, status = PyQt5.QtWidgets.QFileDialog.getOpenFileName(
             self, _("Select Team Logo"), "", _("Support Images ({})").format("*.png *.jpg"))
         if fileName:
             logo = self.controller.logoManager.newLogo()
             logo.fromFile(fileName)
             map = logo.provideQPixmap()
-            
+
             if team == 1:
                 self.controller.logoManager.setTeam1Logo(logo)
                 self.team1_icon.setPixmap(map)
@@ -293,7 +293,7 @@ class SubwindowIcons(PyQt5.QtWidgets.QWidget):
                 self.controller.logoManager.setTeam2Logo(logo)
                 self.team2_icon.setPixmap(map)
                 self.refreshLastUsed()
-                
+
     def closeWindow(self):
         """Close window without save."""
         self.close()

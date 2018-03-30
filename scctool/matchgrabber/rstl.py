@@ -58,9 +58,12 @@ class MatchGrabber(MatchGrabberParent):
                         pass
 
                 for set_idx in range(4, 7):
-                    player = data['result']['8']['member_name' +
-                                                 str(team_idx + 1)]
-                    race = data['result']['8']['r_name' + str(team_idx + 1)]
+                    try:
+                        player = data['result']['8']['member_name' +
+                                                    str(team_idx + 1)]
+                        race = data['result']['8']['r_name' + str(team_idx + 1)]
+                    except Exception:
+                        pass
 
                     try:
                         idx = str(4 + set_idx)
@@ -213,25 +216,17 @@ class MatchGrabber(MatchGrabberParent):
         if self._rawData is None:
             raise ValueError(
                 "Error: No raw data.")
-
-        for i in range(1, 3):
+                
+        for idx in range(1,3):
             try:
-                os.remove(scctool.settings.getAbsPath(
-                    dir + "/logo" + str(i) + ".png"))
-            except Exception:
-                pass
-            try:
-                os.remove(scctool.settings.getAbsPath(
-                    dir + "/logo" + str(i) + ".jpg"))
-            except Exception:
-                pass
+                logo = logoManager.newLogo()
+                logo.fromURL("http://hdgame.net" + self._rawData['member' + str(idx)]['img_m'])
+                getattr(logoManager, 'setTeam{}Logo'.format(idx))(logo)
 
-            url = "http://hdgame.net" + \
-                self._rawData['member' + str(i)]['img_m']
-            base, ext = os.path.splitext(url)
-            ext = ext.split("?")[0]
-            fname = dir + "/logo" + str(i) + ext
-            urlretrieve(url, scctool.settings.getAbsPath(fname))
-            self._controller.ftpUploader.cwd(dir)
-            self._controller.ftpUploader.upload(fname, "logo" + str(i) + ext)
-            self._controller.ftpUploader.cwd("..")
+                # self._controller.ftpUploader.cwd(dir)
+                # self._controller.ftpUploader.upload(
+                #     fname,
+                #     "logo" + str(idx + 1) + ext)
+                # self._controller.ftpUploader.cwd("..")
+            except Exception as e:
+                module_logger.exception("message")

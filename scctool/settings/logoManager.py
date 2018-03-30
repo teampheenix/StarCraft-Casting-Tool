@@ -34,21 +34,23 @@ class LogoManager:
             self.removeDuplicates()
         except Exception as e:
             module_logger.exception("message")
-        
+
     def newLogo(self):
         return Logo(self)
-        
+
     def fromOldFormat(self):
         if not self._team1.isLogo():
-            file = getAbsPath(self.__controller.linkFile(OBSdataDir + "/" + "logo1"))
+            file = getAbsPath(self.__controller.linkFile(
+                OBSdataDir + "/" + "logo1"))
             if os.path.isfile(file):
                 logo = Logo(self)
                 logo.fromFile(file)
                 self.setTeam1Logo(logo)
                 os.remove(file)
-        
+
         if not self._team2.isLogo():
-            file = getAbsPath(self.__controller.linkFile(OBSdataDir + "/" + "logo2"))
+            file = getAbsPath(self.__controller.linkFile(
+                OBSdataDir + "/" + "logo2"))
             if os.path.isfile(file):
                 logo = Logo(self)
                 logo.fromFile(file)
@@ -133,7 +135,7 @@ class LogoManager:
             self.addLastUsed(self._team1)
         self._team1 = logo
         return True
-        
+
     def resetTeam1Logo(self):
         if(self._team1.isLogo()):
             self.addLastUsed(self._team1)
@@ -151,12 +153,12 @@ class LogoManager:
             self.addLastUsed(self._team2)
         self._team2 = logo
         return True
-        
+
     def resetTeam2Logo(self):
         if(self._team2.isLogo()):
             self.addLastUsed(self._team2)
         self._team2 = Logo(self)
-        
+
     def swapTeamLogos(self):
         self._team1, self._team2 = self._team2, self._team1
 
@@ -193,7 +195,7 @@ class LogoManager:
             if ident == logo._ident:
                 return True
         return False
-        
+
     def isInLastused(self, ident):
         if not ident:
             return False
@@ -224,7 +226,7 @@ class LogoManager:
             if logo1.equals(logo2) and logo1._ident != logo2._ident:
                 logo2.delete(True, False)
                 logo2._ident = logo1._ident
-            
+
     def getFavorites(self):
         return self._favorites
 
@@ -238,7 +240,7 @@ class LogoManager:
 
     def getTeam2(self):
         return self._team2
-        
+
     def pixmap2ident(self, pixmap):
         for ident, map in self._ident2map.items():
             if map.cacheKey() == pixmap.cacheKey():
@@ -247,7 +249,7 @@ class LogoManager:
 
 
 class Logo:
-    
+
     _iconsize = 120
 
     def __init__(self, manager):
@@ -283,11 +285,12 @@ class Logo:
         if self._format == "none":
             file = os.path.join(OBShtmlDir, "src/SC2.png")
         else:
-            file = os.path.join(logosDir, "{}.{}".format(self._ident, self._format))
-            
+            file = os.path.join(logosDir, "{}.{}".format(
+                self._ident, self._format))
+
         if web:
-            file = file.replace('\\','/')
-            
+            file = file.replace('\\', '/')
+
         return file
 
     def getAbsFile(self):
@@ -351,10 +354,11 @@ class Logo:
 
         self._manager._identifiers.add(self._ident)
         return True
-        
+
     def provideQPixmap(self):
         if self._manager._ident2map.get(self._ident, None) is None:
-            map = QPixmap(self.getAbsFile()).scaled(self._iconsize, self._iconsize, Qt.KeepAspectRatio)
+            map = QPixmap(self.getAbsFile()).scaled(
+                self._iconsize, self._iconsize, Qt.KeepAspectRatio)
             self._manager._ident2map[self._ident] = map
         return self._manager._ident2map[self._ident]
 

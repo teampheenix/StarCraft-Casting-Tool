@@ -3,7 +3,6 @@
 import logging
 import scctool.settings
 
-import os
 from urllib.request import urlretrieve
 from scctool.matchgrabber.custom import MatchGrabber as MatchGrabberParent
 
@@ -84,12 +83,12 @@ class MatchGrabber(MatchGrabberParent):
         if self._rawData is None:
             raise ValueError(
                 "Error: No raw data.")
-            
+
         for idx in range(2):
             try:
                 logo = logoManager.newLogo()
                 logo.fromURL(self._rawData['team' + str(idx + 1)]['logo'])
-                getattr(logoManager, 'setTeam{}Logo'.format(idx+1))(logo)
+                getattr(logoManager, 'setTeam{}Logo'.format(idx + 1))(logo)
 
                 # self._controller.ftpUploader.cwd(dir)
                 # self._controller.ftpUploader.upload(

@@ -566,13 +566,12 @@ class InitialUpdater(PyQt5.QtWidgets.QProgressDialog):
 
 
 class DragImageLabel(PyQt5.QtWidgets.QLabel):
-    
 
-    def __init__(self, logo, team = 0):
+    def __init__(self, logo, team=0):
         super(PyQt5.QtWidgets.QLabel, self).__init__()
-        
+
         self._team = team
-        
+
         self._iconsize = logo._iconsize
         self._logomanager = logo._manager
 
@@ -582,7 +581,7 @@ class DragImageLabel(PyQt5.QtWidgets.QLabel):
 
         self.setLogo(logo)
         self.setAcceptDrops(False)
-        
+
     def setLogo(self, logo):
         self.setPixmap(logo.provideQPixmap())
 
@@ -598,10 +597,10 @@ class DragImageLabel(PyQt5.QtWidgets.QLabel):
             "application/x-qabstractitemmodeldatalist"))
         map = result[0][1].pixmap(self._iconsize)
         self.setPixmap(map)
-        
+
         if self._team == 1:
             ident = self._logomanager.pixmap2ident(map)
-            print("Ident: ",ident)
+            print("Ident: ", ident)
             logo = self._logomanager.findLogo(ident)
             self._logomanager.setTeam1Logo(logo)
         elif self._team == 2:
@@ -614,7 +613,7 @@ class DragImageLabel(PyQt5.QtWidgets.QLabel):
         value = PyQt5.QtCore.QVariant()
         stream = PyQt5.QtCore.QDataStream(data)
         while not stream.atEnd():
-            _ = stream.readInt32()
+            stream.readInt32()
             col = stream.readInt32()
             item = result.setdefault(col, {})
             for role in range(stream.readInt32()):

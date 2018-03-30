@@ -170,10 +170,10 @@ class MainController:
 
     def updateLogos(self):
         """Updata team logos in  view."""
-        
+
         logo = self.logoManager.getTeam1()
         self.view.qb_logo1.setIcon(PyQt5.QtGui.QIcon(logo.provideQPixmap()))
-        
+
         logo = self.logoManager.getTeam2()
         self.view.qb_logo2.setIcon(PyQt5.QtGui.QIcon(logo.provideQPixmap()))
 
@@ -560,7 +560,7 @@ class MainController:
     def updateLogosHTML(self):
         """Update html files with team logos."""
         for idx in range(2):
-            logo = getattr(self.logoManager, 'getTeam{}'.format(idx+1))()
+            logo = getattr(self.logoManager, 'getTeam{}'.format(idx + 1))()
             filename = scctool.settings.OBShtmlDir +\
                 "/data/logo" + str(idx + 1) + "-data.html"
             filename = scctool.settings.getAbsPath(filename)
