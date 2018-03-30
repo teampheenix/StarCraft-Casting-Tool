@@ -5,6 +5,8 @@
 
 ### New
 
+* Removed FTP-Upload. If you were using this feature, please contact me and I will provide an alternative via websockets.
+
 * Added Logo Manager featuring last used logos, favorites, adding from URL, and searching Liquipedia for logos.
 
 ### Changes
@@ -12,6 +14,10 @@
 * Returning to the official python keyboard package since v0.13 has been published.
 
 * Changelog is now displayed on restart after an update.
+
+### Fix
+
+* RSTL Matchgrabber should be working properly for all matches now.
 
 
 ## v1.7.2 (2018-03-26)
