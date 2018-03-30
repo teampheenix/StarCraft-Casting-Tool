@@ -6,7 +6,7 @@ from scctool.view.widgets import MonitoredLineEdit, FTPsetup, Completer, HotkeyL
 
 import scctool.settings
 import base64
-import mykeyboard
+import keyboard
 import weakref
 
 # create logger
@@ -151,7 +151,7 @@ class SubwindowConnections(PyQt5.QtWidgets.QWidget):
         self.hotkeyBox = PyQt5.QtWidgets.QGroupBox(_("Intro Hotkeys"))
         layout = PyQt5.QtWidgets.QVBoxLayout()
 
-        mykeyboard.unhook_all()
+        keyboard.unhook_all()
         self.hotkeys = dict()
         layout.addLayout(self.addHotkey("hotkey_player1", _("Player 1")))
         layout.addLayout(self.addHotkey("hotkey_player2", _("Player 2")))
@@ -505,7 +505,7 @@ class CommandDropBox(PyQt5.QtWidgets.QGroupBox):
     @classmethod
     def addDeletedCommand(cls, cmd):
         cls._todelete.add(cmd.strip())
-        
+
     @classmethod
     def getData(cls):
         data = dict()
@@ -519,7 +519,7 @@ class CommandDropBox(PyQt5.QtWidgets.QGroupBox):
                 if cmd and msg:
                     data[cmd] = msg
         return data
-        
+
     @classmethod
     def clean(cls):
         cls._instances = set()

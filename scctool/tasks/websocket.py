@@ -8,7 +8,7 @@ try:
     import asyncio
     import websockets
     import json
-    import mykeyboard
+    import keyboard
     import scctool.settings
     import PyQt5
 
@@ -61,7 +61,7 @@ class WebsocketThread(PyQt5.QtCore.QThread):
 
     def __callback_on_hook(self, scan_code, is_keypad, e, callback):
         if e.is_keypad == is_keypad:
-            if e.event_type == mykeyboard.KEY_DOWN:
+            if e.event_type == keyboard.KEY_DOWN:
                 if((scan_code, is_keypad) not in self.keyboard_state
                         or self.keyboard_state[(scan_code, is_keypad)]):
                     try:
@@ -69,7 +69,7 @@ class WebsocketThread(PyQt5.QtCore.QThread):
                     except Exception as e:
                         module_logger.exception("message")
                 self.keyboard_state[(scan_code, is_keypad)] = False
-            if e.event_type == mykeyboard.KEY_UP:
+            if e.event_type == keyboard.KEY_UP:
                 self.keyboard_state[(scan_code, is_keypad)] = True
 
     def __register_hotkey(self, string, callback):
@@ -79,7 +79,7 @@ class WebsocketThread(PyQt5.QtCore.QThread):
         if data['scan_code'] == 0:
             return
 
-        mykeyboard.hook_key(data['scan_code'], lambda e: self.__callback_on_hook(
+        keyboard.hook_key(data['scan_code'], lambda e: self.__callback_on_hook(
             data['scan_code'], data['is_keypad'], e, callback))
 
     def register_hotkeys(self):
@@ -94,7 +94,7 @@ class WebsocketThread(PyQt5.QtCore.QThread):
 
     def unregister_hotkeys(self):
         try:
-            mykeyboard.unhook_all()
+            keyboard.unhook_all()
         except AttributeError:
             pass
         finally:

@@ -11,7 +11,7 @@ try:
     import time
     from difflib import SequenceMatcher
     import re
-    import mykeyboard
+    import keyboard
 
     import scctool.settings
 
@@ -38,36 +38,36 @@ def ToggleScore(score1=0, score2=0, bestof=5):
     """Set and toggle SC2-ingame score."""
 
     if scctool.settings.config.parser.getboolean("SCT", "CtrlShiftS"):
-        mykeyboard.send("ctrl+shift+s")
+        keyboard.send("ctrl+shift+s")
 
     if scctool.settings.config.parser.getboolean("SCT", "CtrlShiftC"):
-        mykeyboard.send("ctrl+shift+c")
+        keyboard.send("ctrl+shift+c")
 
     times = scctool.settings.config.parser.getint("SCT", "CtrlShiftR")
     if times > 0:
         # For some reason the first time pressing CTRL+SHIFT+R does nothing.
         for x in range(0, times + 1):
-            mykeyboard.send("ctrl+shift+r")
+            keyboard.send("ctrl+shift+r")
 
     if(not skipBestOf(bestof)):
-        mykeyboard.send("ctrl+shift+{}".format(bestof))
+        keyboard.send("ctrl+shift+{}".format(bestof))
 
     if(not skipScore(score2)):
-        mykeyboard.send("ctrl+{}".format(score2))
+        keyboard.send("ctrl+{}".format(score2))
 
     if(not skipScore(score1)):
-        mykeyboard.send("shift+{}".format(score1))
+        keyboard.send("shift+{}".format(score1))
 
 
 def TogglePlayerNames():
     """Toggle Score ahead of OCR."""
     if scctool.settings.config.parser.getboolean("SCT", "CtrlN"):
-        mykeyboard.send("ctrl+n")
+        keyboard.send("ctrl+n")
 
 
 def ToggleProduction():
     """Toggle SC2-ingame production tab."""
-    mykeyboard.send("d")
+    keyboard.send("d")
 
 
 class SC2ApiThread(PyQt5.QtCore.QThread):
