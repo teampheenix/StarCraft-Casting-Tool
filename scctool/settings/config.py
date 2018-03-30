@@ -120,18 +120,12 @@ def setDefaultConfigAll():
 
     setDefaultConfig("Nightbot", "token", "")
 
-    setDefaultConfig("FTP", "upload", "False")
-    setDefaultConfig("FTP", "server", "")
-    setDefaultConfig("FTP", "user", "")
-    setDefaultConfig("FTP", "passwd", "")
-    setDefaultConfig("FTP", "dir", "")
-
     setDefaultConfig("SCT", "myteams", "MiXed Minds, team pheeniX")
     setDefaultConfig("SCT", "commonplayers", "Shakyor, pressure, Moash, " +
                      "Ostseedude, spaz, DERASTAT, FanTasY, " +
                      "chrismaverik, holden, Desolation, RiseOfDeath, " +
-                     "Tune-Trigger, MoFuJones, Fenix, Hyvaa, snoozle, " +
-                     "CptWobbles, dreign, SLY, Sonarwolf, Unknown, Xoneon ")
+                     "Tune-Trigger, MoFuJones, Fenix, snoozle, " +
+                     "dreign, SLY, Sonarwolf, Unknown, Xoneon ")
 
     setDefaultConfig("SCT", "fuzzymatch", "True")
     setDefaultConfig("SCT", "new_version_prompt", "True")
@@ -183,6 +177,7 @@ def renameConfigOptions():
         pass
 
     parser.remove_section("OBS")
+    parser.remove_section("FTP")
 
     try:
         command = parser.get("Nightbot", "command")

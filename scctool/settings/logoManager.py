@@ -87,28 +87,30 @@ class LogoManager:
         try:
             with open(logos_json_file) as json_file:
                 data = json.load(json_file)
-        finally:
-            for item in data['last_used']:
-                logo = Logo(self)
-                logo.fromDict(item)
-                self.addLastUsed(logo)
-            for item in data['favorites']:
-                logo = Logo(self)
-                logo.fromDict(item)
-                if logo.isFile():
-                    self._favorites.append(logo)
-
-            item = data.get('team1', None)
+        except:
+            return 
+        
+        for item in data['last_used']:
+            logo = Logo(self)
+            logo.fromDict(item)
+            self.addLastUsed(logo)
+        for item in data['favorites']:
             logo = Logo(self)
             logo.fromDict(item)
             if logo.isFile():
-                self.setTeam1Logo(logo)
+                self._favorites.append(logo)
 
-            item = data.get('team2', None)
-            logo = Logo(self)
-            logo.fromDict(item)
-            if logo.isFile():
-                self.setTeam2Logo(logo)
+        item = data.get('team1', None)
+        logo = Logo(self)
+        logo.fromDict(item)
+        if logo.isFile():
+            self.setTeam1Logo(logo)
+
+        item = data.get('team2', None)
+        logo = Logo(self)
+        logo.fromDict(item)
+        if logo.isFile():
+            self.setTeam2Logo(logo)
 
     def trimLastUsed(self):
         while len(self._last_used) > self._last_used_max_len:

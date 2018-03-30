@@ -68,7 +68,7 @@ def setDataVersion(version):
     data['data_version'] = version
     with open(scctool.settings.versiondata_json_file, 'w') as outfile:
         json.dump(data, outfile)
-        
+
 
 def getRestartFlag():
     flag = False
@@ -78,14 +78,14 @@ def getRestartFlag():
             flag = data.get('restart_flag', False)
     finally:
         return flag
-        
+
+
 def setRestartFlag(flag=True):
-        with open(scctool.settings.versiondata_json_file, 'r') as f:
-            data = json.load(f)
-        data['restart_flag'] = bool(flag)
-        with open(scctool.settings.versiondata_json_file, 'w') as outfile:
-            json.dump(data, outfile)
-    
+    with open(scctool.settings.versiondata_json_file, 'r') as f:
+        data = json.load(f)
+    data['restart_flag'] = bool(flag)
+    with open(scctool.settings.versiondata_json_file, 'w') as outfile:
+        json.dump(data, outfile)
 
 
 def deleteObsoleteFiles():
@@ -179,15 +179,8 @@ def copyStyleFile(style_dir, css_file, value):
 
         shutil.copy(new_file, css_file)
 
-        # fname = os.path.basename(css_file)
-        # dirs = os.path.dirname(css_file)
-
     except Exception as e:
         module_logger.exception("message")
-
-    # controller.ftpUploader.cwd(dirs)
-    # controller.ftpUploader.upload(css_file, fname)
-    # controller.ftpUploader.cwdback(dirs)
 
 
 class VersionHandler(TasksThread):

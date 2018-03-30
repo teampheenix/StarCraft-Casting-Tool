@@ -690,16 +690,8 @@ class matchData:
     def createOBStxtFiles(self):
         """Create OBS txt files."""
         try:
-            files2upload = []
 
             if(self.hasAnySetChanged()):
-                files2upload = files2upload + ["lineup.txt",
-                                               "maps.txt",
-                                               "score.txt",
-                                               "nextplayer1.txt",
-                                               "nextplayer2.txt",
-                                               "nextrace1.txt",
-                                               "nextrace2.txt"]
                 f = open(scctool.settings.getAbsPath(scctool.settings.OBSdataDir +
                                                      "/lineup.txt"),
                          mode='w', encoding='utf-8-sig')
@@ -758,10 +750,6 @@ class matchData:
 
             if(self.hasMetaChanged()):
 
-                files2upload = files2upload + \
-                    ["teams_vs_long.txt", "teams_vs_short.txt",
-                        "team1.txt", "team2.txt", "tournament.txt"]
-
                 f = open(scctool.settings.getAbsPath(scctool.settings.OBSdataDir +
                                                      "/teams_vs_long.txt"),
                          mode='w', encoding='utf-8-sig')
@@ -792,14 +780,6 @@ class matchData:
                          mode='w', encoding='utf-8-sig')
                 f.write(self.getLeague())
                 f.close()
-
-            if(len(files2upload) > 0):
-                self.__controller.ftpUploader.cwd(scctool.settings.OBSdataDir)
-                for file in files2upload:
-                    self.__controller.ftpUploader.upload(
-                        scctool.settings.OBSdataDir + "/" + file, file)
-
-                self.__controller.ftpUploader.cwd("..")
 
         except Exception as e:
             module_logger.exception("message")
@@ -887,11 +867,6 @@ class matchData:
                         line = line.replace(
                             '%DISPLAY-M' + str(i + 1) + '%', display[i])
                     fout.write(line)
-
-        self.__controller.ftpUploader.cwd(
-            scctool.settings.OBShtmlDir + "/data")
-        self.__controller.ftpUploader.upload(filename, "score-data.html")
-        self.__controller.ftpUploader.cwd("../../..")
 
     def updateMapIcons(self):
         """Update map icons."""
@@ -1034,23 +1009,6 @@ class matchData:
                             line = line.replace('%HIDDEN%', hidden)
                             fout.write(line)
 
-            if(False in skip or self.hasMetaChanged()):
-                self.__controller.ftpUploader.cwd(scctool.settings.OBSmapDir)
-                for type in ["box", "landscape"]:
-                    self.__controller.ftpUploader.cwd(
-                        "icons_" + type + "/data")
-                    for i in range(scctool.settings.max_no_sets):
-                        if(i < self.getNoSets() and skip[i]):
-                            continue
-                        if(i >= self.getNoSets() and not self.hasMetaChanged()):
-                            continue
-                        filename = scctool.settings.OBSmapDir + "/icons_" + \
-                            type + "/data/" + str(i + 1) + ".html"
-                        self.__controller.ftpUploader.upload(
-                            filename, str(i + 1) + ".html")
-                    self.__controller.ftpUploader.cwd("../..")
-                self.__controller.ftpUploader.cwd("..")
-
         except Exception as e:
             module_logger.exception("message")
 
@@ -1065,11 +1023,6 @@ class matchData:
             filename_new = scctool.settings.OBShtmlDir + "/data/league-data.html"
             shutil.copy(scctool.settings.getAbsPath(filename_old),
                         scctool.settings.getAbsPath(filename_new))
-            self.__controller.ftpUploader.cwd(
-                scctool.settings.OBShtmlDir + "/data")
-            self.__controller.ftpUploader.upload(
-                filename_new, "league-data.html")
-            self.__controller.ftpUploader.cwd("../..")
 
         except Exception as e:
             module_logger.exception("message")

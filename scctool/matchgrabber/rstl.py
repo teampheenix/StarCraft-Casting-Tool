@@ -1,10 +1,7 @@
 """Provide match grabber for AlphaTL."""
 
 import logging
-import os
-import scctool.settings
 
-from urllib.request import urlretrieve
 from scctool.matchgrabber.custom import MatchGrabber as MatchGrabberParent
 
 # create logger
@@ -60,8 +57,9 @@ class MatchGrabber(MatchGrabberParent):
                 for set_idx in range(4, 7):
                     try:
                         player = data['result']['8']['member_name' +
-                                                    str(team_idx + 1)]
-                        race = data['result']['8']['r_name' + str(team_idx + 1)]
+                                                     str(team_idx + 1)]
+                        race = data['result']['8']['r_name' +
+                                                   str(team_idx + 1)]
                     except Exception:
                         pass
 
@@ -211,22 +209,17 @@ class MatchGrabber(MatchGrabberParent):
 
     def downloadLogos(self, logoManager):
         """Download team logos."""
-        dir = scctool.settings.OBSdataDir
 
         if self._rawData is None:
             raise ValueError(
                 "Error: No raw data.")
-                
-        for idx in range(1,3):
+
+        for idx in range(1, 3):
             try:
                 logo = logoManager.newLogo()
-                logo.fromURL("http://hdgame.net" + self._rawData['member' + str(idx)]['img_m'])
+                logo.fromURL("http://hdgame.net" +
+                             self._rawData['member' + str(idx)]['img_m'])
                 getattr(logoManager, 'setTeam{}Logo'.format(idx))(logo)
 
-                # self._controller.ftpUploader.cwd(dir)
-                # self._controller.ftpUploader.upload(
-                #     fname,
-                #     "logo" + str(idx + 1) + ext)
-                # self._controller.ftpUploader.cwd("..")
             except Exception as e:
                 module_logger.exception("message")

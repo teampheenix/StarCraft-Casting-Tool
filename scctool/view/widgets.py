@@ -102,82 +102,12 @@ class StyleComboBox(PyQt5.QtWidgets.QComboBox):
         new_file = scctool.settings.getAbsPath(new_file)
         shutil.copy(new_file, scctool.settings.getAbsPath(file))
 
-        fname = os.path.basename(file)
-        dirs = os.path.dirname(file)
-
-        controller.ftpUploader.cwd(dirs)
-        controller.ftpUploader.upload(file, fname)
-        controller.ftpUploader.cwdback(dirs)
-
     def applyWebsocket(self, controller):
         controller.websocketThread.changeStyle(self.currentText())
 
 
-class FTPsetup(PyQt5.QtWidgets.QProgressDialog):
-    """Define FTP setup progress dialog."""
-
-    def __init__(self, controller, mainWindow):
-        """Init progress dialog."""
-        try:
-            PyQt5.QtWidgets.QProgressDialog.__init__(self)
-            self.setWindowModality(PyQt5.QtCore.Qt.ApplicationModal)
-            self.progress = 0
-            self.setWindowTitle(_("FTP Server Setup"))
-            self.setLabelText(
-                _("Setting up the required file structure on the FTP server..."))
-            self.canceled.connect(self.close)
-            self.setRange(0, 100)
-            self.setValue(self.minimum())
-
-            self.resize(PyQt5.QtCore.QSize(
-                self.sizeHint().width(), self.sizeHint().height()))
-            relativeChange = PyQt5.QtCore.QPoint(mainWindow.size().width() / 2,
-                                                 mainWindow.size().height() / 3)\
-                - PyQt5.QtCore.QPoint(self.size().width() / 2,
-                                      self.size().height() / 3)
-            self.move(mainWindow.pos() + relativeChange)
-            self.show()
-
-            old_bool = mainWindow.cb_autoFTP.isChecked()
-            mainWindow.cb_autoFTP.setChecked(False)
-            controller.ftpUploader.empty_queque()
-            mainWindow.cb_autoFTP.setChecked(True)
-
-            signal, range = controller.ftpUploader.setup()
-            signal.connect(self.setProgress)
-            self.setRange(0, range)
-
-            while not self.wasCanceled():
-                PyQt5.QtWidgets.QApplication.processEvents()
-                time.sleep(0.05)
-
-            mainWindow.cb_autoFTP.setChecked(False)
-
-            if(self.progress != -2):
-                controller.ftpUploader.empty_queque()
-                mainWindow.cb_autoFTP.setChecked(old_bool)
-            else:
-                PyQt5.QtWidgets.QMessageBox.warning(self, _("Login error"),
-                                                    _('FTP server login incorrect!'))
-
-        except Exception as e:
-            module_logger.exception("message")
-            mainWindow.cb_autoFTP.setChecked(False)
-
-    def setProgress(self, progress):
-        """Set the progress of the bar."""
-        self.progress = progress
-        if(progress == -1):
-            self.cancel()
-        elif(progress == -2):
-            module_logger.info(_("Wrong login data for FTP"))
-            self.cancel()
-        else:
-            self.setValue(progress)
-
-
 class ToolUpdater(PyQt5.QtWidgets.QProgressDialog):
-    """Define FTP setup progress dialog."""
+    """Define updater dialog."""
 
     def __init__(self, controller, mainWindow):
         """Init progress dialog."""

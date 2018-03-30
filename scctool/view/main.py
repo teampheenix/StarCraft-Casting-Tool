@@ -7,8 +7,6 @@ import PyQt5
 
 import scctool.settings
 import scctool.settings.config
-import shutil
-import os
 import markdown2
 import gettext
 
@@ -66,7 +64,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             self.progressBar.setMaximumWidth(160)
             self.progressBar.setMinimumWidth(160)
             self.progressBar.setVisible(False)
-            self.progressBar.setText(_("FTP Transfer in progress..."))
+            self.progressBar.setText("")
             self.statusBar().addPermanentWidget(self.progressBar)
 
             self.app = app
@@ -84,10 +82,10 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             self.mysubwindows = dict()
 
             self.show()
-            
+
             if showChangelog:
                 self.openChangelog()
-                
+
         except Exception as e:
             module_logger.exception("message")
 
@@ -132,7 +130,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             apiAct = PyQt5.QtWidgets.QAction(PyQt5.QtGui.QIcon(scctool.settings.getAbsPath(
                 'src/connection.png')), _('Connections'), self)
             apiAct.setToolTip(
-                _('Edit FTP-Settings and API-Settings for Twitch and Nightbot'))
+                _('Edit Intro-Settings and API-Settings for Twitch and Nightbot'))
             apiAct.triggered.connect(self.openApiDialog)
             settingsMenu.addAction(apiAct)
             styleAct = PyQt5.QtWidgets.QAction(PyQt5.QtGui.QIcon(scctool.settings.getAbsPath(
@@ -152,24 +150,22 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
                 'src/about.png')), _('About'), self)
             myAct.triggered.connect(self.showAbout)
             infoMenu.addAction(myAct)
-            
 
             myAct = PyQt5.QtWidgets.QAction(PyQt5.QtGui.QIcon(scctool.settings.getAbsPath(
                 'src/readme.ico')), _('Readme'), self)
             myAct.triggered.connect(self.openReadme)
             infoMenu.addAction(myAct)
-            
+
             myAct = PyQt5.QtWidgets.QAction(PyQt5.QtGui.QIcon(scctool.settings.getAbsPath(
                 'src/update.png')), _('Check for new version'), self)
             myAct.triggered.connect(lambda: self.controller.checkVersion(True))
             infoMenu.addAction(myAct)
-            
+
             myAct = PyQt5.QtWidgets.QAction(PyQt5.QtGui.QIcon(scctool.settings.getAbsPath(
                 'src/changelog.png')), _('Changelog'), self)
             myAct.triggered.connect(self.openChangelog)
             infoMenu.addAction(myAct)
-            
-            
+
             infoMenu.addSeparator()
 
             websiteAct = PyQt5.QtWidgets.QAction(
@@ -179,7 +175,6 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             websiteAct.triggered.connect(lambda: self.controller.openURL(
                 "https://teampheenix.github.io/StarCraft-Casting-Tool/"))
             infoMenu.addAction(websiteAct)
-
 
             ixAct = PyQt5.QtWidgets.QAction(PyQt5.QtGui.QIcon(scctool.settings.getAbsPath(
                 'src/icon.png')), 'team pheeniX', self)
@@ -253,13 +248,16 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
     def openReadme(self):
         """Open subwindow with readme viewer."""
         self.mysubwindows['readme'] = SubwindowMarkdown()
-        self.mysubwindows['readme'].createWindow(self, _("Readme"), "src/readme.ico", "README.md")
+        self.mysubwindows['readme'].createWindow(
+            self, _("Readme"), "src/readme.ico", "README.md")
         self.mysubwindows['readme'].show()
-        
+
     def openChangelog(self):
         """Open subwindow with readme viewer."""
         self.mysubwindows['changelog'] = SubwindowMarkdown()
-        self.mysubwindows['changelog'].createWindow(self, "StarCraft Casting Tool "+_("Changelog"), "src/changelog.png", "CHANGELOG.md")
+        self.mysubwindows['changelog'].createWindow(
+            self, "StarCraft Casting Tool " + _("Changelog"),
+            "src/changelog.png", "CHANGELOG.md")
         self.mysubwindows['changelog'].show()
 
     def changeLanguage(self, language):
@@ -772,10 +770,6 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             self.cb_autoToggleProduction.stateChanged.connect(
                 self.autoToggleProduction_change)
 
-            self.cb_autoFTP = PyQt5.QtWidgets.QCheckBox(_("FTP Upload"))
-            self.cb_autoFTP.setChecked(False)
-            self.cb_autoFTP.stateChanged.connect(self.autoFTP_change)
-
             self.cb_autoTwitch = PyQt5.QtWidgets.QCheckBox(
                 _("Auto Twitch Update"))
             self.cb_autoTwitch.setChecked(False)
@@ -799,34 +793,16 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
 
             layout = PyQt5.QtWidgets.QGridLayout()
 
-            label = PyQt5.QtWidgets.QLabel()
-            label.setFixedWidth(2)
-            layout.addWidget(label, 0, 0)
-            layout.addWidget(self.cb_autoFTP, 0, 1)
-            layout.addWidget(self.cb_autoTwitch, 0, 2)
-            layout.addWidget(self.cb_autoNightbot, 0, 3)
+            layout.addWidget(self.cb_playerIntros, 0, 0)
+            layout.addWidget(self.cb_autoTwitch, 0, 1)
+            layout.addWidget(self.cb_autoNightbot, 0, 2)
 
-            layout.addWidget(self.cb_autoUpdate, 1, 1)
-            layout.addWidget(self.cb_playerIntros, 1, 2)
-            layout.addWidget(self.cb_autoToggleScore, 1, 3)
-            layout.addWidget(self.cb_autoToggleProduction, 1, 4)
+            layout.addWidget(self.cb_autoUpdate, 1, 0)
+            layout.addWidget(self.cb_autoToggleScore, 1, 1)
+            layout.addWidget(self.cb_autoToggleProduction, 1, 2)
 
             self.backgroundTasksBox.setLayout(layout)
 
-        except Exception as e:
-            module_logger.exception("message")
-
-    def autoFTP_change(self):
-        """Monitor check box for ftp upload."""
-        try:
-            scctool.settings.config.parser.set(
-                "FTP", "upload", str(self.cb_autoFTP.isChecked()))
-            if(self.cb_autoFTP.isChecked()):
-                signal = self.controller.ftpUploader.connect()
-                signal.connect(self.ftpSignal)
-                self.controller.matchData.allChanged()
-            else:
-                self.controller.ftpUploader.disconnect()
         except Exception as e:
             module_logger.exception("message")
 
@@ -849,17 +825,6 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
                 self.controller.autoRequestsThread.deactivateTask('nightbot')
         except Exception as e:
             module_logger.exception("message")
-
-    def ftpSignal(self, signal):
-        """Define signal handle for ftpUploader."""
-        if(signal == -2):
-            PyQt5.QtWidgets.QMessageBox.warning(self, _("Login error"),
-                                                _('FTP server login incorrect!'))
-            self.cb_autoFTP.setChecked(False)
-        elif(signal == -3):
-            self.progressBar.setVisible(False)
-        else:
-            self.progressBar.setVisible(True)
 
     def autoUpdate_change(self):
         """Handle change of auto score update check box."""
@@ -1043,35 +1008,6 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
         self.mysubwindows['icons'] = SubwindowIcons()
         self.mysubwindows['icons'].createWindow(self, self.controller)
         self.mysubwindows['icons'].show()
-        # options = PyQt5.QtWidgets.QFileDialog.Options()
-        # options |= PyQt5.QtWidgets.QFileDialog.DontUseNativeDialog
-        
-        # fileName, status = PyQt5.QtWidgets.QFileDialog.getOpenFileName(
-        #     self, _("Select Team Logo"), "", _("Support Images ({})").format("*.png *.jpg"))
-        # if fileName:
-        #     try:
-        #         os.remove(scctool.settings.getAbsPath(scctool.settings.OBSdataDir +
-        #                                               "/logo" + str(button) + ".png"))
-        #     except Exception:
-        #         pass
-        #     try:
-        #         os.remove(scctool.settings.getAbsPath(scctool.settings.OBSdataDir +
-        #                                               "/logo" + str(button) + ".jpg"))
-        #     except Exception:
-        #         pass
-
-       ##       base, ext = os.path.splitext(fileName)
-        #     ext = ext.split("?")[0]
-        #     fname = scctool.settings.OBSdataDir + "/logo" + str(button) + ext
-
-       ##       shutil.copy(fileName, scctool.settings.getAbsPath(fname))
-        #     self.controller.updateLogos()
-        #     self.controller.ftpUploader.cwd(scctool.settings.OBSdataDir)
-        #     self.controller.ftpUploader.upload(
-        #         fname, "logo" + str(button) + ext)
-        #     self.controller.ftpUploader.cwd("..")
-        #     self.controller.matchData.metaChanged()
-        #     self.controller.matchData.updateScoreIcon()
 
     def resizeWindow(self):
         """Resize the window height to size hint."""

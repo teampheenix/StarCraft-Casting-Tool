@@ -2,10 +2,9 @@
 import logging
 import PyQt5
 
-from scctool.view.widgets import MonitoredLineEdit, FTPsetup, Completer, HotkeyLayout
+from scctool.view.widgets import MonitoredLineEdit, Completer, HotkeyLayout
 
 import scctool.settings
-import base64
 import keyboard
 import weakref
 
@@ -58,7 +57,6 @@ class SubwindowConnections(PyQt5.QtWidgets.QWidget):
         """Create tabs."""
         self.tabs = PyQt5.QtWidgets.QTabWidget()
 
-        self.createFormGroupFTP()
         self.createFormGroupWebsocket()
         self.createFormGroupTwitch()
         self.createFormGroupNightbot()
@@ -67,66 +65,6 @@ class SubwindowConnections(PyQt5.QtWidgets.QWidget):
         self.tabs.addTab(self.formGroupWebsocket, _("Intros && Hotkeys"))
         self.tabs.addTab(self.formGroupTwitch, _("Twitch"))
         self.tabs.addTab(self.formGroupNightbot, _("Nightbot"))
-        self.tabs.addTab(self.formGroupFTP, _("FTP"))
-
-    def createFormGroupFTP(self):
-        """Create form group for FTP."""
-        self.formGroupFTP = PyQt5.QtWidgets.QWidget()
-        layout = PyQt5.QtWidgets.QFormLayout()
-
-        self.ftpServer = MonitoredLineEdit()
-        self.ftpServer.textModified.connect(self.changed)
-        self.ftpServer.setText(
-            scctool.settings.config.parser.get("FTP", "server").strip())
-        self.ftpServer.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
-        self.ftpServer.setPlaceholderText(_("FTP server address"))
-        self.ftpServer.setToolTip('')
-        layout.addRow(PyQt5.QtWidgets.QLabel(_("Host:")), self.ftpServer)
-
-        self.ftpUser = MonitoredLineEdit()
-        self.ftpUser.textModified.connect(self.changed)
-        self.ftpUser.setText(
-            scctool.settings.config.parser.get("FTP", "user").strip())
-        self.ftpUser.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
-        self.ftpUser.setPlaceholderText(_("FTP username"))
-        self.ftpUser.setToolTip('')
-        layout.addRow(PyQt5.QtWidgets.QLabel(_("Username:")), self.ftpUser)
-
-        self.ftpPwd = MonitoredLineEdit()
-        self.ftpPwd.textModified.connect(self.changed)
-        self.ftpPwd.setText(base64.b64decode(scctool.settings.config.parser.get(
-            "FTP", "passwd").strip().encode()).decode("utf8"))
-        self.ftpPwd.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
-        self.ftpPwd.setPlaceholderText(_("FTP password"))
-        self.ftpPwd.setToolTip('')
-        self.ftpPwd.setEchoMode(PyQt5.QtWidgets.QLineEdit.Password)
-        label = PyQt5.QtWidgets.QLabel(_("Password:"))
-        # label.setFixedWidth(100)
-        layout.addRow(label, self.ftpPwd)
-
-        self.ftpDir = MonitoredLineEdit()
-        self.ftpDir.textModified.connect(self.changed)
-        self.ftpDir.setText(
-            scctool.settings.config.parser.get("FTP", "dir").strip())
-        self.ftpDir.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
-        self.ftpDir.setPlaceholderText(_("currently using root directory"))
-        self.ftpDir.setToolTip('')
-        layout.addRow(PyQt5.QtWidgets.QLabel(_("Directory:")), self.ftpDir)
-
-        container = PyQt5.QtWidgets.QHBoxLayout()
-        self.pb_testFTP = PyQt5.QtWidgets.QPushButton(
-            _('Test && Setup FTP server'))
-        self.pb_testFTP.clicked.connect(self.testFTP)
-        container.addWidget(self.pb_testFTP)
-
-        layout.addRow(PyQt5.QtWidgets.QLabel(""), container)
-
-        self.formGroupFTP.setLayout(layout)
-
-    def testFTP(self):
-        """Test FTP settings."""
-        self.saveFtpData()
-        FTPsetup(self.controller, self.mainWindow)
 
     def addHotkey(self, ident, label):
         element = HotkeyLayout(
@@ -151,7 +89,10 @@ class SubwindowConnections(PyQt5.QtWidgets.QWidget):
         self.hotkeyBox = PyQt5.QtWidgets.QGroupBox(_("Intro Hotkeys"))
         layout = PyQt5.QtWidgets.QVBoxLayout()
 
-        keyboard.unhook_all()
+        try:
+            keyboard.unhook_all()
+        except AttributeError:
+            pass
         self.hotkeys = dict()
         layout.addLayout(self.addHotkey("hotkey_player1", _("Player 1")))
         layout.addLayout(self.addHotkey("hotkey_player2", _("Player 2")))
@@ -356,8 +297,6 @@ class SubwindowConnections(PyQt5.QtWidgets.QWidget):
     def saveData(self):
         """Save the data to config."""
 
-        self.saveFtpData()
-
         scctool.settings.config.parser.set(
             "Twitch", "channel", self.twitchChannel.text().strip())
         scctool.settings.config.parser.set(
@@ -370,17 +309,6 @@ class SubwindowConnections(PyQt5.QtWidgets.QWidget):
         self.saveWebsocketdata()
 
         self.controller.refreshButtonStatus()
-
-    def saveFtpData(self):
-        """Save FTP data."""
-        scctool.settings.config.parser.set(
-            "FTP", "server", self.ftpServer.text().strip())
-        scctool.settings.config.parser.set(
-            "FTP", "user", self.ftpUser.text().strip())
-        scctool.settings.config.parser.set("FTP", "passwd", base64.b64encode(
-            self.ftpPwd.text().strip().encode()).decode("utf8"))
-        scctool.settings.config.parser.set(
-            "FTP", "dir", self.ftpDir.text().strip())
 
     def saveWebsocketdata(self):
         """Save Websocket data."""

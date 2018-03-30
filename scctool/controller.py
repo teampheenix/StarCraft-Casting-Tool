@@ -9,7 +9,6 @@ try:
     from scctool.tasks.apithread import SC2ApiThread, ToggleScore
     from scctool.tasks.webapp import FlaskThread
     from scctool.settings.placeholders import PlaceholderList
-    from scctool.tasks.ftpuploader import FTPUploader
     from scctool.tasks.websocket import WebsocketThread
     from scctool.tasks.autorequests import AutoRequestsThread
     from scctool.tasks.updater import VersionHandler
@@ -43,7 +42,6 @@ class MainController:
             self.webApp = FlaskThread()
             self.webApp.signal_twitch.connect(self.webAppDone_twitch)
             self.webApp.signal_nightbot.connect(self.webAppDone_nightbot)
-            self.ftpUploader = FTPUploader()
             self.websocketThread = WebsocketThread(self)
             self.autoRequestsThread = AutoRequestsThread(self)
             self.placeholderSetup()
@@ -288,8 +286,6 @@ class MainController:
             self.view.cb_autoNightbot.setChecked(
                 scctool.settings.config.parser.getboolean("Form", "autonightbot"))
 
-            self.view.cb_autoFTP.setChecked(
-                scctool.settings.config.parser.getboolean("FTP", "upload"))
         except Exception as e:
             module_logger.exception("message")
 
@@ -424,7 +420,6 @@ class MainController:
             self.SC2ApiThread.requestTermination("ALL")
             self.webApp.terminate()
             self.saveConfig()
-            self.ftpUploader.kill()
             self.websocketThread.stop()
             self.autoRequestsThread.terminate()
             scctool.settings.saveNightbotCommands()
@@ -448,8 +443,6 @@ class MainController:
                 self.view.cb_autoTwitch.isChecked()))
             scctool.settings.config.parser.set("Form", "autonightbot", str(
                 self.view.cb_autoNightbot.isChecked()))
-            scctool.settings.config.parser.set(
-                "FTP", "upload", str(self.view.cb_autoFTP.isChecked()))
 
             configFile = open(scctool.settings.configFile,
                               'w', encoding='utf-8-sig')
@@ -514,13 +507,6 @@ class MainController:
             _('Specify your Nightbot Settings to use this feature'),
             '')
 
-        self.toggleWidget(
-            self.view.cb_autoFTP,
-            scctool.settings.config.ftpIsValid(),
-            _('Specify your FTP Settings to use this feature'),
-            _('Automatically uploads all streaming data' +
-              ' in the background to a specified FTP server.'))
-
     def requestToggleScore(self, newSC2MatchData, swap=False):
         """Check if SC2-Client-API players are present and toggle score accordingly."""
         try:
@@ -571,14 +557,6 @@ class MainController:
                     for line in fin:
                         line = line.replace('%LOGO%', logo.getFile(True))
                         fout.write(line)
-
-        # self.ftpUploader.cwd(scctool.settings.OBShtmlDir)
-
-        # for file in ["logo1-data.html", "logo2-data.html"]:
-        #     self.ftpUploader.upload(
-        #         scctool.settings.OBShtmlDir + "/data/" + file, file)
-
-        #   self.ftpUploader.cwd("..")
 
     def updateHotkeys(self):
         """Refresh hotkeys."""
@@ -664,17 +642,8 @@ class MainController:
         if mapname not in scctool.settings.maps:
             scctool.settings.maps.append(mapname)
 
-        self.ftpUploader.cwd(scctool.settings.OBSmapDir + "/src/maps")
-        self.ftpUploader.upload(newfile, self.getMapImg(mapname))
-        self.ftpUploader.cwd("../../..")
-
     def deleteMap(self, map):
         """Delete map and file."""
-        mapdir = scctool.settings.getAbsPath(scctool.settings.OBSmapDir)
-        self.ftpUploader.cwd(mapdir + "/src/maps")
-        self.ftpUploader.delete(self.getMapImg(map))
-        self.ftpUploader.cwd("../../..")
-
         os.remove(self.getMapImg(map, True))
         scctool.settings.maps.remove(map)
 

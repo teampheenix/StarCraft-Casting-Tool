@@ -90,11 +90,6 @@ class MatchGrabber(MatchGrabberParent):
                 logo.fromURL(self._rawData['team' + str(idx + 1)]['logo'])
                 getattr(logoManager, 'setTeam{}Logo'.format(idx + 1))(logo)
 
-                # self._controller.ftpUploader.cwd(dir)
-                # self._controller.ftpUploader.upload(
-                #     fname,
-                #     "logo" + str(idx + 1) + ext)
-                # self._controller.ftpUploader.cwd("..")
             except Exception as e:
                 module_logger.exception("message")
 
@@ -120,8 +115,5 @@ class MatchGrabber(MatchGrabberParent):
         try:
             urlretrieve(url, scctool.settings.getAbsPath(fname))
 
-            self._controller.ftpUploader.cwd(dir)
-            self._controller.ftpUploader.upload(fname, "matchbanner.png")
-            self._controller.ftpUploader.cwd("..")
         except Exception as e:
             module_logger.exception("message")
