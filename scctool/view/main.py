@@ -15,7 +15,7 @@ from scctool.view.subConnections import SubwindowConnections
 from scctool.view.subStyles import SubwindowStyles
 from scctool.view.subMisc import SubwindowMisc
 from scctool.view.subMarkdown import SubwindowMarkdown
-from scctool.view.subIcons import SubwindowIcons
+from scctool.view.subLogos import SubwindowLogos
 
 # create logger
 module_logger = logging.getLogger('scctool.view.main')
@@ -553,13 +553,13 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
 
             self.qb_logo1 = IconPushButton()
             self.qb_logo1.setFixedWidth(self.raceWidth)
-            self.qb_logo1.clicked.connect(lambda: self.logoDialog(1))
+            self.qb_logo1.clicked.connect(self.logoDialog)
             logo = self.controller.logoManager.getTeam1()
             self.qb_logo1.setIcon(PyQt5.QtGui.QIcon(logo.provideQPixmap()))
 
             self.qb_logo2 = IconPushButton()
             self.qb_logo2.setFixedWidth(self.raceWidth)
-            self.qb_logo2.clicked.connect(lambda: self.logoDialog(2))
+            self.qb_logo2.clicked.connect(self.logoDialog)
             logo = self.controller.logoManager.getTeam2()
             self.qb_logo2.setIcon(PyQt5.QtGui.QIcon(logo.provideQPixmap()))
 
@@ -1003,9 +1003,9 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
         except Exception as e:
             module_logger.exception("message")
 
-    def logoDialog(self, button):
+    def logoDialog(self):
         """Open dialog for team logo."""
-        self.mysubwindows['icons'] = SubwindowIcons()
+        self.mysubwindows['icons'] = SubwindowLogos()
         self.mysubwindows['icons'].createWindow(self, self.controller)
         self.mysubwindows['icons'].show()
 

@@ -1,19 +1,20 @@
-"""Show readme sub window."""
+"""Show logo manager sub window."""
 import logging
 import PyQt5
 
 import scctool.settings
 from scctool.view.widgets import DragImageLabel
+
 # create logger
-module_logger = logging.getLogger('scctool.view.subIcons')
+module_logger = logging.getLogger('scctool.view.subLogos')
 
 
-class SubwindowIcons(PyQt5.QtWidgets.QWidget):
+class SubwindowLogos(PyQt5.QtWidgets.QWidget):
     """Show readme sub window."""
 
     def createWindow(self, mainWindow, controller):
         """Create readme sub window."""
-        super(SubwindowIcons, self).__init__(None)
+        super(SubwindowLogos, self).__init__(None)
         self.controller = controller
         self.mutex = PyQt5.QtCore.QMutex()
         # self.setWindowIcon(
