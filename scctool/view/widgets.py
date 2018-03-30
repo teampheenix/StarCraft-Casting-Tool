@@ -564,3 +564,51 @@ class InitialUpdater(PyQt5.QtWidgets.QProgressDialog):
             self.setValue(int(float(data['percent_complete']) * 5))
         except Exception as e:
             module_logger.exception("message")
+            
+            
+class DragImageLabel(PyQt5.QtWidgets.QLabel):
+    
+    def __init__(self, file):
+        super(PyQt5.QtWidgets.QLabel, self).__init__()
+        
+        self.iconsize = 120
+        
+        self.setFixedWidth(self.iconsize)
+        self.setFixedHeight(self.iconsize)
+        self.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
+        
+
+        map = PyQt5.QtGui.QPixmap(file).scaled(
+            self.iconsize, self.iconsize, PyQt5.QtCore.Qt.KeepAspectRatio)
+        self.setPixmap(map)
+        self.setAcceptDrops(True)
+        
+        
+    def dragEnterEvent(self, e):
+        data = e.mimeData()
+        if data.hasFormat("application/x-qabstractitemmodeldatalist"):
+            e.accept()
+        else:
+            e.ignore()
+ 
+    def dropEvent(self, e):
+        #itemData = e.mimeData().retrieveData("application/x-qabstractitemmodeldatalist", PyQt5.QtCore.QVariant.List)
+        result = self.decodeMimeData(e.mimeData().data("application/x-qabstractitemmodeldatalist"))
+        map = result[0][1].pixmap(self.iconsize)
+        map = map.scaled(self.iconsize, self.iconsize, PyQt5.QtCore.Qt.KeepAspectRatio)
+        self.setPixmap(map)
+        
+    def decodeMimeData(self, data):
+        result = {}
+        value = PyQt5.QtCore.QVariant()
+        stream = PyQt5.QtCore.QDataStream(data)
+        while not stream.atEnd():
+            row = stream.readInt32()
+            col = stream.readInt32()
+            item = result.setdefault(col, {})
+            for role in range(stream.readInt32()):
+                key = PyQt5.QtCore.Qt.ItemDataRole(stream.readInt32())
+                stream >> value
+                item[key] = value.value()
+        return result    
+        

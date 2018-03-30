@@ -14,6 +14,7 @@ try:
     from scctool.tasks.autorequests import AutoRequestsThread
     from scctool.tasks.updater import VersionHandler
     from scctool.view.widgets import ToolUpdater
+    from scctool.settings.logoManager import LogoManager
     import scctool.settings
     import scctool.tasks.twitch
     import scctool.tasks.nightbot
@@ -49,6 +50,7 @@ class MainController:
             self._warning = False
             self.checkVersion()
             self.initPlayerIntroData()
+            self.logoManager = LogoManager(self)
             scctool.settings.maps = scctool.settings.loadMapList()
             pass
 
@@ -426,6 +428,7 @@ class MainController:
             self.websocketThread.stop()
             self.autoRequestsThread.terminate()
             scctool.settings.saveNightbotCommands()
+            self.logoManager.dumpJson()
             module_logger.info("cleanUp called")
         except Exception as e:
             module_logger.exception("message")

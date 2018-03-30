@@ -17,6 +17,7 @@ from scctool.view.subConnections import SubwindowConnections
 from scctool.view.subStyles import SubwindowStyles
 from scctool.view.subMisc import SubwindowMisc
 from scctool.view.subMarkdown import SubwindowMarkdown
+from scctool.view.subIcons import SubwindowIcons
 
 # create logger
 module_logger = logging.getLogger('scctool.view.main')
@@ -233,33 +234,33 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
 
     def openApiDialog(self):
         """Open subwindow with connection settings."""
-        self.mysubwindows['1'] = SubwindowConnections()
-        self.mysubwindows['1'].createWindow(self)
-        self.mysubwindows['1'].show()
+        self.mysubwindows['connections'] = SubwindowConnections()
+        self.mysubwindows['connections'].createWindow(self)
+        self.mysubwindows['connections'].show()
 
     def openStyleDialog(self):
         """Open subwindow with style settings."""
-        self.mysubwindows['2'] = SubwindowStyles()
-        self.mysubwindows['2'].createWindow(self)
-        self.mysubwindows['2'].show()
+        self.mysubwindows['styles'] = SubwindowStyles()
+        self.mysubwindows['styles'].createWindow(self)
+        self.mysubwindows['styles'].show()
 
     def openMiscDialog(self):
         """Open subwindow with misc settings."""
-        self.mysubwindows['3'] = SubwindowMisc()
-        self.mysubwindows['3'].createWindow(self)
-        self.mysubwindows['3'].show()
+        self.mysubwindows['misc'] = SubwindowMisc()
+        self.mysubwindows['misc'].createWindow(self)
+        self.mysubwindows['misc'].show()
 
     def openReadme(self):
         """Open subwindow with readme viewer."""
-        self.mysubwindows['4'] = SubwindowMarkdown()
-        self.mysubwindows['4'].createWindow(self, _("Readme"), "src/readme.ico", "README.md")
-        self.mysubwindows['4'].show()
+        self.mysubwindows['readme'] = SubwindowMarkdown()
+        self.mysubwindows['readme'].createWindow(self, _("Readme"), "src/readme.ico", "README.md")
+        self.mysubwindows['readme'].show()
         
     def openChangelog(self):
         """Open subwindow with readme viewer."""
-        self.mysubwindows['5'] = SubwindowMarkdown()
-        self.mysubwindows['5'].createWindow(self, "StarCraft Casting Tool "+_("Changelog"), "src/changelog.png", "CHANGELOG.md")
-        self.mysubwindows['5'].show()
+        self.mysubwindows['changelog'] = SubwindowMarkdown()
+        self.mysubwindows['changelog'].createWindow(self, "StarCraft Casting Tool "+_("Changelog"), "src/changelog.png", "CHANGELOG.md")
+        self.mysubwindows['changelog'].show()
 
     def changeLanguage(self, language):
         """Change the language."""
@@ -1041,34 +1042,38 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
 
     def logoDialog(self, button):
         """Open dialog for team logo."""
+        self.mysubwindows['icons'] = SubwindowIcons()
+        self.mysubwindows['icons'].createWindow(self, self.controller)
+        self.mysubwindows['icons'].show()
         # options = PyQt5.QtWidgets.QFileDialog.Options()
         # options |= PyQt5.QtWidgets.QFileDialog.DontUseNativeDialog
-        fileName, status = PyQt5.QtWidgets.QFileDialog.getOpenFileName(
-            self, _("Select Team Logo"), "", _("Support Images ({})").format("*.png *.jpg"))
-        if fileName:
-            try:
-                os.remove(scctool.settings.getAbsPath(scctool.settings.OBSdataDir +
-                                                      "/logo" + str(button) + ".png"))
-            except Exception:
-                pass
-            try:
-                os.remove(scctool.settings.getAbsPath(scctool.settings.OBSdataDir +
-                                                      "/logo" + str(button) + ".jpg"))
-            except Exception:
-                pass
+        
+        # fileName, status = PyQt5.QtWidgets.QFileDialog.getOpenFileName(
+        #     self, _("Select Team Logo"), "", _("Support Images ({})").format("*.png *.jpg"))
+        # if fileName:
+        #     try:
+        #         os.remove(scctool.settings.getAbsPath(scctool.settings.OBSdataDir +
+        #                                               "/logo" + str(button) + ".png"))
+        #     except Exception:
+        #         pass
+        #     try:
+        #         os.remove(scctool.settings.getAbsPath(scctool.settings.OBSdataDir +
+        #                                               "/logo" + str(button) + ".jpg"))
+        #     except Exception:
+        #         pass
 
-            base, ext = os.path.splitext(fileName)
-            ext = ext.split("?")[0]
-            fname = scctool.settings.OBSdataDir + "/logo" + str(button) + ext
+       ##       base, ext = os.path.splitext(fileName)
+        #     ext = ext.split("?")[0]
+        #     fname = scctool.settings.OBSdataDir + "/logo" + str(button) + ext
 
-            shutil.copy(fileName, scctool.settings.getAbsPath(fname))
-            self.controller.updateLogos()
-            self.controller.ftpUploader.cwd(scctool.settings.OBSdataDir)
-            self.controller.ftpUploader.upload(
-                fname, "logo" + str(button) + ext)
-            self.controller.ftpUploader.cwd("..")
-            self.controller.matchData.metaChanged()
-            self.controller.matchData.updateScoreIcon()
+       ##       shutil.copy(fileName, scctool.settings.getAbsPath(fname))
+        #     self.controller.updateLogos()
+        #     self.controller.ftpUploader.cwd(scctool.settings.OBSdataDir)
+        #     self.controller.ftpUploader.upload(
+        #         fname, "logo" + str(button) + ext)
+        #     self.controller.ftpUploader.cwd("..")
+        #     self.controller.matchData.metaChanged()
+        #     self.controller.matchData.updateScoreIcon()
 
     def resizeWindow(self):
         """Resize the window height to size hint."""
