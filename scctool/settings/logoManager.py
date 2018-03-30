@@ -8,8 +8,9 @@ import itertools
 import humanize
 from urllib.request import urlretrieve
 from time import time
-from scctool.settings import logosDir, logos_json_file, getAbsPath
+from scctool.settings import logosDir, logos_json_file, getAbsPath, OBShtmlDir, OBSdataDir
 from PyQt5.QtGui import QPixmap
+from PyQt5.QtCore import Qt
 
 module_logger = logging.getLogger(
     'scctool.settings.logoManager')  # create logger
@@ -20,20 +21,39 @@ class LogoManager:
     _identifiers = set()
     _last_used = []
     _favorites = []
-    _last_used_max_len = 4
+    _ident2map = dict()
+    _last_used_max_len = 10
 
     def __init__(self, controller):
         self.__controller = controller
         self._team1 = Logo(self)
         self._team2 = Logo(self)
-        self.loadJson()
-
-        logo = Logo(self)
-        logo.fromURL(
-            "http://alpha.tl/logos/269acf64f0db26c38e6278219341711a0c9.png")
-        self.setTeam1Logo(logo)
-
-        self.removeDuplicates()
+        try:
+            self.loadJson()
+            self.fromOldFormat()
+            self.removeDuplicates()
+        except Exception as e:
+            module_logger.exception("message")
+        
+    def newLogo(self):
+        return Logo(self)
+        
+    def fromOldFormat(self):
+        if not self._team1.isLogo():
+            file = getAbsPath(self.__controller.linkFile(OBSdataDir + "/" + "logo1"))
+            if os.path.isfile(file):
+                logo = Logo(self)
+                logo.fromFile(file)
+                self.setTeam1Logo(logo)
+                os.remove(file)
+        
+        if not self._team2.isLogo():
+            file = getAbsPath(self.__controller.linkFile(OBSdataDir + "/" + "logo2"))
+            if os.path.isfile(file):
+                logo = Logo(self)
+                logo.fromFile(file)
+                self.setTeam2Logo(logo)
+                os.remove(file)
 
     def dumpJson(self):
         data = dict()
@@ -95,6 +115,9 @@ class LogoManager:
 
     def addLastUsed(self, logo):
         if logo.isFile():
+            for lu_logo in self._last_used:
+                if lu_logo.equals(logo):
+                    self._last_used.remove(lu_logo)
             self._last_used.append(logo)
         self.trimLastUsed()
 
@@ -103,28 +126,41 @@ class LogoManager:
             logo = self.findLogo(logo)
 
         if self._team1.equals(logo):
-            logo.delete(True)
+            logo.delete(False)
             return True
 
         if(self._team1.isLogo()):
             self.addLastUsed(self._team1)
         self._team1 = logo
         return True
+        
+    def resetTeam1Logo(self):
+        if(self._team1.isLogo()):
+            self.addLastUsed(self._team1)
+        self._team1 = Logo(self)
 
     def setTeam2Logo(self, logo):
         if type(logo) is str:
             logo = self.findLogo(logo)
 
         if self._team2.equals(logo):
-            logo.delete(True)
+            logo.delete(False)
             return True
 
         if(self._team2.isLogo()):
             self.addLastUsed(self._team2)
         self._team2 = logo
         return True
+        
+    def resetTeam2Logo(self):
+        if(self._team2.isLogo()):
+            self.addLastUsed(self._team2)
+        self._team2 = Logo(self)
+        
+    def swapTeamLogos(self):
+        self._team1, self._team2 = self._team2, self._team1
 
-    def addFavorites(self, logo):
+    def addFavorite(self, logo):
         if type(logo) is str:
             logo = self.findLogo(logo)
         if type(logo) is Logo:
@@ -136,7 +172,7 @@ class LogoManager:
                 return True
         return False
 
-    def removeFavorites(self, logo):
+    def removeFavorite(self, logo):
         if type(logo) is Logo:
             logo = logo._ident
 
@@ -153,6 +189,14 @@ class LogoManager:
             return True
         if ident == self._team2._ident:
             return True
+        for logo in self._favorites:
+            if ident == logo._ident:
+                return True
+        return False
+        
+    def isInLastused(self, ident):
+        if not ident:
+            return False
         for logo in self._favorites:
             if ident == logo._ident:
                 return True
@@ -178,24 +222,33 @@ class LogoManager:
             self._favorites + self._last_used
         for logo1, logo2 in itertools.combinations(all_logos, 2):
             if logo1.equals(logo2) and logo1._ident != logo2._ident:
-                print("{} {}".format(logo1._ident, logo2._ident))
                 logo2.delete(True, False)
                 logo2._ident = logo1._ident
-
+            
     def getFavorites(self):
         return self._favorites
 
     def getLastUsed(self):
-        return self._last_used
+        lastused = list(self._last_used)
+        lastused.reverse()
+        return lastused
 
     def getTeam1(self):
         return self._team1
 
     def getTeam2(self):
         return self._team2
+        
+    def pixmap2ident(self, pixmap):
+        for ident, map in self._ident2map.items():
+            if map.cacheKey() == pixmap.cacheKey():
+                return ident
+        return ""
 
 
 class Logo:
+    
+    _iconsize = 120
 
     def __init__(self, manager):
         self._manager = manager
@@ -206,7 +259,7 @@ class Logo:
         self._width = 0
         self._height = 0
         self._size = 0
-        self._ident = ""
+        self._ident = "0"
 
     def generateIdentifier(self):
         while True:
@@ -218,7 +271,7 @@ class Logo:
                 break
 
     def isLogo(self):
-        return bool(self._ident)
+        return bool(self._ident != "0")
 
     def isFile(self):
         if self.isLogo():
@@ -226,10 +279,16 @@ class Logo:
         else:
             return False
 
-    def getFile(self):
+    def getFile(self, web=False):
         if self._format == "none":
-            return False
-        return os.path.join(logosDir, "{}.{}".format(self._ident, self._format))
+            file = os.path.join(OBShtmlDir, "src/SC2.png")
+        else:
+            file = os.path.join(logosDir, "{}.{}".format(self._ident, self._format))
+            
+        if web:
+            file = file.replace('\\','/')
+            
+        return file
 
     def getAbsFile(self):
         file = self.getFile()
@@ -292,6 +351,12 @@ class Logo:
 
         self._manager._identifiers.add(self._ident)
         return True
+        
+    def provideQPixmap(self):
+        if self._manager._ident2map.get(self._ident, None) is None:
+            map = QPixmap(self.getAbsFile()).scaled(self._iconsize, self._iconsize, Qt.KeepAspectRatio)
+            self._manager._ident2map[self._ident] = map
+        return self._manager._ident2map[self._ident]
 
     def getDesc(self):
         size = humanize.naturalsize(self._size)
@@ -302,7 +367,8 @@ class Logo:
 
     def delete(self, force=False, reset=True):
         if force or not self._manager.isUsed(self._ident):
-            os.remove(self.getAbsFile())
+            if self.isFile():
+                os.remove(self.getAbsFile())
             if reset:
                 self._reset()
 

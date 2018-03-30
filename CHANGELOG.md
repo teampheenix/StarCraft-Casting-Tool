@@ -1,6 +1,19 @@
 # Changelog
 
 
+## v1.8.0 (2018-03-30)
+
+### New
+
+* Added Logo Manager featuring last used logos, favorites, adding from URL, and searching Liquipedia for logos.
+
+### Changes
+
+* Returning to the official python keyboard package since v0.13 has been published.
+
+* Changelog is now displayed on restart after an update.
+
+
 ## v1.7.2 (2018-03-26)
 
 ### Changes

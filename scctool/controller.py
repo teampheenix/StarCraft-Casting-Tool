@@ -170,13 +170,12 @@ class MainController:
 
     def updateLogos(self):
         """Updata team logos in  view."""
-        pixmap = PyQt5.QtGui.QIcon(scctool.settings.getAbsPath(self.linkFile(
-            scctool.settings.OBSdataDir + '/logo1')))
-        self.view.qb_logo1.setIcon(pixmap)
-
-        pixmap = PyQt5.QtGui.QIcon(scctool.settings.getAbsPath(self.linkFile(
-            scctool.settings.OBSdataDir + '/logo2')))
-        self.view.qb_logo2.setIcon(pixmap)
+        
+        logo = self.logoManager.getTeam1()
+        self.view.qb_logo1.setIcon(PyQt5.QtGui.QIcon(logo.provideQPixmap()))
+        
+        logo = self.logoManager.getTeam2()
+        self.view.qb_logo2.setIcon(PyQt5.QtGui.QIcon(logo.provideQPixmap()))
 
         self.updateLogosHTML()
 
@@ -249,8 +248,9 @@ class MainController:
             self.matchData.grabData()
             self.matchData.autoSetMyTeam()
             self.matchData.writeJsonFile()
+            self.matchData.downloadLogos()
             try:
-                self.matchData.downloadLogos()
+                pass
             except Exception:
                 pass
             try:
@@ -560,28 +560,25 @@ class MainController:
     def updateLogosHTML(self):
         """Update html files with team logos."""
         for idx in range(2):
+            logo = getattr(self.logoManager, 'getTeam{}'.format(idx+1))()
             filename = scctool.settings.OBShtmlDir +\
                 "/data/logo" + str(idx + 1) + "-data.html"
             filename = scctool.settings.getAbsPath(filename)
             template = scctool.settings.getAbsPath(
                 scctool.settings.OBShtmlDir + "/data/logo-template.html")
             with open(template, "rt", encoding='utf-8-sig') as fin:
-                logo = self.linkFile(
-                    scctool.settings.OBSdataDir + "/" + "logo" + str(idx + 1))
-                if logo == "":
-                    logo = scctool.settings.OBShtmlDir + "/src/SC2.png"
                 with open(filename, "wt", encoding='utf-8-sig') as fout:
                     for line in fin:
-                        line = line.replace('%LOGO%', logo)
+                        line = line.replace('%LOGO%', logo.getFile(True))
                         fout.write(line)
 
-        self.ftpUploader.cwd(scctool.settings.OBShtmlDir)
+        # self.ftpUploader.cwd(scctool.settings.OBShtmlDir)
 
-        for file in ["logo1-data.html", "logo2-data.html"]:
-            self.ftpUploader.upload(
-                scctool.settings.OBShtmlDir + "/data/" + file, file)
+        # for file in ["logo1-data.html", "logo2-data.html"]:
+        #     self.ftpUploader.upload(
+        #         scctool.settings.OBShtmlDir + "/data/" + file, file)
 
-        self.ftpUploader.cwd("..")
+        #   self.ftpUploader.cwd("..")
 
     def updateHotkeys(self):
         """Refresh hotkeys."""
@@ -627,24 +624,19 @@ class MainController:
                 display = "none"
             elif(team1):
                 team = self.matchData.getTeam(0)
-                logo = self.linkFile(
-                    scctool.settings.OBSdataDir + "/" + "logo1")
+                logo = "../" + self.logoManager.getTeam1().getFile(True)
                 display = "block"
             elif(team2):
                 team = self.matchData.getTeam(1)
-                logo = self.linkFile(
-                    scctool.settings.OBSdataDir + "/" + "logo2")
+                logo = "../" + self.logoManager.getTeam2().getFile(True)
                 display = "block"
-
-            if logo == "":
-                logo = scctool.settings.OBShtmlDir + "/src/SC2.png"
 
             self.__playerIntroData[player_idx]['name'] = newData.getPlayer(
                 player_idx)
             self.__playerIntroData[player_idx]['team'] = team
             self.__playerIntroData[player_idx]['race'] = newData.getPlayerRace(
                 player_idx).lower()
-            self.__playerIntroData[player_idx]['logo'] = "../" + logo
+            self.__playerIntroData[player_idx]['logo'] = logo
             self.__playerIntroData[player_idx]['display'] = display
 
     def getMapImg(self, map, fullpath=False):

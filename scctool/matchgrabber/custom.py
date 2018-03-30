@@ -54,7 +54,7 @@ class MatchGrabber(object):
         data = requests.get(url=self._getAPI()).json()
         return data
 
-    def downloadLogos(self):
+    def downloadLogos(self, logoManager):
         """Download logos."""
         raise UserWarning(
             "Error: Cannot download logos from this provider.")

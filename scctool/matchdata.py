@@ -685,7 +685,7 @@ class matchData:
 
     def downloadLogos(self):
         """Grab the team logos via a provider."""
-        self.__matchGrabber.downloadLogos()
+        self.__matchGrabber.downloadLogos(self.__controller.logoManager)
 
     def createOBStxtFiles(self):
         """Create OBS txt files."""
@@ -853,15 +853,9 @@ class matchData:
         elif(score[1] > threshold):
             winner[1] = "winner"
 
-        logo1 = self.__controller.linkFile(
-            scctool.settings.OBSdataDir + "/logo1")
-        if logo1 == "":
-            logo1 = scctool.settings.OBShtmlDir + "/src/SC2.png"
+        logo1 = self.__controller.logoManager.getTeam1().getFile(True)
 
-        logo2 = self.__controller.linkFile(
-            scctool.settings.OBSdataDir + "/logo2")
-        if logo2 == "":
-            logo2 = scctool.settings.OBShtmlDir + "/src/SC2.png"
+        logo2 = self.__controller.logoManager.getTeam2().getFile(True)
 
         filename = scctool.settings.getAbsPath(
             scctool.settings.OBShtmlDir + "/data/score-data.html")

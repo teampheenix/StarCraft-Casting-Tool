@@ -79,36 +79,23 @@ class MatchGrabber(MatchGrabberParent):
 
             self._matchData.setAllKill(False)
 
-    def downloadLogos(self):
+    def downloadLogos(self, logoManager):
         """Download team logos."""
-        dir = scctool.settings.OBSdataDir
         if self._rawData is None:
             raise ValueError(
                 "Error: No raw data.")
-
+            
         for idx in range(2):
             try:
-                os.remove(scctool.settings.getAbsPath(
-                    dir + "/logo" + str(idx + 1) + ".png"))
-            except Exception:
-                pass
-            try:
-                os.remove(scctool.settings.getAbsPath(
-                    dir + "/logo" + str(idx + 1) + ".jpg"))
-            except Exception:
-                pass
-            try:
-                url = self._rawData['team' + str(idx + 1)]['logo']
-                base, ext = os.path.splitext(url)
-                ext = ext.split("?")[0].lower()
-                fname = dir + "/logo" + str(idx + 1) + ext
-                urlretrieve(url, scctool.settings.getAbsPath(fname))
+                logo = logoManager.newLogo()
+                logo.fromURL(self._rawData['team' + str(idx + 1)]['logo'])
+                getattr(logoManager, 'setTeam{}Logo'.format(idx+1))(logo)
 
-                self._controller.ftpUploader.cwd(dir)
-                self._controller.ftpUploader.upload(
-                    fname,
-                    "logo" + str(idx + 1) + ext)
-                self._controller.ftpUploader.cwd("..")
+                # self._controller.ftpUploader.cwd(dir)
+                # self._controller.ftpUploader.upload(
+                #     fname,
+                #     "logo" + str(idx + 1) + ext)
+                # self._controller.ftpUploader.cwd("..")
             except Exception as e:
                 module_logger.exception("message")
 

@@ -206,7 +206,7 @@ class MatchGrabber(MatchGrabberParent):
         else:
             module_logger.info("RSTL Format Unknown")
 
-    def downloadLogos(self):
+    def downloadLogos(self, logoManager):
         """Download team logos."""
         dir = scctool.settings.OBSdataDir
 

@@ -556,16 +556,14 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             self.qb_logo1 = IconPushButton()
             self.qb_logo1.setFixedWidth(self.raceWidth)
             self.qb_logo1.clicked.connect(lambda: self.logoDialog(1))
-            pixmap = PyQt5.QtGui.QIcon(scctool.settings.getAbsPath(self.controller.linkFile(
-                scctool.settings.OBSdataDir + '/logo1')))
-            self.qb_logo1.setIcon(pixmap)
+            logo = self.controller.logoManager.getTeam1()
+            self.qb_logo1.setIcon(PyQt5.QtGui.QIcon(logo.provideQPixmap()))
 
             self.qb_logo2 = IconPushButton()
             self.qb_logo2.setFixedWidth(self.raceWidth)
             self.qb_logo2.clicked.connect(lambda: self.logoDialog(2))
-            pixmap = PyQt5.QtGui.QIcon(scctool.settings.getAbsPath(self.controller.linkFile(
-                scctool.settings.OBSdataDir + '/logo2')))
-            self.qb_logo2.setIcon(pixmap)
+            logo = self.controller.logoManager.getTeam2()
+            self.qb_logo2.setIcon(PyQt5.QtGui.QIcon(logo.provideQPixmap()))
 
             self.sl_team = PyQt5.QtWidgets.QSlider(PyQt5.QtCore.Qt.Horizontal)
             self.sl_team.setMinimum(-1)

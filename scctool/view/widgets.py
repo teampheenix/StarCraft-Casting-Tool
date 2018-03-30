@@ -566,20 +566,25 @@ class InitialUpdater(PyQt5.QtWidgets.QProgressDialog):
 
 
 class DragImageLabel(PyQt5.QtWidgets.QLabel):
+    
 
-    def __init__(self, file):
+    def __init__(self, logo, team = 0):
         super(PyQt5.QtWidgets.QLabel, self).__init__()
+        
+        self._team = team
+        
+        self._iconsize = logo._iconsize
+        self._logomanager = logo._manager
 
-        self.iconsize = 120
-
-        self.setFixedWidth(self.iconsize)
-        self.setFixedHeight(self.iconsize)
+        self.setFixedWidth(self._iconsize)
+        self.setFixedHeight(self._iconsize)
         self.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
 
-        map = PyQt5.QtGui.QPixmap(file).scaled(
-            self.iconsize, self.iconsize, PyQt5.QtCore.Qt.KeepAspectRatio)
-        self.setPixmap(map)
-        self.setAcceptDrops(True)
+        self.setLogo(logo)
+        self.setAcceptDrops(False)
+        
+    def setLogo(self, logo):
+        self.setPixmap(logo.provideQPixmap())
 
     def dragEnterEvent(self, e):
         data = e.mimeData()
@@ -591,17 +596,25 @@ class DragImageLabel(PyQt5.QtWidgets.QLabel):
     def dropEvent(self, e):
         result = self.decodeMimeData(e.mimeData().data(
             "application/x-qabstractitemmodeldatalist"))
-        map = result[0][1].pixmap(self.iconsize)
-        map = map.scaled(self.iconsize, self.iconsize,
-                         PyQt5.QtCore.Qt.KeepAspectRatio)
+        map = result[0][1].pixmap(self._iconsize)
         self.setPixmap(map)
+        
+        if self._team == 1:
+            ident = self._logomanager.pixmap2ident(map)
+            print("Ident: ",ident)
+            logo = self._logomanager.findLogo(ident)
+            self._logomanager.setTeam1Logo(logo)
+        elif self._team == 2:
+            ident = self._logomanager.pixmap2ident(map)
+            logo = self._logomanager.findLogo(ident)
+            self._logomanager.setTeam2Logo(logo)
 
     def decodeMimeData(self, data):
         result = {}
         value = PyQt5.QtCore.QVariant()
         stream = PyQt5.QtCore.QDataStream(data)
         while not stream.atEnd():
-            # row = stream.readInt32()
+            _ = stream.readInt32()
             col = stream.readInt32()
             item = result.setdefault(col, {})
             for role in range(stream.readInt32()):

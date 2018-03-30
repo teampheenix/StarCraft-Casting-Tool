@@ -15,6 +15,7 @@ class SubwindowIcons(PyQt5.QtWidgets.QWidget):
         """Create readme sub window."""
         super(SubwindowIcons, self).__init__(None)
         self.controller = controller
+        self.mutex = PyQt5.QtCore.QMutex()
         # self.setWindowIcon(
         #     PyQt5.QtGui.QIcon(scctool.settings.getAbsPath(icon)))
         self.mainWindow = mainWindow
@@ -22,29 +23,45 @@ class SubwindowIcons(PyQt5.QtWidgets.QWidget):
 
         mainLayout = PyQt5.QtWidgets.QGridLayout()
 
-        self.iconsize = 120
+        self.iconsize = scctool.settings.logoManager.Logo._iconsize
 
         box = PyQt5.QtWidgets.QGroupBox(_("Logo Team 1"))
         layout = PyQt5.QtWidgets.QGridLayout()
         self.team1_icon = DragImageLabel(
-            self.controller.logoManager.getTeam1().getAbsFile())
+            self.controller.logoManager.getTeam1(), 1)
         layout.addWidget(self.team1_icon, 0, 0, 5, 1)
-        layout.addWidget(PyQt5.QtWidgets.QPushButton(
-            _("Load from File")), 0, 1)
-        layout.addWidget(PyQt5.QtWidgets.QPushButton(_("Load from URL")), 1, 1)
-        layout.addWidget(PyQt5.QtWidgets.QPushButton(
-            _("Search Liquipedia")), 2, 1)
-        layout.addWidget(PyQt5.QtWidgets.QPushButton(
-            _("Add to Favorites")), 3, 1)
-        layout.addWidget(PyQt5.QtWidgets.QPushButton(_("Remove")), 4, 1)
+        button = PyQt5.QtWidgets.QPushButton(_("Load from File"))
+        button.clicked.connect(lambda: self.logoFromFileDialog(1))
+        layout.addWidget(button, 0, 1)
+        button = PyQt5.QtWidgets.QPushButton(_("Load from URL"))
+        button.setEnabled(False)
+        layout.addWidget(button, 1, 1)
+        button = PyQt5.QtWidgets.QPushButton(_("Search Liquipedia"))
+        button.setEnabled(False)
+        layout.addWidget(button, 2, 1)
+        button = PyQt5.QtWidgets.QPushButton(_("Add to Favorites"))
+        button.clicked.connect(lambda: self.addFavorite(1))
+        layout.addWidget(button, 3, 1)
+        button = PyQt5.QtWidgets.QPushButton(_("Remove"))
+        button.clicked.connect(lambda: self.removeLogo(1))
+        layout.addWidget(button, 4, 1)
         box.setLayout(layout)
         mainLayout.addWidget(box, 0, 0)
 
         box = PyQt5.QtWidgets.QGroupBox("")
         layout = PyQt5.QtWidgets.QVBoxLayout()
-        layout.addWidget(PyQt5.QtWidgets.QPushButton("↔"))
-        layout.addWidget(PyQt5.QtWidgets.QPushButton("→"))
-        layout.addWidget(PyQt5.QtWidgets.QPushButton("←"))
+        button = PyQt5.QtWidgets.QPushButton("↔")
+        button.clicked.connect(self.swapLogos)
+        layout.addWidget(button)
+        
+        button = PyQt5.QtWidgets.QPushButton("→")
+        button.clicked.connect(self.one2two)
+        layout.addWidget(button)
+        
+        button = PyQt5.QtWidgets.QPushButton("←")
+        button.clicked.connect(self.two2one)
+        layout.addWidget(button)
+        
         box.setLayout(layout)
         mainLayout.addWidget(box, 0, 1)
 
@@ -56,16 +73,23 @@ class SubwindowIcons(PyQt5.QtWidgets.QWidget):
         box.setAlignment(PyQt5.QtCore.Qt.AlignRight)
         layout = PyQt5.QtWidgets.QGridLayout()
         self.team2_icon = DragImageLabel(
-            self.controller.logoManager.getTeam2().getAbsFile())
+            self.controller.logoManager.getTeam2(), 2)
         layout.addWidget(self.team2_icon, 0, 1, 5, 1)
-        layout.addWidget(PyQt5.QtWidgets.QPushButton(
-            _("Load from File")), 0, 0)
-        layout.addWidget(PyQt5.QtWidgets.QPushButton(_("Load from URL")), 1, 0)
-        layout.addWidget(PyQt5.QtWidgets.QPushButton(
-            _("Search Liquipedia")), 2, 0)
-        layout.addWidget(PyQt5.QtWidgets.QPushButton(
-            _("Add to Favorites")), 3, 0)
-        layout.addWidget(PyQt5.QtWidgets.QPushButton(_("Remove")), 4, 0)
+        button = PyQt5.QtWidgets.QPushButton(_("Load from File"))
+        button.clicked.connect(lambda: self.logoFromFileDialog(2))
+        layout.addWidget(button, 0, 0)
+        button = PyQt5.QtWidgets.QPushButton(_("Load from URL"))
+        button.setEnabled(False)
+        layout.addWidget(button, 1, 0)
+        button = PyQt5.QtWidgets.QPushButton(_("Search Liquipedia"))
+        button.setEnabled(False)
+        layout.addWidget(button, 2, 0)
+        button = PyQt5.QtWidgets.QPushButton(_("Add to Favorites"))
+        button.clicked.connect(lambda: self.addFavorite(2))
+        layout.addWidget(button, 3, 0)
+        button = PyQt5.QtWidgets.QPushButton(_("Remove"))
+        button.clicked.connect(lambda: self.removeLogo(2))
+        layout.addWidget(button, 4, 0)
         box.setLayout(layout)
         mainLayout.addWidget(box, 0, 2, 1, 2)
 
@@ -78,8 +102,7 @@ class SubwindowIcons(PyQt5.QtWidgets.QWidget):
             self.listItemRightClickedFav)
 
         for logo in self.controller.logoManager.getFavorites():
-            map = PyQt5.QtGui.QPixmap(logo.getAbsFile()).scaled(
-                self.iconsize, self.iconsize, PyQt5.QtCore.Qt.KeepAspectRatio)
+            map = logo.provideQPixmap()
             item = PyQt5.QtWidgets.QListWidgetItem(
                 PyQt5.QtGui.QIcon(map), logo.getDesc())
             self.fav_list.addItem(item)
@@ -87,6 +110,8 @@ class SubwindowIcons(PyQt5.QtWidgets.QWidget):
         self.fav_list.setMaximumHeight(160)
         # list.setWrapping(False)
         # list.setVerticalScrollBarPolicy(PyQt5.QtCore.Qt.ScrollBarAlwaysOff)
+        self.fav_list.setAcceptDrops(False)
+        self.fav_list.setDragEnabled(False)
         layout.addWidget(self.fav_list)
         box.setLayout(layout)
 
@@ -100,15 +125,11 @@ class SubwindowIcons(PyQt5.QtWidgets.QWidget):
             PyQt5.QtCore.Qt.CustomContextMenu)
         self.lastused_list.customContextMenuRequested.connect(
             self.listItemRightClickedLastUsed)
-        for logo in self.controller.logoManager.getLastUsed():
-            map = PyQt5.QtGui.QPixmap(logo.getAbsFile()).scaled(
-                self.iconsize, self.iconsize, PyQt5.QtCore.Qt.KeepAspectRatio)
-            item = PyQt5.QtWidgets.QListWidgetItem(
-                PyQt5.QtGui.QIcon(map), logo.getDesc())
-            self.lastused_list.addItem(item)
         self.lastused_list.setIconSize(PyQt5.QtCore.QSize(75, 75))
         self.lastused_list.setMaximumHeight(160)
         self.lastused_list.setAcceptDrops(False)
+        self.lastused_list.setDragEnabled(False)
+        self.refreshLastUsed()
         layout.addWidget(self.lastused_list)
 
         box.setLayout(layout)
@@ -167,27 +188,122 @@ class SubwindowIcons(PyQt5.QtWidgets.QWidget):
 
     def deleteFavorite(self):
         item = self.fav_list.takeItem(self.fav_list.currentRow())
+        map = item.icon().pixmap(self.iconsize)
+        ident = self.controller.logoManager.pixmap2ident(map)
+        self.controller.logoManager.removeFavorite(ident)
         item = None
 
     def setTeam1Logo(self, list):
         item = list.currentItem()
         map = item.icon().pixmap(self.iconsize)
-        map = map.scaled(self.iconsize, self.iconsize,
-                         PyQt5.QtCore.Qt.KeepAspectRatio)
+        ident = self.controller.logoManager.pixmap2ident(map)
+        logo = self.controller.logoManager.findLogo(ident)
+        self.controller.logoManager.setTeam1Logo(logo)
         self.team1_icon.setPixmap(map)
+        self.refreshLastUsed()
 
     def setTeam2Logo(self, list):
         item = list.currentItem()
         map = item.icon().pixmap(self.iconsize)
-        map = map.scaled(self.iconsize, self.iconsize,
-                         PyQt5.QtCore.Qt.KeepAspectRatio)
+        ident = self.controller.logoManager.pixmap2ident(map)
+        logo = self.controller.logoManager.findLogo(ident)
+        self.controller.logoManager.setTeam2Logo(logo)
         self.team2_icon.setPixmap(map)
+        self.refreshLastUsed()
+        
+    def removeLogo(self, team):
+        if team == 1:
+            self.controller.logoManager.resetTeam1Logo()
+            self.team1_icon.setLogo(self.controller.logoManager.getTeam1())
+        elif team == 2:
+            self.controller.logoManager.resetTeam2Logo()
+            self.team2_icon.setLogo(self.controller.logoManager.getTeam2())
+        else:
+            return
+        
+        self.refreshLastUsed()
+            
+    def addFavorite(self, team):
+        if team == 1:
+            map = self.team1_icon.pixmap()
+        elif team == 2:
+            map = self.team2_icon.pixmap()
+        else:
+            return 
+            
+        ident = self.controller.logoManager.pixmap2ident(map)
+        logo = self.controller.logoManager.findLogo(ident)
+        item = PyQt5.QtWidgets.QListWidgetItem(
+            PyQt5.QtGui.QIcon(map), logo.getDesc())
+    
+        if self.controller.logoManager.addFavorite(ident):
+            self.fav_list.addItem(item)
+        
 
     def addFavoriteLastUsed(self):
         item = self.lastused_list.currentItem()
         map = item.icon().pixmap(self.iconsize)
-        map = map.scaled(self.iconsize, self.iconsize,
-                         PyQt5.QtCore.Qt.KeepAspectRatio)
         item = PyQt5.QtWidgets.QListWidgetItem(
             PyQt5.QtGui.QIcon(map), item.text())
-        self.fav_list.addItem(item)
+        ident = self.controller.logoManager.pixmap2ident(map)
+        if self.controller.logoManager.addFavorite(ident):
+            self.fav_list.addItem(item)
+        
+        
+    def refreshLastUsed(self):
+        self.lastused_list.clear()
+        for logo in self.controller.logoManager.getLastUsed():
+            map = logo.provideQPixmap()
+            item = PyQt5.QtWidgets.QListWidgetItem(
+                PyQt5.QtGui.QIcon(map), logo.getDesc())
+            self.lastused_list.addItem(item)
+            
+    def swapLogos(self):        
+        self.controller.logoManager.swapTeamLogos()
+        self.team1_icon.setLogo(self.controller.logoManager.getTeam1())
+        self.team2_icon.setLogo(self.controller.logoManager.getTeam2())
+        
+    def one2two(self):
+        self.controller.logoManager.setTeam2Logo(self.controller.logoManager.getTeam1())
+        self.team2_icon.setLogo(self.controller.logoManager.getTeam2())
+        self.refreshLastUsed()
+        
+    def two2one(self):
+        self.controller.logoManager.setTeam1Logo(self.controller.logoManager.getTeam2())
+        self.team1_icon.setLogo(self.controller.logoManager.getTeam1())
+        self.refreshLastUsed()
+            
+    def logoFromFileDialog(self, team):
+        """Open dialog for team logo."""
+        options = PyQt5.QtWidgets.QFileDialog.Options()
+        options |= PyQt5.QtWidgets.QFileDialog.DontUseNativeDialog
+        
+        fileName, status = PyQt5.QtWidgets.QFileDialog.getOpenFileName(
+            self, _("Select Team Logo"), "", _("Support Images ({})").format("*.png *.jpg"))
+        if fileName:
+            logo = self.controller.logoManager.newLogo()
+            logo.fromFile(fileName)
+            map = logo.provideQPixmap()
+            
+            if team == 1:
+                self.controller.logoManager.setTeam1Logo(logo)
+                self.team1_icon.setPixmap(map)
+                self.refreshLastUsed()
+            elif team == 2:
+                self.controller.logoManager.setTeam2Logo(logo)
+                self.team2_icon.setPixmap(map)
+                self.refreshLastUsed()
+                
+    def closeWindow(self):
+        """Close window without save."""
+        self.close()
+
+    def closeEvent(self, event):
+        """Handle close event."""
+        try:
+            self.controller.updateLogos()
+            self.controller.matchData.metaChanged()
+            self.controller.matchData.updateScoreIcon()
+            event.accept()
+        except Exception as e:
+            module_logger.exception("message")
