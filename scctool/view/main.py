@@ -298,6 +298,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             self.le_url.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
 
             self.le_url.setPlaceholderText("http://alpha.tl/match/3000")
+            self.le_url.returnPressed.connect(self.refresh_click)
 
             completer = PyQt5.QtWidgets.QCompleter(
                 ["http://alpha.tl/match/",
@@ -870,7 +871,8 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
 
     def applycustom_click(self):
         """Handle click to apply custom match."""
-        PyQt5.QtWidgets.QApplication.setOverrideCursor(PyQt5.QtCore.Qt.WaitCursor)
+        PyQt5.QtWidgets.QApplication.setOverrideCursor(
+            PyQt5.QtCore.Qt.WaitCursor)
         try:
             self.trigger = False
             self.statusBar().showMessage(_('Applying Custom Match...'))
@@ -885,9 +887,11 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             module_logger.exception("message")
         finally:
             PyQt5.QtWidgets.QApplication.restoreOverrideCursor()
+
     def resetdata_click(self):
         """Handle click to reset the data."""
-        PyQt5.QtWidgets.QApplication.setOverrideCursor(PyQt5.QtCore.Qt.WaitCursor)
+        PyQt5.QtWidgets.QApplication.setOverrideCursor(
+            PyQt5.QtCore.Qt.WaitCursor)
         try:
             self.trigger = False
             msg = self.controller.resetData()
@@ -900,7 +904,8 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
 
     def refresh_click(self):
         """Handle click to refresh/load data from an URL."""
-        PyQt5.QtWidgets.QApplication.setOverrideCursor(PyQt5.QtCore.Qt.WaitCursor)
+        PyQt5.QtWidgets.QApplication.setOverrideCursor(
+            PyQt5.QtCore.Qt.WaitCursor)
         try:
             url = self.le_url.text()
             self.trigger = False

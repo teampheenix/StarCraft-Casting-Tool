@@ -28,7 +28,8 @@ class SubwindowLogos(PyQt5.QtWidgets.QWidget):
 
         self.iconsize = scctool.settings.logoManager.Logo._iconsize
 
-        box = PyQt5.QtWidgets.QGroupBox(_("Logo Team 1"))
+        box = PyQt5.QtWidgets.QGroupBox(
+            _("Logo Team 1") + " - {}".format(mainWindow.le_team[0].text()))
         layout = PyQt5.QtWidgets.QGridLayout()
         self.team1_icon = DragImageLabel(
             self.controller.logoManager.getTeam1(), 1)
@@ -40,7 +41,8 @@ class SubwindowLogos(PyQt5.QtWidgets.QWidget):
         button.clicked.connect(lambda: self.logoFromUrlDialog(1))
         layout.addWidget(button, 1, 1)
         button = PyQt5.QtWidgets.QPushButton(_("Search Liquipedia"))
-        button.clicked.connect(lambda: self.liqupediaSearchDialog(1))
+        button.clicked.connect(lambda: self.liqupediaSearchDialog(
+            1, mainWindow.le_team[0].text()))
         layout.addWidget(button, 2, 1)
         button = PyQt5.QtWidgets.QPushButton(_("Add to Favorites"))
         button.clicked.connect(lambda: self.addFavorite(1))
@@ -72,7 +74,8 @@ class SubwindowLogos(PyQt5.QtWidgets.QWidget):
         #     0, 0, PyQt5.QtWidgets.QSizePolicy.Expanding,
         #     PyQt5.QtWidgets.QSizePolicy.Minimum), 0, 1)
 
-        box = PyQt5.QtWidgets.QGroupBox(_("Logo Team 2"))
+        box = PyQt5.QtWidgets.QGroupBox(
+            _("Logo Team 2") + " - {}".format(mainWindow.le_team[1].text()))
         box.setAlignment(PyQt5.QtCore.Qt.AlignRight)
         layout = PyQt5.QtWidgets.QGridLayout()
         self.team2_icon = DragImageLabel(
@@ -85,7 +88,8 @@ class SubwindowLogos(PyQt5.QtWidgets.QWidget):
         button.clicked.connect(lambda: self.logoFromUrlDialog(2))
         layout.addWidget(button, 1, 0)
         button = PyQt5.QtWidgets.QPushButton(_("Search Liquipedia"))
-        button.clicked.connect(lambda: self.liqupediaSearchDialog(2))
+        button.clicked.connect(lambda: self.liqupediaSearchDialog(
+            2, mainWindow.le_team[1].text()))
         layout.addWidget(button, 2, 0)
         button = PyQt5.QtWidgets.QPushButton(_("Add to Favorites"))
         button.clicked.connect(lambda: self.addFavorite(2))
@@ -341,11 +345,10 @@ class SubwindowLogos(PyQt5.QtWidgets.QWidget):
                     break
             else:
                 break
-                
-                
-    def liqupediaSearchDialog(self, team):
+
+    def liqupediaSearchDialog(self, team, placeholder):
         self.mysubwindow = SubwindowLiquipediaSearch()
-        self.mysubwindow.createWindow(self)
+        self.mysubwindow.createWindow(self, placeholder, team)
         self.mysubwindow.show()
 
     def closeWindow(self):
