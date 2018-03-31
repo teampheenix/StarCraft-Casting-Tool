@@ -35,6 +35,7 @@ try:
     pip.main(['install', 'humanize', '--upgrade'])
     pip.main(['install', 'markdown2', '--upgrade'])
     pip.main(['install', 'pyupdater', '--upgrade'])
+    pip.main(['install', 'beautifulsoup4', '--upgrade'])
 
     if(system == "Windows"):
         pip.main(['install', 'pypiwin32', '--upgrade'])

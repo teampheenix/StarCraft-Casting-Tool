@@ -1,23 +1,31 @@
-@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+@import url('https://fonts.googleapis.com/css?family=Orbitron:350,400');
 /* latin */
+
+@font-face {
+        font-family: 'OrbitronAdv';
+        font-style: normal;
+        font-weight: 400;
+        src: local('OrbitronAdv Regular'), local('OrbitronAdv-Regular'), url(https://fonts.gstatic.com/s/orbitron/v9/yMJRMIlzdpvBhQQL_Qq7dy0.woff2) format('woff2');
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
 
 :root {
         --border-size: 2px;
-        --border-color: rgb(49, 86, 113);
-        --total-width: 1280px;
-        --total-height: 100px;
+        --border-color: black;
+        --total-width: calc(1280px - 2 * var(--border-size));
+        --total-height: calc(100px - 2 * var(--border-size));
         --border-radius: 20px;
         --middle-width: 120px;
-        --logo-width: 100px;
+        --logo-width: 80px;
         --lower-text-height: 33%;
         --side-width: calc((100% - var(--middle-width) - 2 * var(--logo-width)) / 2);
 }
 
 .text-item {
         color: white;
-        font: bold 18px Open Sans, Helvetica, Sans-Serif;
-        --outline-size: 2.5px;
-        text-shadow: 0px 0px var(--outline-size) rgb(49, 86, 113), 0px 0px var(--outline-size) rgb(49, 86, 113), 0px 0px var(--outline-size) rgb(49, 86, 113), 0px 0px var(--outline-size) rgb(49, 86, 113), 0px 0px var(--outline-size) rgb(49, 86, 113), 0px 0px var(--outline-size) rgb(49, 86, 113), 0px 0px var(--outline-size) rgb(49, 86, 113), 0px 0px var(--outline-size) rgb(49, 86, 113), 0px 0px var(--outline-size) rgb(49, 86, 113);
+        font: bold 18px OrbitronAdv, Orbitron, Helvetica, Sans-Serif;
+        --outline-size: 3px;
+        text-shadow: 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black;
         -webkit-font-smoothing: antialiased;
 }
 
@@ -25,11 +33,15 @@ div.box {
         position: relative;
         width: var(--total-width);
         height: var(--total-height);
+        border: var(--border-size) solid var(--border-color);
+        border-radius: 0px var(--border-radius) 0px var(--border-radius);
         overflow: hidden;
         display: inline-block;
+        box-shadow: 0px 1px 1px rgba(000, 000, 000, 0.5), inset 1px 1px 0px rgba(255, 255, 255, 0.4);
 }
 
 div.logo {
+        background-color: white;
         background-size: contain;
         background-position: center center;
         background-repeat: no-repeat;
@@ -37,35 +49,35 @@ div.logo {
 
 div.box_veryleft {
         position: absolute;
-        height: calc(100% - 5px);
-        top: 2.5px;
-        left: 0px;
-        width: var(--logo-width);
+        height: var(--total-height);
+        top: calc(0px - var(--border-size));
+        left: calc(0px - var(--border-size));
+        width: calc(var(--logo-width) + var(--border-radius) - 2 * var(--border-size));
+        border: var(--border-size) solid var(--border-color);
+        border-radius: 0px var(--border-radius) 0px var(--border-radius);
         overflow: hidden;
 }
 
 div.box_veryright {
         position: absolute;
-        height: calc(100% - 5px);
-        top: 2.5px;
-        right: 0px;
-        width: var(--logo-width);
+        height: var(--total-height);
+        top: calc(0px - var(--border-size));
+        right: calc(0px - var(--border-size));
+        width: calc(var(--logo-width) + var(--border-radius) - 2 * var(--border-size));
+        border: var(--border-size) solid var(--border-color);
+        border-radius: 0px var(--border-radius) 0px var(--border-radius);
         overflow: hidden;
 }
 
 div.box_left {
         position: absolute;
         height: 100%;
-        left: 0px;
-        width: calc((100% - var(--middle-width) + 2 * var(--border-radius)) / 2);
-        background-image: url("../ducklings/background.jpg");
+        left: var(--logo-width);
+        width: calc(var(--side-width) + var(--border-radius));
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0, 0, 0, 0.4)), color-stop(8%, rgba(0, 0, 0, 0.05)), color-stop(50%, rgba(0, 0, 0, 0.0)), color-stop(92%, rgba(0, 0, 0, 0.40)), color-stop(100%, rgba(0, 0, 0, 0.20))), url("../background-left.jpg");
         background-size: cover;
-        background-repeat: no-repeat;
-        background-position: top left;
-        border: var(--border-size) solid var(--border-color);
-        border-radius: var(--border-radius) 0px 0px var(--border-radius);
-        box-sizing: border-box;
-        overflow: hidden;
+        background-repeat: repeat;
+        background-position: -100px 0px;
 }
 
 div.box_middle {
@@ -73,12 +85,13 @@ div.box_middle {
         height: 100%;
         left: calc(50% - var(--middle-width) / 2 - var(--border-size));
         width: var(--middle-width);
-        top: 0px;
+        top: calc(0px - var(--border-size));
         border: var(--border-size) solid var(--border-color);
-        border-radius: var(--border-radius) var(--border-radius) var(--border-radius) var(--border-radius);
-        background-color: rgb(71, 123, 162);
+        border-radius: 0px var(--border-radius) 0px var(--border-radius);
+        background-image: url("../texture1.jpg");
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0, 0, 0, 0.4)), color-stop(8%, rgba(0, 0, 0, 0.05)), color-stop(50%, rgba(0, 0, 0, 0.0)), color-stop(92%, rgba(0, 0, 0, 0.40)), color-stop(100%, rgba(0, 0, 0, 0.20))), url("../texture1.jpg");
+        background-size: cover;
         overflow: hidden;
-        box-sizing: border-box;
 }
 
 div.score_left {
@@ -87,7 +100,7 @@ div.score_left {
         left: 0px;
         width: 50px;
         height: 100%;
-        font: bold 40px Open Sans, Helvetica, Sans-Serif;
+        font: bold 36px OrbitronAdv, Orbitron, Helvetica, Sans-Serif;
         text-align: center;
         line-height: calc(var(--total-height) - var(--border-size));
 }
@@ -98,7 +111,7 @@ div.score_right {
         right: 0px;
         width: 50px;
         height: 100%;
-        font: bold 40px Open Sans, Helvetica, Sans-Serif;
+        font: bold 36px OrbitronAdv, Orbitron, Helvetica, Sans-Serif;
         text-align: center;
         line-height: calc(var(--total-height) - var(--border-size));
 }
@@ -106,10 +119,10 @@ div.score_right {
 div.score_middle {
         position: absolute;
         top: 0px;
-        left: 0px;
-        width: 100%;
+        left: 50px;
+        width: calc(var(--middle-width)-100px);
         height: 100%;
-        font: bold 40px Open Sans, Helvetica, Sans-Serif;
+        font: bold 36px OrbitronAdv, Orbitron, Helvetica, Sans-Serif;
         text-align: center;
         line-height: calc(var(--total-height) - var(--border-size));
 }
@@ -117,39 +130,32 @@ div.score_middle {
 div.box_right {
         position: absolute;
         height: var(--total-height);
-        right: 0px;
-        width: calc((100% - var(--middle-width) + 2 * var(--border-radius)) / 2);
-        background-image: url("../ducklings/background.jpg");
+        right: var(--logo-width);
+        width: calc(var(--side-width) + var(--border-radius));
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0, 0, 0, 0.4)), color-stop(8%, rgba(0, 0, 0, 0.05)), color-stop(50%, rgba(0, 0, 0, 0.0)), color-stop(92%, rgba(0, 0, 0, 0.40)), color-stop(100%, rgba(0, 0, 0, 0.20))), url("../background-right.jpg");
         background-size: cover;
-        background-repeat: repeat;
-        background-position: 0px 0px;
-        border: var(--border-size) solid var(--border-color);
-        border-radius: var(--border-radius) 0px 0px var(--border-radius);
-        box-sizing: border-box;
-        overflow: hidden;
-        transform: scaleX(-1);
+        background-position: right bottom;
 }
 
 div.upper-text-right {
         position: absolute;
         top: 0%;
         height: calc(100% - var(--lower-text-height));
-        left: calc(0% + var(--logo-width) + var(--border-radius) + 0px);
-        width: calc(100% - 2 * var(--border-radius) - var(--logo-width) - 10px);
-        font: bold 36px Open Sans, Helvetica, Sans-Serif;
+        right: calc(0% + var(--border-radius) + 15px);
+        width: calc(100% - 2 * var(--border-radius) - 30px);
+        font: bold 36px OrbitronAdv, Orbitron, Helvetica, Sans-Serif;
         text-align: center;
         line-height: 60px;
         overflow: hidden;
-        transform: scaleX(-1);
 }
 
 div.upper-text-left {
         position: absolute;
         top: 0%;
         height: calc(100% - var(--lower-text-height));
-        left: calc(0% + var(--logo-width) + var(--border-radius) + 0px);
-        width: calc(100% - 2 * var(--border-radius) - var(--logo-width) - 10px);
-        font: bold 36px Open Sans, Helvetica, Sans-Serif;
+        left: calc(0% + var(--border-radius) + 15px);
+        width: calc(100% - 2 * var(--border-radius) - 30px);
+        font: bold 36px OrbitronAdv, Orbitron, Helvetica, Sans-Serif;
         text-align: center;
         line-height: 60px;
         overflow: hidden;
@@ -162,7 +168,7 @@ div.lower-text {
         height: var(--lower-text-height);
         width: 100%;
         line-height: 25px;
-        background: rgba(71, 123, 162, 0.6) !important;
+        background: rgba(0, 0, 0, 0.6) !important;
 }
 
 #circle {
@@ -171,36 +177,43 @@ div.lower-text {
         bottom: 0px;
         width: 28px;
         height: 20px;
-        border-radius: 10px 10px 10px 10px;
-        border: 2px solid var(--border-color);
+        border-radius: 0px 10px 0px 10px;
+        box-shadow: 0px 0px 2px white;
         display: inline-block;
         margin: 1.5px;
-        margin-bottom: -8px;
+        margin-bottom: -6px;
 }
 
 div.mapscore-right {
         position: absolute;
-        left: calc(0% + var(--border-radius) + var(--logo-width) + 6px);
-        width: calc(100% - var(--border-radius) - var(--logo-width) - 6px);
+        left: calc(0% + var(--border-radius) + 6px);
+        width: calc(100% - var(--border-radius) - 6px);
         text-align: center;
         line-height: 25px;
         height: 100%;
-        transform: scaleX(-1);
 }
 
 div.mapscore-left {
         position: absolute;
-        left: calc(0% + var(--border-radius) + var(--logo-width) + 6px);
-        width: calc(100% - var(--border-radius) - var(--logo-width) - 6px);
+        left: calc(0% + var(--border-radius) + 3px);
+        width: calc(100% - 2 * var(--border-radius) - 3px);
         text-align: center;
         line-height: 25px;
         height: 100%;
 }
 
 .winner {
-        --winner-color: #ffcc66;
+        --winner-color: #f29b00;
         --size: 8px;
         color: white !important;
-        text-shadow: 0px 0px 2.5px rgb(49, 86, 113), 0px 0px 2.5px rgb(49, 86, 113), 0px 0px 2.5px rgb(49, 86, 113), 0px 0px 2.5px rgb(49, 86, 113), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color) !important;
+        text-shadow: 0px 0px 2.5px black, 0px 0px 2.5px black, 0px 0px 2.5px black, 0px 0px 2.5px black, 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color) !important;
+        -webkit-font-smoothing: antialiased;
+}
+
+.score {
+        --winner-color: white;
+        --size: 5px;
+        color: white !important;
+        text-shadow: 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color) !important;
         -webkit-font-smoothing: antialiased;
 }

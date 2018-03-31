@@ -49,7 +49,7 @@ This tool should run on any operating system that supports Python 3, e.g., Windo
 
 ### Alternativ: Python Script
 
-**Windows, MacOS, Linux: [Download the Source Code as Archive](https://github.com/teampheenix/StarCraft-Casting-Tool/archive/master.zip)** and exctract StarCraft Casting Tool, download the latest version of Python 3 at [https://www.python.org/downloads](https://www.python.org/downloads). This tool requires the additional Python Packages *PyQt5*, *requests*, *configparser*, *flask*, *humanize*, *markdown2*, *pyupdater*, *keyboard*, *websockets* and on Windows additionally *pypiwin32*, *Pillow*, *pytesseract*. To install these packages execute the script `installPackages.py` once or do it manually (e.g., via *pip*). Execute `StarCraftCastingTool.pyw` or execute the command `python3 StarCraftCastingTool.pyw` to start the SCC Tool.
+**Windows, MacOS, Linux: [Download the Source Code as Archive](https://github.com/teampheenix/StarCraft-Casting-Tool/archive/master.zip)** and exctract StarCraft Casting Tool, download the latest version of Python 3 at [https://www.python.org/downloads](https://www.python.org/downloads). This tool requires the additional Python Packages *PyQt5*, *requests*, *configparser*, *flask*, *humanize*, *markdown2*, *pyupdater*, *keyboard*, *websockets*, *beautifulsoup4* and on Windows additionally *pypiwin32*, *Pillow*, *pytesseract*. To install these packages execute the script `installPackages.py` once or do it manually (e.g., via *pip*). Execute `StarCraftCastingTool.pyw` or execute the command `python3 StarCraftCastingTool.pyw` to start the SCC Tool.
 
 ## Instructions for Use
 
@@ -78,7 +78,7 @@ Sometimes the order of players given by the SC2-Client-API differs from the orde
 
 Include the Player Intro `OBS_html/intro.html` as browser sources (using the full height and width of your display). The intros will only work if the task *Provide Player Intros* is activated in SCC-Tool. The data will be updated when a game or replay is started in the StarCraft 2 client. You have to assign hotkeys to trigger the intros in *Settings: Connections: Intros & Hotkeys*. The first player is always corresponding to the player your observer camera is centered on at start of a game. The sound volume of the intros as well as the duration of the intros can be adjusted in *Settings: Connections: Intros & Hotkeys*.
 
-## Customization
+## Customization 
 
 Some basic options for customization can be found under *Settings: Styles*, for example, alternative styles/skins for the Map Icons, Score Icon, Intros and option to specify border colors. For additional **nearly unlimited customization** of the Icons you can make your own custom skins via [CSS](https://www.w3schools.com/css/) by creating new alternative *css*-files and placing them into `OBS_mapicons/src/css/box_styles`, `OBS_mapicons/src/css/landscape_styles`, `OBS_html/src/css/score_styles`, or `OBS_html/src/css/intro` respectively. If you do so, please share your custom skins with this project. If you want help implementing your own icon skin with CSS or just want to share an idea for a skin join the [Discord server](https://discord.gg/G9hFEfh).
 
