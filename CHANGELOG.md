@@ -11,6 +11,8 @@
 
 ### Changes
 
+* Migrated to Python 3.6.5.
+
 * Returning to the official python keyboard package since v0.13 has been published.
 
 * Changelog is now displayed on restart after an update.

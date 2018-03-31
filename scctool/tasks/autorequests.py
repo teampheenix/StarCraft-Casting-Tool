@@ -68,7 +68,7 @@ class AutoRequestsThread(TasksThread):
             elif(scctool.tasks.nightbot.previousMsg[command] != message):
                 data[command] = message
 
-        for cmd, msg, _, deleted in scctool.tasks.nightbot.updateCommand(data):
+        for cmd, msg, success, deleted in scctool.tasks.nightbot.updateCommand(data):
             self.nightbotSignal.emit(msg)
             if not success:
                 self.disableCB.emit('nightbot')

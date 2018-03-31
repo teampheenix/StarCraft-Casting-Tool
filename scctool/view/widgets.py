@@ -5,6 +5,7 @@ import os
 import re
 import shutil
 import time
+import requests
 import scctool.matchdata
 import scctool.settings.config
 import scctool.tasks.updater
@@ -104,6 +105,64 @@ class StyleComboBox(PyQt5.QtWidgets.QComboBox):
 
     def applyWebsocket(self, controller):
         controller.websocketThread.changeStyle(self.currentText())
+
+
+class LogoDownloader(PyQt5.QtWidgets.QProgressDialog):
+    """Define updater dialog."""
+
+    def __init__(self, controller, mainWindow, url):
+        """Init progress dialog."""
+        PyQt5.QtWidgets.QProgressDialog.__init__(self)
+        self.setWindowModality(PyQt5.QtCore.Qt.ApplicationModal)
+        self.progress = 0
+
+        self.logo = controller.logoManager.newLogo()
+        self.url = url
+        self.file_name = self.logo.fromURL(self.url, False)
+
+        self.setWindowTitle(_("Logo Downloader"))
+        self.setLabelText(
+            _("Downloading {}".format(self.file_name)))
+        self.setCancelButton(None)
+        self.setRange(0, 100)
+        self.setValue(self.minimum())
+
+        self.resize(PyQt5.QtCore.QSize(
+            mainWindow.size().width() * 0.8, self.sizeHint().height()))
+        relativeChange = PyQt5.QtCore.QPoint(mainWindow.size().width() / 2,
+                                             mainWindow.size().height() / 3)\
+            - PyQt5.QtCore.QPoint(self.size().width() / 2,
+                                  self.size().height() / 3)
+        self.move(mainWindow.pos() + relativeChange)
+
+    def download(self):
+        self.show()
+
+        with open(self.file_name, "wb") as f:
+            module_logger.info("Downloading {}".format(self.file_name))
+            response = requests.get(self.url, stream=True)
+            total_length = response.headers.get('content-length')
+
+            if total_length is None:  # no content length header
+                f.write(response.content)
+            else:
+                dl = 0
+                total_length = int(total_length)
+                for data in response.iter_content(chunk_size=4096):
+                    dl += len(data)
+                    f.write(data)
+                    done = int(100 * dl / total_length)
+                    self.setProgress(done)
+
+        return self.logo
+
+    def setProgress(self, value):
+        """Set the progress of the bar."""
+        # TODO: What is the data structure in case of a patch?
+        try:
+            self.setValue(value)
+        except Exception as e:
+            module_logger.exception("message")
 
 
 class ToolUpdater(PyQt5.QtWidgets.QProgressDialog):

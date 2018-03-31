@@ -1,9 +1,10 @@
 """Show logo manager sub window."""
 import logging
 import PyQt5
+import re
 
 import scctool.settings
-from scctool.view.widgets import DragImageLabel
+from scctool.view.widgets import DragImageLabel, LogoDownloader
 
 # create logger
 module_logger = logging.getLogger('scctool.view.subLogos')
@@ -35,7 +36,7 @@ class SubwindowLogos(PyQt5.QtWidgets.QWidget):
         button.clicked.connect(lambda: self.logoFromFileDialog(1))
         layout.addWidget(button, 0, 1)
         button = PyQt5.QtWidgets.QPushButton(_("Load from URL"))
-        button.setEnabled(False)
+        button.clicked.connect(lambda: self.logoFromUrlDialog(1))
         layout.addWidget(button, 1, 1)
         button = PyQt5.QtWidgets.QPushButton(_("Search Liquipedia"))
         button.setEnabled(False)
@@ -80,7 +81,7 @@ class SubwindowLogos(PyQt5.QtWidgets.QWidget):
         button.clicked.connect(lambda: self.logoFromFileDialog(2))
         layout.addWidget(button, 0, 0)
         button = PyQt5.QtWidgets.QPushButton(_("Load from URL"))
-        button.setEnabled(False)
+        button.clicked.connect(lambda: self.logoFromUrlDialog(2))
         layout.addWidget(button, 1, 0)
         button = PyQt5.QtWidgets.QPushButton(_("Search Liquipedia"))
         button.setEnabled(False)
@@ -294,6 +295,51 @@ class SubwindowLogos(PyQt5.QtWidgets.QWidget):
                 self.controller.logoManager.setTeam2Logo(logo)
                 self.team2_icon.setPixmap(map)
                 self.refreshLastUsed()
+
+    def logoFromUrlDialog(self, team):
+        """Open dialog for team logo."""
+
+        url = "http://"
+        regex = re.compile(
+            r'^(?:http|ftp)s?://'  # http:// or https://
+            # domain...
+            r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+'
+            r'(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|'
+            r'localhost|'  # localhost...
+            r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'  # ...or ip
+            r'(?::\d+)?'  # optional port
+            r'(?:/?|[/?]\S+)$', re.IGNORECASE)
+        emsg = PyQt5.QtWidgets.QErrorMessage(self)
+        emsg.setWindowModality(PyQt5.QtCore.Qt.WindowModal)
+
+        while True:
+
+            url, status = PyQt5.QtWidgets.QInputDialog.getText(self, _("Logo from URL"), _(
+                "URL of Team Logo") + ":", PyQt5.QtWidgets.QLineEdit.Normal, url)
+
+            if status:
+
+                if not regex.match(url):
+                    PyQt5.QtWidgets.QMessageBox.critical(
+                        self, "Invalid URL", _('{} is not a valid URL.').format(url))
+                    continue
+                else:
+                    logo = LogoDownloader(
+                        self.controller, self, url).download()
+                    logo.refreshData()
+                    map = logo.provideQPixmap()
+
+                    if team == 1:
+                        self.controller.logoManager.setTeam1Logo(logo)
+                        self.team1_icon.setPixmap(map)
+                        self.refreshLastUsed()
+                    elif team == 2:
+                        self.controller.logoManager.setTeam2Logo(logo)
+                        self.team2_icon.setPixmap(map)
+                        self.refreshLastUsed()
+                    break
+            else:
+                break
 
     def closeWindow(self):
         """Close window without save."""

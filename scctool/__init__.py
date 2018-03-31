@@ -43,7 +43,7 @@ def main():
             translator.load(QLocale(language), "qtbase",
                             "_",  getAbsPath('locales'), ".qm")
             app.installTranslator(translator)
-            
+
             icon = QIcon()
             icon.addFile(getAbsPath('src/scct.ico'), QSize(32, 32))
             app.setWindowIcon(icon)
@@ -89,12 +89,12 @@ def initial_download():
 
     version = scctool.tasks.updater.getDataVersion()
     restart_flag = scctool.tasks.updater.getRestartFlag()
-    
+
     if scctool.tasks.updater.needInitialUpdate(version):
         InitialUpdater()
     elif restart_flag:
         InitialUpdater(version)
-        
+
     scctool.tasks.updater.setRestartFlag(False)
-    
+
     return restart_flag

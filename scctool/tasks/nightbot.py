@@ -70,11 +70,11 @@ def updateCommand(data):
                 if message != "__DELETE__":
                     put_data = {"message": message}
                     requests.put("https://api.nightbot.tv/1/commands/" + id,
-                                headers=headers,
-                                data=put_data).raise_for_status()
+                                 headers=headers,
+                                 data=put_data).raise_for_status()
                 else:
                     requests.delete("https://api.nightbot.tv/1/commands/" + id,
-                                headers=headers).raise_for_status()
+                                    headers=headers).raise_for_status()
                     deleted = True
             elif(message != "__DELETE__"):
                 post_data = {"message": message,
@@ -89,12 +89,12 @@ def updateCommand(data):
                 deleted = True
 
             previousMsg[cmd] = message
-            
+
             if deleted:
                 msg = _("Deleted command '{}'").format(cmd)
             else:
                 msg = _("Updated Nightbot command '{}' to '{}'").format(
-                cmd, message)
+                    cmd, message)
             success = True
 
         except requests.exceptions.HTTPError as e:
@@ -117,7 +117,7 @@ def updateCommand(data):
             module_logger.exception("message")
         finally:
             yield cmd, msg, success, deleted
-            
+
     return
 
 

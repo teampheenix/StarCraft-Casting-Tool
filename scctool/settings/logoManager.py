@@ -32,6 +32,7 @@ class LogoManager:
             self.loadJson()
             self.fromOldFormat()
             self.removeDuplicates()
+            self.clearFolder()
         except Exception as e:
             module_logger.exception("message")
 
@@ -87,9 +88,9 @@ class LogoManager:
         try:
             with open(logos_json_file) as json_file:
                 data = json.load(json_file)
-        except:
-            return 
-        
+        except (OSError, IOError):
+            return
+
         for item in data['last_used']:
             logo = Logo(self)
             logo.fromDict(item)
@@ -201,7 +202,7 @@ class LogoManager:
     def isInLastused(self, ident):
         if not ident:
             return False
-        for logo in self._favorites:
+        for logo in self._last_used:
             if ident == logo._ident:
                 return True
         return False
@@ -228,6 +229,18 @@ class LogoManager:
             if logo1.equals(logo2) and logo1._ident != logo2._ident:
                 logo2.delete(True, False)
                 logo2._ident = logo1._ident
+
+    def clearFolder(self):
+        dir = getAbsPath(logosDir)
+
+        for fname in os.listdir(dir):
+            full_fname = os.path.join(dir, fname)
+            name, ext = os.path.splitext(fname)
+            ext = ext.replace(".", "")
+            if (os.path.isfile(full_fname) and
+                    not (self.isUsed(name) or self.isInLastused(name))):
+                os.remove(full_fname)
+                module_logger.info("Removed logo {}".format(full_fname))
 
     def getFavorites(self):
         return self._favorites
@@ -316,13 +329,16 @@ class Logo:
 
         return True
 
-    def fromURL(self, url):
+    def fromURL(self, url, download=True):
         base, ext = os.path.splitext(url)
         self._format = ext.split("?")[0].replace(".", "").lower()
         self.generateIdentifier()
         fname = self.getAbsFile()
-        urlretrieve(url, fname)
-        self.refreshData()
+        if download:
+            urlretrieve(url, fname)
+            self.refreshData()
+        else:
+            return fname
 
     def refreshData(self):
         file = self.getAbsFile()
