@@ -5,6 +5,8 @@
 
 ### New
 
+* Match Grabber can now be used by pressing enter.
+
 * Removed FTP-Upload. If you were using this feature, please contact me and I will provide an alternative via websockets.
 
 * Added Logo Manager featuring last used logos, favorites, adding from URL, and searching Liquipedia for logos.
@@ -18,6 +20,8 @@
 * Changelog is now displayed on restart after an update.
 
 ### Fix
+
+* Testing the Twitch title template works again.
 
 * RSTL Matchgrabber should be working properly for all matches now.
 
