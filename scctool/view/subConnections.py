@@ -352,6 +352,11 @@ class SubwindowConnections(PyQt5.QtWidgets.QWidget):
             event.accept()
         except Exception as e:
             module_logger.exception("message")
+            
+    def testPlaceholder(self, string):
+        """Test placeholders."""
+        string = self.controller.placeholders.replace(string)
+        PyQt5.QtWidgets.QMessageBox.information(self, _("Output:"), string)
 
 
 class CommandDropBox(PyQt5.QtWidgets.QGroupBox):

@@ -4,6 +4,7 @@ import PyQt5
 import re
 
 import scctool.settings
+from scctool.view.subLiquipediaSearch import SubwindowLiquipediaSearch
 from scctool.view.widgets import DragImageLabel, LogoDownloader
 
 # create logger
@@ -39,7 +40,7 @@ class SubwindowLogos(PyQt5.QtWidgets.QWidget):
         button.clicked.connect(lambda: self.logoFromUrlDialog(1))
         layout.addWidget(button, 1, 1)
         button = PyQt5.QtWidgets.QPushButton(_("Search Liquipedia"))
-        button.setEnabled(False)
+        button.clicked.connect(lambda: self.liqupediaSearchDialog(1))
         layout.addWidget(button, 2, 1)
         button = PyQt5.QtWidgets.QPushButton(_("Add to Favorites"))
         button.clicked.connect(lambda: self.addFavorite(1))
@@ -84,7 +85,7 @@ class SubwindowLogos(PyQt5.QtWidgets.QWidget):
         button.clicked.connect(lambda: self.logoFromUrlDialog(2))
         layout.addWidget(button, 1, 0)
         button = PyQt5.QtWidgets.QPushButton(_("Search Liquipedia"))
-        button.setEnabled(False)
+        button.clicked.connect(lambda: self.liqupediaSearchDialog(2))
         layout.addWidget(button, 2, 0)
         button = PyQt5.QtWidgets.QPushButton(_("Add to Favorites"))
         button.clicked.connect(lambda: self.addFavorite(2))
@@ -340,9 +341,15 @@ class SubwindowLogos(PyQt5.QtWidgets.QWidget):
                     break
             else:
                 break
+                
+                
+    def liqupediaSearchDialog(self, team):
+        self.mysubwindow = SubwindowLiquipediaSearch()
+        self.mysubwindow.createWindow(self)
+        self.mysubwindow.show()
 
     def closeWindow(self):
-        """Close window without save."""
+        """Close window."""
         self.close()
 
     def closeEvent(self, event):

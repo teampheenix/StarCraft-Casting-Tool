@@ -297,11 +297,11 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             self.le_url = PyQt5.QtWidgets.QLineEdit()
             self.le_url.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
 
-            self.le_url.setPlaceholderText("http://alpha.tl/match/2392")
+            self.le_url.setPlaceholderText("http://alpha.tl/match/3000")
 
             completer = PyQt5.QtWidgets.QCompleter(
                 ["http://alpha.tl/match/",
-                 "http://hdgame.net/en/tournaments/list/tournament/rstl-12/"], self.le_url)
+                 "http://hdgame.net/en/tournaments/list/tournament/rstl-13/"], self.le_url)
             completer.setCaseSensitivity(PyQt5.QtCore.Qt.CaseInsensitive)
             completer.setCompletionMode(
                 PyQt5.QtWidgets.QCompleter.UnfilteredPopupCompletion)
@@ -870,6 +870,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
 
     def applycustom_click(self):
         """Handle click to apply custom match."""
+        PyQt5.QtWidgets.QApplication.setOverrideCursor(PyQt5.QtCore.Qt.WaitCursor)
         try:
             self.trigger = False
             self.statusBar().showMessage(_('Applying Custom Match...'))
@@ -882,9 +883,11 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             self.trigger = True
         except Exception as e:
             module_logger.exception("message")
-
+        finally:
+            PyQt5.QtWidgets.QApplication.restoreOverrideCursor()
     def resetdata_click(self):
         """Handle click to reset the data."""
+        PyQt5.QtWidgets.QApplication.setOverrideCursor(PyQt5.QtCore.Qt.WaitCursor)
         try:
             self.trigger = False
             msg = self.controller.resetData()
@@ -892,9 +895,12 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             self.trigger = True
         except Exception as e:
             module_logger.exception("message")
+        finally:
+            PyQt5.QtWidgets.QApplication.restoreOverrideCursor()
 
     def refresh_click(self):
         """Handle click to refresh/load data from an URL."""
+        PyQt5.QtWidgets.QApplication.setOverrideCursor(PyQt5.QtCore.Qt.WaitCursor)
         try:
             url = self.le_url.text()
             self.trigger = False
@@ -904,6 +910,8 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             self.trigger = True
         except Exception as e:
             module_logger.exception("message")
+        finally:
+            PyQt5.QtWidgets.QApplication.restoreOverrideCursor()
 
     def openBrowser_click(self):
         """Handle request to open URL in browser."""
