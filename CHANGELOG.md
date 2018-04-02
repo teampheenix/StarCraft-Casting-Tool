@@ -1,6 +1,13 @@
 # Changelog
 
 
+## v1.8.2 (2018-04-02)
+
+### Fix
+
+* Winning player should now be properly transfered to the next map when using All-Kill-Format/Mode.
+
+
 ## v1.8.1 (2018-04-02)
 
 ### New
