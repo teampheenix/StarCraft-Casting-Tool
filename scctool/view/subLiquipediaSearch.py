@@ -47,7 +47,8 @@ class SubwindowLiquipediaSearch(PyQt5.QtWidgets.QWidget):
         layout = PyQt5.QtWidgets.QHBoxLayout()
         self.result_list = PyQt5.QtWidgets.QListWidget()
         self.result_list.setViewMode(PyQt5.QtWidgets.QListWidget.IconMode)
-        self.result_list.setContextMenuPolicy(PyQt5.QtCore.Qt.CustomContextMenu)
+        self.result_list.setContextMenuPolicy(
+            PyQt5.QtCore.Qt.CustomContextMenu)
         self.result_list.customContextMenuRequested.connect(
             self.listItemRightClicked)
 
@@ -124,7 +125,7 @@ class SubwindowLiquipediaSearch(PyQt5.QtWidgets.QWidget):
             75, 75, PyQt5.QtCore.Qt.KeepAspectRatio)
         self.results[idx].setIcon(PyQt5.QtGui.QIcon(map))
 
-    def applyLogo(self, skip = False):
+    def applyLogo(self, skip=False):
         item = self.result_list.currentItem()
         if item is not None and (skip or item.isSelected()):
             for idx, iteritem in self.results.items():
@@ -139,17 +140,18 @@ class SubwindowLiquipediaSearch(PyQt5.QtWidgets.QWidget):
                     break
 
         self.close()
-        
+
     def listItemRightClicked(self, QPos):
         self.listMenu = PyQt5.QtWidgets.QMenu()
         menu_item = self.listMenu.addAction(_("Open on Liquipedia"))
         menu_item.triggered.connect(self.openLiquipedia)
         menu_item = self.listMenu.addAction(_("Use as Team Logo"))
         menu_item.triggered.connect(lambda: self.applyLogo(True))
-        parentPosition = self.result_list.mapToGlobal(PyQt5.QtCore.QPoint(0, 0))
+        parentPosition = self.result_list.mapToGlobal(
+            PyQt5.QtCore.QPoint(0, 0))
         self.listMenu.move(parentPosition + QPos)
         self.listMenu.show()
-    
+
     def openLiquipedia(self):
         item = self.result_list.currentItem()
         for idx, iteritem in self.results.items():

@@ -471,7 +471,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
 
         except Exception as e:
             module_logger.exception("message")
-            
+
     def allkill_change(self):
         try:
             self.controller.matchData.setAllKill(self.cb_allkill.isChecked())
@@ -499,14 +499,15 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
                 PyQt5.QtWidgets.QCompleter.InlineCompletion)
             completer.setWrapAround(True)
             self.le_map[i].setCompleter(completer)
-        
+
     def updatePlayerCompleters(self):
         """Refresh the completer for the player line edits."""
-        list =  scctool.settings.config.getMyPlayers(True) + self.used_player_names
+        list = scctool.settings.config.getMyPlayers(
+            True) + self.used_player_names
         for player_idx in range(self.max_no_sets):
             for team_idx in range(2):
                 completer = PyQt5.QtWidgets.QCompleter(
-                    list , self.le_player[team_idx][player_idx])
+                    list, self.le_player[team_idx][player_idx])
                 completer.setCaseSensitivity(
                     PyQt5.QtCore.Qt.CaseInsensitive)
                 completer.setCompletionMode(
@@ -647,7 +648,8 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             for player_idx in range(self.max_no_sets):
                 for team_idx in range(2):
                     self.le_player[team_idx][player_idx].editingFinished.connect(
-                        lambda team_idx=team_idx,player_idx=team_idx: self.player_changed(team_idx, player_idx))
+                        lambda team_idx=team_idx, player_idx=team_idx:
+                            self.player_changed(team_idx, player_idx))
                     self.le_player[team_idx][player_idx].setText("TBD")
                     self.le_player[team_idx][player_idx].setAlignment(
                         PyQt5.QtCore.Qt.AlignCenter)

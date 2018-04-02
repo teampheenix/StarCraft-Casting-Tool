@@ -163,7 +163,7 @@ class MainController:
                 self.view.le_map[i].show()
                 self.view.sl_score[i].show()
                 self.view.label_set[i].show()
-                
+
             self.view.updatePlayerCompleters()
 
         except Exception as e:

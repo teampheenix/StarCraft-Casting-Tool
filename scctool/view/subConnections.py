@@ -127,10 +127,10 @@ class SubwindowConnections(PyQt5.QtWidgets.QWidget):
         currentIdx = 0
         idx = 0
         for item in ["Fly-In", "Slide", "Fanfare"]:
-                self.cb_animation.addItem(item)
-                if(item == animation):
-                    currentIdx = idx
-                idx += 1
+            self.cb_animation.addItem(item)
+            if(item == animation):
+                currentIdx = idx
+            idx += 1
         self.cb_animation.setCurrentIndex(currentIdx)
         layout.addRow(PyQt5.QtWidgets.QLabel(
             _("Animation:") + " "), self.cb_animation)
@@ -366,7 +366,7 @@ class SubwindowConnections(PyQt5.QtWidgets.QWidget):
             event.accept()
         except Exception as e:
             module_logger.exception("message")
-            
+
     def testPlaceholder(self, string):
         """Test placeholders."""
         string = self.controller.placeholders.replace(string)

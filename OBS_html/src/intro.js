@@ -47,103 +47,103 @@ function Connect() {
                                 fillText();
                                 var intro = document.getElementById("intro");
                                 var offset = (window.innerWidth - intro.offsetWidth) / 2;
-								var introWidth = intro.offsetWidth;
-								var introHeight = intro.offsetHeight;
+                                var introWidth = intro.offsetWidth;
+                                var introHeight = intro.offsetHeight;
                                 myAudio1.volume = jsonObject.data.volume / 10.0;
-								myAudio2.volume = jsonObject.data.volume / 10.0;
-								myAudio3.volume = jsonObject.data.volume / 10.0;
-								var animation = "default";
-								try{
-										animation = jsonObject.data.animation;
-								} catch {
-										animation = "default";
-								}
-								if (animation == "fanfare")	{								
-									tween.call(playSound3)
-									    .to(intro, 0, {
-                                                opacity: 0,
-                                                left: offset + "px",
-												height: "0px"
-                                        })
-										.to(intro, 0.1, {
-                                                opacity: 1,
-												height: "0px"
-                                        })
-                                        .to(intro, 0.35, {
-                                                ease: Power2.easeOut,
-                                                height: introHeight + "px",
-                                        })
-                                        .to(intro, jsonObject.data.display_time, {
-                                                height: introHeight + "px"
-                                        })
-                                        .to(intro, 0.35, {
-												height: "0px",
-                                                ease: Power1.easeOut
-                                        })
-                                        .to(intro, 0, {
-                                                left: "105%",
-												opacity: 0,
-												height: introHeight + "px"
-                                        });
-								}else if(animation == "slide"){
-									tween.to(intro, 0, {
-                                                opacity: 0,
-                                                left: offset + introWidth/2 + "px",
-												width: "0px"
-                                        })
-										.to(intro, 0.1, {
-                                                opacity: 1,
-                                                left: offset + introWidth/2 + "px",
-												width: "0px"
-                                        })
-										.call(playSound2)
-                                        .to(intro, 0.35, {
-                                                ease: Power2.easeOut,
-                                                width: introWidth + "px",
-												left: offset + "px"
-                                        })
-                                        .to(intro, jsonObject.data.display_time, {
-                                                width: introWidth + "px"
-                                        })
-                                        .call(playSound2)
-                                        .to(intro, 0.35, {
-                                                left: offset + introWidth/2 + "px",
-												width: "0px",
-                                                ease: Power1.easeOut
-                                        })
-                                        .to(intro, 0, {
-                                                left: "105%",
-												opacity: 0,
-												width: introWidth + "px"
-                                        });
-								}else{
-									tween.call(playSound1)
-                                        .to(intro, 0, {
-                                                opacity: 1,
-                                                left: "105%"
-                                        })
-                                        .to(intro, 1.12, {
-                                                ease: Power2.easeIn,
-                                                left: offset + "px"
-                                        })
-                                        .to(intro, jsonObject.data.display_time, {
-                                                left: offset + "px"
-                                        })
-                                        .to(intro, 0.5, {
-                                                opacity: 0,
-                                                ease: Power1.easeInOut
-                                        })
-                                        .to(intro, 0, {
-                                                left: "105%"
-                                        });
-								}
+                                myAudio2.volume = jsonObject.data.volume / 10.0;
+                                myAudio3.volume = jsonObject.data.volume / 10.0;
+                                var animation = "default";
+                                try {
+                                        animation = jsonObject.data.animation;
+                                } catch {
+                                        animation = "default";
+                                }
+                                if (animation == "fanfare") {
+                                        tween.call(playSound3)
+                                                .to(intro, 0, {
+                                                        opacity: 0,
+                                                        left: offset + "px",
+                                                        height: "0px"
+                                                })
+                                                .to(intro, 0.1, {
+                                                        opacity: 1,
+                                                        height: "0px"
+                                                })
+                                                .to(intro, 0.35, {
+                                                        ease: Power2.easeOut,
+                                                        height: introHeight + "px",
+                                                })
+                                                .to(intro, jsonObject.data.display_time, {
+                                                        height: introHeight + "px"
+                                                })
+                                                .to(intro, 0.35, {
+                                                        height: "0px",
+                                                        ease: Power1.easeOut
+                                                })
+                                                .to(intro, 0, {
+                                                        left: "105%",
+                                                        opacity: 0,
+                                                        height: introHeight + "px"
+                                                });
+                                } else if (animation == "slide") {
+                                        tween.to(intro, 0, {
+                                                        opacity: 0,
+                                                        left: offset + introWidth / 2 + "px",
+                                                        width: "0px"
+                                                })
+                                                .to(intro, 0.1, {
+                                                        opacity: 1,
+                                                        left: offset + introWidth / 2 + "px",
+                                                        width: "0px"
+                                                })
+                                                .call(playSound2)
+                                                .to(intro, 0.35, {
+                                                        ease: Power2.easeOut,
+                                                        width: introWidth + "px",
+                                                        left: offset + "px"
+                                                })
+                                                .to(intro, jsonObject.data.display_time, {
+                                                        width: introWidth + "px"
+                                                })
+                                                .call(playSound2)
+                                                .to(intro, 0.35, {
+                                                        left: offset + introWidth / 2 + "px",
+                                                        width: "0px",
+                                                        ease: Power1.easeOut
+                                                })
+                                                .to(intro, 0, {
+                                                        left: "105%",
+                                                        opacity: 0,
+                                                        width: introWidth + "px"
+                                                });
+                                } else {
+                                        tween.call(playSound1)
+                                                .to(intro, 0, {
+                                                        opacity: 1,
+                                                        left: "105%"
+                                                })
+                                                .to(intro, 1.12, {
+                                                        ease: Power2.easeIn,
+                                                        left: offset + "px"
+                                                })
+                                                .to(intro, jsonObject.data.display_time, {
+                                                        left: offset + "px"
+                                                })
+                                                .to(intro, 0.5, {
+                                                        opacity: 0,
+                                                        ease: Power1.easeInOut
+                                                })
+                                                .to(intro, 0, {
+                                                        left: "105%"
+                                                });
+                                }
                         }
 
                 } else if (jsonObject.event == 'CHANGE_STYLE') {
                         changeCSS(jsonObject.data.file, 0);
                         fillText();
                 } else if (jsonObject.event == 'DEBUG_MODE') {
-                        if(!debug){
+                        if (!debug) {
                                 tween.kill()
                                 var intro = document.getElementById("intro");
                                 var offset = (window.innerWidth - intro.offsetWidth) / 2;
@@ -152,7 +152,7 @@ function Connect() {
                                         left: offset + "px"
                                 });
                                 debug = true;
-                        }else{
+                        } else {
                                 tween.kill()
                                 var intro = document.getElementById("intro");
                                 TweenLite.to(intro, 0, {
