@@ -192,7 +192,8 @@ class matchData:
                 if(set_idx == 0):
                     return False
                 team_idx = int((self.getMapScore(set_idx - 1) + 1) / 2)
-                if(self.getPlayer(team_idx, set_idx) != "TBD"):
+                player = self.getPlayer(team_idx, set_idx).strip().lower()
+                if(player != "tbd" and player != ""):
                     return False
                 self.setPlayer(team_idx, set_idx, self.getPlayer(team_idx, set_idx - 1),
                                self.getRace(team_idx, set_idx - 1))

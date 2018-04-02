@@ -401,12 +401,13 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             self.cb_minSets.setMaximumWidth(40)
             container.addWidget(self.cb_minSets, 0)
             container.addWidget(
-                PyQt5.QtWidgets.QLabel(" " + _("maps") + " "), 0)
+                PyQt5.QtWidgets.QLabel(" " + _("maps") + "  "), 0)
 
             self.cb_allkill = PyQt5.QtWidgets.QCheckBox(_("All-Kill Format"))
             self.cb_allkill.setChecked(False)
             self.cb_allkill.setToolTip(
                 _('Winner stays and is automatically placed into the next set'))
+            self.cb_allkill.stateChanged.connect(self.allkill_change)
             container.addWidget(self.cb_allkill, 0)
 
             self.cb_solo = PyQt5.QtWidgets.QCheckBox(_("1vs1"))
@@ -467,6 +468,12 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
 
             self.tab2.setLayout(self.tab2.layout)
 
+        except Exception as e:
+            module_logger.exception("message")
+            
+    def allkill_change(self):
+        try:
+            self.controller.matchData.setAllKill(self.cb_allkill.isChecked())
         except Exception as e:
             module_logger.exception("message")
 
