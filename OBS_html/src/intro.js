@@ -5,8 +5,24 @@ var volume = 1.0;
 var debug = false;
 var displayTime = 3.0;
 var tween = new TimelineMax()
-var myAudio = new Audio("src/sound.wav");
-myAudio.volume = volume;
+var myAudio1 = new Audio("src/sound.wav");
+myAudio1.volume = volume;
+var myAudio2 = new Audio("src/sound2.wav");
+myAudio2.volume = volume;
+var myAudio3 = new Audio("src/fanfare.wav");
+myAudio3.volume = volume;
+
+function playSound1() {
+        myAudio1.play();
+}
+
+function playSound2() {
+        myAudio2.play();
+}
+
+function playSound3() {
+        myAudio3.play();
+}
 
 function Connect() {
 
@@ -31,8 +47,77 @@ function Connect() {
                                 fillText();
                                 var intro = document.getElementById("intro");
                                 var offset = (window.innerWidth - intro.offsetWidth) / 2;
-                                myAudio.volume = jsonObject.data.volume / 10.0;
-                                tween.call(playSound)
+								var introWidth = intro.offsetWidth;
+								var introHeight = intro.offsetHeight;
+                                myAudio1.volume = jsonObject.data.volume / 10.0;
+								myAudio2.volume = jsonObject.data.volume / 10.0;
+								myAudio3.volume = jsonObject.data.volume / 10.0;
+								var animation = "default";
+								try{
+										animation = jsonObject.data.animation;
+								} catch {
+										animation = "default";
+								}
+								if (animation == "fanfare")	{								
+									tween.call(playSound3)
+									    .to(intro, 0, {
+                                                opacity: 0,
+                                                left: offset + "px",
+												height: "0px"
+                                        })
+										.to(intro, 0.1, {
+                                                opacity: 1,
+												height: "0px"
+                                        })
+                                        .to(intro, 0.35, {
+                                                ease: Power2.easeOut,
+                                                height: introHeight + "px",
+                                        })
+                                        .to(intro, jsonObject.data.display_time, {
+                                                height: introHeight + "px"
+                                        })
+                                        .to(intro, 0.35, {
+												height: "0px",
+                                                ease: Power1.easeOut
+                                        })
+                                        .to(intro, 0, {
+                                                left: "105%",
+												opacity: 0,
+												height: introHeight + "px"
+                                        });
+								}else if(animation == "slide"){
+									tween.to(intro, 0, {
+                                                opacity: 0,
+                                                left: offset + introWidth/2 + "px",
+												width: "0px"
+                                        })
+										.to(intro, 0.1, {
+                                                opacity: 1,
+                                                left: offset + introWidth/2 + "px",
+												width: "0px"
+                                        })
+										.call(playSound2)
+                                        .to(intro, 0.35, {
+                                                ease: Power2.easeOut,
+                                                width: introWidth + "px",
+												left: offset + "px"
+                                        })
+                                        .to(intro, jsonObject.data.display_time, {
+                                                width: introWidth + "px"
+                                        })
+                                        .call(playSound2)
+                                        .to(intro, 0.35, {
+                                                left: offset + introWidth/2 + "px",
+												width: "0px",
+                                                ease: Power1.easeOut
+                                        })
+                                        .to(intro, 0, {
+                                                left: "105%",
+												opacity: 0,
+												width: introWidth + "px"
+                                        });
+								}else{
+									tween.call(playSound1)
                                         .to(intro, 0, {
                                                 opacity: 1,
                                                 left: "105%"
@@ -51,6 +136,7 @@ function Connect() {
                                         .to(intro, 0, {
                                                 left: "105%"
                                         });
+								}
                         }
 
                 } else if (jsonObject.event == 'CHANGE_STYLE') {
@@ -87,10 +173,6 @@ function Connect() {
                 }, reconnectIntervalMs);
         }
 };
-
-function playSound() {
-        myAudio.play();
-}
 
 function sendText() {
         if (isopen) {

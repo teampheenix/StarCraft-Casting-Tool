@@ -587,6 +587,8 @@ class MainController:
             "Intros", "sound_volume")
         data['display_time'] = scctool.settings.config.parser.getfloat(
             "Intros", "display_time")
+        data['animation'] = scctool.settings.config.parser.get(
+            "Intros", "animation") .strip().lower()
         return data
 
     def updatePlayerIntros(self, newData):

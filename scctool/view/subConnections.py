@@ -122,6 +122,18 @@ class SubwindowConnections(PyQt5.QtWidgets.QWidget):
         self.sb_displaytime.valueChanged.connect(self.changed)
         layout.addRow(PyQt5.QtWidgets.QLabel(
             _("Display Duration:") + " "), self.sb_displaytime)
+        self.cb_animation = PyQt5.QtWidgets.QComboBox()
+        animation = scctool.settings.config.parser.get("Intros", "animation")
+        currentIdx = 0
+        idx = 0
+        for item in ["Fly-In", "Slide", "Fanfare"]:
+                self.cb_animation.addItem(item)
+                if(item == animation):
+                    currentIdx = idx
+                idx += 1
+        self.cb_animation.setCurrentIndex(currentIdx)
+        layout.addRow(PyQt5.QtWidgets.QLabel(
+            _("Animation:") + " "), self.cb_animation)
         self.introBox.setLayout(layout)
         mainLayout.addWidget(self.introBox)
 
@@ -319,6 +331,8 @@ class SubwindowConnections(PyQt5.QtWidgets.QWidget):
             "Intros", "display_time", str(self.sb_displaytime.value()))
         scctool.settings.config.parser.set(
             "Intros", "sound_volume", str(self.sl_sound.value()))
+        scctool.settings.config.parser.set(
+            "Intros", "animation", self.cb_animation.currentText().strip())
 
     def saveCloseWindow(self):
         """Save and close window."""

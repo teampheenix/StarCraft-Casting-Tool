@@ -164,6 +164,7 @@ def setDefaultConfigAll():
     setDefaultConfig("Intros", "hotkey_debug", "")
     setDefaultConfig("Intros", "sound_volume", "5")
     setDefaultConfig("Intros", "display_time", "3.0")
+    setDefaultConfig("Intros", "animation", "Fly-In")
 
 
 def renameConfigOptions():
