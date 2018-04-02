@@ -74,7 +74,7 @@ class LogoManager:
         data['team2'] = self._team2.toDict()
 
         try:
-            with open(logos_json_file, 'w') as outfile:
+            with open(logos_json_file, 'w', encoding='utf-8-sig') as outfile:
                 json.dump(data, outfile)
         except Exception as e:
             module_logger.exception("message")
@@ -86,7 +86,7 @@ class LogoManager:
         data = dict()
 
         try:
-            with open(logos_json_file) as json_file:
+            with open(logos_json_file, 'r', encoding='utf-8-sig') as json_file:
                 data = json.load(json_file)
         except (OSError, IOError):
             return

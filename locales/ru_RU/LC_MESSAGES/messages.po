@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2018-02-17 15:22+0100\n"
-"PO-Revision-Date: 2018-02-17 15:24+0100\n"
+"POT-Creation-Date: 2018-04-02 19:09+0200\n"
+"PO-Revision-Date: 2018-04-02 19:09+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ru\n"
@@ -21,108 +21,86 @@ msgstr ""
 msgid "This version is up to date."
 msgstr "Вы используете новейшую версию."
 
-#: scctool/controller.py:512 scctool/controller.py:520
+#: scctool/controller.py:490 scctool/controller.py:498
 msgid "Specify your Twitch Settings to use this feature"
 msgstr "Укажите настройки Twitch для использования этой возможности"
 
-#: scctool/controller.py:515
+#: scctool/controller.py:493
 msgid ""
 "Automatically update the title of your twitch channel in the background."
 msgstr ""
 "Автоматическое обновление заголовка вашего Twitch-канала в фоновом режиме."
 
-#: scctool/controller.py:526 scctool/controller.py:533
+#: scctool/controller.py:504 scctool/controller.py:511
 msgid "Specify your Nightbot Settings to use this feature"
 msgstr "Укажите настройки Nightbot для использования этой возможности"
 
-#: scctool/controller.py:527
+#: scctool/controller.py:505
 msgid "Automatically update the commands of your nightbot in the background."
 msgstr "Автоматическое обновление команд nightbot в фоновом режиме."
 
-#: scctool/controller.py:539
-msgid "Specify your FTP Settings to use this feature"
-msgstr "Задайте настройки FTP для использования этой возможности"
-
-#: scctool/controller.py:540
-msgid ""
-"Automatically uploads all streaming data in the background to a specified "
-"FTP server."
-msgstr ""
-"Автоматическая загрузка всех данных о стриме в фоновом режиме на указанный "
-"FTP сервер."
-
-#: scctool/controller.py:667
+#: scctool/controller.py:634
 msgid "Warning: Map '{}' not found!"
 msgstr "Внимание: Карта '{}' Не найдена!"
 
-#: scctool/controller.py:717
+#: scctool/controller.py:675
 msgid "A new version {} is available."
 msgstr "Доступна новая версия {}."
 
-#: scctool/controller.py:719
+#: scctool/controller.py:677
 msgid "Update to new version?"
 msgstr "Загрузить новую версию?"
 
-#: scctool/controller.py:720
+#: scctool/controller.py:678
 msgid "New SCC-Tool Version"
 msgstr "Новая версия SCC-Tool"
 
-#: scctool/controller.py:729
+#: scctool/controller.py:687
 msgid "Don't show on startup."
 msgstr "Не показывать при запуске."
 
-#: scctool/controller.py:738
+#: scctool/controller.py:696
 msgid "A new version {} is available on GitHub!"
 msgstr "Новая версия {} доступна на GitHub!"
 
-#: scctool/tasks/nightbot.py:45
-msgid "Nightbot command '{}' was already set to '{}'"
-msgstr "Nightbot команда '{}' уже установлена в '{}'"
-
-#: scctool/tasks/nightbot.py:67
-msgid "Updated Nightbot command '{}' to '{}'"
-msgstr "Обновить команду Nightbot '{}' на '{}'"
-
-#: scctool/tasks/nightbot.py:74 scctool/tasks/twitch.py:46
+#: scctool/tasks/nightbot.py:43 scctool/tasks/nightbot.py:105
+#: scctool/tasks/twitch.py:47
 msgid "Forbidden - Do you have permission?"
 msgstr "Запрещено! У вас есть разрешение?"
 
-#: scctool/tasks/nightbot.py:76 scctool/tasks/twitch.py:48
+#: scctool/tasks/nightbot.py:45 scctool/tasks/nightbot.py:107
+#: scctool/tasks/twitch.py:49
 msgid "Unauthorized - Refresh your token!"
 msgstr "Неавторизован - обновите ваш токен!"
 
-#: scctool/tasks/nightbot.py:78 scctool/tasks/twitch.py:50
+#: scctool/tasks/nightbot.py:47 scctool/tasks/nightbot.py:109
+#: scctool/tasks/twitch.py:51
 msgid "Too Many Requests."
 msgstr "Слишком много запросов."
 
-#: scctool/tasks/obs.py:43
-#, python-brace-format
-msgid ""
-"{host}:{port} is unreachable. Is OBS Studio with obs-websocket plugin "
-"launched?"
-msgstr ""
-"{host}:{port} недоступен. Убедитесь, что OBS с плагином obs-websocket "
-"запущен."
+#: scctool/tasks/nightbot.py:64
+msgid "Nightbot command '{}' was already set to '{}'"
+msgstr "Nightbot команда '{}' уже установлена в '{}'"
 
-#: scctool/tasks/obs.py:47
-msgid "Couldn't auth to obs-websocket. Correct password?"
-msgstr "Не удалось войти в obs-websocket. Пароль верен?"
+#: scctool/tasks/nightbot.py:94
+msgid "Deleted command '{}'"
+msgstr "Удалить команду '{}'"
 
-#: scctool/tasks/obs.py:51
-msgid "Unkown Error!"
-msgstr "Неизвестная ошибка!"
+#: scctool/tasks/nightbot.py:96
+msgid "Updated Nightbot command '{}' to '{}'"
+msgstr "Обновить команду Nightbot '{}' на '{}'"
 
 #: scctool/tasks/twitch.py:35
 msgid "Updated Twitch title of {} to: \"{}\""
-msgstr ""
+msgstr "Изменить заголовок Twitch из {} на: \"{}\""
 
-#: scctool/tasks/twitch.py:43
+#: scctool/tasks/twitch.py:44
 msgid "Not Found - Channel '{}' not found."
 msgstr "Не найдено - канал '{}' не найден."
 
-#: scctool/tasks/updater.py:210
+#: scctool/tasks/updater.py:266
 msgid "Updated data files!"
-msgstr ""
+msgstr "Данные обновлены!"
 
 #: scctool/tasks/webapp.py:140
 msgid ""
@@ -138,10 +116,6 @@ msgstr ""
 "scctool: Успешно получен доступ к Twitch - теперь вы можете закрыть эту "
 "вкладку."
 
-#: scctool/view/main.py:69
-msgid "FTP Transfer in progress..."
-msgstr "FTP передача в процессе..."
-
 #: scctool/view/main.py:100
 msgid "StarCraft Casting Tool is up to date."
 msgstr "Новершая версия StarCraft Casting Tool."
@@ -154,41 +128,45 @@ msgstr "Доступна новая версия {}!"
 msgid "StarCraft Casting Tool - About"
 msgstr "StarCraft Casting Tool - О программе"
 
-#: scctool/view/main.py:135
+#: scctool/view/main.py:130
 msgid "Settings"
 msgstr "Настройки"
 
-#: scctool/view/main.py:137 scctool/view/subConnections.py:51
+#: scctool/view/main.py:132 scctool/view/subConnections.py:51
 msgid "Connections"
 msgstr "Соединения"
 
-#: scctool/view/main.py:139
-msgid "Edit FTP-Settings and API-Settings for Twitch and Nightbot"
-msgstr "Редактировать FTP- и API- настройки для Twitch и Nightbot"
+#: scctool/view/main.py:134
+msgid "Edit Intro-Settings and API-Settings for Twitch and Nightbot"
+msgstr "Редактировать настройки превью и API для Twitch Nightbot"
 
-#: scctool/view/main.py:143 scctool/view/subStyles.py:83
+#: scctool/view/main.py:138 scctool/view/subStyles.py:81
 msgid "Styles"
 msgstr "Стили"
 
-#: scctool/view/main.py:148
+#: scctool/view/main.py:143
 msgid "Misc"
 msgstr "Разное"
 
-#: scctool/view/main.py:153
+#: scctool/view/main.py:148
 msgid "Info && Links"
 msgstr "Информация и ссылки"
 
-#: scctool/view/main.py:156
+#: scctool/view/main.py:151
 msgid "About"
 msgstr "О программе"
 
-#: scctool/view/main.py:161 scctool/view/subReadme.py:34
+#: scctool/view/main.py:156 scctool/view/main.py:253
 msgid "Readme"
 msgstr "Прочти"
 
-#: scctool/view/main.py:166
+#: scctool/view/main.py:161
 msgid "Check for new version"
 msgstr "Проверить наличие обновлений"
+
+#: scctool/view/main.py:166 scctool/view/main.py:260
+msgid "Changelog"
+msgstr "История изменений"
 
 #: scctool/view/main.py:201
 msgid "Donate"
@@ -198,142 +176,142 @@ msgstr "Поддержать"
 msgid "Language"
 msgstr "Язык"
 
-#: scctool/view/main.py:283
+#: scctool/view/main.py:292
 msgid "Match Grabber for AlphaTL && RSTL"
 msgstr "Граббер матчей для AlphaTL и RSTL"
 
-#: scctool/view/main.py:284
+#: scctool/view/main.py:293
 msgid "Custom Match"
 msgstr "Кастомный матч"
 
-#: scctool/view/main.py:307
+#: scctool/view/main.py:317
 msgid "Open in Browser"
 msgstr "Открыть в браузере"
 
-#: scctool/view/main.py:317 scctool/view/main.py:428
+#: scctool/view/main.py:327 scctool/view/main.py:437
 msgid "Match-URL:"
 msgstr "URL матча:"
 
-#: scctool/view/main.py:350
+#: scctool/view/main.py:360
 msgid "Load Data from URL"
 msgstr "Загрузить данные по URL"
 
-#: scctool/view/main.py:368
+#: scctool/view/main.py:378
 msgid "Match Format:"
 msgstr "Формат матча:"
 
-#: scctool/view/main.py:372
+#: scctool/view/main.py:382
 msgid "Best of"
 msgstr "Лучший из"
 
-#: scctool/view/main.py:378
+#: scctool/view/main.py:388
 msgid ""
 "\"Best of 6/4\": First, a Bo5/3 is played and the ace map gets extended to a "
 "Bo3 if needed; Best of 2: Bo3 with only two maps played."
 msgstr ""
 "Бо5, играются все карты. При равном счёте играется эйс матч до двух побед."
 
-#: scctool/view/main.py:385
+#: scctool/view/main.py:396
 msgid " but at least"
 msgstr " но как минимум"
 
-#: scctool/view/main.py:393
+#: scctool/view/main.py:401
 msgid "Minimum number of maps played (even if the match is decided already)"
 msgstr "Минимальное количество сыгранных карт (Даже если матч уже завершен)"
 
-#: scctool/view/main.py:397
+#: scctool/view/main.py:405
 msgid "maps"
 msgstr "карты"
 
-#: scctool/view/main.py:399
+#: scctool/view/main.py:407
 msgid "All-Kill Format"
 msgstr "Формат All-Kill"
 
-#: scctool/view/main.py:402
+#: scctool/view/main.py:410
 msgid "Winner stays and is automatically placed into the next set"
 msgstr "Победитель автоматически переносится в следующий сет"
 
-#: scctool/view/main.py:405
+#: scctool/view/main.py:414
 msgid "1vs1"
 msgstr "1vs1"
 
-#: scctool/view/main.py:408
+#: scctool/view/main.py:417
 msgid "Select for solo (non-team matches)"
 msgstr "Выбрать для дуэлей (не командных игр)"
 
-#: scctool/view/main.py:415
+#: scctool/view/main.py:424
 msgid "Apply Format"
 msgstr "Применить формат"
 
-#: scctool/view/main.py:435
+#: scctool/view/main.py:444
 msgid "Optionally specify the Match-URL, e.g., for Nightbot commands"
 msgstr "Опционально введите URL матча, например для команд Nightbot"
 
-#: scctool/view/main.py:437
+#: scctool/view/main.py:446
 msgid "Specify the Match-URL of your Custom Match"
 msgstr "Введите URL вашего матча"
 
-#: scctool/view/main.py:454
+#: scctool/view/main.py:463
 msgid "Reset Match Data"
 msgstr "Сброс данных матча"
 
-#: scctool/view/main.py:487
+#: scctool/view/main.py:529
 msgid "Match Data"
 msgstr "Данные матча"
 
-#: scctool/view/main.py:559
+#: scctool/view/main.py:599
 msgid "Choose your team"
 msgstr "Выберите вашу команду"
 
-#: scctool/view/main.py:575
+#: scctool/view/main.py:615
 msgid "League:"
 msgstr "Лига:"
 
-#: scctool/view/main.py:585
+#: scctool/view/main.py:625
 msgid "Maps \\ Teams:"
 msgstr "Карты \\ Команды:"
 
-#: scctool/view/main.py:616
+#: scctool/view/main.py:657
 msgid "Player {} of team {}"
 msgstr "Игрок {} из команды {}"
 
-#: scctool/view/main.py:644
+#: scctool/view/main.py:676
 msgid "Set the score"
 msgstr "Установить счет"
 
-#: scctool/view/main.py:651
+#: scctool/view/main.py:683
 msgid "Map {}"
 msgstr "Карта {}"
 
-#: scctool/view/main.py:691
+#: scctool/view/main.py:724
 msgid "Tasks"
 msgstr "Задачи"
 
-#: scctool/view/main.py:695
+#: scctool/view/main.py:728
 msgid "Update Twitch Title"
 msgstr "Обновить заголовок на Twitch"
 
-#: scctool/view/main.py:699
+#: scctool/view/main.py:732
 msgid "Update Nightbot"
 msgstr "Обновить Nightbot"
 
-#: scctool/view/main.py:702
+#: scctool/view/main.py:735
 msgid "Reset Score"
 msgstr "Сбросить счет"
 
-#: scctool/view/main.py:706
+#: scctool/view/main.py:739
 msgid "Update OBS Data"
 msgstr "Обновить данные OBS"
 
-#: scctool/view/main.py:722
+#: scctool/view/main.py:755
 msgid "Background Tasks"
 msgstr "Задачи в фоновом режиме"
 
-#: scctool/view/main.py:725
+#: scctool/view/main.py:758
 msgid "Auto Score Update"
 msgstr "Автообновление счета"
 
-#: scctool/view/main.py:727
+#: scctool/view/main.py:760
 msgid ""
 "Automatically detects the outcome of SC2 matches that are played/observed in "
 "your SC2-client and updates the score accordingly."
@@ -341,251 +319,301 @@ msgstr ""
 "Автоматически определяет вывод о текущем матче из вашего клиента SC2 и "
 "обновляет счет."
 
-#: scctool/view/main.py:733
+#: scctool/view/main.py:766
 msgid "Provide Player Intros"
 msgstr "Заставки игроков"
 
-#: scctool/view/main.py:736
+#: scctool/view/main.py:769
 msgid "Update player intros files via SC2-Client-API"
 msgstr "Обновить заставки игроков с помощью SC2-Client-API"
 
-#: scctool/view/main.py:740
+#: scctool/view/main.py:773
 msgid "Set Ingame Score"
 msgstr "Задать счет"
 
-#: scctool/view/main.py:742
+#: scctool/view/main.py:775
 msgid ""
 "Automatically sets the score of your ingame UI-interface at the begining of "
 "a game."
 msgstr ""
 "Автоматически задает счет внутри вашего игрового интерфейса в начале игры."
 
-#: scctool/view/main.py:749
+#: scctool/view/main.py:782
 msgid "Toggle Production Tab"
 msgstr "Включать вкладку \"Производство\""
 
-#: scctool/view/main.py:751
+#: scctool/view/main.py:784
 msgid ""
 "Automatically toggles the production tab of your ingame UI-interface at the "
 "begining of a game."
 msgstr "Автоматически переключается на вкладку Производство в начале игры."
 
-#: scctool/view/main.py:757
-msgid "FTP Upload"
-msgstr "FTP загрузка"
-
-#: scctool/view/main.py:762
+#: scctool/view/main.py:791
 msgid "Auto Twitch Update"
 msgstr "Автообновление Twitch"
 
-#: scctool/view/main.py:767
+#: scctool/view/main.py:796
 msgid "Auto Nightbot Update"
 msgstr "Автообновление Nightbot"
 
-#: scctool/view/main.py:776 scctool/view/main.py:780
+#: scctool/view/main.py:805 scctool/view/main.py:809
 msgid "Only Windows"
 msgstr "Только Windows"
 
-#: scctool/view/main.py:838 scctool/view/widgets.py:155
-msgid "Login error"
-msgstr "Ошибка входа"
-
-#: scctool/view/main.py:839 scctool/view/widgets.py:156
-msgid "FTP server login incorrect!"
-msgstr "FTP логин неверен!"
-
-#: scctool/view/main.py:892
+#: scctool/view/main.py:894
 msgid "Applying Custom Match..."
 msgstr "Применение матча..."
 
-#: scctool/view/main.py:918
+#: scctool/view/main.py:928
 msgid "Reading {}..."
 msgstr "Чтение {}..."
 
-#: scctool/view/main.py:936
+#: scctool/view/main.py:948
 msgid "Updating Nightbot Command..."
 msgstr "Обновление команды Nightbot..."
 
-#: scctool/view/main.py:945
+#: scctool/view/main.py:957
 msgid "Updating Twitch Title..."
 msgstr "Обновление заголовка Twitch..."
 
-#: scctool/view/main.py:954
+#: scctool/view/main.py:966
 msgid "Updating OBS Data..."
 msgstr "Обновление данных OBS..."
 
-#: scctool/view/main.py:964
+#: scctool/view/main.py:976
 msgid "Resetting Score..."
 msgstr "Сброс счета..."
 
-#: scctool/view/main.py:979
+#: scctool/view/main.py:991
 msgid "Updating Score..."
 msgstr "Обновление счета..."
 
-#: scctool/view/main.py:1028
-msgid "Select Team Logo"
-msgstr "Выбрать логотип команды"
-
-#: scctool/view/main.py:1028
-msgid "Support Images ({})"
-msgstr "Поддержка изображений ({})"
+#: scctool/view/subConnections.py:65
+msgid "Intros && Hotkeys"
+msgstr "Интро и хоткеи"
 
 #: scctool/view/subConnections.py:66
-msgid "FTP"
-msgstr "FTP"
-
-#: scctool/view/subConnections.py:67
 msgid "Twitch"
 msgstr "Twitch"
 
-#: scctool/view/subConnections.py:68
+#: scctool/view/subConnections.py:67
 msgid "Nightbot"
 msgstr "Nightbot"
 
-#: scctool/view/subConnections.py:69
-msgid "OBS via Websocket Plugin"
-msgstr "OBS по плагину Websocket"
+#: scctool/view/subConnections.py:89
+msgid "Intro Hotkeys"
+msgstr "Интро хоткеи"
 
-#: scctool/view/subConnections.py:81
-msgid "FTP server address"
-msgstr "Адрес FTP сервера"
+#: scctool/view/subConnections.py:97
+msgid "Player 1"
+msgstr "Игрок 1"
 
-#: scctool/view/subConnections.py:83
-msgid "Host:"
-msgstr "Хост:"
-
-#: scctool/view/subConnections.py:90
-msgid "FTP username"
-msgstr "Имя пользователя для FTP"
-
-#: scctool/view/subConnections.py:92
-msgid "Username:"
-msgstr "Имя пользователя:"
+#: scctool/view/subConnections.py:98
+msgid "Player 2"
+msgstr "Игрок 2"
 
 #: scctool/view/subConnections.py:99
-msgid "FTP password"
-msgstr "Пароль для FTP"
+msgid "Debug"
+msgstr "Отладка"
 
-#: scctool/view/subConnections.py:102 scctool/view/subConnections.py:158
-msgid "Password:"
-msgstr "Пароль:"
+#: scctool/view/subConnections.py:104
+msgid "Intro Settings"
+msgstr "Интро настройки"
 
-#: scctool/view/subConnections.py:111
-msgid "currently using root directory"
-msgstr "Используется корневая директория."
+#: scctool/view/subConnections.py:115
+msgid "Sound Volume:"
+msgstr "Громкость:"
 
-#: scctool/view/subConnections.py:113
-msgid "Directory:"
-msgstr "Директория:"
+#: scctool/view/subConnections.py:121
+msgid "Seconds"
+msgstr "Секунд"
 
-#: scctool/view/subConnections.py:117
-msgid "Test && Setup FTP server"
-msgstr "Тестирование и настройка FTP сервера"
+#: scctool/view/subConnections.py:124
+msgid "Display Duration:"
+msgstr "Длительность показа:"
 
-#: scctool/view/subConnections.py:146
-msgid "Server Port (Default: 4444)"
-msgstr "Порт сервера (По умолчанию: 4444)"
+#: scctool/view/subConnections.py:136
+msgid "Animation:"
+msgstr "Анимация:"
 
-#: scctool/view/subConnections.py:148
-msgid "Server Port:"
-msgstr "Порт сервера:"
-
-#: scctool/view/subConnections.py:156
-msgid "recommended"
-msgstr "рекомендовано"
-
-#: scctool/view/subConnections.py:168
-msgid ""
-"Name of the OBS-sources that should automatically be hidden 4.5 sec after "
-"they become visible."
-msgstr ""
-"Название ресурса OBS, которое должно автоматически скрываться через 4.5 "
-"секунды после появления."
-
-#: scctool/view/subConnections.py:171
-msgid "Sources:"
-msgstr "Ресурсы:"
-
-#: scctool/view/subConnections.py:174
-msgid "Automatic hide sources"
-msgstr "Автоматически скрывать ресурсы"
-
-#: scctool/view/subConnections.py:179
-msgid "Active:"
-msgstr "Активно:"
-
-#: scctool/view/subConnections.py:182
-msgid "Test Connection to OBS"
-msgstr "Проверить соединение с OBS"
-
-#: scctool/view/subConnections.py:199
+#: scctool/view/subConnections.py:155
 msgid "Name of the Twitch channel that should be updated"
 msgstr "Название канала Twitch, который должен быть обновлен"
 
-#: scctool/view/subConnections.py:201
+#: scctool/view/subConnections.py:157
 msgid "The connected twitch user needs to have editor rights for this channel."
 msgstr ""
 "Подключенный пользователь twitch должен обладать правами редактора для этого "
 "канала."
 
-#: scctool/view/subConnections.py:213 scctool/view/subConnections.py:269
+#: scctool/view/subConnections.py:169 scctool/view/subConnections.py:226
 msgid "Press 'Get' to generate a token"
 msgstr "Нажмите 'Получить' для генерации токена"
 
-#: scctool/view/subConnections.py:215 scctool/view/subConnections.py:271
+#: scctool/view/subConnections.py:171
 msgid "Press 'Get' to generate a new token."
 msgstr "Нажмите 'Получить' для генерации нового токена."
 
-#: scctool/view/subConnections.py:218 scctool/view/subConnections.py:281
+#: scctool/view/subConnections.py:174 scctool/view/subConnections.py:230
 msgid "Get"
 msgstr "Получить"
 
-#: scctool/view/subConnections.py:223 scctool/view/subConnections.py:287
+#: scctool/view/subConnections.py:179
 msgid "Access-Token:"
 msgstr "Токен доступа:"
 
-#: scctool/view/subConnections.py:234 scctool/view/subConnections.py:301
+#: scctool/view/subConnections.py:190 scctool/view/subConnections.py:398
 msgid "Available placeholders:"
 msgstr "Доступные заглушки:"
 
-#: scctool/view/subConnections.py:244 scctool/view/subConnections.py:310
+#: scctool/view/subConnections.py:200 scctool/view/subConnections.py:406
 msgid "Test"
 msgstr "Тест"
 
-#: scctool/view/subConnections.py:250
+#: scctool/view/subConnections.py:206
 msgid "Title Template:"
 msgstr "Шаблон заголовка:"
 
-#: scctool/view/subConnections.py:288
-msgid "Command:"
-msgstr "Команда:"
+#: scctool/view/subConnections.py:228
+msgid "Press 'Get' to generate a token."
+msgstr "Нажмите 'Получить', чтобы создать токен."
 
-#: scctool/view/subConnections.py:316
-msgid "Message:"
-msgstr "Сообщение:"
+#: scctool/view/subConnections.py:262
+msgid "Add Command"
+msgstr "Добавить команду"
 
-#: scctool/view/subConnections.py:327 scctool/view/subMisc.py:394
-#: scctool/view/subStyles.py:69
+#: scctool/view/subConnections.py:293 scctool/view/subLiquipediaSearch.py:68
+#: scctool/view/subMisc.py:432 scctool/view/subStyles.py:67
 msgid "Cancel"
 msgstr "Отмена"
 
-#: scctool/view/subConnections.py:331 scctool/view/subMisc.py:398
-#: scctool/view/subStyles.py:73
+#: scctool/view/subConnections.py:297 scctool/view/subMisc.py:436
+#: scctool/view/subStyles.py:71
 msgid "Save && Close"
 msgstr "Сохранить и закрыть"
 
-#: scctool/view/subConnections.py:342
-msgid "Output:"
-msgstr "Вывод:"
-
-#: scctool/view/subConnections.py:414 scctool/view/subMisc.py:444
-#: scctool/view/subStyles.py:238
+#: scctool/view/subConnections.py:359 scctool/view/subMisc.py:488
+#: scctool/view/subStyles.py:235
 msgid "Save data?"
 msgstr "Сохранить данные?"
 
-#: scctool/view/subConnections.py:414
+#: scctool/view/subConnections.py:359
 msgid "Do you want to save the data?"
 msgstr "Вы хотите сохранить данные?"
+
+#: scctool/view/subConnections.py:373 scctool/view/subConnections.py:450
+msgid "Output:"
+msgstr "Вывод:"
+
+#: scctool/view/subConnections.py:396
+msgid "message, e.g.,"
+msgstr "сообщение,"
+
+#: scctool/view/subConnections.py:411
+msgid "Delete"
+msgstr "Удалить"
+
+#: scctool/view/subLiquipediaSearch.py:42
+msgid "Search"
+msgstr "Поиск"
+
+#: scctool/view/subLiquipediaSearch.py:46
+msgid "Results"
+msgstr "Результаты"
+
+#: scctool/view/subLiquipediaSearch.py:66
+msgid "Use Selected Logo"
+msgstr "Использовать выбранный логотип"
+
+#: scctool/view/subLiquipediaSearch.py:77
+msgid "Liqupedia Image Search"
+msgstr "Поиск изображения Liquipedia"
+
+#: scctool/view/subLiquipediaSearch.py:146
+msgid "Open on Liquipedia"
+msgstr "Открыть на Liquipedia"
+
+#: scctool/view/subLiquipediaSearch.py:148
+msgid "Use as Team Logo"
+msgstr "Использовать как логотип команды"
+
+#: scctool/view/subLogos.py:32
+msgid "Logo Team 1"
+msgstr "Логотип команды 1"
+
+#: scctool/view/subLogos.py:37 scctool/view/subLogos.py:84
+msgid "Load from File"
+msgstr "Загрузить из файла"
+
+#: scctool/view/subLogos.py:40 scctool/view/subLogos.py:87
+msgid "Load from URL"
+msgstr "Загрузить по ссылке"
+
+#: scctool/view/subLogos.py:43 scctool/view/subLogos.py:90
+msgid "Search Liquipedia"
+msgstr "Поиск в Liquipedia"
+
+#: scctool/view/subLogos.py:47 scctool/view/subLogos.py:94
+#: scctool/view/subLogos.py:188
+msgid "Add to Favorites"
+msgstr "Добавить в избранное"
+
+#: scctool/view/subLogos.py:50 scctool/view/subLogos.py:97
+#: scctool/view/subMisc.py:300
+msgid "Remove"
+msgstr "Удалить"
+
+#: scctool/view/subLogos.py:78
+msgid "Logo Team 2"
+msgstr "Логотип команды 2"
+
+#: scctool/view/subLogos.py:103 scctool/view/subMisc.py:68
+msgid "Favorites"
+msgstr "Избранное"
+
+#: scctool/view/subLogos.py:127
+msgid "Last Used"
+msgstr "Последний"
+
+#: scctool/view/subLogos.py:150 scctool/view/subMarkdown.py:26
+msgid "&OK"
+msgstr "&OK"
+
+#: scctool/view/subLogos.py:158
+msgid "Logo Manager"
+msgstr "Логотип"
+
+#: scctool/view/subLogos.py:170 scctool/view/subLogos.py:182
+msgid "Set Team 1 Logo"
+msgstr "Установить логотип команды 1"
+
+#: scctool/view/subLogos.py:172 scctool/view/subLogos.py:185
+msgid "Set Team 2 Logo"
+msgstr "Установить логотип команды 2"
+
+#: scctool/view/subLogos.py:174
+msgid "Remove from Favorites"
+msgstr "Удалить из избранного"
+
+#: scctool/view/subLogos.py:289
+msgid "Select Team Logo"
+msgstr "Выбрать логотип команды"
+
+#: scctool/view/subLogos.py:289
+msgid "Support Images ({})"
+msgstr "Поддержка изображений ({})"
+
+#: scctool/view/subLogos.py:322
+msgid "Logo from URL"
+msgstr "Логотип по ссылке"
+
+#: scctool/view/subLogos.py:323
+msgid "URL of Team Logo"
+msgstr "Ссылка логотипа команды"
+
+#: scctool/view/subLogos.py:329
+msgid "{} is not a valid URL."
+msgstr "{} не допустимая ссылка."
 
 #: scctool/view/subMisc.py:52
 msgid "Miscellaneous Settings"
@@ -595,10 +623,6 @@ msgstr "Другие настройки"
 msgid "Map Manager"
 msgstr "Менеджер карт"
 
-#: scctool/view/subMisc.py:68
-msgid "Favorites"
-msgstr "Избранное"
-
 #: scctool/view/subMisc.py:69
 msgid "OCR"
 msgstr "OCR"
@@ -607,54 +631,77 @@ msgstr "OCR"
 msgid "AlphaTL && Ingame Score"
 msgstr "AlphaTL и счет в игре"
 
-#: scctool/view/subMisc.py:80
+#: scctool/view/subMisc.py:81
 msgid "AlphaTL"
 msgstr "AlphaTL"
 
-#: scctool/view/subMisc.py:84
+#: scctool/view/subMisc.py:85
 msgid "Download transparent Banner of the Match"
 msgstr "Скачать прозрачный баннер матча"
 
-#: scctool/view/subMisc.py:94
+#: scctool/view/subMisc.py:95
 msgid "Set Ingame Score Task"
 msgstr "Настройка счета в игре"
 
-#: scctool/view/subMisc.py:98
+#: scctool/view/subMisc.py:99
+msgid "Automatically press Ctrl+N before OCR to display player names."
+msgstr ""
+"Нажмите Ctrl+N перед OCR, чтобы автоматически отобразить имена игроков."
+
+#: scctool/view/subMisc.py:101
+msgid "This is recommended for Standard and Gawliq Observer UI."
+msgstr "Рекомендуется для Standard и Gawliq Observer UI."
+
+#: scctool/view/subMisc.py:108
 msgid "Automatically press Ctrl+Shift+S to display the ingame score"
 msgstr "Автоматически нажимать Ctrl+Shift+S для вывода счета в игре"
 
-#: scctool/view/subMisc.py:99
+#: scctool/view/subMisc.py:110
 msgid ""
 "Ctrl+Shift+S is needed for the WCS-Gameheart Oberserver Overlay, but "
 "disables the sound for other overlays."
 msgstr ""
+"Ctrl+Shift+S необходим для наложения WCS-Gameheart Observer Overlay, но "
+"отключает звук для других оверлеев."
 
-#: scctool/view/subMisc.py:119
+#: scctool/view/subMisc.py:118
+msgid "Automatically press Ctrl+Shift+C to toogle the clan tag"
+msgstr "Автоматически нажимать Ctrl+Shift+C, чтобы поменять тег клана"
+
+#: scctool/view/subMisc.py:137
+msgid "Automatically press Ctrl+Shift+R to toogle the race icon "
+msgstr "Автоматически нажимать Ctrl+Shift+R, чтобы поменять иконку расы"
+
+#: scctool/view/subMisc.py:139
+msgid " time(s)"
+msgstr " время"
+
+#: scctool/view/subMisc.py:156
 msgid "Players"
 msgstr "Игроки"
 
-#: scctool/view/subMisc.py:131
+#: scctool/view/subMisc.py:168
 msgid "Teams"
 msgstr "Команды"
 
-#: scctool/view/subMisc.py:154
+#: scctool/view/subMisc.py:191
 msgid "Optical Character Recognition for Automatic Setting of Ingame Score"
 msgstr ""
 "Оптическое распознавание персонажей для автоматической настройки счета в игре"
 
-#: scctool/view/subMisc.py:159
+#: scctool/view/subMisc.py:196
 msgid "Activate Optical Character Recognition"
 msgstr "Активировать оптическое распознавание персонажей"
 
-#: scctool/view/subMisc.py:172 scctool/view/subMisc.py:224
+#: scctool/view/subMisc.py:209 scctool/view/subMisc.py:262
 msgid "Tesseract-OCR Executable"
 msgstr "Исполняемый файл Tesseract-OCR"
 
-#: scctool/view/subMisc.py:174
+#: scctool/view/subMisc.py:211
 msgid "Browse..."
 msgstr "Выбрать..."
 
-#: scctool/view/subMisc.py:177
+#: scctool/view/subMisc.py:214
 msgid ""
 "Sometimes the order of players given by the SC2-Client-API differs from the "
 "order in the Observer-UI resulting in a swapped match score. To correct this "
@@ -666,183 +713,291 @@ msgstr ""
 "распознавания вам необходимо скачать {}, установить и выбрать исполняемый "
 "файл ниже, еслион не определился автоматически."
 
-#: scctool/view/subMisc.py:194
+#: scctool/view/subMisc.py:232
 msgid "Tesseract-OCR Executable:"
 msgstr "Исполняемый файл Tesseract-OCR:"
 
-#: scctool/view/subMisc.py:208 scctool/view/subMisc.py:212
-#: scctool/view/subMisc.py:216
+#: scctool/view/subMisc.py:246 scctool/view/subMisc.py:250
+#: scctool/view/subMisc.py:254
 msgid "This feature is only available in Windows."
 msgstr "Эта возможность доступна только в Windows."
 
-#: scctool/view/subMisc.py:223
+#: scctool/view/subMisc.py:261
 msgid "Select Tesseract-OCR Executable"
 msgstr "Выберите исполняемый файл Tesseract-OCR"
 
-#: scctool/view/subMisc.py:225
+#: scctool/view/subMisc.py:263
 msgid "Executable"
 msgstr "Исполняемый файл"
 
-#: scctool/view/subMisc.py:225
+#: scctool/view/subMisc.py:263
 msgid "All files"
 msgstr "Все файлы"
 
-#: scctool/view/subMisc.py:256
+#: scctool/view/subMisc.py:294
 msgid "Add"
 msgstr "Добавить"
 
-#: scctool/view/subMisc.py:258
+#: scctool/view/subMisc.py:296
 msgid "Rename"
 msgstr "Переименовать"
 
-#: scctool/view/subMisc.py:260
+#: scctool/view/subMisc.py:298
 msgid "Change Image"
 msgstr "Изменить изображение"
 
-#: scctool/view/subMisc.py:262
-msgid "Remove"
-msgstr "Удалить"
-
-#: scctool/view/subMisc.py:291 scctool/view/subMisc.py:333
+#: scctool/view/subMisc.py:329 scctool/view/subMisc.py:371
 msgid "Map Name"
 msgstr "Название карты"
 
-#: scctool/view/subMisc.py:291 scctool/view/subMisc.py:333
+#: scctool/view/subMisc.py:329 scctool/view/subMisc.py:371
 msgid "Map Name:"
 msgstr "Название карты:"
 
-#: scctool/view/subMisc.py:299 scctool/view/subMisc.py:337
+#: scctool/view/subMisc.py:337 scctool/view/subMisc.py:375
 msgid "Duplicate Entry"
 msgstr "Повторяющийся ввод"
 
-#: scctool/view/subMisc.py:300 scctool/view/subMisc.py:338
+#: scctool/view/subMisc.py:338 scctool/view/subMisc.py:376
 msgid "Map is already in list! Overwrite?"
 msgstr "Карта уже в списке! Переписать?"
 
-#: scctool/view/subMisc.py:314 scctool/view/subMisc.py:326
+#: scctool/view/subMisc.py:352 scctool/view/subMisc.py:364
 msgid "Select Map Image (> 500x500px recommended)"
 msgstr "Выберите изображение карты (> 500x500px рекомендовано)"
 
-#: scctool/view/subMisc.py:315 scctool/view/subMisc.py:327
+#: scctool/view/subMisc.py:353 scctool/view/subMisc.py:365
 msgid "Support Images"
 msgstr "Поддерживаемые изображения"
 
-#: scctool/view/subMisc.py:354
+#: scctool/view/subMisc.py:392
 msgid "Delete map?"
 msgstr "Удалить карту?"
 
-#: scctool/view/subMisc.py:355
+#: scctool/view/subMisc.py:393
 msgid "Delete '{}' permanently?"
 msgstr "Удалить '{}'?"
 
-#: scctool/view/subReadme.py:26
-msgid "&OK"
-msgstr "&OK"
-
-#: scctool/view/subStyles.py:53
+#: scctool/view/subStyles.py:51
 msgid "Style Settings"
 msgstr "Настройки стилей"
 
-#: scctool/view/subStyles.py:91
+#: scctool/view/subStyles.py:89
 msgid "Box Map Icons:"
 msgstr "Пиктограммы карт:"
 
-#: scctool/view/subStyles.py:93 scctool/view/subStyles.py:105
-#: scctool/view/subStyles.py:118 scctool/view/subStyles.py:130
+#: scctool/view/subStyles.py:91 scctool/view/subStyles.py:103
+#: scctool/view/subStyles.py:116 scctool/view/subStyles.py:128
 msgid "Show in Browser"
 msgstr "Показать в браузере"
 
-#: scctool/view/subStyles.py:111
+#: scctool/view/subStyles.py:109
 msgid "Landscape Map Icons:"
 msgstr "Ландшафт карт:"
 
-#: scctool/view/subStyles.py:123
+#: scctool/view/subStyles.py:121
 msgid "Score:"
 msgstr "Счет:"
 
-#: scctool/view/subStyles.py:135
+#: scctool/view/subStyles.py:133
 msgid "Intros:"
 msgstr "Заставки:"
 
-#: scctool/view/subStyles.py:137
+#: scctool/view/subStyles.py:135
 msgid "Apply"
 msgstr "Применить"
 
-#: scctool/view/subStyles.py:141
+#: scctool/view/subStyles.py:139
 msgid ""
 "Note that to make these changes visible in OBS you have to refresh the cache "
 "of your browser sources."
 msgstr ""
 "Чтобы изменения были видны в OBS вы должны обновить кэш вашего браузера."
 
-#: scctool/view/subStyles.py:166
+#: scctool/view/subStyles.py:163
 msgid "Colors"
 msgstr "Цвета"
 
-#: scctool/view/subStyles.py:170
+#: scctool/view/subStyles.py:167
 msgid "Default Border:"
 msgstr "Граница по умолчанию:"
 
-#: scctool/view/subStyles.py:174
+#: scctool/view/subStyles.py:171
 msgid "Win:"
 msgstr "Победа:"
 
-#: scctool/view/subStyles.py:178
+#: scctool/view/subStyles.py:175
 msgid "Lose:"
 msgstr "Поражение:"
 
-#: scctool/view/subStyles.py:182
+#: scctool/view/subStyles.py:179
 msgid "Undecided:"
 msgstr "Не определено:"
 
-#: scctool/view/subStyles.py:186
+#: scctool/view/subStyles.py:183
 msgid "Not played:"
 msgstr "Не сыграно:"
 
-#: scctool/view/widgets.py:120
-msgid "FTP Server Setup"
-msgstr "Настройки FTP сервера"
+#: scctool/view/widgets.py:123
+msgid "Logo Downloader"
+msgstr "Загрузчик логотипов"
 
-#: scctool/view/widgets.py:122
-msgid "Setting up the required file structure on the FTP server..."
-msgstr "Настроить структуру необходимого файла на FTP сервере..."
+#: scctool/view/widgets.py:125
+msgid "Downloading {}"
+msgstr "Загрузка {}"
 
-#: scctool/view/widgets.py:168
-msgid "Wrong login data for FTP"
-msgstr "Неверные данные для входа на FTP"
-
-#: scctool/view/widgets.py:182
+#: scctool/view/widgets.py:176
 msgid "Updater"
 msgstr "Обновление"
 
-#: scctool/view/widgets.py:184
+#: scctool/view/widgets.py:178
 msgid "Updating to a new version..."
 msgstr "Обновление на новую версию..."
 
-#: scctool/view/widgets.py:212
+#: scctool/view/widgets.py:206
 msgid "Downloading a new version: Total file size {}, Time remaining {}."
 msgstr "Загрузка новой версии: размер файла {}, осталось времени {}."
 
-#: scctool/view/widgets.py:256
+#: scctool/view/widgets.py:249
+msgid "Not set"
+msgstr "Не задано"
+
+#: scctool/view/widgets.py:255
+msgid "Set Hotkey"
+msgstr "Установить хоткей"
+
+#: scctool/view/widgets.py:258
+msgid "Clear"
+msgstr "Очистить"
+
+#: scctool/view/widgets.py:309
 msgid "Select"
 msgstr "Выбрать"
 
-#: scctool/view/widgets.py:259
+#: scctool/view/widgets.py:312
 msgid "Default"
 msgstr "По умолчанию"
 
-#: scctool/view/widgets.py:451
+#: scctool/view/widgets.py:504
 msgid "Collecting data..."
 msgstr "Сбор данных..."
 
-#: scctool/view/widgets.py:476
+#: scctool/view/widgets.py:530
 msgid "Extracting data..."
 msgstr "Получение данных..."
 
-#: scctool/view/widgets.py:478
+#: scctool/view/widgets.py:532
 msgid "Done."
 msgstr "Готово."
 
-#: scctool/view/widgets.py:494
+#: scctool/view/widgets.py:548
 msgid "Downloading required files...: Total file size {}, Time remaining {}."
 msgstr "Загрузка необходимых файлов...: размер файла {}, осталось времени {}."
+
+#~ msgid "Specify your FTP Settings to use this feature"
+#~ msgstr "Задайте настройки FTP для использования этой возможности"
+
+#~ msgid ""
+#~ "Automatically uploads all streaming data in the background to a specified "
+#~ "FTP server."
+#~ msgstr ""
+#~ "Автоматическая загрузка всех данных о стриме в фоновом режиме на "
+#~ "указанный FTP сервер."
+
+#~ msgid ""
+#~ "{host}:{port} is unreachable. Is OBS Studio with obs-websocket plugin "
+#~ "launched?"
+#~ msgstr ""
+#~ "{host}:{port} недоступен. Убедитесь, что OBS с плагином obs-websocket "
+#~ "запущен."
+
+#~ msgid "Couldn't auth to obs-websocket. Correct password?"
+#~ msgstr "Не удалось войти в obs-websocket. Пароль верен?"
+
+#~ msgid "Unkown Error!"
+#~ msgstr "Неизвестная ошибка!"
+
+#~ msgid "FTP Transfer in progress..."
+#~ msgstr "FTP передача в процессе..."
+
+#~ msgid "FTP Upload"
+#~ msgstr "FTP загрузка"
+
+#~ msgid "Login error"
+#~ msgstr "Ошибка входа"
+
+#~ msgid "FTP server login incorrect!"
+#~ msgstr "FTP логин неверен!"
+
+#~ msgid "FTP"
+#~ msgstr "FTP"
+
+#~ msgid "OBS via Websocket Plugin"
+#~ msgstr "OBS по плагину Websocket"
+
+#~ msgid "FTP server address"
+#~ msgstr "Адрес FTP сервера"
+
+#~ msgid "Host:"
+#~ msgstr "Хост:"
+
+#~ msgid "FTP username"
+#~ msgstr "Имя пользователя для FTP"
+
+#~ msgid "Username:"
+#~ msgstr "Имя пользователя:"
+
+#~ msgid "FTP password"
+#~ msgstr "Пароль для FTP"
+
+#~ msgid "Password:"
+#~ msgstr "Пароль:"
+
+#~ msgid "currently using root directory"
+#~ msgstr "Используется корневая директория."
+
+#~ msgid "Directory:"
+#~ msgstr "Директория:"
+
+#~ msgid "Test && Setup FTP server"
+#~ msgstr "Тестирование и настройка FTP сервера"
+
+#~ msgid "Server Port (Default: 4444)"
+#~ msgstr "Порт сервера (По умолчанию: 4444)"
+
+#~ msgid "Server Port:"
+#~ msgstr "Порт сервера:"
+
+#~ msgid "recommended"
+#~ msgstr "рекомендовано"
+
+#~ msgid ""
+#~ "Name of the OBS-sources that should automatically be hidden 4.5 sec after "
+#~ "they become visible."
+#~ msgstr ""
+#~ "Название ресурса OBS, которое должно автоматически скрываться через 4.5 "
+#~ "секунды после появления."
+
+#~ msgid "Sources:"
+#~ msgstr "Ресурсы:"
+
+#~ msgid "Automatic hide sources"
+#~ msgstr "Автоматически скрывать ресурсы"
+
+#~ msgid "Active:"
+#~ msgstr "Активно:"
+
+#~ msgid "Test Connection to OBS"
+#~ msgstr "Проверить соединение с OBS"
+
+#~ msgid "Message:"
+#~ msgstr "Сообщение:"
+
+#~ msgid "FTP Server Setup"
+#~ msgstr "Настройки FTP сервера"
+
+#~ msgid "Setting up the required file structure on the FTP server..."
+#~ msgstr "Настроить структуру необходимого файла на FTP сервере..."
+
+#~ msgid "Wrong login data for FTP"
+#~ msgstr "Неверные данные для входа на FTP"

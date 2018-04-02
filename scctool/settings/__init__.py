@@ -30,7 +30,7 @@ logosDir = os.path.join(dataDir, "logos")
 matchdata_json_file = getAbsPath(dataDir + "/matchdata.json")
 versiondata_json_file = getAbsPath(dataDir + "/versiondata.json")
 nightbot_json_file = getAbsPath(dataDir + "/nightbot.json")
-logos_json_file = getAbsPath(dataDir + "/logos.json") 
+logos_json_file = getAbsPath(dataDir + "/logos.json")
 
 windows = (platform.system().lower() == "windows")
 
@@ -47,6 +47,7 @@ if not os.path.exists(getAbsPath(dataDir)):
 # Creating directories if not exisiting
 if not os.path.exists(getAbsPath(logosDir)):
     os.makedirs(getAbsPath(logosDir))
+
 
 def loadMapList():
     """Load map list form dir."""
@@ -74,7 +75,7 @@ def loadNightbotCommands():
     """Read json data from file."""
     global nightbot_commands
     try:
-        with open(nightbot_json_file) as json_file:
+        with open(nightbot_json_file, 'r', encoding='utf-8-sig') as json_file:
             data = json.load(json_file)
     except Exception as e:
         data = dict()
@@ -87,7 +88,7 @@ def saveNightbotCommands():
     """Write json data to file."""
     global nightbot_commands
     try:
-        with open(nightbot_json_file, 'w') as outfile:
+        with open(nightbot_json_file, 'w', encoding='utf-8-sig') as outfile:
             json.dump(nightbot_commands, outfile)
     except Exception as e:
         module_logger.exception("message")

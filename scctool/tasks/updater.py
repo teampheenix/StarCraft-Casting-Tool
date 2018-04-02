@@ -55,7 +55,7 @@ def getDataVersion():
     """Read data version from json file."""
     version = '0.0.0'
     try:
-        with open(scctool.settings.versiondata_json_file, 'r') as f:
+        with open(scctool.settings.versiondata_json_file, 'r', encoding='utf-8-sig') as f:
             data = json.load(f)
             version = data.get('data_version', version)
     finally:
@@ -66,14 +66,14 @@ def setDataVersion(version):
     """Write data version to json file."""
     data = {}
     data['data_version'] = version
-    with open(scctool.settings.versiondata_json_file, 'w') as outfile:
+    with open(scctool.settings.versiondata_json_file, 'w', encoding='utf-8-sig') as outfile:
         json.dump(data, outfile)
 
 
 def getRestartFlag():
     flag = False
     try:
-        with open(scctool.settings.versiondata_json_file, 'r') as f:
+        with open(scctool.settings.versiondata_json_file, 'r', encoding='utf-8-sig') as f:
             data = json.load(f)
             flag = data.get('restart_flag', False)
     finally:
@@ -81,10 +81,10 @@ def getRestartFlag():
 
 
 def setRestartFlag(flag=True):
-    with open(scctool.settings.versiondata_json_file, 'r') as f:
+    with open(scctool.settings.versiondata_json_file, 'r', encoding='utf-8-sig') as f:
         data = json.load(f)
     data['restart_flag'] = bool(flag)
-    with open(scctool.settings.versiondata_json_file, 'w') as outfile:
+    with open(scctool.settings.versiondata_json_file, 'w', encoding='utf-8-sig') as outfile:
         json.dump(data, outfile)
 
 
