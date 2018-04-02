@@ -1,6 +1,13 @@
 # Changelog
 
 
+## v1.8.1 (2018-04-02)
+
+### Changes
+
+* All-Kill Format no longer needs to be applied via "Apply Format".
+
+
 ## v1.8.0 (2018-03-31)
 
 ### New

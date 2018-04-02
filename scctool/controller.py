@@ -137,8 +137,10 @@ class MainController:
 
             for i in range(min(self.view.max_no_sets, self.matchData.getNoSets())):
                 for j in range(2):
-                    self.view.le_player[j][i].setText(
-                        self.matchData.getPlayer(j, i))
+                    player = self.matchData.getPlayer(j, i)
+                    self.view.le_player[j][i].setText(player)
+                    if player not in self.view.used_player_names:
+                        self.view.used_player_names.append(player)
                     self.view.cb_race[j][i].setCurrentIndex(
                         scctool.settings.race2idx(self.matchData.getRace(j, i)))
 
@@ -161,6 +163,8 @@ class MainController:
                 self.view.le_map[i].show()
                 self.view.sl_score[i].show()
                 self.view.label_set[i].show()
+                
+            self.view.updatePlayerCompleters()
 
         except Exception as e:
             module_logger.exception("message")

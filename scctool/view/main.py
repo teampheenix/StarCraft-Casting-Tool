@@ -25,6 +25,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
     """Show the main window of SCCT."""
 
     EXIT_CODE_REBOOT = -123
+    used_player_names = list()
 
     def __init__(self, controller, app, translator, showChangelog):
         """Init the main window."""
@@ -498,6 +499,21 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
                 PyQt5.QtWidgets.QCompleter.InlineCompletion)
             completer.setWrapAround(True)
             self.le_map[i].setCompleter(completer)
+        
+    def updatePlayerCompleters(self):
+        """Refresh the completer for the player line edits."""
+        list =  scctool.settings.config.getMyPlayers(True) + self.used_player_names
+        for player_idx in range(self.max_no_sets):
+            for team_idx in range(2):
+                completer = PyQt5.QtWidgets.QCompleter(
+                    list , self.le_player[team_idx][player_idx])
+                completer.setCaseSensitivity(
+                    PyQt5.QtCore.Qt.CaseInsensitive)
+                completer.setCompletionMode(
+                    PyQt5.QtWidgets.QCompleter.InlineCompletion)
+                completer.setWrapAround(True)
+                self.le_player[team_idx][player_idx].setCompleter(
+                    completer)
 
     def createFormMatchDataBox(self):
         """Create the froms for the match data."""
@@ -625,28 +641,18 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             layout2.addLayout(container)
 
             for team_idx in range(2):
-                self.le_player[team_idx][0].editingFinished.connect(
-                    lambda team_idx=team_idx: self.player_changed(team_idx))
                 self.cb_race[team_idx][0].currentIndexChanged.connect(
                     lambda value, team_idx=team_idx, func=self.race_changed: func(team_idx))
 
             for player_idx in range(self.max_no_sets):
                 for team_idx in range(2):
+                    self.le_player[team_idx][player_idx].editingFinished.connect(
+                        lambda team_idx=team_idx,player_idx=team_idx: self.player_changed(team_idx, player_idx))
                     self.le_player[team_idx][player_idx].setText("TBD")
                     self.le_player[team_idx][player_idx].setAlignment(
                         PyQt5.QtCore.Qt.AlignCenter)
                     self.le_player[team_idx][player_idx].setPlaceholderText(
                         _("Player {} of team {}").format(player_idx + 1, team_idx + 1))
-                    completer = PyQt5.QtWidgets.QCompleter(
-                        scctool.settings.config.getMyPlayers(
-                            True), self.le_player[team_idx][player_idx])
-                    completer.setCaseSensitivity(
-                        PyQt5.QtCore.Qt.CaseInsensitive)
-                    completer.setCompletionMode(
-                        PyQt5.QtWidgets.QCompleter.InlineCompletion)
-                    completer.setWrapAround(True)
-                    self.le_player[team_idx][player_idx].setCompleter(
-                        completer)
                     self.le_player[team_idx][player_idx].setMinimumWidth(
                         self.mimumLineEditWidth)
 
@@ -705,6 +711,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             self.fromMatchDataBox.setLayout(layout2)
 
             self.updateMapCompleters()
+            self.updatePlayerCompleters()
 
         except Exception as e:
             module_logger.exception("message")
@@ -1001,14 +1008,16 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
         except Exception as e:
             module_logger.exception("message")
 
-    def player_changed(self, team_idx):
+    def player_changed(self, team_idx, player_idx):
         """Handle a change of player names."""
         try:
-            if(self.controller.matchData.getSolo()):
-                text = self.le_player[team_idx][0].text()
+            player = self.le_player[team_idx][player_idx].text().strip()
+            if(player_idx == 0 and self.controller.matchData.getSolo()):
                 for player_idx in range(1, self.max_no_sets):
-                    self.le_player[team_idx][player_idx].setText(text)
-
+                    self.le_player[team_idx][player_idx].setText(player)
+            if player not in self.used_player_names:
+                self.used_player_names.append(player)
+            self.updatePlayerCompleters()
         except Exception as e:
             module_logger.exception("message")
 

@@ -514,7 +514,7 @@ class matchData:
                     and team_idx in range(2))):
                 return False
 
-            return self.__data['players'][team_idx][set_idx]['name']
+            return self.__data['players'][team_idx][set_idx]['name'].strip()
 
         except Exception:
             return False
