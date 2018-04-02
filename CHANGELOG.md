@@ -1,6 +1,13 @@
 # Changelog
 
 
+## v1.8.3 (2018-04-02)
+
+### New
+
+* Added two alternative Intro animations (Slide & Fanfare) including new sounds that can be selected at Settings: Connections: Intro & Hotkeys.
+
+
 ## v1.8.2 (2018-04-02)
 
 ### Fix
