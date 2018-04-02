@@ -190,11 +190,14 @@ class matchData:
         for set_idx in range(self.getNoSets()):
             if self.getMapScore(set_idx) == 0:
                 if(set_idx == 0):
-                    return False
-                team_idx = int((self.getMapScore(set_idx - 1) + 1) / 2)
+                    continue
+                previous_score = self.getMapScore(set_idx - 1)
+                if previous_score == 0:
+                    continue
+                team_idx = int((previous_score + 1) / 2)
                 player = self.getPlayer(team_idx, set_idx).strip().lower()
                 if(player != "tbd" and player != ""):
-                    return False
+                    continue
                 self.setPlayer(team_idx, set_idx, self.getPlayer(team_idx, set_idx - 1),
                                self.getRace(team_idx, set_idx - 1))
                 return True
