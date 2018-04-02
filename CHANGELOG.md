@@ -3,6 +3,10 @@
 
 ## v1.8.1 (2018-04-02)
 
+### New
+
+* Player names are used or have been used in the current session are available for auto completion.
+
 ### Changes
 
 * All-Kill Format no longer needs to be applied via "Apply Format".
