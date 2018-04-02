@@ -1,6 +1,13 @@
 # Changelog
 
 
+## v1.8.4 (2018-04-02)
+
+### Changes
+
+* Russian localization has been updated.
+
+
 ## v1.8.3 (2018-04-02)
 
 ### New
