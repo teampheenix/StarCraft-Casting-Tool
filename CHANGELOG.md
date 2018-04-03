@@ -1,6 +1,13 @@
 # Changelog
 
 
+## v1.8.5 (2018-04-03)
+
+### Fix
+
+* Improved new intro animation with respect to the race logo and the default skin.
+
+
 ## v1.8.4 (2018-04-02)
 
 ### Changes

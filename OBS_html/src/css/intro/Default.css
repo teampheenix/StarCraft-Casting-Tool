@@ -89,17 +89,15 @@ div.race {
 
 div.logo {
         position: absolute;
-        background-color: white;
         background-size: contain;
         background-position: center center;
         background-repeat: no-repeat;
-        right: calc(0px - var(--border-size));
-        top: calc(0px - var(--border-size) / 2);
+        right: calc(14px - var(--border-size));
+        top: calc(6px - var(--border-size));
         height: 120px;
         width: 120px;
         overflow: hidden;
-        border: var(--border-size) solid var(--border-color);
-        border-radius: 0px var(--border-radius) 0px var(--border-radius);
+        filter: drop-shadow(2px 2px 2px black);
 }
 
 div.label {
