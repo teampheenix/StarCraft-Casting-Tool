@@ -31,6 +31,7 @@ matchdata_json_file = getAbsPath(dataDir + "/matchdata.json")
 versiondata_json_file = getAbsPath(dataDir + "/versiondata.json")
 nightbot_json_file = getAbsPath(dataDir + "/nightbot.json")
 logos_json_file = getAbsPath(dataDir + "/logos.json")
+history_json_file = getAbsPath(dataDir + "/history.json")
 
 windows = (platform.system().lower() == "windows")
 
@@ -108,6 +109,6 @@ def idx2race(idx):
         return races[idx]
     except Exception:
         return races[0]
-
-
+        
 loadNightbotCommands()
+

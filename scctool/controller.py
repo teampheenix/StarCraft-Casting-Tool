@@ -14,6 +14,7 @@ try:
     from scctool.tasks.updater import VersionHandler
     from scctool.view.widgets import ToolUpdater
     from scctool.settings.logoManager import LogoManager
+    from scctool.settings.history import HistoryManager
     import scctool.settings
     import scctool.tasks.twitch
     import scctool.tasks.nightbot
@@ -49,8 +50,8 @@ class MainController:
             self.checkVersion()
             self.initPlayerIntroData()
             self.logoManager = LogoManager(self)
+            self.historyManager = HistoryManager()
             scctool.settings.maps = scctool.settings.loadMapList()
-            pass
 
         except Exception as e:
             module_logger.exception("message")
@@ -138,11 +139,11 @@ class MainController:
             for i in range(min(self.view.max_no_sets, self.matchData.getNoSets())):
                 for j in range(2):
                     player = self.matchData.getPlayer(j, i)
+                    race = self.matchData.getRace(j, i)
                     self.view.le_player[j][i].setText(player)
-                    if player not in self.view.used_player_names:
-                        self.view.used_player_names.append(player)
                     self.view.cb_race[j][i].setCurrentIndex(
-                        scctool.settings.race2idx(self.matchData.getRace(j, i)))
+                        scctool.settings.race2idx(race))
+                    self.historyManager.insertPlayer(player, race)
 
                 self.view.le_map[i].setText(self.matchData.getMap(i))
 
@@ -421,6 +422,7 @@ class MainController:
     def cleanUp(self):
         """Clean up all threads and save config to close program."""
         try:
+            module_logger.info("cleanUp called")
             self.SC2ApiThread.requestTermination("ALL")
             self.webApp.terminate()
             self.saveConfig()
@@ -428,7 +430,7 @@ class MainController:
             self.autoRequestsThread.terminate()
             scctool.settings.saveNightbotCommands()
             self.logoManager.dumpJson()
-            module_logger.info("cleanUp called")
+            self.historyManager.dumpJson()
         except Exception as e:
             module_logger.exception("message")
 

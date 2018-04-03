@@ -25,7 +25,6 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
     """Show the main window of SCCT."""
 
     EXIT_CODE_REBOOT = -123
-    used_player_names = list()
 
     def __init__(self, controller, app, translator, showChangelog):
         """Init the main window."""
@@ -217,6 +216,12 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
                 'src/en.png')), 'English', self, checkable=True)
             myAct.setChecked(language == 'en_US')
             myAct.triggered.connect(lambda: self.changeLanguage('en_US'))
+            langMenu.addAction(myAct)
+
+            myAct = PyQt5.QtWidgets.QAction(PyQt5.QtGui.QIcon(scctool.settings.getAbsPath(
+                'src/fr.png')), 'Français', self, checkable=True)
+            myAct.setChecked(language == 'fr_FR')
+            myAct.triggered.connect(lambda: self.changeLanguage('fr_FR'))
             langMenu.addAction(myAct)
 
             myAct = PyQt5.QtWidgets.QAction(PyQt5.QtGui.QIcon(scctool.settings.getAbsPath(
@@ -503,7 +508,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
     def updatePlayerCompleters(self):
         """Refresh the completer for the player line edits."""
         list = scctool.settings.config.getMyPlayers(
-            True) + self.used_player_names
+            True) + self.controller.historyManager.getPlayerList()
         for player_idx in range(self.max_no_sets):
             for team_idx in range(2):
                 completer = PyQt5.QtWidgets.QCompleter(
@@ -641,15 +646,12 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
 
             layout2.addLayout(container)
 
-            for team_idx in range(2):
-                self.cb_race[team_idx][0].currentIndexChanged.connect(
-                    lambda value, team_idx=team_idx, func=self.race_changed: func(team_idx))
-
             for player_idx in range(self.max_no_sets):
                 for team_idx in range(2):
+                    self.cb_race[team_idx][player_idx].currentIndexChanged.connect(
+                        lambda idx, t=team_idx, p=player_idx: self.race_changed(t, p))
                     self.le_player[team_idx][player_idx].editingFinished.connect(
-                        lambda team_idx=team_idx, player_idx=team_idx:
-                            self.player_changed(team_idx, player_idx))
+                        lambda t=team_idx, p=player_idx: self.player_changed(t, p))
                     self.le_player[team_idx][player_idx].setText("TBD")
                     self.le_player[team_idx][player_idx].setAlignment(
                         PyQt5.QtCore.Qt.AlignCenter)
@@ -1014,19 +1016,27 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
         """Handle a change of player names."""
         try:
             player = self.le_player[team_idx][player_idx].text().strip()
+            race = self.cb_race[team_idx][player_idx].currentIndex()
             if(player_idx == 0 and self.controller.matchData.getSolo()):
                 for player_idx in range(1, self.max_no_sets):
                     self.le_player[team_idx][player_idx].setText(player)
-            if player not in self.used_player_names:
-                self.used_player_names.append(player)
+            self.controller.historyManager.insertPlayer(player, race)
+            
+            if race == 0:
+                new_race = scctool.settings.race2idx(self.controller.historyManager.getRace(player))
+                if new_race != 0:
+                    self.cb_race[team_idx][player_idx].setCurrentIndex(new_race)
             self.updatePlayerCompleters()
         except Exception as e:
             module_logger.exception("message")
 
-    def race_changed(self, team_idx):
+    def race_changed(self, team_idx, player_idx):
         """Handle a change of player names."""
+        player = self.le_player[team_idx][player_idx].text().strip()
+        race = self.cb_race[team_idx][player_idx].currentIndex()
+        self.controller.historyManager.insertPlayer(player, race)
         try:
-            if(self.controller.matchData.getSolo()):
+            if(player_idx == 0 and self.controller.matchData.getSolo()):
                 idx = self.cb_race[team_idx][0].currentIndex()
                 for player_idx in range(1, self.max_no_sets):
                     self.cb_race[team_idx][player_idx].setCurrentIndex(idx)

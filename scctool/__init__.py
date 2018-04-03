@@ -54,6 +54,7 @@ def main():
             app = None
         except Exception as e:
             logger.exception("message")
+            break
 
     sys.exit(currentExitCode)
 
