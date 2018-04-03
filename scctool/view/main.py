@@ -501,7 +501,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
                 scctool.settings.maps, self.le_map[i])
             completer.setCaseSensitivity(PyQt5.QtCore.Qt.CaseInsensitive)
             completer.setCompletionMode(
-                PyQt5.QtWidgets.QCompleter.InlineCompletion)
+                PyQt5.QtWidgets.QCompleter.UnfilteredPopupCompletion)
             completer.setWrapAround(True)
             self.le_map[i].setCompleter(completer)
 
