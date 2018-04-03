@@ -7,6 +7,10 @@
 
 * The race of the last 100 players is now saved and will be selected automatically.
 
+### Changes
+
+* When selecting the map a popup window with all available maps is now displayed.
+
 ### Fix
 
 * Improved new intro animation with respect to the race logo and the default skin.
