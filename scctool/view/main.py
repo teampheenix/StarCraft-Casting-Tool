@@ -1021,11 +1021,13 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
                 for player_idx in range(1, self.max_no_sets):
                     self.le_player[team_idx][player_idx].setText(player)
             self.controller.historyManager.insertPlayer(player, race)
-            
+
             if race == 0:
-                new_race = scctool.settings.race2idx(self.controller.historyManager.getRace(player))
+                new_race = scctool.settings.race2idx(
+                    self.controller.historyManager.getRace(player))
                 if new_race != 0:
-                    self.cb_race[team_idx][player_idx].setCurrentIndex(new_race)
+                    self.cb_race[team_idx][player_idx].setCurrentIndex(
+                        new_race)
             self.updatePlayerCompleters()
         except Exception as e:
             module_logger.exception("message")

@@ -62,7 +62,7 @@ class HistoryManager:
             if player not in playerList:
                 playerList.append(player)
         return playerList
-        
+
     def getRace(self, player):
         player = player.lower().strip()
         race = "Random"

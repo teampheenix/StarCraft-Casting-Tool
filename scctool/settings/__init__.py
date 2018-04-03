@@ -109,6 +109,6 @@ def idx2race(idx):
         return races[idx]
     except Exception:
         return races[0]
-        
-loadNightbotCommands()
 
+
+loadNightbotCommands()

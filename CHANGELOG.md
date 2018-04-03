@@ -1,6 +1,17 @@
 # Changelog
 
 
+## v1.8.5 (2018-04-03)
+
+### New
+
+* The race of the last 100 players is now saved and will be selected automatically.
+
+### Fix
+
+* Improved new intro animation with respect to the race logo and the default skin.
+
+
 ## v1.8.4 (2018-04-02)
 
 ### Changes
@@ -28,15 +39,6 @@
 
 * Player names are used or have been used in the current session are available for auto completion.
 
-### Changes
-
-* All-Kill Format no longer needs to be applied via "Apply Format".
-
-
-## v1.8.0 (2018-03-31)
-
-### New
-
 * Match Grabber can now be used by pressing enter.
 
 * Removed FTP-Upload. If you were using this feature, please contact me and I will provide an alternative via websockets.
@@ -44,6 +46,8 @@
 * Added Logo Manager featuring last used logos, favorites, adding from URL, and searching Liquipedia for logos.
 
 ### Changes
+
+* All-Kill Format no longer needs to be applied via "Apply Format".
 
 * Migrated to Python 3.6.5.
 
