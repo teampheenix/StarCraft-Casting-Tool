@@ -19,6 +19,7 @@
 
 body {
         overflow: hidden;
+        font-family: OrbitronAdv, Orbitron, Helvetica, Sans-Serif;
 }
 
 div.box {
@@ -122,12 +123,14 @@ div.team {
         /*line-height: calc(40% - 7px);
     */
         text-align: center;
-        font: bold 30px OrbitronAdv, Orbitron, Helvetica, Sans-Serif !important;
+        font-size: 30px !important;
+        font-weight: bold;
         transform: skewX(10deg);
 }
 
 .text-item {
         color: white;
-        font: bold 44px OrbitronAdv, Orbitron, Helvetica, Sans-Serif;
+        font-size: 44px !important;
+        font-weight: bold;
         filter: drop-shadow(-1px -1px 1px black) drop-shadow(1px 1px 1px black) drop-shadow(2px 2px 2px black);
 }

@@ -9,6 +9,10 @@
         unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
+body {
+        font-family: OrbitronAdv, Orbitron;
+}
+
 .image {
         position: relative;
         width: 265px;
@@ -19,7 +23,8 @@
 
 .text-item {
         color: white;
-        font: bold 25px OrbitronAdv, Orbitron;
+        font-size: 25px;
+        font-weight: bold;
         --outline-size: 2.5px;
         text-shadow: 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black;
         -webkit-font-smoothing: antialiased;
@@ -63,7 +68,8 @@ div.lower-panel {
 div.data {
         position: absolute;
         color: white;
-        font: bold 25px OrbitronAdv, Orbitron, Helvetica, Sans-Serif;
+        font-size: 25px;
+        font-weight: bold;
         background: none;
         padding: 4px;
         --outline-size: 2.5px;

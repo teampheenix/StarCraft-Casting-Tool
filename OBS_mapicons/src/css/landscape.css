@@ -9,6 +9,10 @@
         unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
+body{
+        font-family: OrbitronAdv, Orbitron;
+}
+
 :root {
         --border-size: 3px;
         --border-color: black;
@@ -22,7 +26,8 @@
 
 .text-item {
         color: white;
-        font: bold 18px OrbitronAdv, Orbitron;
+        font-size: 18px;
+        font-family: bold;
         --outline-size: 2.5px;
         text-shadow: 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black;
         -webkit-font-smoothing: antialiased;
@@ -67,7 +72,8 @@ div.box_middle {
         border-radius: 0px var(--border-radius) 0px var(--border-radius);
         background-image: url("./../texture1.jpg");
         background-size: cover;
-        font: bold 40px OrbitronAdv, Orbitron, Helvetica, Sans-Serif;
+        font-size: 40px;
+        font-family: bold;
         text-align: center;
         line-height: calc(var(--total-height) - var(--border-size));
         --winner-color: white;
@@ -127,7 +133,8 @@ div.upper-text-right {
         height: calc(100% - var(--lower-text-height) - 10px);
         left: calc(0% + var(--border-radius) + 6px);
         width: calc(100% - var(--border-radius) - 6px);
-        font: bold 28px OrbitronAdv, Orbitron, Helvetica, Sans-Serif;
+        font-size: 28px;
+        font-family: bold;
         text-align: center;
         line-height: 60px;
 }
@@ -138,7 +145,8 @@ div.upper-text-left {
         height: calc(100% - var(--lower-text-height) - 10px);
         left: 3px;
         width: calc(100% - var(--border-radius) - 6px);
-        font: bold 28px OrbitronAdv, Orbitron, Helvetica, Sans-Serif;
+        font-size: 28px;
+        font-family: bold;
         text-align: center;
         line-height: 60px;
 }

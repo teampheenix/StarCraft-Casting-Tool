@@ -5,7 +5,6 @@ pyu-data/
 pyupdater-usage.md
 OBS_data/
 data/*
-mykeyboard/
 config.ini
 OBS_mapicons/icons_box/data/*
 !OBS_mapicons/icons_box/data/template.html
@@ -21,5 +20,6 @@ build_app.py
 build_data.py
 sign.py
 *Ducklings.css
+*GoID.css
 OBS_mapicons/src/races/ducklings/
 OBS_html/src/ducklings/

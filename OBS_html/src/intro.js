@@ -46,9 +46,18 @@ function Connect() {
                                 $('.team span').html(jsonObject.data.team);
                                 fillText();
                                 var intro = document.getElementById("intro");
+                                var racelogo = document.getElementsByClassName("race")[0];
                                 var offset = (window.innerWidth - intro.offsetWidth) / 2;
-                                var introWidth = intro.offsetWidth;
-                                var introHeight = intro.offsetHeight;
+                                var introWidth = intro.clientWidth;
+                                var introHeight = intro.clientHeight;
+                                var racelogoWidth = racelogo.clientWidth;
+                                var racelogoHeight = racelogo.clientHeight;
+                                var logoTransHeight = racelogoHeight;
+                                var logoTransWidth = racelogoWidth;
+                                if ((racelogoHeight - introHeight) > 0) {
+                                        logoTransHeight = 0;
+                                        logoTransWidth = 0;
+                                };
                                 myAudio1.volume = jsonObject.data.volume / 10.0;
                                 myAudio2.volume = jsonObject.data.volume / 10.0;
                                 myAudio3.volume = jsonObject.data.volume / 10.0;
@@ -65,14 +74,21 @@ function Connect() {
                                                         left: offset + "px",
                                                         height: "0px"
                                                 })
+                                                .to(racelogo, 0, {
+                                                        height: logoTransHeight + "px"
+                                                })
                                                 .to(intro, 0.1, {
                                                         opacity: 1,
                                                         height: "0px"
                                                 })
                                                 .to(intro, 0.35, {
                                                         ease: Power2.easeOut,
-                                                        height: introHeight + "px",
+                                                        height: introHeight + "px"
                                                 })
+                                                .to(racelogo, 0.35, {
+                                                        ease: Power2.easeOut,
+                                                        height: racelogoHeight + "px"
+                                                }, "-=0.35")
                                                 .to(intro, jsonObject.data.display_time, {
                                                         height: introHeight + "px"
                                                 })
@@ -80,10 +96,17 @@ function Connect() {
                                                         height: "0px",
                                                         ease: Power1.easeOut
                                                 })
+                                                .to(racelogo, 0.35, {
+                                                        ease: Power2.easeOut,
+                                                        height: logoTransHeight + "px"
+                                                }, "-=0.35")
                                                 .to(intro, 0, {
                                                         left: "105%",
                                                         opacity: 0,
-                                                        height: introHeight + "px"
+                                                        height: ""
+                                                })
+                                                .to(racelogo, 0, {
+                                                        height: ""
                                                 });
                                 } else if (animation == "slide") {
                                         tween.to(intro, 0, {
@@ -91,10 +114,12 @@ function Connect() {
                                                         left: offset + introWidth / 2 + "px",
                                                         width: "0px"
                                                 })
+                                                .to(racelogo, 0, {
+                                                        width: logoTransWidth + "px"
+                                                })
                                                 .to(intro, 0.1, {
                                                         opacity: 1,
                                                         left: offset + introWidth / 2 + "px",
-                                                        width: "0px"
                                                 })
                                                 .call(playSound2)
                                                 .to(intro, 0.35, {
@@ -102,6 +127,10 @@ function Connect() {
                                                         width: introWidth + "px",
                                                         left: offset + "px"
                                                 })
+                                                .to(racelogo, 0.35, {
+                                                        ease: Power2.easeOut,
+                                                        width: racelogoWidth + "px"
+                                                }, "-=0.35")
                                                 .to(intro, jsonObject.data.display_time, {
                                                         width: introWidth + "px"
                                                 })
@@ -109,12 +138,19 @@ function Connect() {
                                                 .to(intro, 0.35, {
                                                         left: offset + introWidth / 2 + "px",
                                                         width: "0px",
-                                                        ease: Power1.easeOut
+                                                        ease: Power2.easeIn
                                                 })
+                                                .to(racelogo, 0.35, {
+                                                        ease: Power2.easeIn,
+                                                        width: logoTransWidth + "px"
+                                                }, "-=0.35")
                                                 .to(intro, 0, {
                                                         left: "105%",
                                                         opacity: 0,
-                                                        width: introWidth + "px"
+                                                        width: ""
+                                                })
+                                                .to(racelogo, 0, {
+                                                        width: ""
                                                 });
                                 } else {
                                         tween.call(playSound1)
@@ -174,15 +210,6 @@ function Connect() {
         }
 };
 
-function sendText() {
-        if (isopen) {
-                socket.send("Hello, world!");
-                console.log("Text message sent.");
-        } else {
-                console.log("Connection not opened.")
-        }
-};
-
 function fillText() {
         $("div.box").find(".text-fill").textfill({
                 maxFontPixels: 60
@@ -200,9 +227,12 @@ function changeCSS(cssFile, cssLinkIndex) {
         document.getElementsByTagName("head").item(0).replaceChild(newlink, oldlink);
 }
 
-var intro = document.getElementById("intro");
-TweenLite.to(intro, 0, {
-        opacity: 1,
-        left: "105%"
-});
-Connect();
+
+function init() {
+        var intro = document.getElementById("intro");
+        TweenLite.to(intro, 0, {
+                opacity: 1,
+                left: "105%"
+        });
+        Connect();
+}

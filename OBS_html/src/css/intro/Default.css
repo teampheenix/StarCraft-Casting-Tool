@@ -19,6 +19,7 @@
 
 body {
         overflow: hidden;
+        font-family: OrbitronAdv, Orbitron, Helvetica, Sans-Serif;
 }
 
 div.box {
@@ -127,12 +128,14 @@ div.team {
         height: calc(40% - 7px);
         /*line-height: calc(40% - 7px);*/
         text-align: center;
-        font: bold 30px OrbitronAdv, Orbitron, Helvetica, Sans-Serif !important;
+        font-size: 30px !important;
+        font-weight: bold;
 }
 
 .text-item {
         color: white;
-        font: bold 44px OrbitronAdv, Orbitron, Helvetica, Sans-Serif;
+        font-size: 44px !important;
+        font-weight: bold;
         --outline-size: 3px;
         text-shadow: 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black;
         -webkit-font-smoothing: antialiased;
