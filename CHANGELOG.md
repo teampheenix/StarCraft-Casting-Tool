@@ -1,6 +1,21 @@
 # Changelog
 
 
+## v1.8.6 (2018-04-04)
+
+### New
+
+* "Apply Format" and "Update OBS Data" buttons now indicated when they need to be pressed.
+
+* The winner highlight color is selectable in Settings: Styles.
+
+### Changes
+
+* A map is only labled as "Ace" when appropriate.
+
+* "Reset Match Data" now resets logos as well as the score.
+
+
 ## v1.8.5 (2018-04-03)
 
 ### New
