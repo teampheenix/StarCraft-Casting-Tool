@@ -32,7 +32,7 @@ StarCraft Casting Tool (SCC Tool) is a small program written in Python 3 that ca
 
 ## Discord Server
 
-If you need support, have questions, want to be up-to-date on, or like to contribute to this project, join our [Discord server](https://discord.gg/G9hFEfh).
+If you need support, have questions, want to be up-to-date on, or like to contribute to this project, join our [Discord Server](https://discord.gg/G9hFEfh).
 
 ## Links
 
@@ -85,14 +85,10 @@ Include the Player Intro `OBS_html/intro.html` as browser sources (using the ful
 
 ## Customization 
 
-Some basic options for customization can be found under *Settings: Styles*, for example, alternative styles/skins for the Map Icons, Score Icon, Intros and option to specify border colors. For additional **nearly unlimited customization** of the Icons you can make your own custom skins via [CSS](https://www.w3schools.com/css/) by creating new alternative *css*-files and placing them into `OBS_mapicons/src/css/box_styles`, `OBS_mapicons/src/css/landscape_styles`, `OBS_html/src/css/score_styles`, or `OBS_html/src/css/intro` respectively. If you do so, please share your custom skins with this project. If you want help implementing your own icon skin with CSS or just want to share an idea for a skin join the [Discord server](https://discord.gg/G9hFEfh).
+Some basic options for customization can be found under *Settings: Styles*, for example, alternative styles/skins for the Map Icons, Score Icon, Intros and option to specify border colors. For additional **nearly unlimited customization** of the Icons you can make your own custom skins via [CSS](https://www.w3schools.com/css/) by creating new alternative *css*-files and placing them into `OBS_mapicons/src/css/box_styles`, `OBS_mapicons/src/css/landscape_styles`, `OBS_html/src/css/score_styles`, or `OBS_html/src/css/intro` respectively. If you do so, please share your custom skins with this project. If you want help implementing your own icon skin with CSS or just want to share an idea for a skin join the [Discord Server](https://discord.gg/G9hFEfh).
 
 ## Help, Bug-Report, Suggestions & Contribution
 
-If you need help, have bugs to report, have suggestions to make, or want to contribute to this project in any way message me (*pres.sure#5247*) on [Discord](https://discordapp.com/) or join the Discord Server of this project via https://discord.gg/G9hFEfh.
+If you need help, have bugs to report, have suggestions to make, or want to contribute to this project in any way join the Discord Server of this project via https://discord.gg/G9hFEfh and/or message me (*pres.sure#5247*) on [Discord](https://discordapp.com/).
 
 In the case of a bug report please provide the log-file `scctool.log` (and `installpackages.log` if applicable).
-
-## Support
-
-If you want to support this project join our [Discord Server](https://discord.gg/G9hFEfh).
