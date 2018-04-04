@@ -36,7 +36,7 @@ If you need support, have questions, want to be up-to-date on, or like to contri
 
 ## Links
 
-[Changelog](https://github.com/teampheenix/StarCraft-Casting-Tool/blob/master/CHANGELOG.md) | [Icon Preview](https://teampheenix.github.io/SCCT-archive/)
+[Changelog](https://github.com/teampheenix/StarCraft-Casting-Tool/blob/master/CHANGELOG.md) | [Icon Preview](https://teampheenix.github.io/SCCT-archive/) | [Discord Server](https://discord.gg/G9hFEfh)
 
 
 ## General Information
@@ -95,4 +95,4 @@ In the case of a bug report please provide the log-file `scctool.log` (and `inst
 
 ## Support
 
-If you want to support this project join our [Discord Server](https://discord.gg/G9hFEfh) and consider subscribing to [twitch.tv/teampheenix](https://www.twitch.tv/teampheenix) or [donate directly](https://streamlabs.com/scpressure). Alternatively and free of cost - just follow the team pheeniX and my personal [twitch.tv/scpressure](https://www.twitch.tv/scpressure) Twitch channel!
+If you want to support this project join our [Discord Server](https://discord.gg/G9hFEfh).
