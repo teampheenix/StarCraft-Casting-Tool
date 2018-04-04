@@ -1,7 +1,16 @@
-![streaming-tool](https://user-images.githubusercontent.com/26044736/38167067-7b78fd10-352f-11e8-8676-50a7b0bf9e98.png)
+[![Release](https://img.shields.io/github/release/teampheenix/StarCraft-Casting-Tool.svg)](https://github.com/teampheenix/StarCraft-Casting-Tool/releases/latest)
+![GitHub (Pre-)Release Date](https://img.shields.io/github/release-date-pre/teampheenix/StarCraft-Casting-Tool.svg)
+![GitHub last commit](https://img.shields.io/github/last-commit/teampheenix/StarCraft-Casting-Tool.svg)
+[![GitHub license](https://img.shields.io/github/license/teampheenix/StarCraft-Casting-Tool.svg)](https://github.com/teampheenix/StarCraft-Casting-Tool/blob/master/LICENSE)
+[![GitHub issues](https://img.shields.io/github/issues/teampheenix/StarCraft-Casting-Tool.svg)](https://github.com/teampheenix/StarCraft-Casting-Tool/issues)
+[![Discord](https://img.shields.io/discord/408901724355559435.svg)](https://discord.gg/G9hFEfh)
+[![Twitter](https://img.shields.io/twitter/url/https/github.com/teampheenix/StarCraft-Casting-Tool.svg?style=social)](https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fteampheenix%2FStarCraft-Casting-Tool)
 
 # StarCraft Casting Tool
+
 StarCraft Casting Tool (SCC Tool) is a small program written in Python 3 that can grab all relevant data of a Stracraft 2 Team League Match from either [Alpha SC2 Teamleague](http://alpha.tl/) (AlphaTL) or [Russian StarCraft Team League](http://hdgame.net/en/tournaments/list/tournament/rstl-13/) (RSTL) and process it such that the information can be readily included for streaming, e.g., in OBS-Studio, X-Split or any other similar streaming tool. Alternatively, the format of a *Custom Match* can be specified. The title of your Twitch stream and your Nightbot chat commands can be updated accordingly by a single click.
+
+![streaming-tool](https://user-images.githubusercontent.com/26044736/38167067-7b78fd10-352f-11e8-8676-50a7b0bf9e98.png)
 
 ## Download
 
