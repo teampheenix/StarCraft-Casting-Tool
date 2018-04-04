@@ -843,6 +843,9 @@ class matchData:
 
         logo2 = self.__controller.logoManager.getTeam2().getFile(True)
 
+        vars = "--winner-color: {};".format(
+            scctool.settings.config.parser.get("MapIcons", "winner_highlight_color"))
+
         filename = scctool.settings.getAbsPath(
             scctool.settings.OBShtmlDir + "/data/score-data.html")
         with open(scctool.settings.getAbsPath(scctool.settings.OBShtmlDir +
@@ -860,6 +863,7 @@ class matchData:
                         '%LOGO2%', logo2)
                     line = line.replace('%WINNER1%', winner[0]).replace(
                         '%WINNER2%', winner[1])
+                    line = line.replace('%VARS%', vars)
                     line = line.replace('%SCORE-T1%', str(score[0]))
                     line = line.replace('%SCORE-T2%', str(score[1]))
                     line = line.replace('%SCORE%', str(
@@ -945,6 +949,8 @@ class matchData:
                 race1 = self.getRace(0, i).lower()
                 race2 = self.getRace(1, i).lower()
                 hidden = ""
+                vars = "--winner-color: {};".format(
+                    scctool.settings.config.parser.get("MapIcons", "winner_highlight_color"))
 
                 filename = scctool.settings.getAbsPath(scctool.settings.OBSmapDir +
                                                        "/icons_box/data/"
@@ -969,6 +975,7 @@ class matchData:
                             line = line.replace('%HIDDEN%', hidden)
                             line = line.replace('%STATUS1%', player1status).replace(
                                 '%STATUS2%', player2status)
+                            line = line.replace('%VARS%', vars)
                             fout.write(line)
 
                 with open(scctool.settings.getAbsPath(scctool.settings.OBSmapDir +
@@ -989,6 +996,7 @@ class matchData:
                             line = line.replace('%HIDDEN%', hidden)
                             line = line.replace('%STATUS1%', player1status).replace(
                                 '%STATUS2%', player2status)
+                            line = line.replace('%VARS%', vars)
                             fout.write(line)
 
             for i in range(self.getNoSets(), scctool.settings.max_no_sets):

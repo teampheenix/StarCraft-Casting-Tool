@@ -54,11 +54,11 @@
 <body>
         <div class="container" id="container">
         </div>
+        <script>
+                for (i = 1; i <= 9; i++) {
+                        $('#container').append("<div class='block' id='mapicon" + i.toString() + "'></div>");
+                };
+        </script>
 </body>
-<script>
-        for (i = 1; i <= 9; i++) {
-                $('#container').append("<div class='block' id='mapicon" + i.toString() + "'></div>");
-        };
-</script>
 
 </html>

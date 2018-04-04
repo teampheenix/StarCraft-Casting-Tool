@@ -151,6 +151,7 @@ def setDefaultConfigAll():
     setDefaultConfig("MapIcons", "undecided_color", "#f29b00")
     setDefaultConfig("MapIcons", "win_color", "#008000")
     setDefaultConfig("MapIcons", "lose_color", "#f22200")
+    setDefaultConfig("MapIcons", "winner_highlight_color", "#f29b00")
     setDefaultConfig("MapIcons", "notplayed_color", "#c0c0c0")
     setDefaultConfig("MapIcons", "notplayed_opacity", "0.4")
 

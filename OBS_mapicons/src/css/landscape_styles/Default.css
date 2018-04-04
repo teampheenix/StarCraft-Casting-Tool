@@ -27,7 +27,7 @@ body{
 .text-item {
         color: white;
         font-size: 18px;
-        font-family: bold;
+        font-weight: bold;
         --outline-size: 2.5px;
         text-shadow: 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black;
         -webkit-font-smoothing: antialiased;

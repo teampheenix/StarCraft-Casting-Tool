@@ -177,6 +177,10 @@ def copyStyleFile(style_dir, css_file, value):
         new_file = scctool.settings.getAbsPath(new_file)
         css_file = scctool.settings.getAbsPath(css_file)
 
+        if not os.path.isfile(new_file):
+            new_file = scctool.settings.getAbsPath(
+                os.path.join(style_dir, "Default.css"))
+
         shutil.copy(new_file, css_file)
 
     except Exception as e:

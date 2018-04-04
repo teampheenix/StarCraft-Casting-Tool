@@ -16,7 +16,7 @@
                         }
 
                         $(mapicon).find(".text-fill").textfill();
-                        setTimeout(reloadBox.bind(null, i), 1000);
+                        //setTimeout(reloadBox.bind(null, i), 1000);
                 }
 
                 function reloadBox(i) {
@@ -71,11 +71,11 @@
                         </div>
                 </div>
         </div>
+        <script>
+                for (i = 1; i <= 9; i++) {
+                        $('#container').append("<div class='block' id='mapicon" + i.toString() + "'></div>");
+                };
+        </script>
 </body>
-<script>
-        for (i = 1; i <= 9; i++) {
-                $('#container').append("<div class='block' id='mapicon" + i.toString() + "'></div>");
-        };
-</script>
 
 </html>
