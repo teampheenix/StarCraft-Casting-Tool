@@ -234,6 +234,10 @@ class MainController:
 
             self.matchData.resetData()
             self.matchData.writeJsonFile()
+            self.logoManager.resetTeam1Logo()
+            self.logoManager.resetTeam2Logo()
+            self.view.resetscore_click()
+            self.updateLogos()
             self.updateForms()
             self.updateOBS()
 

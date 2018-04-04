@@ -740,6 +740,15 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             self.pb_obsupdate = PyQt5.QtWidgets.QPushButton(
                 _("Update OBS Data"))
             self.pb_obsupdate.clicked.connect(self.updateobs_click)
+            
+            # TODO: Highlight if Update OBS Data is needed.
+            # self.pb_obsupdate.setAutoFillBackground(True)
+            # myPalette = self.pb_obsupdate.palette()
+            # oldPalette = self.pb_obsupdate.palette()
+            # myPalette.setColor(PyQt5.QtGui.QPalette.Background, PyQt5.QtCore.Qt.darkBlue)
+            # myPalette.setColor(PyQt5.QtGui.QPalette.ButtonText, PyQt5.QtCore.Qt.darkBlue)
+            # self.pb_obsupdate.setPalette(myPalette)
+            # self.pb_obsupdate.setPalette(oldPalette)
 
             layout.addWidget(self.pb_twitchupdate)
             layout.addWidget(self.pb_nightbotupdate)
