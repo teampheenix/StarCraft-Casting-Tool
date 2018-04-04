@@ -1,6 +1,13 @@
 # Changelog
 
 
+## v1.8.7 (2018-04-04)
+
+### Fix
+
+* Font is now correctly displayed in landscape map icons.
+
+
 ## v1.8.6 (2018-04-04)
 
 ### New
