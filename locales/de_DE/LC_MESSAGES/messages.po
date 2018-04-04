@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2018-04-04 17:02+0200\n"
-"PO-Revision-Date: 2018-04-04 17:02+0200\n"
+"POT-Creation-Date: 2018-04-04 20:08+0200\n"
+"PO-Revision-Date: 2018-04-04 20:08+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de\n"
@@ -593,19 +593,19 @@ msgstr "Von Favoriten löschen"
 msgid "Select Team Logo"
 msgstr "Wähle das Team Logo aus"
 
-#: view/subLogos.py:289
-msgid "Support Images ({})"
-msgstr "Unterstütze Bild-Formate ({})"
+#: view/subLogos.py:290 view/subMisc.py:353 view/subMisc.py:365
+msgid "Supported Images"
+msgstr "Unterstütze Bild-Formate"
 
-#: view/subLogos.py:322
+#: view/subLogos.py:323
 msgid "Logo from URL"
 msgstr "Logo aus URL"
 
-#: view/subLogos.py:323
+#: view/subLogos.py:324
 msgid "URL of Team Logo"
 msgstr "URL des Teamlogos"
 
-#: view/subLogos.py:329
+#: view/subLogos.py:330
 msgid "{} is not a valid URL."
 msgstr "{} ist keine gültige URL"
 
@@ -738,10 +738,6 @@ msgstr "Ändere Bild"
 msgid "Map Name"
 msgstr "Karten-Name"
 
-#: view/subMisc.py:329 view/subMisc.py:371
-msgid "Map Name:"
-msgstr "Karten-Name:"
-
 #: view/subMisc.py:337 view/subMisc.py:375
 msgid "Duplicate Entry"
 msgstr "Doppelter Eintragf"
@@ -753,10 +749,6 @@ msgstr "Karte ist bereits in der Liste! Überschreiben?"
 #: view/subMisc.py:352 view/subMisc.py:364
 msgid "Select Map Image (> 500x500px recommended)"
 msgstr "Wähe Karten-Bild aus (> 500x500px empfohlen)"
-
-#: view/subMisc.py:353 view/subMisc.py:365
-msgid "Support Images"
-msgstr "Unterstütze Bild-Formate"
 
 #: view/subMisc.py:392
 msgid "Delete map?"
@@ -887,6 +879,12 @@ msgstr "Fertig."
 msgid "Downloading required files...: Total file size {}, Time remaining {}."
 msgstr ""
 "Lade benötigte Dateien herunter...:  {} Gesamtgröße, {} Zeit verbleibend."
+
+#~ msgid "Support Images ({})"
+#~ msgstr "Unterstütze Bild-Formate ({})"
+
+#~ msgid "Map Name:"
+#~ msgstr "Karten-Name:"
 
 #~ msgid "Tesseract-OCR Executable:"
 #~ msgstr "Tesseract-OCR Programmdatei:"

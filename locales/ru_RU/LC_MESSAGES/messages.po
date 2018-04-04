@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2018-04-04 16:59+0200\n"
-"PO-Revision-Date: 2018-04-04 17:02+0200\n"
+"POT-Creation-Date: 2018-04-04 20:05+0200\n"
+"PO-Revision-Date: 2018-04-04 20:07+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ru\n"
@@ -599,19 +599,20 @@ msgstr "Удалить из избранного"
 msgid "Select Team Logo"
 msgstr "Выбрать логотип команды"
 
-#: scctool/view/subLogos.py:289
-msgid "Support Images ({})"
-msgstr "Поддержка изображений ({})"
+#: scctool/view/subLogos.py:290 scctool/view/subMisc.py:353
+#: scctool/view/subMisc.py:365
+msgid "Supported Images"
+msgstr "Поддерживаемые изображения"
 
-#: scctool/view/subLogos.py:322
+#: scctool/view/subLogos.py:323
 msgid "Logo from URL"
 msgstr "Логотип по ссылке"
 
-#: scctool/view/subLogos.py:323
+#: scctool/view/subLogos.py:324
 msgid "URL of Team Logo"
 msgstr "Ссылка логотипа команды"
 
-#: scctool/view/subLogos.py:329
+#: scctool/view/subLogos.py:330
 msgid "{} is not a valid URL."
 msgstr "{} не допустимая ссылка."
 
@@ -763,10 +764,6 @@ msgstr "Карта уже в списке! Переписать?"
 msgid "Select Map Image (> 500x500px recommended)"
 msgstr "Выберите изображение карты (> 500x500px рекомендовано)"
 
-#: scctool/view/subMisc.py:353 scctool/view/subMisc.py:365
-msgid "Support Images"
-msgstr "Поддерживаемые изображения"
-
 #: scctool/view/subMisc.py:392
 msgid "Delete map?"
 msgstr "Удалить карту?"
@@ -894,6 +891,12 @@ msgstr "Готово."
 #: scctool/view/widgets.py:548
 msgid "Downloading required files...: Total file size {}, Time remaining {}."
 msgstr "Загрузка необходимых файлов...: размер файла {}, осталось времени {}."
+
+#~ msgid "Support Images"
+#~ msgstr "Поддерживаемые изображения"
+
+#~ msgid "Support Images ({})"
+#~ msgstr "Поддержка изображений ({})"
 
 #~ msgid "Tesseract-OCR Executable:"
 #~ msgstr "Исполняемый файл Tesseract-OCR:"

@@ -73,7 +73,7 @@ div.box_middle {
         background-image: url("./../texture1.jpg");
         background-size: cover;
         font-size: 40px;
-        font-family: bold;
+        font-weight: bold;
         text-align: center;
         line-height: calc(var(--total-height) - var(--border-size));
         --winner-color: white;
@@ -134,7 +134,7 @@ div.upper-text-right {
         left: calc(0% + var(--border-radius) + 6px);
         width: calc(100% - var(--border-radius) - 6px);
         font-size: 28px;
-        font-family: bold;
+        font-weight: bold;
         text-align: center;
         line-height: 60px;
 }
@@ -146,7 +146,7 @@ div.upper-text-left {
         left: 3px;
         width: calc(100% - var(--border-radius) - 6px);
         font-size: 28px;
-        font-family: bold;
+        font-weight: bold;
         text-align: center;
         line-height: 60px;
 }

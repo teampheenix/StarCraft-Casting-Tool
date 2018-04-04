@@ -803,6 +803,7 @@ class matchData:
         winner = ["", ""]
         border_color = [[], []]
         threshold = int(self.getBestOf() / 2)
+        regex = re.compile(r"%[^%]+%")
 
         for i in range(self.getNoSets()):
             display.append("inline-block")
@@ -879,6 +880,7 @@ class matchData:
                             '%SCORE-M' + str(i + 1) + '-T2%', border_color[1][i])
                         line = line.replace(
                             '%DISPLAY-M' + str(i + 1) + '%', display[i])
+                    line = regex.sub("", line)
                     fout.write(line)
 
     def updateMapIcons(self):
@@ -888,6 +890,7 @@ class matchData:
             score = [0, 0]
             skip = [False] * self.getNoSets()
             meta_changed = self.hasMetaChanged()
+            regex = re.compile(r"%[^%]+%")
 
             if(team == 0):
                 landscape_score_hide = ";display: none"
@@ -979,6 +982,7 @@ class matchData:
                             line = line.replace('%STATUS1%', player1status).replace(
                                 '%STATUS2%', player2status)
                             line = line.replace('%VARS%', vars)
+                            line = regex.sub("", line)
                             fout.write(line)
 
                 with open(scctool.settings.getAbsPath(scctool.settings.OBSmapDir +
@@ -1000,6 +1004,7 @@ class matchData:
                             line = line.replace('%STATUS1%', player1status).replace(
                                 '%STATUS2%', player2status)
                             line = line.replace('%VARS%', vars)
+                            line = regex.sub("", line)
                             fout.write(line)
 
             for i in range(self.getNoSets(), scctool.settings.max_no_sets):
@@ -1016,6 +1021,7 @@ class matchData:
                     with open(filename, "wt", encoding='utf-8-sig') as fout:
                         for line in fin:
                             line = line.replace('%HIDDEN%', hidden)
+                            line = regex.sub("", line)
                             fout.write(line)
 
                 with open(scctool.settings.getAbsPath(scctool.settings.OBSmapDir +
@@ -1024,6 +1030,7 @@ class matchData:
                     with open(filename2, "wt", encoding='utf-8-sig') as fout:
                         for line in fin:
                             line = line.replace('%HIDDEN%', hidden)
+                            line = regex.sub("", line)
                             fout.write(line)
 
         except Exception as e:

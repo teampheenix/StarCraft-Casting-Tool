@@ -326,7 +326,7 @@ class SubwindowMisc(PyQt5.QtWidgets.QWidget):
         item = self.maplist.currentItem()
         map = item.text()
         text, ok = PyQt5.QtWidgets.QInputDialog.getText(
-            self, _('Map Name'), _('Map Name:'), text=map)
+            self, _('Map Name'), _('Map Name') + ':', text=map)
         if not ok:
             return
         text = text.strip()
@@ -350,7 +350,7 @@ class SubwindowMisc(PyQt5.QtWidgets.QWidget):
         map = self.maplist.currentItem().text()
         fileName, ok = PyQt5.QtWidgets.QFileDialog.getOpenFileName(
             self, _("Select Map Image (> 500x500px recommended)"),
-            "", _("Support Images") + " (*.png *.jpg)")
+            "", _("Supported Images") + " (*.png *.jpg)")
         if ok:
             base = os.path.basename(fileName)
             name, ext = os.path.splitext(base)
@@ -362,13 +362,13 @@ class SubwindowMisc(PyQt5.QtWidgets.QWidget):
         """Add a map."""
         fileName, ok = PyQt5.QtWidgets.QFileDialog.getOpenFileName(
             self, _("Select Map Image (> 500x500px recommended)"),
-            "", _("Support Images") + " (*.png *.jpg)")
+            "", _("Supported Images") + " (*.png *.jpg)")
         if ok:
             base = os.path.basename(fileName)
             name, ext = os.path.splitext(base)
             name = name.replace("_", " ")
             text, ok = PyQt5.QtWidgets.QInputDialog.getText(
-                self, _('Map Name'), _('Map Name:'), text=name)
+                self, _('Map Name'), _('Map Name') + ':', text=name)
             if ok:
                 if(text.strip() in scctool.settings.maps):
                     buttonReply = PyQt5.QtWidgets.QMessageBox.warning(

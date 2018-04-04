@@ -286,7 +286,8 @@ class SubwindowLogos(PyQt5.QtWidgets.QWidget):
         options |= PyQt5.QtWidgets.QFileDialog.DontUseNativeDialog
 
         fileName, status = PyQt5.QtWidgets.QFileDialog.getOpenFileName(
-            self, _("Select Team Logo"), "", _("Support Images ({})").format("*.png *.jpg"))
+            self, _("Select Team Logo"), "",
+            (_("Supported Images") + " ({})").format("*.png *.jpg"))
         if fileName:
             logo = self.controller.logoManager.newLogo()
             logo.fromFile(fileName)
