@@ -252,16 +252,18 @@ class matchData:
 
         ace_start = no_sets - 3 + 2 * (best_of % 2)
         skip_one = (ace_start + 1 == no_sets)
+        ace = (best_of % 2) == 0
 
-        for set_idx in range(ace_start):
+        for set_idx in range(no_sets):
             self.setLabel(set_idx, "Map " + str(set_idx + 1))
 
-        for set_idx in range(ace_start, no_sets):
-            if(skip_one):
-                self.setLabel(set_idx, "Ace Map")
-            else:
-                self.setLabel(set_idx, "Ace Map " +
-                              str(set_idx - ace_start + 1))
+        if ace:
+            for set_idx in range(ace_start, no_sets):
+                if(skip_one):
+                    self.setLabel(set_idx, "Ace Map")
+                else:
+                    self.setLabel(set_idx, "Ace Map " +
+                                  str(set_idx - ace_start + 1))
 
     def setNoSets(self, no_sets=5, bestof=False, resetPlayers=False):
         """Set the number of sets/maps."""
