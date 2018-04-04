@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2018-04-03 21:33+0200\n"
-"PO-Revision-Date: 2018-04-03 21:33+0200\n"
+"POT-Creation-Date: 2018-04-04 16:59+0200\n"
+"PO-Revision-Date: 2018-04-04 16:59+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -18,44 +18,44 @@ msgstr ""
 msgid "This version is up to date."
 msgstr ""
 
-#: controller.py:492 controller.py:500
+#: controller.py:500 controller.py:508
 msgid "Specify your Twitch Settings to use this feature"
 msgstr ""
 
-#: controller.py:495
+#: controller.py:503
 msgid ""
 "Automatically update the title of your twitch channel in the background."
 msgstr ""
 
-#: controller.py:506 controller.py:513
+#: controller.py:514 controller.py:521
 msgid "Specify your Nightbot Settings to use this feature"
 msgstr ""
 
-#: controller.py:507
+#: controller.py:515
 msgid "Automatically update the commands of your nightbot in the background."
 msgstr ""
 
-#: controller.py:636
+#: controller.py:644
 msgid "Warning: Map '{}' not found!"
 msgstr ""
 
-#: controller.py:677
+#: controller.py:685
 msgid "A new version {} is available."
 msgstr ""
 
-#: controller.py:679
+#: controller.py:687
 msgid "Update to new version?"
 msgstr ""
 
-#: controller.py:680
+#: controller.py:688
 msgid "New SCC-Tool Version"
 msgstr ""
 
-#: controller.py:689
+#: controller.py:697
 msgid "Don't show on startup."
 msgstr ""
 
-#: controller.py:698
+#: controller.py:706
 msgid "A new version {} is available on GitHub!"
 msgstr ""
 
@@ -91,7 +91,7 @@ msgstr ""
 msgid "Not Found - Channel '{}' not found."
 msgstr ""
 
-#: tasks/updater.py:266
+#: tasks/updater.py:270
 msgid "Updated data files!"
 msgstr ""
 
@@ -145,7 +145,7 @@ msgstr ""
 msgid "About"
 msgstr ""
 
-#: view/main.py:156 view/main.py:253
+#: view/main.py:156 view/main.py:259
 msgid "Readme"
 msgstr ""
 
@@ -153,7 +153,7 @@ msgstr ""
 msgid "Check for new version"
 msgstr ""
 
-#: view/main.py:166 view/main.py:260
+#: view/main.py:166 view/main.py:266
 msgid "Changelog"
 msgstr ""
 
@@ -165,211 +165,211 @@ msgstr ""
 msgid "Language"
 msgstr ""
 
-#: view/main.py:292
+#: view/main.py:298
 msgid "Match Grabber for AlphaTL && RSTL"
 msgstr ""
 
-#: view/main.py:293
+#: view/main.py:299
 msgid "Custom Match"
 msgstr ""
 
-#: view/main.py:317
+#: view/main.py:323
 msgid "Open in Browser"
 msgstr ""
 
-#: view/main.py:327 view/main.py:437
+#: view/main.py:333 view/main.py:449
 msgid "Match-URL:"
 msgstr ""
 
-#: view/main.py:360
+#: view/main.py:366
 msgid "Load Data from URL"
 msgstr ""
 
-#: view/main.py:378
+#: view/main.py:384
 msgid "Match Format:"
 msgstr ""
 
-#: view/main.py:382
+#: view/main.py:388
 msgid "Best of"
 msgstr ""
 
-#: view/main.py:388
+#: view/main.py:394
 msgid ""
 "\"Best of 6/4\": First, a Bo5/3 is played and the ace map gets extended to a "
 "Bo3 if needed; Best of 2: Bo3 with only two maps played."
 msgstr ""
 
-#: view/main.py:396
+#: view/main.py:402
 msgid " but at least"
 msgstr ""
 
-#: view/main.py:401
+#: view/main.py:407
 msgid "Minimum number of maps played (even if the match is decided already)"
 msgstr ""
 
-#: view/main.py:405
+#: view/main.py:411
 msgid "maps"
 msgstr ""
 
-#: view/main.py:407
+#: view/main.py:415
 msgid "All-Kill Format"
 msgstr ""
 
-#: view/main.py:410
+#: view/main.py:418
 msgid "Winner stays and is automatically placed into the next set"
 msgstr ""
 
-#: view/main.py:414
+#: view/main.py:422
 msgid "1vs1"
 msgstr ""
 
-#: view/main.py:417
+#: view/main.py:425
 msgid "Select for solo (non-team matches)"
 msgstr ""
 
-#: view/main.py:424
+#: view/main.py:436
 msgid "Apply Format"
 msgstr ""
 
-#: view/main.py:444
+#: view/main.py:456
 msgid "Optionally specify the Match-URL, e.g., for Nightbot commands"
 msgstr ""
 
-#: view/main.py:446
+#: view/main.py:458
 msgid "Specify the Match-URL of your Custom Match"
 msgstr ""
 
-#: view/main.py:463
+#: view/main.py:476
 msgid "Reset Match Data"
 msgstr ""
 
-#: view/main.py:529
+#: view/main.py:544
 msgid "Match Data"
 msgstr ""
 
-#: view/main.py:599
+#: view/main.py:617
 msgid "Choose your team"
 msgstr ""
 
-#: view/main.py:615
+#: view/main.py:633
 msgid "League:"
 msgstr ""
 
-#: view/main.py:625
+#: view/main.py:643
 msgid "Maps \\ Teams:"
 msgstr ""
 
-#: view/main.py:657
+#: view/main.py:674
 msgid "Player {} of team {}"
 msgstr ""
 
-#: view/main.py:676
+#: view/main.py:693
 msgid "Set the score"
 msgstr ""
 
-#: view/main.py:683
+#: view/main.py:700
 msgid "Map {}"
 msgstr ""
 
-#: view/main.py:724
+#: view/main.py:743
 msgid "Tasks"
 msgstr ""
 
-#: view/main.py:728
+#: view/main.py:747
 msgid "Update Twitch Title"
 msgstr ""
 
-#: view/main.py:732
+#: view/main.py:751
 msgid "Update Nightbot"
 msgstr ""
 
-#: view/main.py:735
+#: view/main.py:754
 msgid "Reset Score"
 msgstr ""
 
-#: view/main.py:739
+#: view/main.py:758
 msgid "Update OBS Data"
 msgstr ""
 
-#: view/main.py:755
+#: view/main.py:785
 msgid "Background Tasks"
 msgstr ""
 
-#: view/main.py:758
+#: view/main.py:788
 msgid "Auto Score Update"
 msgstr ""
 
-#: view/main.py:760
+#: view/main.py:790
 msgid ""
 "Automatically detects the outcome of SC2 matches that are played/observed in "
 "your SC2-client and updates the score accordingly."
 msgstr ""
 
-#: view/main.py:766
+#: view/main.py:796
 msgid "Provide Player Intros"
 msgstr ""
 
-#: view/main.py:769
+#: view/main.py:799
 msgid "Update player intros files via SC2-Client-API"
 msgstr ""
 
-#: view/main.py:773
+#: view/main.py:803
 msgid "Set Ingame Score"
 msgstr ""
 
-#: view/main.py:775
+#: view/main.py:805
 msgid ""
 "Automatically sets the score of your ingame UI-interface at the begining of "
 "a game."
 msgstr ""
 
-#: view/main.py:782
+#: view/main.py:812
 msgid "Toggle Production Tab"
 msgstr ""
 
-#: view/main.py:784
+#: view/main.py:814
 msgid ""
 "Automatically toggles the production tab of your ingame UI-interface at the "
 "begining of a game."
 msgstr ""
 
-#: view/main.py:791
+#: view/main.py:821
 msgid "Auto Twitch Update"
 msgstr ""
 
-#: view/main.py:796
+#: view/main.py:826
 msgid "Auto Nightbot Update"
 msgstr ""
 
-#: view/main.py:805 view/main.py:809
+#: view/main.py:835 view/main.py:839
 msgid "Only Windows"
 msgstr ""
 
-#: view/main.py:894
+#: view/main.py:924
 msgid "Applying Custom Match..."
 msgstr ""
 
-#: view/main.py:928
+#: view/main.py:959
 msgid "Reading {}..."
 msgstr ""
 
-#: view/main.py:948
+#: view/main.py:979
 msgid "Updating Nightbot Command..."
 msgstr ""
 
-#: view/main.py:957
+#: view/main.py:988
 msgid "Updating Twitch Title..."
 msgstr ""
 
-#: view/main.py:966
+#: view/main.py:997
 msgid "Updating OBS Data..."
 msgstr ""
 
-#: view/main.py:976
+#: view/main.py:1007
 msgid "Resetting Score..."
 msgstr ""
 
-#: view/main.py:991
+#: view/main.py:1024
 msgid "Updating Score..."
 msgstr ""
 
@@ -474,7 +474,7 @@ msgstr ""
 msgid "Save && Close"
 msgstr ""
 
-#: view/subConnections.py:359 view/subMisc.py:488 view/subStyles.py:235
+#: view/subConnections.py:359 view/subMisc.py:488 view/subStyles.py:241
 msgid "Save data?"
 msgstr ""
 
@@ -668,7 +668,7 @@ msgstr ""
 msgid "Activate Optical Character Recognition"
 msgstr ""
 
-#: view/subMisc.py:209 view/subMisc.py:262
+#: view/subMisc.py:209 view/subMisc.py:232 view/subMisc.py:262
 msgid "Tesseract-OCR Executable"
 msgstr ""
 
@@ -682,10 +682,6 @@ msgid ""
 "order in the Observer-UI resulting in a swapped match score. To correct this "
 "via Optical Character Recognition you have to download {} and install and "
 "select the exectuable below, if it is not detected automatically."
-msgstr ""
-
-#: view/subMisc.py:232
-msgid "Tesseract-OCR Executable:"
 msgstr ""
 
 #: view/subMisc.py:246 view/subMisc.py:250 view/subMisc.py:254
@@ -792,18 +788,22 @@ msgid "Default Border:"
 msgstr ""
 
 #: view/subStyles.py:171
-msgid "Win:"
+msgid "Winner Highlight:"
 msgstr ""
 
 #: view/subStyles.py:175
-msgid "Lose:"
+msgid "Win:"
 msgstr ""
 
 #: view/subStyles.py:179
-msgid "Undecided:"
+msgid "Lose:"
 msgstr ""
 
 #: view/subStyles.py:183
+msgid "Undecided:"
+msgstr ""
+
+#: view/subStyles.py:187
 msgid "Not played:"
 msgstr ""
 

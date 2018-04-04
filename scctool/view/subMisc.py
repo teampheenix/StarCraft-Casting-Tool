@@ -229,7 +229,7 @@ class SubwindowMisc(PyQt5.QtWidgets.QWidget):
 
         layout.addWidget(self.cb_useocr, 0, 0, 1, 2)
         layout.addWidget(PyQt5.QtWidgets.QLabel(
-            _("Tesseract-OCR Executable:")), 2, 0)
+            _("Tesseract-OCR Executable") + ":"), 2, 0)
         layout.addWidget(self.tesseract, 3, 0)
         layout.addWidget(self.browse, 3, 1)
 

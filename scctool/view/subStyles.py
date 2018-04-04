@@ -168,7 +168,7 @@ class SubwindowStyles(PyQt5.QtWidgets.QWidget):
             scctool.settings.config.parser.get("MapIcons", "default_border_color"), "#f29b00")
         layout.addLayout(self.default_color)
         self.winner_color = ColorLayout(
-            self, _("Winner Hightlight:"),
+            self, _("Winner Highlight:"),
             scctool.settings.config.parser.get("MapIcons", "winner_highlight_color"), "#f29b00")
         layout.addLayout(self.winner_color)
         self.win_color = ColorLayout(

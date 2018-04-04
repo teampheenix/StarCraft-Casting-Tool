@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: SCCT\n"
-"POT-Creation-Date: 2018-04-02 13:46+0200\n"
-"PO-Revision-Date: 2018-04-02 13:46+0200\n"
+"POT-Creation-Date: 2018-04-04 16:58+0200\n"
+"PO-Revision-Date: 2018-04-04 16:59+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en\n"
@@ -14,49 +14,49 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: controller.py:74
+#: controller.py:75
 msgid "This version is up to date."
 msgstr "This version is up to date."
 
-#: controller.py:490 controller.py:498
+#: controller.py:500 controller.py:508
 msgid "Specify your Twitch Settings to use this feature"
 msgstr "Specify your Twitch Settings to use this feature"
 
-#: controller.py:493
+#: controller.py:503
 msgid ""
 "Automatically update the title of your twitch channel in the background."
 msgstr ""
 "Automatically update the title of your twitch channel in the background."
 
-#: controller.py:504 controller.py:511
+#: controller.py:514 controller.py:521
 msgid "Specify your Nightbot Settings to use this feature"
 msgstr "Specify your Nightbot Settings to use this feature"
 
-#: controller.py:505
+#: controller.py:515
 msgid "Automatically update the commands of your nightbot in the background."
 msgstr "Automatically update the commands of your nightbot in the background."
 
-#: controller.py:634
+#: controller.py:644
 msgid "Warning: Map '{}' not found!"
 msgstr "Warning: Map '{}' not found!"
 
-#: controller.py:675
+#: controller.py:685
 msgid "A new version {} is available."
 msgstr "A new version {} is available."
 
-#: controller.py:677
+#: controller.py:687
 msgid "Update to new version?"
 msgstr "Update to new version?"
 
-#: controller.py:678
+#: controller.py:688
 msgid "New SCC-Tool Version"
 msgstr "New SCC-Tool Version"
 
-#: controller.py:687
+#: controller.py:697
 msgid "Don't show on startup."
 msgstr "Don't show on startup."
 
-#: controller.py:696
+#: controller.py:706
 msgid "A new version {} is available on GitHub!"
 msgstr "A new version {} is available on GitHub!"
 
@@ -92,7 +92,7 @@ msgstr "Updated Twitch title of {} to: \"{}\""
 msgid "Not Found - Channel '{}' not found."
 msgstr "Not Found - Channel '{}' not found."
 
-#: tasks/updater.py:266
+#: tasks/updater.py:270
 msgid "Updated data files!"
 msgstr "Updated data files!"
 
@@ -148,7 +148,7 @@ msgstr "Info && Links"
 msgid "About"
 msgstr "About"
 
-#: view/main.py:156 view/main.py:253
+#: view/main.py:156 view/main.py:259
 msgid "Readme"
 msgstr "Readme"
 
@@ -156,7 +156,7 @@ msgstr "Readme"
 msgid "Check for new version"
 msgstr "Check for new version"
 
-#: view/main.py:166 view/main.py:260
+#: view/main.py:166 view/main.py:266
 msgid "Changelog"
 msgstr "Changelog"
 
@@ -168,35 +168,35 @@ msgstr "Donate"
 msgid "Language"
 msgstr "Language"
 
-#: view/main.py:292
+#: view/main.py:298
 msgid "Match Grabber for AlphaTL && RSTL"
 msgstr "Match Grabber for AlphaTL && RSTL"
 
-#: view/main.py:293
+#: view/main.py:299
 msgid "Custom Match"
 msgstr "Custom Match"
 
-#: view/main.py:317
+#: view/main.py:323
 msgid "Open in Browser"
 msgstr "Open in Browser"
 
-#: view/main.py:327 view/main.py:437
+#: view/main.py:333 view/main.py:449
 msgid "Match-URL:"
 msgstr "Match-URL:"
 
-#: view/main.py:360
+#: view/main.py:366
 msgid "Load Data from URL"
 msgstr "Load Data from URL"
 
-#: view/main.py:378
+#: view/main.py:384
 msgid "Match Format:"
 msgstr "Match Format:"
 
-#: view/main.py:382
+#: view/main.py:388
 msgid "Best of"
 msgstr "Best of"
 
-#: view/main.py:388
+#: view/main.py:394
 msgid ""
 "\"Best of 6/4\": First, a Bo5/3 is played and the ace map gets extended to a "
 "Bo3 if needed; Best of 2: Bo3 with only two maps played."
@@ -204,107 +204,107 @@ msgstr ""
 "\"Best of 6/4\": First, a Bo5/3 is played and the ace map gets extended to a "
 "Bo3 if needed; Best of 2: Bo3 with only two maps played."
 
-#: view/main.py:396
+#: view/main.py:402
 msgid " but at least"
 msgstr " but at least"
 
-#: view/main.py:401
+#: view/main.py:407
 msgid "Minimum number of maps played (even if the match is decided already)"
 msgstr "Minimum number of maps played (even if the match is decided already)"
 
-#: view/main.py:405
+#: view/main.py:411
 msgid "maps"
 msgstr "maps"
 
-#: view/main.py:407
+#: view/main.py:415
 msgid "All-Kill Format"
 msgstr "All-Kill Format"
 
-#: view/main.py:410
+#: view/main.py:418
 msgid "Winner stays and is automatically placed into the next set"
 msgstr "Winner stays and is automatically placed into the next set"
 
-#: view/main.py:414
+#: view/main.py:422
 msgid "1vs1"
 msgstr "1vs1"
 
-#: view/main.py:417
+#: view/main.py:425
 msgid "Select for solo (non-team matches)"
 msgstr "Select for solo (non-team matches)"
 
-#: view/main.py:424
+#: view/main.py:436
 msgid "Apply Format"
 msgstr "Apply Format"
 
-#: view/main.py:444
+#: view/main.py:456
 msgid "Optionally specify the Match-URL, e.g., for Nightbot commands"
 msgstr "Optionally specify the Match-URL, e.g., for Nightbot commands"
 
-#: view/main.py:446
+#: view/main.py:458
 msgid "Specify the Match-URL of your Custom Match"
 msgstr "Specify the Match-URL of your Custom Match"
 
-#: view/main.py:463
+#: view/main.py:476
 msgid "Reset Match Data"
 msgstr "Reset Match Data"
 
-#: view/main.py:528
+#: view/main.py:544
 msgid "Match Data"
 msgstr "Match Data"
 
-#: view/main.py:598
+#: view/main.py:617
 msgid "Choose your team"
 msgstr "Choose your team"
 
-#: view/main.py:614
+#: view/main.py:633
 msgid "League:"
 msgstr "League:"
 
-#: view/main.py:624
+#: view/main.py:643
 msgid "Maps \\ Teams:"
 msgstr "Maps \\ Teams:"
 
-#: view/main.py:655
+#: view/main.py:674
 msgid "Player {} of team {}"
 msgstr "Player {} of team {}"
 
-#: view/main.py:674
+#: view/main.py:693
 msgid "Set the score"
 msgstr "Set the score"
 
-#: view/main.py:681
+#: view/main.py:700
 msgid "Map {}"
 msgstr "Map {}"
 
-#: view/main.py:722
+#: view/main.py:743
 msgid "Tasks"
 msgstr "Tasks"
 
-#: view/main.py:726
+#: view/main.py:747
 msgid "Update Twitch Title"
 msgstr "Update Twitch Title"
 
-#: view/main.py:730
+#: view/main.py:751
 msgid "Update Nightbot"
 msgstr "Update Nightbot"
 
-#: view/main.py:733
+#: view/main.py:754
 msgid "Reset Score"
 msgstr "Reset Score"
 
-#: view/main.py:737
+#: view/main.py:758
 msgid "Update OBS Data"
 msgstr "Update OBS Data"
 
-#: view/main.py:753
+#: view/main.py:785
 msgid "Background Tasks"
 msgstr "Background Tasks"
 
-#: view/main.py:756
+#: view/main.py:788
 msgid "Auto Score Update"
 msgstr "Auto Score Update"
 
-#: view/main.py:758
+#: view/main.py:790
 msgid ""
 "Automatically detects the outcome of SC2 matches that are played/observed in "
 "your SC2-client and updates the score accordingly."
@@ -312,19 +312,19 @@ msgstr ""
 "Automatically detects the outcome of SC2 matches that are played/observed in "
 "your SC2-client and updates the score accordingly."
 
-#: view/main.py:764
+#: view/main.py:796
 msgid "Provide Player Intros"
 msgstr "Provide Player Intros"
 
-#: view/main.py:767
+#: view/main.py:799
 msgid "Update player intros files via SC2-Client-API"
 msgstr "Update player intros files via SC2-Client-API"
 
-#: view/main.py:771
+#: view/main.py:803
 msgid "Set Ingame Score"
 msgstr "Set Ingame Score"
 
-#: view/main.py:773
+#: view/main.py:805
 msgid ""
 "Automatically sets the score of your ingame UI-interface at the begining of "
 "a game."
@@ -332,11 +332,11 @@ msgstr ""
 "Automatically sets the score of your ingame UI-interface at the begining of "
 "a game."
 
-#: view/main.py:780
+#: view/main.py:812
 msgid "Toggle Production Tab"
 msgstr "Toggle Production Tab"
 
-#: view/main.py:782
+#: view/main.py:814
 msgid ""
 "Automatically toggles the production tab of your ingame UI-interface at the "
 "begining of a game."
@@ -344,43 +344,43 @@ msgstr ""
 "Automatically toggles the production tab of your ingame UI-interface at the "
 "begining of a game."
 
-#: view/main.py:789
+#: view/main.py:821
 msgid "Auto Twitch Update"
 msgstr "Auto Twitch Update"
 
-#: view/main.py:794
+#: view/main.py:826
 msgid "Auto Nightbot Update"
 msgstr "Auto Nightbot Update"
 
-#: view/main.py:803 view/main.py:807
+#: view/main.py:835 view/main.py:839
 msgid "Only Windows"
 msgstr "Only Windows"
 
-#: view/main.py:892
+#: view/main.py:924
 msgid "Applying Custom Match..."
 msgstr "Applying Custom Match..."
 
-#: view/main.py:926
+#: view/main.py:959
 msgid "Reading {}..."
 msgstr "Reading {}..."
 
-#: view/main.py:946
+#: view/main.py:979
 msgid "Updating Nightbot Command..."
 msgstr "Updating Nightbot Command..."
 
-#: view/main.py:955
+#: view/main.py:988
 msgid "Updating Twitch Title..."
 msgstr "Updating Twitch Title..."
 
-#: view/main.py:964
+#: view/main.py:997
 msgid "Updating OBS Data..."
 msgstr "Updating OBS Data..."
 
-#: view/main.py:974
+#: view/main.py:1007
 msgid "Resetting Score..."
 msgstr "Resetting Score..."
 
-#: view/main.py:989
+#: view/main.py:1024
 msgid "Updating Score..."
 msgstr "Updating Score..."
 
@@ -477,7 +477,7 @@ msgstr "Press 'Get' to generate a token."
 msgid "Add Command"
 msgstr "Add Command"
 
-#: view/subConnections.py:293 view/subLiquipediaSearch.py:67
+#: view/subConnections.py:293 view/subLiquipediaSearch.py:68
 #: view/subMisc.py:432 view/subStyles.py:67
 msgid "Cancel"
 msgstr "Cancel"
@@ -486,7 +486,7 @@ msgstr "Cancel"
 msgid "Save && Close"
 msgstr "Save && Close"
 
-#: view/subConnections.py:359 view/subMisc.py:488 view/subStyles.py:235
+#: view/subConnections.py:359 view/subMisc.py:488 view/subStyles.py:241
 msgid "Save data?"
 msgstr "Save data?"
 
@@ -514,19 +514,19 @@ msgstr "Search"
 msgid "Results"
 msgstr "Results"
 
-#: view/subLiquipediaSearch.py:65
+#: view/subLiquipediaSearch.py:66
 msgid "Use Selected Logo"
 msgstr "Use Selected Logo"
 
-#: view/subLiquipediaSearch.py:76
+#: view/subLiquipediaSearch.py:77
 msgid "Liqupedia Image Search"
 msgstr "Liqupedia Image Search"
 
-#: view/subLiquipediaSearch.py:145
+#: view/subLiquipediaSearch.py:146
 msgid "Open on Liquipedia"
 msgstr "Open on Liquipedia"
 
-#: view/subLiquipediaSearch.py:147
+#: view/subLiquipediaSearch.py:148
 msgid "Use as Team Logo"
 msgstr "Use as Team Logo"
 
@@ -682,7 +682,7 @@ msgstr "Optical Character Recognition for Automatic Setting of Ingame Score"
 msgid "Activate Optical Character Recognition"
 msgstr "Activate Optical Character Recognition"
 
-#: view/subMisc.py:209 view/subMisc.py:262
+#: view/subMisc.py:209 view/subMisc.py:232 view/subMisc.py:262
 msgid "Tesseract-OCR Executable"
 msgstr "Tesseract-OCR Executable"
 
@@ -701,10 +701,6 @@ msgstr ""
 "order in the Observer-UI resulting in a swapped match score. To correct this "
 "via Optical Character Recognition you have to download {} and install and "
 "select the exectuable below, if it is not detected automatically."
-
-#: view/subMisc.py:232
-msgid "Tesseract-OCR Executable:"
-msgstr "Tesseract-OCR Executable:"
 
 #: view/subMisc.py:246 view/subMisc.py:250 view/subMisc.py:254
 msgid "This feature is only available in Windows."
@@ -812,18 +808,22 @@ msgid "Default Border:"
 msgstr "Default Border:"
 
 #: view/subStyles.py:171
+msgid "Winner Highlight:"
+msgstr "Winner Highlight:"
+
+#: view/subStyles.py:175
 msgid "Win:"
 msgstr "Win:"
 
-#: view/subStyles.py:175
+#: view/subStyles.py:179
 msgid "Lose:"
 msgstr "Lose:"
 
-#: view/subStyles.py:179
+#: view/subStyles.py:183
 msgid "Undecided:"
 msgstr "Undecided:"
 
-#: view/subStyles.py:183
+#: view/subStyles.py:187
 msgid "Not played:"
 msgstr "Not played:"
 
@@ -882,6 +882,9 @@ msgstr "Done."
 #: view/widgets.py:548
 msgid "Downloading required files...: Total file size {}, Time remaining {}."
 msgstr "Downloading required files...: Total file size {}, Time remaining {}."
+
+#~ msgid "Tesseract-OCR Executable:"
+#~ msgstr "Tesseract-OCR Executable:"
 
 #~ msgid "Specify your FTP Settings to use this feature"
 #~ msgstr "Specify your FTP Settings to use this feature"
