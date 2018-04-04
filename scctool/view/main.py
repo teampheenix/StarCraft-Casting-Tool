@@ -10,7 +10,8 @@ import scctool.settings.config
 import markdown2
 import gettext
 
-from scctool.view.widgets import BusyProgressBar, MapLineEdit, IconPushButton
+from scctool.view.widgets import BusyProgressBar, MapLineEdit, \
+    IconPushButton, MonitoredLineEdit
 from scctool.view.subConnections import SubwindowConnections
 from scctool.view.subStyles import SubwindowStyles
 from scctool.view.subMisc import SubwindowMisc
@@ -408,6 +409,8 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             container.addWidget(self.cb_minSets, 0)
             container.addWidget(
                 PyQt5.QtWidgets.QLabel(" " + _("maps") + "  "), 0)
+            self.cb_minSets.currentIndexChanged.connect(
+                lambda idx: self.highlightApplyCustom())
 
             self.cb_allkill = PyQt5.QtWidgets.QCheckBox(_("All-Kill Format"))
             self.cb_allkill.setChecked(False)
@@ -421,9 +424,13 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             self.cb_solo.setToolTip(
                 _('Select for solo (non-team matches)'))
             container.addWidget(self.cb_solo, 0)
+            self.cb_solo.stateChanged.connect(
+                lambda idx: self.highlightApplyCustom())
 
             label = PyQt5.QtWidgets.QLabel("")
             container.addWidget(label, 1)
+
+            self.applycustom_is_highlighted = False
 
             self.pb_applycustom = PyQt5.QtWidgets.QPushButton(
                 _("Apply Format"))
@@ -443,7 +450,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             label.setMinimumWidth(80)
             container.addWidget(label, 0)
 
-            self.le_url_custom = PyQt5.QtWidgets.QLineEdit()
+            self.le_url_custom = MonitoredLineEdit()
             self.le_url_custom.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
             self.le_url_custom.setToolTip(
                 _('Optionally specify the Match-URL, e.g., for Nightbot commands'))
@@ -458,6 +465,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             completer.setWrapAround(True)
             self.le_url_custom.setCompleter(completer)
             self.le_url_custom.setMinimumWidth(360)
+            self.le_url_custom.textModified.connect(self.highlightApplyCustom)
 
             container.addWidget(self.le_url_custom, 11)
 
@@ -487,6 +495,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
         """Change the minimum sets combo box on change of BoX."""
         bestof = bestof + 1
         self.cb_minSets.clear()
+        self.highlightApplyCustom()
         for idx in range(0, bestof):
             self.cb_minSets.addItem(str(idx + 1))
             if bestof == 2:
@@ -530,14 +539,16 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             self.raceWidth = 45
             self.labelWidth = 15
             self.mimumLineEditWidth = 130
+            self.trigger = False
 
             self.fromMatchDataBox = PyQt5.QtWidgets.QGroupBox(_("Match Data"))
             layout2 = PyQt5.QtWidgets.QVBoxLayout()
 
-            self.le_league = PyQt5.QtWidgets.QLineEdit()
+            self.le_league = MonitoredLineEdit()
             self.le_league.setText("League TBD")
             self.le_league.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
             self.le_league.setPlaceholderText("League TBD")
+            self.le_league.textModified.connect(self.highlightOBSupdate)
             policy = PyQt5.QtWidgets.QSizePolicy()
             policy.setHorizontalStretch(3)
             policy.setHorizontalPolicy(PyQt5.QtWidgets.QSizePolicy.Expanding)
@@ -545,8 +556,8 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             policy.setVerticalPolicy(PyQt5.QtWidgets.QSizePolicy.Fixed)
             self.le_league.setSizePolicy(policy)
 
-            self.le_team = [PyQt5.QtWidgets.QLineEdit() for y in range(2)]
-            self.le_player = [[PyQt5.QtWidgets.QLineEdit() for x in range(
+            self.le_team = [MonitoredLineEdit() for y in range(2)]
+            self.le_player = [[MonitoredLineEdit() for x in range(
                 self.max_no_sets)] for y in range(2)]
             self.cb_race = [[PyQt5.QtWidgets.QComboBox() for x in range(self.max_no_sets)]
                             for y in range(2)]
@@ -580,6 +591,8 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
                 policy.setVerticalPolicy(PyQt5.QtWidgets.QSizePolicy.Fixed)
                 self.le_team[team_idx].setSizePolicy(policy)
                 self.le_team[team_idx].setMinimumWidth(self.mimumLineEditWidth)
+                self.le_team[team_idx].textModified.connect(
+                    lambda team_idx=team_idx: self.team_changed(team_idx))
 
             self.qb_logo1 = IconPushButton()
             self.qb_logo1.setFixedWidth(self.raceWidth)
@@ -647,10 +660,12 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             layout2.addLayout(container)
 
             for player_idx in range(self.max_no_sets):
+                self.le_map[player_idx].textModified.connect(
+                    self.highlightOBSupdate)
                 for team_idx in range(2):
                     self.cb_race[team_idx][player_idx].currentIndexChanged.connect(
                         lambda idx, t=team_idx, p=player_idx: self.race_changed(t, p))
-                    self.le_player[team_idx][player_idx].editingFinished.connect(
+                    self.le_player[team_idx][player_idx].textModified.connect(
                         lambda t=team_idx, p=player_idx: self.player_changed(t, p))
                     self.le_player[team_idx][player_idx].setText("TBD")
                     self.le_player[team_idx][player_idx].setAlignment(
@@ -719,6 +734,8 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
 
         except Exception as e:
             module_logger.exception("message")
+        finally:
+            self.trigger = True
 
     def createHorizontalGroupBox(self):
         """Create horizontal group box for tasks."""
@@ -740,9 +757,11 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             self.pb_obsupdate = PyQt5.QtWidgets.QPushButton(
                 _("Update OBS Data"))
             self.pb_obsupdate.clicked.connect(self.updateobs_click)
-            
+
             # TODO: Highlight if Update OBS Data is needed.
             # self.pb_obsupdate.setAutoFillBackground(True)
+            self.defaultButtonPalette = self.pb_obsupdate.palette()
+            self.obsupdate_is_highlighted = False
             # myPalette = self.pb_obsupdate.palette()
             # oldPalette = self.pb_obsupdate.palette()
             # myPalette.setColor(PyQt5.QtGui.QPalette.Background, PyQt5.QtCore.Qt.darkBlue)
@@ -910,6 +929,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
                                               self.le_url_custom.text().strip())
             self.statusBar().showMessage(msg)
             self.trigger = True
+            self.highlightApplyCustom(False)
         except Exception as e:
             module_logger.exception("message")
         finally:
@@ -981,13 +1001,15 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
         except Exception as e:
             module_logger.exception("message")
 
-    def resetscore_click(self):
+    def resetscore_click(self, myteam=False):
         """Handle click to reset the score."""
         try:
             self.statusBar().showMessage(_('Resetting Score...'))
             self.trigger = False
             for player_idx in range(self.max_no_sets):
                 self.sl_score[player_idx].setValue(0)
+            if myteam:
+                self.sl_team.setValue(0)
             self.controller.updateOBS()
             if not self.controller.resetWarning():
                 self.statusBar().showMessage('')
@@ -1023,6 +1045,8 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
 
     def player_changed(self, team_idx, player_idx):
         """Handle a change of player names."""
+        if not self.trigger:
+            return
         try:
             player = self.le_player[team_idx][player_idx].text().strip()
             race = self.cb_race[team_idx][player_idx].currentIndex()
@@ -1040,9 +1064,13 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             self.updatePlayerCompleters()
         except Exception as e:
             module_logger.exception("message")
+        finally:
+            self.highlightOBSupdate()
 
     def race_changed(self, team_idx, player_idx):
         """Handle a change of player names."""
+        if not self.trigger:
+            return
         player = self.le_player[team_idx][player_idx].text().strip()
         race = self.cb_race[team_idx][player_idx].currentIndex()
         self.controller.historyManager.insertPlayer(player, race)
@@ -1054,9 +1082,65 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
 
         except Exception as e:
             module_logger.exception("message")
+        finally:
+            self.highlightOBSupdate()
+
+    def team_changed(self, team_idx):
+        if not self.trigger:
+            return
+        self.controller.matchData.setTeam(
+            team_idx, self.le_team[team_idx].text().strip())
+        self.highlightOBSupdate()
+        self.controller.matchData.autoSetMyTeam()
+        self.sl_team.setValue(self.controller.matchData.getMyTeam())
+
+    def highlightOBSupdate(self, highlight=True, force=False):
+        if not force and not self.trigger:
+            return
+        try:
+            if self.obsupdate_is_highlighted == highlight:
+                return highlight
+        except AttributeError:
+            return False
+
+        if highlight:
+            myPalette = self.pb_obsupdate.palette()
+            myPalette.setColor(PyQt5.QtGui.QPalette.Background,
+                               PyQt5.QtCore.Qt.darkBlue)
+            myPalette.setColor(PyQt5.QtGui.QPalette.ButtonText,
+                               PyQt5.QtCore.Qt.darkBlue)
+            self.pb_obsupdate.setPalette(myPalette)
+        else:
+            self.pb_obsupdate.setPalette(self.defaultButtonPalette)
+
+        self.obsupdate_is_highlighted = highlight
+        return highlight
+
+    def highlightApplyCustom(self, highlight=True, force=False):
+        if not force and not self.trigger:
+            return
+        try:
+            if self.applycustom_is_highlighted == highlight:
+                return highlight
+        except AttributeError:
+            return False
+
+        if highlight:
+            myPalette = self.pb_applycustom.palette()
+            myPalette.setColor(PyQt5.QtGui.QPalette.Background,
+                               PyQt5.QtCore.Qt.darkBlue)
+            myPalette.setColor(PyQt5.QtGui.QPalette.ButtonText,
+                               PyQt5.QtCore.Qt.darkBlue)
+            self.pb_applycustom.setPalette(myPalette)
+        else:
+            self.pb_applycustom.setPalette(self.defaultButtonPalette)
+
+        self.applycustom_is_highlighted = highlight
+        return highlight
 
     def logoDialog(self):
         """Open dialog for team logo."""
+        self.controller.logoManager.resetLogoChanged()
         self.mysubwindows['icons'] = SubwindowLogos()
         self.mysubwindows['icons'].createWindow(self, self.controller)
         self.mysubwindows['icons'].show()

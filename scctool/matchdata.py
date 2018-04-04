@@ -223,7 +223,7 @@ class matchData:
         self.setURL("")
         self.setSolo(solo)
 
-    def resetData(self):
+    def resetData(self, reset_options=True):
         """Reset all data to default values."""
         for team_idx in range(2):
             for set_idx in range(self.getNoSets()):
@@ -231,13 +231,14 @@ class matchData:
             self.setTeam(team_idx, "TBD", "TBD")
 
         for set_idx in range(self.getNoSets()):
-            self.setMapScore(set_idx, 0)
+            self.setMapScore(set_idx, 0, overwrite=True)
             self.setMap(set_idx)
 
         self.setLeague("TBD")
         self.setMyTeam(0)
-        self.setAllKill(False)
-        self.setSolo(False)
+        if reset_options:
+            self.setAllKill(False)
+            self.setSolo(False)
 
     def resetLabels(self):
         """Reset the map labels."""
@@ -348,7 +349,7 @@ class matchData:
     def __selectMyTeam(self, string):
         teams = [self.getTeam(0).lower(), self.getTeam(1).lower()]
         matches = difflib.get_close_matches(string.lower(), teams, 1)
-        if(len(matches) == 0):
+        if(len(matches) != 1):
             return 0
         elif(matches[0] == teams[0]):
             return -1
@@ -578,7 +579,7 @@ class matchData:
         if team_idx not in range(2):
             return False
 
-        new = str(name)
+        new = str(name.strip())
 
         if(self.__data['teams'][team_idx]['name'] != new):
             self.__data['teams'][team_idx]['name'] = new
@@ -1044,17 +1045,21 @@ class matchData:
     def autoSetMyTeam(self):
         """Try to set team via fav teams."""
         try:
+            team_matches = []
             for team_idx in range(2):
                 team = self.__data['teams'][team_idx]['name']
+                if not team or team == "TBD":
+                    continue
                 matches = difflib.get_close_matches(
                     team.lower(), scctool.settings.config.getMyTeams(), 1)
                 if(len(matches) > 0):
-                    self.setMyTeam(team_idx * 2 - 1)
-                    return True
-
-            self.setMyTeam(0)
-
-            return False
+                    team_matches.append(team_idx)
+            if len(team_matches) == 1:
+                self.setMyTeam(team_matches.pop() * 2 - 1)
+                return True
+            else:
+                self.setMyTeam(0)
+                return False
 
         except Exception as e:
             module_logger.exception("message")

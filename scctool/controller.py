@@ -166,6 +166,7 @@ class MainController:
                 self.view.label_set[i].show()
 
             self.view.updatePlayerCompleters()
+            self.view.highlightOBSupdate(False, force=True)
 
         except Exception as e:
             module_logger.exception("message")
@@ -180,6 +181,8 @@ class MainController:
         logo = self.logoManager.getTeam2()
         self.view.qb_logo2.setIcon(PyQt5.QtGui.QIcon(logo.provideQPixmap()))
 
+        if self.logoManager.hasLogoChanged():
+            self.view.highlightOBSupdate(force=True)
         self.updateLogosHTML()
 
     def updateData(self, writeJson=True):
@@ -219,7 +222,7 @@ class MainController:
             self.matchData.writeJsonFile()
             self.updateForms()
             self.view.resizeWindow()
-            self.updateOBS()
+            self.view.highlightOBSupdate(force=True)
 
         except Exception as e:
             msg = str(e)
@@ -232,14 +235,13 @@ class MainController:
         msg = ''
         try:
 
-            self.matchData.resetData()
+            self.matchData.resetData(False)
             self.matchData.writeJsonFile()
             self.logoManager.resetTeam1Logo()
             self.logoManager.resetTeam2Logo()
-            self.view.resetscore_click()
             self.updateLogos()
             self.updateForms()
-            self.updateOBS()
+            self.view.highlightOBSupdate(force=True)
 
         except Exception as e:
             msg = str(e)
@@ -266,6 +268,7 @@ class MainController:
                 pass
             self.updateLogos()
             self.updateForms()
+            self.view.highlightOBSupdate(force=True)
             self.view.resizeWindow()
         except Exception as e:
             msg = str(e)
@@ -315,6 +318,7 @@ class MainController:
             self.matchData.updateLeagueIcon()
             self.matchData.writeJsonFile()
             self.matchData.resetChanged()
+            self.view.highlightOBSupdate(False, force=True)
         except Exception as e:
             module_logger.exception("message")
 

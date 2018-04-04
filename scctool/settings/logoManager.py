@@ -28,6 +28,7 @@ class LogoManager:
         self.__controller = controller
         self._team1 = Logo(self)
         self._team2 = Logo(self)
+        self._logo_changed = False
         try:
             self.loadJson()
             self.fromOldFormat()
@@ -137,12 +138,14 @@ class LogoManager:
         if(self._team1.isLogo()):
             self.addLastUsed(self._team1)
         self._team1 = logo
+        self._logo_changed = True
         return True
 
     def resetTeam1Logo(self):
         if(self._team1.isLogo()):
             self.addLastUsed(self._team1)
         self._team1 = Logo(self)
+        self._logo_changed = True
 
     def setTeam2Logo(self, logo):
         if type(logo) is str:
@@ -155,12 +158,14 @@ class LogoManager:
         if(self._team2.isLogo()):
             self.addLastUsed(self._team2)
         self._team2 = logo
+        self._logo_changed = True
         return True
 
     def resetTeam2Logo(self):
         if(self._team2.isLogo()):
             self.addLastUsed(self._team2)
         self._team2 = Logo(self)
+        self._logo_changed = True
 
     def swapTeamLogos(self):
         self._team1, self._team2 = self._team2, self._team1
@@ -241,6 +246,12 @@ class LogoManager:
                     not (self.isUsed(name) or self.isInLastused(name))):
                 os.remove(full_fname)
                 module_logger.info("Removed logo {}".format(full_fname))
+                
+    def hasLogoChanged(self):
+        return bool(self._logo_changed)
+        
+    def resetLogoChanged(self):
+        self._logo_changed = False
 
     def getFavorites(self):
         return self._favorites

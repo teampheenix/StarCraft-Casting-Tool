@@ -360,7 +360,6 @@ class SubwindowLogos(PyQt5.QtWidgets.QWidget):
         try:
             self.controller.updateLogos()
             self.controller.matchData.metaChanged()
-            self.controller.matchData.updateScoreIcon()
             event.accept()
         except Exception as e:
             module_logger.exception("message")
