@@ -559,7 +559,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             self.le_league.setText("League TBD")
             self.le_league.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
             self.le_league.setPlaceholderText("League TBD")
-            self.le_league.textModified.connect(self.highlightOBSupdate)
+            self.le_league.textModified.connect(self.league_changed)
             policy = PyQt5.QtWidgets.QSizePolicy()
             policy.setHorizontalStretch(3)
             policy.setHorizontalPolicy(PyQt5.QtWidgets.QSizePolicy.Expanding)
@@ -665,7 +665,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
 
             for player_idx in range(self.max_no_sets):
                 self.le_map[player_idx].textModified.connect(
-                    self.highlightOBSupdate)
+                    lambda player_idx=player_idx: self.map_changed(player_idx))
                 for team_idx in range(2):
                     self.cb_race[team_idx][player_idx].currentIndexChanged.connect(
                         lambda idx, t=team_idx, p=player_idx: self.race_changed(t, p))
@@ -1038,6 +1038,12 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
                 return False
         except Exception as e:
             module_logger.exception("message")
+            
+    def league_changed(self):
+        if not self.trigger:
+            return
+        self.controller.matchData.setLeague(self.le_league.text())
+        self.highlightOBSupdate()
 
     def sl_changed(self):
         """Handle a new score value."""
@@ -1059,6 +1065,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
                 for player_idx in range(1, self.max_no_sets):
                     self.le_player[team_idx][player_idx].setText(player)
             self.controller.historyManager.insertPlayer(player, race)
+            self.controller.matchData.setPlayer(team_idx, player_idx, self.le_player[team_idx][player_idx].text())
 
             if race == 0:
                 new_race = scctool.settings.race2idx(
@@ -1079,6 +1086,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
         player = self.le_player[team_idx][player_idx].text().strip()
         race = self.cb_race[team_idx][player_idx].currentIndex()
         self.controller.historyManager.insertPlayer(player, race)
+        self.controller.matchData.setRace(team_idx, player_idx, scctool.settings.idx2race(self.cb_race[team_idx][player_idx].currentIndex()))
         try:
             if(player_idx == 0 and self.controller.matchData.getSolo()):
                 idx = self.cb_race[team_idx][0].currentIndex()
@@ -1100,6 +1108,12 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
         self.highlightOBSupdate()
         self.controller.matchData.autoSetMyTeam()
         self.sl_team.setValue(self.controller.matchData.getMyTeam())
+        
+    def map_changed(self, set_idx):
+        if not self.trigger:
+            return
+        self.controller.matchData.setMap(set_idx, self.le_map[set_idx].text())
+        self.highlightOBSupdate()
 
     def highlightOBSupdate(self, highlight=True, force=False):
         if not force and not self.trigger:

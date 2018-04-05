@@ -19,7 +19,7 @@ module_logger = logging.getLogger('scctool.view.widgets')
 class MapLineEdit(PyQt5.QtWidgets.QLineEdit):
     """Define line edit for maps."""
 
-    textModified = PyQt5.QtCore.pyqtSignal(str, str)  # (before, after)
+    textModified = PyQt5.QtCore.pyqtSignal()  # (before, after)
 
     def __init__(self, contents='', parent=None):
         """Init lineedit."""
@@ -38,7 +38,7 @@ class MapLineEdit(PyQt5.QtWidgets.QLineEdit):
             after, known = scctool.matchdata.autoCorrectMap(after)
             self.setText(after)
             self._before = after
-            self.textModified.emit(before, after)
+            self.textModified.emit()
 
 
 class MonitoredLineEdit(PyQt5.QtWidgets.QLineEdit):
@@ -67,7 +67,6 @@ class MonitoredLineEdit(PyQt5.QtWidgets.QLineEdit):
     def __handleEditingFinished(self):
         before, after = self._before, self.text()
         if before != after:
-            # after, known = scctool.matchdata.autoCorrectMap(after)
             self.setText(after)
             self._before = after
             self.textModified.emit()
