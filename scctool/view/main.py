@@ -517,7 +517,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
     def updatePlayerCompleters(self):
         """Refresh the completer for the player line edits."""
         list = scctool.settings.config.getMyPlayers(
-            True) + self.controller.historyManager.getPlayerList()
+            True) + ["TBD"] + self.controller.historyManager.getPlayerList()
         for player_idx in range(self.max_no_sets):
             for team_idx in range(2):
                 completer = PyQt5.QtWidgets.QCompleter(
@@ -529,7 +529,18 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
                 completer.setWrapAround(True)
                 self.le_player[team_idx][player_idx].setCompleter(
                     completer)
-
+                    
+    def updateTeamCompleters(self):
+        """Refresh the completer for the team line edits."""
+        list = scctool.settings.config.getMyTeams() + ["TBD"] + self.controller.historyManager.getTeamList()
+        for team_idx in range(2):
+            completer = PyQt5.QtWidgets.QCompleter(list, self.le_team[team_idx])
+            completer.setCaseSensitivity(PyQt5.QtCore.Qt.CaseInsensitive)
+            completer.setCompletionMode(
+                PyQt5.QtWidgets.QCompleter.InlineCompletion)
+            completer.setWrapAround(True)
+            self.le_team[team_idx].setCompleter(completer)
+            
     def createFormMatchDataBox(self):
         """Create the froms for the match data."""
         try:
@@ -576,13 +587,6 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
                     PyQt5.QtCore.Qt.AlignCenter)
                 self.le_team[team_idx].setPlaceholderText(
                     "Team " + str(team_idx + 1))
-                completer = PyQt5.QtWidgets.QCompleter(
-                    scctool.settings.config.getMyTeams() + ["TBD"], self.le_team[team_idx])
-                completer.setCaseSensitivity(PyQt5.QtCore.Qt.CaseInsensitive)
-                completer.setCompletionMode(
-                    PyQt5.QtWidgets.QCompleter.InlineCompletion)
-                completer.setWrapAround(True)
-                self.le_team[team_idx].setCompleter(completer)
                 policy = PyQt5.QtWidgets.QSizePolicy()
                 policy.setHorizontalStretch(4)
                 policy.setHorizontalPolicy(
@@ -731,6 +735,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
 
             self.updateMapCompleters()
             self.updatePlayerCompleters()
+            self.updateTeamCompleters()
 
         except Exception as e:
             module_logger.exception("message")
@@ -1088,8 +1093,10 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
     def team_changed(self, team_idx):
         if not self.trigger:
             return
-        self.controller.matchData.setTeam(
-            team_idx, self.le_team[team_idx].text().strip())
+        team = self.le_team[team_idx].text().strip()
+        self.controller.historyManager.insertTeam(team)
+        self.updateTeamCompleters()
+        self.controller.matchData.setTeam(team_idx, team)
         self.highlightOBSupdate()
         self.controller.matchData.autoSetMyTeam()
         self.sl_team.setValue(self.controller.matchData.getMyTeam())

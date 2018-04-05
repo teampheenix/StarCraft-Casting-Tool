@@ -24,11 +24,13 @@ class HistoryManager:
             data = dict()
 
         self.__player_history = data.get('player', [])
+        self.__team_history = data.get('team', [])
 
     def dumpJson(self):
         """Write json data to file."""
         data = dict()
         data['player'] = self.__player_history
+        data['team'] = self.__team_history
         try:
             with open(history_json_file, 'w', encoding='utf-8-sig') as outfile:
                 json.dump(data, outfile)
@@ -49,11 +51,25 @@ class HistoryManager:
                     race = item.get('race', 'Random')
                 break
         self.__player_history.insert(0, {"player": player, "race": race})
-        self.enforeMaxLength()
-
-    def enforeMaxLength(self):
-        while len(self.__player_history) > self.__max_length:
-            self.__player_history.pop()
+        self.enforeMaxLength("player")
+    
+    def insertTeam(self, team):
+        team = team.strip()
+        if not team or team.lower() == "tbd":
+            return
+        for item in self.__team_history:
+            if item == team:
+                self.__team_history.remove(item)
+        self.__team_history.insert(0, team)
+        self.enforeMaxLength("team")
+        
+    def enforeMaxLength(self, scope=None):
+        if not scope or scope == "player":
+            while len(self.__player_history) > self.__max_length:
+                self.__player_history.pop()
+        if not scope or scope == "team":
+            while len(self.__team_history) > self.__max_length:
+                self.__team_history.pop()
 
     def getPlayerList(self):
         playerList = list()
@@ -62,6 +78,13 @@ class HistoryManager:
             if player not in playerList:
                 playerList.append(player)
         return playerList
+    
+    def getTeamList(self):
+        teamList = list()
+        for team in self.__team_history:
+            if team not in teamList:
+                teamList.append(team)
+        return teamList
 
     def getRace(self, player):
         player = player.lower().strip()

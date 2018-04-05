@@ -129,7 +129,9 @@ class MainController:
             self.view.le_league.setText(self.matchData.getLeague())
             self.view.sl_team.setValue(self.matchData.getMyTeam())
             for i in range(2):
-                self.view.le_team[i].setText(self.matchData.getTeam(i))
+                team = self.matchData.getTeam(i)
+                self.view.le_team[i].setText(team)
+                self.historyManager.insertTeam(team)
 
             for j in range(2):
                 for i in range(1, self.matchData.getNoSets()):
@@ -166,6 +168,7 @@ class MainController:
                 self.view.label_set[i].show()
 
             self.view.updatePlayerCompleters()
+            self.view.updateTeamCompleters()
             self.view.highlightOBSupdate(False, force=True)
 
         except Exception as e:
