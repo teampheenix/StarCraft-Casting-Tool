@@ -1,6 +1,17 @@
 # Changelog
 
 
+## v1.8.8 (2018-04-05)
+
+### New
+
+* Option to overwrite the font of the icon has been added to Settings: Styles.
+
+### Fix
+
+* Fixed bug that prevented intros from working.
+
+
 ## v1.8.7 (2018-04-04)
 
 ### Fix
