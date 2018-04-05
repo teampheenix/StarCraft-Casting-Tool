@@ -563,14 +563,9 @@ class MainController:
             logo = getattr(self.logoManager, 'getTeam{}'.format(idx + 1))()
             filename = scctool.settings.OBShtmlDir +\
                 "/data/logo" + str(idx + 1) + "-data.html"
-            filename = scctool.settings.getAbsPath(filename)
-            template = scctool.settings.getAbsPath(
-                scctool.settings.OBShtmlDir + "/data/logo-template.html")
-            with open(template, "rt", encoding='utf-8-sig') as fin:
-                with open(filename, "wt", encoding='utf-8-sig') as fout:
-                    for line in fin:
-                        line = line.replace('%LOGO%', logo.getFile(True))
-                        fout.write(line)
+            template = scctool.settings.OBShtmlDir + "/data/logo-template.html"
+            self.matchData._useTemplate(
+                template, filename, {'logo': logo.getFile(True)})
 
     def updateHotkeys(self):
         """Refresh hotkeys."""
