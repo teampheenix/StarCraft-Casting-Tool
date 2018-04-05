@@ -3,7 +3,7 @@ import logging
 
 import PyQt5
 
-from scctool.view.widgets import StyleComboBox, ColorLayout
+from scctool.view.widgets import StyleComboBox, ColorLayout, TextPreviewer
 import scctool.settings
 
 # create logger
@@ -188,11 +188,11 @@ class SubwindowStyles(PyQt5.QtWidgets.QWidget):
         layout.addLayout(self.lose_color)
         self.undecided_color = ColorLayout(
             self, _("Undecided:"),
-            scctool.settings.config.parser.get("MapIcons", "undecided_color"), "#f29b00")
+            scctool.settings.config.parser.get("MapIcons", "undecided_color"), "#aaaaaa")
         layout.addLayout(self.undecided_color)
         self.notplayed_color = ColorLayout(
             self, _("Not played:"),
-            scctool.settings.config.parser.get("MapIcons", "notplayed_color"), "#c0c0c0")
+            scctool.settings.config.parser.get("MapIcons", "notplayed_color"), "#aaaaaa")
         layout.addLayout(self.notplayed_color)
 
         self.colorBox.setLayout(layout)
@@ -227,20 +227,24 @@ class SubwindowStyles(PyQt5.QtWidgets.QWidget):
         fonts = PyQt5.QtGui.QFontDatabase().families()
         for idx, font in enumerate(fonts):
             self.cb_font.addItem(str(font))
-            qfont = PyQt5.QtGui.QFont(font)
-            qfont.setPointSize(qfont.pointSize())
-            self.cb_font.setItemData(idx, PyQt5.QtCore.QVariant(
-                qfont), PyQt5.QtCore.Qt.FontRole)
             if str(font).lower().strip() == my_font.lower():
                 self.cb_font.setCurrentIndex(idx)
         self.cb_font.setStyleSheet("QComboBox { combobox-popup: 0; }")
         self.cb_font.currentIndexChanged.connect(self.changed)
+        self.cb_font.currentIndexChanged.connect(self.updateFontPreview)
         layout.addWidget(self.cb_font, 2, 1)
         layout.setColumnStretch(1, 1)
+        self.previewer = TextPreviewer()
+        layout.addWidget(self.previewer, 3, 0, 1, 2)
         layout.addItem(PyQt5.QtWidgets.QSpacerItem(
             0, 0, PyQt5.QtWidgets.QSizePolicy.Minimum, PyQt5.QtWidgets.QSizePolicy.Expanding),
-            3, 0)
+            4, 0)
         self.fontBox.setLayout(layout)
+        self.updateFontPreview()
+        
+    def updateFontPreview(self):
+        font = self.cb_font.currentText().strip()
+        self.previewer.setFont(font)
 
     def saveData(self):
         """Save data."""

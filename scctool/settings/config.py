@@ -121,11 +121,7 @@ def setDefaultConfigAll():
     setDefaultConfig("Nightbot", "token", "")
 
     setDefaultConfig("SCT", "myteams", "MiXed Minds, team pheeniX")
-    setDefaultConfig("SCT", "commonplayers", "Shakyor, pressure, Moash, " +
-                     "Ostseedude, spaz, DERASTAT, FanTasY, " +
-                     "chrismaverik, holden, Desolation, RiseOfDeath, " +
-                     "Tune-Trigger, MoFuJones, Fenix, snoozle, " +
-                     "dreign, SLY, Sonarwolf, Unknown, Xoneon ")
+    setDefaultConfig("SCT", "commonplayers", "pressure")
 
     setDefaultConfig("SCT", "fuzzymatch", "True")
     setDefaultConfig("SCT", "new_version_prompt", "True")
@@ -148,11 +144,11 @@ def setDefaultConfigAll():
     setDefaultConfig("Form", "autonightbot", "False")
 
     setDefaultConfig("MapIcons", "default_border_color", "#f29b00")
-    setDefaultConfig("MapIcons", "undecided_color", "#f29b00")
     setDefaultConfig("MapIcons", "win_color", "#008000")
     setDefaultConfig("MapIcons", "lose_color", "#f22200")
     setDefaultConfig("MapIcons", "winner_highlight_color", "#f29b00")
-    setDefaultConfig("MapIcons", "notplayed_color", "#c0c0c0")
+    setDefaultConfig("MapIcons", "undecided_color", "#aaaaaa")
+    setDefaultConfig("MapIcons", "notplayed_color", "#aaaaaa")
     setDefaultConfig("MapIcons", "notplayed_opacity", "0.4")
 
     setDefaultConfig("Style", "mapicon_box", "Default")

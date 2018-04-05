@@ -610,3 +610,30 @@ class DragImageLabel(PyQt5.QtWidgets.QLabel):
                 stream >> value
                 item[key] = value.value()
         return result
+
+class TextPreviewer(PyQt5.QtWidgets.QTextBrowser):
+    def __init__(self):
+        super(PyQt5.QtWidgets.QTextBrowser, self).__init__()
+        self.setReadOnly(True)
+        self.setMaximumHeight(50)
+        self.setHorizontalScrollBarPolicy(PyQt5.QtCore.Qt.ScrollBarAlwaysOff)
+        self.setVerticalScrollBarPolicy(PyQt5.QtCore.Qt.ScrollBarAlwaysOff)
+        self.setTextInteractionFlags(PyQt5.QtCore.Qt.NoTextInteraction)  
+        
+    def setFont(self, font):
+        font = font.strip()
+        css = dict()
+        css['font-family'] = font
+        css['font-size'] = '25px'
+        css['height'] = '50px'
+        css['width'] = '100%'
+        css['text-align'] = 'center'
+        css['display'] = 'table'
+        style = ""
+        for key, value in css.items():
+            style += "{}: {};".format(key, value)
+        self.setHtml("<div style='{}'><span style='display: table-cell; vertical-align: middle;'>{}</span></div>".format(style, font))
+    
+    def wheelEvent(self, e):
+        e.ignore()
+        
