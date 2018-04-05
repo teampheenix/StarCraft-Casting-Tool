@@ -1,6 +1,13 @@
 # Changelog
 
 
+## v1.8.9 (2018-04-05)
+
+### New
+
+* Last 100 team name are saved for auto completion.
+
+
 ## v1.8.8 (2018-04-05)
 
 ### New
