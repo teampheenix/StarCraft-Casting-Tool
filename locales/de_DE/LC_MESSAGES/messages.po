@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2018-04-04 20:08+0200\n"
-"PO-Revision-Date: 2018-04-04 20:08+0200\n"
+"POT-Creation-Date: 2018-04-05 11:27+0200\n"
+"PO-Revision-Date: 2018-04-05 11:33+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de\n"
@@ -35,27 +35,27 @@ msgstr "Geben Sie Ihre Nightbot-Einstellungen an, um diese Funktion zu nutzen"
 msgid "Automatically update the commands of your nightbot in the background."
 msgstr "Automatische Hintergrund-Aktualisierung der Nightbot Kommandos."
 
-#: controller.py:644
+#: controller.py:647
 msgid "Warning: Map '{}' not found!"
 msgstr "Warnung: Karte '{}' nicht gefunden!"
 
-#: controller.py:685
+#: controller.py:688
 msgid "A new version {} is available."
 msgstr "Eine neue Version {} ist verfügbar."
 
-#: controller.py:687
+#: controller.py:690
 msgid "Update to new version?"
 msgstr "Auf die neue Version aktualisieren?"
 
-#: controller.py:688
+#: controller.py:691
 msgid "New SCC-Tool Version"
 msgstr "Neue SCC-Tool Version"
 
-#: controller.py:697
+#: controller.py:700
 msgid "Don't show on startup."
 msgstr "Nicht mehr beim Programm-Start zeigen."
 
-#: controller.py:706
+#: controller.py:709
 msgid "A new version {} is available on GitHub!"
 msgstr "Die neue Version {} ist bei GitHub verfügbar!"
 
@@ -133,7 +133,7 @@ msgstr "Verbinndungen"
 msgid "Edit Intro-Settings and API-Settings for Twitch and Nightbot"
 msgstr "Editiere Intro- und API-Einstellungen für Twitch und Nightbot"
 
-#: view/main.py:138 view/subStyles.py:81
+#: view/main.py:138 view/subStyles.py:36
 msgid "Styles"
 msgstr "Stil"
 
@@ -481,15 +481,15 @@ msgid "Add Command"
 msgstr "Kommando hinzufügen"
 
 #: view/subConnections.py:293 view/subLiquipediaSearch.py:68
-#: view/subMisc.py:432 view/subStyles.py:67
+#: view/subMisc.py:432 view/subStyles.py:72
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: view/subConnections.py:297 view/subMisc.py:436 view/subStyles.py:71
+#: view/subConnections.py:297 view/subMisc.py:436 view/subStyles.py:76
 msgid "Save && Close"
 msgstr "Speichern && Schließen"
 
-#: view/subConnections.py:359 view/subMisc.py:488 view/subStyles.py:241
+#: view/subConnections.py:359 view/subMisc.py:488 view/subStyles.py:300
 msgid "Save data?"
 msgstr "Daten speichern?"
 
@@ -758,36 +758,44 @@ msgstr "Karte löschen?"
 msgid "Delete '{}' permanently?"
 msgstr "Soll '{}' permanent gelöscht werden?"
 
-#: view/subStyles.py:51
+#: view/subStyles.py:37
+msgid "Colors"
+msgstr "Farben"
+
+#: view/subStyles.py:38
+msgid "Font"
+msgstr ""
+
+#: view/subStyles.py:56
 msgid "Style Settings"
 msgstr "Stil Einstellungen"
 
-#: view/subStyles.py:89
+#: view/subStyles.py:94
 msgid "Box Map Icons:"
 msgstr "Box Karten Icons:"
 
-#: view/subStyles.py:91 view/subStyles.py:103 view/subStyles.py:116
-#: view/subStyles.py:128
+#: view/subStyles.py:96 view/subStyles.py:108 view/subStyles.py:121
+#: view/subStyles.py:133
 msgid "Show in Browser"
 msgstr "Im Browser anzeigen"
 
-#: view/subStyles.py:109
+#: view/subStyles.py:114
 msgid "Landscape Map Icons:"
 msgstr "Querformat Karten Icons:"
 
-#: view/subStyles.py:121
+#: view/subStyles.py:126
 msgid "Score:"
 msgstr "Spielstand:"
 
-#: view/subStyles.py:133
+#: view/subStyles.py:138
 msgid "Intros:"
 msgstr "Intros:"
 
-#: view/subStyles.py:135
+#: view/subStyles.py:140
 msgid "Apply"
 msgstr "Anwenden"
 
-#: view/subStyles.py:139
+#: view/subStyles.py:144
 msgid ""
 "Note that to make these changes visible in OBS you have to refresh the cache "
 "of your browser sources."
@@ -795,33 +803,50 @@ msgstr ""
 "Beachten Sie, dass, damit diese Änderung in OBS sichtbar sind, der Cache der "
 "Browser-Quelle aktualisiert werden muss."
 
-#: view/subStyles.py:163
-msgid "Colors"
-msgstr "Farben"
-
-#: view/subStyles.py:167
+#: view/subStyles.py:172
 msgid "Default Border:"
 msgstr "Standardrahmen:"
 
-#: view/subStyles.py:171
+#: view/subStyles.py:176
 msgid "Winner Highlight:"
 msgstr "Sieger Highlight:"
 
-#: view/subStyles.py:175
+#: view/subStyles.py:182
 msgid "Win:"
 msgstr "Sieg:"
 
-#: view/subStyles.py:179
+#: view/subStyles.py:186
 msgid "Lose:"
 msgstr "Niederlage:"
 
-#: view/subStyles.py:183
+#: view/subStyles.py:190
 msgid "Undecided:"
 msgstr "Unentschieden:"
 
-#: view/subStyles.py:187
+#: view/subStyles.py:194
 msgid "Not played:"
 msgstr "Nicht gespielt:"
+
+#: view/subStyles.py:206
+msgid ""
+"Warning: Using a custom font instead of the regular font defined in the Icon "
+"Styles can lead to unitentional appereance."
+msgstr ""
+"Warnung: Das Verwenden einen benutzerdefinierten Schrift anstelle der "
+"regulären, im Icon Stil definierten, Schrift kann zu unbeabsichtigter "
+"Darstellung führen."
+
+#: view/subStyles.py:208
+msgid "The proper way is to create a custom skin."
+msgstr "Angemessen wäre einen benutzerdefinierten Stil zu erstellen."
+
+#: view/subStyles.py:212
+msgid "Activate Custom Font"
+msgstr "Aktiviere benutzerdefinierte Schrift"
+
+#: view/subStyles.py:221
+msgid "Custom Font"
+msgstr "Benutzerdefinierte Schrift"
 
 #: view/widgets.py:123
 msgid "Logo Downloader"

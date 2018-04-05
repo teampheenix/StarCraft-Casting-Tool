@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2018-04-04 20:05+0200\n"
-"PO-Revision-Date: 2018-04-04 20:07+0200\n"
+"POT-Creation-Date: 2018-04-05 11:33+0200\n"
+"PO-Revision-Date: 2018-04-05 11:39+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ru\n"
@@ -39,27 +39,27 @@ msgstr "Укажите настройки Nightbot для использован
 msgid "Automatically update the commands of your nightbot in the background."
 msgstr "Автоматическое обновление команд nightbot в фоновом режиме."
 
-#: scctool/controller.py:644
+#: scctool/controller.py:647
 msgid "Warning: Map '{}' not found!"
 msgstr "Внимание: Карта '{}' Не найдена!"
 
-#: scctool/controller.py:685
+#: scctool/controller.py:688
 msgid "A new version {} is available."
 msgstr "Доступна новая версия {}."
 
-#: scctool/controller.py:687
+#: scctool/controller.py:690
 msgid "Update to new version?"
 msgstr "Загрузить новую версию?"
 
-#: scctool/controller.py:688
+#: scctool/controller.py:691
 msgid "New SCC-Tool Version"
 msgstr "Новая версия SCC-Tool"
 
-#: scctool/controller.py:697
+#: scctool/controller.py:700
 msgid "Don't show on startup."
 msgstr "Не показывать при запуске."
 
-#: scctool/controller.py:706
+#: scctool/controller.py:709
 msgid "A new version {} is available on GitHub!"
 msgstr "Новая версия {} доступна на GitHub!"
 
@@ -140,7 +140,7 @@ msgstr "Соединения"
 msgid "Edit Intro-Settings and API-Settings for Twitch and Nightbot"
 msgstr "Редактировать настройки превью и API для Twitch Nightbot"
 
-#: scctool/view/main.py:138 scctool/view/subStyles.py:81
+#: scctool/view/main.py:138 scctool/view/subStyles.py:36
 msgid "Styles"
 msgstr "Стили"
 
@@ -483,17 +483,17 @@ msgid "Add Command"
 msgstr "Добавить команду"
 
 #: scctool/view/subConnections.py:293 scctool/view/subLiquipediaSearch.py:68
-#: scctool/view/subMisc.py:432 scctool/view/subStyles.py:67
+#: scctool/view/subMisc.py:432 scctool/view/subStyles.py:72
 msgid "Cancel"
 msgstr "Отмена"
 
 #: scctool/view/subConnections.py:297 scctool/view/subMisc.py:436
-#: scctool/view/subStyles.py:71
+#: scctool/view/subStyles.py:76
 msgid "Save && Close"
 msgstr "Сохранить и закрыть"
 
 #: scctool/view/subConnections.py:359 scctool/view/subMisc.py:488
-#: scctool/view/subStyles.py:241
+#: scctool/view/subStyles.py:300
 msgid "Save data?"
 msgstr "Сохранить данные?"
 
@@ -748,10 +748,6 @@ msgstr "Изменить изображение"
 msgid "Map Name"
 msgstr "Название карты"
 
-#: scctool/view/subMisc.py:329 scctool/view/subMisc.py:371
-msgid "Map Name:"
-msgstr "Название карты:"
-
 #: scctool/view/subMisc.py:337 scctool/view/subMisc.py:375
 msgid "Duplicate Entry"
 msgstr "Повторяющийся ввод"
@@ -772,69 +768,98 @@ msgstr "Удалить карту?"
 msgid "Delete '{}' permanently?"
 msgstr "Удалить '{}'?"
 
-#: scctool/view/subStyles.py:51
+#: scctool/view/subStyles.py:37
+msgid "Colors"
+msgstr "Цвета"
+
+#: scctool/view/subStyles.py:38
+msgid "Font"
+msgstr "Шрифт"
+
+#: scctool/view/subStyles.py:56
 msgid "Style Settings"
 msgstr "Настройки стилей"
 
-#: scctool/view/subStyles.py:89
+#: scctool/view/subStyles.py:94
 msgid "Box Map Icons:"
 msgstr "Пиктограммы карт:"
 
-#: scctool/view/subStyles.py:91 scctool/view/subStyles.py:103
-#: scctool/view/subStyles.py:116 scctool/view/subStyles.py:128
+#: scctool/view/subStyles.py:96 scctool/view/subStyles.py:108
+#: scctool/view/subStyles.py:121 scctool/view/subStyles.py:133
 msgid "Show in Browser"
 msgstr "Показать в браузере"
 
-#: scctool/view/subStyles.py:109
+#: scctool/view/subStyles.py:114
 msgid "Landscape Map Icons:"
 msgstr "Ландшафт карт:"
 
-#: scctool/view/subStyles.py:121
+#: scctool/view/subStyles.py:126
 msgid "Score:"
 msgstr "Счет:"
 
-#: scctool/view/subStyles.py:133
+#: scctool/view/subStyles.py:138
 msgid "Intros:"
 msgstr "Заставки:"
 
-#: scctool/view/subStyles.py:135
+#: scctool/view/subStyles.py:140
 msgid "Apply"
 msgstr "Применить"
 
-#: scctool/view/subStyles.py:139
+#: scctool/view/subStyles.py:144
 msgid ""
 "Note that to make these changes visible in OBS you have to refresh the cache "
 "of your browser sources."
 msgstr ""
 "Чтобы изменения были видны в OBS вы должны обновить кэш вашего браузера."
 
-#: scctool/view/subStyles.py:163
-msgid "Colors"
-msgstr "Цвета"
-
-#: scctool/view/subStyles.py:167
+#: scctool/view/subStyles.py:172
 msgid "Default Border:"
 msgstr "Граница по умолчанию:"
 
-#: scctool/view/subStyles.py:171
+# To be checked by Russian
+#: scctool/view/subStyles.py:176
 msgid "Winner Highlight:"
 msgstr "Победитель кульминацио́нный:"
 
-#: scctool/view/subStyles.py:175
+#: scctool/view/subStyles.py:182
 msgid "Win:"
 msgstr "Победа:"
 
-#: scctool/view/subStyles.py:179
+#: scctool/view/subStyles.py:186
 msgid "Lose:"
 msgstr "Поражение:"
 
-#: scctool/view/subStyles.py:183
+#: scctool/view/subStyles.py:190
 msgid "Undecided:"
 msgstr "Не определено:"
 
-#: scctool/view/subStyles.py:187
+#: scctool/view/subStyles.py:194
 msgid "Not played:"
 msgstr "Не сыграно:"
+
+# To be checked by Russian
+#: scctool/view/subStyles.py:206
+msgid ""
+"Warning: Using a custom font instead of the regular font defined in the Icon "
+"Styles can lead to unitentional appereance."
+msgstr ""
+"Предупреждение: Использование специального шрифта вместо обычного шрифта, "
+"определенного в стилях значков, может привести к нежелательному просмотру."
+
+# To be checked by Russian.
+#: scctool/view/subStyles.py:208
+msgid "The proper way is to create a custom skin."
+msgstr "равильный способ - создать пользовательский скин."
+
+# To be checked by Russian
+#: scctool/view/subStyles.py:212
+msgid "Activate Custom Font"
+msgstr "Активировать собственный шрифт"
+
+# To be checked by Russian
+#: scctool/view/subStyles.py:221
+msgid "Custom Font"
+msgstr "Пользовательский шрифт"
 
 #: scctool/view/widgets.py:123
 msgid "Logo Downloader"
@@ -891,6 +916,9 @@ msgstr "Готово."
 #: scctool/view/widgets.py:548
 msgid "Downloading required files...: Total file size {}, Time remaining {}."
 msgstr "Загрузка необходимых файлов...: размер файла {}, осталось времени {}."
+
+#~ msgid "Map Name:"
+#~ msgstr "Название карты:"
 
 #~ msgid "Support Images"
 #~ msgstr "Поддерживаемые изображения"
