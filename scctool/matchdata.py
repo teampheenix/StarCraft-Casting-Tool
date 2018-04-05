@@ -867,10 +867,11 @@ class matchData:
                 "Style", "custom_font"))
 
         for s_idx in range(scctool.settings.max_no_sets):
-            data['score-m{}'.format(s_idx)] = display[s_idx]
+            data['display-m{}'.format(s_idx+1)] = display[s_idx]
             for t_idx in range(2):
-                key = 'score-m{}-t{}'.format(t_idx + 1, s_idx + 1)
+                key = 'score-m{}-t{}'.format(s_idx + 1, t_idx + 1)
                 data[key] = border_color[t_idx][s_idx]
+                
 
         self._useTemplate(templateFile, dataFile, data)
 
