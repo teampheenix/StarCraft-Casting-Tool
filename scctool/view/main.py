@@ -617,7 +617,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
             self.sl_team.setTickPosition(
                 PyQt5.QtWidgets.QSlider.TicksBothSides)
             self.sl_team.setTickInterval(1)
-            self.sl_team.valueChanged.connect(self.sl_changed)
+            self.sl_team.valueChanged.connect(lambda x: self.sl_changed(-1, x))
             self.sl_team.setToolTip(_('Choose your team'))
             self.sl_team.setMinimumHeight(5)
             self.sl_team.setFixedWidth(self.scoreWidth)
@@ -693,7 +693,7 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
                 self.sl_score[player_idx].setTickPosition(
                     PyQt5.QtWidgets.QSlider.TicksBothSides)
                 self.sl_score[player_idx].setTickInterval(1)
-                self.sl_score[player_idx].valueChanged.connect(self.sl_changed)
+                self.sl_score[player_idx].valueChanged.connect(lambda x, player_idx=player_idx: self.sl_changed(player_idx, x))
                 self.sl_score[player_idx].setToolTip(_('Set the score'))
                 self.sl_score[player_idx].setFixedWidth(self.scoreWidth)
 
@@ -1029,6 +1029,8 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
                 self.statusBar().showMessage(_('Updating Score...'))
                 self.trigger = False
                 self.sl_score[idx].setValue(score)
+                self.controller.matchData.setMapScore(idx, score, True)
+                self.controller.allkillUpdate()
                 self.controller.updateOBS()
                 if not self.controller.resetWarning():
                     self.statusBar().showMessage('')
@@ -1045,11 +1047,15 @@ class MainWindow(PyQt5.QtWidgets.QMainWindow):
         self.controller.matchData.setLeague(self.le_league.text())
         self.highlightOBSupdate()
 
-    def sl_changed(self):
+    def sl_changed(self, set_idx, value):
         """Handle a new score value."""
         try:
             if(self.trigger):
-                self.controller.allkillUpdate()
+                if set_idx == -1:
+                    self.controller.matchData.setMyTeam(value)
+                else:
+                    self.controller.matchData.setMapScore(set_idx, value, True)
+                    self.controller.allkillUpdate()
                 self.controller.updateOBS()
         except Exception as e:
             module_logger.exception("message")
