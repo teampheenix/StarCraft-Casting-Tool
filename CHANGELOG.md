@@ -1,6 +1,13 @@
 # Changelog
 
 
+## v1.8.10 (2018-04-05)
+
+### Fix
+
+* Fixed Bug in Score Icon.
+
+
 ## v1.8.9 (2018-04-05)
 
 ### New
