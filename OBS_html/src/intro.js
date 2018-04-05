@@ -35,6 +35,10 @@ function Connect() {
 
         socket.onmessage = function(message) {
                 var jsonObject = JSON.parse(message.data);
+                var intro = document.getElementById("intro");
+                if (jsonObject.data.hasOwnProperty('font')) {
+                        intro.style.fontFamily = jsonObject.data.font;
+                }
                 console.log("Message received");
                 if (jsonObject.event == 'SHOW_INTRO') {
                         if (!tween.isActive()) {
@@ -45,7 +49,6 @@ function Connect() {
                                 $('.name span').html(jsonObject.data.name);
                                 $('.team span').html(jsonObject.data.team);
                                 fillText();
-                                var intro = document.getElementById("intro");
                                 var offset = (window.innerWidth - intro.offsetWidth) / 2;
                                 var introWidth = intro.offsetWidth;
                                 var introHeight = intro.offsetHeight;
@@ -53,9 +56,9 @@ function Connect() {
                                 myAudio2.volume = jsonObject.data.volume / 10.0;
                                 myAudio3.volume = jsonObject.data.volume / 10.0;
                                 var animation = "default";
-                                try {
+                                if (jsonObject.data.hasOwnProperty('animation')) {
                                         animation = jsonObject.data.animation;
-                                } catch {
+                                } else {
                                         animation = "default";
                                 }
                                 if (animation == "fanfare") {
@@ -145,7 +148,6 @@ function Connect() {
                 } else if (jsonObject.event == 'DEBUG_MODE') {
                         if (!debug) {
                                 tween.kill()
-                                var intro = document.getElementById("intro");
                                 var offset = (window.innerWidth - intro.offsetWidth) / 2;
                                 TweenLite.to(intro, 0, {
                                         opacity: 1,
@@ -154,7 +156,6 @@ function Connect() {
                                 debug = true;
                         } else {
                                 tween.kill()
-                                var intro = document.getElementById("intro");
                                 TweenLite.to(intro, 0, {
                                         opacity: 0
                                 });
@@ -200,9 +201,11 @@ function changeCSS(cssFile, cssLinkIndex) {
         document.getElementsByTagName("head").item(0).replaceChild(newlink, oldlink);
 }
 
-var intro = document.getElementById("intro");
-TweenLite.to(intro, 0, {
-        opacity: 1,
-        left: "105%"
-});
-Connect();
+function init() {
+        var intro = document.getElementById("intro");
+        TweenLite.to(intro, 0, {
+                opacity: 1,
+                left: "105%"
+        });
+        Connect();
+}

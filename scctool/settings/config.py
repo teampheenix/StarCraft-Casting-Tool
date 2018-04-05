@@ -159,6 +159,8 @@ def setDefaultConfigAll():
     setDefaultConfig("Style", "mapicon_landscape", "Default")
     setDefaultConfig("Style", "score", "Default")
     setDefaultConfig("Style", "intro", "Default")
+    setDefaultConfig("Style", "use_custom_font", "False")
+    setDefaultConfig("Style", "custom_font", "Verdana")
 
     setDefaultConfig("Intros", "hotkey_player1", "")
     setDefaultConfig("Intros", "hotkey_player2", "")

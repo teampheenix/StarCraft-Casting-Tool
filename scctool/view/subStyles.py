@@ -30,10 +30,15 @@ class SubwindowStyles(PyQt5.QtWidgets.QWidget):
             self.createButtonGroup()
             self.createColorBox()
             self.createStyleBox()
+            self.createFontBox()
+
+            self.tabs = PyQt5.QtWidgets.QTabWidget()
+            self.tabs.addTab(self.styleBox, _("Styles"))
+            self.tabs.addTab(self.colorBox, _("Colors"))
+            self.tabs.addTab(self.fontBox, _("Font"))
 
             mainLayout = PyQt5.QtWidgets.QVBoxLayout()
-            mainLayout.addWidget(self.styleBox)
-            mainLayout.addWidget(self.colorBox)
+            mainLayout.addWidget(self.tabs)
             mainLayout.addItem(PyQt5.QtWidgets.QSpacerItem(
                 0, 0, PyQt5.QtWidgets.QSizePolicy.Minimum,
                 PyQt5.QtWidgets.QSizePolicy.Expanding))
@@ -78,7 +83,7 @@ class SubwindowStyles(PyQt5.QtWidgets.QWidget):
 
     def createStyleBox(self):
         """Create style box."""
-        self.styleBox = PyQt5.QtWidgets.QGroupBox(_("Styles"))
+        self.styleBox = PyQt5.QtWidgets.QWidget()
         layout = PyQt5.QtWidgets.QFormLayout()
 
         container = PyQt5.QtWidgets.QHBoxLayout()
@@ -160,7 +165,7 @@ class SubwindowStyles(PyQt5.QtWidgets.QWidget):
 
     def createColorBox(self):
         """Create box for color selection."""
-        self.colorBox = PyQt5.QtWidgets.QGroupBox(_("Colors"))
+        self.colorBox = PyQt5.QtWidgets.QWidget()
         layout = PyQt5.QtWidgets.QVBoxLayout()
 
         self.default_color = ColorLayout(
@@ -169,7 +174,9 @@ class SubwindowStyles(PyQt5.QtWidgets.QWidget):
         layout.addLayout(self.default_color)
         self.winner_color = ColorLayout(
             self, _("Winner Highlight:"),
-            scctool.settings.config.parser.get("MapIcons", "winner_highlight_color"), "#f29b00")
+            scctool.settings.config.parser.get(
+                "MapIcons", "winner_highlight_color"),
+            "#f29b00")
         layout.addLayout(self.winner_color)
         self.win_color = ColorLayout(
             self, _("Win:"),
@@ -190,6 +197,51 @@ class SubwindowStyles(PyQt5.QtWidgets.QWidget):
 
         self.colorBox.setLayout(layout)
 
+    def createFontBox(self):
+        """Create box for font selection."""
+        self.fontBox = PyQt5.QtWidgets.QWidget()
+        layout = PyQt5.QtWidgets.QGridLayout()
+
+        label = PyQt5.QtWidgets.QLabel(
+            _("Warning: Using a custom font instead of the regular font defined"
+              " in the Icon Styles can lead to unitentional appereance.") +
+            _("The proper way is to create a custom skin."))
+        label.setWordWrap(True)
+        label.setAlignment(PyQt5.QtCore.Qt.AlignJustify)
+        layout.addWidget(label, 1, 0, 1, 2)
+        label = PyQt5.QtWidgets.QLabel(_("Activate Custom Font") + ":")
+        label.setMinimumWidth(110)
+        self.cb_usefont = PyQt5.QtWidgets.QCheckBox(" ")
+        self.cb_usefont.setChecked(
+            scctool.settings.config.parser.getboolean("Style", "use_custom_font"))
+        self.cb_usefont.stateChanged.connect(self.changed)
+        layout.addWidget(label, 0, 0, alignment=PyQt5.QtCore.Qt.AlignVCenter)
+        layout.addWidget(self.cb_usefont, 0, 1,
+                         alignment=PyQt5.QtCore.Qt.AlignVCenter)
+        label = PyQt5.QtWidgets.QLabel(_("Custom Font") + ":")
+        label.setMinimumWidth(110)
+        layout.addWidget(label, 2, 0)
+        self.cb_font = PyQt5.QtWidgets.QComboBox()
+        my_font = scctool.settings.config.parser.get(
+            "Style", "custom_font")
+        fonts = PyQt5.QtGui.QFontDatabase().families()
+        for idx, font in enumerate(fonts):
+            self.cb_font.addItem(str(font))
+            qfont = PyQt5.QtGui.QFont(font)
+            qfont.setPointSize(qfont.pointSize())
+            self.cb_font.setItemData(idx, PyQt5.QtCore.QVariant(
+                qfont), PyQt5.QtCore.Qt.FontRole)
+            if str(font).lower().strip() == my_font.lower():
+                self.cb_font.setCurrentIndex(idx)
+        self.cb_font.setStyleSheet("QComboBox { combobox-popup: 0; }")
+        self.cb_font.currentIndexChanged.connect(self.changed)
+        layout.addWidget(self.cb_font, 2, 1)
+        layout.setColumnStretch(1, 1)
+        layout.addItem(PyQt5.QtWidgets.QSpacerItem(
+            0, 0, PyQt5.QtWidgets.QSizePolicy.Minimum, PyQt5.QtWidgets.QSizePolicy.Expanding),
+            3, 0)
+        self.fontBox.setLayout(layout)
+
     def saveData(self):
         """Save data."""
         if(self.__dataChanged):
@@ -200,7 +252,7 @@ class SubwindowStyles(PyQt5.QtWidgets.QWidget):
             scctool.settings.config.parser.set(
                 "MapIcons", "winner_highlight_color", self.winner_color.getColor())
             scctool.settings.config.parser.set(
-                "MapIcons", "win_color", self.win_color.getColor())   
+                "MapIcons", "win_color", self.win_color.getColor())
             scctool.settings.config.parser.set(
                 "MapIcons", "lose_color", self.lose_color.getColor())
             scctool.settings.config.parser.set(
@@ -215,6 +267,13 @@ class SubwindowStyles(PyQt5.QtWidgets.QWidget):
             scctool.settings.config.parser.set(
                 "Style", "intro", self.qb_introStyle.currentText())
 
+            scctool.settings.config.parser.set(
+                "Style", "use_custom_font", str(self.cb_usefont.isChecked()))
+
+            scctool.settings.config.parser.set(
+                "Style", "custom_font", self.cb_font.currentText().strip())
+
+            self.mainWindow.highlightOBSupdate()
             self.controller.matchData.allChanged()
 
     def saveCloseWindow(self):

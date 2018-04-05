@@ -803,7 +803,6 @@ class matchData:
         winner = ["", ""]
         border_color = [[], []]
         threshold = int(self.getBestOf() / 2)
-        regex = re.compile(r"%[^%]+%")
 
         for i in range(self.getNoSets()):
             display.append("inline-block")
@@ -843,45 +842,37 @@ class matchData:
         elif(score[1] > threshold):
             winner[1] = "winner"
 
-        logo1 = self.__controller.logoManager.getTeam1().getFile(True)
+        dataFile = scctool.settings.OBShtmlDir + "/data/score-data.html"
+        templateFile = scctool.settings.OBShtmlDir + "/data/score-template.html"
 
-        logo2 = self.__controller.logoManager.getTeam2().getFile(True)
-
-        vars = "--winner-color: {};".format(
+        data = dict()
+        if self.getSolo():
+            data['team1'] = self.getPlayer(0, 0)
+            data['team2'] = self.getPlayer(1, 0)
+        else:
+            data['team1'] = self.getTeam(0)
+            data['team2'] = self.getTeam(1)
+        data['logo1'] = self.__controller.logoManager.getTeam1().getFile(True)
+        data['logo2'] = self.__controller.logoManager.getTeam2().getFile(True)
+        data['winner1'] = winner[0]
+        data['winner2'] = winner[1]
+        data['vars'] = "--winner-color: {};".format(
             scctool.settings.config.parser.get("MapIcons", "winner_highlight_color"))
+        data['score-t1'] = score[0]
+        data['score-t2'] = score[1]
+        data['score'] = "{} - {}".format(score[0], score[1])
+        data['timestamp'] = time.time()
+        if scctool.settings.config.parser.getboolean("Style", "use_custom_font"):
+            data['font'] = "font-family: {};".format(scctool.settings.config.parser.get(
+                "Style", "custom_font"))
 
-        filename = scctool.settings.getAbsPath(
-            scctool.settings.OBShtmlDir + "/data/score-data.html")
-        with open(scctool.settings.getAbsPath(scctool.settings.OBShtmlDir +
-                                              "/data/score-template.html"),
-                  "rt", encoding='utf-8-sig') as fin:
-            with open(filename, "wt", encoding='utf-8-sig') as fout:
-                for line in fin:
-                    if self.getSolo():
-                        line = line.replace('%TEAM1%', self.getPlayer(
-                            0, 0)).replace('%TEAM2%', self.getPlayer(1, 0))
-                    else:
-                        line = line.replace('%TEAM1%', self.getTeam(
-                            0)).replace('%TEAM2%', self.getTeam(1))
-                    line = line.replace('%LOGO1%', logo1).replace(
-                        '%LOGO2%', logo2)
-                    line = line.replace('%WINNER1%', winner[0]).replace(
-                        '%WINNER2%', winner[1])
-                    line = line.replace('%VARS%', vars)
-                    line = line.replace('%SCORE-T1%', str(score[0]))
-                    line = line.replace('%SCORE-T2%', str(score[1]))
-                    line = line.replace('%SCORE%', str(
-                        score[0]) + ' - ' + str(score[1]))
-                    line = line.replace('%TIMESTAMP%', str(time.time()))
-                    for i in range(scctool.settings.max_no_sets):
-                        line = line.replace(
-                            '%SCORE-M' + str(i + 1) + '-T1%', border_color[0][i])
-                        line = line.replace(
-                            '%SCORE-M' + str(i + 1) + '-T2%', border_color[1][i])
-                        line = line.replace(
-                            '%DISPLAY-M' + str(i + 1) + '%', display[i])
-                    line = regex.sub("", line)
-                    fout.write(line)
+        for s_idx in range(scctool.settings.max_no_sets):
+            data['score-m{}'.format(s_idx)] = display[s_idx]
+            for t_idx in range(2):
+                key = 'score-m{}-t{}'.format(t_idx + 1, s_idx + 1)
+                data[key] = border_color[t_idx][s_idx]
+
+        self._useTemplate(templateFile, dataFile, data)
 
     def updateMapIcons(self):
         """Update map icons."""
@@ -890,7 +881,6 @@ class matchData:
             score = [0, 0]
             skip = [False] * self.getNoSets()
             meta_changed = self.hasMetaChanged()
-            regex = re.compile(r"%[^%]+%")
 
             if(team == 0):
                 landscape_score_hide = ";display: none"
@@ -900,9 +890,6 @@ class matchData:
             for i in range(self.getNoSets()):
 
                 winner = self.getMapScore(i)
-                player1 = self.getPlayer(0, i)
-                player2 = self.getPlayer(1, i)
-
                 won = winner * team
                 opacity = "0.0"
 
@@ -950,88 +937,54 @@ class matchData:
                 if(skip[i]):
                     continue
 
-                map = self.getMap(i)
-                map_img = self.__controller.getMapImg(map)
-                race1 = self.getRace(0, i).lower()
-                race2 = self.getRace(1, i).lower()
-                hidden = ""
-                vars = "--winner-color: {};".format(
+                data = dict()
+                data['player1'] = self.getPlayer(0, i)
+                data['player2'] = self.getPlayer(1, i)
+                data['race1'] = self.getRace(0, i).lower()
+                data['race2'] = self.getRace(1, i).lower()
+                data['map_img'] = self.__controller.getMapImg(self.getMap(i))
+                data['map_name'] = self.getMap(i)
+                data['map_id'] = self.getLabel(i)
+                data['score_color'] = score_color + landscape_score_hide
+                data['border_color'] = border_color
+                data['opacity'] = opacity
+                data['status1'] = player1status
+                data['status2'] = player2status
+                data['vars'] = "--winner-color: {};".format(
                     scctool.settings.config.parser.get("MapIcons", "winner_highlight_color"))
+                if scctool.settings.config.parser.getboolean("Style", "use_custom_font"):
+                    data['font'] = "font-family: {};".format(
+                        scctool.settings.config.parser.get("Style", "custom_font"))
 
-                filename = scctool.settings.getAbsPath(scctool.settings.OBSmapDir +
-                                                       "/icons_box/data/"
-                                                       + str(i + 1) + ".html")
-                filename2 = scctool.settings.getAbsPath(scctool.settings.OBSmapDir +
-                                                        "/icons_landscape/data/"
-                                                        + str(i + 1) + ".html")
-                with open(scctool.settings.getAbsPath(scctool.settings.OBSmapDir +
-                                                      "/icons_box/data/template.html"),
-                          "rt", encoding='utf-8-sig') as fin:
-                    with open(filename, "wt", encoding='utf-8-sig') as fout:
-                        for line in fin:
-                            line = line.replace('%PLAYER1%', player1).replace(
-                                '%PLAYER2%', player2)
-                            line = line.replace('%RACE1%', race1).replace(
-                                '%RACE2%', race2)
-                            line = line.replace('%MAP_IMG%', map_img).replace(
-                                '%MAP_NAME%', map)
-                            line = line.replace('%MAP_ID%', self.getLabel(i))
-                            line = line.replace('%BORDER_COLOR%', border_color).replace(
-                                '%OPACITY%', opacity)
-                            line = line.replace('%HIDDEN%', hidden)
-                            line = line.replace('%STATUS1%', player1status).replace(
-                                '%STATUS2%', player2status)
-                            line = line.replace('%VARS%', vars)
-                            line = regex.sub("", line)
-                            fout.write(line)
+                dataFile = scctool.settings.OBSmapDir + \
+                    "/icons_box/data/" + str(i + 1) + ".html"
+                templateFile = scctool.settings.OBSmapDir + "/icons_box/data/template.html"
 
-                with open(scctool.settings.getAbsPath(scctool.settings.OBSmapDir +
-                                                      "/icons_landscape/data/template.html"),
-                          "rt", encoding='utf-8-sig') as fin:
-                    with open(filename2, "wt", encoding='utf-8-sig') as fout:
-                        for line in fin:
-                            line = line.replace('%PLAYER1%', player1).replace(
-                                '%PLAYER2%', player2)
-                            line = line.replace('%RACE1%', race1).replace(
-                                '%RACE2%', race2)
-                            line = line.replace('%MAP_IMG%', map_img).replace(
-                                '%MAP_NAME%', map)
-                            line = line.replace('%MAP_ID%', self.getLabel(i))
-                            line = line.replace('%SCORE_COLOR%',
-                                                score_color + landscape_score_hide)
-                            line = line.replace('%OPACITY%', opacity)
-                            line = line.replace('%HIDDEN%', hidden)
-                            line = line.replace('%STATUS1%', player1status).replace(
-                                '%STATUS2%', player2status)
-                            line = line.replace('%VARS%', vars)
-                            line = regex.sub("", line)
-                            fout.write(line)
+                self._useTemplate(templateFile, dataFile, data)
+
+                dataFile = scctool.settings.OBSmapDir + \
+                    "/icons_landscape/data/" + str(i + 1) + ".html"
+                templateFile = scctool.settings.OBSmapDir + \
+                    "/icons_landscape/data/template.html"
+
+                self._useTemplate(templateFile, dataFile, data)
 
             for i in range(self.getNoSets(), scctool.settings.max_no_sets):
-                filename = scctool.settings.getAbsPath(scctool.settings.OBSmapDir +
-                                                       "/icons_box/data/" + str(i + 1) +
-                                                       ".html")
-                filename2 = scctool.settings.getAbsPath(scctool.settings.OBSmapDir +
-                                                        "/icons_landscape/data/" + str(i + 1) +
-                                                        ".html")
-                hidden = "visibility: hidden;"
-                with open(scctool.settings.getAbsPath(scctool.settings.OBSmapDir +
-                                                      "/icons_box/data/template.html"),
-                          "rt", encoding='utf-8-sig') as fin:
-                    with open(filename, "wt", encoding='utf-8-sig') as fout:
-                        for line in fin:
-                            line = line.replace('%HIDDEN%', hidden)
-                            line = regex.sub("", line)
-                            fout.write(line)
+                data = dict()
+                data['hidden'] = 'visibility: hidden;'
+                if scctool.settings.config.parser.getboolean("Style", "use_custom_font"):
+                    data['font'] = "font-family: {};".format(
+                        scctool.settings.config.parser.get("Style", "custom_font"))
+                dataFile = scctool.settings.OBSmapDir + \
+                    "/icons_box/data/" + str(i + 1) + ".html"
+                templateFile = scctool.settings.OBSmapDir + "/icons_box/data/template.html"
+                self._useTemplate(templateFile, dataFile, data)
 
-                with open(scctool.settings.getAbsPath(scctool.settings.OBSmapDir +
-                                                      "/icons_landscape/data/template.html"),
-                          "rt") as fin:
-                    with open(filename2, "wt", encoding='utf-8-sig') as fout:
-                        for line in fin:
-                            line = line.replace('%HIDDEN%', hidden)
-                            line = regex.sub("", line)
-                            fout.write(line)
+                dataFile = scctool.settings.OBSmapDir + \
+                    "/icons_landscape/data/" + str(i + 1) + ".html"
+                templateFile = scctool.settings.OBSmapDir + \
+                    "/icons_landscape/data/template.html"
+                self._useTemplate(templateFile, dataFile, data)
 
         except Exception as e:
             module_logger.exception("message")
@@ -1073,6 +1026,22 @@ class matchData:
         except Exception as e:
             module_logger.exception("message")
             return False
+
+    def _useTemplate(self, filein, fileout, replacements):
+        filein = scctool.settings.getAbsPath(filein)
+        fileout = scctool.settings.getAbsPath(fileout)
+        regex = re.compile(r"%[^%]+%")
+        compiled_replacements = dict()
+        for placeholder, value in replacements.items():
+            compiled_replacements['%{}%'.format(
+                placeholder.upper())] = str(value)
+        with open(filein, "rt", encoding='utf-8-sig') as fin:
+            with open(fileout, "wt", encoding='utf-8-sig') as fout:
+                for line in fin:
+                    for placeholder, value in compiled_replacements.items():
+                        line = line.replace(placeholder, value)
+                    line = regex.sub("", line)
+                    fout.write(line)
 
 
 def autoCorrectMap(map):

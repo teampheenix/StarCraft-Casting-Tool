@@ -599,6 +599,9 @@ class MainController:
             "Intros", "display_time")
         data['animation'] = scctool.settings.config.parser.get(
             "Intros", "animation") .strip().lower()
+        if scctool.settings.config.parser.getboolean("Style", "use_custom_font"):
+            data['font'] = scctool.settings.config.parser.get(
+                "Style", "custom_font")
         return data
 
     def updatePlayerIntros(self, newData):
