@@ -608,13 +608,13 @@ class MainWindow(QMainWindow):
 
             self.qb_logo1 = IconPushButton()
             self.qb_logo1.setFixedWidth(self.raceWidth)
-            self.qb_logo1.clicked.connect(self.logoDialog)
+            self.qb_logo1.clicked.connect(lambda: self.logoDialog(1))
             logo = self.controller.logoManager.getTeam1()
             self.qb_logo1.setIcon(QIcon(logo.provideQPixmap()))
 
             self.qb_logo2 = IconPushButton()
             self.qb_logo2.setFixedWidth(self.raceWidth)
-            self.qb_logo2.clicked.connect(self.logoDialog)
+            self.qb_logo2.clicked.connect(lambda: self.logoDialog(2))
             logo = self.controller.logoManager.getTeam2()
             self.qb_logo2.setIcon(QIcon(logo.provideQPixmap()))
 
@@ -1174,11 +1174,11 @@ class MainWindow(QMainWindow):
         self.applycustom_is_highlighted = highlight
         return highlight
 
-    def logoDialog(self):
+    def logoDialog(self, team):
         """Open dialog for team logo."""
         self.controller.logoManager.resetLogoChanged()
         self.mysubwindows['icons'] = SubwindowLogos()
-        self.mysubwindows['icons'].createWindow(self, self.controller)
+        self.mysubwindows['icons'].createWindow(self, self.controller, team)
         self.mysubwindows['icons'].show()
 
     def resizeWindow(self):

@@ -19,10 +19,11 @@ module_logger = logging.getLogger('scctool.view.subLogos')
 class SubwindowLogos(QWidget):
     """Show readme sub window."""
 
-    def createWindow(self, mainWindow, controller):
+    def createWindow(self, mainWindow, controller, team):
         """Create readme sub window."""
         super(SubwindowLogos, self).__init__(None)
         self.controller = controller
+        self.team = team
         self.mutex = QMutex()
         # self.setWindowIcon(
         #     QIcon(scctool.settings.getAbsPath(icon)))
@@ -108,6 +109,7 @@ class SubwindowLogos(QWidget):
         box = QGroupBox(_("Favorites"))
         layout = QHBoxLayout()
         self.fav_list = QListWidget()
+        self.fav_list.itemDoubleClicked.connect(self.doubleClicked)
         self.fav_list.setViewMode(QListWidget.IconMode)
         self.fav_list.setContextMenuPolicy(Qt.CustomContextMenu)
         self.fav_list.customContextMenuRequested.connect(
@@ -132,6 +134,7 @@ class SubwindowLogos(QWidget):
         box = QGroupBox(_("Last Used"))
         layout = QHBoxLayout()
         self.lastused_list = QListWidget()
+        self.lastused_list.itemDoubleClicked.connect(self.doubleClicked)
         self.lastused_list.setViewMode(QListWidget.IconMode)
         self.lastused_list.setContextMenuPolicy(
             Qt.CustomContextMenu)
@@ -233,6 +236,18 @@ class SubwindowLogos(QWidget):
         else:
             return
 
+        self.refreshLastUsed()
+        
+    def doubleClicked(self, item):
+        map = item.icon().pixmap(self.iconsize)
+        ident = self.controller.logoManager.pixmap2ident(map)
+        logo = self.controller.logoManager.findLogo(ident)
+        if self.team == 1:
+            self.controller.logoManager.setTeam1Logo(logo)
+            self.team1_icon.setPixmap(map)
+        else:
+            self.controller.logoManager.setTeam2Logo(logo)
+            self.team2_icon.setPixmap(map)
         self.refreshLastUsed()
 
     def addFavorite(self, team):
