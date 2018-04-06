@@ -7,9 +7,9 @@ import logging
 from PyQt5.QtWidgets import QLineEdit, QVBoxLayout, QWidget, QMessageBox, QMainWindow,\
     QAction, QCompleter, QPushButton, QHBoxLayout, QLabel, QFormLayout, QComboBox,\
     QCheckBox, QTabWidget, QSlider, QSizePolicy, QGroupBox, QGridLayout, QSpacerItem, \
-    QApplication
+    QApplication, QShortcut
 from PyQt5.QtCore import QSettings, QTranslator, QLocale, Qt
-from PyQt5.QtGui import QIcon, QPalette
+from PyQt5.QtGui import QIcon, QPalette, QKeySequence
 
 import scctool.settings
 import scctool.settings.config
@@ -769,18 +769,14 @@ class MainWindow(QMainWindow):
             self.pb_obsupdate = QPushButton(
                 _("Update OBS Data"))
             self.pb_obsupdate.clicked.connect(self.updateobs_click)
+            self.pb_obsupdate.setToolTip(_("Shortcut: {}").format("Ctrl+S"))
+            self.shortcut = QShortcut(QKeySequence("Ctrl+S"),self)
+            self.shortcut.setAutoRepeat(False)
+            self.shortcut.activated.connect(self.updateobs_click)
 
-            # TODO: Highlight if Update OBS Data is needed.
-            # self.pb_obsupdate.setAutoFillBackground(True)
             self.defaultButtonPalette = self.pb_obsupdate.palette()
             self.obsupdate_is_highlighted = False
-            # myPalette = self.pb_obsupdate.palette()
-            # oldPalette = self.pb_obsupdate.palette()
-            # myPalette.setColor(QPalette.Background, Qt.darkBlue)
-            # myPalette.setColor(QPalette.ButtonText, Qt.darkBlue)
-            # self.pb_obsupdate.setPalette(myPalette)
-            # self.pb_obsupdate.setPalette(oldPalette)
-
+            
             layout.addWidget(self.pb_twitchupdate)
             layout.addWidget(self.pb_nightbotupdate)
             layout.addWidget(self.pb_resetscore)
