@@ -563,9 +563,10 @@ class InitialUpdater(QProgressDialog):
 
 class DragImageLabel(QLabel):
 
-    def __init__(self, logo, team=0):
+    def __init__(self, parent, logo, team=0):
         super(QLabel, self).__init__()
 
+        self._parent = parent
         self._team = team
 
         self._iconsize = logo._iconsize
@@ -576,7 +577,7 @@ class DragImageLabel(QLabel):
         self.setAlignment(Qt.AlignCenter)
 
         self.setLogo(logo)
-        self.setAcceptDrops(False)
+        self.setAcceptDrops(True)
 
     def setLogo(self, logo):
         self.setPixmap(logo.provideQPixmap())
@@ -589,20 +590,30 @@ class DragImageLabel(QLabel):
             e.ignore()
 
     def dropEvent(self, e):
-        result = self.decodeMimeData(e.mimeData().data(
-            "application/x-qabstractitemmodeldatalist"))
-        map = result[0][1].pixmap(self._iconsize)
-        self.setPixmap(map)
-
+        item = e.source().currentItem()
+        map = item.icon().pixmap(self._iconsize)
+        ident = self._logomanager.pixmap2ident(map)
+        logo = self._logomanager.findLogo(ident)
         if self._team == 1:
-            ident = self._logomanager.pixmap2ident(map)
-            print("Ident: ", ident)
-            logo = self._logomanager.findLogo(ident)
             self._logomanager.setTeam1Logo(logo)
         elif self._team == 2:
-            ident = self._logomanager.pixmap2ident(map)
-            logo = self._logomanager.findLogo(ident)
-            self._logomanager.setTeam2Logo(logo)
+            self._logomanager.setTeam1Logo(logo)
+        self.setPixmap(map)
+        self._parent.refreshLastUsed()
+        # result = self.decodeMimeData(e.mimeData().data(
+        #     "application/x-qabstractitemmodeldatalist"))
+        # map = result[0][1].pixmap(self._iconsize)
+        # self.setPixmap(map)
+
+        # if self._team == 1:
+        #     ident = self._logomanager.pixmap2ident(map)
+        #     print("Ident: ", ident)
+        #     logo = self._logomanager.findLogo(ident)
+        #     self._logomanager.setTeam1Logo(logo)
+        # elif self._team == 2:
+        #     ident = self._logomanager.pixmap2ident(map)
+        #     logo = self._logomanager.findLogo(ident)
+        #     self._logomanager.setTeam2Logo(logo)
 
     def decodeMimeData(self, data):
         result = {}

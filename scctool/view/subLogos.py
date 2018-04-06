@@ -37,8 +37,8 @@ class SubwindowLogos(QWidget):
         box = QGroupBox(
             _("Logo Team 1") + " - {}".format(mainWindow.le_team[0].text()))
         layout = QGridLayout()
-        self.team1_icon = DragImageLabel(
-            self.controller.logoManager.getTeam1(), 1)
+        self.team1_icon = DragImageLabel(self,
+                                         self.controller.logoManager.getTeam1(), 1)
         layout.addWidget(self.team1_icon, 0, 0, 5, 1)
         button = QPushButton(_("Load from File"))
         button.clicked.connect(lambda: self.logoFromFileDialog(1))
@@ -84,8 +84,8 @@ class SubwindowLogos(QWidget):
             _("Logo Team 2") + " - {}".format(mainWindow.le_team[1].text()))
         box.setAlignment(Qt.AlignRight)
         layout = QGridLayout()
-        self.team2_icon = DragImageLabel(
-            self.controller.logoManager.getTeam2(), 2)
+        self.team2_icon = DragImageLabel(self,
+                                         self.controller.logoManager.getTeam2(), 2)
         layout.addWidget(self.team2_icon, 0, 1, 5, 1)
         button = QPushButton(_("Load from File"))
         button.clicked.connect(lambda: self.logoFromFileDialog(2))
@@ -125,7 +125,7 @@ class SubwindowLogos(QWidget):
         # list.setWrapping(False)
         # list.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.fav_list.setAcceptDrops(False)
-        self.fav_list.setDragEnabled(False)
+        self.fav_list.setDragEnabled(True)
         layout.addWidget(self.fav_list)
         box.setLayout(layout)
 
@@ -143,7 +143,7 @@ class SubwindowLogos(QWidget):
         self.lastused_list.setIconSize(QSize(75, 75))
         self.lastused_list.setMaximumHeight(160)
         self.lastused_list.setAcceptDrops(False)
-        self.lastused_list.setDragEnabled(False)
+        self.lastused_list.setDragEnabled(True)
         self.refreshLastUsed()
         layout.addWidget(self.lastused_list)
 
