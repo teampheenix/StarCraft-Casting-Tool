@@ -10,7 +10,7 @@ try:
     import json
     import keyboard
     import scctool.settings
-    import PyQt5
+    from PyQt5.QtCore import QThread
 
 except Exception as e:
 
@@ -18,14 +18,14 @@ except Exception as e:
     raise
 
 
-class WebsocketThread(PyQt5.QtCore.QThread):
+class WebsocketThread(QThread):
     """Thread for websocket interaction."""
 
     keyboard_state = dict()
 
     def __init__(self, controller):
         """Init thread."""
-        PyQt5.QtCore.QThread.__init__(self)
+        QThread.__init__(self)
         self.connected = set()
         self.__loop = None
         self.__controller = controller

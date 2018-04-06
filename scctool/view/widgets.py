@@ -1,14 +1,22 @@
 """Define PyQt5 widgets."""
 import logging
-import PyQt5
+
+from PyQt5.QtWidgets import QLineEdit, QComboBox, QProgressDialog, QApplication,\
+    QProgressBar, QHBoxLayout, QLabel, QPushButton, QColorDialog, QSizePolicy, \
+    QStyleOptionButton, QStyle, QHeaderView, QTableWidget, \
+    QTableWidgetItem, QCompleter, QFrame, QTextBrowser
+from PyQt5.QtCore import pyqtSignal, Qt, QSize, QPoint, QVariant, QDataStream
+from PyQt5.QtGui import QColor, QPainter
+
+import scctool.matchdata
+import scctool.settings.config
+import scctool.tasks.updater
+
 import os
 import re
 import shutil
 import time
 import requests
-import scctool.matchdata
-import scctool.settings.config
-import scctool.tasks.updater
 import humanize
 import keyboard
 
@@ -16,10 +24,10 @@ import keyboard
 module_logger = logging.getLogger('scctool.view.widgets')
 
 
-class MapLineEdit(PyQt5.QtWidgets.QLineEdit):
+class MapLineEdit(QLineEdit):
     """Define line edit for maps."""
 
-    textModified = PyQt5.QtCore.pyqtSignal()  # (before, after)
+    textModified = pyqtSignal()  # (before, after)
 
     def __init__(self, contents='', parent=None):
         """Init lineedit."""
@@ -41,10 +49,10 @@ class MapLineEdit(PyQt5.QtWidgets.QLineEdit):
             self.textModified.emit()
 
 
-class MonitoredLineEdit(PyQt5.QtWidgets.QLineEdit):
+class MonitoredLineEdit(QLineEdit):
     """Define moinitored line edit."""
 
-    textModified = PyQt5.QtCore.pyqtSignal()
+    textModified = pyqtSignal()
 
     def __init__(self, contents='', parent=None):
         """Init moinitored line edit."""
@@ -72,7 +80,7 @@ class MonitoredLineEdit(PyQt5.QtWidgets.QLineEdit):
             self.textModified.emit()
 
 
-class StyleComboBox(PyQt5.QtWidgets.QComboBox):
+class StyleComboBox(QComboBox):
     """Define combo box to change the styles."""
 
     def __init__(self, style_dir, default="Default"):
@@ -88,11 +96,11 @@ class StyleComboBox(PyQt5.QtWidgets.QComboBox):
                 label = re.search('^(.+)\.css$', fname).group(1)
                 self.addItem(label)
 
-        index = self.findText(default, PyQt5.QtCore.Qt.MatchFixedString)
+        index = self.findText(default, Qt.MatchFixedString)
         if index >= 0:
             self.setCurrentIndex(index)
         else:
-            index = self.findText("Default", PyQt5.QtCore.Qt.MatchFixedString)
+            index = self.findText("Default", Qt.MatchFixedString)
             if index >= 0:
                 self.setCurrentIndex(index)
 
@@ -106,13 +114,13 @@ class StyleComboBox(PyQt5.QtWidgets.QComboBox):
         controller.websocketThread.changeStyle(self.currentText())
 
 
-class LogoDownloader(PyQt5.QtWidgets.QProgressDialog):
+class LogoDownloader(QProgressDialog):
     """Define updater dialog."""
 
     def __init__(self, controller, mainWindow, url):
         """Init progress dialog."""
-        PyQt5.QtWidgets.QProgressDialog.__init__(self)
-        self.setWindowModality(PyQt5.QtCore.Qt.ApplicationModal)
+        QProgressDialog.__init__(self)
+        self.setWindowModality(Qt.ApplicationModal)
         self.progress = 0
 
         self.logo = controller.logoManager.newLogo()
@@ -126,12 +134,12 @@ class LogoDownloader(PyQt5.QtWidgets.QProgressDialog):
         self.setRange(0, 100)
         self.setValue(self.minimum())
 
-        self.resize(PyQt5.QtCore.QSize(
+        self.resize(QSize(
             mainWindow.size().width() * 0.8, self.sizeHint().height()))
-        relativeChange = PyQt5.QtCore.QPoint(mainWindow.size().width() / 2,
-                                             mainWindow.size().height() / 3)\
-            - PyQt5.QtCore.QPoint(self.size().width() / 2,
-                                  self.size().height() / 3)
+        relativeChange = QPoint(mainWindow.size().width() / 2,
+                                mainWindow.size().height() / 3)\
+            - QPoint(self.size().width() / 2,
+                     self.size().height() / 3)
         self.move(mainWindow.pos() + relativeChange)
 
     def download(self):
@@ -164,13 +172,13 @@ class LogoDownloader(PyQt5.QtWidgets.QProgressDialog):
             module_logger.exception("message")
 
 
-class ToolUpdater(PyQt5.QtWidgets.QProgressDialog):
+class ToolUpdater(QProgressDialog):
     """Define updater dialog."""
 
     def __init__(self, controller, mainWindow):
         """Init progress dialog."""
-        PyQt5.QtWidgets.QProgressDialog.__init__(self)
-        self.setWindowModality(PyQt5.QtCore.Qt.ApplicationModal)
+        QProgressDialog.__init__(self)
+        self.setWindowModality(Qt.ApplicationModal)
         self.progress = 0
         self.setWindowTitle(_("Updater"))
         self.setLabelText(
@@ -179,12 +187,12 @@ class ToolUpdater(PyQt5.QtWidgets.QProgressDialog):
         self.setRange(0, 1000)
         self.setValue(self.minimum())
 
-        self.resize(PyQt5.QtCore.QSize(
+        self.resize(QSize(
             mainWindow.size().width() * 0.8, self.sizeHint().height()))
-        relativeChange = PyQt5.QtCore.QPoint(mainWindow.size().width() / 2,
-                                             mainWindow.size().height() / 3)\
-            - PyQt5.QtCore.QPoint(self.size().width() / 2,
-                                  self.size().height() / 3)
+        relativeChange = QPoint(mainWindow.size().width() / 2,
+                                mainWindow.size().height() / 3)\
+            - QPoint(self.size().width() / 2,
+                     self.size().height() / 3)
         self.move(mainWindow.pos() + relativeChange)
         self.show()
 
@@ -192,7 +200,7 @@ class ToolUpdater(PyQt5.QtWidgets.QProgressDialog):
         controller.versionHandler.activateTask('update_app')
 
         while not self.wasCanceled():
-            PyQt5.QtWidgets.QApplication.processEvents()
+            QApplication.processEvents()
             time.sleep(0.05)
 
         controller.versionHandler.progress.disconnect(self.setProgress)
@@ -211,14 +219,14 @@ class ToolUpdater(PyQt5.QtWidgets.QProgressDialog):
             module_logger.exception("message")
 
 
-class BusyProgressBar(PyQt5.QtWidgets.QProgressBar):
+class BusyProgressBar(QProgressBar):
     """Define a busy progress bar."""
 
     def __init__(self):
         """Init the progress of the bar."""
         super().__init__()
         self.setRange(0, 0)
-        self.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
+        self.setAlignment(Qt.AlignCenter)
         self._text = None
 
     def setText(self, text):
@@ -230,31 +238,31 @@ class BusyProgressBar(PyQt5.QtWidgets.QProgressBar):
         return self._text
 
 
-class HotkeyLayout(PyQt5.QtWidgets.QHBoxLayout):
+class HotkeyLayout(QHBoxLayout):
 
-    modified = PyQt5.QtCore.pyqtSignal(str)
+    modified = pyqtSignal(str)
 
     def __init__(self, parent, label="Hotkey", hotkey=""):
         """Init box."""
-        super(PyQt5.QtWidgets.QHBoxLayout, self).__init__()
+        super(QHBoxLayout, self).__init__()
         self.data = scctool.settings.config.loadHotkey(hotkey)
         self.__parent = parent
-        label = PyQt5.QtWidgets.QLabel(label + ":")
+        label = QLabel(label + ":")
         label.setMinimumWidth(50)
         self.addWidget(label, 1)
-        self.__preview = PyQt5.QtWidgets.QLineEdit()
+        self.__preview = QLineEdit()
         self.__preview.setReadOnly(True)
         self.__preview.setText(self.data['name'])
         self.__preview.setPlaceholderText(_("Not set"))
-        self.__preview.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
+        self.__preview.setAlignment(Qt.AlignCenter)
         self.addWidget(self.__preview, 1)
-        # self.__pb_setHotKey = PyQt5.QtWidgets.QPushButton(_('Set Hotkey'))
+        # self.__pb_setHotKey = QPushButton(_('Set Hotkey'))
         # self.__pb_setHotKey.clicked.connect(self.setHotkey)
         # self.addWidget(self.__pb_setHotKey, 0)
-        self.__pb_set = PyQt5.QtWidgets.QPushButton(_('Set Hotkey'))
+        self.__pb_set = QPushButton(_('Set Hotkey'))
         self.__pb_set.clicked.connect(self.setKey)
         self.addWidget(self.__pb_set, 0)
-        self.__pb_clear = PyQt5.QtWidgets.QPushButton(_('Clear'))
+        self.__pb_clear = QPushButton(_('Clear'))
         self.__pb_clear.clicked.connect(self.clear)
         self.addWidget(self.__pb_clear, 0)
 
@@ -289,38 +297,38 @@ class HotkeyLayout(PyQt5.QtWidgets.QHBoxLayout):
             self.clear()
 
 
-class ColorLayout(PyQt5.QtWidgets.QHBoxLayout):
+class ColorLayout(QHBoxLayout):
     """Define box the select colors."""
 
     def __init__(self, parent, label="Color:", color="#ffffff", default_color="#ffffff"):
         """Init box."""
-        super(PyQt5.QtWidgets.QHBoxLayout, self).__init__()
+        super(QHBoxLayout, self).__init__()
         self.__parent = parent
         self.__defaultColor = default_color
-        label = PyQt5.QtWidgets.QLabel(label)
+        label = QLabel(label)
         label.setMinimumWidth(110)
         self.addWidget(label, 1)
-        self.__preview = PyQt5.QtWidgets.QLineEdit()
+        self.__preview = QLineEdit()
         self.__preview.setReadOnly(True)
-        self.__preview.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
+        self.__preview.setAlignment(Qt.AlignCenter)
         self.setColor(color, False)
         self.addWidget(self.__preview, 2)
-        self.__pb_selectColor = PyQt5.QtWidgets.QPushButton(_('Select'))
+        self.__pb_selectColor = QPushButton(_('Select'))
         self.__pb_selectColor.clicked.connect(self.__openColorDialog)
         self.addWidget(self.__pb_selectColor, 0)
-        self.__pb_default = PyQt5.QtWidgets.QPushButton(_('Default'))
+        self.__pb_default = QPushButton(_('Default'))
         self.__pb_default.clicked.connect(self.reset)
         self.addWidget(self.__pb_default, 0)
 
     def __openColorDialog(self):
-        color = PyQt5.QtWidgets.QColorDialog.getColor(self.__currentColor)
+        color = QColorDialog.getColor(self.__currentColor)
 
         if color.isValid():
             self.setColor(color.name())
 
     def setColor(self, color, trigger=True):
         """Set the new color."""
-        new_color = PyQt5.QtGui.QColor(color)
+        new_color = QColor(color)
         if(trigger and self.__currentColor != new_color):
             self.__parent.changed()
         self.__currentColor = new_color
@@ -343,7 +351,7 @@ class ColorLayout(PyQt5.QtWidgets.QHBoxLayout):
         return self.__currentColor.name()
 
 
-class IconPushButton(PyQt5.QtWidgets.QPushButton):
+class IconPushButton(QPushButton):
     """Define push button with icon."""
 
     def __init__(self, label=None, parent=None):
@@ -353,18 +361,18 @@ class IconPushButton(PyQt5.QtWidgets.QPushButton):
         self.pad = 4     # padding between the icon and the button frame
         self.minSize = 8  # minimum size of the icon
 
-        sizePolicy = PyQt5.QtWidgets.QSizePolicy(PyQt5.QtWidgets.QSizePolicy.Expanding,
-                                                 PyQt5.QtWidgets.QSizePolicy.Expanding)
+        sizePolicy = QSizePolicy(QSizePolicy.Expanding,
+                                 QSizePolicy.Expanding)
         self.setSizePolicy(sizePolicy)
 
     def paintEvent(self, event):
         """Paint event."""
-        qp = PyQt5.QtGui.QPainter()
+        qp = QPainter()
         qp.begin(self)
 
         # ---- get default style ----
 
-        opt = PyQt5.QtWidgets.QStyleOptionButton()
+        opt = QStyleOptionButton()
         self.initStyleOption(opt)
 
         # ---- scale icon to button size ----
@@ -375,19 +383,19 @@ class IconPushButton(PyQt5.QtWidgets.QPushButton):
         w = Rect.width()
         iconSize = max(min(h, w) - 2 * self.pad, self.minSize)
 
-        opt.iconSize = PyQt5.QtCore.QSize(iconSize, iconSize)
+        opt.iconSize = QSize(iconSize, iconSize)
 
         # ---- draw button ----
 
-        self.style().drawControl(PyQt5.QtWidgets.QStyle.CE_PushButton, opt, qp, self)
+        self.style().drawControl(QStyle.CE_PushButton, opt, qp, self)
 
         qp.end()
 
 
-class ListTable(PyQt5.QtWidgets.QTableWidget):
+class ListTable(QTableWidget):
     """Define a custom table list."""
 
-    dataModified = PyQt5.QtCore.pyqtSignal()
+    dataModified = pyqtSignal()
 
     def __init__(self, noColumns=1, data=[]):
         """Init table list."""
@@ -399,10 +407,10 @@ class ListTable(PyQt5.QtWidgets.QTableWidget):
         self.setCornerButtonEnabled(False)
         self.horizontalHeader().hide()
         self.horizontalHeader().setSectionResizeMode(
-            PyQt5.QtWidgets.QHeaderView.Stretch)
+            QHeaderView.Stretch)
         self.verticalHeader().hide()
         self.verticalHeader().setSectionResizeMode(
-            PyQt5.QtWidgets.QHeaderView.ResizeToContents)
+            QHeaderView.ResizeToContents)
         self.setData(data)
 
     def __handleDataChanged(self, item):
@@ -426,15 +434,15 @@ class ListTable(PyQt5.QtWidgets.QTableWidget):
         self.setRowCount(int(len(data) / self.__noColumns) + 1)
         for idx, entry in enumerate(data):
             row, column = divmod(idx, self.__noColumns)
-            self.setItem(row, column, PyQt5.QtWidgets.QTableWidgetItem(entry))
+            self.setItem(row, column, QTableWidgetItem(entry))
 
         row = int(len(data) / self.__noColumns)
         for col in range(len(data) % self.__noColumns, self.__noColumns):
-            self.setItem(row, col, PyQt5.QtWidgets.QTableWidgetItem(""))
+            self.setItem(row, col, QTableWidgetItem(""))
 
         row = int(len(data) / self.__noColumns) + 1
         for col in range(self.__noColumns):
-            self.setItem(row, col, PyQt5.QtWidgets.QTableWidgetItem(""))
+            self.setItem(row, col, QTableWidgetItem(""))
 
         self.itemChanged.connect(self.__handleDataChanged)
 
@@ -453,20 +461,20 @@ class ListTable(PyQt5.QtWidgets.QTableWidget):
         return self.__processData(data)
 
 
-class Completer(PyQt5.QtWidgets.QCompleter):
+class Completer(QCompleter):
     """Define custom auto completer for multiple words."""
 
     def __init__(self, list, parent=None):
         """Init completer."""
         super(Completer, self).__init__(list, parent)
 
-        self.setCaseSensitivity(PyQt5.QtCore.Qt.CaseInsensitive)
-        self.setCompletionMode(PyQt5.QtWidgets.QCompleter.PopupCompletion)
+        self.setCaseSensitivity(Qt.CaseInsensitive)
+        self.setCompletionMode(QCompleter.PopupCompletion)
         self.setWrapAround(False)
 
     def pathFromIndex(self, index):
         """Add texts instead of replace."""
-        path = PyQt5.QtWidgets.QCompleter.pathFromIndex(self, index)
+        path = QCompleter.pathFromIndex(self, index)
 
         lst = str(self.widget().text()).split(' ')
 
@@ -481,23 +489,23 @@ class Completer(PyQt5.QtWidgets.QCompleter):
         return [path]
 
 
-class QHLine(PyQt5.QtWidgets.QFrame):
+class QHLine(QFrame):
     """Define a vertical line."""
 
     def __init__(self):
         """Init frame."""
         super(QHLine, self).__init__()
-        self.setFrameShape(PyQt5.QtWidgets.QFrame.HLine)
-        self.setFrameShadow(PyQt5.QtWidgets.QFrame.Sunken)
+        self.setFrameShape(QFrame.HLine)
+        self.setFrameShadow(QFrame.Sunken)
 
 
-class InitialUpdater(PyQt5.QtWidgets.QProgressDialog):
+class InitialUpdater(QProgressDialog):
     """Define initial progress dialog to download data."""
 
     def __init__(self, version='0.0.0'):
         """Init progress dialog."""
-        PyQt5.QtWidgets.QProgressDialog.__init__(self)
-        self.setWindowModality(PyQt5.QtCore.Qt.ApplicationModal)
+        QProgressDialog.__init__(self)
+        self.setWindowModality(Qt.ApplicationModal)
         self.progress = 0
         self.setWindowTitle("SCC-Tool")
         self.setLabelText(_("Collecting data..."))
@@ -508,7 +516,7 @@ class InitialUpdater(PyQt5.QtWidgets.QProgressDialog):
 
         self.show()
         for i in range(10):
-            PyQt5.QtWidgets.QApplication.processEvents()
+            QApplication.processEvents()
         self.run()
 
     def run(self):
@@ -553,10 +561,10 @@ class InitialUpdater(PyQt5.QtWidgets.QProgressDialog):
             module_logger.exception("message")
 
 
-class DragImageLabel(PyQt5.QtWidgets.QLabel):
+class DragImageLabel(QLabel):
 
     def __init__(self, logo, team=0):
-        super(PyQt5.QtWidgets.QLabel, self).__init__()
+        super(QLabel, self).__init__()
 
         self._team = team
 
@@ -565,7 +573,7 @@ class DragImageLabel(PyQt5.QtWidgets.QLabel):
 
         self.setFixedWidth(self._iconsize)
         self.setFixedHeight(self._iconsize)
-        self.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
+        self.setAlignment(Qt.AlignCenter)
 
         self.setLogo(logo)
         self.setAcceptDrops(False)
@@ -598,27 +606,28 @@ class DragImageLabel(PyQt5.QtWidgets.QLabel):
 
     def decodeMimeData(self, data):
         result = {}
-        value = PyQt5.QtCore.QVariant()
-        stream = PyQt5.QtCore.QDataStream(data)
+        value = QVariant()
+        stream = QDataStream(data)
         while not stream.atEnd():
             stream.readInt32()
             col = stream.readInt32()
             item = result.setdefault(col, {})
             for role in range(stream.readInt32()):
-                key = PyQt5.QtCore.Qt.ItemDataRole(stream.readInt32())
+                key = Qt.ItemDataRole(stream.readInt32())
                 stream >> value
                 item[key] = value.value()
         return result
 
-class TextPreviewer(PyQt5.QtWidgets.QTextBrowser):
+
+class TextPreviewer(QTextBrowser):
     def __init__(self):
-        super(PyQt5.QtWidgets.QTextBrowser, self).__init__()
+        super(QTextBrowser, self).__init__()
         self.setReadOnly(True)
         self.setMaximumHeight(50)
-        self.setHorizontalScrollBarPolicy(PyQt5.QtCore.Qt.ScrollBarAlwaysOff)
-        self.setVerticalScrollBarPolicy(PyQt5.QtCore.Qt.ScrollBarAlwaysOff)
-        self.setTextInteractionFlags(PyQt5.QtCore.Qt.NoTextInteraction)  
-        
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.setTextInteractionFlags(Qt.NoTextInteraction)
+
     def setFont(self, font):
         font = font.strip()
         css = dict()
@@ -631,8 +640,9 @@ class TextPreviewer(PyQt5.QtWidgets.QTextBrowser):
         style = ""
         for key, value in css.items():
             style += "{}: {};".format(key, value)
-        self.setHtml("<div style='{}'><span style='display: table-cell; vertical-align: middle;'>{}</span></div>".format(style, font))
-    
+        self.setHtml(
+            "<div style='{}'><span style='display: table-cell;"
+            " vertical-align: middle;'>{}</span></div>".format(style, font))
+
     def wheelEvent(self, e):
         e.ignore()
-        

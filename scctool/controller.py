@@ -23,7 +23,9 @@ try:
     import sys
     import shutil
 
-    import PyQt5
+    from PyQt5.QtWidgets import QMessageBox, QCheckBox
+    from PyQt5.QtCore import Qt
+    from PyQt5.QtGui import QIcon
 
 
 except Exception as e:
@@ -115,12 +117,12 @@ class MainController:
             self.view.cb_solo.setChecked(self.matchData.getSolo())
 
             index = self.view.cb_bestof.findText(str(self.matchData.getBestOfRaw()),
-                                                 PyQt5.QtCore.Qt.MatchFixedString)
+                                                 Qt.MatchFixedString)
             if index >= 0:
                 self.view.cb_bestof.setCurrentIndex(index)
 
             index = self.view.cb_minSets.findText(str(self.matchData.getMinSets()),
-                                                  PyQt5.QtCore.Qt.MatchFixedString)
+                                                  Qt.MatchFixedString)
             if index >= 0:
                 self.view.cb_minSets.setCurrentIndex(index)
 
@@ -179,10 +181,10 @@ class MainController:
         """Updata team logos in  view."""
 
         logo = self.logoManager.getTeam1()
-        self.view.qb_logo1.setIcon(PyQt5.QtGui.QIcon(logo.provideQPixmap()))
+        self.view.qb_logo1.setIcon(QIcon(logo.provideQPixmap()))
 
         logo = self.logoManager.getTeam2()
-        self.view.qb_logo2.setIcon(PyQt5.QtGui.QIcon(logo.provideQPixmap()))
+        self.view.qb_logo2.setIcon(QIcon(logo.provideQPixmap()))
 
         if self.logoManager.hasLogoChanged():
             self.view.highlightOBSupdate(force=True)
@@ -458,7 +460,7 @@ class MainController:
 
     def toggleWidget(self, widget, condition, ttFalse='', ttTrue=''):
         """Disable or an enable a widget based on a condition."""
-        widget.setAttribute(PyQt5.QtCore.Qt.WA_AlwaysShowToolTips)
+        widget.setAttribute(Qt.WA_AlwaysShowToolTips)
         if condition:
             tooltip = ttTrue
         else:
@@ -651,22 +653,22 @@ class MainController:
         prompt = force or scctool.settings.config.parser.getboolean(
             "SCT", "new_version_prompt")
         if hasattr(sys, "frozen") and prompt:
-            messagebox = PyQt5.QtWidgets.QMessageBox()
+            messagebox = QMessageBox()
             text = _("A new version {} is available.")
             messagebox.setText(text.format(version))
             messagebox.setInformativeText(_("Update to new version?"))
             messagebox.setWindowTitle(_("New SCC-Tool Version"))
             messagebox.setStandardButtons(
-                PyQt5.QtWidgets.QMessageBox.Yes | PyQt5.QtWidgets.QMessageBox.No)
-            messagebox.setDefaultButton(PyQt5.QtWidgets.QMessageBox.Yes)
-            messagebox.setIcon(PyQt5.QtWidgets.QMessageBox.Information)
-            messagebox.setWindowModality(PyQt5.QtCore.Qt.ApplicationModal)
-            cb = PyQt5.QtWidgets.QCheckBox()
+                QMessageBox.Yes | QMessageBox.No)
+            messagebox.setDefaultButton(QMessageBox.Yes)
+            messagebox.setIcon(QMessageBox.Information)
+            messagebox.setWindowModality(Qt.ApplicationModal)
+            cb = QCheckBox()
             cb.setChecked(not scctool.settings.config.parser.getboolean(
                 "SCT", "new_version_prompt"))
             cb.setText(_("Don't show on startup."))
             messagebox.setCheckBox(cb)
-            if messagebox.exec_() == PyQt5.QtWidgets.QMessageBox.Yes:
+            if messagebox.exec_() == QMessageBox.Yes:
                 ToolUpdater(self, self.view)
             scctool.settings.config.parser.set("SCT",
                                                "new_version_prompt",

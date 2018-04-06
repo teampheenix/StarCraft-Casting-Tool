@@ -10,7 +10,7 @@ import sys
 import json
 import shutil
 import tarfile
-import PyQt5
+from PyQt5.QtCore import pyqtSignal
 from scctool.tasks.tasksthread import TasksThread
 
 module_logger = logging.getLogger('scctool.tasks.updater')
@@ -190,11 +190,11 @@ def copyStyleFile(style_dir, css_file, value):
 class VersionHandler(TasksThread):
     """Check for new version and update or notify."""
 
-    newVersion = PyQt5.QtCore.pyqtSignal(str)
-    newData = PyQt5.QtCore.pyqtSignal(str)
-    noNewVersion = PyQt5.QtCore.pyqtSignal()
-    progress = PyQt5.QtCore.pyqtSignal(dict)
-    updated_data = PyQt5.QtCore.pyqtSignal(str)
+    newVersion = pyqtSignal(str)
+    newData = pyqtSignal(str)
+    noNewVersion = pyqtSignal()
+    progress = pyqtSignal(dict)
+    updated_data = pyqtSignal(str)
 
     # Constants
     APP_NAME = 'StarCraft-Casting-Tool'

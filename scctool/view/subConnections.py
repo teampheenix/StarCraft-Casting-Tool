@@ -1,10 +1,15 @@
 """Show connections settings sub window."""
 import logging
-import PyQt5
+
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QTabWidget, QGroupBox, QFormLayout, QSlider,\
+    QDoubleSpinBox, QLabel, QComboBox, QSpacerItem, QSizePolicy, QHBoxLayout, QLineEdit, \
+    QPushButton, QBoxLayout, QScrollArea, QMessageBox
+from PyQt5.QtCore import Qt, QSize, QPoint
+from PyQt5.QtGui import QIcon
 
 from scctool.view.widgets import MonitoredLineEdit, Completer, HotkeyLayout
-
 import scctool.settings
+
 import keyboard
 import weakref
 
@@ -12,7 +17,7 @@ import weakref
 module_logger = logging.getLogger('scctool.view.subConnections')
 
 
-class SubwindowConnections(PyQt5.QtWidgets.QWidget):
+class SubwindowConnections(QWidget):
     """Show connections settings sub window."""
 
     def createWindow(self, mainWindow):
@@ -20,11 +25,11 @@ class SubwindowConnections(PyQt5.QtWidgets.QWidget):
         try:
             parent = None
             super(SubwindowConnections, self).__init__(parent)
-            # self.setWindowFlags(PyQt5.QtCore.Qt.WindowStaysOnTopHint)
+            # self.setWindowFlags(Qt.WindowStaysOnTopHint)
 
             self.setWindowIcon(
-                PyQt5.QtGui.QIcon(scctool.settings.getAbsPath('src/connection.png')))
-            self.setWindowModality(PyQt5.QtCore.Qt.ApplicationModal)
+                QIcon(scctool.settings.getAbsPath('src/connection.png')))
+            self.setWindowModality(Qt.ApplicationModal)
             self.mainWindow = mainWindow
             self.passEvent = False
             self.controller = mainWindow.controller
@@ -33,19 +38,19 @@ class SubwindowConnections(PyQt5.QtWidgets.QWidget):
             self.createButtonGroup()
             self.createTabs()
 
-            mainLayout = PyQt5.QtWidgets.QVBoxLayout()
+            mainLayout = QVBoxLayout()
 
             mainLayout.addWidget(self.tabs)
             mainLayout.addLayout(self.buttonGroup)
 
             self.setLayout(mainLayout)
 
-            self.resize(PyQt5.QtCore.QSize(mainWindow.size().width()
-                                           * 0.8, self.sizeHint().height()))
-            relativeChange = PyQt5.QtCore.QPoint(mainWindow.size().width() / 2,
-                                                 mainWindow.size().height() / 3) -\
-                PyQt5.QtCore.QPoint(self.size().width() / 2,
-                                    self.size().height() / 3)
+            self.resize(QSize(mainWindow.size().width()
+                              * 0.8, self.sizeHint().height()))
+            relativeChange = QPoint(mainWindow.size().width() / 2,
+                                    mainWindow.size().height() / 3) -\
+                QPoint(self.size().width() / 2,
+                       self.size().height() / 3)
             self.move(mainWindow.pos() + relativeChange)
 
             self.setWindowTitle(_("Connections"))
@@ -55,7 +60,7 @@ class SubwindowConnections(PyQt5.QtWidgets.QWidget):
 
     def createTabs(self):
         """Create tabs."""
-        self.tabs = PyQt5.QtWidgets.QTabWidget()
+        self.tabs = QTabWidget()
 
         self.createFormGroupWebsocket()
         self.createFormGroupTwitch()
@@ -83,11 +88,11 @@ class SubwindowConnections(PyQt5.QtWidgets.QWidget):
 
     def createFormGroupWebsocket(self):
         """Create forms for OBS websocket connection."""
-        self.formGroupWebsocket = PyQt5.QtWidgets.QWidget()
-        mainLayout = PyQt5.QtWidgets.QVBoxLayout()
+        self.formGroupWebsocket = QWidget()
+        mainLayout = QVBoxLayout()
 
-        self.hotkeyBox = PyQt5.QtWidgets.QGroupBox(_("Intro Hotkeys"))
-        layout = PyQt5.QtWidgets.QVBoxLayout()
+        self.hotkeyBox = QGroupBox(_("Intro Hotkeys"))
+        layout = QVBoxLayout()
 
         try:
             keyboard.unhook_all()
@@ -101,28 +106,28 @@ class SubwindowConnections(PyQt5.QtWidgets.QWidget):
         self.hotkeyBox.setLayout(layout)
         mainLayout.addWidget(self.hotkeyBox)
 
-        self.introBox = PyQt5.QtWidgets.QGroupBox(_("Intro Settings"))
-        layout = PyQt5.QtWidgets.QFormLayout()
-        self.sl_sound = PyQt5.QtWidgets.QSlider(PyQt5.QtCore.Qt.Horizontal)
+        self.introBox = QGroupBox(_("Intro Settings"))
+        layout = QFormLayout()
+        self.sl_sound = QSlider(Qt.Horizontal)
         self.sl_sound.setMinimum(0)
         self.sl_sound.setMaximum(10)
         self.sl_sound.setValue(
             scctool.settings.config.parser.getint("Intros", "sound_volume"))
-        self.sl_sound.setTickPosition(PyQt5.QtWidgets.QSlider.TicksBothSides)
+        self.sl_sound.setTickPosition(QSlider.TicksBothSides)
         self.sl_sound.setTickInterval(1)
         self.sl_sound.valueChanged.connect(self.changed)
-        layout.addRow(PyQt5.QtWidgets.QLabel(
+        layout.addRow(QLabel(
             _("Sound Volume:") + " "), self.sl_sound)
-        self.sb_displaytime = PyQt5.QtWidgets.QDoubleSpinBox()
+        self.sb_displaytime = QDoubleSpinBox()
         self.sb_displaytime.setRange(0, 10)
         self.sb_displaytime.setDecimals(1)
         self.sb_displaytime.setValue(
             scctool.settings.config.parser.getfloat("Intros", "display_time"))
         self.sb_displaytime.setSuffix(" " + _("Seconds"))
         self.sb_displaytime.valueChanged.connect(self.changed)
-        layout.addRow(PyQt5.QtWidgets.QLabel(
+        layout.addRow(QLabel(
             _("Display Duration:") + " "), self.sb_displaytime)
-        self.cb_animation = PyQt5.QtWidgets.QComboBox()
+        self.cb_animation = QComboBox()
         animation = scctool.settings.config.parser.get("Intros", "animation")
         currentIdx = 0
         idx = 0
@@ -132,59 +137,59 @@ class SubwindowConnections(PyQt5.QtWidgets.QWidget):
                 currentIdx = idx
             idx += 1
         self.cb_animation.setCurrentIndex(currentIdx)
-        layout.addRow(PyQt5.QtWidgets.QLabel(
+        layout.addRow(QLabel(
             _("Animation:") + " "), self.cb_animation)
         self.introBox.setLayout(layout)
         mainLayout.addWidget(self.introBox)
 
-        mainLayout.addItem(PyQt5.QtWidgets.QSpacerItem(
-            0, 0, PyQt5.QtWidgets.QSizePolicy.Minimum, PyQt5.QtWidgets.QSizePolicy.Expanding))
+        mainLayout.addItem(QSpacerItem(
+            0, 0, QSizePolicy.Minimum, QSizePolicy.Expanding))
         self.formGroupWebsocket.setLayout(mainLayout)
 
     def createFormGroupTwitch(self):
         """Create forms for twitch."""
-        self.formGroupTwitch = PyQt5.QtWidgets.QWidget()
-        layout = PyQt5.QtWidgets.QFormLayout()
+        self.formGroupTwitch = QWidget()
+        layout = QFormLayout()
 
         self.twitchChannel = MonitoredLineEdit()
         self.twitchChannel.textModified.connect(self.changed)
         self.twitchChannel.setText(
             scctool.settings.config.parser.get("Twitch", "channel"))
-        self.twitchChannel.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
+        self.twitchChannel.setAlignment(Qt.AlignCenter)
         self.twitchChannel.setPlaceholderText(
             _("Name of the Twitch channel that should be updated"))
         self.twitchChannel.setToolTip(
             _('The connected twitch user needs to have editor rights for this channel.'))
-        layout.addRow(PyQt5.QtWidgets.QLabel(
+        layout.addRow(QLabel(
             "Twitch-Channel:"), self.twitchChannel)
 
-        container = PyQt5.QtWidgets.QHBoxLayout()
+        container = QHBoxLayout()
 
         self.twitchToken = MonitoredLineEdit()
         self.twitchToken.textModified.connect(self.changed)
         self.twitchToken.setText(
             scctool.settings.config.parser.get("Twitch", "oauth"))
-        self.twitchToken.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
+        self.twitchToken.setAlignment(Qt.AlignCenter)
         self.twitchToken.setPlaceholderText(
             _("Press 'Get' to generate a token"))
-        self.twitchToken.setEchoMode(PyQt5.QtWidgets.QLineEdit.Password)
+        self.twitchToken.setEchoMode(QLineEdit.Password)
         self.twitchToken.setToolTip(_("Press 'Get' to generate a new token."))
         container.addWidget(self.twitchToken)
 
-        self.pb_getTwitch = PyQt5.QtWidgets.QPushButton(_('Get'))
+        self.pb_getTwitch = QPushButton(_('Get'))
         self.pb_getTwitch.setFixedWidth(100)
         self.pb_getTwitch.clicked.connect(self.controller.getTwitchToken)
         container.addWidget(self.pb_getTwitch)
 
-        layout.addRow(PyQt5.QtWidgets.QLabel(_("Access-Token:")), container)
+        layout.addRow(QLabel(_("Access-Token:")), container)
 
-        container = PyQt5.QtWidgets.QHBoxLayout()
+        container = QHBoxLayout()
 
         self.twitchTemplate = MonitoredLineEdit()
         self.twitchTemplate.textModified.connect(self.changed)
         self.twitchTemplate.setText(
             scctool.settings.config.parser.get("Twitch", "title_template"))
-        self.twitchTemplate.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
+        self.twitchTemplate.setAlignment(Qt.AlignCenter)
         self.twitchTemplate.setPlaceholderText("(League) – (Team1) vs (Team2)")
         self.twitchTemplate.setToolTip(
             _('Available placeholders:') + " " +
@@ -197,13 +202,13 @@ class SubwindowConnections(PyQt5.QtWidgets.QWidget):
 
         container.addWidget(self.twitchTemplate)
 
-        button = PyQt5.QtWidgets.QPushButton(_('Test'))
+        button = QPushButton(_('Test'))
         button.setFixedWidth(100)
         button.clicked.connect(
             lambda: self.testPlaceholder(self.twitchTemplate.text()))
         container.addWidget(button)
 
-        label = PyQt5.QtWidgets.QLabel(_("Title Template:"))
+        label = QLabel(_("Title Template:"))
         label.setFixedWidth(100)
         layout.addRow(label, container)
 
@@ -211,23 +216,23 @@ class SubwindowConnections(PyQt5.QtWidgets.QWidget):
 
     def createFormGroupNightbot(self):
         """Create forms for nightbot."""
-        self.formGroupNightbot = PyQt5.QtWidgets.QWidget()
-        mainLayout = PyQt5.QtWidgets.QVBoxLayout()
-        tokenBox = PyQt5.QtWidgets.QGroupBox("Access-Token")
-        container = PyQt5.QtWidgets.QHBoxLayout()
+        self.formGroupNightbot = QWidget()
+        mainLayout = QVBoxLayout()
+        tokenBox = QGroupBox("Access-Token")
+        container = QHBoxLayout()
 
         self.nightbotToken = MonitoredLineEdit()
         self.nightbotToken.textModified.connect(self.changed)
         self.nightbotToken.setText(
             scctool.settings.config.parser.get("Nightbot", "token"))
-        self.nightbotToken.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
-        self.nightbotToken.setEchoMode(PyQt5.QtWidgets.QLineEdit.Password)
+        self.nightbotToken.setAlignment(Qt.AlignCenter)
+        self.nightbotToken.setEchoMode(QLineEdit.Password)
         self.nightbotToken.setPlaceholderText(
             _("Press 'Get' to generate a token"))
         self.nightbotToken.setToolTip(
             _("Press 'Get' to generate a token."))
         container.addWidget(self.nightbotToken)
-        self.pb_getNightbot = PyQt5.QtWidgets.QPushButton(_('Get'))
+        self.pb_getNightbot = QPushButton(_('Get'))
         self.pb_getNightbot.clicked.connect(self.controller.getNightbotToken)
         self.pb_getNightbot.setFixedWidth(100)
         # self.pb_getNightbot.setEnabled(False)
@@ -238,28 +243,28 @@ class SubwindowConnections(PyQt5.QtWidgets.QWidget):
         mainLayout.addWidget(tokenBox, 0)
 
         # scroll area widget contents - layout
-        self.scrollLayout = PyQt5.QtWidgets.QVBoxLayout()
-        self.scrollLayout.setDirection(PyQt5.QtWidgets.QBoxLayout.BottomToTop)
+        self.scrollLayout = QVBoxLayout()
+        self.scrollLayout.setDirection(QBoxLayout.BottomToTop)
         self.scrollLayout.addStretch(0)
-        buttonLayout = PyQt5.QtWidgets.QHBoxLayout()
+        buttonLayout = QHBoxLayout()
         buttonLayout.addStretch(0)
         self.scrollLayout.addLayout(buttonLayout)
 
         # scroll area widget contents
-        self.scrollWidget = PyQt5.QtWidgets.QWidget()
+        self.scrollWidget = QWidget()
         self.scrollWidget.setLayout(self.scrollLayout)
 
         # scroll area
-        self.scrollArea = PyQt5.QtWidgets.QScrollArea()
+        self.scrollArea = QScrollArea()
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setWidget(self.scrollWidget)
         self.scrollArea.setFixedHeight(180)
 
         mainLayout.addWidget(self.scrollArea, 1)
 
-        layout = PyQt5.QtWidgets.QHBoxLayout()
-        layout.addWidget(PyQt5.QtWidgets.QLabel(""))
-        addButton = PyQt5.QtWidgets.QPushButton(_('Add Command'))
+        layout = QHBoxLayout()
+        layout.addWidget(QLabel(""))
+        addButton = QPushButton(_('Add Command'))
         addButton.clicked.connect(lambda: self.addCommand())
         layout.addWidget(addButton)
 
@@ -286,15 +291,15 @@ class SubwindowConnections(PyQt5.QtWidgets.QWidget):
     def createButtonGroup(self):
         """Create buttons."""
         try:
-            layout = PyQt5.QtWidgets.QHBoxLayout()
+            layout = QHBoxLayout()
 
-            layout.addWidget(PyQt5.QtWidgets.QLabel(""))
+            layout.addWidget(QLabel(""))
 
-            buttonCancel = PyQt5.QtWidgets.QPushButton(_('Cancel'))
+            buttonCancel = QPushButton(_('Cancel'))
             buttonCancel.clicked.connect(self.closeWindow)
             layout.addWidget(buttonCancel)
 
-            buttonSave = PyQt5.QtWidgets.QPushButton(_('Save && Close'))
+            buttonSave = QPushButton(_('Save && Close'))
             buttonSave.clicked.connect(self.saveCloseWindow)
             layout.addWidget(buttonSave)
 
@@ -355,11 +360,11 @@ class SubwindowConnections(PyQt5.QtWidgets.QWidget):
             if(not self.passEvent):
                 if(self.isMinimized()):
                     self.showNormal()
-                buttonReply = PyQt5.QtWidgets.QMessageBox.question(
+                buttonReply = QMessageBox.question(
                     self, _('Save data?'), _("Do you want to save the data?"),
-                    PyQt5.QtWidgets.QMessageBox.Yes | PyQt5.QtWidgets.QMessageBox.No,
-                    PyQt5.QtWidgets.QMessageBox.No)
-                if buttonReply == PyQt5.QtWidgets.QMessageBox.Yes:
+                    QMessageBox.Yes | QMessageBox.No,
+                    QMessageBox.No)
+                if buttonReply == QMessageBox.Yes:
                     self.saveData()
             self.controller.updateHotkeys()
             CommandDropBox.clean()
@@ -370,10 +375,10 @@ class SubwindowConnections(PyQt5.QtWidgets.QWidget):
     def testPlaceholder(self, string):
         """Test placeholders."""
         string = self.controller.placeholders.replace(string)
-        PyQt5.QtWidgets.QMessageBox.information(self, _("Output:"), string)
+        QMessageBox.information(self, _("Output:"), string)
 
 
-class CommandDropBox(PyQt5.QtWidgets.QGroupBox):
+class CommandDropBox(QGroupBox):
     _instances = set()
     _todelete = set()
 
@@ -382,17 +387,17 @@ class CommandDropBox(PyQt5.QtWidgets.QGroupBox):
         self.controller = controller
         self._instances.add(weakref.ref(self))
         self.ident = len(self._instances)
-        layout = PyQt5.QtWidgets.QHBoxLayout()
+        layout = QHBoxLayout()
 
         self.command = MonitoredLineEdit()
         self.command.setText(cmd)
-        self.command.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
+        self.command.setAlignment(Qt.AlignCenter)
         self.command.setPlaceholderText(("!command"))
         layout.addWidget(self.command)
 
         self.message = MonitoredLineEdit()
         self.message.setText(msg)
-        self.message.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
+        self.message.setAlignment(Qt.AlignCenter)
         self.message.setPlaceholderText(_('message, e.g.,') + ' (URL)')
         self.message.setToolTip(
             _('Available placeholders:') + ' ' +
@@ -403,12 +408,12 @@ class CommandDropBox(PyQt5.QtWidgets.QGroupBox):
         self.message.setCompleter(completer)
         layout.addWidget(self.message)
 
-        self.pushButton1 = PyQt5.QtWidgets.QPushButton(_('Test'))
+        self.pushButton1 = QPushButton(_('Test'))
         self.pushButton1.clicked.connect(
             lambda: self.testPlaceholder(self.message.text()))
         layout.addWidget(self.pushButton1)
 
-        self.pushButton2 = PyQt5.QtWidgets.QPushButton(_('Delete'))
+        self.pushButton2 = QPushButton(_('Delete'))
         self.pushButton2.clicked.connect(self.remove)
         layout.addWidget(self.pushButton2)
         self.setLayout(layout)
@@ -447,7 +452,7 @@ class CommandDropBox(PyQt5.QtWidgets.QGroupBox):
     def testPlaceholder(self, string):
         """Test placeholders."""
         string = self.controller.placeholders.replace(string)
-        PyQt5.QtWidgets.QMessageBox.information(self, _("Output:"), string)
+        QMessageBox.information(self, _("Output:"), string)
 
     @classmethod
     def addDeletedCommand(cls, cmd):

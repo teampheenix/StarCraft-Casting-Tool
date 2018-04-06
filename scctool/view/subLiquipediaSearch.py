@@ -1,11 +1,15 @@
 """Show readme sub window."""
 import logging
-import PyQt5
 import requests
 import urllib.parse
 import re
 import scctool.settings
 
+from PyQt5.QtWidgets import QWidget, QGroupBox, QSpacerItem, QSizePolicy,\
+    QHBoxLayout, QLineEdit, QPushButton, QGridLayout, QListWidget, QApplication, \
+    QListWidgetItem, QMenu
+from PyQt5.QtCore import Qt, QSize, QPoint, QUrl
+from PyQt5.QtGui import QIcon, QPixmap, QImage
 from PyQt5.QtNetwork import QNetworkAccessManager, QNetworkRequest
 from bs4 import BeautifulSoup
 
@@ -16,7 +20,7 @@ module_logger = logging.getLogger('scctool.view.subLiquipediaSearch')
 base_url = 'http://liquipedia.net'
 
 
-class SubwindowLiquipediaSearch(PyQt5.QtWidgets.QWidget):
+class SubwindowLiquipediaSearch(QWidget):
     """Show readme sub window."""
 
     nams = dict()
@@ -30,31 +34,31 @@ class SubwindowLiquipediaSearch(PyQt5.QtWidgets.QWidget):
         self.controller = mainWindow.controller
         self.team = team
         self.setWindowIcon(
-            PyQt5.QtGui.QIcon(scctool.settings.getAbsPath("src/liquipedia.png")))
+            QIcon(scctool.settings.getAbsPath("src/liquipedia.png")))
 
-        self.setWindowModality(PyQt5.QtCore.Qt.ApplicationModal)
+        self.setWindowModality(Qt.ApplicationModal)
 
-        mainLayout = PyQt5.QtWidgets.QGridLayout()
-        self.qle_search = PyQt5.QtWidgets.QLineEdit(placeholder)
-        self.qle_search.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
+        mainLayout = QGridLayout()
+        self.qle_search = QLineEdit(placeholder)
+        self.qle_search.setAlignment(Qt.AlignCenter)
         self.qle_search.returnPressed.connect(self.search)
         mainLayout.addWidget(self.qle_search, 0, 0, 1, 2)
-        searchButton = PyQt5.QtWidgets.QPushButton(_("Search"))
+        searchButton = QPushButton(_("Search"))
         searchButton.clicked.connect(self.search)
         mainLayout.addWidget(searchButton, 0, 2)
 
-        box = PyQt5.QtWidgets.QGroupBox(_("Results"))
-        layout = PyQt5.QtWidgets.QHBoxLayout()
-        self.result_list = PyQt5.QtWidgets.QListWidget()
-        self.result_list.setViewMode(PyQt5.QtWidgets.QListWidget.IconMode)
+        box = QGroupBox(_("Results"))
+        layout = QHBoxLayout()
+        self.result_list = QListWidget()
+        self.result_list.setViewMode(QListWidget.IconMode)
         self.result_list.setContextMenuPolicy(
-            PyQt5.QtCore.Qt.CustomContextMenu)
+            Qt.CustomContextMenu)
         self.result_list.customContextMenuRequested.connect(
             self.listItemRightClicked)
 
-        self.result_list.setIconSize(PyQt5.QtCore.QSize(75, 75))
+        self.result_list.setIconSize(QSize(75, 75))
         # list.setWrapping(False)
-        # list.setVerticalScrollBarPolicy(PyQt5.QtCore.Qt.ScrollBarAlwaysOff)
+        # list.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.result_list.setAcceptDrops(False)
         self.result_list.setDragEnabled(False)
         layout.addWidget(self.result_list)
@@ -62,26 +66,26 @@ class SubwindowLiquipediaSearch(PyQt5.QtWidgets.QWidget):
 
         mainLayout.addWidget(box, 1, 0, 1, 3)
 
-        selectButton = PyQt5.QtWidgets.QPushButton(
+        selectButton = QPushButton(
             " " + _("Use Selected Logo") + " ")
         selectButton.clicked.connect(self.applyLogo)
-        closeButton = PyQt5.QtWidgets.QPushButton(_("Cancel"))
+        closeButton = QPushButton(_("Cancel"))
         closeButton.clicked.connect(self.close)
-        mainLayout.addItem(PyQt5.QtWidgets.QSpacerItem(
-            0, 0, PyQt5.QtWidgets.QSizePolicy.Expanding,
-            PyQt5.QtWidgets.QSizePolicy.Minimum), 2, 0)
+        mainLayout.addItem(QSpacerItem(
+            0, 0, QSizePolicy.Expanding,
+            QSizePolicy.Minimum), 2, 0)
         mainLayout.addWidget(closeButton, 2, 1)
         mainLayout.addWidget(selectButton, 2, 2)
         self.setLayout(mainLayout)
 
         self.setWindowTitle(_("Liqupedia Image Search"))
 
-        self.resize(PyQt5.QtCore.QSize(mainWindow.size().width()
-                                       * 0.9, self.sizeHint().height()))
-        relativeChange = PyQt5.QtCore.QPoint(mainWindow.size().width() / 2,
-                                             mainWindow.size().height() / 3)\
-            - PyQt5.QtCore.QPoint(self.size().width() / 2,
-                                  self.size().height() / 3)
+        self.resize(QSize(mainWindow.size().width()
+                          * 0.9, self.sizeHint().height()))
+        relativeChange = QPoint(mainWindow.size().width() / 2,
+                                mainWindow.size().height() / 3)\
+            - QPoint(self.size().width() / 2,
+                     self.size().height() / 3)
         self.move(mainWindow.pos() + relativeChange)
 
     def clean(self):
@@ -90,10 +94,10 @@ class SubwindowLiquipediaSearch(PyQt5.QtWidgets.QWidget):
         self.data.clear()
 
     def search(self):
-        PyQt5.QtWidgets.QApplication.setOverrideCursor(
-            PyQt5.QtCore.Qt.WaitCursor)
+        QApplication.setOverrideCursor(
+            Qt.WaitCursor)
         self.clean()
-        loading_map = PyQt5.QtGui.QPixmap(
+        loading_map = QPixmap(
             scctool.settings.getAbsPath("src/loading.png"))
         try:
             self.result_list.clear()
@@ -101,14 +105,14 @@ class SubwindowLiquipediaSearch(PyQt5.QtWidgets.QWidget):
             for name, thumb in search_liquipedia(self.qle_search.text()):
                 self.data[idx] = name
                 name = name.replace('/commons/File:', '')
-                self.results[idx] = PyQt5.QtWidgets.QListWidgetItem(
-                    PyQt5.QtGui.QIcon(loading_map), name)
-                self.results[idx].setSizeHint(PyQt5.QtCore.QSize(80, 90))
+                self.results[idx] = QListWidgetItem(
+                    QIcon(loading_map), name)
+                self.results[idx].setSizeHint(QSize(80, 90))
                 url = base_url + thumb
                 self.nams[idx] = QNetworkAccessManager()
                 self.nams[idx].finished.connect(
                     lambda reply, i=idx: self.finishRequest(reply, i))
-                self.nams[idx].get(QNetworkRequest(PyQt5.QtCore.QUrl(url)))
+                self.nams[idx].get(QNetworkRequest(QUrl(url)))
                 self.result_list.addItem(self.results[idx])
                 if idx == 0:
                     self.result_list.setCurrentItem(self.results[idx])
@@ -116,14 +120,14 @@ class SubwindowLiquipediaSearch(PyQt5.QtWidgets.QWidget):
         except Exception as e:
             module_logger.exception("message")
         finally:
-            PyQt5.QtWidgets.QApplication.restoreOverrideCursor()
+            QApplication.restoreOverrideCursor()
 
     def finishRequest(self, reply, idx):
-        img = PyQt5.QtGui.QImage()
+        img = QImage()
         img.loadFromData(reply.readAll())
-        map = PyQt5.QtGui.QPixmap(img).scaled(
-            75, 75, PyQt5.QtCore.Qt.KeepAspectRatio)
-        self.results[idx].setIcon(PyQt5.QtGui.QIcon(map))
+        map = QPixmap(img).scaled(
+            75, 75, Qt.KeepAspectRatio)
+        self.results[idx].setIcon(QIcon(map))
 
     def applyLogo(self, skip=False):
         item = self.result_list.currentItem()
@@ -142,13 +146,13 @@ class SubwindowLiquipediaSearch(PyQt5.QtWidgets.QWidget):
         self.close()
 
     def listItemRightClicked(self, QPos):
-        self.listMenu = PyQt5.QtWidgets.QMenu()
+        self.listMenu = QMenu()
         menu_item = self.listMenu.addAction(_("Open on Liquipedia"))
         menu_item.triggered.connect(self.openLiquipedia)
         menu_item = self.listMenu.addAction(_("Use as Team Logo"))
         menu_item.triggered.connect(lambda: self.applyLogo(True))
         parentPosition = self.result_list.mapToGlobal(
-            PyQt5.QtCore.QPoint(0, 0))
+            QPoint(0, 0))
         self.listMenu.move(parentPosition + QPos)
         self.listMenu.show()
 

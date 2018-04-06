@@ -1,7 +1,11 @@
 """Show styles settings sub window."""
 import logging
 
-import PyQt5
+from PyQt5.QtWidgets import QWidget, QTabWidget, QVBoxLayout, QSizePolicy, QSpacerItem,\
+    QHBoxLayout, QLabel, QPushButton, QFormLayout, QGridLayout, QCheckBox,\
+    QComboBox, QMessageBox
+from PyQt5.QtCore import Qt, QSize, QPoint
+from PyQt5.QtGui import QIcon, QFontDatabase
 
 from scctool.view.widgets import StyleComboBox, ColorLayout, TextPreviewer
 import scctool.settings
@@ -10,7 +14,7 @@ import scctool.settings
 module_logger = logging.getLogger('scctool.view.subStyles')
 
 
-class SubwindowStyles(PyQt5.QtWidgets.QWidget):
+class SubwindowStyles(QWidget):
     """Show styles settings sub window."""
 
     def createWindow(self, mainWindow):
@@ -20,8 +24,8 @@ class SubwindowStyles(PyQt5.QtWidgets.QWidget):
             super(SubwindowStyles, self).__init__(parent)
 
             self.setWindowIcon(
-                PyQt5.QtGui.QIcon(scctool.settings.getAbsPath('src/pantone.png')))
-            self.setWindowModality(PyQt5.QtCore.Qt.ApplicationModal)
+                QIcon(scctool.settings.getAbsPath('src/pantone.png')))
+            self.setWindowModality(Qt.ApplicationModal)
             self.mainWindow = mainWindow
             self.passEvent = False
             self.controller = mainWindow.controller
@@ -32,25 +36,25 @@ class SubwindowStyles(PyQt5.QtWidgets.QWidget):
             self.createStyleBox()
             self.createFontBox()
 
-            self.tabs = PyQt5.QtWidgets.QTabWidget()
+            self.tabs = QTabWidget()
             self.tabs.addTab(self.styleBox, _("Styles"))
             self.tabs.addTab(self.colorBox, _("Colors"))
             self.tabs.addTab(self.fontBox, _("Font"))
 
-            mainLayout = PyQt5.QtWidgets.QVBoxLayout()
+            mainLayout = QVBoxLayout()
             mainLayout.addWidget(self.tabs)
-            mainLayout.addItem(PyQt5.QtWidgets.QSpacerItem(
-                0, 0, PyQt5.QtWidgets.QSizePolicy.Minimum,
-                PyQt5.QtWidgets.QSizePolicy.Expanding))
+            mainLayout.addItem(QSpacerItem(
+                0, 0, QSizePolicy.Minimum,
+                QSizePolicy.Expanding))
             mainLayout.addLayout(self.buttonGroup)
             self.setLayout(mainLayout)
 
-            self.resize(PyQt5.QtCore.QSize(mainWindow.size().width()
-                                           * .80, self.sizeHint().height()))
-            relativeChange = + PyQt5.QtCore.QPoint(mainWindow.size().width() / 2,
-                                                   mainWindow.size().height() / 3)\
-                - PyQt5.QtCore.QPoint(self.size().width() / 2,
-                                      self.size().height() / 3)
+            self.resize(QSize(mainWindow.size().width()
+                              * .80, self.sizeHint().height()))
+            relativeChange = + QPoint(mainWindow.size().width() / 2,
+                                      mainWindow.size().height() / 3)\
+                - QPoint(self.size().width() / 2,
+                         self.size().height() / 3)
             self.move(mainWindow.pos() + relativeChange)
 
             self.setWindowTitle(_("Style Settings"))
@@ -65,15 +69,15 @@ class SubwindowStyles(PyQt5.QtWidgets.QWidget):
     def createButtonGroup(self):
         """Create buttons."""
         try:
-            layout = PyQt5.QtWidgets.QHBoxLayout()
+            layout = QHBoxLayout()
 
-            layout.addWidget(PyQt5.QtWidgets.QLabel(""))
+            layout.addWidget(QLabel(""))
 
-            buttonCancel = PyQt5.QtWidgets.QPushButton(_('Cancel'))
+            buttonCancel = QPushButton(_('Cancel'))
             buttonCancel.clicked.connect(self.closeWindow)
             layout.addWidget(buttonCancel)
 
-            buttonSave = PyQt5.QtWidgets.QPushButton(_('Save && Close'))
+            buttonSave = QPushButton(_('Save && Close'))
             buttonSave.clicked.connect(self.saveCloseWindow)
             layout.addWidget(buttonSave)
 
@@ -83,69 +87,69 @@ class SubwindowStyles(PyQt5.QtWidgets.QWidget):
 
     def createStyleBox(self):
         """Create style box."""
-        self.styleBox = PyQt5.QtWidgets.QWidget()
-        layout = PyQt5.QtWidgets.QFormLayout()
+        self.styleBox = QWidget()
+        layout = QFormLayout()
 
-        container = PyQt5.QtWidgets.QHBoxLayout()
+        container = QHBoxLayout()
         self.qb_boxStyle = StyleComboBox(
             scctool.settings.OBSmapDir + "/src/css/box_styles",
             scctool.settings.config.parser.get("Style", "mapicon_box"))
         self.qb_boxStyle.currentIndexChanged.connect(self.changed)
-        label = PyQt5.QtWidgets.QLabel(_("Box Map Icons:"))
+        label = QLabel(_("Box Map Icons:"))
         label.setMinimumWidth(110)
-        button = PyQt5.QtWidgets.QPushButton(_("Show in Browser"))
+        button = QPushButton(_("Show in Browser"))
         button.clicked.connect(lambda: self.openHTML(
             scctool.settings.OBSmapDir + "/icons_box/all_maps.html"))
         container.addWidget(self.qb_boxStyle)
         container.addWidget(button)
         layout.addRow(label, container)
 
-        container = PyQt5.QtWidgets.QHBoxLayout()
+        container = QHBoxLayout()
         self.qb_landscapeStyle = StyleComboBox(
             scctool.settings.OBSmapDir + "/src/css/landscape_styles",
             scctool.settings.config.parser.get("Style", "mapicon_landscape"))
         self.qb_landscapeStyle.currentIndexChanged.connect(self.changed)
-        button = PyQt5.QtWidgets.QPushButton(_("Show in Browser"))
+        button = QPushButton(_("Show in Browser"))
         button.clicked.connect(lambda: self.openHTML(
             scctool.settings.OBSmapDir + "/icons_landscape/all_maps.html"))
         container.addWidget(self.qb_landscapeStyle)
         container.addWidget(button)
-        layout.addRow(PyQt5.QtWidgets.QLabel(
+        layout.addRow(QLabel(
             _("Landscape Map Icons:")), container)
 
-        container = PyQt5.QtWidgets.QHBoxLayout()
+        container = QHBoxLayout()
         self.qb_scoreStyle = StyleComboBox(
             scctool.settings.OBShtmlDir + "/src/css/score_styles",
             scctool.settings.config.parser.get("Style", "score"))
         self.qb_scoreStyle.currentIndexChanged.connect(self.changed)
-        button = PyQt5.QtWidgets.QPushButton(_("Show in Browser"))
+        button = QPushButton(_("Show in Browser"))
         button.clicked.connect(lambda: self.openHTML(
             scctool.settings.OBShtmlDir + "/score.html"))
         container.addWidget(self.qb_scoreStyle)
         container.addWidget(button)
-        layout.addRow(PyQt5.QtWidgets.QLabel(_("Score:")), container)
+        layout.addRow(QLabel(_("Score:")), container)
 
-        container = PyQt5.QtWidgets.QHBoxLayout()
+        container = QHBoxLayout()
         self.qb_introStyle = StyleComboBox(
             scctool.settings.OBShtmlDir + "/src/css/intro",
             scctool.settings.config.parser.get("Style", "intro"))
         self.qb_introStyle.currentIndexChanged.connect(self.changed)
-        button = PyQt5.QtWidgets.QPushButton(_("Show in Browser"))
+        button = QPushButton(_("Show in Browser"))
         button.clicked.connect(lambda: self.openHTML(
             scctool.settings.OBShtmlDir + "/intro.html"))
         container.addWidget(self.qb_introStyle)
         container.addWidget(button)
-        layout.addRow(PyQt5.QtWidgets.QLabel(_("Intros:")), container)
+        layout.addRow(QLabel(_("Intros:")), container)
 
-        self.pb_applyStyles = PyQt5.QtWidgets.QPushButton(_("Apply"))
+        self.pb_applyStyles = QPushButton(_("Apply"))
         self.pb_applyStyles.clicked.connect(self.applyStyles)
-        layout.addRow(PyQt5.QtWidgets.QLabel(), self.pb_applyStyles)
+        layout.addRow(QLabel(), self.pb_applyStyles)
 
         txt = _("Note that to make these changes visible in OBS" +
                 " you have to refresh the cache of your browser sources.")
-        label = PyQt5.QtWidgets.QLabel(txt)
+        label = QLabel(txt)
         label.setWordWrap(True)
-        layout.addRow(PyQt5.QtWidgets.QLabel(), label)
+        layout.addRow(QLabel(), label)
 
         self.styleBox.setLayout(layout)
 
@@ -165,8 +169,8 @@ class SubwindowStyles(PyQt5.QtWidgets.QWidget):
 
     def createColorBox(self):
         """Create box for color selection."""
-        self.colorBox = PyQt5.QtWidgets.QWidget()
-        layout = PyQt5.QtWidgets.QVBoxLayout()
+        self.colorBox = QWidget()
+        layout = QVBoxLayout()
 
         self.default_color = ColorLayout(
             self, _("Default Border:"),
@@ -199,32 +203,32 @@ class SubwindowStyles(PyQt5.QtWidgets.QWidget):
 
     def createFontBox(self):
         """Create box for font selection."""
-        self.fontBox = PyQt5.QtWidgets.QWidget()
-        layout = PyQt5.QtWidgets.QGridLayout()
+        self.fontBox = QWidget()
+        layout = QGridLayout()
 
-        label = PyQt5.QtWidgets.QLabel(
+        label = QLabel(
             _("Warning: Using a custom font instead of the regular font defined"
               " in the Icon Styles can lead to unitentional appereance.") +
             _("The proper way is to create a custom skin."))
         label.setWordWrap(True)
-        label.setAlignment(PyQt5.QtCore.Qt.AlignJustify)
+        label.setAlignment(Qt.AlignJustify)
         layout.addWidget(label, 1, 0, 1, 2)
-        label = PyQt5.QtWidgets.QLabel(_("Activate Custom Font") + ":")
+        label = QLabel(_("Activate Custom Font") + ":")
         label.setMinimumWidth(110)
-        self.cb_usefont = PyQt5.QtWidgets.QCheckBox(" ")
+        self.cb_usefont = QCheckBox(" ")
         self.cb_usefont.setChecked(
             scctool.settings.config.parser.getboolean("Style", "use_custom_font"))
         self.cb_usefont.stateChanged.connect(self.changed)
-        layout.addWidget(label, 0, 0, alignment=PyQt5.QtCore.Qt.AlignVCenter)
+        layout.addWidget(label, 0, 0, alignment=Qt.AlignVCenter)
         layout.addWidget(self.cb_usefont, 0, 1,
-                         alignment=PyQt5.QtCore.Qt.AlignVCenter)
-        label = PyQt5.QtWidgets.QLabel(_("Custom Font") + ":")
+                         alignment=Qt.AlignVCenter)
+        label = QLabel(_("Custom Font") + ":")
         label.setMinimumWidth(110)
         layout.addWidget(label, 2, 0)
-        self.cb_font = PyQt5.QtWidgets.QComboBox()
+        self.cb_font = QComboBox()
         my_font = scctool.settings.config.parser.get(
             "Style", "custom_font")
-        fonts = PyQt5.QtGui.QFontDatabase().families()
+        fonts = QFontDatabase().families()
         for idx, font in enumerate(fonts):
             self.cb_font.addItem(str(font))
             if str(font).lower().strip() == my_font.lower():
@@ -236,12 +240,12 @@ class SubwindowStyles(PyQt5.QtWidgets.QWidget):
         layout.setColumnStretch(1, 1)
         self.previewer = TextPreviewer()
         layout.addWidget(self.previewer, 3, 0, 1, 2)
-        layout.addItem(PyQt5.QtWidgets.QSpacerItem(
-            0, 0, PyQt5.QtWidgets.QSizePolicy.Minimum, PyQt5.QtWidgets.QSizePolicy.Expanding),
+        layout.addItem(QSpacerItem(
+            0, 0, QSizePolicy.Minimum, QSizePolicy.Expanding),
             4, 0)
         self.fontBox.setLayout(layout)
         self.updateFontPreview()
-        
+
     def updateFontPreview(self):
         font = self.cb_font.currentText().strip()
         self.previewer.setFont(font)
@@ -300,11 +304,11 @@ class SubwindowStyles(PyQt5.QtWidgets.QWidget):
             if(not self.passEvent):
                 if(self.isMinimized()):
                     self.showNormal()
-                buttonReply = PyQt5.QtWidgets.QMessageBox.question(
+                buttonReply = QMessageBox.question(
                     self, _('Save data?'), _("Save data?"),
-                    PyQt5.QtWidgets.QMessageBox.Yes | PyQt5.QtWidgets.QMessageBox.No,
-                    PyQt5.QtWidgets.QMessageBox.No)
-                if buttonReply == PyQt5.QtWidgets.QMessageBox.Yes:
+                    QMessageBox.Yes | QMessageBox.No,
+                    QMessageBox.No)
+                if buttonReply == QMessageBox.Yes:
                     self.saveData()
             event.accept()
         except Exception as e:
