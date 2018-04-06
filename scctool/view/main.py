@@ -1028,7 +1028,7 @@ class MainWindow(QMainWindow):
         except Exception as e:
             module_logger.exception("message")
 
-    def setScore(self, idx, score):
+    def setScore(self, idx, score, allkill=True):
         """Handle change of the score."""
         try:
             if(self.sl_score[idx].value() == 0):
@@ -1036,7 +1036,8 @@ class MainWindow(QMainWindow):
                 with self.tlock:
                     self.sl_score[idx].setValue(score)
                     self.controller.matchData.setMapScore(idx, score, True)
-                    self.controller.allkillUpdate()
+                    if allkill:
+                        self.controller.allkillUpdate()
                     if not self.controller.resetWarning():
                         self.statusBar().showMessage('')
                 return True
@@ -1084,6 +1085,8 @@ class MainWindow(QMainWindow):
                 if new_race != 0:
                     self.cb_race[team_idx][player_idx].setCurrentIndex(
                         new_race)
+            elif player.lower() == "tbd":
+                self.cb_race[team_idx][player_idx].setCurrentIndex(0)
             self.updatePlayerCompleters()
         except Exception as e:
             module_logger.exception("message")

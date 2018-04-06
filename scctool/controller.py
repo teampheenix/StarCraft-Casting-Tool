@@ -41,6 +41,8 @@ class MainController:
         try:
             self.matchData = matchData(self)
             self.SC2ApiThread = SC2ApiThread(self)
+            self.SC2ApiThread.requestScoreUpdate.connect(
+                self.requestScoreUpdate)
             self.versionHandler = VersionHandler(self)
             self.webApp = FlaskThread()
             self.webApp.signal_twitch.connect(self.webAppDone_twitch)
@@ -458,15 +460,16 @@ class MainController:
             for j in range(2):
                 self.historyManager.insertPlayer(
                     newSC2MatchData.getPlayer(j), newSC2MatchData.getRace(j))
+            self.view.updatePlayerCompleters()
+            if newSC2MatchData.result == 0:
+                return
             for i in range(self.matchData.getNoSets()):
                 player1 = self.matchData.getPlayer(0, i)
                 player2 = self.matchData.getPlayer(1, i)
-                found, newscore = newSC2MatchData.compare_returnScore(
+                found, in_order, newscore, _ = newSC2MatchData.compare_returnScore(
                     player1, player2)
-                if(found and newscore != 0):
+                if found:
                     if(self.view.setScore(i, newscore)):
-                        _, in_order = newSC2MatchData.compare_returnOrder(
-                            player1, player2)
                         race1 = newSC2MatchData.getRace(0)
                         race2 = newSC2MatchData.getRace(1)
                         if not in_order:
@@ -477,6 +480,36 @@ class MainController:
                         break
                     else:
                         continue
+            # If not found try again with weak search and set missing playernames
+            if not found:
+                for i in range(self.matchData.getNoSets()):
+                    player1 = self.matchData.getPlayer(0, i)
+                    player2 = self.matchData.getPlayer(1, i)
+                    found, in_order, newscore, notset_idx \
+                        = newSC2MatchData.compare_returnScore(
+                            player1, player2, weak=True)
+                    if(found and notset_idx in range(2)):
+                        if(self.view.setScore(i, newscore, allkill=False)):
+                            race1 = newSC2MatchData.getRace(0)
+                            race2 = newSC2MatchData.getRace(1)
+                            if not in_order:
+                                race1, race2 = race2, race1
+                                player = newSC2MatchData.getPlayer(
+                                    1 - notset_idx)
+                            else:
+                                player = newSC2MatchData.getRace(notset_idx)
+                            self.setRace(0, i, race1)
+                            self.setRace(1, i, race2)
+                            self.matchData.setPlayer(notset_idx, i, player)
+                            with self.view.tlock:
+                                self.view.le_player[notset_idx][i].setText(
+                                    player)
+                            self.allkillUpdate()
+                            self.updateOBS()
+                            break
+                        else:
+                            continue
+
         except Exception as e:
             module_logger.exception("message")
 

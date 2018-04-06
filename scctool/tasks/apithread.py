@@ -5,7 +5,7 @@ import logging
 module_logger = logging.getLogger('scctool.tasks.apithread')
 
 try:
-    from PyQt5.QtCore import QThread
+    from PyQt5.QtCore import QThread, pyqtSignal
 
     import requests
     import time
@@ -72,6 +72,8 @@ def ToggleProduction():
 
 class SC2ApiThread(QThread):
     """Thread to interact with SC2-Client."""
+
+    requestScoreUpdate = pyqtSignal(object)
 
     def __init__(self, controller, parent=None):
         """Init thread."""
@@ -179,7 +181,7 @@ class SC2ApiThread(QThread):
                 if(self.activeTask['updateScore'] and newData.isDecidedGame()
                    and self.currentData != SC2MatchData()):
                     # print("Updating Score")
-                    self.controller.requestScoreUpdate(newData)
+                    self.requestScoreUpdate.emit(newData)
 
                 if(newData.isLive() and (self.activeTask['toggleScore']
                                          or self.activeTask['toggleProduction'])):
@@ -312,16 +314,31 @@ class SC2MatchData:
             self.time = 0
             self.ingame = False
 
-    def compare_returnScore(self, player1, player2):
-        """Fuzzy compare playernames and return their score."""
-        if(compareStr(self.player1, player1)
-           and compareStr(self.player2, player2)):
-            return True, self.result
-        elif(compareStr(self.player1, player2)
-             and compareStr(self.player2, player1)):
-            return True, -self.result
-        else:
-            return False, 0
+    def compare_returnScore(self, player1, player2, weak=False):
+        """Fuzzy compare playernames and return order and their score."""
+        player1, player2 = player1.strip(), player2.strip()
+        player1_notset = not player1 or player1.lower() == "tbd"
+        player2_notset = not player2 or player2.lower() == "tbd"
+        if not (player1_notset or player2_notset):
+            if(compareStr(self.player1, player1)
+               and compareStr(self.player2, player2)):
+                return True, True, self.result, -1
+            elif(compareStr(self.player1, player2)
+                 and compareStr(self.player2, player1)):
+                return True, False, -self.result, -1
+        elif weak and not (player1_notset and player2_notset):
+            if player1_notset:
+                noset_idx = 0
+            elif player2_notset:
+                noset_idx = 1
+            if((player1_notset and compareStr(self.player2, player2))
+                    or (compareStr(self.player1, player1) and player2_notset)):
+                return True, True, self.result, noset_idx
+            elif((player1_notset and compareStr(self.player1, player1))
+                    or (compareStr(self.player2, player1) and player2_notset)):
+                return True, False, -self.result, noset_idx
+
+        return False, False, 0, -1
 
     def compare_returnOrder(self, player1, player2):
         """Fuzzy compare playernames and return the correct order."""

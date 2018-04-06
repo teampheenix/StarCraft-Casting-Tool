@@ -1,6 +1,13 @@
 # Changelog
 
 
+## v1.8.11 (2018-04-06)
+
+### New
+
+* *Auto Score Update* task will now set the races when a score is automatically updated.
+
+
 ## v1.8.10 (2018-04-05)
 
 ### Fix
