@@ -392,7 +392,7 @@ class SC2MatchData:
         else:
             return False
 
-    def getPlayerRace(self, idx):
+    def getRace(self, idx):
         """Get races via index."""
         if(idx == 0):
             return self.race1

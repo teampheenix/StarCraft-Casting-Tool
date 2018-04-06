@@ -96,9 +96,8 @@ class MainController:
         self.view = view
         try:
             self.matchData.readJsonFile()
-            self.view.trigger = False
-            self.updateForms()
-            self.view.trigger = True
+            with self.view.tlock:
+                self.updateForms()
             self.setCBs()
             self.view.resizeWindow()
         except Exception as e:
@@ -413,6 +412,7 @@ class MainController:
             self.saveConfig()
             self.websocketThread.stop()
             self.autoRequestsThread.terminate()
+            self.matchData.writeJsonFile()
             scctool.settings.saveNightbotCommands()
             self.logoManager.dumpJson()
             self.historyManager.dumpJson()
@@ -442,16 +442,38 @@ class MainController:
         except Exception as e:
             module_logger.exception("message")
 
+    def setRace(self, team_idx, set_idx, race):
+        if self.matchData.setRace(team_idx, set_idx, race):
+            race_idx = scctool.settings.race2idx(race)
+            if race_idx != self.view.cb_race[team_idx][set_idx].currentIndex():
+                with self.view.tlock:
+                    self.view.cb_race[team_idx][set_idx].setCurrentIndex(
+                        race_idx)
+                    self.view.highlightOBSupdate()
+
     def requestScoreUpdate(self, newSC2MatchData):
         """Update score based on result of SC2-Client-API."""
         try:
             newscore = 0
+            for j in range(2):
+                self.historyManager.insertPlayer(
+                    newSC2MatchData.getPlayer(j), newSC2MatchData.getRace(j))
             for i in range(self.matchData.getNoSets()):
+                player1 = self.matchData.getPlayer(0, i)
+                player2 = self.matchData.getPlayer(1, i)
                 found, newscore = newSC2MatchData.compare_returnScore(
-                    self.matchData.getPlayer(0, i),
-                    self.matchData.getPlayer(1, i))
+                    player1, player2)
                 if(found and newscore != 0):
                     if(self.view.setScore(i, newscore)):
+                        _, in_order = newSC2MatchData.compare_returnOrder(
+                            player1, player2)
+                        race1 = newSC2MatchData.getRace(0)
+                        race2 = newSC2MatchData.getRace(1)
+                        if not in_order:
+                            race1, race2 = race2, race1
+                        self.setRace(0, i, race1)
+                        self.setRace(1, i, race2)
+                        self.updateOBS()
                         break
                     else:
                         continue
@@ -536,7 +558,7 @@ class MainController:
         """Update html files with team logos."""
         for idx in range(2):
             logo = getattr(self.logoManager, 'getTeam{}'.format(idx + 1))()
-            filename = scctool.settings.OBShtmlDir +\
+            filename = scctool.settings.OBShtmlDir + \
                 "/data/logo" + str(idx + 1) + "-data.html"
             template = scctool.settings.OBShtmlDir + "/data/logo-template.html"
             self.matchData._useTemplate(
@@ -600,7 +622,7 @@ class MainController:
             self.__playerIntroData[player_idx]['name'] = newData.getPlayer(
                 player_idx)
             self.__playerIntroData[player_idx]['team'] = team
-            self.__playerIntroData[player_idx]['race'] = newData.getPlayerRace(
+            self.__playerIntroData[player_idx]['race'] = newData.getRace(
                 player_idx).lower()
             self.__playerIntroData[player_idx]['logo'] = logo
             self.__playerIntroData[player_idx]['display'] = display
@@ -644,7 +666,6 @@ class MainController:
     def resetWarning(self):
         """Display or reset warning now."""
         warning = self._warning
-        # print(str(warning))
         self._warning = False
         return warning
 

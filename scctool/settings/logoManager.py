@@ -246,10 +246,10 @@ class LogoManager:
                     not (self.isUsed(name) or self.isInLastused(name))):
                 os.remove(full_fname)
                 module_logger.info("Removed logo {}".format(full_fname))
-                
+
     def hasLogoChanged(self):
         return bool(self._logo_changed)
-        
+
     def resetLogoChanged(self):
         self._logo_changed = False
 

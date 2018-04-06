@@ -38,11 +38,12 @@ class MainWindow(QMainWindow):
         try:
             super(MainWindow, self).__init__()
 
-            self.trigger = True
+            self.tlock = TriggerLock()
             self.controller = controller
             self.translator = translator
 
-            self.createFormMatchDataBox()
+            with self.tlock:
+                self.createFormMatchDataBox()
             self.createTabs()
             self.createHorizontalGroupBox()
             self.createBackgroundTasksBox()
@@ -558,7 +559,6 @@ class MainWindow(QMainWindow):
             self.raceWidth = 45
             self.labelWidth = 15
             self.mimumLineEditWidth = 130
-            self.trigger = False
 
             self.fromMatchDataBox = QGroupBox(_("Match Data"))
             layout2 = QVBoxLayout()
@@ -748,8 +748,6 @@ class MainWindow(QMainWindow):
 
         except Exception as e:
             module_logger.exception("message")
-        finally:
-            self.trigger = True
 
     def createHorizontalGroupBox(self):
         """Create horizontal group box for tasks."""
@@ -934,15 +932,14 @@ class MainWindow(QMainWindow):
         QApplication.setOverrideCursor(
             Qt.WaitCursor)
         try:
-            self.trigger = False
-            self.statusBar().showMessage(_('Applying Custom Match...'))
-            msg = self.controller.applyCustom(int(self.cb_bestof.currentText()),
-                                              self.cb_allkill.isChecked(),
-                                              self.cb_solo.isChecked(),
-                                              int(self.cb_minSets.currentText()),
-                                              self.le_url_custom.text().strip())
-            self.statusBar().showMessage(msg)
-            self.trigger = True
+            with self.tlock:
+                self.statusBar().showMessage(_('Applying Custom Match...'))
+                msg = self.controller.applyCustom(int(self.cb_bestof.currentText()),
+                                                  self.cb_allkill.isChecked(),
+                                                  self.cb_solo.isChecked(),
+                                                  int(self.cb_minSets.currentText()),
+                                                  self.le_url_custom.text().strip())
+                self.statusBar().showMessage(msg)
             self.highlightApplyCustom(False)
         except Exception as e:
             module_logger.exception("message")
@@ -954,10 +951,9 @@ class MainWindow(QMainWindow):
         QApplication.setOverrideCursor(
             Qt.WaitCursor)
         try:
-            self.trigger = False
-            msg = self.controller.resetData()
-            self.statusBar().showMessage(msg)
-            self.trigger = True
+            with self.tlock:
+                msg = self.controller.resetData()
+                self.statusBar().showMessage(msg)
         except Exception as e:
             module_logger.exception("message")
         finally:
@@ -969,11 +965,10 @@ class MainWindow(QMainWindow):
             Qt.WaitCursor)
         try:
             url = self.le_url.text()
-            self.trigger = False
-            self.statusBar().showMessage(_('Reading {}...').format(url))
-            msg = self.controller.refreshData(url)
-            self.statusBar().showMessage(msg)
-            self.trigger = True
+            with self.tlock:
+                self.statusBar().showMessage(_('Reading {}...').format(url))
+                msg = self.controller.refreshData(url)
+                self.statusBar().showMessage(msg)
         except Exception as e:
             module_logger.exception("message")
         finally:
@@ -1019,15 +1014,17 @@ class MainWindow(QMainWindow):
         """Handle click to reset the score."""
         try:
             self.statusBar().showMessage(_('Resetting Score...'))
-            self.trigger = False
-            for player_idx in range(self.max_no_sets):
-                self.sl_score[player_idx].setValue(0)
-            if myteam:
-                self.sl_team.setValue(0)
-            self.controller.updateOBS()
-            if not self.controller.resetWarning():
-                self.statusBar().showMessage('')
-            self.trigger = True
+            with self.tlock:
+                for set_idx in range(self.max_no_sets):
+                    self.sl_score[set_idx].setValue(0)
+                    self.controller.matchData.setMapScore(
+                        set_idx, 0, overwrite=True)
+                if myteam:
+                    self.sl_team.setValue(0)
+                    self.controller.matchData.setMyTeam(0)
+                self.controller.updateOBS()
+                if not self.controller.resetWarning():
+                    self.statusBar().showMessage('')
         except Exception as e:
             module_logger.exception("message")
 
@@ -1036,14 +1033,12 @@ class MainWindow(QMainWindow):
         try:
             if(self.sl_score[idx].value() == 0):
                 self.statusBar().showMessage(_('Updating Score...'))
-                self.trigger = False
-                self.sl_score[idx].setValue(score)
-                self.controller.matchData.setMapScore(idx, score, True)
-                self.controller.allkillUpdate()
-                self.controller.updateOBS()
-                if not self.controller.resetWarning():
-                    self.statusBar().showMessage('')
-                self.trigger = True
+                with self.tlock:
+                    self.sl_score[idx].setValue(score)
+                    self.controller.matchData.setMapScore(idx, score, True)
+                    self.controller.allkillUpdate()
+                    if not self.controller.resetWarning():
+                        self.statusBar().showMessage('')
                 return True
             else:
                 return False
@@ -1051,7 +1046,7 @@ class MainWindow(QMainWindow):
             module_logger.exception("message")
 
     def league_changed(self):
-        if not self.trigger:
+        if not self.tlock.trigger():
             return
         self.controller.matchData.setLeague(self.le_league.text())
         self.highlightOBSupdate()
@@ -1059,7 +1054,7 @@ class MainWindow(QMainWindow):
     def sl_changed(self, set_idx, value):
         """Handle a new score value."""
         try:
-            if(self.trigger):
+            if self.tlock.trigger():
                 if set_idx == -1:
                     self.controller.matchData.setMyTeam(value)
                 else:
@@ -1071,7 +1066,7 @@ class MainWindow(QMainWindow):
 
     def player_changed(self, team_idx, player_idx):
         """Handle a change of player names."""
-        if not self.trigger:
+        if not self.tlock.trigger():
             return
         try:
             player = self.le_player[team_idx][player_idx].text().strip()
@@ -1097,7 +1092,7 @@ class MainWindow(QMainWindow):
 
     def race_changed(self, team_idx, player_idx):
         """Handle a change of player names."""
-        if not self.trigger:
+        if not self.tlock.trigger():
             return
         player = self.le_player[team_idx][player_idx].text().strip()
         race = self.cb_race[team_idx][player_idx].currentIndex()
@@ -1116,7 +1111,7 @@ class MainWindow(QMainWindow):
             self.highlightOBSupdate()
 
     def team_changed(self, team_idx):
-        if not self.trigger:
+        if not self.tlock.trigger():
             return
         team = self.le_team[team_idx].text().strip()
         self.controller.historyManager.insertTeam(team)
@@ -1127,13 +1122,13 @@ class MainWindow(QMainWindow):
         self.sl_team.setValue(self.controller.matchData.getMyTeam())
 
     def map_changed(self, set_idx):
-        if not self.trigger:
+        if not self.tlock.trigger():
             return
         self.controller.matchData.setMap(set_idx, self.le_map[set_idx].text())
         self.highlightOBSupdate()
 
     def highlightOBSupdate(self, highlight=True, force=False):
-        if not force and not self.trigger:
+        if not force and not self.tlock.trigger():
             return
         try:
             if self.obsupdate_is_highlighted == highlight:
@@ -1155,7 +1150,7 @@ class MainWindow(QMainWindow):
         return highlight
 
     def highlightApplyCustom(self, highlight=True, force=False):
-        if not force and not self.trigger:
+        if not force and not self.tlock.trigger():
             return
         try:
             if self.applycustom_is_highlighted == highlight:
@@ -1198,3 +1193,17 @@ class MainWindow(QMainWindow):
         """Restart the main window."""
         self.close()
         self.app.exit(self.EXIT_CODE_REBOOT)
+
+
+class TriggerLock():
+    def __init__(self):
+        self.__trigger = True
+
+    def __enter__(self):
+        self.__trigger = False
+
+    def __exit__(self, type, value, traceback):
+        self.__trigger = True
+
+    def trigger(self):
+        return bool(self.__trigger)

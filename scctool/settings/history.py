@@ -45,24 +45,24 @@ class HistoryManager:
             race = race2idx(race)
         race = idx2race(race)
         for item in self.__player_history:
-            if item.get('player', '') == player:
+            if item.get('player', '').lower() == player.lower():
                 self.__player_history.remove(item)
                 if race == "Random":
                     race = item.get('race', 'Random')
                 break
         self.__player_history.insert(0, {"player": player, "race": race})
         self.enforeMaxLength("player")
-    
+
     def insertTeam(self, team):
         team = team.strip()
         if not team or team.lower() == "tbd":
             return
         for item in self.__team_history:
-            if item == team:
+            if item.lower() == team.lower():
                 self.__team_history.remove(item)
         self.__team_history.insert(0, team)
         self.enforeMaxLength("team")
-        
+
     def enforeMaxLength(self, scope=None):
         if not scope or scope == "player":
             while len(self.__player_history) > self.__max_length:
@@ -78,7 +78,7 @@ class HistoryManager:
             if player not in playerList:
                 playerList.append(player)
         return playerList
-    
+
     def getTeamList(self):
         teamList = list()
         for team in self.__team_history:
