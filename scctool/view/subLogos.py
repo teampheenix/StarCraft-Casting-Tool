@@ -237,7 +237,7 @@ class SubwindowLogos(QWidget):
             return
 
         self.refreshLastUsed()
-        
+
     def doubleClicked(self, item):
         map = item.icon().pixmap(self.iconsize)
         ident = self.controller.logoManager.pixmap2ident(map)

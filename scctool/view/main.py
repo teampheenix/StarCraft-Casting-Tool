@@ -767,16 +767,16 @@ class MainWindow(QMainWindow):
             self.pb_resetscore.clicked.connect(self.resetscore_click)
 
             self.pb_obsupdate = QPushButton(
-                _("Update OBS Data"))
+                _("Update OB&S Data"))
             self.pb_obsupdate.clicked.connect(self.updateobs_click)
             self.pb_obsupdate.setToolTip(_("Shortcut: {}").format("Ctrl+S"))
-            self.shortcut = QShortcut(QKeySequence("Ctrl+S"),self)
+            self.shortcut = QShortcut(QKeySequence("Ctrl+S"), self)
             self.shortcut.setAutoRepeat(False)
             self.shortcut.activated.connect(self.updateobs_click)
 
             self.defaultButtonPalette = self.pb_obsupdate.palette()
             self.obsupdate_is_highlighted = False
-            
+
             layout.addWidget(self.pb_twitchupdate)
             layout.addWidget(self.pb_nightbotupdate)
             layout.addWidget(self.pb_resetscore)
