@@ -1,19 +1,18 @@
 """Show subwindow with miscellaneous settings."""
 import logging
-
-from PyQt5.QtWidgets import QLabel, QWidget, QVBoxLayout, QTabWidget,\
-    QGroupBox, QHBoxLayout, QCheckBox, QComboBox, QSpacerItem, QSizePolicy,\
-    QGridLayout, QPushButton, QFileDialog, QListWidget, QMessageBox, QInputDialog,\
-    QListWidgetItem
-from PyQt5.QtCore import QPoint, Qt, QSize
-from PyQt5.QtGui import QIcon, QPixmap
-
 import os.path
+
 import humanize  # pip install humanize
+from PyQt5.QtCore import QPoint, QSize, Qt
+from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5.QtWidgets import (QCheckBox, QComboBox, QFileDialog, QGridLayout,
+                             QGroupBox, QHBoxLayout, QInputDialog, QLabel,
+                             QListWidget, QListWidgetItem, QMessageBox,
+                             QPushButton, QSizePolicy, QSpacerItem, QTabWidget,
+                             QVBoxLayout, QWidget)
 
-from scctool.view.widgets import MonitoredLineEdit, ListTable
 import scctool.settings
-
+from scctool.view.widgets import ListTable, MonitoredLineEdit
 
 # create logger
 module_logger = logging.getLogger('scctool.view.subMisc')

@@ -1,16 +1,13 @@
 """Update the twitch title to the title specified in the config file."""
 import logging
 
+import requests
+
+import scctool.settings
+import scctool.tasks.webapp
+
 # create logger
 module_logger = logging.getLogger('scctool.tasks.twitch')
-
-try:
-    import requests
-    import scctool.settings
-    import scctool.tasks.webapp
-except Exception as e:
-    module_logger.exception("message")
-    raise
 
 previousTitle = None
 

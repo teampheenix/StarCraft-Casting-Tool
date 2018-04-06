@@ -1,24 +1,17 @@
 """Interact with SC2-Client via thread."""
 import logging
+import re
+import time
+from difflib import SequenceMatcher
+
+import keyboard
+import requests
+from PyQt5.QtCore import QThread, pyqtSignal
+
+import scctool.settings
 
 # create logger
 module_logger = logging.getLogger('scctool.tasks.apithread')
-
-try:
-    from PyQt5.QtCore import QThread, pyqtSignal
-
-    import requests
-    import time
-    from difflib import SequenceMatcher
-    import re
-    import keyboard
-
-    import scctool.settings
-
-
-except Exception as e:
-    module_logger.exception("message")
-    raise
 
 if(scctool.settings.windows):
     from PIL import ImageGrab  # pip install Pillow

@@ -1,23 +1,18 @@
 """Matchdata."""
+import difflib
+import json
 import logging
+import re
+import shutil
+import time
+
+import scctool.settings
+from scctool.matchgrabber import MatchGrabber
+from scctool.matchgrabber.alpha import MatchGrabber as MatchGrabberAlpha
+from scctool.matchgrabber.rstl import MatchGrabber as MatchGrabberRSTL
 
 # create logger
 module_logger = logging.getLogger('scctool.matchdata')
-
-try:
-    import scctool.settings
-    import json
-    import re
-    import time
-    import difflib
-    import shutil
-    from scctool.matchgrabber import MatchGrabber
-    from scctool.matchgrabber.alpha import MatchGrabber as MatchGrabberAlpha
-    from scctool.matchgrabber.rstl import MatchGrabber as MatchGrabberRSTL
-
-except Exception as e:
-    module_logger.exception("message")
-    raise
 
 
 class matchData:

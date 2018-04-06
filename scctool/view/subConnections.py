@@ -1,17 +1,18 @@
 """Show connections settings sub window."""
 import logging
-
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QTabWidget, QGroupBox, QFormLayout, QSlider,\
-    QDoubleSpinBox, QLabel, QComboBox, QSpacerItem, QSizePolicy, QHBoxLayout, QLineEdit, \
-    QPushButton, QBoxLayout, QScrollArea, QMessageBox
-from PyQt5.QtCore import Qt, QSize, QPoint
-from PyQt5.QtGui import QIcon
-
-from scctool.view.widgets import MonitoredLineEdit, Completer, HotkeyLayout
-import scctool.settings
+import weakref
 
 import keyboard
-import weakref
+from PyQt5.QtCore import QPoint, QSize, Qt
+from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import (QBoxLayout, QComboBox, QDoubleSpinBox,
+                             QFormLayout, QGroupBox, QHBoxLayout, QLabel,
+                             QLineEdit, QMessageBox, QPushButton, QScrollArea,
+                             QSizePolicy, QSlider, QSpacerItem, QTabWidget,
+                             QVBoxLayout, QWidget)
+
+import scctool.settings
+from scctool.view.widgets import Completer, HotkeyLayout, MonitoredLineEdit
 
 # create logger
 module_logger = logging.getLogger('scctool.view.subConnections')

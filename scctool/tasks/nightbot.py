@@ -1,16 +1,12 @@
 """Update Nightbot commands."""
 import logging
 
+import requests
+
+import scctool.settings
+
 # create logger
 module_logger = logging.getLogger('scctool.tasks.nightbot')
-
-try:
-    import requests
-    import scctool.settings
-
-except Exception as e:
-    module_logger.exception("message")
-    raise
 
 
 def base_headers():

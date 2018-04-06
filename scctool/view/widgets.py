@@ -1,24 +1,25 @@
 """Define PyQt5 widgets."""
 import logging
-
-from PyQt5.QtWidgets import QLineEdit, QComboBox, QProgressDialog, QApplication,\
-    QProgressBar, QHBoxLayout, QLabel, QPushButton, QColorDialog, QSizePolicy, \
-    QStyleOptionButton, QStyle, QHeaderView, QTableWidget, \
-    QTableWidgetItem, QCompleter, QFrame, QTextBrowser
-from PyQt5.QtCore import pyqtSignal, Qt, QSize, QPoint, QVariant, QDataStream
-from PyQt5.QtGui import QColor, QPainter
-
-import scctool.matchdata
-import scctool.settings.config
-import scctool.tasks.updater
-
 import os
 import re
 import shutil
 import time
-import requests
+
 import humanize
 import keyboard
+import requests
+from PyQt5.QtCore import QMimeData, QPoint, QSize, Qt, pyqtSignal
+from PyQt5.QtGui import QColor, QDrag, QIcon, QPainter
+from PyQt5.QtWidgets import (QApplication, QColorDialog, QComboBox, QCompleter,
+                             QFrame, QHBoxLayout, QHeaderView, QLabel,
+                             QLineEdit, QListWidget, QListWidgetItem,
+                             QProgressBar, QProgressDialog, QPushButton,
+                             QSizePolicy, QStyle, QStyleOptionButton,
+                             QTableWidget, QTableWidgetItem, QTextBrowser)
+
+import scctool.matchdata
+import scctool.settings.config
+import scctool.tasks.updater
 
 # create logger
 module_logger = logging.getLogger('scctool.view.widgets')
@@ -561,6 +562,58 @@ class InitialUpdater(QProgressDialog):
             module_logger.exception("message")
 
 
+class DragDropLogoList(QListWidget):
+    def __init__(self, logoManager, addIdent=lambda: None):
+        super(QListWidget, self).__init__()
+        self.setViewMode(QListWidget.IconMode)
+        self.setIconSize(QSize(75, 75))
+        self.setMaximumHeight(160)
+        self.setDragEnabled(True)
+        self._logoManager = logoManager
+        self._iconsize = scctool.settings.logoManager.Logo._iconsize
+        self._addIdent = addIdent
+
+    def dragEnterEvent(self, e):
+        data = e.mimeData()
+        if(data.hasFormat("application/x-qabstractitemmodeldatalist")
+                and e.source() != self):
+            e.accept()
+        elif data.hasFormat("logo/ident"):
+            e.accept()
+        else:
+            e.ignore()
+
+    def dragMoveEvent(self, e):
+        data = e.mimeData()
+        if(data.hasFormat("application/x-qabstractitemmodeldatalist")
+                or data.hasFormat("logo/ident")):
+            e.setDropAction(Qt.CopyAction)
+            e.accept()
+        else:
+            e.ignore()
+
+    def dropEvent(self, e):
+        data = e.mimeData()
+        if(data.hasFormat("application/x-qabstractitemmodeldatalist")
+                and e.source() != self):
+            item = e.source().currentItem()
+            map = item.icon().pixmap(self._iconsize)
+            ident = self._logoManager.pixmap2ident(map)
+        elif data.hasFormat("logo/ident"):
+            ident = data.text()
+            map = e.source().pixmap()
+        else:
+            return
+        logo = self._logoManager.findLogo(ident)
+        item = QListWidgetItem(
+            QIcon(map), logo.getDesc())
+
+        if self._addIdent(ident):
+            self.addItem(item)
+        else:
+            print("Not adding")
+
+
 class DragImageLabel(QLabel):
 
     def __init__(self, parent, logo, team=0):
@@ -568,6 +621,7 @@ class DragImageLabel(QLabel):
 
         self._parent = parent
         self._team = team
+        self._ident = ""
 
         self._iconsize = logo._iconsize
         self._logomanager = logo._manager
@@ -581,53 +635,58 @@ class DragImageLabel(QLabel):
 
     def setLogo(self, logo):
         self.setPixmap(logo.provideQPixmap())
+        self._ident = logo.getIdent()
 
     def dragEnterEvent(self, e):
         data = e.mimeData()
         if data.hasFormat("application/x-qabstractitemmodeldatalist"):
             e.accept()
+        elif data.hasFormat("logo/ident") and e.source() != self:
+            e.accept()
         else:
             e.ignore()
 
+        return
+
     def dropEvent(self, e):
-        item = e.source().currentItem()
-        map = item.icon().pixmap(self._iconsize)
-        ident = self._logomanager.pixmap2ident(map)
-        logo = self._logomanager.findLogo(ident)
-        if self._team == 1:
-            self._logomanager.setTeam1Logo(logo)
-        elif self._team == 2:
-            self._logomanager.setTeam1Logo(logo)
-        self.setPixmap(map)
-        self._parent.refreshLastUsed()
-        # result = self.decodeMimeData(e.mimeData().data(
-        #     "application/x-qabstractitemmodeldatalist"))
-        # map = result[0][1].pixmap(self._iconsize)
-        # self.setPixmap(map)
+        data = e.mimeData()
+        if data.hasFormat("application/x-qabstractitemmodeldatalist"):
+            item = e.source().currentItem()
+            map = item.icon().pixmap(self._iconsize)
+            ident = self._logomanager.pixmap2ident(map)
+            logo = self._logomanager.findLogo(ident)
+            if self._team == 1:
+                self._logomanager.setTeam1Logo(logo)
+            elif self._team == 2:
+                self._logomanager.setTeam1Logo(logo)
+            self.setPixmap(map)
+            self._ident = ident
+            self._parent.refreshLastUsed()
+        elif data.hasFormat("logo/ident") and e.source() != self:
+            ident = data.text()
+            map = e.source().pixmap()
+            logo = self._logomanager.findLogo(ident)
+            if self._team == 1:
+                self._logomanager.setTeam1Logo(logo)
+            elif self._team == 2:
+                self._logomanager.setTeam1Logo(logo)
+            self._ident = ident
+            self.setPixmap(map)
+            self._parent.refreshLastUsed()
 
-        # if self._team == 1:
-        #     ident = self._logomanager.pixmap2ident(map)
-        #     print("Ident: ", ident)
-        #     logo = self._logomanager.findLogo(ident)
-        #     self._logomanager.setTeam1Logo(logo)
-        # elif self._team == 2:
-        #     ident = self._logomanager.pixmap2ident(map)
-        #     logo = self._logomanager.findLogo(ident)
-        #     self._logomanager.setTeam2Logo(logo)
+    def mousePressEvent(self, event):
+        mimeData = QMimeData()
+        b = bytearray()
+        b.extend(self._ident.encode())
+        mimeData.setData('logo/ident', b)
+        mimeData.setText(self._ident)
 
-    def decodeMimeData(self, data):
-        result = {}
-        value = QVariant()
-        stream = QDataStream(data)
-        while not stream.atEnd():
-            stream.readInt32()
-            col = stream.readInt32()
-            item = result.setdefault(col, {})
-            for role in range(stream.readInt32()):
-                key = Qt.ItemDataRole(stream.readInt32())
-                stream >> value
-                item[key] = value.value()
-        return result
+        drag = QDrag(self)
+        drag.setPixmap(self.pixmap())
+        drag.setMimeData(mimeData)
+        drag.setHotSpot(event.pos() - self.rect().topLeft())
+
+        drag.exec(Qt.CopyAction | Qt.CopyAction, Qt.CopyAction)
 
 
 class TextPreviewer(QTextBrowser):

@@ -1,14 +1,15 @@
 """Show readme sub window."""
 import logging
-
-from PyQt5.QtWidgets import QWidget, QGridLayout, QPushButton, QSpacerItem, \
-    QSizePolicy, QTextBrowser
-from PyQt5.QtCore import QSize, QPoint
-from PyQt5.QtGui import QIcon
+import re
 
 import markdown2
+from PyQt5.QtCore import QPoint, QSize
+from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import (QGridLayout, QPushButton, QSizePolicy,
+                             QSpacerItem, QTextBrowser, QWidget)
+
 import scctool.settings
-import re
+
 # create logger
 module_logger = logging.getLogger('scctool.view.subMarkdown')
 

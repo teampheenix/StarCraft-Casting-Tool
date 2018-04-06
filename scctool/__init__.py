@@ -1,12 +1,14 @@
 """StarCraft Casting Tool."""
 
-import sys
-import logging
 import gettext
+import logging
+import sys
+
+from PyQt5.QtCore import QLocale, QTranslator
+from PyQt5.QtWidgets import QApplication, QStyleFactory
+
 import scctool.settings
 import scctool.settings.config
-from PyQt5.QtWidgets import QApplication, QStyleFactory
-from PyQt5.QtCore import QTranslator, QLocale
 from scctool.settings import getAbsPath
 
 logger = logging.getLogger('scctool')

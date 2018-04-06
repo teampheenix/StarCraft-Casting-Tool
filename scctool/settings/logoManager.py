@@ -289,6 +289,9 @@ class Logo:
         self._size = 0
         self._ident = "0"
 
+    def getIdent(self):
+        return self._ident
+
     def generateIdentifier(self):
         while True:
             self._ident = self._uniqid()

@@ -1,36 +1,30 @@
 """Control all other modules."""
 import logging
+import os
+import shutil
+import sys
+import webbrowser
+
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import QCheckBox, QMessageBox
+
+import scctool.settings
+import scctool.tasks.nightbot
+import scctool.tasks.twitch
+from scctool.matchdata import matchData
+from scctool.settings.history import HistoryManager
+from scctool.settings.logoManager import LogoManager
+from scctool.settings.placeholders import PlaceholderList
+from scctool.tasks.apithread import SC2ApiThread, ToggleScore
+from scctool.tasks.autorequests import AutoRequestsThread
+from scctool.tasks.updater import VersionHandler
+from scctool.tasks.webapp import FlaskThread
+from scctool.tasks.websocket import WebsocketThread
+from scctool.view.widgets import ToolUpdater
 
 # create logger
 module_logger = logging.getLogger('scctool.controller')
-
-try:
-    from scctool.matchdata import matchData
-    from scctool.tasks.apithread import SC2ApiThread, ToggleScore
-    from scctool.tasks.webapp import FlaskThread
-    from scctool.settings.placeholders import PlaceholderList
-    from scctool.tasks.websocket import WebsocketThread
-    from scctool.tasks.autorequests import AutoRequestsThread
-    from scctool.tasks.updater import VersionHandler
-    from scctool.view.widgets import ToolUpdater
-    from scctool.settings.logoManager import LogoManager
-    from scctool.settings.history import HistoryManager
-    import scctool.settings
-    import scctool.tasks.twitch
-    import scctool.tasks.nightbot
-    import webbrowser
-    import os
-    import sys
-    import shutil
-
-    from PyQt5.QtWidgets import QMessageBox, QCheckBox
-    from PyQt5.QtCore import Qt
-    from PyQt5.QtGui import QIcon
-
-
-except Exception as e:
-    module_logger.exception("message")
-    raise
 
 
 class MainController:

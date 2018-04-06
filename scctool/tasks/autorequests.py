@@ -1,12 +1,12 @@
 """Sent request to Nightbot and Twitch if needed."""
 import logging
+
 from PyQt5.QtCore import pyqtSignal
 
-from scctool.tasks.tasksthread import TasksThread
-
 import scctool.settings
-import scctool.tasks.twitch
 import scctool.tasks.nightbot
+import scctool.tasks.twitch
+from scctool.tasks.tasksthread import TasksThread
 
 # create logger
 module_logger = logging.getLogger('scctool.tasks.autorequests')

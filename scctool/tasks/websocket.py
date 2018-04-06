@@ -1,21 +1,16 @@
 """Interaction with Browser Source via Websocket."""
+import asyncio
+import json
 import logging
+
+import keyboard
+import websockets
+from PyQt5.QtCore import QThread
+
+import scctool.settings
 
 # create logger
 module_logger = logging.getLogger('scctool.tasks.websocket')
-
-try:
-    import asyncio
-    import websockets
-    import json
-    import keyboard
-    import scctool.settings
-    from PyQt5.QtCore import QThread
-
-except Exception as e:
-
-    module_logger.exception("message")
-    raise
 
 
 class WebsocketThread(QThread):

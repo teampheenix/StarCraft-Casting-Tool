@@ -47,10 +47,11 @@ class SubwindowLiquipediaSearch(QWidget):
         searchButton.clicked.connect(self.search)
         mainLayout.addWidget(searchButton, 0, 2)
 
-        box = QGroupBox(_("Results"))
+        self.box = QGroupBox(_("Results"))
         layout = QHBoxLayout()
         self.result_list = QListWidget()
         self.result_list.setViewMode(QListWidget.IconMode)
+        self.result_list.itemDoubleClicked.connect(self.doubleClicked)
         self.result_list.setContextMenuPolicy(
             Qt.CustomContextMenu)
         self.result_list.customContextMenuRequested.connect(
@@ -62,9 +63,9 @@ class SubwindowLiquipediaSearch(QWidget):
         self.result_list.setAcceptDrops(False)
         self.result_list.setDragEnabled(False)
         layout.addWidget(self.result_list)
-        box.setLayout(layout)
+        self.box.setLayout(layout)
 
-        mainLayout.addWidget(box, 1, 0, 1, 3)
+        mainLayout.addWidget(self.box, 1, 0, 1, 3)
 
         selectButton = QPushButton(
             " " + _("Use Selected Logo") + " ")
@@ -102,7 +103,8 @@ class SubwindowLiquipediaSearch(QWidget):
         try:
             self.result_list.clear()
             idx = 0
-            for name, thumb in search_liquipedia(self.qle_search.text()):
+            search_str = self.qle_search.text()
+            for name, thumb in search_liquipedia(search_str):
                 self.data[idx] = name
                 name = name.replace('/commons/File:', '')
                 self.results[idx] = QListWidgetItem(
@@ -117,6 +119,7 @@ class SubwindowLiquipediaSearch(QWidget):
                 if idx == 0:
                     self.result_list.setCurrentItem(self.results[idx])
                 idx += 1
+            self.box.setTitle(_("Results for '{}': {}").format(search_str, idx))
         except Exception as e:
             module_logger.exception("message")
         finally:
@@ -142,6 +145,20 @@ class SubwindowLiquipediaSearch(QWidget):
 
                     self.downloadLogo(base_url + image)
                     break
+
+        self.close()
+    
+    def doubleClicked(self, item):
+        for idx, iteritem in self.results.items():
+            if item is iteritem:
+                images = get_liquipedia_image(self.data[idx])
+                image = ""
+                for size in sorted(images):
+                    if not image or size <= 600 * 600:
+                        image = images[size]
+
+                self.downloadLogo(base_url + image)
+                break
 
         self.close()
 

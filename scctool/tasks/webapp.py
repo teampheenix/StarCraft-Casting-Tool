@@ -1,16 +1,15 @@
 """Flask app for outflow with APIs."""
+import base64
 import logging
+import urllib
+from uuid import uuid4
+
+from flask import Flask, abort, request  # pip install flask
+from PyQt5 import QtCore
 
 # create logger
 module_logger = logging.getLogger('scctool.tasks.webapp')
-
 try:
-    import urllib
-    import base64
-    from PyQt5 import QtCore
-    from flask import Flask, abort, request  # pip install flask
-    from uuid import uuid4
-
     NIGHTBOT_CLIENT_ID = base64.b64decode(
         b'YzEyMGE5YWQ0MjM3MGNmNTViYzFhNjA5ZjFjYTM0Y2E=').decode("utf8")
     NIGHTBOT_REDIRECT_URI = "http://localhost:65010/nightbot_callback"

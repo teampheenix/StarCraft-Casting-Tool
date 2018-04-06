@@ -19,7 +19,7 @@ StarCraft Casting Tool (SCC Tool) is a small program written in Python 3 that ca
 ## Feature List
 
 * **Match Grabber** for [AlphaTL](http://alpha.tl/) and [RSTL](http://hdgame.net/en/tournaments/list/tournament/rstl-12/)
-* **Custom Match Format**: Bo1-Bo9, allkill format
+* **Custom Match Format**: Bo1-Bo9, All-Kill format, 1vs1
 * Two sets of **Map Icons**: Box and Landscape in `OBS_mapicons/icons_box` and `OBS_mapicons/icons_landscape`
 * **Scoreboard** including team icons in `OBS_html`
 * **Animated Player Intros** in `OBS_html` including playername & race via SC2-Client, team with logo via SCC Tool
@@ -50,7 +50,7 @@ This tool should run on any operating system that supports Python 3, e.g., Windo
 
 ### Executable with Updater
 
-**Only Windows: [Download the latest executable](https://github.com/teampheenix/StarCraft-Casting-Tool/releases/latest)** `StarCraft-Casting-Tool.exe`, place it in an preferable empty folder folder with *sufficient write-privileges* and execute it. After the first start a subfolder structure is generated and all additional data is downloaded - do not move or alter this data structure relative to the executable.
+**Only Windows: [Download the latest executable](https://github.com/teampheenix/StarCraft-Casting-Tool/releases/latest)** `StarCraft-Casting-Tool.exe`, place it in a preferable empty folder folder with *sufficient write-privileges* and execute it. After the first start a subfolder structure is generated and all additional data is downloaded - do not move or alter this data structure relative to the executable.
 
 ### Alternativ: Python Script
 

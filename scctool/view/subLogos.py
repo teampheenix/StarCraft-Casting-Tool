@@ -2,15 +2,17 @@
 import logging
 import re
 
-from PyQt5.QtWidgets import QWidget, QGridLayout, QGroupBox, QPushButton, QVBoxLayout,\
-    QHBoxLayout, QListWidget, QListWidgetItem, QSpacerItem, QSizePolicy, QMenu, QFileDialog, \
-    QErrorMessage, QInputDialog, QLineEdit, QMessageBox
-from PyQt5.QtCore import QMutex, Qt, QSize, QPoint
+from PyQt5.QtCore import QMutex, QPoint, QSize, Qt
 from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import (QErrorMessage, QFileDialog, QGridLayout,
+                             QGroupBox, QHBoxLayout, QInputDialog, QLineEdit,
+                             QListWidgetItem, QMenu, QMessageBox, QPushButton,
+                             QSizePolicy, QSpacerItem, QVBoxLayout, QWidget)
 
 import scctool.settings
 from scctool.view.subLiquipediaSearch import SubwindowLiquipediaSearch
-from scctool.view.widgets import DragImageLabel, LogoDownloader
+from scctool.view.widgets import (DragDropLogoList, DragImageLabel,
+                                  LogoDownloader)
 
 # create logger
 module_logger = logging.getLogger('scctool.view.subLogos')
@@ -108,9 +110,9 @@ class SubwindowLogos(QWidget):
 
         box = QGroupBox(_("Favorites"))
         layout = QHBoxLayout()
-        self.fav_list = QListWidget()
+        self.fav_list = DragDropLogoList(
+            self.controller.logoManager, self.controller.logoManager.addFavorite)
         self.fav_list.itemDoubleClicked.connect(self.doubleClicked)
-        self.fav_list.setViewMode(QListWidget.IconMode)
         self.fav_list.setContextMenuPolicy(Qt.CustomContextMenu)
         self.fav_list.customContextMenuRequested.connect(
             self.listItemRightClickedFav)
@@ -120,12 +122,8 @@ class SubwindowLogos(QWidget):
             item = QListWidgetItem(
                 QIcon(map), logo.getDesc())
             self.fav_list.addItem(item)
-        self.fav_list.setIconSize(QSize(75, 75))
-        self.fav_list.setMaximumHeight(160)
-        # list.setWrapping(False)
-        # list.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.fav_list.setAcceptDrops(False)
-        self.fav_list.setDragEnabled(True)
+
+        self.fav_list.setAcceptDrops(True)
         layout.addWidget(self.fav_list)
         box.setLayout(layout)
 
@@ -133,17 +131,13 @@ class SubwindowLogos(QWidget):
 
         box = QGroupBox(_("Last Used"))
         layout = QHBoxLayout()
-        self.lastused_list = QListWidget()
+        self.lastused_list = DragDropLogoList(self.controller.logoManager)
         self.lastused_list.itemDoubleClicked.connect(self.doubleClicked)
-        self.lastused_list.setViewMode(QListWidget.IconMode)
         self.lastused_list.setContextMenuPolicy(
             Qt.CustomContextMenu)
         self.lastused_list.customContextMenuRequested.connect(
             self.listItemRightClickedLastUsed)
-        self.lastused_list.setIconSize(QSize(75, 75))
-        self.lastused_list.setMaximumHeight(160)
         self.lastused_list.setAcceptDrops(False)
-        self.lastused_list.setDragEnabled(True)
         self.refreshLastUsed()
         layout.addWidget(self.lastused_list)
 

@@ -1,14 +1,15 @@
 """Show styles settings sub window."""
 import logging
 
-from PyQt5.QtWidgets import QWidget, QTabWidget, QVBoxLayout, QSizePolicy, QSpacerItem,\
-    QHBoxLayout, QLabel, QPushButton, QFormLayout, QGridLayout, QCheckBox,\
-    QComboBox, QMessageBox
-from PyQt5.QtCore import Qt, QSize, QPoint
-from PyQt5.QtGui import QIcon, QFontDatabase
+from PyQt5.QtCore import QPoint, QSize, Qt
+from PyQt5.QtGui import QFontDatabase, QIcon
+from PyQt5.QtWidgets import (QCheckBox, QComboBox, QFormLayout, QGridLayout,
+                             QHBoxLayout, QLabel, QMessageBox, QPushButton,
+                             QSizePolicy, QSpacerItem, QTabWidget, QVBoxLayout,
+                             QWidget)
 
-from scctool.view.widgets import StyleComboBox, ColorLayout, TextPreviewer
 import scctool.settings
+from scctool.view.widgets import ColorLayout, StyleComboBox, TextPreviewer
 
 # create logger
 module_logger = logging.getLogger('scctool.view.subStyles')

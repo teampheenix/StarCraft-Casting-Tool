@@ -1,16 +1,18 @@
 """Get info about latest version and download it in the background."""
 
-from scctool.settings.client_config import ClientConfig
-from pyupdater.client import Client
-import scctool
+import json
 import logging
 import os
-import zipfile
-import sys
-import json
 import shutil
+import sys
 import tarfile
+import zipfile
+
 from PyQt5.QtCore import pyqtSignal
+from pyupdater.client import Client
+
+import scctool
+from scctool.settings.client_config import ClientConfig
 from scctool.tasks.tasksthread import TasksThread
 
 module_logger = logging.getLogger('scctool.tasks.updater')

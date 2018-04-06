@@ -1,28 +1,26 @@
 """Define the main window."""
+import gettext
 import logging
-# import PyQt5
-# from QtWidgets import *
-# from QtCore import *
-# from QtGui import *
-from PyQt5.QtWidgets import QLineEdit, QVBoxLayout, QWidget, QMessageBox, QMainWindow,\
-    QAction, QCompleter, QPushButton, QHBoxLayout, QLabel, QFormLayout, QComboBox,\
-    QCheckBox, QTabWidget, QSlider, QSizePolicy, QGroupBox, QGridLayout, QSpacerItem, \
-    QApplication, QShortcut
-from PyQt5.QtCore import QSettings, QTranslator, QLocale, Qt
-from PyQt5.QtGui import QIcon, QPalette, QKeySequence
+
+import markdown2
+from PyQt5.QtCore import QLocale, QSettings, Qt, QTranslator
+from PyQt5.QtGui import QIcon, QKeySequence, QPalette
+from PyQt5.QtWidgets import (QAction, QApplication, QCheckBox, QComboBox,
+                             QCompleter, QFormLayout, QGridLayout, QGroupBox,
+                             QHBoxLayout, QLabel, QLineEdit, QMainWindow,
+                             QMessageBox, QPushButton, QShortcut, QSizePolicy,
+                             QSlider, QSpacerItem, QTabWidget, QVBoxLayout,
+                             QWidget)
 
 import scctool.settings
 import scctool.settings.config
-import markdown2
-import gettext
-
-from scctool.view.widgets import BusyProgressBar, MapLineEdit, \
-    IconPushButton, MonitoredLineEdit
 from scctool.view.subConnections import SubwindowConnections
-from scctool.view.subStyles import SubwindowStyles
-from scctool.view.subMisc import SubwindowMisc
-from scctool.view.subMarkdown import SubwindowMarkdown
 from scctool.view.subLogos import SubwindowLogos
+from scctool.view.subMarkdown import SubwindowMarkdown
+from scctool.view.subMisc import SubwindowMisc
+from scctool.view.subStyles import SubwindowStyles
+from scctool.view.widgets import (BusyProgressBar, IconPushButton, MapLineEdit,
+                                  MonitoredLineEdit)
 
 # create logger
 module_logger = logging.getLogger('scctool.view.main')
