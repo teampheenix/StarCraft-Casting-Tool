@@ -5,6 +5,14 @@
 
 ### New
 
+* Favorites or Last Used icons can be dragged and dropped to the team icon.
+
+* Added `CTRL+S` shortcut for *Update OBS Data*.
+
+* Double click on a logo in the logo manager will set it as a team logo.
+
+* *Auto Score Update* task will now detect the score even if one player name is missing and update the missing name accordingly.
+
 * *Auto Score Update* task will now set the races when a score is automatically updated.
 
 
