@@ -5,6 +5,10 @@
 
 ### New
 
+* Added completer for Liquipedia logo search.
+
+* All logos can be dragged and dropped in the logo manager.
+
 * Favorites or Last Used icons can be dragged and dropped to the team icon.
 
 * Added `CTRL+S` shortcut for *Update OBS Data*.
