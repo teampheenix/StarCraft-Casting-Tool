@@ -1,18 +1,19 @@
 """Show readme sub window."""
 import logging
-import requests
-import urllib.parse
 import re
-import scctool.settings
+import urllib.parse
 
-from PyQt5.QtWidgets import QWidget, QGroupBox, QSpacerItem, QSizePolicy,\
-    QHBoxLayout, QLineEdit, QPushButton, QGridLayout, QListWidget, QApplication, \
-    QListWidgetItem, QMenu
-from PyQt5.QtCore import Qt, QSize, QPoint, QUrl
-from PyQt5.QtGui import QIcon, QPixmap, QImage
-from PyQt5.QtNetwork import QNetworkAccessManager, QNetworkRequest
+import requests
 from bs4 import BeautifulSoup
+from PyQt5.QtCore import QPoint, QSize, Qt, QUrl
+from PyQt5.QtGui import QIcon, QImage, QPixmap
+from PyQt5.QtNetwork import QNetworkAccessManager, QNetworkRequest
+from PyQt5.QtWidgets import (QApplication, QCompleter, QGridLayout, QGroupBox,
+                             QHBoxLayout, QLineEdit, QListWidget,
+                             QListWidgetItem, QMenu, QPushButton, QSizePolicy,
+                             QSpacerItem, QWidget)
 
+import scctool.settings
 from scctool.view.widgets import LogoDownloader
 
 # create logger
@@ -42,6 +43,14 @@ class SubwindowLiquipediaSearch(QWidget):
         self.qle_search = QLineEdit(placeholder)
         self.qle_search.setAlignment(Qt.AlignCenter)
         self.qle_search.returnPressed.connect(self.search)
+        completer = QCompleter(scctool.settings.config.getMyTeams() +
+                               self.controller.historyManager.getTeamList(), self.qle_search)
+        completer.setCaseSensitivity(Qt.CaseInsensitive)
+        completer.setCompletionMode(
+            QCompleter.UnfilteredPopupCompletion)
+        completer.setWrapAround(True)
+        self.qle_search.setCompleter(completer)
+
         mainLayout.addWidget(self.qle_search, 0, 0, 1, 2)
         searchButton = QPushButton(_("Search"))
         searchButton.clicked.connect(self.search)
@@ -119,7 +128,8 @@ class SubwindowLiquipediaSearch(QWidget):
                 if idx == 0:
                     self.result_list.setCurrentItem(self.results[idx])
                 idx += 1
-            self.box.setTitle(_("Results for '{}': {}").format(search_str, idx))
+            self.box.setTitle(
+                _("Results for '{}': {}").format(search_str, idx))
         except Exception as e:
             module_logger.exception("message")
         finally:
@@ -147,7 +157,7 @@ class SubwindowLiquipediaSearch(QWidget):
                     break
 
         self.close()
-    
+
     def doubleClicked(self, item):
         for idx, iteritem in self.results.items():
             if item is iteritem:
