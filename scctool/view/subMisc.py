@@ -99,6 +99,15 @@ class SubwindowMisc(QWidget):
 
         box = QGroupBox(_("Set Ingame Score Task"))
         layout = QVBoxLayout()
+        
+        self.cb_ctrlx = QCheckBox(
+            " " + _('Automatically press Ctrl+X to apply the correct player order ingame.'))
+        self.cb_ctrlx.setToolTip(
+            _("This will ensure that the player of the first team is always on the left/top in the ingame Observer UI."))
+        self.cb_ctrlx.setChecked(
+            scctool.settings.config.parser.getboolean("SCT", "CtrlX"))
+        self.cb_ctrlx.stateChanged.connect(self.changed)
+        layout.addWidget(self.cb_ctrlx)
 
         self.cb_ctrln = QCheckBox(
             " " + _('Automatically press Ctrl+N before OCR to display player names.'))
@@ -465,6 +474,8 @@ class SubwindowMisc(QWidget):
                 "SCT", "CtrlShiftC", str(self.cb_ctrlshiftc.isChecked()))
             scctool.settings.config.parser.set(
                 "SCT", "CtrlN", str(self.cb_ctrln.isChecked()))
+            scctool.settings.config.parser.set(
+                "SCT", "CtrlX", str(self.cb_ctrlx.isChecked()))
             scctool.settings.config.parser.set(
                 "SCT", "CtrlShiftR", str(self.cb_ctrlshiftr.currentText()))
 

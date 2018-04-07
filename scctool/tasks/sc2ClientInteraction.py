@@ -11,7 +11,7 @@ from PyQt5.QtCore import QThread, pyqtSignal
 import scctool.settings
 
 # create logger
-module_logger = logging.getLogger('scctool.tasks.apithread')
+module_logger = logging.getLogger('scctool.tasks.sc2ClientInteraction')
 
 if(scctool.settings.windows):
     from PIL import ImageGrab  # pip install Pillow
@@ -56,6 +56,11 @@ def TogglePlayerNames():
     """Toggle Score ahead of OCR."""
     if scctool.settings.config.parser.getboolean("SCT", "CtrlN"):
         keyboard.send("ctrl+n")
+
+
+def SwapPlayerNames():
+    """Toggle Score ahead of OCR."""
+    keyboard.send("ctrl+x")
 
 
 def ToggleProduction():
@@ -203,7 +208,7 @@ class SC2ApiThread(QThread):
                     # print("SC2 not on foreground... waiting.")
                     time.sleep(0.1)
         except Exception:
-            module_logger.info("Toggle not working on this OS:")
+            module_logger.info("Toggle not working on this OS.")
 
     def swapPlayers(self, data):
         """Detect if players are swapped relative to SC2-Client-API data via ocr."""
@@ -213,58 +218,80 @@ class SC2ApiThread(QThread):
 
             # Don't use OCR if the score is tied.
             score = self.controller.matchData.getScore()
-            if(score[0] == score[1]):
+            if(score[0] == score[1]
+               and not scctool.settings.config.parser.getboolean("SCT", "CtrlX")):
                 return False
 
             pytesseract.pytesseract.tesseract_cmd = scctool.settings.config.getTesserAct()
 
             players = data.getPlayerList()
-            full_img = ImageGrab.grab()
-            width, height = full_img.size
-            positions = [None, None]
-            ratios = [0.0, 0.0]
-            img = full_img.crop((int(width * 0.1), int(height * 0.8),
-                                 int(width * 0.5), height))
-            text = pytesseract.image_to_string(img)
-            items = re.split(r'\s+', text)
+            full_img = ImageGrab.grab().convert('L')
 
-            threshold = 0.35
-            for item_idx, item in enumerate(items):
-                for player_idx, player in enumerate(players):
-                    ratio = SequenceMatcher(
-                        None, item.lower(), player.lower()).ratio()
-                    if(ratio >= max(threshold, ratios[player_idx])):
-                        positions[player_idx] = item_idx
-                        ratios[player_idx] = ratio
-                        module_logger.info("Player {} at postion {}".format(
-                            player_idx, item_idx))
-
-            if None in positions:  # Retry with full image.
-                positions = [None, None]
-                ratios = [0.0, 0.0]
-                text = pytesseract.image_to_string(full_img)
-                items = re.split(r'\s+', text)
-
-                threshold = 0.35
-                for item_idx, item in enumerate(items):
-                    for player_idx, player in enumerate(players):
-                        ratio = SequenceMatcher(
-                            None, item.lower(), player.lower()).ratio()
-                        if(ratio >= max(threshold, ratios[player_idx])):
-                            positions[player_idx] = item_idx
-                            ratios[player_idx] = ratio
-                            module_logger.info("Player {} at postion {}".format(
-                                player_idx, item_idx))
-
-            if None in positions:
-                return False
-            elif(positions[0] > positions[1]):
-                return True
+            crop_regions = []
+            if scctool.settings.config.parser.getboolean("SCT", "CtrlN"):
+                crop_regions.append((0.3, 0.7, 0.0, 0.08))
+                crop_regions.append((0.3, 0.7, 0.0, 0.14))
+                crop_regions.append((0.12, 0.35, 0.88, 1.0))
+                crop_regions.append((0.1, 0.4, 0.8, 1.0))
             else:
-                return False
+                crop_regions.append((0.12, 0.35, 0.88, 1.0))
+                crop_regions.append((0.1, 0.4, 0.8, 1.0))
+                crop_regions.append((0.3, 0.7, 0.0, 0.08))
+
+            crop_regions.append((0.0, 1.0, 0.0, 1.0))
+
+            for crop_region in crop_regions:
+                img = cropImage(full_img, crop_region)
+                found, swap = ocr(players, img)
+                if found:
+                    break
+
+            if found:
+                module_logger.info("OCR was successfull.")
+
+            return swap
+
         except Exception as e:
             module_logger.exception("message")
             return False
+
+
+def ocr(players, img):
+    crop_text = pytesseract.image_to_string(img, config='--psm 3 --oem 0')
+    items = re.split(r'\s+', crop_text)
+    threshold = 0.35
+    ratios = [0.0, 0.0]
+    positions = [None, None]
+    regex = re.compile(r"<[^>]+>")
+    for item_idx, item in enumerate(items):
+        item = regex.sub("", item)
+        for player_idx, player in enumerate(players):
+            ratio = SequenceMatcher(None, item.lower(), player.lower()).ratio()
+            if(ratio >= max(threshold, ratios[player_idx])):
+                positions[player_idx] = item_idx
+                ratios[player_idx] = ratio
+
+    found = ratios[0] > 0.0 and ratios[1] > 0.0
+
+    if found:
+        if(positions[0] > positions[1]):
+            return True, True
+        else:
+            return True, False
+    else:
+        return False, False
+
+
+def cropImage(full_img, crop_region):
+    x1, x2, y1, y2 = crop_region
+    width, height = full_img.size
+    if x1 != 0.0 and x2 == 1.0 and y1 == 0.0 and y2 == 1.0:
+        return full_img
+    else:
+        return full_img.crop((int(width * x1),
+                              int(height * y1),
+                              int(width * x2),
+                              int(height * y2)))
 
 
 def isSC2onForeground():

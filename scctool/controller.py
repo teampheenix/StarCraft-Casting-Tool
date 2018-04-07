@@ -16,8 +16,9 @@ from scctool.matchdata import matchData
 from scctool.settings.history import HistoryManager
 from scctool.settings.logoManager import LogoManager
 from scctool.settings.placeholders import PlaceholderList
-from scctool.tasks.apithread import SC2ApiThread, ToggleScore
 from scctool.tasks.autorequests import AutoRequestsThread
+from scctool.tasks.sc2ClientInteraction import (SC2ApiThread, SwapPlayerNames,
+                                                ToggleScore)
 from scctool.tasks.updater import VersionHandler
 from scctool.tasks.webapp import FlaskThread
 from scctool.tasks.websocket import WebsocketThread
@@ -564,8 +565,13 @@ class MainController:
                         ToggleScore(score[0], score[1],
                                     self.matchData.getBestOf())
                     else:
-                        ToggleScore(score[1], score[0],
-                                    self.matchData.getBestOf())
+                        if scctool.settings.config.parser.getboolean("SCT", "CtrlX"):
+                            SwapPlayerNames()
+                            ToggleScore(score[0], score[1],
+                                        self.matchData.getBestOf())
+                        else:
+                            ToggleScore(score[1], score[0],
+                                        self.matchData.getBestOf())
 
                     return
 
