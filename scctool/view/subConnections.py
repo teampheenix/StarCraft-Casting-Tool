@@ -4,12 +4,12 @@ import weakref
 
 import keyboard
 from PyQt5.QtCore import QPoint, QSize, Qt
-from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import QIcon, QKeySequence
 from PyQt5.QtWidgets import (QBoxLayout, QComboBox, QDoubleSpinBox,
                              QFormLayout, QGroupBox, QHBoxLayout, QLabel,
                              QLineEdit, QMessageBox, QPushButton, QScrollArea,
-                             QSizePolicy, QSlider, QSpacerItem, QTabWidget,
-                             QVBoxLayout, QWidget)
+                             QShortcut, QSizePolicy, QSlider, QSpacerItem,
+                             QTabWidget, QVBoxLayout, QWidget)
 
 import scctool.settings
 from scctool.view.widgets import Completer, HotkeyLayout, MonitoredLineEdit
@@ -300,7 +300,11 @@ class SubwindowConnections(QWidget):
             buttonCancel.clicked.connect(self.closeWindow)
             layout.addWidget(buttonCancel)
 
-            buttonSave = QPushButton(_('Save && Close'))
+            buttonSave = QPushButton(_('&Save && Close'))
+            buttonSave.setToolTip(_("Shortcut: {}").format("Ctrl+S"))
+            self.shortcut = QShortcut(QKeySequence("Ctrl+S"), self)
+            self.shortcut.setAutoRepeat(False)
+            self.shortcut.activated.connect(self.saveCloseWindow)
             buttonSave.clicked.connect(self.saveCloseWindow)
             layout.addWidget(buttonSave)
 

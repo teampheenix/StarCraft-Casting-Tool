@@ -2,11 +2,11 @@
 import logging
 
 from PyQt5.QtCore import QPoint, QSize, Qt
-from PyQt5.QtGui import QFontDatabase, QIcon
+from PyQt5.QtGui import QFontDatabase, QIcon, QKeySequence
 from PyQt5.QtWidgets import (QCheckBox, QComboBox, QFormLayout, QGridLayout,
                              QHBoxLayout, QLabel, QMessageBox, QPushButton,
-                             QSizePolicy, QSpacerItem, QTabWidget, QVBoxLayout,
-                             QWidget)
+                             QShortcut, QSizePolicy, QSpacerItem, QTabWidget,
+                             QVBoxLayout, QWidget)
 
 import scctool.settings
 from scctool.view.widgets import ColorLayout, StyleComboBox, TextPreviewer
@@ -78,7 +78,11 @@ class SubwindowStyles(QWidget):
             buttonCancel.clicked.connect(self.closeWindow)
             layout.addWidget(buttonCancel)
 
-            buttonSave = QPushButton(_('Save && Close'))
+            buttonSave = QPushButton(_('&Save && Close'))
+            buttonSave.setToolTip(_("Shortcut: {}").format("Ctrl+S"))
+            self.shortcut = QShortcut(QKeySequence("Ctrl+S"), self)
+            self.shortcut.setAutoRepeat(False)
+            self.shortcut.activated.connect(self.saveCloseWindow)
             buttonSave.clicked.connect(self.saveCloseWindow)
             layout.addWidget(buttonSave)
 

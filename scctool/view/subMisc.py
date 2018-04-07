@@ -4,12 +4,12 @@ import os.path
 
 import humanize  # pip install humanize
 from PyQt5.QtCore import QPoint, QSize, Qt
-from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5.QtGui import QIcon, QKeySequence, QPixmap
 from PyQt5.QtWidgets import (QCheckBox, QComboBox, QFileDialog, QGridLayout,
                              QGroupBox, QHBoxLayout, QInputDialog, QLabel,
                              QListWidget, QListWidgetItem, QMessageBox,
-                             QPushButton, QSizePolicy, QSpacerItem, QTabWidget,
-                             QVBoxLayout, QWidget)
+                             QPushButton, QShortcut, QSizePolicy, QSpacerItem,
+                             QTabWidget, QVBoxLayout, QWidget)
 
 import scctool.settings
 from scctool.view.widgets import ListTable, MonitoredLineEdit
@@ -99,11 +99,12 @@ class SubwindowMisc(QWidget):
 
         box = QGroupBox(_("Set Ingame Score Task"))
         layout = QVBoxLayout()
-        
+
         self.cb_ctrlx = QCheckBox(
             " " + _('Automatically press Ctrl+X to apply the correct player order ingame.'))
         self.cb_ctrlx.setToolTip(
-            _("This will ensure that the player of the first team is always on the left/top in the ingame Observer UI."))
+            _("This will ensure that the player of the first team is always"
+              " on the left/top in the ingame Observer UI."))
         self.cb_ctrlx.setChecked(
             scctool.settings.config.parser.getboolean("SCT", "CtrlX"))
         self.cb_ctrlx.stateChanged.connect(self.changed)
@@ -447,7 +448,11 @@ class SubwindowMisc(QWidget):
             buttonCancel.clicked.connect(self.closeWindow)
             layout.addWidget(buttonCancel)
 
-            buttonSave = QPushButton(_('Save && Close'))
+            buttonSave = QPushButton(_('&Save && Close'))
+            buttonSave.setToolTip(_("Shortcut: {}").format("Ctrl+S"))
+            self.shortcut = QShortcut(QKeySequence("Ctrl+S"), self)
+            self.shortcut.setAutoRepeat(False)
+            self.shortcut.activated.connect(self.saveCloseWindow)
             buttonSave.clicked.connect(self.saveCloseWindow)
             layout.addWidget(buttonSave)
 

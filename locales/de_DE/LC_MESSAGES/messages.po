@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2018-04-06 17:22+0200\n"
-"PO-Revision-Date: 2018-04-06 17:23+0200\n"
+"POT-Creation-Date: 2018-04-07 19:36+0200\n"
+"PO-Revision-Date: 2018-04-07 19:38+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de\n"
@@ -14,190 +14,190 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: controller.py:79
+#: controller.py:74
 msgid "This version is up to date."
 msgstr "Diese Version ist aktuell."
 
-#: controller.py:531 controller.py:539
+#: controller.py:526 controller.py:534
 msgid "Specify your Twitch Settings to use this feature"
 msgstr "Geben Sie Ihre Twitch-Einstellungen an, um diese Funktion zu verwenden"
 
-#: controller.py:534
+#: controller.py:529
 msgid ""
 "Automatically update the title of your twitch channel in the background."
 msgstr "Automatische Hintergrund-Aktualisierung des Twitch Titel."
 
-#: controller.py:545 controller.py:552
+#: controller.py:540 controller.py:547
 msgid "Specify your Nightbot Settings to use this feature"
 msgstr "Geben Sie Ihre Nightbot-Einstellungen an, um diese Funktion zu nutzen"
 
-#: controller.py:546
+#: controller.py:541
 msgid "Automatically update the commands of your nightbot in the background."
 msgstr "Automatische Hintergrund-Aktualisierung der Nightbot Kommandos."
 
-#: controller.py:671
+#: controller.py:681
 msgid "Warning: Map '{}' not found!"
 msgstr "Warnung: Karte '{}' nicht gefunden!"
 
-#: controller.py:711
+#: controller.py:721
 msgid "A new version {} is available."
 msgstr "Eine neue Version {} ist verfügbar."
 
-#: controller.py:713
+#: controller.py:723
 msgid "Update to new version?"
 msgstr "Auf die neue Version aktualisieren?"
 
-#: controller.py:714
+#: controller.py:724
 msgid "New SCC-Tool Version"
 msgstr "Neue SCC-Tool Version"
 
-#: controller.py:723
+#: controller.py:733
 msgid "Don't show on startup."
 msgstr "Nicht mehr beim Programm-Start zeigen."
 
-#: controller.py:732
+#: controller.py:742
 msgid "A new version {} is available on GitHub!"
 msgstr "Die neue Version {} ist bei GitHub verfügbar!"
 
-#: tasks/nightbot.py:43 tasks/nightbot.py:105 tasks/twitch.py:47
+#: tasks/nightbot.py:39 tasks/nightbot.py:101 tasks/twitch.py:44
 msgid "Forbidden - Do you have permission?"
 msgstr "Nicht erlaubt - Rechte vorhanden?"
 
-#: tasks/nightbot.py:45 tasks/nightbot.py:107 tasks/twitch.py:49
+#: tasks/nightbot.py:41 tasks/nightbot.py:103 tasks/twitch.py:46
 msgid "Unauthorized - Refresh your token!"
 msgstr "Nicht autorisiert - Erneure deinen Token!"
 
-#: tasks/nightbot.py:47 tasks/nightbot.py:109 tasks/twitch.py:51
+#: tasks/nightbot.py:43 tasks/nightbot.py:105 tasks/twitch.py:48
 msgid "Too Many Requests."
 msgstr "Zu viele Anfragen."
 
-#: tasks/nightbot.py:64
+#: tasks/nightbot.py:60
 msgid "Nightbot command '{}' was already set to '{}'"
 msgstr "Nightbot Kommando '{}' war bereits auf '{}' gesetzt"
 
-#: tasks/nightbot.py:94
+#: tasks/nightbot.py:90
 msgid "Deleted command '{}'"
 msgstr "Kommando '{}' gelöscht"
 
-#: tasks/nightbot.py:96
+#: tasks/nightbot.py:92
 msgid "Updated Nightbot command '{}' to '{}'"
 msgstr "Nightbot Kommand '{}' auf '{}' aktualisiert"
 
-#: tasks/twitch.py:35
+#: tasks/twitch.py:32
 msgid "Updated Twitch title of {} to: \"{}\""
 msgstr "Aktualisiere Twitch Titel von {} auf \"{}\""
 
-#: tasks/twitch.py:44
+#: tasks/twitch.py:41
 msgid "Not Found - Channel '{}' not found."
 msgstr "Nicht gefunden - Kanal '{}' nicht gefunden."
 
-#: tasks/updater.py:270
+#: tasks/updater.py:272
 msgid "Updated data files!"
 msgstr "Daten aktualisiert!"
 
-#: tasks/webapp.py:140
+#: tasks/webapp.py:139
 msgid ""
 "scctool: Succesfully recived access to Nightbot - you can close this tab now."
 msgstr ""
 "scctool: Erfolgreich Zugangs zu Nightbot erhalten - dieses Tab kann nun "
 "geschlossen werden."
 
-#: tasks/webapp.py:160
+#: tasks/webapp.py:159
 msgid ""
 "scctool: Succesfully recived access to Twitch - you can close this tab now."
 msgstr ""
 "scctool: Erfolgreich Zugangs zu Twitch erhalten - dieses Tab kann nun "
 "geschlossen werden."
 
-#: view/main.py:107
+#: view/main.py:105
 msgid "StarCraft Casting Tool is up to date."
 msgstr "StarCraft Casting Tool ist aktuell."
 
-#: view/main.py:109
+#: view/main.py:107
 msgid "The new version {} is available!"
 msgstr "Die neue Version {} ist verfügbar!"
 
-#: view/main.py:115
+#: view/main.py:113
 msgid "StarCraft Casting Tool - About"
 msgstr "StarCraft Casting Tool - Über"
 
-#: view/main.py:137
+#: view/main.py:135
 msgid "Settings"
 msgstr "Einstellungen"
 
-#: view/main.py:139 view/subConnections.py:56
+#: view/main.py:137 view/subConnections.py:57
 msgid "Connections"
 msgstr "Verbinndungen"
 
-#: view/main.py:141
+#: view/main.py:139
 msgid "Edit Intro-Settings and API-Settings for Twitch and Nightbot"
 msgstr "Editiere Intro- und API-Einstellungen für Twitch und Nightbot"
 
-#: view/main.py:145 view/subStyles.py:40
+#: view/main.py:143 view/subStyles.py:41
 msgid "Styles"
 msgstr "Stil"
 
-#: view/main.py:150
+#: view/main.py:148
 msgid "Misc"
 msgstr "Verschiedenes"
 
-#: view/main.py:155
+#: view/main.py:153
 msgid "Info && Links"
 msgstr "Info && Links"
 
-#: view/main.py:158
+#: view/main.py:156
 msgid "About"
 msgstr "Über"
 
-#: view/main.py:163 view/main.py:266
+#: view/main.py:161 view/main.py:264
 msgid "Readme"
 msgstr "Liesmich"
 
-#: view/main.py:168
+#: view/main.py:166
 msgid "Check for new version"
 msgstr "Auf eine neue Version prüfen"
 
-#: view/main.py:173 view/main.py:273
+#: view/main.py:171 view/main.py:271
 msgid "Changelog"
 msgstr "Änderungsprotokoll"
 
-#: view/main.py:208
+#: view/main.py:206
 msgid "Donate"
 msgstr "Spenden"
 
-#: view/main.py:213
+#: view/main.py:211
 msgid "Language"
 msgstr "Sprache"
 
-#: view/main.py:305
+#: view/main.py:303
 msgid "Match Grabber for AlphaTL && RSTL"
 msgstr "Partie-Kralle für AlphaTL && RSTL"
 
-#: view/main.py:306
+#: view/main.py:304
 msgid "Custom Match"
 msgstr "Benutzerdefinierte Partie"
 
-#: view/main.py:330
+#: view/main.py:328
 msgid "Open in Browser"
 msgstr "Im Browser öffnen"
 
-#: view/main.py:340 view/main.py:456
+#: view/main.py:338 view/main.py:454
 msgid "Match-URL:"
 msgstr "Partie-URL:"
 
-#: view/main.py:373
+#: view/main.py:371
 msgid "Load Data from URL"
 msgstr "Daten von URL laden"
 
-#: view/main.py:391
+#: view/main.py:389
 msgid "Match Format:"
 msgstr "Partie-Format:"
 
-#: view/main.py:395
+#: view/main.py:393
 msgid "Best of"
 msgstr "Best of"
 
-#: view/main.py:401
+#: view/main.py:399
 msgid ""
 "\"Best of 6/4\": First, a Bo5/3 is played and the ace map gets extended to a "
 "Bo3 if needed; Best of 2: Bo3 with only two maps played."
@@ -206,113 +206,114 @@ msgstr ""
 "Entscheidungs-Partie benötigt wird, wird diese zu einem Bo3 ausgeweitet; "
 "Best of 2: Bo3, wobei nur zwei Karten gespielt werden."
 
-#: view/main.py:409
+#: view/main.py:407
 msgid " but at least"
 msgstr " aber mind."
 
-#: view/main.py:414
+#: view/main.py:412
 msgid "Minimum number of maps played (even if the match is decided already)"
 msgstr ""
 "Mindestanzahl an Karten die gespielt werden (selbst, wenn die Partie schon "
 "entschieden ist)"
 
-#: view/main.py:418
+#: view/main.py:416
 msgid "maps"
 msgstr "Karten"
 
-#: view/main.py:422
+#: view/main.py:420
 msgid "All-Kill Format"
 msgstr "All-Kill Format"
 
-#: view/main.py:425
+#: view/main.py:423
 msgid "Winner stays and is automatically placed into the next set"
 msgstr "Gewinner bleibt und wir automatisch in das nächste Set plaziert"
 
-#: view/main.py:429
+#: view/main.py:427
 msgid "1vs1"
 msgstr "1vs1"
 
-#: view/main.py:432
+#: view/main.py:430
 msgid "Select for solo (non-team matches)"
 msgstr "Für Solo-Spiele auswählen"
 
-#: view/main.py:443
+#: view/main.py:441
 msgid "Apply Format"
 msgstr "Format anwenden"
 
-#: view/main.py:463
+#: view/main.py:461
 msgid "Optionally specify the Match-URL, e.g., for Nightbot commands"
 msgstr "Gib optional eine URL, z.B. für Nightbot Kommandos an"
 
-#: view/main.py:465
+#: view/main.py:463
 msgid "Specify the Match-URL of your Custom Match"
 msgstr "Gib die URL deiner benutzerdefinierten Partie an"
 
-#: view/main.py:483
+#: view/main.py:481
 msgid "Reset Match Data"
 msgstr "Daten zurücksetzten"
 
-#: view/main.py:563
+#: view/main.py:561
 msgid "Match Data"
 msgstr "Daten der Partie"
 
-#: view/main.py:629
+#: view/main.py:627
 msgid "Choose your team"
 msgstr "Wähle dein Team"
 
-#: view/main.py:645
+#: view/main.py:643
 msgid "League:"
 msgstr "Liga:"
 
-#: view/main.py:655
+#: view/main.py:653
 msgid "Maps \\ Teams:"
 msgstr "Karten \\ Teams:"
 
-#: view/main.py:686
+#: view/main.py:684
 msgid "Player {} of team {}"
 msgstr "Spieler {} von Team {}"
 
-#: view/main.py:706
+#: view/main.py:704
 msgid "Set the score"
 msgstr "Änder das Ergebnis"
 
-#: view/main.py:713
+#: view/main.py:711
 msgid "Map {}"
 msgstr "Karte {}"
 
-#: view/main.py:755
+#: view/main.py:753
 msgid "Tasks"
 msgstr "Aufgaben"
 
-#: view/main.py:759
+#: view/main.py:757
 msgid "Update Twitch Title"
 msgstr "Aktualisiere Twitch Titel"
 
-#: view/main.py:763
+#: view/main.py:761
 msgid "Update Nightbot"
 msgstr "Aktualisere Nightbot"
 
-#: view/main.py:766
+#: view/main.py:764
 msgid "Reset Score"
 msgstr "Setze Ergebnisse zurück"
 
-#: view/main.py:770
+#: view/main.py:768
 msgid "Update OB&S Data"
 msgstr "Aktualisiere OB&S-Daten"
 
-#: view/main.py:772
+#: view/main.py:770 view/subConnections.py:304 view/subMisc.py:452
+#: view/subStyles.py:82
 msgid "Shortcut: {}"
-msgstr ""
+msgstr "Tastenkürzel: {}"
 
-#: view/main.py:793
+#: view/main.py:791
 msgid "Background Tasks"
 msgstr "Hintergrund-Aufgaben"
 
-#: view/main.py:796
+#: view/main.py:794
 msgid "Auto Score Update"
 msgstr "Auto Ergebnis Aktual."
 
-#: view/main.py:798
+#: view/main.py:796
 msgid ""
 "Automatically detects the outcome of SC2 matches that are played/observed in "
 "your SC2-client and updates the score accordingly."
@@ -321,339 +322,356 @@ msgstr ""
 "gespielt oder beobachtet werden, und aktualisiert den Spielstand "
 "entsprechend."
 
-#: view/main.py:804
+#: view/main.py:802
 msgid "Provide Player Intros"
 msgstr "Stelle Spieler-Intros bereit"
 
-#: view/main.py:807
+#: view/main.py:805
 msgid "Update player intros files via SC2-Client-API"
 msgstr "Aktualisiere die Player-Intro Dateien via SC2-Client API"
 
-#: view/main.py:811
+#: view/main.py:809
 msgid "Set Ingame Score"
 msgstr "Setzte Spielstand im Spiel"
 
-#: view/main.py:813
+#: view/main.py:811
 msgid ""
 "Automatically sets the score of your ingame UI-interface at the begining of "
 "a game."
 msgstr ""
 "Setzt automatisch den Spielstand des UI-Interface zu Beginn einer Partie."
 
-#: view/main.py:820
+#: view/main.py:818
 msgid "Toggle Production Tab"
 msgstr "Produktions-Tab einblenden"
 
-#: view/main.py:822
+#: view/main.py:820
 msgid ""
 "Automatically toggles the production tab of your ingame UI-interface at the "
 "begining of a game."
 msgstr "Zeigt automatisch das Produktions-Tab zu Beginn eines Spieles an."
 
-#: view/main.py:829
+#: view/main.py:827
 msgid "Auto Twitch Update"
 msgstr "Auto Twitch Aktual."
 
-#: view/main.py:834
+#: view/main.py:832
 msgid "Auto Nightbot Update"
 msgstr "Auto Nightbot Aktual."
 
-#: view/main.py:843 view/main.py:847
+#: view/main.py:841 view/main.py:845
 msgid "Only Windows"
 msgstr "Nur für Windows verfügbar"
 
-#: view/main.py:932
+#: view/main.py:930
 msgid "Applying Custom Match..."
 msgstr "Wende benutzerdefinierte Partie an..."
 
-#: view/main.py:965
+#: view/main.py:963
 msgid "Reading {}..."
 msgstr "Lese {}..."
 
-#: view/main.py:984
+#: view/main.py:982
 msgid "Updating Nightbot Command..."
 msgstr "Aktulisiere Nightbot Kommando..."
 
-#: view/main.py:993
+#: view/main.py:991
 msgid "Updating Twitch Title..."
 msgstr "Aktualisiere Twitch Titel..."
 
-#: view/main.py:1002
+#: view/main.py:1000
 msgid "Updating OBS Data..."
 msgstr "Aktualisiere OBS-Daten..."
 
-#: view/main.py:1012
+#: view/main.py:1010
 msgid "Resetting Score..."
 msgstr "Setze Ergebnisse zurück..."
 
-#: view/main.py:1031
+#: view/main.py:1029
 msgid "Updating Score..."
 msgstr "Aktualisiere Ergebnisstand..."
 
-#: view/subConnections.py:70
+#: view/subConnections.py:71
 msgid "Intros && Hotkeys"
 msgstr "Intros && Tastenkürzel"
 
-#: view/subConnections.py:71
+#: view/subConnections.py:72
 msgid "Twitch"
 msgstr "Twitch"
 
-#: view/subConnections.py:72
+#: view/subConnections.py:73
 msgid "Nightbot"
 msgstr "Nightbot"
 
-#: view/subConnections.py:94
+#: view/subConnections.py:95
 msgid "Intro Hotkeys"
 msgstr "Intros Tastenkürzel"
 
-#: view/subConnections.py:102
+#: view/subConnections.py:103
 msgid "Player 1"
 msgstr "Spieler 1"
 
-#: view/subConnections.py:103
+#: view/subConnections.py:104
 msgid "Player 2"
 msgstr "Spieler 2"
 
-#: view/subConnections.py:104
+#: view/subConnections.py:105
 msgid "Debug"
 msgstr "Debug"
 
-#: view/subConnections.py:109
+#: view/subConnections.py:110
 msgid "Intro Settings"
 msgstr "Intro Einstellungen"
 
-#: view/subConnections.py:120
+#: view/subConnections.py:121
 msgid "Sound Volume:"
 msgstr "Lautstärke"
 
-#: view/subConnections.py:126
+#: view/subConnections.py:127
 msgid "Seconds"
 msgstr "Sekunden"
 
-#: view/subConnections.py:129
+#: view/subConnections.py:130
 msgid "Display Duration:"
 msgstr "Anzeigedauer:"
 
-#: view/subConnections.py:141
+#: view/subConnections.py:142
 msgid "Animation:"
 msgstr "Animation:"
 
-#: view/subConnections.py:160
+#: view/subConnections.py:161
 msgid "Name of the Twitch channel that should be updated"
 msgstr "Name des Twitch-Kanal der aktualisiert werden soll"
 
-#: view/subConnections.py:162
+#: view/subConnections.py:163
 msgid "The connected twitch user needs to have editor rights for this channel."
 msgstr ""
 "Der verbundene Twitch-Benutzer muss Editoren-Rechte für den angegeben Kanal "
 "haben."
 
-#: view/subConnections.py:174 view/subConnections.py:231
+#: view/subConnections.py:175 view/subConnections.py:232
 msgid "Press 'Get' to generate a token"
 msgstr "Drücke 'Erzeugen' um einen Token zu generieren"
 
-#: view/subConnections.py:176
+#: view/subConnections.py:177
 msgid "Press 'Get' to generate a new token."
 msgstr "Drücke 'Erzeugen' um einen neuen Token zu generieren."
 
-#: view/subConnections.py:179 view/subConnections.py:235
+#: view/subConnections.py:180 view/subConnections.py:236
 msgid "Get"
 msgstr "Erzeugen"
 
-#: view/subConnections.py:184
+#: view/subConnections.py:185
 msgid "Access-Token:"
 msgstr "Zugangs-Token:"
 
-#: view/subConnections.py:195 view/subConnections.py:403
+#: view/subConnections.py:196 view/subConnections.py:408
 msgid "Available placeholders:"
 msgstr "Verfügbare Platzhalter:"
 
-#: view/subConnections.py:205 view/subConnections.py:411
+#: view/subConnections.py:206 view/subConnections.py:416
 msgid "Test"
 msgstr "Testen"
 
-#: view/subConnections.py:211
+#: view/subConnections.py:212
 msgid "Title Template:"
 msgstr "Titel Vorlage:"
 
-#: view/subConnections.py:233
+#: view/subConnections.py:234
 msgid "Press 'Get' to generate a token."
 msgstr "Drücke 'Erzeugen' um einen Token zu generieren."
 
-#: view/subConnections.py:267
+#: view/subConnections.py:268
 msgid "Add Command"
 msgstr "Kommando hinzufügen"
 
-#: view/subConnections.py:298 view/subLiquipediaSearch.py:72
-#: view/subMisc.py:438 view/subStyles.py:76
+#: view/subConnections.py:299 view/subLiquipediaSearch.py:82
+#: view/subMisc.py:447 view/subStyles.py:77
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: view/subConnections.py:302 view/subMisc.py:442 view/subStyles.py:80
-msgid "Save && Close"
-msgstr "Speichern && Schließen"
+#: view/subConnections.py:303 view/subMisc.py:451 view/subStyles.py:81
+msgid "&Save && Close"
+msgstr "&Speichern && Schließen"
 
-#: view/subConnections.py:364 view/subMisc.py:494 view/subStyles.py:308
+#: view/subConnections.py:369 view/subMisc.py:509 view/subStyles.py:313
 msgid "Save data?"
 msgstr "Daten speichern?"
 
-#: view/subConnections.py:364
+#: view/subConnections.py:369
 msgid "Do you want to save the data?"
 msgstr "Möchten Sie die Daten speichern?"
 
-#: view/subConnections.py:378 view/subConnections.py:455
+#: view/subConnections.py:383 view/subConnections.py:460
 msgid "Output:"
 msgstr "Ausgabe:"
 
-#: view/subConnections.py:401
+#: view/subConnections.py:406
 msgid "message, e.g.,"
 msgstr "Nachricht, z.B."
 
-#: view/subConnections.py:416
+#: view/subConnections.py:421
 msgid "Delete"
 msgstr "Löschen"
 
-#: view/subLiquipediaSearch.py:46
+#: view/subLiquipediaSearch.py:55
 msgid "Search"
 msgstr "Suchen"
 
-#: view/subLiquipediaSearch.py:50
+#: view/subLiquipediaSearch.py:59
 msgid "Results"
 msgstr "Ergebnisse "
 
-#: view/subLiquipediaSearch.py:70
+#: view/subLiquipediaSearch.py:80
 msgid "Use Selected Logo"
 msgstr "Verwendet ausgewähltes Logo"
 
-#: view/subLiquipediaSearch.py:81
+#: view/subLiquipediaSearch.py:91
 msgid "Liqupedia Image Search"
 msgstr "Liqupedia Bild Suche"
 
-#: view/subLiquipediaSearch.py:150
+#: view/subLiquipediaSearch.py:132
+msgid "Results for '{}': {}"
+msgstr "Ergebnisse für '{}': {}"
+
+#: view/subLiquipediaSearch.py:177
 msgid "Open on Liquipedia"
 msgstr "Auf Liquipedia öffnen"
 
-#: view/subLiquipediaSearch.py:152
+#: view/subLiquipediaSearch.py:179
 msgid "Use as Team Logo"
 msgstr "Als Team Logo verwenden"
 
-#: view/subLogos.py:38
+#: view/subLogos.py:40
 msgid "Logo Team 1"
 msgstr "Logo Team 1"
 
-#: view/subLogos.py:43 view/subLogos.py:90
+#: view/subLogos.py:45 view/subLogos.py:92
 msgid "Load from File"
 msgstr "Aus Datei laden"
 
-#: view/subLogos.py:46 view/subLogos.py:93
+#: view/subLogos.py:48 view/subLogos.py:95
 msgid "Load from URL"
 msgstr "Von URL laden"
 
-#: view/subLogos.py:49 view/subLogos.py:96
+#: view/subLogos.py:51 view/subLogos.py:98
 msgid "Search Liquipedia"
 msgstr "Auf Liquipedia suchen"
 
-#: view/subLogos.py:53 view/subLogos.py:100 view/subLogos.py:196
+#: view/subLogos.py:55 view/subLogos.py:102 view/subLogos.py:190
 msgid "Add to Favorites"
 msgstr "Zu Favoriten hinzufügen"
 
-#: view/subLogos.py:56 view/subLogos.py:103 view/subMisc.py:306
+#: view/subLogos.py:58 view/subLogos.py:105 view/subMisc.py:315
 msgid "Remove"
 msgstr "Löschen"
 
-#: view/subLogos.py:84
+#: view/subLogos.py:86
 msgid "Logo Team 2"
 msgstr "Logo Team 2"
 
-#: view/subLogos.py:109 view/subMisc.py:74
+#: view/subLogos.py:111 view/subMisc.py:73
 msgid "Favorites"
 msgstr "Favoriten"
 
-#: view/subLogos.py:134
+#: view/subLogos.py:132
 msgid "Last Used"
 msgstr "Zuletzt verwendet"
 
-#: view/subLogos.py:158 view/subMarkdown.py:30
+#: view/subLogos.py:152 view/subMarkdown.py:31
 msgid "&OK"
 msgstr "&OK"
 
-#: view/subLogos.py:166
+#: view/subLogos.py:160
 msgid "Logo Manager"
 msgstr "Logo Manager"
 
-#: view/subLogos.py:178 view/subLogos.py:190
+#: view/subLogos.py:172 view/subLogos.py:184
 msgid "Set Team 1 Logo"
 msgstr "Als Team 1 Logo setzen"
 
-#: view/subLogos.py:180 view/subLogos.py:193
+#: view/subLogos.py:174 view/subLogos.py:187
 msgid "Set Team 2 Logo"
 msgstr "Als Team 2 Logo setzen"
 
-#: view/subLogos.py:182
+#: view/subLogos.py:176
 msgid "Remove from Favorites"
 msgstr "Von Favoriten löschen"
 
-#: view/subLogos.py:309
+#: view/subLogos.py:303
 msgid "Select Team Logo"
 msgstr "Wähle das Team Logo aus"
 
-#: view/subLogos.py:310 view/subMisc.py:359 view/subMisc.py:371
+#: view/subLogos.py:304 view/subMisc.py:368 view/subMisc.py:380
 msgid "Supported Images"
 msgstr "Unterstütze Bild-Formate"
 
-#: view/subLogos.py:343
+#: view/subLogos.py:337
 msgid "Logo from URL"
 msgstr "Logo aus URL"
 
-#: view/subLogos.py:344
+#: view/subLogos.py:338
 msgid "URL of Team Logo"
 msgstr "URL des Teamlogos"
 
-#: view/subLogos.py:350
+#: view/subLogos.py:344
 msgid "{} is not a valid URL."
 msgstr "{} ist keine gültige URL"
 
-#: view/subMisc.py:58
+#: view/subMisc.py:57
 msgid "Miscellaneous Settings"
 msgstr "Verschiedene Einstellungen"
 
-#: view/subMisc.py:73
+#: view/subMisc.py:72
 msgid "Map Manager"
 msgstr "Karten Manager"
 
-#: view/subMisc.py:75
+#: view/subMisc.py:74
 msgid "OCR"
 msgstr "OCR"
 
-#: view/subMisc.py:76
+#: view/subMisc.py:75
 msgid "AlphaTL && Ingame Score"
 msgstr "AlphaTL && Ingame Spielstand"
 
-#: view/subMisc.py:87
+#: view/subMisc.py:86
 msgid "AlphaTL"
 msgstr "AlphaTL"
 
-#: view/subMisc.py:91
+#: view/subMisc.py:90
 msgid "Download transparent Banner of the Match"
 msgstr "Transparentes Match Banner herunterladen"
 
-#: view/subMisc.py:101
+#: view/subMisc.py:100
 msgid "Set Ingame Score Task"
 msgstr "Setzte Spielstand im Spiel"
 
-#: view/subMisc.py:105
+#: view/subMisc.py:104
+msgid "Automatically press Ctrl+X to apply the correct player order ingame."
+msgstr ""
+"Drücke automatisch Strg+X um die Spieler in korrekter Ordnung anzuzeigen."
+
+#: view/subMisc.py:106
+msgid ""
+"This will ensure that the player of the first team is always on the left/top "
+"in the ingame Observer UI."
+msgstr ""
+"Dies stellt sicher, dass der Spieler des ersten Teams immer links bzw. "
+"rechts im Observer UI steht."
+
+#: view/subMisc.py:114
 msgid "Automatically press Ctrl+N before OCR to display player names."
 msgstr "Drücke automatisch Strg+N, um die Spielernamen anzuzeigen."
 
-#: view/subMisc.py:107
+#: view/subMisc.py:116
 msgid "This is recommended for Standard and Gawliq Observer UI."
 msgstr "Diese Option ist für das Standard und Gawliq Observer UI empfohlen."
 
-#: view/subMisc.py:114
+#: view/subMisc.py:123
 msgid "Automatically press Ctrl+Shift+S to display the ingame score"
 msgstr "Drücke automatisch Strg+Shift+S, um den Spielstand im Spiel anzuzeigen"
 
-#: view/subMisc.py:116
+#: view/subMisc.py:125
 msgid ""
 "Ctrl+Shift+S is needed for the WCS-Gameheart Oberserver Overlay, but "
 "disables the sound for other overlays."
@@ -661,43 +679,43 @@ msgstr ""
 "Strg+Shift+S wird für das WCS-GameHeart Overlay benötigt, aber deaktiviert "
 "den Ton bei Verwendung anderer Overlays."
 
-#: view/subMisc.py:124
+#: view/subMisc.py:133
 msgid "Automatically press Ctrl+Shift+C to toogle the clan tag"
 msgstr "Drücke automatisch Strg+Shift+C, um den Clantag auszublenden"
 
-#: view/subMisc.py:143
+#: view/subMisc.py:152
 msgid "Automatically press Ctrl+Shift+R to toogle the race icon "
 msgstr "Drücke automatisch Strg+Shift+R "
 
-#: view/subMisc.py:145
+#: view/subMisc.py:154
 msgid " time(s)"
 msgstr " mal, um das Rasse-Icon zu wechseln"
 
-#: view/subMisc.py:162
+#: view/subMisc.py:171
 msgid "Players"
 msgstr "Spieler"
 
-#: view/subMisc.py:174
+#: view/subMisc.py:183
 msgid "Teams"
 msgstr "Teams"
 
-#: view/subMisc.py:197
+#: view/subMisc.py:206
 msgid "Optical Character Recognition for Automatic Setting of Ingame Score"
 msgstr "Optische Zeichenerkennung zum automatischen Setzen des Spielstandes"
 
-#: view/subMisc.py:202
+#: view/subMisc.py:211
 msgid "Activate Optical Character Recognition"
 msgstr "Optische Zeichenerkennung aktivieren"
 
-#: view/subMisc.py:215 view/subMisc.py:238 view/subMisc.py:268
+#: view/subMisc.py:224 view/subMisc.py:247 view/subMisc.py:277
 msgid "Tesseract-OCR Executable"
 msgstr "Tesseract-OCR Programmdatei"
 
-#: view/subMisc.py:217
+#: view/subMisc.py:226
 msgid "Browse..."
 msgstr "Durchsuchen..."
 
-#: view/subMisc.py:220
+#: view/subMisc.py:229
 msgid ""
 "Sometimes the order of players given by the SC2-Client-API differs from the "
 "order in the Observer-UI resulting in a swapped match score. To correct this "
@@ -710,96 +728,96 @@ msgstr ""
 "{} heruntergeladen, installiert und unten ausgewählt werden, sofern nicht "
 "automatisch geschehen."
 
-#: view/subMisc.py:252 view/subMisc.py:256 view/subMisc.py:260
+#: view/subMisc.py:261 view/subMisc.py:265 view/subMisc.py:269
 msgid "This feature is only available in Windows."
 msgstr "Nur für Windows verfügbar."
 
-#: view/subMisc.py:267
+#: view/subMisc.py:276
 msgid "Select Tesseract-OCR Executable"
 msgstr "Tesseract-OCR Programmdatei auswählen"
 
-#: view/subMisc.py:269
+#: view/subMisc.py:278
 msgid "Executable"
 msgstr "Programmdatei"
 
-#: view/subMisc.py:269
+#: view/subMisc.py:278
 msgid "All files"
 msgstr "Alle Dateien"
 
-#: view/subMisc.py:300
+#: view/subMisc.py:309
 msgid "Add"
 msgstr "Hinzufügen"
 
-#: view/subMisc.py:302
+#: view/subMisc.py:311
 msgid "Rename"
 msgstr "Ändern"
 
-#: view/subMisc.py:304
+#: view/subMisc.py:313
 msgid "Change Image"
 msgstr "Ändere Bild"
 
-#: view/subMisc.py:335 view/subMisc.py:377
+#: view/subMisc.py:344 view/subMisc.py:386
 msgid "Map Name"
 msgstr "Karten-Name"
 
-#: view/subMisc.py:343 view/subMisc.py:381
+#: view/subMisc.py:352 view/subMisc.py:390
 msgid "Duplicate Entry"
 msgstr "Doppelter Eintragf"
 
-#: view/subMisc.py:344 view/subMisc.py:382
+#: view/subMisc.py:353 view/subMisc.py:391
 msgid "Map is already in list! Overwrite?"
 msgstr "Karte ist bereits in der Liste! Überschreiben?"
 
-#: view/subMisc.py:358 view/subMisc.py:370
+#: view/subMisc.py:367 view/subMisc.py:379
 msgid "Select Map Image (> 500x500px recommended)"
 msgstr "Wähe Karten-Bild aus (> 500x500px empfohlen)"
 
-#: view/subMisc.py:398
+#: view/subMisc.py:407
 msgid "Delete map?"
 msgstr "Karte löschen?"
 
-#: view/subMisc.py:399
+#: view/subMisc.py:408
 msgid "Delete '{}' permanently?"
 msgstr "Soll '{}' permanent gelöscht werden?"
 
-#: view/subStyles.py:41
+#: view/subStyles.py:42
 msgid "Colors"
 msgstr "Farben"
 
-#: view/subStyles.py:42
+#: view/subStyles.py:43
 msgid "Font"
 msgstr "Schriftart"
 
-#: view/subStyles.py:60
+#: view/subStyles.py:61
 msgid "Style Settings"
 msgstr "Stil Einstellungen"
 
-#: view/subStyles.py:98
+#: view/subStyles.py:103
 msgid "Box Map Icons:"
 msgstr "Box Karten Icons:"
 
-#: view/subStyles.py:100 view/subStyles.py:112 view/subStyles.py:125
-#: view/subStyles.py:137
+#: view/subStyles.py:105 view/subStyles.py:117 view/subStyles.py:130
+#: view/subStyles.py:142
 msgid "Show in Browser"
 msgstr "Im Browser anzeigen"
 
-#: view/subStyles.py:118
+#: view/subStyles.py:123
 msgid "Landscape Map Icons:"
 msgstr "Querformat Karten Icons:"
 
-#: view/subStyles.py:130
+#: view/subStyles.py:135
 msgid "Score:"
 msgstr "Spielstand:"
 
-#: view/subStyles.py:142
+#: view/subStyles.py:147
 msgid "Intros:"
 msgstr "Intros:"
 
-#: view/subStyles.py:144
+#: view/subStyles.py:149
 msgid "Apply"
 msgstr "Anwenden"
 
-#: view/subStyles.py:148
+#: view/subStyles.py:153
 msgid ""
 "Note that to make these changes visible in OBS you have to refresh the cache "
 "of your browser sources."
@@ -807,31 +825,31 @@ msgstr ""
 "Beachten Sie, dass, damit diese Änderung in OBS sichtbar sind, der Cache der "
 "Browser-Quelle aktualisiert werden muss."
 
-#: view/subStyles.py:176
+#: view/subStyles.py:181
 msgid "Default Border:"
 msgstr "Standardrahmen:"
 
-#: view/subStyles.py:180
+#: view/subStyles.py:185
 msgid "Winner Highlight:"
 msgstr "Sieger Highlight:"
 
-#: view/subStyles.py:186
+#: view/subStyles.py:191
 msgid "Win:"
 msgstr "Sieg:"
 
-#: view/subStyles.py:190
+#: view/subStyles.py:195
 msgid "Lose:"
 msgstr "Niederlage:"
 
-#: view/subStyles.py:194
+#: view/subStyles.py:199
 msgid "Undecided:"
 msgstr "Unentschieden:"
 
-#: view/subStyles.py:198
+#: view/subStyles.py:203
 msgid "Not played:"
 msgstr "Nicht gespielt:"
 
-#: view/subStyles.py:210
+#: view/subStyles.py:215
 msgid ""
 "Warning: Using a custom font instead of the regular font defined in the Icon "
 "Styles can lead to unitentional appereance."
@@ -840,71 +858,71 @@ msgstr ""
 "regulären, im Icon Stil definierten, Schrift kann zu unbeabsichtigter "
 "Darstellung führen."
 
-#: view/subStyles.py:212
+#: view/subStyles.py:217
 msgid "The proper way is to create a custom skin."
 msgstr "Angemessen wäre einen benutzerdefinierten Stil zu erstellen."
 
-#: view/subStyles.py:216
+#: view/subStyles.py:221
 msgid "Activate Custom Font"
 msgstr "Aktiviere benutzerdefinierte Schrift"
 
-#: view/subStyles.py:225
+#: view/subStyles.py:230
 msgid "Custom Font"
 msgstr "Benutzerdefinierte Schrift"
 
-#: view/widgets.py:130
+#: view/widgets.py:131
 msgid "Logo Downloader"
 msgstr "Logo Downloader"
 
-#: view/widgets.py:132
+#: view/widgets.py:133
 msgid "Downloading {}"
 msgstr "Lade {} herunter"
 
-#: view/widgets.py:183
+#: view/widgets.py:184
 msgid "Updater"
 msgstr "Aktualisierer"
 
-#: view/widgets.py:185
+#: view/widgets.py:186
 msgid "Updating to a new version..."
 msgstr "Aktualisiere auf eine neue Version..."
 
-#: view/widgets.py:213
+#: view/widgets.py:214
 msgid "Downloading a new version: Total file size {}, Time remaining {}."
 msgstr "Lade eine neue Version herunter: {} Gesamtgröße, {} Zeit verbleibend."
 
-#: view/widgets.py:256
+#: view/widgets.py:257
 msgid "Not set"
 msgstr "Nicht gesetzt"
 
-#: view/widgets.py:262
+#: view/widgets.py:263
 msgid "Set Hotkey"
 msgstr "Setze Kürzel"
 
-#: view/widgets.py:265
+#: view/widgets.py:266
 msgid "Clear"
 msgstr "Löschen"
 
-#: view/widgets.py:316
+#: view/widgets.py:317
 msgid "Select"
 msgstr "Auswählen"
 
-#: view/widgets.py:319
+#: view/widgets.py:320
 msgid "Default"
 msgstr "Voreinstellung"
 
-#: view/widgets.py:511
+#: view/widgets.py:512
 msgid "Collecting data..."
 msgstr "Sammele Daten..."
 
-#: view/widgets.py:537
+#: view/widgets.py:538
 msgid "Extracting data..."
 msgstr "Extrahiere Daten..."
 
-#: view/widgets.py:539
+#: view/widgets.py:540
 msgid "Done."
 msgstr "Fertig."
 
-#: view/widgets.py:555
+#: view/widgets.py:556
 msgid "Downloading required files...: Total file size {}, Time remaining {}."
 msgstr ""
 "Lade benötigte Dateien herunter...:  {} Gesamtgröße, {} Zeit verbleibend."
