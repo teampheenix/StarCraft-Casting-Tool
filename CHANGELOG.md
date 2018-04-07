@@ -19,6 +19,10 @@
 
 * *Auto Score Update* task will now set the races when a score is automatically updated.
 
+### Changes
+
+* Improved OCR reliability (e.g., with Gawliq UI).
+
 
 ## v1.8.10 (2018-04-05)
 
