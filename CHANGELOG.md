@@ -1,6 +1,15 @@
 # Changelog
 
 
+## v1.9.0 (2018-04-07)
+
+### New
+
+* *Set Ingame Score* task will work even if one player is not entered in SCCT.
+
+* Added option to automatically press Ctrl+X to enforce the SCCT's player order in the Observer UI.
+
+
 ## v1.8.11 (2018-04-07)
 
 ### New
