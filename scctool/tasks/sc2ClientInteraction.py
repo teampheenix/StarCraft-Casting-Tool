@@ -360,16 +360,11 @@ class SC2MatchData:
 
         return False, False, 0, -1
 
-    def compare_returnOrder(self, player1, player2):
+    def compare_returnOrder(self, player1, player2, weak=False):
         """Fuzzy compare playernames and return the correct order."""
-        if(compareStr(self.player1, player1)
-           and compareStr(self.player2, player2)):
-            return True, True
-        elif(compareStr(self.player1, player2)
-             and compareStr(self.player2, player1)):
-            return True, False
-        else:
-            return False, False
+        found, inorder, _, _ = self.compare_returnScore(
+            player1, player2, weak=weak)
+        return found, inorder
 
     def playerInList(self, player_idx, players):
         """Fuzzy check if player is in list of players."""

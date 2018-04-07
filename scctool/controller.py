@@ -552,30 +552,40 @@ class MainController:
         try:
 
             for i in range(self.matchData.getNoSets()):
-                found, order = newSC2MatchData.compare_returnOrder(
+                found, inorder = newSC2MatchData.compare_returnOrder(
                     self.matchData.getPlayer(0, i),
                     self.matchData.getPlayer(1, i))
+                if found:
+                    print("Strong found")
+                    break
+            if not found:
+                for i in range(self.matchData.getNoSets()):
+                    found, inorder = newSC2MatchData.compare_returnOrder(
+                        self.matchData.getPlayer(0, i),
+                        self.matchData.getPlayer(1, i),
+                        weak=True)
+                    if found:
+                        print("Weak found")
+                        break
+            if found:
+                score = self.matchData.getScore()
+                if swap:
+                    inorder = not inorder
 
-                if(found):
-                    score = self.matchData.getScore()
-                    if(swap):
-                        order = not order
-
-                    if(order):
+                if inorder:
+                    ToggleScore(score[0], score[1],
+                                self.matchData.getBestOf())
+                else:
+                    if scctool.settings.config.parser.getboolean("SCT", "CtrlX"):
+                        SwapPlayerNames()
                         ToggleScore(score[0], score[1],
                                     self.matchData.getBestOf())
                     else:
-                        if scctool.settings.config.parser.getboolean("SCT", "CtrlX"):
-                            SwapPlayerNames()
-                            ToggleScore(score[0], score[1],
-                                        self.matchData.getBestOf())
-                        else:
-                            ToggleScore(score[1], score[0],
-                                        self.matchData.getBestOf())
+                        ToggleScore(score[1], score[0],
+                                    self.matchData.getBestOf())
 
-                    return
-
-            ToggleScore(0, 0, self.matchData.getBestOf())
+            else:
+                ToggleScore(0, 0, self.matchData.getBestOf())
 
         except Exception as e:
             module_logger.exception("message")
