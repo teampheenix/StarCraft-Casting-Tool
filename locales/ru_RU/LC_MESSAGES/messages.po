@@ -1,10 +1,10 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
-"POT-Creation-Date: 2018-04-07 19:33+0200\n"
-"PO-Revision-Date: 2018-04-07 19:40+0200\n"
+"Project-Id-Version: StarCraft Casting Tool\n"
+"POT-Creation-Date: 2018-04-08 15:21+0200\n"
+"PO-Revision-Date: 2018-04-08 15:27+0200\n"
 "Last-Translator: \n"
-"Language-Team: \n"
+"Language-Team: Mayhem, TanTall\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -13,6 +13,7 @@ msgstr ""
 "X-Poedit-Basepath: ../../..\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: scctool\n"
 "X-Poedit-SearchPath-1: StarCraftCastingTool.py\n"
 "X-Poedit-SearchPath-2: StarCraftCastingTool.pyw\n"
@@ -156,7 +157,7 @@ msgstr "Информация и ссылки"
 msgid "About"
 msgstr "О программе"
 
-#: scctool/view/main.py:161 scctool/view/main.py:264
+#: scctool/view/main.py:161 scctool/view/main.py:272
 msgid "Readme"
 msgstr "Прочти"
 
@@ -164,159 +165,159 @@ msgstr "Прочти"
 msgid "Check for new version"
 msgstr "Проверить наличие обновлений"
 
-#: scctool/view/main.py:171 scctool/view/main.py:271
+#: scctool/view/main.py:171 scctool/view/main.py:279
 msgid "Changelog"
 msgstr "История изменений"
 
-#: scctool/view/main.py:206
+#: scctool/view/main.py:214
 msgid "Donate"
 msgstr "Поддержать"
 
-#: scctool/view/main.py:211
+#: scctool/view/main.py:219
 msgid "Language"
 msgstr "Язык"
 
-#: scctool/view/main.py:303
+#: scctool/view/main.py:311
 msgid "Match Grabber for AlphaTL && RSTL"
 msgstr "Граббер матчей для AlphaTL и RSTL"
 
-#: scctool/view/main.py:304
+#: scctool/view/main.py:312
 msgid "Custom Match"
 msgstr "Кастомный матч"
 
-#: scctool/view/main.py:328
+#: scctool/view/main.py:336
 msgid "Open in Browser"
 msgstr "Открыть в браузере"
 
-#: scctool/view/main.py:338 scctool/view/main.py:454
+#: scctool/view/main.py:346 scctool/view/main.py:462
 msgid "Match-URL:"
 msgstr "URL матча:"
 
-#: scctool/view/main.py:371
+#: scctool/view/main.py:379
 msgid "Load Data from URL"
 msgstr "Загрузить данные по URL"
 
-#: scctool/view/main.py:389
+#: scctool/view/main.py:397
 msgid "Match Format:"
 msgstr "Формат матча:"
 
-#: scctool/view/main.py:393
+#: scctool/view/main.py:401
 msgid "Best of"
 msgstr "Лучший из"
 
-#: scctool/view/main.py:399
+#: scctool/view/main.py:407
 msgid ""
 "\"Best of 6/4\": First, a Bo5/3 is played and the ace map gets extended to a "
 "Bo3 if needed; Best of 2: Bo3 with only two maps played."
 msgstr ""
 "Бо5, играются все карты. При равном счёте играется эйс матч до двух побед."
 
-#: scctool/view/main.py:407
+#: scctool/view/main.py:415
 msgid " but at least"
 msgstr " но как минимум"
 
-#: scctool/view/main.py:412
+#: scctool/view/main.py:420
 msgid "Minimum number of maps played (even if the match is decided already)"
 msgstr "Минимальное количество сыгранных карт (Даже если матч уже завершен)"
 
-#: scctool/view/main.py:416
+#: scctool/view/main.py:424
 msgid "maps"
 msgstr "карты"
 
-#: scctool/view/main.py:420
+#: scctool/view/main.py:428
 msgid "All-Kill Format"
 msgstr "Формат All-Kill"
 
-#: scctool/view/main.py:423
+#: scctool/view/main.py:431
 msgid "Winner stays and is automatically placed into the next set"
 msgstr "Победитель автоматически переносится в следующий сет"
 
-#: scctool/view/main.py:427
+#: scctool/view/main.py:435
 msgid "1vs1"
 msgstr "1vs1"
 
-#: scctool/view/main.py:430
+#: scctool/view/main.py:438
 msgid "Select for solo (non-team matches)"
 msgstr "Выбрать для дуэлей (не командных игр)"
 
-#: scctool/view/main.py:441
+#: scctool/view/main.py:449
 msgid "Apply Format"
 msgstr "Применить формат"
 
-#: scctool/view/main.py:461
+#: scctool/view/main.py:469
 msgid "Optionally specify the Match-URL, e.g., for Nightbot commands"
 msgstr "Опционально введите URL матча, например для команд Nightbot"
 
-#: scctool/view/main.py:463
+#: scctool/view/main.py:471
 msgid "Specify the Match-URL of your Custom Match"
 msgstr "Введите URL вашего матча"
 
-#: scctool/view/main.py:481
+#: scctool/view/main.py:489
 msgid "Reset Match Data"
 msgstr "Сброс данных матча"
 
-#: scctool/view/main.py:561
+#: scctool/view/main.py:569
 msgid "Match Data"
 msgstr "Данные матча"
 
-#: scctool/view/main.py:627
+#: scctool/view/main.py:635
 msgid "Choose your team"
 msgstr "Выберите вашу команду"
 
-#: scctool/view/main.py:643
+#: scctool/view/main.py:651
 msgid "League:"
 msgstr "Лига:"
 
-#: scctool/view/main.py:653
+#: scctool/view/main.py:661
 msgid "Maps \\ Teams:"
 msgstr "Карты \\ Команды:"
 
-#: scctool/view/main.py:684
+#: scctool/view/main.py:692
 msgid "Player {} of team {}"
 msgstr "Игрок {} из команды {}"
 
-#: scctool/view/main.py:704
+#: scctool/view/main.py:712
 msgid "Set the score"
 msgstr "Установить счет"
 
-#: scctool/view/main.py:711
+#: scctool/view/main.py:719
 msgid "Map {}"
 msgstr "Карта {}"
 
-#: scctool/view/main.py:753
+#: scctool/view/main.py:761
 msgid "Tasks"
 msgstr "Задачи"
 
-#: scctool/view/main.py:757
+#: scctool/view/main.py:765
 msgid "Update Twitch Title"
 msgstr "Обновить заголовок на Twitch"
 
-#: scctool/view/main.py:761
+#: scctool/view/main.py:769
 msgid "Update Nightbot"
 msgstr "Обновить Nightbot"
 
-#: scctool/view/main.py:764
+#: scctool/view/main.py:772
 msgid "Reset Score"
 msgstr "Сбросить счет"
 
-#: scctool/view/main.py:768
+#: scctool/view/main.py:776
 msgid "Update OB&S Data"
 msgstr "Обновить данные OB&S"
 
-#: scctool/view/main.py:770 scctool/view/subConnections.py:304
-#: scctool/view/subMisc.py:452 scctool/view/subStyles.py:82
+#: scctool/view/main.py:778 scctool/view/subConnections.py:304
+#: scctool/view/subMisc.py:538 scctool/view/subStyles.py:82
 msgid "Shortcut: {}"
 msgstr "горячая клавиша: {}"
 
-#: scctool/view/main.py:791
+#: scctool/view/main.py:799
 msgid "Background Tasks"
 msgstr "Задачи в фоновом режиме"
 
-#: scctool/view/main.py:794
+#: scctool/view/main.py:802
 msgid "Auto Score Update"
 msgstr "Автообновление счета"
 
-#: scctool/view/main.py:796
+#: scctool/view/main.py:804
 msgid ""
 "Automatically detects the outcome of SC2 matches that are played/observed in "
 "your SC2-client and updates the score accordingly."
@@ -324,72 +325,72 @@ msgstr ""
 "Автоматически определяет вывод о текущем матче из вашего клиента SC2 и "
 "обновляет счет."
 
-#: scctool/view/main.py:802
+#: scctool/view/main.py:810
 msgid "Provide Player Intros"
 msgstr "Заставки игроков"
 
-#: scctool/view/main.py:805
+#: scctool/view/main.py:813
 msgid "Update player intros files via SC2-Client-API"
 msgstr "Обновить заставки игроков с помощью SC2-Client-API"
 
-#: scctool/view/main.py:809
+#: scctool/view/main.py:817
 msgid "Set Ingame Score"
 msgstr "Задать счет"
 
-#: scctool/view/main.py:811
+#: scctool/view/main.py:819
 msgid ""
 "Automatically sets the score of your ingame UI-interface at the begining of "
 "a game."
 msgstr ""
 "Автоматически задает счет внутри вашего игрового интерфейса в начале игры."
 
-#: scctool/view/main.py:818
+#: scctool/view/main.py:826
 msgid "Toggle Production Tab"
 msgstr "Включать вкладку \"Производство\""
 
-#: scctool/view/main.py:820
+#: scctool/view/main.py:828
 msgid ""
 "Automatically toggles the production tab of your ingame UI-interface at the "
 "begining of a game."
 msgstr "Автоматически переключается на вкладку Производство в начале игры."
 
-#: scctool/view/main.py:827
+#: scctool/view/main.py:835
 msgid "Auto Twitch Update"
 msgstr "Автообновление Twitch"
 
-#: scctool/view/main.py:832
+#: scctool/view/main.py:840
 msgid "Auto Nightbot Update"
 msgstr "Автообновление Nightbot"
 
-#: scctool/view/main.py:841 scctool/view/main.py:845
+#: scctool/view/main.py:849 scctool/view/main.py:853
 msgid "Only Windows"
 msgstr "Только Windows"
 
-#: scctool/view/main.py:930
+#: scctool/view/main.py:938
 msgid "Applying Custom Match..."
 msgstr "Применение матча..."
 
-#: scctool/view/main.py:963
+#: scctool/view/main.py:971
 msgid "Reading {}..."
 msgstr "Чтение {}..."
 
-#: scctool/view/main.py:982
+#: scctool/view/main.py:990
 msgid "Updating Nightbot Command..."
 msgstr "Обновление команды Nightbot..."
 
-#: scctool/view/main.py:991
+#: scctool/view/main.py:999
 msgid "Updating Twitch Title..."
 msgstr "Обновление заголовка Twitch..."
 
-#: scctool/view/main.py:1000
+#: scctool/view/main.py:1008
 msgid "Updating OBS Data..."
 msgstr "Обновление данных OBS..."
 
-#: scctool/view/main.py:1010
+#: scctool/view/main.py:1018
 msgid "Resetting Score..."
 msgstr "Сброс счета..."
 
-#: scctool/view/main.py:1029
+#: scctool/view/main.py:1037
 msgid "Updating Score..."
 msgstr "Обновление счета..."
 
@@ -487,19 +488,17 @@ msgstr "Нажмите 'Получить', чтобы создать токен.
 msgid "Add Command"
 msgstr "Добавить команду"
 
-#: scctool/view/subConnections.py:299 scctool/view/subLiquipediaSearch.py:82
-#: scctool/view/subMisc.py:447 scctool/view/subStyles.py:77
+#: scctool/view/subConnections.py:299 scctool/view/subLiquipediaSearch.py:80
+#: scctool/view/subMisc.py:533 scctool/view/subStyles.py:77
 msgid "Cancel"
 msgstr "Отмена"
 
-#: scctool/view/subConnections.py:303 scctool/view/subMisc.py:451
+#: scctool/view/subConnections.py:303 scctool/view/subMisc.py:537
 #: scctool/view/subStyles.py:81
-#, fuzzy
-#| msgid "Save && Close"
 msgid "&Save && Close"
 msgstr "Сохранить и закрыть"
 
-#: scctool/view/subConnections.py:369 scctool/view/subMisc.py:509
+#: scctool/view/subConnections.py:369 scctool/view/subMisc.py:595
 #: scctool/view/subStyles.py:313
 msgid "Save data?"
 msgstr "Сохранить данные?"
@@ -520,32 +519,32 @@ msgstr "сообщение,"
 msgid "Delete"
 msgstr "Удалить"
 
-#: scctool/view/subLiquipediaSearch.py:55
+#: scctool/view/subLiquipediaSearch.py:53
 msgid "Search"
 msgstr "Поиск"
 
-#: scctool/view/subLiquipediaSearch.py:59
+#: scctool/view/subLiquipediaSearch.py:57
 msgid "Results"
 msgstr "Результаты"
 
-#: scctool/view/subLiquipediaSearch.py:80
+#: scctool/view/subLiquipediaSearch.py:78
 msgid "Use Selected Logo"
 msgstr "Использовать выбранный логотип"
 
-#: scctool/view/subLiquipediaSearch.py:91
+#: scctool/view/subLiquipediaSearch.py:89
 msgid "Liqupedia Image Search"
 msgstr "Поиск изображения Liquipedia"
 
 # Needs to be checked by Russian
-#: scctool/view/subLiquipediaSearch.py:132
+#: scctool/view/subLiquipediaSearch.py:130
 msgid "Results for '{}': {}"
 msgstr "Результаты для '{}': {}"
 
-#: scctool/view/subLiquipediaSearch.py:177
+#: scctool/view/subLiquipediaSearch.py:175
 msgid "Open on Liquipedia"
 msgstr "Открыть на Liquipedia"
 
-#: scctool/view/subLiquipediaSearch.py:179
+#: scctool/view/subLiquipediaSearch.py:177
 msgid "Use as Team Logo"
 msgstr "Использовать как логотип команды"
 
@@ -571,7 +570,7 @@ msgid "Add to Favorites"
 msgstr "Добавить в избранное"
 
 #: scctool/view/subLogos.py:58 scctool/view/subLogos.py:105
-#: scctool/view/subMisc.py:315
+#: scctool/view/subMisc.py:319
 msgid "Remove"
 msgstr "Удалить"
 
@@ -579,7 +578,7 @@ msgstr "Удалить"
 msgid "Logo Team 2"
 msgstr "Логотип команды 2"
 
-#: scctool/view/subLogos.py:111 scctool/view/subMisc.py:73
+#: scctool/view/subLogos.py:111 scctool/view/subMisc.py:74
 msgid "Favorites"
 msgstr "Избранное"
 
@@ -611,8 +610,8 @@ msgstr "Удалить из избранного"
 msgid "Select Team Logo"
 msgstr "Выбрать логотип команды"
 
-#: scctool/view/subLogos.py:304 scctool/view/subMisc.py:368
-#: scctool/view/subMisc.py:380
+#: scctool/view/subLogos.py:304 scctool/view/subMisc.py:377
+#: scctool/view/subMisc.py:390
 msgid "Supported Images"
 msgstr "Поддерживаемые изображения"
 
@@ -628,43 +627,43 @@ msgstr "Ссылка логотипа команды"
 msgid "{} is not a valid URL."
 msgstr "{} не допустимая ссылка."
 
-#: scctool/view/subMisc.py:57
+#: scctool/view/subMisc.py:58
 msgid "Miscellaneous Settings"
 msgstr "Другие настройки"
 
-#: scctool/view/subMisc.py:72
+#: scctool/view/subMisc.py:73
 msgid "Map Manager"
 msgstr "Менеджер карт"
 
-#: scctool/view/subMisc.py:74
+#: scctool/view/subMisc.py:75
 msgid "OCR"
 msgstr "OCR"
 
-#: scctool/view/subMisc.py:75
+#: scctool/view/subMisc.py:76
 msgid "AlphaTL && Ingame Score"
 msgstr "AlphaTL и счет в игре"
 
-#: scctool/view/subMisc.py:86
+#: scctool/view/subMisc.py:87
 msgid "AlphaTL"
 msgstr "AlphaTL"
 
-#: scctool/view/subMisc.py:90
+#: scctool/view/subMisc.py:91
 msgid "Download transparent Banner of the Match"
 msgstr "Скачать прозрачный баннер матча"
 
-#: scctool/view/subMisc.py:100
+#: scctool/view/subMisc.py:101
 msgid "Set Ingame Score Task"
 msgstr "Настройка счета в игре"
 
 # Needs to be checked by Russian
-#: scctool/view/subMisc.py:104
+#: scctool/view/subMisc.py:105
 msgid "Automatically press Ctrl+X to apply the correct player order ingame."
 msgstr ""
 "Автоматически нажмите Ctrl+X, чтобы применить правильный порядок к игрокам в "
 "игре."
 
 # Needs to be checked by Russian.
-#: scctool/view/subMisc.py:106
+#: scctool/view/subMisc.py:107
 msgid ""
 "This will ensure that the player of the first team is always on the left/top "
 "in the ingame Observer UI."
@@ -672,20 +671,20 @@ msgstr ""
 "Это гарантирует, что игрок первой команды всегда находится слева / сверху в "
 "пользовательском интерфейсе Observer."
 
-#: scctool/view/subMisc.py:114
+#: scctool/view/subMisc.py:115
 msgid "Automatically press Ctrl+N before OCR to display player names."
 msgstr ""
 "Нажмите Ctrl+N перед OCR, чтобы автоматически отобразить имена игроков."
 
-#: scctool/view/subMisc.py:116
+#: scctool/view/subMisc.py:117
 msgid "This is recommended for Standard and Gawliq Observer UI."
 msgstr "Рекомендуется для Standard и Gawliq Observer UI."
 
-#: scctool/view/subMisc.py:123
+#: scctool/view/subMisc.py:124
 msgid "Automatically press Ctrl+Shift+S to display the ingame score"
 msgstr "Автоматически нажимать Ctrl+Shift+S для вывода счета в игре"
 
-#: scctool/view/subMisc.py:125
+#: scctool/view/subMisc.py:126
 msgid ""
 "Ctrl+Shift+S is needed for the WCS-Gameheart Oberserver Overlay, but "
 "disables the sound for other overlays."
@@ -693,45 +692,45 @@ msgstr ""
 "Ctrl+Shift+S необходим для наложения WCS-Gameheart Observer Overlay, но "
 "отключает звук для других оверлеев."
 
-#: scctool/view/subMisc.py:133
+#: scctool/view/subMisc.py:134
 msgid "Automatically press Ctrl+Shift+C to toogle the clan tag"
 msgstr "Автоматически нажимать Ctrl+Shift+C, чтобы поменять тег клана"
 
-#: scctool/view/subMisc.py:152
+#: scctool/view/subMisc.py:153
 msgid "Automatically press Ctrl+Shift+R to toogle the race icon "
 msgstr "Автоматически нажимать Ctrl+Shift+R, чтобы поменять иконку расы"
 
-#: scctool/view/subMisc.py:154
+#: scctool/view/subMisc.py:155
 msgid " time(s)"
 msgstr " время"
 
-#: scctool/view/subMisc.py:171
+#: scctool/view/subMisc.py:172
 msgid "Players"
 msgstr "Игроки"
 
-#: scctool/view/subMisc.py:183
+#: scctool/view/subMisc.py:184
 msgid "Teams"
 msgstr "Команды"
 
-#: scctool/view/subMisc.py:206
+#: scctool/view/subMisc.py:207
 msgid "Optical Character Recognition for Automatic Setting of Ingame Score"
 msgstr ""
 "Оптическое распознавание персонажей для автоматической настройки счета в игре"
 
-#: scctool/view/subMisc.py:211
+#: scctool/view/subMisc.py:212
 msgid "Activate Optical Character Recognition"
 msgstr "Активировать оптическое распознавание персонажей"
 
-#: scctool/view/subMisc.py:224 scctool/view/subMisc.py:247
-#: scctool/view/subMisc.py:277
+#: scctool/view/subMisc.py:225 scctool/view/subMisc.py:248
+#: scctool/view/subMisc.py:278
 msgid "Tesseract-OCR Executable"
 msgstr "Исполняемый файл Tesseract-OCR"
 
-#: scctool/view/subMisc.py:226
+#: scctool/view/subMisc.py:227
 msgid "Browse..."
 msgstr "Выбрать..."
 
-#: scctool/view/subMisc.py:229
+#: scctool/view/subMisc.py:230
 msgid ""
 "Sometimes the order of players given by the SC2-Client-API differs from the "
 "order in the Observer-UI resulting in a swapped match score. To correct this "
@@ -743,56 +742,88 @@ msgstr ""
 "распознавания вам необходимо скачать {}, установить и выбрать исполняемый "
 "файл ниже, еслион не определился автоматически."
 
-#: scctool/view/subMisc.py:261 scctool/view/subMisc.py:265
-#: scctool/view/subMisc.py:269
+#: scctool/view/subMisc.py:262 scctool/view/subMisc.py:266
+#: scctool/view/subMisc.py:270
 msgid "This feature is only available in Windows."
 msgstr "Эта возможность доступна только в Windows."
 
-#: scctool/view/subMisc.py:276
+#: scctool/view/subMisc.py:277
 msgid "Select Tesseract-OCR Executable"
 msgstr "Выберите исполняемый файл Tesseract-OCR"
 
-#: scctool/view/subMisc.py:278
+#: scctool/view/subMisc.py:279
 msgid "Executable"
 msgstr "Исполняемый файл"
 
-#: scctool/view/subMisc.py:278
+#: scctool/view/subMisc.py:279
 msgid "All files"
 msgstr "Все файлы"
 
-#: scctool/view/subMisc.py:309
-msgid "Add"
-msgstr "Добавить"
-
+# Needs to be checked
 #: scctool/view/subMisc.py:311
+msgid "Add from Liquipedia"
+msgstr "Добавить из Liquipedia"
+
+#: scctool/view/subMisc.py:313
+msgid "Add from File"
+msgstr "Добавить из файла"
+
+#: scctool/view/subMisc.py:315
 msgid "Rename"
 msgstr "Переименовать"
 
-#: scctool/view/subMisc.py:313
+#: scctool/view/subMisc.py:317
 msgid "Change Image"
 msgstr "Изменить изображение"
 
-#: scctool/view/subMisc.py:344 scctool/view/subMisc.py:386
+#: scctool/view/subMisc.py:347 scctool/view/subMisc.py:396
+#: scctool/view/subMisc.py:432
 msgid "Map Name"
 msgstr "Название карты"
 
-#: scctool/view/subMisc.py:352 scctool/view/subMisc.py:390
+#: scctool/view/subMisc.py:356 scctool/view/subMisc.py:402
+#: scctool/view/subMisc.py:439 scctool/view/subMisc.py:484
+msgid "Error"
+msgstr ""
+
+# Needs to be checked by Russian.
+#: scctool/view/subMisc.py:357 scctool/view/subMisc.py:403
+#: scctool/view/subMisc.py:440
+msgid "\"{}\" is not a valid map name."
+msgstr "\"{}\" не является допустимым именем карты."
+
+#: scctool/view/subMisc.py:361 scctool/view/subMisc.py:408
+#: scctool/view/subMisc.py:454
 msgid "Duplicate Entry"
 msgstr "Повторяющийся ввод"
 
-#: scctool/view/subMisc.py:353 scctool/view/subMisc.py:391
+#: scctool/view/subMisc.py:362 scctool/view/subMisc.py:409
 msgid "Map is already in list! Overwrite?"
 msgstr "Карта уже в списке! Переписать?"
 
-#: scctool/view/subMisc.py:367 scctool/view/subMisc.py:379
+#: scctool/view/subMisc.py:376 scctool/view/subMisc.py:389
 msgid "Select Map Image (> 500x500px recommended)"
 msgstr "Выберите изображение карты (> 500x500px рекомендовано)"
 
-#: scctool/view/subMisc.py:407
+# Needs to be checked
+#: scctool/view/subMisc.py:447
+msgid "Map not found"
+msgstr "Карта Не найдена"
+
+# Needs to be checked by Russian
+#: scctool/view/subMisc.py:448
+msgid "\"{}\" was not found on Liquipedia."
+msgstr "\"{}\"  не найден на Liquipedia."
+
+#: scctool/view/subMisc.py:455
+msgid "Map {} is already in list! Overwrite?"
+msgstr "Карта {} уже в списке! Переписать?"
+
+#: scctool/view/subMisc.py:493
 msgid "Delete map?"
 msgstr "Удалить карту?"
 
-#: scctool/view/subMisc.py:408
+#: scctool/view/subMisc.py:494
 msgid "Delete '{}' permanently?"
 msgstr "Удалить '{}'?"
 
@@ -889,61 +920,69 @@ msgstr "Активировать собственный шрифт"
 msgid "Custom Font"
 msgstr "Пользовательский шрифт"
 
-#: scctool/view/widgets.py:131
-msgid "Logo Downloader"
-msgstr "Загрузчик логотипов"
+# Needs to be checked.
+#: scctool/view/widgets.py:136
+msgid "Map Downloader"
+msgstr "Загружатель карт"
 
-#: scctool/view/widgets.py:133
+#: scctool/view/widgets.py:138 scctool/view/widgets.py:196
 msgid "Downloading {}"
 msgstr "Загрузка {}"
 
-#: scctool/view/widgets.py:184
+#: scctool/view/widgets.py:194
+msgid "Logo Downloader"
+msgstr "Загрузчик логотипов"
+
+#: scctool/view/widgets.py:246
 msgid "Updater"
 msgstr "Обновление"
 
-#: scctool/view/widgets.py:186
+#: scctool/view/widgets.py:248
 msgid "Updating to a new version..."
 msgstr "Обновление на новую версию..."
 
-#: scctool/view/widgets.py:214
+#: scctool/view/widgets.py:276
 msgid "Downloading a new version: Total file size {}, Time remaining {}."
 msgstr "Загрузка новой версии: размер файла {}, осталось времени {}."
 
-#: scctool/view/widgets.py:257
+#: scctool/view/widgets.py:319
 msgid "Not set"
 msgstr "Не задано"
 
-#: scctool/view/widgets.py:263
+#: scctool/view/widgets.py:325
 msgid "Set Hotkey"
 msgstr "Установить хоткей"
 
-#: scctool/view/widgets.py:266
+#: scctool/view/widgets.py:328
 msgid "Clear"
 msgstr "Очистить"
 
-#: scctool/view/widgets.py:317
+#: scctool/view/widgets.py:379
 msgid "Select"
 msgstr "Выбрать"
 
-#: scctool/view/widgets.py:320
+#: scctool/view/widgets.py:382
 msgid "Default"
 msgstr "По умолчанию"
 
-#: scctool/view/widgets.py:512
+#: scctool/view/widgets.py:574
 msgid "Collecting data..."
 msgstr "Сбор данных..."
 
-#: scctool/view/widgets.py:538
+#: scctool/view/widgets.py:600
 msgid "Extracting data..."
 msgstr "Получение данных..."
 
-#: scctool/view/widgets.py:540
+#: scctool/view/widgets.py:602
 msgid "Done."
 msgstr "Готово."
 
-#: scctool/view/widgets.py:556
+#: scctool/view/widgets.py:618
 msgid "Downloading required files...: Total file size {}, Time remaining {}."
 msgstr "Загрузка необходимых файлов...: размер файла {}, осталось времени {}."
+
+#~ msgid "Add"
+#~ msgstr "Добавить"
 
 #~ msgid "Map Name:"
 #~ msgstr "Название карты:"

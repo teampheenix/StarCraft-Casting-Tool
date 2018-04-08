@@ -115,12 +115,75 @@ class StyleComboBox(QComboBox):
         controller.websocketThread.changeStyle(self.currentText())
 
 
+class MapDownloader(QProgressDialog):
+    """Map logo downloader dialog."""
+
+    def __init__(self, mainWindow, map_name, url):
+        """Init progress dialog."""
+        super().__init__(mainWindow)
+        self.setWindowModality(Qt.ApplicationModal)
+        self.progress = 0
+
+        self.url = url
+        base, ext = os.path.splitext(url)
+        ext = ext.split("?")[0].lower()
+        map = map_name.strip().replace(" ", "_") + ext
+        mapdir = scctool.settings.getAbsPath(scctool.settings.OBSmapDir)
+        if ext not in ['.jpg', '.png']:
+            raise ValueError('Not supported image format.')
+        self.file_name = os.path.normpath(os.path.join(mapdir, "src/maps", map))
+
+        self.setWindowTitle(_("Map Downloader"))
+        self.setLabelText(
+            _("Downloading {}".format(self.file_name)))
+        self.setCancelButton(None)
+        self.setRange(0, 100)
+        self.setValue(self.minimum())
+
+        self.resize(QSize(
+            mainWindow.size().width() * 0.8, self.sizeHint().height()))
+        relativeChange = QPoint(mainWindow.size().width() / 2,
+                                mainWindow.size().height() / 3)\
+            - QPoint(self.size().width() / 2,
+                     self.size().height() / 3)
+        self.move(mainWindow.pos() + relativeChange)
+
+    def download(self):
+        self.show()
+
+        with open(self.file_name, "wb") as f:
+            module_logger.info("Downloading {} from {}".format(
+                self.file_name, self.url))
+            response = requests.get(self.url, stream=True)
+            total_length = response.headers.get('content-length')
+
+            if total_length is None:  # no content length header
+                f.write(response.content)
+            else:
+                dl = 0
+                total_length = int(total_length)
+                for data in response.iter_content(chunk_size=4096):
+                    dl += len(data)
+                    f.write(data)
+                    done = int(100 * dl / total_length)
+                    self.setProgress(done)
+
+        return True
+
+    def setProgress(self, value):
+        """Set the progress of the bar."""
+        try:
+            self.setValue(value)
+        except Exception as e:
+            module_logger.exception("message")
+
+
 class LogoDownloader(QProgressDialog):
-    """Define updater dialog."""
+    """Define logo downloader dialog."""
 
     def __init__(self, controller, mainWindow, url):
         """Init progress dialog."""
-        QProgressDialog.__init__(self)
+        super().__init__()
         self.setWindowModality(Qt.ApplicationModal)
         self.progress = 0
 
@@ -166,7 +229,6 @@ class LogoDownloader(QProgressDialog):
 
     def setProgress(self, value):
         """Set the progress of the bar."""
-        # TODO: What is the data structure in case of a patch?
         try:
             self.setValue(value)
         except Exception as e:

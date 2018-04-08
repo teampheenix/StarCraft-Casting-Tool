@@ -1,16 +1,19 @@
 """Provide logo manager for SCCTool."""
+import filecmp
+import itertools
+import json
 import logging
 import os
 import shutil
-import json
-import filecmp
-import itertools
-import humanize
-from urllib.request import urlretrieve
 from time import time
-from scctool.settings import logosDir, logos_json_file, getAbsPath, OBShtmlDir, OBSdataDir
-from PyQt5.QtGui import QPixmap
+from urllib.request import urlretrieve
+
+import humanize
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QPixmap
+
+from scctool.settings import (OBSdataDir, OBShtmlDir, getAbsPath,
+                              logos_json_file, logosDir)
 
 module_logger = logging.getLogger(
     'scctool.settings.logoManager')  # create logger
@@ -344,7 +347,7 @@ class Logo:
         return True
 
     def fromURL(self, url, download=True):
-        base, ext = os.path.splitext(url)
+        _, ext = os.path.splitext(url)
         self._format = ext.split("?")[0].replace(".", "").lower()
         self.generateIdentifier()
         fname = self.getAbsFile()

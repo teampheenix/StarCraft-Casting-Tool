@@ -1,10 +1,6 @@
 """Show readme sub window."""
 import logging
-import re
-import urllib.parse
 
-import requests
-from bs4 import BeautifulSoup
 from PyQt5.QtCore import QPoint, QSize, Qt, QUrl
 from PyQt5.QtGui import QIcon, QImage, QPixmap
 from PyQt5.QtNetwork import QNetworkAccessManager, QNetworkRequest
@@ -14,6 +10,7 @@ from PyQt5.QtWidgets import (QApplication, QCompleter, QGridLayout, QGroupBox,
                              QSpacerItem, QWidget)
 
 import scctool.settings
+from scctool.tasks.liquipedia import LiquipediaGrabber
 from scctool.view.widgets import LogoDownloader
 
 # create logger
@@ -34,6 +31,7 @@ class SubwindowLiquipediaSearch(QWidget):
         self.mainWindow = mainWindow
         self.controller = mainWindow.controller
         self.team = team
+        self.liquipediaGrabber = LiquipediaGrabber()
         self.setWindowIcon(
             QIcon(scctool.settings.getAbsPath("src/liquipedia.png")))
 
@@ -113,7 +111,7 @@ class SubwindowLiquipediaSearch(QWidget):
             self.result_list.clear()
             idx = 0
             search_str = self.qle_search.text()
-            for name, thumb in search_liquipedia(search_str):
+            for name, thumb in self.liquipediaGrabber.image_search(search_str):
                 self.data[idx] = name
                 name = name.replace('/commons/File:', '')
                 self.results[idx] = QListWidgetItem(
@@ -147,7 +145,7 @@ class SubwindowLiquipediaSearch(QWidget):
         if item is not None and (skip or item.isSelected()):
             for idx, iteritem in self.results.items():
                 if item is iteritem:
-                    images = get_liquipedia_image(self.data[idx])
+                    images = self.liquipediaGrabber.get_images(self.data[idx])
                     image = ""
                     for size in sorted(images):
                         if not image or size <= 600 * 600:
@@ -161,7 +159,7 @@ class SubwindowLiquipediaSearch(QWidget):
     def doubleClicked(self, item):
         for idx, iteritem in self.results.items():
             if item is iteritem:
-                images = get_liquipedia_image(self.data[idx])
+                images = self.liquipediaGrabber.get_images(self.data[idx])
                 image = ""
                 for size in sorted(images):
                     if not image or size <= 600 * 600:
@@ -213,59 +211,3 @@ class SubwindowLiquipediaSearch(QWidget):
             event.accept()
         except Exception as e:
             module_logger.exception("message")
-
-
-def search_liquipedia(search):
-    params = {'title': 'Special:Search',
-              'profile': 'advanced', 'fulltext': 'Search', 'ns6': 1}
-    params['search'] = str(search)
-    source = '{}/commons/index.php?{}'.format(
-        base_url, urllib.parse.urlencode(params))
-
-    urllib.parse.urlencode(params)
-    r = requests.get(source)
-
-    soup = BeautifulSoup(r.content, 'html.parser')
-    try:
-        for result in soup.find("ul", class_="mw-search-results").find_all("li"):
-            try:
-                link = result.find("a", class_="image")
-                href = link['href']
-                thumb = link.find("img")['src']
-                data = result.find(
-                    "div", class_="mw-search-result-data").contents[0]
-                r = re.compile(
-                    r'\((\d+,?\d*)\s+×\s+(\d+,?\d*)\s\((\d+)\s+([KM]*B)\)\)')
-                data = r.match(data)
-                pixel = int(data.group(1).replace(",", "")) * \
-                    int(data.group(2).replace(",", ""))
-                if(pixel > 10000):
-                    yield href, thumb
-            except Exception:
-                continue
-    except Exception:
-        pass
-
-
-def get_liquipedia_image(image):
-    r = requests.get(base_url + image)
-    regex = re.compile(r'(\d+,?\d*)\s+×\s+(\d+,?\d*)')
-    soup = BeautifulSoup(r.content, 'html.parser')
-    images = dict()
-    for item in soup.select('div[class*="mw-filepage-"]'):
-        for link in item.findAll("a"):
-            data = regex.match(link.contents[0])
-            pixel = int(data.group(1).replace(",", "")) * \
-                int(data.group(2).replace(",", ""))
-            images[pixel] = link['href']
-    if len(images) == 0:
-        link = soup.find("div", class_="fullMedia").find("a")
-        data = regex.match(link.contents[0])
-        try:
-            pixel = int(data.group(1).replace(",", "")) * \
-                int(data.group(2).replace(",", ""))
-        except Exception:
-            pixel = 0
-        images[pixel] = link['href']
-
-    return images

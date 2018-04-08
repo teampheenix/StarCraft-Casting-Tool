@@ -12,7 +12,8 @@ from PyQt5.QtWidgets import (QCheckBox, QComboBox, QFileDialog, QGridLayout,
                              QTabWidget, QVBoxLayout, QWidget)
 
 import scctool.settings
-from scctool.view.widgets import ListTable, MonitoredLineEdit
+from scctool.tasks.liquipedia import LiquipediaGrabber, MapNotFound
+from scctool.view.widgets import ListTable, MapDownloader, MonitoredLineEdit
 
 # create logger
 module_logger = logging.getLogger('scctool.view.subMisc')
@@ -304,9 +305,12 @@ class SubwindowMisc(QWidget):
         self.mapPreview.setAlignment(Qt.AlignCenter)
         layout.addWidget(self.mapPreview, 0, 0)
         self.mapInfo = QLabel()
+        self.mapInfo.setIndent(10)
         layout.addWidget(self.mapInfo, 1, 0)
 
-        self.pb_addMap = QPushButton(_("Add"))
+        self.pb_addMapLiquipedia = QPushButton(_("Add from Liquipedia"))
+        self.pb_addMapLiquipedia.clicked.connect(self.addFromLquipedia)
+        self.pb_addMap = QPushButton(_("Add from File"))
         self.pb_addMap.clicked.connect(self.addMap)
         self.pb_renameMap = QPushButton(_("Rename"))
         self.pb_renameMap.clicked.connect(self.renameMap)
@@ -317,13 +321,12 @@ class SubwindowMisc(QWidget):
 
         box = QWidget()
         container = QHBoxLayout()
+
+        container.addWidget(self.pb_addMapLiquipedia, 0)
+        container.addWidget(self.pb_addMap, 0)
         container.addWidget(QLabel(), 4)
         container.addWidget(self.pb_renameMap, 0)
         container.addWidget(self.pb_changeMap, 0)
-        label = QLabel()
-        label.setFixedWidth(10)
-        container.addWidget(QLabel(), 0)
-        container.addWidget(self.pb_addMap, 0)
         container.addWidget(self.pb_removeMap, 0)
         box.setLayout(container)
 
@@ -346,6 +349,12 @@ class SubwindowMisc(QWidget):
             return
         text = text.strip()
         if(text == map):
+            return
+        if text.lower() == 'tbd':
+            QMessageBox.critical(
+                self,
+                _("Error"),
+                _('"{}" is not a valid map name.').format(text))
             return
         if(text in scctool.settings.maps):
             buttonReply = QMessageBox.warning(
@@ -370,6 +379,7 @@ class SubwindowMisc(QWidget):
             base = os.path.basename(fileName)
             name, ext = os.path.splitext(base)
             name = name.replace("_", " ")
+            self.controller.deleteMap(map)
             self.controller.addMap(fileName, map)
             self.changePreview()
 
@@ -382,10 +392,18 @@ class SubwindowMisc(QWidget):
             base = os.path.basename(fileName)
             name, ext = os.path.splitext(base)
             name = name.replace("_", " ")
-            text, ok = QInputDialog.getText(
+            map_name, ok = QInputDialog.getText(
                 self, _('Map Name'), _('Map Name') + ':', text=name)
+            map_name = map_name.strip()
             if ok:
-                if(text.strip() in scctool.settings.maps):
+                if map_name.lower() == 'tbd':
+                    QMessageBox.critical(
+                        self,
+                        _("Error"),
+                        _('"{}" is not a valid map name.').format(map_name))
+                    return
+                
+                if(map_name in scctool.settings.maps):
                     buttonReply = QMessageBox.warning(
                         self, _("Duplicate Entry"), _(
                             "Map is already in list! Overwrite?"),
@@ -393,11 +411,79 @@ class SubwindowMisc(QWidget):
                         QMessageBox.No)
                     if buttonReply == QMessageBox.No:
                         return
+                    else:
+                        self.controller.deleteMap(map_name)
 
-                self.controller.addMap(fileName, text)
-                item = QListWidgetItem(text)
-                self.maplist.addItem(item)
-                self.maplist.setCurrentItem(item)
+                self.controller.addMap(fileName, map_name)
+                items = self.maplist.findItems(map_name, Qt.MatchExactly)
+                if len(items) == 0:
+                    item = QListWidgetItem(map_name)
+                    self.maplist.addItem(item)
+                    self.maplist.setCurrentItem(item)
+                else:
+                    self.maplist.setCurrentItem(items[0])
+                self.changePreview()
+
+    def addFromLquipedia(self):
+        grabber = LiquipediaGrabber()
+        search_str = ''
+        while True:
+            search_str, ok = QInputDialog.getText(
+                self, _('Map Name'), _('Map Name') + ':', text=search_str)
+            search_str.strip()
+            try:
+                if ok and search_str:
+                    if search_str.lower() == 'tbd':
+                        QMessageBox.critical(
+                            self,
+                            _("Error"),
+                            _('"{}" is not a valid map name.').format(search_str))
+                        continue
+                    try:
+                        map = grabber.get_map(search_str)
+                    except MapNotFound:
+                        QMessageBox.critical(
+                            self,
+                            _("Map not found"),
+                            _('"{}" was not found on Liquipedia.').format(search_str))
+                        continue
+                    map_name = map.get_name()
+
+                    if(map_name in scctool.settings.maps):
+                        buttonReply = QMessageBox.warning(
+                            self, _("Duplicate Entry"), _(
+                                "Map {} is already in list! Overwrite?".format(map_name)),
+                            QMessageBox.Yes | QMessageBox.No,
+                            QMessageBox.No)
+                        if buttonReply == QMessageBox.No:
+                            break
+                        else:
+                            self.controller.deleteMap(map_name)
+
+                    images = grabber.get_images(map.get_map_images())
+                    image = ""
+                    for size in sorted(images):
+                        if not image or size <= 2000 * 2000:
+                            image = images[size]
+                    url = grabber._base_url + image
+
+                    downloader = MapDownloader(self, map_name, url)
+                    downloader.download()
+                    if map_name not in scctool.settings.maps:
+                        scctool.settings.maps.append(map_name)
+                    items = self.maplist.findItems(map_name, Qt.MatchExactly)
+                    if len(items) == 0:
+                        item = QListWidgetItem(map_name)
+                        self.maplist.addItem(item)
+                        self.maplist.setCurrentItem(item)
+                    else:
+                        self.maplist.setCurrentItem(items[0])
+                    self.changePreview()
+            except Exception as e:
+                module_logger.exception("message")
+                QMessageBox.critical(self, _("Error"), repr(e))
+            finally:
+                break
 
     def deleteMap(self):
         """Delete a map."""
