@@ -7,6 +7,10 @@
 
 * Dialog in the Map Manager to add a map from Liquipedia.
 
+### Fix
+
+* Fixed a few minor bug in the Map Manager.
+
 
 ## v1.9.0 (2018-04-07)
 
