@@ -519,8 +519,11 @@ class MainWindow(QMainWindow):
     def updateMapCompleters(self):
         """Update the auto completers for maps."""
         for i in range(self.max_no_sets):
-            completer = QCompleter(
-                scctool.settings.maps, self.le_map[i])
+            list = scctool.settings.maps
+            list.remove("TBD")
+            list.sort()
+            list.append("TBD")
+            completer = QCompleter(list, self.le_map[i])
             completer.setCaseSensitivity(Qt.CaseInsensitive)
             completer.setCompletionMode(
                 QCompleter.UnfilteredPopupCompletion)
