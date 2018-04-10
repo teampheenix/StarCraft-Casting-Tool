@@ -13,6 +13,7 @@ import scctool.settings
 import scctool.tasks.nightbot
 import scctool.tasks.twitch
 from scctool.matchdata import matchData
+from scctool.settings.alias import AliasManager
 from scctool.settings.history import HistoryManager
 from scctool.settings.logoManager import LogoManager
 from scctool.settings.placeholders import PlaceholderList
@@ -49,6 +50,7 @@ class MainController:
             self.checkVersion()
             self.initPlayerIntroData()
             self.logoManager = LogoManager(self)
+            self.aliasManager = AliasManager()
             self.historyManager = HistoryManager()
             scctool.settings.maps = scctool.settings.loadMapList()
 
@@ -413,6 +415,7 @@ class MainController:
             scctool.settings.saveNightbotCommands()
             self.logoManager.dumpJson()
             self.historyManager.dumpJson()
+            self.aliasManager.dumpJson()
         except Exception as e:
             module_logger.exception("message")
 
@@ -451,10 +454,11 @@ class MainController:
     def requestScoreUpdate(self, newSC2MatchData):
         """Update score based on result of SC2-Client-API."""
         try:
+            alias = self.aliasManager.translatePlayer
             newscore = 0
             for j in range(2):
                 self.historyManager.insertPlayer(
-                    newSC2MatchData.getPlayer(j), newSC2MatchData.getRace(j))
+                    alias(newSC2MatchData.getPlayer(j)), newSC2MatchData.getRace(j))
             self.view.updatePlayerCompleters()
             if newSC2MatchData.result == 0:
                 return
@@ -462,7 +466,7 @@ class MainController:
                 player1 = self.matchData.getPlayer(0, i)
                 player2 = self.matchData.getPlayer(1, i)
                 found, in_order, newscore, _ = newSC2MatchData.compare_returnScore(
-                    player1, player2)
+                    player1, player2, translator=alias)
                 if found:
                     if(self.view.setScore(i, newscore)):
                         race1 = newSC2MatchData.getRace(0)
@@ -482,7 +486,7 @@ class MainController:
                     player2 = self.matchData.getPlayer(1, i)
                     found, in_order, newscore, notset_idx \
                         = newSC2MatchData.compare_returnScore(
-                            player1, player2, weak=True)
+                            player1, player2, weak=True, translator=alias)
                     if(found and notset_idx in range(2)):
                         if(self.view.setScore(i, newscore, allkill=False)):
                             race1 = newSC2MatchData.getRace(0)
@@ -550,11 +554,13 @@ class MainController:
     def requestToggleScore(self, newSC2MatchData, swap=False):
         """Check if SC2-Client-API players are present and toggle score accordingly."""
         try:
+            alias = self.aliasManager.translatePlayer
 
             for i in range(self.matchData.getNoSets()):
                 found, inorder = newSC2MatchData.compare_returnOrder(
                     self.matchData.getPlayer(0, i),
-                    self.matchData.getPlayer(1, i))
+                    self.matchData.getPlayer(1, i),
+                    translator=alias)
                 if found:
                     print("Strong found")
                     break
@@ -563,7 +569,8 @@ class MainController:
                     found, inorder = newSC2MatchData.compare_returnOrder(
                         self.matchData.getPlayer(0, i),
                         self.matchData.getPlayer(1, i),
-                        weak=True)
+                        weak=True,
+                        translator=alias)
                     if found:
                         print("Weak found")
                         break
@@ -645,11 +652,14 @@ class MainController:
 
         for player_idx in range(2):
             team1 = newData.playerInList(
-                player_idx, self.matchData.getPlayerList(0))
+                player_idx,
+                self.matchData.getPlayerList(0),
+                self.aliasManager.translatePlayer)
             team2 = newData.playerInList(
-                player_idx, self.matchData.getPlayerList(1))
+                player_idx, self.matchData.getPlayerList(1),
+                self.aliasManager.translatePlayer)
 
-            if((team1 and team2) or not (team1 or team2)):
+            if(not team1 and not team2):
                 team = ""
                 logo = ""
                 display = "none"
@@ -662,8 +672,9 @@ class MainController:
                 logo = "../" + self.logoManager.getTeam2().getFile(True)
                 display = "block"
 
-            self.__playerIntroData[player_idx]['name'] = newData.getPlayer(
-                player_idx)
+            self.__playerIntroData[player_idx]['name'] = \
+                self.aliasManager.translatePlayer(
+                    newData.getPlayer(player_idx))
             self.__playerIntroData[player_idx]['team'] = team
             self.__playerIntroData[player_idx]['race'] = newData.getRace(
                 player_idx).lower()

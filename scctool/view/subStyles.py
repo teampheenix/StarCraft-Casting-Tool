@@ -22,7 +22,7 @@ class SubwindowStyles(QWidget):
         """Create styles settings sub window."""
         try:
             parent = None
-            super(SubwindowStyles, self).__init__(parent)
+            super().__init__(parent)
 
             self.setWindowIcon(
                 QIcon(scctool.settings.getAbsPath('src/pantone.png')))

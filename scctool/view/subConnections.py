@@ -25,7 +25,7 @@ class SubwindowConnections(QWidget):
         """Create window."""
         try:
             parent = None
-            super(SubwindowConnections, self).__init__(parent)
+            super().__init__(parent)
             # self.setWindowFlags(Qt.WindowStaysOnTopHint)
 
             self.setWindowIcon(
@@ -388,7 +388,7 @@ class CommandDropBox(QGroupBox):
     _todelete = set()
 
     def __init__(self, controller, cmd="", msg="", parent=None):
-        super(CommandDropBox, self).__init__(parent)
+        super().__init__(parent)
         self.controller = controller
         self._instances.add(weakref.ref(self))
         self.ident = len(self._instances)
@@ -434,7 +434,7 @@ class CommandDropBox(QGroupBox):
 
     def setTitle(self):
         title = "Command {}".format(self.ident)
-        super(CommandDropBox, self).setTitle(title)
+        super().setTitle(title)
         self.pushButton2.setDisabled(len(self._instances) == 1)
 
     def adjustIdent(self, removedIdent):

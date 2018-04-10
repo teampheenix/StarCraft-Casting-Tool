@@ -23,7 +23,7 @@ class SubwindowLogos(QWidget):
 
     def createWindow(self, mainWindow, controller, team):
         """Create readme sub window."""
-        super(SubwindowLogos, self).__init__(None)
+        super().__init__(None)
         self.controller = controller
         self.team = team
         self.mutex = QMutex()

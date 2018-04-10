@@ -1,9 +1,9 @@
 """Provide match grabber for AlphaTL."""
 
 import logging
-import scctool.settings
-
 from urllib.request import urlretrieve
+
+import scctool.settings
 from scctool.matchgrabber.custom import MatchGrabber as MatchGrabberParent
 
 # create logger
@@ -15,7 +15,7 @@ class MatchGrabber(MatchGrabberParent):
 
     def __init__(self, *args):
         """Init match grabber."""
-        super(MatchGrabber, self).__init__(*args)
+        super().__init__(*args)
         self._provider = "AlphaSC2"
         self._urlprefix = "http://alpha.tl/match/"
         self._apiprefix = "http://alpha.tl/api?match="
@@ -51,7 +51,7 @@ class MatchGrabber(MatchGrabberParent):
                 for set_idx, player in enumerate(data['lineup' +
                                                       str(team_idx + 1)]):
                     try:
-                        playername = player['nickname']
+                        playername = self._aliasPlayer(player['nickname'])
                         if not isinstance(playername, str):
                             playername = "TBD"
                         self._matchData.setPlayer(
@@ -66,7 +66,7 @@ class MatchGrabber(MatchGrabberParent):
                     name = "TBD"
                 if not isinstance(tag, str):
                     tag = ""
-                self._matchData.setTeam(team_idx, name, tag)
+                self._matchData.setTeam(team_idx, self._aliasTeam(name), tag)
 
             for set_idx in range(5):
                 try:

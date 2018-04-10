@@ -212,7 +212,7 @@ class VersionHandler(TasksThread):
 
     def __init__(self, controller):
         """Init the thread."""
-        super(VersionHandler, self).__init__()
+        super().__init__()
 
         self.__controller = controller
         self.setTimeout(10)

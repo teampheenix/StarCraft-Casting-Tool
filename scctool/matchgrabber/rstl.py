@@ -13,7 +13,7 @@ class MatchGrabber(MatchGrabberParent):
 
     def __init__(self, *args):
         """Init match grabber."""
-        super(MatchGrabber, self).__init__(*args)
+        super().__init__(*args)
         self._provider = "RSTL"
         self._urlprefix = \
             "http://hdgame.net/en/tournaments/list/tournament"\
@@ -49,7 +49,8 @@ class MatchGrabber(MatchGrabberParent):
                         lu = 'lu' + str(team_idx + 1)
                         self._matchData.setPlayer(
                             team_idx, set_idx,
-                            data[lu][str(set_idx)]['member_name'],
+                            self._aliasPlayer(
+                                data[lu][str(set_idx)]['member_name']),
                             data[lu][str(set_idx)]['r_name'])
                     except Exception:
                         pass
@@ -84,13 +85,16 @@ class MatchGrabber(MatchGrabberParent):
                             if temp_player is None:
                                 player = "TBD"
 
+                        player = self._aliasPlayer(player)
+
                         self._matchData.setPlayer(team_idx, set_idx,
                                                   player, race)
                     except Exception:
                         pass
 
                 team = data['member' + str(team_idx + 1)]
-                self._matchData.setTeam(team_idx, team['name'], team['tag'])
+                self._matchData.setTeam(
+                    team_idx, self._aliasTeam(team['name']), team['tag'])
 
             self._matchData.setLabel(4, "Ace Map 1")
             self._matchData.setLabel(5, "Ace Map 2")
@@ -175,13 +179,15 @@ class MatchGrabber(MatchGrabberParent):
                                 set_idx * 2)]['r_name' + str(team_idx + 1)]
                         player = data['result'][str(
                             set_idx * 2)]['member_name' + str(team_idx + 1)]
+                        player = self._aliasPlayer(player)
                         self._matchData.setPlayer(team_idx, set_idx,
                                                   player, race)
                     except Exception:
                         pass
 
                 team = data['member' + str(team_idx + 1)]
-                self._matchData.setTeam(team_idx, team['name'], team['tag'])
+                self._matchData.setTeam(
+                    team_idx, self._aliasTeam(team['name']), team['tag'])
 
             for set_idx in range(bo):
                 try:

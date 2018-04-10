@@ -27,7 +27,7 @@ class SubwindowLiquipediaSearch(QWidget):
 
     def createWindow(self, mainWindow, placeholder, team):
         """Create readme sub window."""
-        super(SubwindowLiquipediaSearch, self).__init__(None)
+        super().__init__(None)
         self.mainWindow = mainWindow
         self.controller = mainWindow.controller
         self.team = team

@@ -34,7 +34,7 @@ class MainWindow(QMainWindow):
     def __init__(self, controller, app, translator, showChangelog):
         """Init the main window."""
         try:
-            super(MainWindow, self).__init__()
+            super().__init__()
 
             self.tlock = TriggerLock()
             self.controller = controller
@@ -181,7 +181,7 @@ class MainWindow(QMainWindow):
             websiteAct.triggered.connect(lambda: self.controller.openURL(
                 "https://teampheenix.github.io/StarCraft-Casting-Tool/"))
             infoMenu.addAction(websiteAct)
-            
+
             discordAct = QAction(
                 QIcon(
                     scctool.settings.getAbsPath('src/discord.png')),

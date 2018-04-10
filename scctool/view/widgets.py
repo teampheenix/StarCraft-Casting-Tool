@@ -10,12 +10,13 @@ import keyboard
 import requests
 from PyQt5.QtCore import QMimeData, QPoint, QSize, Qt, pyqtSignal
 from PyQt5.QtGui import QColor, QDrag, QIcon, QPainter
-from PyQt5.QtWidgets import (QApplication, QColorDialog, QComboBox, QCompleter,
-                             QFrame, QHBoxLayout, QHeaderView, QLabel,
-                             QLineEdit, QListWidget, QListWidgetItem,
-                             QProgressBar, QProgressDialog, QPushButton,
+from PyQt5.QtWidgets import (QAction, QApplication, QColorDialog, QComboBox,
+                             QCompleter, QFrame, QHBoxLayout, QHeaderView,
+                             QLabel, QLineEdit, QListWidget, QListWidgetItem,
+                             QMenu, QProgressBar, QProgressDialog, QPushButton,
                              QSizePolicy, QStyle, QStyleOptionButton,
-                             QTableWidget, QTableWidgetItem, QTextBrowser)
+                             QTableWidget, QTableWidgetItem, QTextBrowser,
+                             QTreeWidget, QTreeWidgetItem)
 
 import scctool.matchdata
 import scctool.settings.config
@@ -32,7 +33,7 @@ class MapLineEdit(QLineEdit):
 
     def __init__(self, contents='', parent=None):
         """Init lineedit."""
-        super(MapLineEdit, self).__init__(contents, parent)
+        super().__init__(contents, parent)
         self.editingFinished.connect(self.__handleEditingFinished)
         self.textChanged.connect(self.__handleTextChanged)
         self._before = contents
@@ -57,7 +58,7 @@ class MonitoredLineEdit(QLineEdit):
 
     def __init__(self, contents='', parent=None):
         """Init moinitored line edit."""
-        super(MonitoredLineEdit, self).__init__(contents, parent)
+        super().__init__(contents, parent)
         self.editingFinished.connect(self.__handleEditingFinished)
         self.textChanged.connect(self.__handleTextChanged)
         self._before = contents
@@ -86,7 +87,7 @@ class StyleComboBox(QComboBox):
 
     def __init__(self, style_dir, default="Default"):
         """Init combo box to change the styles."""
-        super(StyleComboBox, self).__init__()
+        super().__init__()
 
         self.__style_dir = style_dir
         style_dir = scctool.settings.getAbsPath(style_dir)
@@ -131,7 +132,8 @@ class MapDownloader(QProgressDialog):
         mapdir = scctool.settings.getAbsPath(scctool.settings.OBSmapDir)
         if ext not in ['.jpg', '.png']:
             raise ValueError('Not supported image format.')
-        self.file_name = os.path.normpath(os.path.join(mapdir, "src/maps", map))
+        self.file_name = os.path.normpath(
+            os.path.join(mapdir, "src/maps", map))
 
         self.setWindowTitle(_("Map Downloader"))
         self.setLabelText(
@@ -307,7 +309,7 @@ class HotkeyLayout(QHBoxLayout):
 
     def __init__(self, parent, label="Hotkey", hotkey=""):
         """Init box."""
-        super(QHBoxLayout, self).__init__()
+        super().__init__()
         self.data = scctool.settings.config.loadHotkey(hotkey)
         self.__parent = parent
         label = QLabel(label + ":")
@@ -365,7 +367,7 @@ class ColorLayout(QHBoxLayout):
 
     def __init__(self, parent, label="Color:", color="#ffffff", default_color="#ffffff"):
         """Init box."""
-        super(QHBoxLayout, self).__init__()
+        super().__init__()
         self.__parent = parent
         self.__defaultColor = default_color
         label = QLabel(label)
@@ -419,7 +421,7 @@ class IconPushButton(QPushButton):
 
     def __init__(self, label=None, parent=None):
         """Init button."""
-        super(IconPushButton, self).__init__(label, parent)
+        super().__init__(label, parent)
 
         self.pad = 4     # padding between the icon and the button frame
         self.minSize = 8  # minimum size of the icon
@@ -455,6 +457,96 @@ class IconPushButton(QPushButton):
         qp.end()
 
 
+class AliasTreeView(QTreeWidget):
+
+    aliasRemoved = pyqtSignal(str, str)
+
+    def __init__(self, parent):
+        """Init table list."""
+        super().__init__()
+        self.parent = parent
+        self.items = dict()
+        self.header().hide()
+        self.setAnimated(True)
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.customContextMenuRequested.connect(self.openMenu)
+
+    def insertAliasList(self, name, aliasList):
+        name = str(name).strip()
+        self.items[name] = QTreeWidgetItem(self, [name])
+        for alias in aliasList:
+            QTreeWidgetItem(self.items[name], [str(alias).strip()])
+
+        self.sortItems(0, Qt.AscendingOrder)
+
+    def insertAlias(self, name, alias, expand=False):
+        name = str(name).strip()
+        if name not in self.items.keys():
+            self.items[name] = QTreeWidgetItem(self, [name])
+
+        newitem = QTreeWidgetItem(self.items[name], [str(alias).strip()])
+
+        self.sortItems(0, Qt.AscendingOrder)
+        self.items[name].setExpanded(expand)
+        if expand:
+            self.setCurrentItem(newitem)
+            self.setFocus()
+
+    def removeName(self, name):
+        try:
+            for child in self.items[name].takeChildren():
+                self.aliasRemoved.emit(name, child.text(0))
+            self.takeTopLevelItem(self.indexOfTopLevelItem(self.items[name]))
+            del self.items[name]
+        except KeyError:
+            pass
+
+    def removeAlias(self, alias):
+        items = self.findItems(alias, Qt.MatchExactly | Qt.MatchRecursive)
+        for item in items:
+            parent = item.parent()
+
+            try:
+                parent.takeChild(parent.indexOfChild(item))
+                self.aliasRemoved.emit(parent.text(0), item.text(0))
+                if parent.childCount() == 0:
+                    self.takeTopLevelItem(self.indexOfTopLevelItem(parent))
+                    del self.items[parent.text(0)]
+            except AttributeError:
+                pass
+
+    def openMenu(self, position):
+        indexes = self.selectedIndexes()
+
+        if len(indexes) > 0:
+            level = 0
+            index = indexes[0]
+            text = self.itemFromIndex(index).text(0)
+            while index.parent().isValid():
+                index = index.parent()
+                level += 1
+
+            menu = QMenu()
+            if level == 0:
+                act1 = QAction(_("Add Alias"))
+                act1.triggered.connect(
+                    lambda x, self=self, text=text:
+                        self.parent.addAlias(self, _('Name'), text))
+                menu.addAction(act1)
+                act2 = QAction(_("Remove with Aliases"))
+                act2.triggered.connect(
+                    lambda x, text=text: self.removeName(text))
+                menu.addAction(act2)
+            elif level == 1:
+                action = QAction(_("Remove Alias"))
+                action.triggered.connect(
+                    lambda x, text=text: self.removeAlias(text))
+                menu.addAction(action)
+
+            menu.exec_(self.viewport().mapToGlobal(position))
+
+
 class ListTable(QTableWidget):
     """Define a custom table list."""
 
@@ -462,7 +554,7 @@ class ListTable(QTableWidget):
 
     def __init__(self, noColumns=1, data=[]):
         """Init table list."""
-        super(ListTable, self).__init__()
+        super().__init__()
 
         data = self.__processData(data)
         self.__noColumns = noColumns
@@ -477,7 +569,7 @@ class ListTable(QTableWidget):
         self.setData(data)
 
     def __handleDataChanged(self, item):
-        self.setData(self.getData())
+        self.setData(self.getData(), item)
         self.dataModified.emit()
 
     def __processData(self, data):
@@ -486,18 +578,23 @@ class ListTable(QTableWidget):
         uniq.sort()
         return uniq
 
-    def setData(self, data):
+    def setData(self, data, item=""):
         """Set the data."""
         try:
             self.itemChanged.disconnect()
         except Exception:
             pass
 
+        if item:
+            item = item.text()
+
         self.setColumnCount(self.__noColumns)
         self.setRowCount(int(len(data) / self.__noColumns) + 1)
         for idx, entry in enumerate(data):
             row, column = divmod(idx, self.__noColumns)
             self.setItem(row, column, QTableWidgetItem(entry))
+            if entry == item:
+                self.setCurrentCell(row, column)
 
         row = int(len(data) / self.__noColumns)
         for col in range(len(data) % self.__noColumns, self.__noColumns):
@@ -529,7 +626,7 @@ class Completer(QCompleter):
 
     def __init__(self, list, parent=None):
         """Init completer."""
-        super(Completer, self).__init__(list, parent)
+        super().__init__(list, parent)
 
         self.setCaseSensitivity(Qt.CaseInsensitive)
         self.setCompletionMode(QCompleter.PopupCompletion)
@@ -557,7 +654,7 @@ class QHLine(QFrame):
 
     def __init__(self):
         """Init frame."""
-        super(QHLine, self).__init__()
+        super().__init__()
         self.setFrameShape(QFrame.HLine)
         self.setFrameShadow(QFrame.Sunken)
 
@@ -626,7 +723,7 @@ class InitialUpdater(QProgressDialog):
 
 class DragDropLogoList(QListWidget):
     def __init__(self, logoManager, addIdent=lambda: None):
-        super(QListWidget, self).__init__()
+        super().__init__()
         self.setViewMode(QListWidget.IconMode)
         self.setIconSize(QSize(75, 75))
         self.setMaximumHeight(160)
@@ -672,14 +769,12 @@ class DragDropLogoList(QListWidget):
 
         if self._addIdent(ident):
             self.addItem(item)
-        else:
-            print("Not adding")
 
 
 class DragImageLabel(QLabel):
 
     def __init__(self, parent, logo, team=0):
-        super(QLabel, self).__init__()
+        super().__init__()
 
         self._parent = parent
         self._team = team
@@ -753,7 +848,7 @@ class DragImageLabel(QLabel):
 
 class TextPreviewer(QTextBrowser):
     def __init__(self):
-        super(QTextBrowser, self).__init__()
+        super().__init__()
         self.setReadOnly(True)
         self.setMaximumHeight(50)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)

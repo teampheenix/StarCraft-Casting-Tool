@@ -334,45 +334,80 @@ class SC2MatchData:
             self.time = 0
             self.ingame = False
 
-    def compare_returnScore(self, player1, player2, weak=False):
+    def compare_returnScore(self, player1, player2, weak=False, translator=None):
         """Fuzzy compare playernames and return order and their score."""
         player1, player2 = player1.strip(), player2.strip()
         player1_notset = not player1 or player1.lower() == "tbd"
         player2_notset = not player2 or player2.lower() == "tbd"
+
+        if not translator:
+            translator = self.__no_translator
+
+        myplayers1 = set()
+        myplayers1.add(translator(self.player1))
+        myplayers1.add(self.player1)
+
+        myplayers2 = set()
+        myplayers2.add(translator(self.player2))
+        myplayers2.add(self.player2)
+
+        myplayers = [(p1, p2) for p1 in myplayers1 for p2 in myplayers2]
+
+        print(myplayers)
+
         if not (player1_notset or player2_notset):
-            if(compareStr(self.player1, player1)
-               and compareStr(self.player2, player2)):
-                return True, True, self.result, -1
-            elif(compareStr(self.player1, player2)
-                 and compareStr(self.player2, player1)):
-                return True, False, -self.result, -1
+            for p1, p2 in myplayers:
+                if(compareStr(p1, player1) and compareStr(p2, player2)):
+                    return True, True, self.result, -1
+                elif(compareStr(p1, player2) and compareStr(p2, player1)):
+                    return True, False, -self.result, -1
         elif weak and not (player1_notset and player2_notset):
             if player1_notset:
                 noset_idx = 0
             elif player2_notset:
                 noset_idx = 1
-            if((player1_notset and compareStr(self.player2, player2))
-                    or (compareStr(self.player1, player1) and player2_notset)):
-                return True, True, self.result, noset_idx
-            elif((player1_notset and compareStr(self.player1, player1))
-                    or (compareStr(self.player2, player1) and player2_notset)):
-                return True, False, -self.result, noset_idx
+            else:
+                raise ValueError
+
+            for p1, p2 in myplayers:
+                if((player1_notset and compareStr(p2, player2))
+                        or (compareStr(p1, player1) and player2_notset)):
+                    return True, True, self.result, noset_idx
+                elif((player1_notset and compareStr(p1, player1))
+                        or (compareStr(p2, player1) and player2_notset)):
+                    return True, False, -self.result, noset_idx
 
         return False, False, 0, -1
 
-    def compare_returnOrder(self, player1, player2, weak=False):
+    def compare_returnOrder(self, player1, player2, weak=False, translator=None):
         """Fuzzy compare playernames and return the correct order."""
         found, inorder, _, _ = self.compare_returnScore(
-            player1, player2, weak=weak)
+            player1, player2, weak=weak, translator=translator)
         return found, inorder
 
-    def playerInList(self, player_idx, players):
+    def __no_translator(self, x):
+        return x
+
+    def playerInList(self, player_idx, players, translator=None):
         """Fuzzy check if player is in list of players."""
+        if not translator:
+            translator = self.__no_translator
+
+        myplayers = set()
+        if player_idx == 0:
+            myplayers.add(translator(self.player1))
+            myplayers.add(self.player1)
+        elif player_idx == 1:
+            myplayers.add(translator(self.player2))
+            myplayers.add(self.player2)
+        else:
+            raise ValueError
+
         for player in players:
-            if(player_idx == 0 and compareStr(self.player1, player)):
-                return True
-            elif(player_idx == 1 and compareStr(self.player2, player)):
-                return True
+            for myplayer in myplayers:
+                if compareStr(myplayer, myplayer):
+                    return True
+
         return False
 
     def translateRace(self, str):

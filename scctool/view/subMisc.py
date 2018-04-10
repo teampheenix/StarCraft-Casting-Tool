@@ -13,7 +13,8 @@ from PyQt5.QtWidgets import (QCheckBox, QComboBox, QFileDialog, QGridLayout,
 
 import scctool.settings
 from scctool.tasks.liquipedia import LiquipediaGrabber, MapNotFound
-from scctool.view.widgets import ListTable, MapDownloader, MonitoredLineEdit
+from scctool.view.widgets import (AliasTreeView, ListTable, MapDownloader,
+                                  MonitoredLineEdit)
 
 # create logger
 module_logger = logging.getLogger('scctool.view.subMisc')
@@ -26,7 +27,7 @@ class SubwindowMisc(QWidget):
         """Create subwindow with miscellaneous settings."""
         try:
             parent = None
-            super(SubwindowMisc, self).__init__(parent)
+            super().__init__(parent)
             # self.setWindowFlags(Qt.WindowStaysOnTopHint)
 
             self.setWindowIcon(
@@ -64,14 +65,16 @@ class SubwindowMisc(QWidget):
         """Create tabs."""
         self.tabs = QTabWidget()
 
-        self.createFavBox()
         self.createMapsBox()
+        self.createFavBox()
+        self.createAliasBox()
         self.createOcrBox()
         self.createAlphaBox()
 
         # Add tabs
         self.tabs.addTab(self.mapsBox, _("Map Manager"))
         self.tabs.addTab(self.favBox, _("Favorites"))
+        self.tabs.addTab(self.aliasBox, _("Alias"))
         self.tabs.addTab(self.ocrBox, _("OCR"))
         self.tabs.addTab(self.alphaBox, _("AlphaTL && Ingame Score"))
 
@@ -196,6 +199,83 @@ class SubwindowMisc(QWidget):
             0, 0, QSizePolicy.Minimum, QSizePolicy.Expanding))
 
         self.favBox.setLayout(mainLayout)
+
+    def createAliasBox(self):
+        """Create favorites box."""
+        self.aliasBox = QWidget()
+        mainLayout = QGridLayout()
+
+        aliasDesc = _('Player and team aliases are replaced by the actual name when' +
+                      ' encountered by the match grabber. Additionally, SC2 player' +
+                      ' names listed as aliases are replaced in the intros by the actual' +
+                      ' name and used to identify players by the automatic' +
+                      ' background tasks "Score Update" and "Set Ingame Score".')
+        label = QLabel(aliasDesc)
+        label.setAlignment(Qt.AlignJustify)
+        label.setWordWrap(True)
+
+        mainLayout.addWidget(label, 1, 0, 1, 2)
+
+        box = QGroupBox(_("Player Aliases"))
+        layout = QVBoxLayout()
+        self.list_aliasPlayers = AliasTreeView(self)
+        self.list_aliasPlayers.aliasRemoved.connect(
+            self.controller.aliasManager.removePlayerAlias)
+        layout.addWidget(self.list_aliasPlayers)
+        addButton = QPushButton(_("Add Alias"))
+        addButton.clicked.connect(lambda: self.addAlias(
+            self.list_aliasPlayers, _('Player Name')))
+        layout.addWidget(addButton)
+        box.setLayout(layout)
+        mainLayout.addWidget(box, 0, 0)
+
+        box = QGroupBox(_("Team Aliases"))
+        layout = QVBoxLayout()
+        self.list_aliasTeams = AliasTreeView(self)
+        self.list_aliasTeams.aliasRemoved.connect(
+            self.controller.aliasManager.removeTeamAlias)
+        layout.addWidget(self.list_aliasTeams)
+        addButton = QPushButton(_("Add Alias"))
+        addButton.clicked.connect(lambda: self.addAlias(
+            self.list_aliasTeams, _('Team Name')))
+        layout.addWidget(addButton)
+        box.setLayout(layout)
+        mainLayout.addWidget(box, 0, 1)
+
+        list = self.controller.aliasManager.playerAliasList()
+        for player, aliases in list.items():
+            self.list_aliasPlayers.insertAliasList(player, aliases)
+
+        list = self.controller.aliasManager.teamAliasList()
+        for team, aliases in list.items():
+            self.list_aliasTeams.insertAliasList(team, aliases)
+
+        self.aliasBox.setLayout(mainLayout)
+
+    def addAlias(self, widget, scope, name=""):
+
+        name, ok = QInputDialog.getText(
+            self, scope, scope + ':', text=name)
+        if not ok:
+            return
+
+        name = name.strip()
+        alias, ok = QInputDialog.getText(
+            self, _('Alias'), _('Alias of {}').format(name) + ':', text="")
+
+        alias = alias.strip()
+        if not ok:
+            return
+
+        try:
+            if widget == self.list_aliasPlayers:
+                self.controller.aliasManager.addPlayerAlias(name, alias)
+            elif widget == self.list_aliasTeams:
+                self.controller.aliasManager.addTeamAlias(name, alias)
+            widget.insertAlias(name, alias, True)
+        except Exception as e:
+            module_logger.exception("message")
+            QMessageBox.critical(self, _("Error"), str(e))
 
     def createOcrBox(self):
         """Create forms for OCR."""
@@ -402,7 +482,7 @@ class SubwindowMisc(QWidget):
                         _("Error"),
                         _('"{}" is not a valid map name.').format(map_name))
                     return
-                
+
                 if(map_name in scctool.settings.maps):
                     buttonReply = QMessageBox.warning(
                         self, _("Duplicate Entry"), _(
@@ -481,7 +561,7 @@ class SubwindowMisc(QWidget):
                     self.changePreview()
             except Exception as e:
                 module_logger.exception("message")
-                QMessageBox.critical(self, _("Error"), repr(e))
+                QMessageBox.critical(self, _("Error"), str(e))
             finally:
                 break
 

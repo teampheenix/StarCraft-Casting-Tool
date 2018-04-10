@@ -19,7 +19,7 @@ class SubwindowMarkdown(QWidget):
 
     def createWindow(self, mainWindow, title, icon, markdown):
         """Create readme sub window."""
-        super(SubwindowMarkdown, self).__init__(None)
+        super().__init__(None)
         self.setWindowIcon(
             QIcon(scctool.settings.getAbsPath(icon)))
         self.mainWindow = mainWindow

@@ -1,7 +1,8 @@
 """Grab match data from websites."""
 
-import requests
 import logging
+
+import requests
 
 # create logger
 module_logger = logging.getLogger('scctool.matchgrabber.custom')
@@ -53,6 +54,12 @@ class MatchGrabber(object):
     def _getJson(self):
         data = requests.get(url=self._getAPI()).json()
         return data
+
+    def _aliasPlayer(self, player):
+        return self._controller.aliasManager.translatePlayer(player)
+
+    def _aliasTeam(self, player):
+        return self._controller.aliasManager.translateTeam(player)
 
     def downloadLogos(self, logoManager):
         """Download logos."""

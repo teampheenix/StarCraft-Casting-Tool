@@ -1,9 +1,9 @@
 """Provide settings for SCCTool."""
+import json
 import logging
 import os
 import platform
 import sys
-import json
 
 module_logger = logging.getLogger('scctool.settings')
 
@@ -32,6 +32,7 @@ versiondata_json_file = getAbsPath(dataDir + "/versiondata.json")
 nightbot_json_file = getAbsPath(dataDir + "/nightbot.json")
 logos_json_file = getAbsPath(dataDir + "/logos.json")
 history_json_file = getAbsPath(dataDir + "/history.json")
+alias_json_file = getAbsPath(dataDir + "/alias.json")
 
 windows = (platform.system().lower() == "windows")
 
