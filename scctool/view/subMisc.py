@@ -207,9 +207,9 @@ class SubwindowMisc(QWidget):
 
         aliasDesc = _('Player and team aliases are replaced by the actual name when' +
                       ' encountered by the match grabber. Additionally, SC2 player' +
-                      ' names listed as aliases are replaced in the intros by the actual' +
-                      ' name and used to identify players by the automatic' +
-                      ' background tasks "Score Update" and "Set Ingame Score".')
+                      ' names listed as aliases are replaced in the intros' +
+                      ' and used to identify players by the automatic' +
+                      ' background tasks "Auto Score Update" and "Set Ingame Score".')
         label = QLabel(aliasDesc)
         label.setAlignment(Qt.AlignJustify)
         label.setWordWrap(True)

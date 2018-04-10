@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: StarCraft Casting Tool\n"
-"POT-Creation-Date: 2018-04-08 15:20+0200\n"
-"PO-Revision-Date: 2018-04-08 15:21+0200\n"
+"POT-Creation-Date: 2018-04-10 22:33+0200\n"
+"PO-Revision-Date: 2018-04-10 22:34+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en\n"
@@ -15,49 +15,49 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: controller.py:74
+#: controller.py:76
 msgid "This version is up to date."
 msgstr "This version is up to date."
 
-#: controller.py:526 controller.py:534
+#: controller.py:530 controller.py:538
 msgid "Specify your Twitch Settings to use this feature"
 msgstr "Specify your Twitch Settings to use this feature"
 
-#: controller.py:529
+#: controller.py:533
 msgid ""
 "Automatically update the title of your twitch channel in the background."
 msgstr ""
 "Automatically update the title of your twitch channel in the background."
 
-#: controller.py:540 controller.py:547
+#: controller.py:544 controller.py:551
 msgid "Specify your Nightbot Settings to use this feature"
 msgstr "Specify your Nightbot Settings to use this feature"
 
-#: controller.py:541
+#: controller.py:545
 msgid "Automatically update the commands of your nightbot in the background."
 msgstr "Automatically update the commands of your nightbot in the background."
 
-#: controller.py:681
+#: controller.py:692
 msgid "Warning: Map '{}' not found!"
 msgstr "Warning: Map '{}' not found!"
 
-#: controller.py:721
+#: controller.py:732
 msgid "A new version {} is available."
 msgstr "A new version {} is available."
 
-#: controller.py:723
+#: controller.py:734
 msgid "Update to new version?"
 msgstr "Update to new version?"
 
-#: controller.py:724
+#: controller.py:735
 msgid "New SCC-Tool Version"
 msgstr "New SCC-Tool Version"
 
-#: controller.py:733
+#: controller.py:744
 msgid "Don't show on startup."
 msgstr "Don't show on startup."
 
-#: controller.py:742
+#: controller.py:753
 msgid "A new version {} is available on GitHub!"
 msgstr "A new version {} is available on GitHub!"
 
@@ -249,68 +249,68 @@ msgstr "Specify the Match-URL of your Custom Match"
 msgid "Reset Match Data"
 msgstr "Reset Match Data"
 
-#: view/main.py:569
+#: view/main.py:572
 msgid "Match Data"
 msgstr "Match Data"
 
-#: view/main.py:635
+#: view/main.py:638
 msgid "Choose your team"
 msgstr "Choose your team"
 
-#: view/main.py:651
+#: view/main.py:654
 msgid "League:"
 msgstr "League:"
 
-#: view/main.py:661
+#: view/main.py:664
 msgid "Maps \\ Teams:"
 msgstr "Maps \\ Teams:"
 
-#: view/main.py:692
+#: view/main.py:695
 msgid "Player {} of team {}"
 msgstr "Player {} of team {}"
 
-#: view/main.py:712
+#: view/main.py:715
 msgid "Set the score"
 msgstr "Set the score"
 
-#: view/main.py:719
+#: view/main.py:722
 msgid "Map {}"
 msgstr "Map {}"
 
-#: view/main.py:761
+#: view/main.py:764
 msgid "Tasks"
 msgstr "Tasks"
 
-#: view/main.py:765
+#: view/main.py:768
 msgid "Update Twitch Title"
 msgstr "Update Twitch Title"
 
-#: view/main.py:769
+#: view/main.py:772
 msgid "Update Nightbot"
 msgstr "Update Nightbot"
 
-#: view/main.py:772
+#: view/main.py:775
 msgid "Reset Score"
 msgstr "Reset Score"
 
-#: view/main.py:776
+#: view/main.py:779
 msgid "Update OB&S Data"
 msgstr "Update OB&S Data"
 
-#: view/main.py:778 view/subConnections.py:304 view/subMisc.py:538
+#: view/main.py:781 view/subConnections.py:304 view/subMisc.py:618
 #: view/subStyles.py:82
 msgid "Shortcut: {}"
 msgstr "Shortcut: {}"
 
-#: view/main.py:799
+#: view/main.py:802
 msgid "Background Tasks"
 msgstr "Background Tasks"
 
-#: view/main.py:802
+#: view/main.py:805
 msgid "Auto Score Update"
 msgstr "Auto Score Update"
 
-#: view/main.py:804
+#: view/main.py:807
 msgid ""
 "Automatically detects the outcome of SC2 matches that are played/observed in "
 "your SC2-client and updates the score accordingly."
@@ -318,19 +318,19 @@ msgstr ""
 "Automatically detects the outcome of SC2 matches that are played/observed in "
 "your SC2-client and updates the score accordingly."
 
-#: view/main.py:810
+#: view/main.py:813
 msgid "Provide Player Intros"
 msgstr "Provide Player Intros"
 
-#: view/main.py:813
+#: view/main.py:816
 msgid "Update player intros files via SC2-Client-API"
 msgstr "Update player intros files via SC2-Client-API"
 
-#: view/main.py:817
+#: view/main.py:820
 msgid "Set Ingame Score"
 msgstr "Set Ingame Score"
 
-#: view/main.py:819
+#: view/main.py:822
 msgid ""
 "Automatically sets the score of your ingame UI-interface at the begining of "
 "a game."
@@ -338,11 +338,11 @@ msgstr ""
 "Automatically sets the score of your ingame UI-interface at the begining of "
 "a game."
 
-#: view/main.py:826
+#: view/main.py:829
 msgid "Toggle Production Tab"
 msgstr "Toggle Production Tab"
 
-#: view/main.py:828
+#: view/main.py:831
 msgid ""
 "Automatically toggles the production tab of your ingame UI-interface at the "
 "begining of a game."
@@ -350,43 +350,43 @@ msgstr ""
 "Automatically toggles the production tab of your ingame UI-interface at the "
 "begining of a game."
 
-#: view/main.py:835
+#: view/main.py:838
 msgid "Auto Twitch Update"
 msgstr "Auto Twitch Update"
 
-#: view/main.py:840
+#: view/main.py:843
 msgid "Auto Nightbot Update"
 msgstr "Auto Nightbot Update"
 
-#: view/main.py:849 view/main.py:853
+#: view/main.py:852 view/main.py:856
 msgid "Only Windows"
 msgstr "Only Windows"
 
-#: view/main.py:938
+#: view/main.py:941
 msgid "Applying Custom Match..."
 msgstr "Applying Custom Match..."
 
-#: view/main.py:971
+#: view/main.py:974
 msgid "Reading {}..."
 msgstr "Reading {}..."
 
-#: view/main.py:990
+#: view/main.py:993
 msgid "Updating Nightbot Command..."
 msgstr "Updating Nightbot Command..."
 
-#: view/main.py:999
+#: view/main.py:1002
 msgid "Updating Twitch Title..."
 msgstr "Updating Twitch Title..."
 
-#: view/main.py:1008
+#: view/main.py:1011
 msgid "Updating OBS Data..."
 msgstr "Updating OBS Data..."
 
-#: view/main.py:1018
+#: view/main.py:1021
 msgid "Resetting Score..."
 msgstr "Resetting Score..."
 
-#: view/main.py:1037
+#: view/main.py:1040
 msgid "Updating Score..."
 msgstr "Updating Score..."
 
@@ -484,15 +484,15 @@ msgid "Add Command"
 msgstr "Add Command"
 
 #: view/subConnections.py:299 view/subLiquipediaSearch.py:80
-#: view/subMisc.py:533 view/subStyles.py:77
+#: view/subMisc.py:613 view/subStyles.py:77
 msgid "Cancel"
 msgstr "Cancel"
 
-#: view/subConnections.py:303 view/subMisc.py:537 view/subStyles.py:81
+#: view/subConnections.py:303 view/subMisc.py:617 view/subStyles.py:81
 msgid "&Save && Close"
 msgstr "&Save && Close"
 
-#: view/subConnections.py:369 view/subMisc.py:595 view/subStyles.py:313
+#: view/subConnections.py:369 view/subMisc.py:675 view/subStyles.py:313
 msgid "Save data?"
 msgstr "Save data?"
 
@@ -560,7 +560,7 @@ msgstr "Search Liquipedia"
 msgid "Add to Favorites"
 msgstr "Add to Favorites"
 
-#: view/subLogos.py:58 view/subLogos.py:105 view/subMisc.py:319
+#: view/subLogos.py:58 view/subLogos.py:105 view/subMisc.py:399
 msgid "Remove"
 msgstr "Remove"
 
@@ -568,7 +568,7 @@ msgstr "Remove"
 msgid "Logo Team 2"
 msgstr "Logo Team 2"
 
-#: view/subLogos.py:111 view/subMisc.py:74
+#: view/subLogos.py:111 view/subMisc.py:76
 msgid "Favorites"
 msgstr "Favorites"
 
@@ -600,7 +600,7 @@ msgstr "Remove from Favorites"
 msgid "Select Team Logo"
 msgstr "Select Team Logo"
 
-#: view/subLogos.py:304 view/subMisc.py:377 view/subMisc.py:390
+#: view/subLogos.py:304 view/subMisc.py:457 view/subMisc.py:470
 msgid "Supported Images"
 msgstr "Supported Images"
 
@@ -616,39 +616,43 @@ msgstr "URL of Team Logo"
 msgid "{} is not a valid URL."
 msgstr "{} is not a valid URL."
 
-#: view/subMisc.py:58
+#: view/subMisc.py:59
 msgid "Miscellaneous Settings"
 msgstr "Miscellaneous Settings"
 
-#: view/subMisc.py:73
+#: view/subMisc.py:75
 msgid "Map Manager"
 msgstr "Map Manager"
 
-#: view/subMisc.py:75
+#: view/subMisc.py:77 view/subMisc.py:264
+msgid "Alias"
+msgstr "Alias"
+
+#: view/subMisc.py:78
 msgid "OCR"
 msgstr "OCR"
 
-#: view/subMisc.py:76
+#: view/subMisc.py:79
 msgid "AlphaTL && Ingame Score"
 msgstr "AlphaTL && Ingame Score"
 
-#: view/subMisc.py:87
+#: view/subMisc.py:90
 msgid "AlphaTL"
 msgstr "AlphaTL"
 
-#: view/subMisc.py:91
+#: view/subMisc.py:94
 msgid "Download transparent Banner of the Match"
 msgstr "Download transparent Banner of the Match"
 
-#: view/subMisc.py:101
+#: view/subMisc.py:104
 msgid "Set Ingame Score Task"
 msgstr "Set Ingame Score Task"
 
-#: view/subMisc.py:105
+#: view/subMisc.py:108
 msgid "Automatically press Ctrl+X to apply the correct player order ingame."
 msgstr "Automatically press Ctrl+X to apply the correct player order ingame."
 
-#: view/subMisc.py:107
+#: view/subMisc.py:110
 msgid ""
 "This will ensure that the player of the first team is always on the left/top "
 "in the ingame Observer UI."
@@ -656,19 +660,19 @@ msgstr ""
 "This will ensure that the player of the first team is always on the left/top "
 "in the ingame Observer UI."
 
-#: view/subMisc.py:115
+#: view/subMisc.py:118
 msgid "Automatically press Ctrl+N before OCR to display player names."
 msgstr "Automatically press Ctrl+N before OCR to display player names."
 
-#: view/subMisc.py:117
+#: view/subMisc.py:120
 msgid "This is recommended for Standard and Gawliq Observer UI."
 msgstr "This is recommended for Standard and Gawliq Observer UI."
 
-#: view/subMisc.py:124
+#: view/subMisc.py:127
 msgid "Automatically press Ctrl+Shift+S to display the ingame score"
 msgstr "Automatically press Ctrl+Shift+S to display the ingame score"
 
-#: view/subMisc.py:126
+#: view/subMisc.py:129
 msgid ""
 "Ctrl+Shift+S is needed for the WCS-Gameheart Oberserver Overlay, but "
 "disables the sound for other overlays."
@@ -676,43 +680,84 @@ msgstr ""
 "Ctrl+Shift+S is needed for the WCS-Gameheart Oberserver Overlay, but "
 "disables the sound for other overlays."
 
-#: view/subMisc.py:134
+#: view/subMisc.py:137
 msgid "Automatically press Ctrl+Shift+C to toogle the clan tag"
 msgstr "Automatically press Ctrl+Shift+C to toogle the clan tag"
 
-#: view/subMisc.py:153
+#: view/subMisc.py:156
 msgid "Automatically press Ctrl+Shift+R to toogle the race icon "
 msgstr "Automatically press Ctrl+Shift+R to toogle the race icon "
 
-#: view/subMisc.py:155
+#: view/subMisc.py:158
 msgid " time(s)"
 msgstr " time(s)"
 
-#: view/subMisc.py:172
+#: view/subMisc.py:175
 msgid "Players"
 msgstr "Players"
 
-#: view/subMisc.py:184
+#: view/subMisc.py:187
 msgid "Teams"
 msgstr "Teams"
 
-#: view/subMisc.py:207
+#: view/subMisc.py:208
+msgid ""
+"Player and team aliases are replaced by the actual name when encountered by "
+"the match grabber. Additionally, SC2 player names listed as aliases are "
+"replaced in the intros and used to identify players by the automatic "
+"background tasks \"Auto Score Update\" and \"Set Ingame Score\"."
+msgstr ""
+"Player and team aliases are replaced by the actual name when encountered by "
+"the match grabber. Additionally, SC2 player names listed as aliases are "
+"replaced in the intros and used to identify players by the automatic "
+"background tasks \"Auto Score Update\" and \"Set Ingame Score\"."
+
+#: view/subMisc.py:219
+msgid "Player Aliases"
+msgstr "Player Aliases"
+
+#: view/subMisc.py:225 view/subMisc.py:238 view/widgets.py:532
+msgid "Add Alias"
+msgstr "Add Alias"
+
+#: view/subMisc.py:227
+msgid "Player Name"
+msgstr "Player Name"
+
+#: view/subMisc.py:232
+msgid "Team Aliases"
+msgstr "Team Aliases"
+
+#: view/subMisc.py:240
+msgid "Team Name"
+msgstr "Team Name"
+
+#: view/subMisc.py:264
+msgid "Alias of {}"
+msgstr "Alias of {}"
+
+#: view/subMisc.py:278 view/subMisc.py:436 view/subMisc.py:482
+#: view/subMisc.py:519 view/subMisc.py:564
+msgid "Error"
+msgstr "Error"
+
+#: view/subMisc.py:287
 msgid "Optical Character Recognition for Automatic Setting of Ingame Score"
 msgstr "Optical Character Recognition for Automatic Setting of Ingame Score"
 
-#: view/subMisc.py:212
+#: view/subMisc.py:292
 msgid "Activate Optical Character Recognition"
 msgstr "Activate Optical Character Recognition"
 
-#: view/subMisc.py:225 view/subMisc.py:248 view/subMisc.py:278
+#: view/subMisc.py:305 view/subMisc.py:328 view/subMisc.py:358
 msgid "Tesseract-OCR Executable"
 msgstr "Tesseract-OCR Executable"
 
-#: view/subMisc.py:227
+#: view/subMisc.py:307
 msgid "Browse..."
 msgstr "Browse..."
 
-#: view/subMisc.py:230
+#: view/subMisc.py:310
 msgid ""
 "Sometimes the order of players given by the SC2-Client-API differs from the "
 "order in the Observer-UI resulting in a swapped match score. To correct this "
@@ -724,80 +769,75 @@ msgstr ""
 "via Optical Character Recognition you have to download {} and install and "
 "select the exectuable below, if it is not detected automatically."
 
-#: view/subMisc.py:262 view/subMisc.py:266 view/subMisc.py:270
+#: view/subMisc.py:342 view/subMisc.py:346 view/subMisc.py:350
 msgid "This feature is only available in Windows."
 msgstr "This feature is only available in Windows."
 
-#: view/subMisc.py:277
+#: view/subMisc.py:357
 msgid "Select Tesseract-OCR Executable"
 msgstr "Select Tesseract-OCR Executable"
 
-#: view/subMisc.py:279
+#: view/subMisc.py:359
 msgid "Executable"
 msgstr "Executable"
 
-#: view/subMisc.py:279
+#: view/subMisc.py:359
 msgid "All files"
 msgstr "All files"
 
-#: view/subMisc.py:311
+#: view/subMisc.py:391
 msgid "Add from Liquipedia"
 msgstr "Add from Liquipedia"
 
-#: view/subMisc.py:313
+#: view/subMisc.py:393
 msgid "Add from File"
 msgstr "Add from File"
 
-#: view/subMisc.py:315
+#: view/subMisc.py:395
 msgid "Rename"
 msgstr "Rename"
 
-#: view/subMisc.py:317
+#: view/subMisc.py:397
 msgid "Change Image"
 msgstr "Change Image"
 
-#: view/subMisc.py:347 view/subMisc.py:396 view/subMisc.py:432
+#: view/subMisc.py:427 view/subMisc.py:476 view/subMisc.py:512
 msgid "Map Name"
 msgstr "Map Name"
 
-#: view/subMisc.py:356 view/subMisc.py:402 view/subMisc.py:439
-#: view/subMisc.py:484
-msgid "Error"
-msgstr "Error"
-
-#: view/subMisc.py:357 view/subMisc.py:403 view/subMisc.py:440
+#: view/subMisc.py:437 view/subMisc.py:483 view/subMisc.py:520
 msgid "\"{}\" is not a valid map name."
 msgstr "\"{}\" is not a valid map name."
 
-#: view/subMisc.py:361 view/subMisc.py:408 view/subMisc.py:454
+#: view/subMisc.py:441 view/subMisc.py:488 view/subMisc.py:534
 msgid "Duplicate Entry"
 msgstr "Duplicate Entry"
 
-#: view/subMisc.py:362 view/subMisc.py:409
+#: view/subMisc.py:442 view/subMisc.py:489
 msgid "Map is already in list! Overwrite?"
 msgstr "Map is already in list! Overwrite?"
 
-#: view/subMisc.py:376 view/subMisc.py:389
+#: view/subMisc.py:456 view/subMisc.py:469
 msgid "Select Map Image (> 500x500px recommended)"
 msgstr "Select Map Image (> 500x500px recommended)"
 
-#: view/subMisc.py:447
+#: view/subMisc.py:527
 msgid "Map not found"
 msgstr "Map not found"
 
-#: view/subMisc.py:448
+#: view/subMisc.py:528
 msgid "\"{}\" was not found on Liquipedia."
 msgstr "\"{}\" was not found on Liquipedia."
 
-#: view/subMisc.py:455
+#: view/subMisc.py:535
 msgid "Map {} is already in list! Overwrite?"
 msgstr "Map {} is already in list! Overwrite?"
 
-#: view/subMisc.py:493
+#: view/subMisc.py:573
 msgid "Delete map?"
 msgstr "Delete map?"
 
-#: view/subMisc.py:494
+#: view/subMisc.py:574
 msgid "Delete '{}' permanently?"
 msgstr "Delete '{}' permanently?"
 
@@ -890,63 +930,75 @@ msgstr "Activate Custom Font"
 msgid "Custom Font"
 msgstr "Custom Font"
 
-#: view/widgets.py:136
+#: view/widgets.py:138
 msgid "Map Downloader"
 msgstr "Map Downloader"
 
-#: view/widgets.py:138 view/widgets.py:196
+#: view/widgets.py:140 view/widgets.py:198
 msgid "Downloading {}"
 msgstr "Downloading {}"
 
-#: view/widgets.py:194
+#: view/widgets.py:196
 msgid "Logo Downloader"
 msgstr "Logo Downloader"
 
-#: view/widgets.py:246
+#: view/widgets.py:248
 msgid "Updater"
 msgstr "Updater"
 
-#: view/widgets.py:248
+#: view/widgets.py:250
 msgid "Updating to a new version..."
 msgstr "Updating to a new version..."
 
-#: view/widgets.py:276
+#: view/widgets.py:278
 msgid "Downloading a new version: Total file size {}, Time remaining {}."
 msgstr "Downloading a new version: Total file size {}, Time remaining {}."
 
-#: view/widgets.py:319
+#: view/widgets.py:321
 msgid "Not set"
 msgstr "Not set"
 
-#: view/widgets.py:325
+#: view/widgets.py:327
 msgid "Set Hotkey"
 msgstr "Set Hotkey"
 
-#: view/widgets.py:328
+#: view/widgets.py:330
 msgid "Clear"
 msgstr "Clear"
 
-#: view/widgets.py:379
+#: view/widgets.py:381
 msgid "Select"
 msgstr "Select"
 
-#: view/widgets.py:382
+#: view/widgets.py:384
 msgid "Default"
 msgstr "Default"
 
-#: view/widgets.py:574
+#: view/widgets.py:535
+msgid "Name"
+msgstr "Name"
+
+#: view/widgets.py:537
+msgid "Remove with Aliases"
+msgstr "Remove with Aliases"
+
+#: view/widgets.py:542
+msgid "Remove Alias"
+msgstr "Remove Alias"
+
+#: view/widgets.py:671
 msgid "Collecting data..."
 msgstr "Collecting data..."
 
-#: view/widgets.py:600
+#: view/widgets.py:697
 msgid "Extracting data..."
 msgstr "Extracting data..."
 
-#: view/widgets.py:602
+#: view/widgets.py:699
 msgid "Done."
 msgstr "Done."
 
-#: view/widgets.py:618
+#: view/widgets.py:715
 msgid "Downloading required files...: Total file size {}, Time remaining {}."
 msgstr "Downloading required files...: Total file size {}, Time remaining {}."
 
