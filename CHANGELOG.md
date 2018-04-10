@@ -1,6 +1,13 @@
 # Changelog
 
 
+## v1.9.2 (2018-04-10)
+
+### New
+
+* Added option to specify player and team aliases. These aliases are replaced by the actual name when encountered by the match grabber. Additionally, SC2 player names listed as aliases are replaced in the intros by the actual name and used to identify players by the automatic background tasks *Score Update* and *Set Ingame Score*.
+
+
 ## v1.9.1 (2018-04-08)
 
 ### New
