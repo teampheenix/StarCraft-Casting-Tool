@@ -5,11 +5,11 @@ import logging
 import re
 import shutil
 import time
+from collections import OrderedDict
 
 import scctool.settings
-from scctool.matchgrabber import MatchGrabber
-from scctool.matchgrabber.alpha import MatchGrabber as MatchGrabberAlpha
-from scctool.matchgrabber.rstl import MatchGrabber as MatchGrabberRSTL
+from scctool.matchformat import *
+from scctool.matchgrabber import *
 
 # create logger
 module_logger = logging.getLogger('scctool.matchdata')
@@ -20,22 +20,44 @@ class matchData:
 
     def __init__(self, controller):
         """Init and define custom providers."""
-        self.__VALID_PROVIDERS = ['Custom', 'AlphaSC2', 'RSTL']
         self.__rawData = None
         self.__controller = controller
+        self.__initProviderList()
         self.__initData()
         self.__initMatchGrabber()
+        self.__initCustomFormats()
+
+    def __initProviderList(self):
+        self.__VALID_PROVIDERS = dict()
+        self.__VALID_PROVIDERS[MatchGrabber._provider] = MatchGrabber
+        for cls in MatchGrabber.__subclasses__():
+            self.__VALID_PROVIDERS[cls._provider] = cls
 
     def __initMatchGrabber(self):
         provider = self.getProvider()
         (*args,) = (self, self.__controller)
 
-        if(provider == "AlphaSC2"):
-            self.__matchGrabber = MatchGrabberAlpha(*args)
-        elif(provider == "RSTL"):
-            self.__matchGrabber = MatchGrabberRSTL(*args)
+        if provider in self.__VALID_PROVIDERS:
+            self.__matchGrabber = self.__VALID_PROVIDERS[provider](*args)
         else:
             self.__matchGrabber = MatchGrabber(*args)
+
+    def __initCustomFormats(self):
+        formats = dict()
+        for cls in MatchFormat.__subclasses__():
+            formats[cls._name] = cls
+        self.__CUSTOM_FORMATS = OrderedDict(sorted(formats.items()))
+
+    def getCustomFormats(self):
+        for format in self.__CUSTOM_FORMATS.keys():
+            yield format
+
+    def applyCustomFormat(self, name):
+        if name in self.__CUSTOM_FORMATS:
+            customFormat = self.__CUSTOM_FORMATS[name](self)
+            customFormat.applyFormat()
+        else:
+            raise ValueError("Unknown Custom Match Format.")
 
     def readJsonFile(self):
         """Read json data from file."""
@@ -85,7 +107,7 @@ class matchData:
 
     def __initData(self):
         self.__data = {}
-        self.__data['provider'] = self.__VALID_PROVIDERS[0]
+        self.__data['provider'] = MatchGrabber._provider
         self.__data['league'] = "TBD"
         self.__data['id'] = 0
         self.__data['matchlink'] = ""
@@ -659,9 +681,9 @@ class matchData:
         """Set the provider."""
         if(provider):
             matches = difflib.get_close_matches(
-                provider, self.__VALID_PROVIDERS, 1)
+                provider, self.__VALID_PROVIDERS.keys(), 1)
             if(len(matches) == 0):
-                new = self.__VALID_PROVIDERS[0]
+                new = MatchGrabber._provider
             else:
                 new = matches[0]
 
@@ -669,7 +691,7 @@ class matchData:
                 self.__data['provider'] = new
                 self.__metaChanged = True
         else:
-            self.__data['provider'] = self.__VALID_PROVIDERS[0]
+            self.__data['provider'] = MatchGrabber._provider
 
         self.__initMatchGrabber()
         return True

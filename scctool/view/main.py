@@ -8,9 +8,9 @@ from PyQt5.QtGui import QIcon, QKeySequence, QPalette
 from PyQt5.QtWidgets import (QAction, QApplication, QCheckBox, QComboBox,
                              QCompleter, QFormLayout, QGridLayout, QGroupBox,
                              QHBoxLayout, QLabel, QLineEdit, QMainWindow,
-                             QMessageBox, QPushButton, QShortcut, QSizePolicy,
-                             QSlider, QSpacerItem, QTabWidget, QVBoxLayout,
-                             QWidget)
+                             QMenu, QMessageBox, QPushButton, QShortcut,
+                             QSizePolicy, QSlider, QSpacerItem, QTabWidget,
+                             QToolButton, QVBoxLayout, QWidget)
 
 import scctool.settings
 import scctool.settings.config
@@ -445,9 +445,24 @@ class MainWindow(QMainWindow):
 
             self.applycustom_is_highlighted = False
 
-            self.pb_applycustom = QPushButton(
-                _("Apply Format"))
-            self.pb_applycustom.clicked.connect(self.applycustom_click)
+            # act = QAction(QIcon(scctool.settings.getAbsPath(
+            #    'src/connection.png')), _('Connections'), self)
+            # act.setToolTip(
+            #    _('Edit Intro-Settings and API-Settings for Twitch and Nightbot'))
+            # act.triggered.connect(self.openApiDialog)
+
+            self.pb_applycustom = QToolButton()
+            action = QAction(_("Apply Format"))
+            action.triggered.connect(self.applycustom_click)
+            self.pb_applycustom.setDefaultAction(action)
+            self.custom_menu = QMenu(self.pb_applycustom)
+            for format in self.controller.matchData.getCustomFormats():
+                action = self.custom_menu.addAction(format)
+                action.triggered.connect(
+                    lambda x, format=format: self.applyCustomFormat(format))
+            self.pb_applycustom.setMenu(self.custom_menu)
+            self.pb_applycustom.setPopupMode(QToolButton.MenuButtonPopup)
+
             self.pb_applycustom.setFixedWidth(150)
             container.addWidget(self.pb_applycustom, 0)
 
@@ -931,6 +946,22 @@ class MainWindow(QMainWindow):
                 self.controller.stopSC2ApiThread("toggleProduction")
         except Exception as e:
             module_logger.exception("message")
+
+    def applyCustomFormat(self, format):
+        """Handle click to apply custom format."""
+        QApplication.setOverrideCursor(
+            Qt.WaitCursor)
+        try:
+            with self.tlock:
+                self.controller.matchData.applyCustomFormat(format)
+                self.controller.updateForms()
+                self.resizeWindow()
+                self.highlightOBSupdate(force=True)
+            self.highlightApplyCustom(False)
+        except Exception as e:
+            module_logger.exception("message")
+        finally:
+            QApplication.restoreOverrideCursor()
 
     def applycustom_click(self):
         """Handle click to apply custom match."""

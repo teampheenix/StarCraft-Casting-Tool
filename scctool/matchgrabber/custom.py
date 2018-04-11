@@ -11,13 +11,14 @@ module_logger = logging.getLogger('scctool.matchgrabber.custom')
 class MatchGrabber(object):
     """Parent definition,i.e., for custom matchs."""
 
+    _provider = "Custom"
+
     def __init__(self, matchData, controller, id=False):
         """Init match grabber."""
         self._id = 0
         self.setID(id)
         self._controller = controller
         self._matchData = matchData
-        self._provider = "Custom"
         self._urlprefix = ""
         self._apiprefix = ""
         self._rawData = None

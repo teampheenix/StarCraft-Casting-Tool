@@ -11,10 +11,11 @@ module_logger = logging.getLogger('scctool.matchgrabber.rstl')
 class MatchGrabber(MatchGrabberParent):
     """Grabs match data from Russian StarCraft 2 Teamleague."""
 
+    _provider = "RSTL"
+
     def __init__(self, *args):
         """Init match grabber."""
         super().__init__(*args)
-        self._provider = "RSTL"
         self._urlprefix = \
             "http://hdgame.net/en/tournaments/list/tournament"\
             + "/rstl-13/tmenu/tmatches/?match="

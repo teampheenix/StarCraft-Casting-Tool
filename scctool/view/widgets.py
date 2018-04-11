@@ -9,14 +9,15 @@ import humanize
 import keyboard
 import requests
 from PyQt5.QtCore import QMimeData, QPoint, QSize, Qt, pyqtSignal
-from PyQt5.QtGui import QColor, QDrag, QIcon, QPainter, QKeySequence
+from PyQt5.QtGui import QColor, QDrag, QIcon, QKeySequence, QPainter
 from PyQt5.QtWidgets import (QAction, QApplication, QColorDialog, QComboBox,
                              QCompleter, QFrame, QHBoxLayout, QHeaderView,
                              QLabel, QLineEdit, QListWidget, QListWidgetItem,
                              QMenu, QProgressBar, QProgressDialog, QPushButton,
-                             QSizePolicy, QStyle, QStyleOptionButton,
-                             QTableWidget, QTableWidgetItem, QTextBrowser,
-                             QTreeWidget, QTreeWidgetItem, QShortcut)
+                             QShortcut, QSizePolicy, QStyle,
+                             QStyleOptionButton, QTableWidget,
+                             QTableWidgetItem, QTextBrowser, QTreeWidget,
+                             QTreeWidgetItem)
 
 import scctool.matchdata
 import scctool.settings.config
@@ -469,15 +470,15 @@ class AliasTreeView(QTreeWidget):
         self.header().hide()
         self.setAnimated(True)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        
+
         self.setContextMenuPolicy(Qt.CustomContextMenu)
         self.customContextMenuRequested.connect(self.openMenu)
-        
+
         shortcut = QShortcut(QKeySequence("DEL"), self)
         shortcut.setAutoRepeat(False)
         shortcut.setContext(Qt.WidgetWithChildrenShortcut)
         shortcut.activated.connect(self.delClicked)
-        
+
         shortcut = QShortcut(QKeySequence("Enter"), self)
         shortcut.setAutoRepeat(False)
         shortcut.setContext(Qt.WidgetWithChildrenShortcut)
@@ -526,7 +527,7 @@ class AliasTreeView(QTreeWidget):
                     del self.items[parent.text(0)]
             except AttributeError:
                 pass
-                
+
     def delClicked(self):
         indexes = self.selectedIndexes()
 
@@ -542,7 +543,7 @@ class AliasTreeView(QTreeWidget):
                 self.removeName(text)
             elif level == 1:
                 self.removeAlias(text)
-                
+
     def enterClicked(self):
         indexes = self.selectedIndexes()
 
@@ -552,12 +553,11 @@ class AliasTreeView(QTreeWidget):
             while index.parent().isValid():
                 index = index.parent()
                 level += 1
-                
+
             text = self.itemFromIndex(index).text(0)
 
             if level == 0 or level == 1:
                 self.parent.addAlias(self, _('Name'), text)
-
 
     def openMenu(self, position):
         indexes = self.selectedIndexes()
@@ -624,7 +624,7 @@ class ListTable(QTableWidget):
         uniq = [x for x in data if x not in seen and not seen.add(x)]
         uniq.sort()
         return uniq
-    
+
     def delClicked(self):
         item = self.currentItem()
         if item and item.isSelected() and item.text().strip():

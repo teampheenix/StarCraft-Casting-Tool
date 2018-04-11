@@ -13,10 +13,11 @@ module_logger = logging.getLogger('scctool.matchgrabber.alpha')
 class MatchGrabber(MatchGrabberParent):
     """Grabs match data from Alpha SC2 Teamleague."""
 
+    _provider = "AlphaSC2"
+
     def __init__(self, *args):
         """Init match grabber."""
         super().__init__(*args)
-        self._provider = "AlphaSC2"
         self._urlprefix = "http://alpha.tl/match/"
         self._apiprefix = "http://alpha.tl/api?match="
 
