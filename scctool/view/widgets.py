@@ -9,14 +9,14 @@ import humanize
 import keyboard
 import requests
 from PyQt5.QtCore import QMimeData, QPoint, QSize, Qt, pyqtSignal
-from PyQt5.QtGui import QColor, QDrag, QIcon, QPainter
+from PyQt5.QtGui import QColor, QDrag, QIcon, QPainter, QKeySequence
 from PyQt5.QtWidgets import (QAction, QApplication, QColorDialog, QComboBox,
                              QCompleter, QFrame, QHBoxLayout, QHeaderView,
                              QLabel, QLineEdit, QListWidget, QListWidgetItem,
                              QMenu, QProgressBar, QProgressDialog, QPushButton,
                              QSizePolicy, QStyle, QStyleOptionButton,
                              QTableWidget, QTableWidgetItem, QTextBrowser,
-                             QTreeWidget, QTreeWidgetItem)
+                             QTreeWidget, QTreeWidgetItem, QShortcut)
 
 import scctool.matchdata
 import scctool.settings.config
@@ -469,8 +469,19 @@ class AliasTreeView(QTreeWidget):
         self.header().hide()
         self.setAnimated(True)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        
         self.setContextMenuPolicy(Qt.CustomContextMenu)
         self.customContextMenuRequested.connect(self.openMenu)
+        
+        shortcut = QShortcut(QKeySequence("DEL"), self)
+        shortcut.setAutoRepeat(False)
+        shortcut.setContext(Qt.WidgetWithChildrenShortcut)
+        shortcut.activated.connect(self.delClicked)
+        
+        shortcut = QShortcut(QKeySequence("Enter"), self)
+        shortcut.setAutoRepeat(False)
+        shortcut.setContext(Qt.WidgetWithChildrenShortcut)
+        shortcut.activated.connect(self.enterClicked)
 
     def insertAliasList(self, name, aliasList):
         name = str(name).strip()
@@ -515,6 +526,38 @@ class AliasTreeView(QTreeWidget):
                     del self.items[parent.text(0)]
             except AttributeError:
                 pass
+                
+    def delClicked(self):
+        indexes = self.selectedIndexes()
+
+        if len(indexes) > 0:
+            level = 0
+            index = indexes[0]
+            text = self.itemFromIndex(index).text(0)
+            while index.parent().isValid():
+                index = index.parent()
+                level += 1
+
+            if level == 0:
+                self.removeName(text)
+            elif level == 1:
+                self.removeAlias(text)
+                
+    def enterClicked(self):
+        indexes = self.selectedIndexes()
+
+        if len(indexes) > 0:
+            level = 0
+            index = indexes[0]
+            while index.parent().isValid():
+                index = index.parent()
+                level += 1
+                
+            text = self.itemFromIndex(index).text(0)
+
+            if level == 0 or level == 1:
+                self.parent.addAlias(self, _('Name'), text)
+
 
     def openMenu(self, position):
         indexes = self.selectedIndexes()
@@ -567,6 +610,10 @@ class ListTable(QTableWidget):
         self.verticalHeader().setSectionResizeMode(
             QHeaderView.ResizeToContents)
         self.setData(data)
+        self.shortcut = QShortcut(QKeySequence("DEL"), self)
+        self.shortcut.setAutoRepeat(False)
+        self.shortcut.setContext(Qt.WidgetWithChildrenShortcut)
+        self.shortcut.activated.connect(self.delClicked)
 
     def __handleDataChanged(self, item):
         self.setData(self.getData(), item)
@@ -577,6 +624,11 @@ class ListTable(QTableWidget):
         uniq = [x for x in data if x not in seen and not seen.add(x)]
         uniq.sort()
         return uniq
+    
+    def delClicked(self):
+        item = self.currentItem()
+        if item and item.isSelected() and item.text().strip():
+            item.setText("")
 
     def setData(self, data, item=""):
         """Set the data."""
