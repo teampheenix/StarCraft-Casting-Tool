@@ -1,6 +1,15 @@
 # Changelog
 
 
+## v1.9.3 (2018-04-11)
+
+### New
+
+* Added predefined Custom Match formats for Koprulu, WardiTV, and PSISTOM Gaming Team League.
+
+* Added Shortcuts to Favorites and Alias Settings.
+
+
 ## v1.9.2 (2018-04-10)
 
 ### New
