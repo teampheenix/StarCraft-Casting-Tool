@@ -50,7 +50,6 @@ class AutoRequestsThread(TasksThread):
 
     def __twitchOnceTask(self):
         try:
-            self.__controller.updateData()
             title = scctool.settings.config.parser.get(
                 "Twitch", "title_template")
             title = self.__controller.placeholders.replace(title)
@@ -78,7 +77,6 @@ class AutoRequestsThread(TasksThread):
 
     def __nightbotOnceTask(self):
         try:
-            self.__controller.updateData()
             data = dict()
             for command, message in scctool.settings.nightbot_commands.items():
                 message = self.__controller.placeholders.replace(message)
