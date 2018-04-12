@@ -1,6 +1,13 @@
 # Changelog
 
 
+## v1.9.4 (2018-04-12)
+
+### Fix
+
+* Fixed crash when "Update Twitch" and "Update Nightbot" was pressed.
+
+
 ## v1.9.3 (2018-04-11)
 
 ### New
