@@ -315,7 +315,7 @@ class Logo:
 
     def getFile(self, web=False):
         if self._format == "none":
-            file = os.path.join(OBShtmlDir, "src/SC2.png")
+            file = os.path.join(OBShtmlDir, "src/img/SC2.png")
         else:
             file = os.path.join(logosDir, "{}.{}".format(
                 self._ident, self._format))

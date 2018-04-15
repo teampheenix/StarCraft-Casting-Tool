@@ -1,0 +1,237 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+:root {
+        --width: 1280px;
+        --height: 480px;
+        --middle: 40%;
+        --side: calc((100% - var(--middle)) / 2);
+        --color: #6495ed;
+        --color2: black;
+        --font: Roboto;
+}
+
+body {
+        overflow: hidden;
+        font-family: var(--font);
+}
+
+div.box {
+        position: absolute;
+        width: var(--width);
+        height: var(--height);
+        left: calc((100% - var(--width)) / 2);
+        top: calc((100% - var(--height)) / 2 - 50px);
+        overflow: hidden;
+}
+
+div.left-column {
+        box-sizing: border-box;
+        position: absolute;
+        height: 100%;
+        width: calc(var(--side) + 25px);
+        padding: 10px;
+        padding-right: 35px;
+        overflow: hidden;
+        display: inline-block;
+}
+
+div.right-column {
+        box-sizing: border-box;
+        position: absolute;
+        height: 100%;
+        right: 0%;
+        width: var(--side);
+        padding: 10px;
+        overflow: hidden;
+        display: inline-block;
+}
+
+div.middle-column {
+        box-sizing: border-box;
+        position: absolute;
+        height: 100%;
+        left: calc(var(--side));
+        width: calc(var(--middle));
+        display: inline-block;
+}
+
+div.column-header {
+        box-sizing: border-box;
+        position: relative;
+        height: 150px;
+        color: var(--color);
+        font-size: 35px;
+        text-transform: uppercase;
+        letter-spacing: 5px;
+}
+
+div.column-header span {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+}
+
+div.column-header.left {
+        text-align: right;
+}
+
+div.column-header.right {
+        text-align: left;
+}
+
+div.column-header span:after {
+        content: '';
+        width: 80%;
+        height: 2px;
+        background-color: var(--color);
+        display: inline-block;
+}
+
+#map-img {
+        position: absolute;
+        box-sizing: border-box;
+        max-width: 85%;
+        max-height: 100%;
+        display: block;
+        bottom: 0%;
+        left: 50%;
+        transform: translate(-50%, 0%);
+        border: 2px solid var(--color);
+}
+
+#map-list {
+        color: var(--color2);
+        letter-spacing: 3px;
+        font-size: 20px;
+        line-height: 25px;
+        text-transform: uppercase;
+        text-align: right;
+        list-style-type: none;
+        position: absolute;
+        right: 0px;
+}
+
+ul li {
+        margin: 10px;
+        cursor: pointer;
+}
+
+ul li::after {
+        content: ' ';
+        width: 25px;
+        box-sizing: border-box;
+        display: inline-block;
+}
+
+ul li.selected::after {
+        content: '⮜';
+        color: var(--color);
+        width: 25px;
+        display: inline-block;
+        box-sizing: border-box;
+}
+
+ul li.selected::before {
+        content: '⮞';
+        color: var(--color);
+        width: 25px;
+        text-align: left;
+        display: inline-block;
+}
+
+ul li::before {
+        content: '';
+        width: 25px;
+        text-align: left;
+        display: inline-block;
+}
+
+div.stat {
+        margin-bottom: 35px;
+}
+
+div.stat>span {
+        font-size: 25px;
+        color: var(--color2);
+        position: relative;
+        top: 3px;
+        display: inline-block;
+}
+
+div.stat>div {
+        letter-spacing: 0px;
+        color: var(--color);
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 0;
+        margin-right: 15px;
+        display: inline-block;
+}
+
+div.stat>div::after {
+        content: ':';
+}
+
+div.small-stat>span {
+        letter-spacing: 0px;
+        font-size: 16px;
+        color: var(--color2);
+}
+
+div.small-stat>span.desc {
+        color: var(--color);
+        letter-spacing: 1px;
+        font-weight: bold;
+        text-transform: uppercase;
+}
+
+div.small-stat>span.desc::after {
+        content: ': '
+}
+
+#column-content {
+        position: relative;
+}
+
+#column-bottom {
+        position: absolute;
+        padding-left: 10px;
+        bottom: 0;
+}
+
+div.race {
+        display: inline-block;
+        width: 2em;
+        height: 2.5em;
+        margin-bottom: -0.8em;
+        overflow: hidden;
+}
+
+div.race>span {
+        background-image: url('../../img/races/protoss-black.png');
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: contain;
+        display: block;
+        position: relative;
+        width: 2em;
+        filter: drop-shadow(100px 0px var(--color));
+        margin-left: -100px;
+}
+
+div.Protoss>span {
+        background-image: url('../../img/races/protoss-black.png');
+        height: 2.5em;
+}
+
+div.Terran>span {
+        background-image: url('../../img/races/terran-black.png');
+        height: 2.0em;
+        margin-top: 0.35em;
+}
+
+div.Zerg>span {
+        background-image: url('../../img/races/zerg-black.png');
+        height: 2.0em;
+        margin-top: 0.35em;
+}

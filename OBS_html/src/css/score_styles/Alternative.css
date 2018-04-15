@@ -9,7 +9,7 @@
         unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
-body{
+body {
         font-family: OrbitronAdv, Orbitron, Helvetica, Sans-Serif;
 }
 
@@ -79,7 +79,7 @@ div.box_left {
         height: 100%;
         left: var(--logo-width);
         width: calc(var(--side-width) + var(--border-radius));
-        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0, 0, 0, 0.4)), color-stop(2%, rgba(0, 0, 0, 0.05)), color-stop(20%, rgba(0, 0, 0, 0.0)), color-stop(92%, rgba(0, 0, 0, 0.40)), color-stop(100%, rgba(0, 0, 0, 0.20))), url("../texture2.jpg");
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0, 0, 0, 0.4)), color-stop(2%, rgba(0, 0, 0, 0.05)), color-stop(20%, rgba(0, 0, 0, 0.0)), color-stop(92%, rgba(0, 0, 0, 0.40)), color-stop(100%, rgba(0, 0, 0, 0.20))), url("../img/textures/texture2.jpg");
         background-size: cover;
         background-position: 270px 0px;
 }
@@ -92,7 +92,7 @@ div.box_middle {
         top: calc(0px - var(--border-size));
         border: var(--border-size) solid var(--border-color);
         border-radius: 0px var(--border-radius) 0px var(--border-radius);
-        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0, 0, 0, 0.4)), color-stop(2%, rgba(0, 0, 0, 0.05)), color-stop(20%, rgba(0, 0, 0, 0.0)), color-stop(92%, rgba(0, 0, 0, 0.20)), color-stop(100%, rgba(0, 0, 0, 0.20))), url("../texture1.jpg");
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0, 0, 0, 0.4)), color-stop(2%, rgba(0, 0, 0, 0.05)), color-stop(20%, rgba(0, 0, 0, 0.0)), color-stop(92%, rgba(0, 0, 0, 0.20)), color-stop(100%, rgba(0, 0, 0, 0.20))), url("../img/textures/texture1.jpg");
         background-image: url("../texture1.jpg");
         background-size: cover;
         overflow: hidden;
@@ -139,7 +139,7 @@ div.box_right {
         height: var(--total-height);
         right: var(--logo-width);
         width: calc(var(--side-width) + var(--border-radius));
-        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0, 0, 0, 0.4)), color-stop(2%, rgba(0, 0, 0, 0.05)), color-stop(20%, rgba(0, 0, 0, 0.0)), color-stop(92%, rgba(0, 0, 0, 0.40)), color-stop(100%, rgba(0, 0, 0, 0.20))), url("../texture2.jpg");
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0, 0, 0, 0.4)), color-stop(2%, rgba(0, 0, 0, 0.05)), color-stop(20%, rgba(0, 0, 0, 0.0)), color-stop(92%, rgba(0, 0, 0, 0.40)), color-stop(100%, rgba(0, 0, 0, 0.20))), url("../img/textures/texture2.jpg");
         background-size: cover;
 }
 

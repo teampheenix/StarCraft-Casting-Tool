@@ -5,12 +5,16 @@ var volume = 1.0;
 var debug = false;
 var displayTime = 3.0;
 var tween = new TimelineMax()
-var myAudio1 = new Audio("src/sound.wav");
+var myAudio1 = new Audio("src/sound/flyin.wav");
 myAudio1.volume = volume;
-var myAudio2 = new Audio("src/sound2.wav");
+var myAudio2 = new Audio("src/sound/bass.wav");
 myAudio2.volume = volume;
-var myAudio3 = new Audio("src/fanfare.wav");
+var myAudio3 = new Audio("src/sound/fanfare.wav");
 myAudio3.volume = volume;
+
+window.onload = function() {
+        init();
+}
 
 function playSound1() {
         myAudio1.play();

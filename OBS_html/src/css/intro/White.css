@@ -36,7 +36,7 @@ div.box {
         box-shadow: 0px 1px 1px rgba(000, 000, 000, 0.5), inset 1px 1px 0px rgba(255, 255, 255, 0.4);
         text-shadow: 1px 1px 1px rgba(000, 000, 000, 0.7), 0px 1px 0px rgba(255, 255, 255, 0.4);
         overflow: hidden;
-        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0, 0, 0, 0.4)), color-stop(8%, rgba(0, 0, 0, 0.05)), color-stop(50%, rgba(0, 0, 0, 0.0)), color-stop(92%, rgba(0, 0, 0, 0.40)), color-stop(100%, rgba(0, 0, 0, 0.60))), url("../../texture2.jpg") no-repeat;
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0, 0, 0, 0.4)), color-stop(8%, rgba(0, 0, 0, 0.05)), color-stop(50%, rgba(0, 0, 0, 0.0)), color-stop(92%, rgba(0, 0, 0, 0.40)), color-stop(100%, rgba(0, 0, 0, 0.60))), url("../../img/textures/texture2.jpg") no-repeat;
 }
 
 div.race {
@@ -49,7 +49,7 @@ div.race {
 }
 
 #random {
-        background-image: url("../../random-black.png");
+        background-image: url("../../img/races/random-black.png");
         background-repeat: no-repeat;
         background-position: center center;
         background-size: cover;
@@ -57,7 +57,7 @@ div.race {
 }
 
 #protoss {
-        background-image: url("../../protoss-black.png");
+        background-image: url("../../img/races/protoss-black.png");
         background-repeat: no-repeat;
         background-position: center -105px;
         background-size: 140px;
@@ -65,7 +65,7 @@ div.race {
 }
 
 #zerg {
-        background-image: url("../../zerg-black.png");
+        background-image: url("../../img/races/zerg-black.png");
         background-repeat: no-repeat;
         background-position: center center;
         background-size: cover;
@@ -73,7 +73,7 @@ div.race {
 }
 
 #terran {
-        background-image: url("../../terran-black.png");
+        background-image: url("../../img/races/terran-black.png");
         background-repeat: no-repeat;
         background-position: center -25px;
         background-size: 180px;
