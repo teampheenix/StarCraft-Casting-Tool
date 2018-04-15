@@ -115,8 +115,8 @@ class StyleComboBox(QComboBox):
         new_file = scctool.settings.getAbsPath(new_file)
         shutil.copy(new_file, scctool.settings.getAbsPath(file))
 
-    def applyWebsocket(self, controller):
-        controller.websocketThread.changeStyle(self.currentText())
+    def applyWebsocket(self, controller, path):
+        controller.websocketThread.changeStyle(path, self.currentText())
 
 
 class MapDownloader(QProgressDialog):

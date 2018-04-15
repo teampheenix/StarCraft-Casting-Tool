@@ -1,7 +1,6 @@
 """Provide config for SCCTool."""
-import logging
 import configparser
-
+import logging
 import os.path
 
 from scctool.settings import configFile, windows
@@ -156,6 +155,7 @@ def setDefaultConfigAll():
     setDefaultConfig("Style", "mapicon_landscape", "Default")
     setDefaultConfig("Style", "score", "Default")
     setDefaultConfig("Style", "intro", "Default")
+    setDefaultConfig("Style", "mapstats", "Default")
     setDefaultConfig("Style", "use_custom_font", "False")
     setDefaultConfig("Style", "custom_font", "Verdana")
 
@@ -165,6 +165,9 @@ def setDefaultConfigAll():
     setDefaultConfig("Intros", "sound_volume", "5")
     setDefaultConfig("Intros", "display_time", "3.0")
     setDefaultConfig("Intros", "animation", "Fly-In")
+
+    setDefaultConfig("Mapstats", "color1", "#6495ed")
+    setDefaultConfig("Mapstats", "color2", "#000000")
 
 
 def renameConfigOptions():

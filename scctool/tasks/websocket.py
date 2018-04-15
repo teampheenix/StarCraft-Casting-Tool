@@ -86,7 +86,7 @@ class WebsocketThread(QThread):
             "Intros", "hotkey_player2"), lambda: self.showIntro(1))
 
         self.__register_hotkey(scctool.settings.config.parser.get(
-            "Intros", "hotkey_debug"), lambda: self.sendData("/intro", "DEBUG_MODE", dict()))
+            "Intros", "hotkey_debug"), lambda: self.sendData("intro", "DEBUG_MODE", dict()))
 
     def unregister_hotkeys(self):
         try:
@@ -97,13 +97,17 @@ class WebsocketThread(QThread):
             self.keyboard_state = dict()
 
     async def handler(self, websocket, path):
-        if path not in ['/intro', '/mapstats']:
+        path = path.replace('/', '')
+        if path not in ['intro', 'mapstats']:
             module_logger.info("Client with incorrect path.")
             return
         self.registerConnection(websocket, path)
         module_logger.info("Client connected!")
-        if path == '/intro':
-            self.changeStyle()
+        self.changeStyle(path)
+        if path == 'mapstats':
+            self.changeColors(path)
+            self.changeFont(path)
+
         while True:
             try:
                 await asyncio.wait_for(websocket.recv(), timeout=20)
@@ -122,26 +126,56 @@ class WebsocketThread(QThread):
 
         module_logger.info("Connection removed")
         self.unregisterConnection(websocket, path)
-        
+
     def registerConnection(self, websocket, path):
         if path not in self.connected.keys():
             self.connected[path] = set()
         self.connected[path].add(websocket)
-        self.socketConnectionChanged.emit(len(self.connected[path]), path.replace('/', ''))
-    
+        self.socketConnectionChanged.emit(
+            len(self.connected[path]), path)
+
     def unregisterConnection(self, websocket, path):
         if path in self.connected.keys():
             self.connected[path].remove(websocket)
-            self.socketConnectionChanged.emit(len(self.connected[path]), path.replace('/', ''))
+            self.socketConnectionChanged.emit(
+                len(self.connected[path]), path)
 
-    def changeStyle(self, style=None):
-        if style is None:
-            style = scctool.settings.config.parser.get("Style", "intro")
-        style_file = "src/css/intro/" + style + ".css"
-        self.sendData("/intro", "CHANGE_STYLE", {'file': style_file})
+    def changeStyle(self, path, style=None):
+        if path in ['intro', 'mapstats']:
+            if style is None:
+                style = scctool.settings.config.parser.get("Style", path)
+            style_file = "src/css/{}/{}.css".format(path, style)
+            self.sendData(path, "CHANGE_STYLE", {'file': style_file})
+        else:
+            raise ValueError('Change style is not available for this path.')
+
+    def changeColors(self, path, colors=None):
+        if path in ['mapstats']:
+            if colors is None:
+                colors = dict()
+                for i in range(1, 3):
+                    key = 'color{}'.format(i)
+                    colors[key] = scctool.settings.config.parser.get(
+                        "Mapstats", key)
+            self.sendData(path, "CHANGE_COLORS", colors)
+        else:
+            raise ValueError('Change style is not available for this path.')
+
+    def changeFont(self, path, font=None):
+        if path in ['mapstats']:
+            if font is None:
+                if not scctool.settings.config.parser.getboolean("Style", "use_custom_font"):
+                    font = "DEFAULT"
+                else:
+                    font = scctool.settings.config.parser.get(
+                        "Style", "custom_font")
+            self.sendData(path, "CHANGE_FONT", {'font': font})
+        else:
+            raise ValueError('Change font is not available for this path.')
 
     def showIntro(self, idx):
-        self.sendData("/intro", "SHOW_INTRO", self.__controller.getPlayerIntroData(idx))
+        self.sendData("intro", "SHOW_INTRO",
+                      self.__controller.getPlayerIntroData(idx))
 
     def sendData(self, path, event, input_data):
         data = dict()

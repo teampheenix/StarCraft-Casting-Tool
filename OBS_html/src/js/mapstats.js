@@ -6,6 +6,7 @@ var tweenInitial = new TimelineMax();
 var socket = null;
 var isopen = false;
 var reconnectIntervalMs = 5000;
+var myDefaultFont = null;
 
 window.onload = function() {
         init();
@@ -13,8 +14,7 @@ window.onload = function() {
 
 function init() {
         connectWebsocket();
-        setColors("blue", "black");
-        setFont("Roboto");
+        myDefaultFont = getComputedStyle(document.body).getPropertyValue('--font');
         setPoolName("Map Pool");
         var map = {};
         map["map-name"] = "Catalyst";
@@ -52,13 +52,13 @@ function connectWebsocket() {
 
         socket.onmessage = function(message) {
                 var jsonObject = JSON.parse(message.data);
-                var intro = document.getElementById("intro");
-                if (jsonObject.data.hasOwnProperty('font')) {
-                        intro.style.fontFamily = jsonObject.data.font;
-                }
                 console.log("Message received");
                 if (jsonObject.event == 'CHANGE_STYLE') {
                         changeCSS(jsonObject.data.file, 0);
+                } else if (jsonObject.event == 'CHANGE_COLORS') {
+                        setColors(jsonObject.data.color1, jsonObject.data.color2);
+                } else if (jsonObject.event == 'CHANGE_FONT') {
+                        setFont(jsonObject.data.font);
                 } else if (jsonObject.event == 'DEBUG_MODE') {}
         }
 
@@ -70,7 +70,7 @@ function connectWebsocket() {
                         connectWebsocket();
                 }, reconnectIntervalMs);
         }
-};
+}
 
 function addMaps(data) {
         for (var name in data) {
@@ -208,6 +208,9 @@ function setColors(color1, color2) {
 
 
 function setFont(font) {
+        if (font == 'DEFAULT') {
+                font = myDefaultFont;
+        }
         document.documentElement.style.setProperty('--font', font);
 }
 

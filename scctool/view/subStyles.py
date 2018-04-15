@@ -4,9 +4,9 @@ import logging
 from PyQt5.QtCore import QPoint, QSize, Qt
 from PyQt5.QtGui import QFontDatabase, QIcon, QKeySequence
 from PyQt5.QtWidgets import (QCheckBox, QComboBox, QFormLayout, QGridLayout,
-                             QHBoxLayout, QLabel, QMessageBox, QPushButton,
-                             QShortcut, QSizePolicy, QSpacerItem, QTabWidget,
-                             QVBoxLayout, QWidget)
+                             QGroupBox, QHBoxLayout, QLabel, QMessageBox,
+                             QPushButton, QShortcut, QSizePolicy, QSpacerItem,
+                             QTabWidget, QVBoxLayout, QWidget)
 
 import scctool.settings
 from scctool.view.widgets import ColorLayout, StyleComboBox, TextPreviewer
@@ -146,6 +146,18 @@ class SubwindowStyles(QWidget):
         container.addWidget(button)
         layout.addRow(QLabel(_("Intros:")), container)
 
+        container = QHBoxLayout()
+        self.qb_mapstatsStyle = StyleComboBox(
+            scctool.settings.OBShtmlDir + "/src/css/mapstats",
+            scctool.settings.config.parser.get("Style", "mapstats"))
+        self.qb_mapstatsStyle.currentIndexChanged.connect(self.changed)
+        button = QPushButton(_("Show in Browser"))
+        button.clicked.connect(lambda: self.openHTML(
+            scctool.settings.OBShtmlDir + "/mapstats.html"))
+        container.addWidget(self.qb_mapstatsStyle)
+        container.addWidget(button)
+        layout.addRow(QLabel(_("Map Stats:")), container)
+
         self.pb_applyStyles = QPushButton(_("Apply"))
         self.pb_applyStyles.clicked.connect(self.applyStyles)
         layout.addRow(QLabel(), self.pb_applyStyles)
@@ -170,13 +182,16 @@ class SubwindowStyles(QWidget):
             self.controller, scctool.settings.OBSmapDir + "/src/css/landscape.css")
         self.qb_scoreStyle.apply(
             self.controller, scctool.settings.OBShtmlDir + "/src/css/score.css")
-        self.qb_introStyle.applyWebsocket(self.controller)
+        self.qb_introStyle.applyWebsocket(self.controller, 'intro')
+        self.qb_mapstatsStyle.applyWebsocket(self.controller, 'mapstats')
 
     def createColorBox(self):
         """Create box for color selection."""
         self.colorBox = QWidget()
-        layout = QVBoxLayout()
+        mainLayout = QVBoxLayout()
 
+        box = QGroupBox(_("Map and Score Icons"))
+        layout = QVBoxLayout()
         self.default_color = ColorLayout(
             self, _("Default Border:"),
             scctool.settings.config.parser.get("MapIcons", "default_border_color"), "#f29b00")
@@ -203,8 +218,23 @@ class SubwindowStyles(QWidget):
             self, _("Not played:"),
             scctool.settings.config.parser.get("MapIcons", "notplayed_color"), "#aaaaaa")
         layout.addLayout(self.notplayed_color)
+        box.setLayout(layout)
+        mainLayout.addWidget(box)
 
-        self.colorBox.setLayout(layout)
+        box = QGroupBox(_("Map Stats"))
+        layout = QVBoxLayout()
+        self.mapstats_color1 = ColorLayout(
+            self, _("Color 1:"),
+            scctool.settings.config.parser.get("Mapstats", "color1"), "#6495ed")
+        layout.addLayout(self.mapstats_color1)
+        self.mapstats_color2 = ColorLayout(
+            self, _("Color 2:"),
+            scctool.settings.config.parser.get("Mapstats", "color2"), "#000000")
+        layout.addLayout(self.mapstats_color2)
+        box.setLayout(layout)
+        mainLayout.addWidget(box)
+
+        self.colorBox.setLayout(mainLayout)
 
     def createFontBox(self):
         """Create box for font selection."""
@@ -272,6 +302,11 @@ class SubwindowStyles(QWidget):
                 "MapIcons", "notplayed_color", self.notplayed_color.getColor())
 
             scctool.settings.config.parser.set(
+                "Mapstats", "color1", self.mapstats_color1.getColor())
+            scctool.settings.config.parser.set(
+                "Mapstats", "color2", self.mapstats_color2.getColor())
+
+            scctool.settings.config.parser.set(
                 "Style", "mapicon_landscape", self.qb_landscapeStyle.currentText())
             scctool.settings.config.parser.set(
                 "Style", "mapicon_box", self.qb_boxStyle.currentText())
@@ -279,6 +314,8 @@ class SubwindowStyles(QWidget):
                 "Style", "score", self.qb_scoreStyle.currentText())
             scctool.settings.config.parser.set(
                 "Style", "intro", self.qb_introStyle.currentText())
+            scctool.settings.config.parser.set(
+                "Style", "mapstats", self.qb_mapstatsStyle.currentText())
 
             scctool.settings.config.parser.set(
                 "Style", "use_custom_font", str(self.cb_usefont.isChecked()))
@@ -288,6 +325,11 @@ class SubwindowStyles(QWidget):
 
             self.mainWindow.highlightOBSupdate()
             self.controller.matchData.allChanged()
+
+            colors = {'color1': self.mapstats_color1.getColor(
+            ), 'color2': self.mapstats_color2.getColor()}
+            self.controller.websocketThread.changeColors('mapstats', colors)
+            self.controller.websocketThread.changeFont('mapstats')
 
     def saveCloseWindow(self):
         """Save and close window."""
