@@ -44,6 +44,8 @@ class MainController:
             self.webApp.signal_twitch.connect(self.webAppDone_twitch)
             self.webApp.signal_nightbot.connect(self.webAppDone_nightbot)
             self.websocketThread = WebsocketThread(self)
+            self.websocketThread.socketConnectionChanged.connect(self.toogleLEDs)
+            self.runWebsocketThread()
             self.autoRequestsThread = AutoRequestsThread(self)
             self.placeholderSetup()
             self._warning = False
@@ -722,6 +724,11 @@ class MainController:
         warning = self._warning
         self._warning = False
         return warning
+        
+    def toogleLEDs(self, num, path):
+        """Indicate when browser sources are connected."""
+        self.view.leds[path].setChecked(num > 0)
+        self.view.leds[path].setToolTip(_("{} {} Browser Source(s) connected.").format(num, path.capitalize()))
 
     def newVersion(self, version, force=False):
         """Display dialog for new version."""

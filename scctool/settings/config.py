@@ -194,11 +194,6 @@ def renameConfigOptions():
         pass
 
 
-def ftpIsValid():
-    """Check if FTP data is valid."""
-    return len(parser.get("FTP", "server")) > 0
-
-
 def nightbotIsValid():
     """Check if nightbot data is valid."""
     from scctool.settings import nightbot_commands

@@ -5,7 +5,7 @@ import logging
 
 import keyboard
 import websockets
-from PyQt5.QtCore import QThread
+from PyQt5.QtCore import QThread, pyqtSignal
 
 import scctool.settings
 
@@ -17,18 +17,19 @@ class WebsocketThread(QThread):
     """Thread for websocket interaction."""
 
     keyboard_state = dict()
+    socketConnectionChanged = pyqtSignal(int, str)
 
     def __init__(self, controller):
         """Init thread."""
         QThread.__init__(self)
-        self.connected = set()
+        self.connected = dict()
         self.__loop = None
         self.__controller = controller
 
     def run(self):
         """Run thread."""
         module_logger.info("WebSocketThread starting!")
-        self.connected = set()
+        self.connected = dict()
         self.__loop = asyncio.new_event_loop()
         asyncio.set_event_loop(self.__loop)
 
@@ -85,7 +86,7 @@ class WebsocketThread(QThread):
             "Intros", "hotkey_player2"), lambda: self.showIntro(1))
 
         self.__register_hotkey(scctool.settings.config.parser.get(
-            "Intros", "hotkey_debug"), lambda: self.sendData("DEBUG_MODE", dict()))
+            "Intros", "hotkey_debug"), lambda: self.sendData("/intro", "DEBUG_MODE", dict()))
 
     def unregister_hotkeys(self):
         try:
@@ -96,12 +97,13 @@ class WebsocketThread(QThread):
             self.keyboard_state = dict()
 
     async def handler(self, websocket, path):
-        if path not in ['/intro']:
+        if path not in ['/intro', '/mapstats']:
             module_logger.info("Client with incorrect path.")
             return
-        self.connected.add(websocket)
+        self.registerConnection(websocket, path)
         module_logger.info("Client connected!")
-        self.changeStyle()
+        if path == '/intro':
+            self.changeStyle()
         while True:
             try:
                 await asyncio.wait_for(websocket.recv(), timeout=20)
@@ -119,22 +121,34 @@ class WebsocketThread(QThread):
                 break
 
         module_logger.info("Connection removed")
-        self.connected.remove(websocket)
+        self.unregisterConnection(websocket, path)
+        
+    def registerConnection(self, websocket, path):
+        if path not in self.connected.keys():
+            self.connected[path] = set()
+        self.connected[path].add(websocket)
+        self.socketConnectionChanged.emit(len(self.connected[path]), path.replace('/', ''))
+    
+    def unregisterConnection(self, websocket, path):
+        if path in self.connected.keys():
+            self.connected[path].remove(websocket)
+            self.socketConnectionChanged.emit(len(self.connected[path]), path.replace('/', ''))
 
     def changeStyle(self, style=None):
         if style is None:
             style = scctool.settings.config.parser.get("Style", "intro")
         style_file = "src/css/intro/" + style + ".css"
-        self.sendData("CHANGE_STYLE", {'file': style_file})
+        self.sendData("/intro", "CHANGE_STYLE", {'file': style_file})
 
     def showIntro(self, idx):
-        self.sendData("SHOW_INTRO", self.__controller.getPlayerIntroData(idx))
+        self.sendData("/intro", "SHOW_INTRO", self.__controller.getPlayerIntroData(idx))
 
-    def sendData(self, event, input_data):
+    def sendData(self, path, event, input_data):
         data = dict()
         data['event'] = event
         data['data'] = input_data
-        for websocket in self.connected.copy():
+        connections = self.connected.get(path, set()).copy()
+        for websocket in connections:
             module_logger.info("Sending data: %s" % data)
             coro = websocket.send(json.dumps(data))
             asyncio.run_coroutine_threadsafe(coro, self.__loop)

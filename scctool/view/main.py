@@ -19,7 +19,7 @@ from scctool.view.subLogos import SubwindowLogos
 from scctool.view.subMarkdown import SubwindowMarkdown
 from scctool.view.subMisc import SubwindowMisc
 from scctool.view.subStyles import SubwindowStyles
-from scctool.view.widgets import (BusyProgressBar, IconPushButton, MapLineEdit,
+from scctool.view.widgets import (IconPushButton, LedIndicator, MapLineEdit,
                                   MonitoredLineEdit)
 
 # create logger
@@ -63,15 +63,15 @@ class MainWindow(QMainWindow):
 
             # self.size
             self.statusBar()
-
-            self.progressBar = BusyProgressBar()
-
-            # self.progressBar.setMaximumHeight(20)
-            self.progressBar.setMaximumWidth(160)
-            self.progressBar.setMinimumWidth(160)
-            self.progressBar.setVisible(False)
-            self.progressBar.setText("")
-            self.statusBar().addPermanentWidget(self.progressBar)
+            
+            self.leds = dict()
+            self.leds['intro'] = LedIndicator(self)
+            self.leds['mapstats'] = LedIndicator(self)
+            
+            for key, led in self.leds.items():
+                led.setDisabled(True)
+                led.setToolTip(_("{} {} Browser Source(s) connected.").format(0, key.capitalize()))
+                self.statusBar().addPermanentWidget(led)
 
             self.app = app
             self.controller.setView(self)
@@ -920,10 +920,10 @@ class MainWindow(QMainWindow):
         try:
             if(self.cb_playerIntros.isChecked()):
                 self.controller.runSC2ApiThread("playerIntros")
-                self.controller.runWebsocketThread()
+                # self.controller.runWebsocketThread()
             else:
                 self.controller.stopSC2ApiThread("playerIntros")
-                self.controller.stopWebsocketThread()
+                # self.controller.stopWebsocketThread()
         except Exception as e:
             module_logger.exception("message")
 
