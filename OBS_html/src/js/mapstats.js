@@ -5,7 +5,7 @@ var tweenShowMap = new TimelineMax({
 var tweenInitial = new TimelineMax();
 var socket = null;
 var isopen = false;
-var reconnectIntervalMs = 5000;
+var reconnectIntervalMs = 1000;
 var myDefaultFont = null;
 
 window.onload = function() {

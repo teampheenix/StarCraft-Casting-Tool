@@ -1,6 +1,6 @@
 var socket = null;
 var isopen = false;
-var reconnectIntervalMs = 5000;
+var reconnectIntervalMs = 1000;
 var volume = 1.0;
 var debug = false;
 var displayTime = 3.0;
