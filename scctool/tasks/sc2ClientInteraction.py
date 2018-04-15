@@ -405,7 +405,7 @@ class SC2MatchData:
 
         for player in players:
             for myplayer in myplayers:
-                if compareStr(myplayer, myplayer):
+                if compareStr(player, myplayer):
                     return True
 
         return False
