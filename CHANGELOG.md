@@ -1,6 +1,13 @@
 # Changelog
 
 
+## v1.9.5 (2018-04-15)
+
+### Fix
+
+* Fixed a bug in the Intros that would associate both players always with Team 1.
+
+
 ## v1.9.4 (2018-04-12)
 
 ### Fix
