@@ -6,7 +6,7 @@ import urllib.parse
 import requests
 from bs4 import BeautifulSoup
 
-from scctool import __version__ as scct_version
+# from scctool import __version__ as scct_version
 
 # create logger
 module_logger = logging.getLogger('scctool.tasks.liquipedia')
@@ -75,6 +75,7 @@ class LiquipediaGrabber:
 
     def get_map(self, map_name):
         # "http://liquipedia.net/starcraft2/index.php?search=Blackpink"
+        # "http://liquipedia.net/starcraft2/api.php?action=opensearch&format=json&search=Blackpink&namespace=0&limit=1"
         params = {}
         params['search'] = str(map_name).strip()
         source = '{}/starcraft2/index.php?{}'.format(
@@ -90,6 +91,7 @@ class LiquipediaGrabber:
         else:
             return map
 
+        # params = dict()
         # params['action'] = "opensearch"
         # params['search'] = str(map_name).strip()
         # params['limit'] = 1
