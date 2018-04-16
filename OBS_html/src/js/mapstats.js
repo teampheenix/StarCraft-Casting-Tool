@@ -5,7 +5,7 @@ var tweenShowMap = new TimelineMax({
 var tweenInitial = new TimelineMax();
 var socket = null;
 var isopen = false;
-var reconnectIntervalMs = 1000;
+var reconnectIntervalMs = 5000;
 var myDefaultFont = null;
 
 window.onload = function() {
@@ -42,7 +42,7 @@ function init() {
 
 
 function connectWebsocket() {
-
+		console.time('connectWebsocket');
         socket = new WebSocket("ws://127.0.0.1:4489/mapstats");
 
         socket.onopen = function() {
@@ -63,6 +63,7 @@ function connectWebsocket() {
         }
 
         socket.onclose = function(e) {
+				console.timeEnd('connectWebsocket');
                 console.log("Connection closed.");
                 socket = null;
                 isopen = false

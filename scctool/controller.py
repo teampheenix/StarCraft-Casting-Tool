@@ -18,6 +18,7 @@ from scctool.settings.history import HistoryManager
 from scctool.settings.logoManager import LogoManager
 from scctool.settings.placeholders import PlaceholderList
 from scctool.tasks.autorequests import AutoRequestsThread
+from scctool.tasks.mapstats import MapStatsManager
 from scctool.tasks.sc2ClientInteraction import (SC2ApiThread, SwapPlayerNames,
                                                 ToggleScore)
 from scctool.tasks.updater import VersionHandler
@@ -56,6 +57,7 @@ class MainController:
             self.aliasManager = AliasManager()
             self.historyManager = HistoryManager()
             scctool.settings.maps = scctool.settings.loadMapList()
+            self.mapstatsManager = MapStatsManager()
 
         except Exception as e:
             module_logger.exception("message")
@@ -419,6 +421,7 @@ class MainController:
             self.logoManager.dumpJson()
             self.historyManager.dumpJson()
             self.aliasManager.dumpJson()
+            self.mapstatsManager.close()
         except Exception as e:
             module_logger.exception("message")
 

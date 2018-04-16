@@ -33,6 +33,7 @@ nightbot_json_file = getAbsPath(dataDir + "/nightbot.json")
 logos_json_file = getAbsPath(dataDir + "/logos.json")
 history_json_file = getAbsPath(dataDir + "/history.json")
 alias_json_file = getAbsPath(dataDir + "/alias.json")
+mapstats_json_file = getAbsPath(dataDir + "/mapstats.json")
 
 windows = (platform.system().lower() == "windows")
 

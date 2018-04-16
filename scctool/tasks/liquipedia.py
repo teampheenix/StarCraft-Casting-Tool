@@ -6,6 +6,8 @@ import urllib.parse
 import requests
 from bs4 import BeautifulSoup
 
+from scctool import __version__ as scct_version
+
 # create logger
 module_logger = logging.getLogger('scctool.tasks.liquipedia')
 
@@ -88,6 +90,25 @@ class LiquipediaGrabber:
         else:
             return map
 
+        # params['action'] = "opensearch"
+        # params['search'] = str(map_name).strip()
+        # params['limit'] = 1
+        # params['namespace'] = 0
+        #
+        # scct_url = "https://teampheenix.github.io/StarCraft-Casting-Tool/"
+        # headers = dict()
+        # headers["User-Agent"] = "StarCraftCastingTool v{} ({})".format(
+        #     scct_version, scct_url)
+        # url = '{}/starcraft2/api.php'.format(self._base_url)
+        # print(headers["User-Agent"])
+        #
+        # data = requests.get(url, headers=headers, params=params).json()
+        # map_url = data[3][0]
+        # if map_url:
+        #     print(map_url)
+        # else:
+        #     raise MapNotFound
+
 
 class LiquipediaMap:
 
@@ -117,16 +138,23 @@ class LiquipediaMap:
                 key = cell.contents[0].strip().replace(":", "")
             else:
                 if key:
-                    data[key] = cell.contents[0].strip()
-                    key = ""
+                    try:
+                        data[key] = cell.contents[0].strip()
+                        key = ""
+                    except Exception:
+                        pass
                 else:
                     raise ValueError('Key is missing in Infobox')
         return data
 
     def get_stats(self):
+        # http://liquipedia.net/starcraft2/Special:ApiSandbox#action=parse&format=json&text=%7B%7B%3ABlackpink_LE%7D%7D%0A&prop=text&contentmodel=wikitext
+        # http://liquipedia.net/starcraft2/Special:ApiSandbox#action=parse&format=json&text=%7B%7BMap+statistics%7Cmap%3DOvergrowth%7D%7D&prop=text&contentmodel=wikitext
+        # /starcraft2/api.php?action=parse&format=json&text=%7B%7BMap+statistics%7Cmap%3DOvergrowth%7D%7D&prop=text&contentmodel=wikitext
+        # /starcraft2/api.php?action=parse&format=json&text=%7B%7B%3ABlackpink_LE%7D%7D%0A&prop=text&contentmodel=wikitext
         data = dict()
         try:
-            data['Games'] = self._soup.find(
+            data['games'] = self._soup.find(
                 "td", class_="stats-map-number").text.strip()
             data['TvZ'] = self._soup.find(
                 "td", class_="stats-tvz-4").text.strip()
