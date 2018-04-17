@@ -1,6 +1,13 @@
 # Changelog
 
 
+## v1.9.6 (2018-04-17)
+
+### Fix
+
+* Custom Mode '1vs1' should work again.
+
+
 ## v1.9.5 (2018-04-15)
 
 ### Fix
