@@ -1109,8 +1109,9 @@ class MainWindow(QMainWindow):
             player = self.le_player[team_idx][player_idx].text().strip()
             race = self.cb_race[team_idx][player_idx].currentIndex()
             if(player_idx == 0 and self.controller.matchData.getSolo()):
-                for player_idx in range(1, self.max_no_sets):
-                    self.le_player[team_idx][player_idx].setText(player)
+                for p_idx in range(1, self.max_no_sets):
+                    self.le_player[team_idx][p_idx].setText(player)
+                    self.player_changed(team_idx, p_idx)
             self.controller.historyManager.insertPlayer(player, race)
             self.controller.matchData.setPlayer(
                 team_idx, player_idx, self.le_player[team_idx][player_idx].text())
