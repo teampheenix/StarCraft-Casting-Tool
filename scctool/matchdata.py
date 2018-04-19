@@ -1047,7 +1047,7 @@ class matchData:
     def _useTemplate(self, filein, fileout, replacements):
         filein = scctool.settings.getAbsPath(filein)
         fileout = scctool.settings.getAbsPath(fileout)
-        regex = re.compile(r"%[^%]+%")
+        regex = re.compile(r"%[\w_-]+%")
         compiled_replacements = dict()
         for placeholder, value in replacements.items():
             compiled_replacements['%{}%'.format(

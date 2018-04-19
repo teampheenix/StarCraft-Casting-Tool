@@ -2,6 +2,7 @@
 import pip
 import platform
 import logging
+import subprocess
 
 system = platform.system()
 
@@ -23,24 +24,20 @@ logger.addHandler(fh)
 logger.addHandler(ch)
 
 logger.info("system: " + system)
+logger.info("pip-version: " + pip.__version__)
+
+modules = ['pip', 'pyqt5', 'requests', 'configparser', 'flask', 'keyboard', 'websockets', 'humanize', 'markdown2', 'pyupdater', 'beautifulsoup4']
+
+win_modules = ['pypiwin32', 'pytesseract', 'Pillow']
 
 try:
-    pip.main(['install', 'pip', '--upgrade'])
-    pip.main(['install', 'pyqt5', '--upgrade'])
-    pip.main(['install', 'requests', '--upgrade'])
-    pip.main(['install', 'configparser', '--upgrade'])
-    pip.main(['install', 'flask', '--upgrade'])
-    pip.main(['install', 'keyboard', '--upgrade'])
-    pip.main(['install', 'websockets', '--upgrade'])
-    pip.main(['install', 'humanize', '--upgrade'])
-    pip.main(['install', 'markdown2', '--upgrade'])
-    pip.main(['install', 'pyupdater', '--upgrade'])
-    pip.main(['install', 'beautifulsoup4', '--upgrade'])
-
-    if(system == "Windows"):
-        pip.main(['install', 'pypiwin32', '--upgrade'])
-        pip.main(['install', 'pytesseract', '--upgrade'])
-        pip.main(['install', 'Pillow', '--upgrade'])
+    
+    for module in modules:
+        subprocess.check_call(["python", '-m', 'pip', 'install',"--upgrade", module])
+        
+    if system == "Windows":
+        for module in win_modules:
+            subprocess.check_call(["python", '-m', 'pip', 'install',"--upgrade", module])
 
 except Exception as e:
     logger.exception("message")
