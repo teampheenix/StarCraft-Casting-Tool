@@ -43,6 +43,9 @@ function connectWebsocket() {
                         data = jsonObject.data;
                         addMaps(data);
                         initAnimation(Object.keys(data)[0]);
+                } else if (jsonObject.event == 'SELECT_MAP') {
+                        selectMap(jsonObject.data.map)
+                }
                 } else if (jsonObject.event == 'DEBUG_MODE') {}
         }
 
