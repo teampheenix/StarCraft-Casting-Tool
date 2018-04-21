@@ -14,31 +14,10 @@ window.onload = function() {
 }
 
 function init() {
+        initHide();
         connectWebsocket();
         myDefaultFont = getComputedStyle(document.body).getPropertyValue('--font');
         setPoolName("Map Pool");
-        // var map = {};
-        // map["map-name"] = "Catalyst";
-        // map["tvz"] = "90.0%";
-        // map["zvp"] = "30.0%";
-        // map["pvt"] = "40.0%";
-        // map["creator"] = "pressure";
-        // map["size"] = "150 x 100";
-        // map["positions"] = "2 at 1, 9";
-        // data[map["map-name"]] = map;
-        //
-        // map = {};
-        // map["map-name"] = "Eastwatch";
-        // map["tvz"] = "20.0%";
-        // map["zvp"] = "50.0%";
-        // map["pvt"] = "10.0%";
-        // map["creator"] = "Test";
-        // map["size"] = "1523 x 140";
-        // map["positions"] = "2 at 2, 7";
-        // data[map["map-name"]] = map;
-        //
-        // addMaps(data);
-        // initAnimation();
 }
 
 
@@ -141,8 +120,22 @@ function setPoolName(name) {
         document.getElementById('map-pool').innerHTML = name;
 }
 
+function initHide(){
+        var map = document.getElementById("map-img");
+        var mapname = document.getElementById("map-name");
+        var element1 = document.getElementById("column-content");
+        var element2 = document.getElementById("column-bottom");
+        var mappool = document.getElementById("map-pool");
+        var maps = document.getElementById('map-list').getElementsByTagName("li");
+        tweenInitial.staggerTo([map, mapname, element1, element2, mappool], 0, {
+                        opacity: "0"
+                }, 0);
+        initNeeded = true;
+}
+
 function initAnimation(init_map) {
         if(initNeeded){
+                tweenInitial.clear();
                 var map = document.getElementById("map-img");
                 var mapname = document.getElementById("map-name");
                 var element1 = document.getElementById("column-content");
@@ -154,6 +147,9 @@ function initAnimation(init_map) {
                                 opacity: "0"
                         }, 0)
                         .call(selectMap, [init_map])
+                        .to(mappool, 0, {
+                                opacity: "1"
+                        }, 0)
                         .from(mappool, 0.3, {
                                 x: '+=110%'
                         })
