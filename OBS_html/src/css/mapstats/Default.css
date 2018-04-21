@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto');
 :root {
-        --width: 1280px;
-        --height: 480px;
+        --width: 1600px;
+        --height: 600px;
         --middle: 40%;
         --side: calc((100% - var(--middle)) / 2);
         --color: #6495ed;
@@ -27,9 +27,9 @@ div.left-column {
         box-sizing: border-box;
         position: absolute;
         height: 100%;
-        width: calc(var(--side) + 25px);
-        padding: 10px;
-        padding-right: 35px;
+        width: calc(var(--side) + 31px);
+        padding: 12px;
+        padding-right: 43px;
         overflow: hidden;
         display: inline-block;
 }
@@ -40,7 +40,7 @@ div.right-column {
         height: 100%;
         right: 0%;
         width: var(--side);
-        padding: 10px;
+        padding: 12px;
         overflow: hidden;
         display: inline-block;
 }
@@ -59,9 +59,9 @@ div.column-header {
         position: relative;
         height: 150px;
         color: var(--color);
-        font-size: 35px;
+        font-size: 43px;
         text-transform: uppercase;
-        letter-spacing: 5px;
+        letter-spacing: 6px;
 }
 
 div.column-header span {
@@ -82,7 +82,7 @@ div.column-header.right {
 div.column-header span:after {
         content: '';
         width: 80%;
-        height: 2px;
+        height: 3px;
         background-color: var(--color);
         display: inline-block;
 }
@@ -96,14 +96,14 @@ div.column-header span:after {
         bottom: 0%;
         left: 50%;
         transform: translate(-50%, 0%);
-        border: 2px solid var(--color);
+        border: 3px solid var(--color);
 }
 
 #map-list {
         color: var(--color2);
-        letter-spacing: 3px;
-        font-size: 20px;
-        line-height: 25px;
+        letter-spacing: 2px;
+        font-size: 25px;
+        line-height: 31px;
         text-transform: uppercase;
         text-align: right;
         list-style-type: none;
@@ -116,20 +116,20 @@ ul {
 }
 
 ul li {
-        margin: 10px;
+        margin: 12px;
         cursor: pointer;
         white-space: nowrap;
 }
 
 ul li div{
         display: inline-block;
-        right: 25px;
+        right: 31px;
         display: inline-block;
 }
 
 ul li::after {
         content: ' ';
-        width: 25px;
+        width: 31px;
         display: inline-block;
         box-sizing: border-box;
 }
@@ -137,7 +137,7 @@ ul li::after {
 ul li.selected::after {
         content: '⮜';
         color: var(--color);
-        width: 25px;
+        width: 31px;
         display: inline-block;
         box-sizing: border-box;
 }
@@ -145,24 +145,24 @@ ul li.selected::after {
 ul li.selected::before {
         content: '⮞';
         color: var(--color);
-        width: 25px;
+        width: 31px;
         text-align: left;
         display: inline-block;
 }
 
 ul li::before {
         content: '';
-        width: 25px;
+        width: 31px;
         text-align: left;
         display: inline-block;
 }
 
 div.stat {
-        margin-bottom: 35px;
+        margin-bottom: 43px;
 }
 
 div.stat>span {
-        font-size: 25px;
+        font-size: 31px;
         color: var(--color2);
         position: relative;
         top: 3px;
@@ -172,10 +172,10 @@ div.stat>span {
 div.stat>div {
         letter-spacing: 0px;
         color: var(--color);
-        font-size: 20px;
+        font-size: 25px;
         font-weight: bold;
         margin-bottom: 0;
-        margin-right: 15px;
+        margin-right: 18px;
         display: inline-block;
 }
 
@@ -185,7 +185,7 @@ div.stat>div::after {
 
 div.small-stat>span {
         letter-spacing: 0px;
-        font-size: 16px;
+        font-size: 20px;
         color: var(--color2);
 }
 
@@ -206,7 +206,7 @@ div.small-stat>span.desc::after {
 
 #column-bottom {
         position: absolute;
-        padding-left: 10px;
+        padding-left: 12px;
         bottom: 0;
 }
 
