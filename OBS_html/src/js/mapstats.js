@@ -7,6 +7,7 @@ var socket = null;
 var isopen = false;
 var reconnectIntervalMs = 5000;
 var myDefaultFont = null;
+var initNeeded = true;
 
 window.onload = function() {
         init();
@@ -16,33 +17,33 @@ function init() {
         connectWebsocket();
         myDefaultFont = getComputedStyle(document.body).getPropertyValue('--font');
         setPoolName("Map Pool");
-        var map = {};
-        map["map-name"] = "Catalyst";
-        map["tvz"] = "90.0%";
-        map["zvp"] = "30.0%";
-        map["pvt"] = "40.0%";
-        map["creator"] = "pressure";
-        map["size"] = "150 x 100";
-        map["positions"] = "2 at 1, 9";
-        data[map["map-name"]] = map;
-
-        map = {};
-        map["map-name"] = "Eastwatch";
-        map["tvz"] = "20.0%";
-        map["zvp"] = "50.0%";
-        map["pvt"] = "10.0%";
-        map["creator"] = "Test";
-        map["size"] = "1523 x 140";
-        map["positions"] = "2 at 2, 7";
-        data[map["map-name"]] = map;
-
-        addMaps(data);
-        initAnimation("Eastwatch");
+        // var map = {};
+        // map["map-name"] = "Catalyst";
+        // map["tvz"] = "90.0%";
+        // map["zvp"] = "30.0%";
+        // map["pvt"] = "40.0%";
+        // map["creator"] = "pressure";
+        // map["size"] = "150 x 100";
+        // map["positions"] = "2 at 1, 9";
+        // data[map["map-name"]] = map;
+        //
+        // map = {};
+        // map["map-name"] = "Eastwatch";
+        // map["tvz"] = "20.0%";
+        // map["zvp"] = "50.0%";
+        // map["pvt"] = "10.0%";
+        // map["creator"] = "Test";
+        // map["size"] = "1523 x 140";
+        // map["positions"] = "2 at 2, 7";
+        // data[map["map-name"]] = map;
+        //
+        // addMaps(data);
+        // initAnimation();
 }
 
 
 function connectWebsocket() {
-		console.time('connectWebsocket');
+	console.time('connectWebsocket');
         socket = new WebSocket("ws://127.0.0.1:4489/mapstats");
 
         socket.onopen = function() {
@@ -59,6 +60,10 @@ function connectWebsocket() {
                         setColors(jsonObject.data.color1, jsonObject.data.color2);
                 } else if (jsonObject.event == 'CHANGE_FONT') {
                         setFont(jsonObject.data.font);
+                } else if (jsonObject.event == 'MAPSTATS') {
+                        data = jsonObject.data;
+                        addMaps(data);
+                        initAnimation(Object.keys(data)[0]);
                 } else if (jsonObject.event == 'DEBUG_MODE') {}
         }
 
@@ -87,7 +92,9 @@ function addMap(name) {
         li.onclick = function() {
                 selectMap(name, 0.5)
         };
-        li.appendChild(document.createTextNode(name));
+        var div = document.createElement("div")
+        div.innerHTML = name;
+        li.appendChild(div);
         ul_maplist.appendChild(li);
 }
 
@@ -95,7 +102,7 @@ function selectMap(name) {
         var maps = document.getElementById('map-list').getElementsByTagName("li");
         for (var i = 0; i < maps.length; i++) {
                 mapElement = maps[i];
-                if (mapElement.innerHTML.toLowerCase() == name.toLowerCase()) {
+                if (mapElement.getElementsByTagName('div')[0].innerHTML.toLowerCase() == name.toLowerCase()) {
                         animateInOut(mapElement, name);
                 } else {
                         maps[i].classList.remove('selected');
@@ -115,7 +122,7 @@ function setMapImage(name) {
 function removeMap(name) {
         var maps = document.getElementById('map-list').getElementsByTagName("li");
         for (var i = 0; i < maps.length; i++) {
-                if (maps[i].innerHTML.toLowerCase() == name.toLowerCase()) {
+                if (maps[i].getElementsByTagName('div')[0].innerHTML.toLowerCase() == name.toLowerCase()) {
                         document.getElementById('map-list').removeChild(maps[i])
                         break;
                 }
@@ -135,53 +142,58 @@ function setPoolName(name) {
 }
 
 function initAnimation(init_map) {
-        var map = document.getElementById("map-img");
-        var mapname = document.getElementById("map-name");
-        var element1 = document.getElementById("column-content");
-        var element2 = document.getElementById("column-bottom");
-        var mappool = document.getElementById("map-pool");
-        var maps = document.getElementById('map-list').getElementsByTagName("li");
-        tweenInitial.delay(0.5)
-                .staggerTo([map, mapname, element1, element2], 0, {
-                        opacity: "0"
-                }, 0)
-                .call(selectMap, [init_map])
-                .from(mappool, 0.3, {
-                        x: '+=110%'
-                })
-                .staggerFrom(maps, 0.3, {
-                        x: '+=110%'
-                }, 0.05, '-=0.2')
-}
-
-function animateInOut(mapElement, name) {
-        //tweenShowMap.clear();
-        var args = Array.prototype.slice.call(arguments, 2);
-
-        if (tweenShowMap.progress() == 1) {
-                tweenShowMap.eventCallback("onReverseComplete", selectMapAnimation, [name, mapElement, 0.3]);
-                tweenShowMap.delay(0);
-                tweenShowMap.reverse(0);
-        } else {
+        if(initNeeded){
                 var map = document.getElementById("map-img");
                 var mapname = document.getElementById("map-name");
                 var element1 = document.getElementById("column-content");
                 var element2 = document.getElementById("column-bottom");
-                var element1s = Array.prototype.slice.call(document.getElementById('column-content').getElementsByClassName("stat"));
-                var element2s = Array.prototype.slice.call(document.getElementById('column-bottom').getElementsByTagName("div"));
                 var mappool = document.getElementById("map-pool");
-                tweenShowMap.clear();
-                tweenShowMap.staggerTo([map, mapname, element1, element2], 0, {
-                                opacity: "1"
+                var maps = document.getElementById('map-list').getElementsByTagName("li");
+                tweenInitial.delay(0.5)
+                        .staggerTo([map, mapname, element1, element2], 0, {
+                                opacity: "0"
                         }, 0)
-                        .from(map, 0.4, {
-                                bottom: '-=100%',
-                                ease: Power1.easeOut
+                        .call(selectMap, [init_map])
+                        .from(mappool, 0.3, {
+                                x: '+=110%'
                         })
-                        .staggerFrom([mapname].concat(element1s, element2s), 0.3, {
-                                x: '-=110%'
-                        }, 0.05, '-=0.2');
-                selectMapAnimation(name, mapElement, 0.2);
+                        .staggerFrom(maps, 0.3, {
+                                x: '+=110%'
+                        }, 0.05, '-=0.2')
+                initNeeded = false;
+        }
+}
+
+function animateInOut(mapElement, name) {
+        if (!tweenShowMap.isActive()){
+                //tweenShowMap.clear();
+                var args = Array.prototype.slice.call(arguments, 2);
+
+                if (tweenShowMap.progress() == 1) {
+                        tweenShowMap.eventCallback("onReverseComplete", selectMapAnimation, [name, mapElement, 0.3]);
+                        tweenShowMap.delay(0);
+                        tweenShowMap.reverse(0);
+                } else {
+                        var map = document.getElementById("map-img");
+                        var mapname = document.getElementById("map-name");
+                        var element1 = document.getElementById("column-content");
+                        var element2 = document.getElementById("column-bottom");
+                        var element1s = Array.prototype.slice.call(document.getElementById('column-content').getElementsByClassName("stat"));
+                        var element2s = Array.prototype.slice.call(document.getElementById('column-bottom').getElementsByTagName("div"));
+                        var mappool = document.getElementById("map-pool");
+                        tweenShowMap.clear();
+                        tweenShowMap.staggerTo([map, mapname, element1, element2], 0, {
+                                        opacity: "1"
+                                }, 0)
+                                .from(map, 0.4, {
+                                        bottom: '-=100%',
+                                        ease: Power1.easeOut
+                                })
+                                .staggerFrom([mapname].concat(element1s, element2s), 0.3, {
+                                        x: '-=110%'
+                                }, 0.05, '-=0.2');
+                        selectMapAnimation(name, mapElement, 0.2);
+                }
         }
 }
 

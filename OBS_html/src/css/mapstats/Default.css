@@ -111,16 +111,27 @@ div.column-header span:after {
         right: 0px;
 }
 
+ul {
+        margin-top: 0px;
+}
+
 ul li {
         margin: 10px;
         cursor: pointer;
+        white-space: nowrap;
+}
+
+ul li div{
+        display: inline-block;
+        right: 25px;
+        display: inline-block;
 }
 
 ul li::after {
         content: ' ';
         width: 25px;
-        box-sizing: border-box;
         display: inline-block;
+        box-sizing: border-box;
 }
 
 ul li.selected::after {

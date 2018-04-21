@@ -79,14 +79,20 @@ class WebsocketThread(QThread):
             data['scan_code'], data['is_keypad'], e, callback))
 
     def register_hotkeys(self):
-        self.__register_hotkey(scctool.settings.config.parser.get(
-            "Intros", "hotkey_player1"), lambda: self.showIntro(0))
+        self.__register_hotkey(
+            scctool.settings.config.parser.get("Intros", "hotkey_player1"),
+            lambda: self.showIntro(0)
+        )
 
-        self.__register_hotkey(scctool.settings.config.parser.get(
-            "Intros", "hotkey_player2"), lambda: self.showIntro(1))
+        self.__register_hotkey(
+            scctool.settings.config.parser.get("Intros", "hotkey_player2"),
+            lambda: self.showIntro(1)
+        )
 
-        self.__register_hotkey(scctool.settings.config.parser.get(
-            "Intros", "hotkey_debug"), lambda: self.sendData("intro", "DEBUG_MODE", dict()))
+        self.__register_hotkey(
+            scctool.settings.config.parser.get("Intros", "hotkey_debug"),
+            lambda: self.sendData2Path("intro", "DEBUG_MODE", dict())
+        )
 
     def unregister_hotkeys(self):
         try:
@@ -107,6 +113,8 @@ class WebsocketThread(QThread):
         if path == 'mapstats':
             self.changeColors(path)
             self.changeFont(path)
+            data = self.__controller.mapstatsManager.getData()
+            self.sendData2WS(websocket, "MAPSTATS", data)
 
         while True:
             try:
@@ -145,7 +153,7 @@ class WebsocketThread(QThread):
             if style is None:
                 style = scctool.settings.config.parser.get("Style", path)
             style_file = "src/css/{}/{}.css".format(path, style)
-            self.sendData(path, "CHANGE_STYLE", {'file': style_file})
+            self.sendData2Path(path, "CHANGE_STYLE", {'file': style_file})
         else:
             raise ValueError('Change style is not available for this path.')
 
@@ -157,7 +165,7 @@ class WebsocketThread(QThread):
                     key = 'color{}'.format(i)
                     colors[key] = scctool.settings.config.parser.get(
                         "Mapstats", key)
-            self.sendData(path, "CHANGE_COLORS", colors)
+            self.sendData2Path(path, "CHANGE_COLORS", colors)
         else:
             raise ValueError('Change style is not available for this path.')
 
@@ -169,15 +177,15 @@ class WebsocketThread(QThread):
                 else:
                     font = scctool.settings.config.parser.get(
                         "Style", "custom_font")
-            self.sendData(path, "CHANGE_FONT", {'font': font})
+            self.sendData2Path(path, "CHANGE_FONT", {'font': font})
         else:
             raise ValueError('Change font is not available for this path.')
 
     def showIntro(self, idx):
-        self.sendData("intro", "SHOW_INTRO",
-                      self.__controller.getPlayerIntroData(idx))
+        self.sendData2Path("intro", "SHOW_INTRO",
+                           self.__controller.getPlayerIntroData(idx))
 
-    def sendData(self, path, event, input_data):
+    def sendData2Path(self, path, event, input_data):
         data = dict()
         data['event'] = event
         data['data'] = input_data
@@ -186,3 +194,11 @@ class WebsocketThread(QThread):
             module_logger.info("Sending data: %s" % data)
             coro = websocket.send(json.dumps(data))
             asyncio.run_coroutine_threadsafe(coro, self.__loop)
+
+    def sendData2WS(self, websocket, event, input_data):
+        data = dict()
+        data['event'] = event
+        data['data'] = input_data
+        module_logger.info("Sending data: %s" % data)
+        coro = websocket.send(json.dumps(data))
+        asyncio.run_coroutine_threadsafe(coro, self.__loop)

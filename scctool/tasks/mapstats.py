@@ -19,6 +19,9 @@ class MapStatsManager:
         self.__thread = MapStatsThread(self)
         self.__thread.newMapData.connect(self._newData)
         self.refreshMaps()
+        self.__currentMapPool = ["Abiogenesis", "Acid Plant",
+                                 "Backwater", "Blackpink", "Catalyst",
+                                 "Eastwatch", "Neon Violet Square"]
 
     def loadJson(self):
         """Read json data from file."""
@@ -67,8 +70,9 @@ class MapStatsManager:
         for map, data in self.__maps.items():
             last_refresh = data.get('refreshed', None)
             if (not last_refresh
-                    or(int(last_refresh) - time.time()) > 24 * 60 * 60):
+                    or(time.time() - int(last_refresh)) > 24 * 60 * 60):
                 maps2refresh.append(map)
+
         self.__thread.setMaps(maps2refresh)
         self.__thread.activateTask('refresh_data')
 
@@ -79,6 +83,24 @@ class MapStatsManager:
         self.__thread.terminate()
         self.dumpJson()
 
+    def getData(self):
+        out_data = dict()
+        for map, data in self.__maps.items():
+            if map not in self.__currentMapPool:
+                continue
+            out_data[map] = dict()
+            out_data[map]['map-name'] = map
+            for key, item in data.items():
+                if key == 'refreshed':
+                    continue
+                if not item:
+                    item = "?"
+                key = key.replace('Spawn Positions', 'positions')
+                key = key.lower().replace(' ', '-')
+                out_data[map][key] = item
+
+        return out_data
+
 
 class MapStatsThread(TasksThread):
 
@@ -88,7 +110,7 @@ class MapStatsThread(TasksThread):
         super().__init__()
         self.__manager = manager
         self.__grabber = LiquipediaGrabber()
-        self.setTimeout(5)
+        self.setTimeout(10)
         self.addTask('refresh_data', self.__refresh_data)
 
     def setMaps(self, maps):
@@ -116,7 +138,6 @@ class MapStatsThread(TasksThread):
             except ConnectionError:
                 module_logger.info('Connection Error for map {}.'.format(map))
             except Exception as e:
-                print(map)
                 module_logger.exception("message")
         except IndexError:
             self.deactivateTask('refresh_data')
