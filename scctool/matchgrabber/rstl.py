@@ -17,8 +17,7 @@ class MatchGrabber(MatchGrabberParent):
         """Init match grabber."""
         super().__init__(*args)
         self._urlprefix = \
-            "http://hdgame.net/en/tournaments/list/tournament"\
-            + "/rstl-13/tmenu/tmatches/?match="
+            "http://hdgame.net/en/tournaments/matches/match/"
         self._apiprefix = \
             "http://hdgame.net/index.php?ajax=1&do=tournament&act=api"\
             + "&data_type=json&lang=en&service=match&match_id="
@@ -149,9 +148,12 @@ class MatchGrabber(MatchGrabberParent):
             self._matchData.setSolo(False)
             self._matchData.setLeague(data['tournament']['name'])
 
-            for set_idx in range(1):
-                self._matchData.setMap(
-                    set_idx, data['start_maps'][str(set_idx)]['name'])
+            try:
+                map = data['start_maps']["1"]['name']
+            except KeyError:
+                map = data['start_map']['name']
+
+            self._matchData.setMap(0, map)
 
             for team_idx in range(2):
                 for set_idx in range(1):

@@ -63,14 +63,15 @@ class MainWindow(QMainWindow):
 
             # self.size
             self.statusBar()
-            
+
             self.leds = dict()
             self.leds['intro'] = LedIndicator(self)
             self.leds['mapstats'] = LedIndicator(self)
-            
+
             for key, led in self.leds.items():
                 led.setDisabled(True)
-                led.setToolTip(_("{} {} Browser Source(s) connected.").format(0, key.capitalize()))
+                led.setToolTip(
+                    _("{} {} Browser Source(s) connected.").format(0, key.capitalize()))
                 self.statusBar().addPermanentWidget(led)
 
             self.app = app
@@ -235,6 +236,7 @@ class MainWindow(QMainWindow):
             myAct = QAction(QIcon(scctool.settings.getAbsPath(
                 'src/fr.png')), 'Français', self, checkable=True)
             myAct.setChecked(language == 'fr_FR')
+            myAct.setDisabled(True)
             myAct.triggered.connect(lambda: self.changeLanguage('fr_FR'))
             langMenu.addAction(myAct)
 
