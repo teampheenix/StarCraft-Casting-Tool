@@ -58,6 +58,24 @@ class MatchFormatWardi(MatchFormat):
         self._matchData.writeJsonFile()
 
 
+class MatchFormatPsi(MatchFormat):
+    """Interface definition"""
+
+    _name = "PSISTORM Gaming Team League"
+
+    def __init__(self, *args):
+        """Init match grabber."""
+        super().__init__(*args)
+        self._url = "http://liquipedia.net/starcraft2/PSISTORM_Gaming_Team_League"
+
+    def applyFormat(self):
+        self._matchData.setCustom(5, False, False)
+        self._matchData.setMinSets(5)
+        self._matchData.setURL(self._url)
+        self._matchData.setLeague(self._name)
+        self._matchData.writeJsonFile()
+
+
 class MatchFormatAllInTheNydus(MatchFormat):
     """Interface definition"""
 
