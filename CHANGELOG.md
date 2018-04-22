@@ -3,6 +3,10 @@
 
 ## v1.9.7 (2018-04-22)
 
+### New
+
+* Added predefined Custom Match formats for All-In TheNydus, Chobo Team League,  and Validity Star League.
+
 ### Fix
 
 * Fixed a bug in the RSTL match grabber where it failed to grab the start map in the All-Kill format.
