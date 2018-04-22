@@ -19,7 +19,7 @@ StarCraft Casting Tool (SCC Tool) is a small program written in Python 3 that ca
 ## Feature List
 
 * **Match Grabber** for [AlphaTL](http://alpha.tl/) and [RSTL](http://hdgame.net/en/tournaments/list/tournament/rstl-12/)
-* **Custom Match Format**: Bo1-Bo9, All-Kill format, 1vs1 - including predefined Formats for Koprulu, WardiTV, and PSISTOM Gaming Team League, ...
+* **Custom Match Format**: Bo1-Bo9, All-Kill format, 1vs1 - including predefined Formats for Chobo, Koprulu, WardiTV, and PSISTOM Gaming Team League, ...
 * Two sets of **Map Icons**: Box and Landscape in `OBS_mapicons/icons_box` and `OBS_mapicons/icons_landscape`
 * **Scoreboard** including team icons in `OBS_html`
 * **Animated Player Intros** in `OBS_html` including playername & race via SC2-Client, team with logo via SCC Tool
@@ -40,7 +40,7 @@ If you need support, have questions, want to be up-to-date on, or like to contri
 
 
 ## General Information
-The tool generates various browser sources (and text-files): Amongst others, two complete sets of corresponding *Map Icons* (including map, players, races, and score), a Score Icon (including the score, team names, and logos) and GSL-like *Intros* (including player, race and team). 
+The tool generates various browser sources (and text-files): Amongst others, two complete sets of corresponding *Map Icons* (including map, players, races, and score), a Score Icon (including the score, team names, and logos) and GSL-like *Intros* (including player, race and team).
 
 StarCraft Casting Tool can monitor your SC2-Client to detect the score, update it automatically, and provide corresponding player Intros. On Windows, the tool can additionally and automatically set and toggle the score in your SC2-Observer UI and toggle the production tab at the start of a game.
 
@@ -83,7 +83,7 @@ Frequently the order of players given by the SC2-Client-API differs from the ord
 
 Include the Player Intro `OBS_html/intro.html` as browser sources (using the full height and width of your display). The intros will only work if the task *Provide Player Intros* is activated in SCC-Tool. The data will be updated when a game or replay is started in the StarCraft 2 client. You have to assign hotkeys to trigger the intros in *Settings: Connections: Intros & Hotkeys*. The first player is always corresponding to the player your observer camera is centered on at start of a game. The sound volume of the intros as well as the duration of the intros can be adjusted in *Settings: Connections: Intros & Hotkeys*.
 
-## Customization 
+## Customization
 
 Some basic options for customization can be found under *Settings: Styles*, for example, alternative styles/skins for the Map Icons, Score Icon, Intros and option to specify border colors. For additional **nearly unlimited customization** of the Icons you can make your own custom skins via [CSS](https://www.w3schools.com/css/) by creating new alternative *css*-files and placing them into `OBS_mapicons/src/css/box_styles`, `OBS_mapicons/src/css/landscape_styles`, `OBS_html/src/css/score_styles`, or `OBS_html/src/css/intro` respectively. If you do so, please share your custom skins with this project. If you want help implementing your own icon skin with CSS or just want to share an idea for a skin join the [Discord Server](https://discord.gg/G9hFEfh).
 

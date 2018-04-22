@@ -235,6 +235,7 @@ class MainWindow(QMainWindow):
             myAct = QAction(QIcon(scctool.settings.getAbsPath(
                 'src/fr.png')), 'Français', self, checkable=True)
             myAct.setChecked(language == 'fr_FR')
+            myAct.setDisabled(True)
             myAct.triggered.connect(lambda: self.changeLanguage('fr_FR'))
             langMenu.addAction(myAct)
 
