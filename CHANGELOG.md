@@ -1,6 +1,13 @@
 # Changelog
 
 
+## v1.9.7 (2018-04-22)
+
+### Fix
+
+* Fixed a bug in the RSTL match grabber where it failed to grab the start map in the All-Kill format.
+
+
 ## v1.9.6 (2018-04-17)
 
 ### Fix

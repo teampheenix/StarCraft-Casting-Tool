@@ -226,7 +226,7 @@ class VersionHandler(TasksThread):
 
     def isCompatible(self):
         """Check if data update is needed."""
-        return compareVersions(self.asset_update.latest, self.APP_VERSION, 2) < 1
+        return compareVersions(self.asset_update.latest, self.APP_VERSION, 3) < 1
 
     def update_progress(self, data):
         """Process progress updates."""
