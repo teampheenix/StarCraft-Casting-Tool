@@ -30,7 +30,7 @@ class MatchFormatKoprulu(MatchFormat):
     def __init__(self, *args):
         """Init match grabber."""
         super().__init__(*args)
-        self._url = "http://koprululeague.forumactif.org"
+        self._url = "http://koprulu-league.fr.nf"
 
     def applyFormat(self):
         self._matchData.setCustom(7, True, False)
