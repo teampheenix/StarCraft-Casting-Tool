@@ -535,7 +535,6 @@ msgstr "Использовать выбранный логотип"
 msgid "Liqupedia Image Search"
 msgstr "Поиск изображения Liquipedia"
 
-# Needs to be checked by Russian
 #: scctool/view/subLiquipediaSearch.py:130
 msgid "Results for '{}': {}"
 msgstr "Результаты для '{}': {}"
@@ -625,7 +624,7 @@ msgstr "Ссылка логотипа команды"
 
 #: scctool/view/subLogos.py:344
 msgid "{} is not a valid URL."
-msgstr "{} не допустимая ссылка."
+msgstr "{} недопустимая ссылка."
 
 #: scctool/view/subMisc.py:59
 msgid "Miscellaneous Settings"
@@ -637,7 +636,7 @@ msgstr "Менеджер карт"
 
 #: scctool/view/subMisc.py:77 scctool/view/subMisc.py:264
 msgid "Alias"
-msgstr "севдоним"
+msgstr "Псевдоним"
 
 #: scctool/view/subMisc.py:78
 msgid "OCR"
@@ -659,21 +658,19 @@ msgstr "Скачать прозрачный баннер матча"
 msgid "Set Ingame Score Task"
 msgstr "Настройка счета в игре"
 
-# Needs to be checked by Russian
 #: scctool/view/subMisc.py:108
 msgid "Automatically press Ctrl+X to apply the correct player order ingame."
 msgstr ""
-"Автоматически нажмите Ctrl+X, чтобы применить правильный порядок к игрокам в "
+"Автоматически нажимать Ctrl+X, чтобы применить правильный порядок к игрокам в "
 "игре."
 
-# Needs to be checked by Russian.
 #: scctool/view/subMisc.py:110
 msgid ""
 "This will ensure that the player of the first team is always on the left/top "
 "in the ingame Observer UI."
 msgstr ""
-"Это гарантирует, что игрок первой команды всегда находится слева / сверху в "
-"пользовательском интерфейсе Observer."
+"Гарантирует, что игрок первой команды всегда находится слева/сверху в "
+"Observer UI игры."
 
 #: scctool/view/subMisc.py:118
 msgid "Automatically press Ctrl+N before OCR to display player names."
@@ -716,7 +713,6 @@ msgstr "Игроки"
 msgid "Teams"
 msgstr "Команды"
 
-# Needs review
 #: scctool/view/subMisc.py:208
 msgid ""
 "Player and team aliases are replaced by the actual name when encountered by "
@@ -724,15 +720,15 @@ msgid ""
 "replaced in the intros and used to identify players by the automatic "
 "background tasks \"Auto Score Update\" and \"Set Ingame Score\"."
 msgstr ""
-"Игрок и командные псевдонимы заменяются фактическим именем, когда его берет "
-"захват матча. Кроме того, имена игроков SC2 перечислены как «Автообновление "
-"счета» и «Задать счет»."
+"Псевдонимы игрока и команды заменяются фактическими именами когда их собирает "
+"граббер матчей. Кроме того, имена игроков SC2, перечисленные как псевдонимы, "
+"заменяются в заставках и используются для определения игроков фоновыми задачами "
+"«Автообновление счета» и «Задать счет»."
 
 #: scctool/view/subMisc.py:219
 msgid "Player Aliases"
-msgstr "севдонимы игроков"
+msgstr "Псевдонимы игроков"
 
-# Review
 #: scctool/view/subMisc.py:225 scctool/view/subMisc.py:238
 #: scctool/view/widgets.py:532
 msgid "Add Alias"
@@ -742,7 +738,6 @@ msgstr "Добавить псевдоним"
 msgid "Player Name"
 msgstr "Имя игрока"
 
-# Review
 #: scctool/view/subMisc.py:232
 msgid "Team Aliases"
 msgstr "Псевдонимы команды"
@@ -751,7 +746,6 @@ msgstr "Псевдонимы команды"
 msgid "Team Name"
 msgstr "Название команды"
 
-# Review
 #: scctool/view/subMisc.py:264
 msgid "Alias of {}"
 msgstr "Псевдоним {}"
@@ -760,7 +754,7 @@ msgstr "Псевдоним {}"
 #: scctool/view/subMisc.py:482 scctool/view/subMisc.py:519
 #: scctool/view/subMisc.py:564
 msgid "Error"
-msgstr "ошибка"
+msgstr "Ошибка"
 
 #: scctool/view/subMisc.py:287
 msgid "Optical Character Recognition for Automatic Setting of Ingame Score"
@@ -790,7 +784,7 @@ msgstr ""
 "Иногда порядок игроков предоставленный SC2-Client-API отличается от порядка "
 "в результатах Обсервера. Для изменения этого с помощью оптического "
 "распознавания вам необходимо скачать {}, установить и выбрать исполняемый "
-"файл ниже, еслион не определился автоматически."
+"файл ниже, если он не определился автоматически."
 
 #: scctool/view/subMisc.py:342 scctool/view/subMisc.py:346
 #: scctool/view/subMisc.py:350
@@ -809,7 +803,6 @@ msgstr "Исполняемый файл"
 msgid "All files"
 msgstr "Все файлы"
 
-# Needs to be checked
 #: scctool/view/subMisc.py:391
 msgid "Add from Liquipedia"
 msgstr "Добавить из Liquipedia"
@@ -831,11 +824,10 @@ msgstr "Изменить изображение"
 msgid "Map Name"
 msgstr "Название карты"
 
-# Needs to be checked by Russian.
 #: scctool/view/subMisc.py:437 scctool/view/subMisc.py:483
 #: scctool/view/subMisc.py:520
 msgid "\"{}\" is not a valid map name."
-msgstr "\"{}\" не является допустимым именем карты."
+msgstr "\"{}\" недопустимое имя карты."
 
 #: scctool/view/subMisc.py:441 scctool/view/subMisc.py:488
 #: scctool/view/subMisc.py:534
@@ -850,12 +842,10 @@ msgstr "Карта уже в списке! Переписать?"
 msgid "Select Map Image (> 500x500px recommended)"
 msgstr "Выберите изображение карты (> 500x500px рекомендовано)"
 
-# Needs to be checked
 #: scctool/view/subMisc.py:527
 msgid "Map not found"
-msgstr "Карта Не найдена"
+msgstr "Карта не найдена"
 
-# Needs to be checked by Russian
 #: scctool/view/subMisc.py:528
 msgid "\"{}\" was not found on Liquipedia."
 msgstr "\"{}\"  не найден на Liquipedia."
@@ -920,10 +910,9 @@ msgstr ""
 msgid "Default Border:"
 msgstr "Граница по умолчанию:"
 
-# To be checked by Russian
 #: scctool/view/subStyles.py:185
 msgid "Winner Highlight:"
-msgstr "Победитель кульминацио́нный:"
+msgstr "Победитель:"
 
 #: scctool/view/subStyles.py:191
 msgid "Win:"
@@ -941,34 +930,29 @@ msgstr "Не определено:"
 msgid "Not played:"
 msgstr "Не сыграно:"
 
-# To be checked by Russian
 #: scctool/view/subStyles.py:215
 msgid ""
 "Warning: Using a custom font instead of the regular font defined in the Icon "
 "Styles can lead to unitentional appereance."
 msgstr ""
-"Предупреждение: Использование специального шрифта вместо обычного шрифта, "
-"определенного в стилях значков, может привести к нежелательному просмотру."
+"Предупреждение: Использование пользовательского шрифта вместо обычного, "
+"определенного в стилях значков, может привести к нежелательному виду."
 
-# To be checked by Russian.
 #: scctool/view/subStyles.py:217
 msgid "The proper way is to create a custom skin."
-msgstr "равильный способ - создать пользовательский скин."
+msgstr "Правильный способ - создать пользовательский скин."
 
-# To be checked by Russian
 #: scctool/view/subStyles.py:221
 msgid "Activate Custom Font"
-msgstr "Активировать собственный шрифт"
+msgstr "Активировать пользовательский шрифт"
 
-# To be checked by Russian
 #: scctool/view/subStyles.py:230
 msgid "Custom Font"
 msgstr "Пользовательский шрифт"
 
-# Needs to be checked.
 #: scctool/view/widgets.py:138
 msgid "Map Downloader"
-msgstr "Загружатель карт"
+msgstr "Загрузчик карт"
 
 #: scctool/view/widgets.py:140 scctool/view/widgets.py:198
 msgid "Downloading {}"
@@ -980,7 +964,7 @@ msgstr "Загрузчик логотипов"
 
 #: scctool/view/widgets.py:248
 msgid "Updater"
-msgstr "Обновление"
+msgstr "Обновления"
 
 #: scctool/view/widgets.py:250
 msgid "Updating to a new version..."
@@ -1012,9 +996,8 @@ msgstr "По умолчанию"
 
 #: scctool/view/widgets.py:535
 msgid "Name"
-msgstr "имя"
+msgstr "Имя"
 
-# Review
 #: scctool/view/widgets.py:537
 msgid "Remove with Aliases"
 msgstr "Удалить с помощью псевдонимов"
