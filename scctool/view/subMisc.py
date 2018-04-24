@@ -313,10 +313,10 @@ class SubwindowMisc(QWidget):
                  " {} and install and select the exectuable below, if it is not detected" +
                  " automatically.")
         url = 'https://github.com/UB-Mannheim/tesseract/wiki#tesseract-at-ub-mannheim'
-        url = "<a href='{}'>" + "Tesseract-OCR" + "</a>"
-        url = url.format(url)
+        href = "<a href='{}'>" + "Tesseract-OCR" + "</a>"
+        href = href.format(url1)
 
-        label = QLabel(text.format(url))
+        label = QLabel(text.format(href))
         label.setAlignment(Qt.AlignJustify)
         label.setOpenExternalLinks(True)
         label.setWordWrap(True)
