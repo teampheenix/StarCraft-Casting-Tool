@@ -93,7 +93,7 @@ div.box_middle {
         border: var(--border-size) solid var(--border-color);
         border-radius: 0px var(--border-radius) 0px var(--border-radius);
         background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0, 0, 0, 0.4)), color-stop(2%, rgba(0, 0, 0, 0.05)), color-stop(20%, rgba(0, 0, 0, 0.0)), color-stop(92%, rgba(0, 0, 0, 0.20)), color-stop(100%, rgba(0, 0, 0, 0.20))), url("../img/textures/texture1.jpg");
-        background-image: url("../texture1.jpg");
+        background-image: url("../img/textures/texture1.jpg");
         background-size: cover;
         overflow: hidden;
 }

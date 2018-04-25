@@ -1,6 +1,22 @@
 # Changelog
 
 
+## v1.9.9 (2018-04-25)
+
+### Fix
+
+* Misc Settings are available again.
+
+
+## v1.9.8 (2018-04-24)
+
+### Fix
+
+* Fixed a bug where the Tesseract-OCR links wasn't properly displayed in the OCR Tab (Misc Settings).
+
+* Russian Localization was revised by Vexxorian.
+
+
 ## v1.9.7 (2018-04-22)
 
 ### New
