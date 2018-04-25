@@ -1,6 +1,13 @@
 # Changelog
 
 
+## v1.9.9 (2018-04-25)
+
+### Fix
+
+* Misc Settings are available again.
+
+
 ## v1.9.8 (2018-04-24)
 
 ### Fix
