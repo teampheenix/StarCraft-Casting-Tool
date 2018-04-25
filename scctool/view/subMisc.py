@@ -314,7 +314,7 @@ class SubwindowMisc(QWidget):
                  " automatically.")
         url = 'https://github.com/UB-Mannheim/tesseract/wiki#tesseract-at-ub-mannheim'
         href = "<a href='{}'>" + "Tesseract-OCR" + "</a>"
-        href = href.format(url1)
+        href = href.format(url)
 
         label = QLabel(text.format(href))
         label.setAlignment(Qt.AlignJustify)
