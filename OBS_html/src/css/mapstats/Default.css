@@ -1,8 +1,8 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto');
 :root {
         --width: 1600px;
-        --height: 600px;
-        --middle: 40%;
+        --height: 850px;
+        --middle: 50%;
         --side: calc((100% - var(--middle)) / 2);
         --color: #6495ed;
         --color2: black;
@@ -10,7 +10,6 @@
 }
 
 body {
-        overflow: hidden;
         font-family: var(--font);
 }
 
@@ -19,7 +18,7 @@ div.box {
         width: var(--width);
         height: var(--height);
         left: calc((100% - var(--width)) / 2);
-        top: calc((100% - var(--height)) / 2 - 50px);
+        top: calc((100% - var(--height)) / 2);
         overflow: hidden;
 }
 
@@ -31,33 +30,32 @@ div.left-column {
         padding: 12px;
         padding-right: 43px;
         overflow: hidden;
-        display: inline-block;
 }
 
 div.right-column {
         box-sizing: border-box;
         position: absolute;
-        height: 100%;
+        height: 90%;
         right: 0%;
         width: var(--side);
         padding: 12px;
         overflow: hidden;
-        display: inline-block;
 }
 
 div.middle-column {
         box-sizing: border-box;
         position: absolute;
-        height: 100%;
+        height: 90%;
         left: calc(var(--side));
         width: calc(var(--middle));
         display: inline-block;
+        overflow: hidden;
 }
 
 div.column-header {
         box-sizing: border-box;
         position: relative;
-        height: 150px;
+        height: 325px;
         color: var(--color);
         font-size: 43px;
         text-transform: uppercase;
@@ -81,7 +79,7 @@ div.column-header.right {
 
 div.column-header span:after {
         content: '';
-        width: 80%;
+        width: 90%;
         height: 3px;
         background-color: var(--color);
         display: inline-block;
@@ -90,8 +88,8 @@ div.column-header span:after {
 #map-img {
         position: absolute;
         box-sizing: border-box;
-        max-width: 85%;
-        max-height: 100%;
+        max-width: 90%;
+        max-height: 90%;
         display: block;
         bottom: 0%;
         left: 50%;

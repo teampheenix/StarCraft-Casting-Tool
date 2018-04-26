@@ -8,21 +8,66 @@ var isopen = false;
 var reconnectIntervalMs = 5000;
 var myDefaultFont = null;
 var initNeeded = true;
+var storage = window.localStorage;
+
+var mapData = {};
+var colors = {};
+var font = "DEFAULT";
+var currentMap = "";
 
 window.onload = function() {
         init();
 }
 
 function init() {
+        myDefaultFont = getComputedStyle(document.body).getPropertyValue('--font');
+        loadStoredData();
         initHide();
         connectWebsocket();
-        myDefaultFont = getComputedStyle(document.body).getPropertyValue('--font');
         setPoolName("Map Pool");
+        if (Object.keys(mapData).length > 0) initAnimation(getCurrentMap());
 }
 
+function getCurrentMap() {
+        if (currentMap == "" || currentMap == undefined) {
+                try {
+                        currentMap = Object.keys(mapData)[0];
+                } catch {
+                        currentMap = "";
+                }
+
+        }
+        if (currentMap == undefined) currentMap = "";
+        return currentMap;
+
+}
+
+function storeData(scope = null) {
+        if (scope == null || scope == "mapdata") storage.setItem('scct-mapstats-mapdata', JSON.stringify(mapData));
+        if (scope == null || scope == "colors") storage.setItem('scct-mapstats-colors', JSON.stringify(colors));
+        if (scope == null || scope == "font") storage.setItem('scct-mapstats-font', font);
+        if (scope == null || scope == "currentmap") storage.setItem('scct-mapstats-currentmap', currentMap);
+}
+
+function loadStoredData() {
+        mapData = JSON.parse(storage.getItem('scct-mapstats-mapdata'));
+        colors = JSON.parse(storage.getItem('scct-mapstats-colors'));
+        font = storage.getItem('scct-mapstats-font');
+        currentMap = storage.getItem('scct-mapstats-currentmap');
+        if (currentMap == null) currentMap = "";
+        if (colors == null) colors = {};
+        if (mapData == null) mapData = {};
+        try {
+                setColors(colors['color1'], colors['color2']);
+        } catch {}
+        try {
+                setFont(font);
+        } catch {}
+        addMaps();
+}
 
 function connectWebsocket() {
-	console.time('connectWebsocket');
+        console.time('connectWebsocket');
         socket = new WebSocket("ws://127.0.0.1:4489/mapstats");
 
         socket.onopen = function() {
@@ -40,16 +85,18 @@ function connectWebsocket() {
                 } else if (jsonObject.event == 'CHANGE_FONT') {
                         setFont(jsonObject.data.font);
                 } else if (jsonObject.event == 'MAPSTATS') {
-                        data = jsonObject.data;
-                        addMaps(data);
-                        initAnimation(Object.keys(data)[0]);
+                        var doInit = Object.keys(mapData).length == 0;
+                        mapData = jsonObject.data;
+                        addMaps();
+                        storeData("mapdata");
+                        if (doInit) initAnimation(getCurrentMap());
                 } else if (jsonObject.event == 'SELECT_MAP') {
                         selectMap(jsonObject.data.map)
                 } else if (jsonObject.event == 'DEBUG_MODE') {}
         }
 
         socket.onclose = function(e) {
-				console.timeEnd('connectWebsocket');
+                console.timeEnd('connectWebsocket');
                 console.log("Connection closed.");
                 socket = null;
                 isopen = false
@@ -59,16 +106,24 @@ function connectWebsocket() {
         }
 }
 
-function addMaps(data) {
-        for (var name in data) {
+function addMaps() {
+        for (var name in mapData) {
                 addMap(name);
-                data[name]['image'] = new Image();
-                data[name]['image'].src = 'src/img/maps/'.concat(name.replace(/\s/g, "_"), '.jpg');
+                mapData[name]['image'] = new Image();
+                mapData[name]['image'].src = 'src/img/maps/'.concat(name.replace(/\s/g, "_"), '.jpg');
         }
 }
 
 function addMap(name) {
         var ul_maplist = document.getElementById('map-list');
+        var existing_maps = ul_maplist.getElementsByTagName("li");
+        for (var i = 0; i < existing_maps.length; i++) {
+                mapElement = existing_maps[i];
+                if (mapElement.getElementsByTagName('div')[0].innerHTML.toLowerCase() == name.toLowerCase()) {
+                        return
+                }
+        }
+
         var li = document.createElement("li");
         li.onclick = function() {
                 selectMap(name, 0.5)
@@ -85,6 +140,8 @@ function selectMap(name) {
                 mapElement = maps[i];
                 if (mapElement.getElementsByTagName('div')[0].innerHTML.toLowerCase() == name.toLowerCase()) {
                         animateInOut(mapElement, name);
+                        currentMap = name;
+                        storeData('currentmap');
                 } else {
                         maps[i].classList.remove('selected');
                 }
@@ -93,11 +150,11 @@ function selectMap(name) {
 
 function _selectMap(name) {
         setMapImage(name);
-        setMapData(data[name]);
+        setMapData(mapData[name]);
 }
 
 function setMapImage(name) {
-        document.getElementById('map-img').src = data[name]['image'].src;
+        document.getElementById('map-img').src = mapData[name]['image'].src;
 }
 
 function removeMap(name) {
@@ -122,7 +179,7 @@ function setPoolName(name) {
         document.getElementById('map-pool').innerHTML = name;
 }
 
-function initHide(){
+function initHide() {
         var map = document.getElementById("map-img");
         var mapname = document.getElementById("map-name");
         var element1 = document.getElementById("column-content");
@@ -130,13 +187,13 @@ function initHide(){
         var mappool = document.getElementById("map-pool");
         var maps = document.getElementById('map-list').getElementsByTagName("li");
         tweenInitial.staggerTo([map, mapname, element1, element2, mappool], 0, {
-                        opacity: "0"
-                }, 0);
+                opacity: "0"
+        }, 0);
         initNeeded = true;
 }
 
 function initAnimation(init_map) {
-        if(initNeeded){
+        if (initNeeded) {
                 tweenInitial.clear();
                 var map = document.getElementById("map-img");
                 var mapname = document.getElementById("map-name");
@@ -163,7 +220,7 @@ function initAnimation(init_map) {
 }
 
 function animateInOut(mapElement, name) {
-        if (!tweenShowMap.isActive()){
+        if (!tweenShowMap.isActive()) {
                 //tweenShowMap.clear();
                 var args = Array.prototype.slice.call(arguments, 2);
 
@@ -213,16 +270,25 @@ function selectMapAnimation(name, mapElement, delay) {
 }
 
 function setColors(color1, color2) {
-        document.documentElement.style.setProperty('--color', color1);
-        document.documentElement.style.setProperty('--color2', color2);
+        if (color1 != null) {
+                document.documentElement.style.setProperty('--color', color1);
+                colors["color1"] = color1;
+        }
+        if (color2 != null) {
+                document.documentElement.style.setProperty('--color2', color2);
+                colors["color2"] = color2;
+        }
+        storeData("colors");
 }
 
 
-function setFont(font) {
-        if (font == 'DEFAULT') {
-                font = myDefaultFont;
+function setFont(newFont) {
+        if (newFont == 'DEFAULT') {
+                newFont = myDefaultFont;
         }
+        font = newFont.trim();
         document.documentElement.style.setProperty('--font', font);
+        storeData("font");
 }
 
 function changeCSS(cssFile, cssLinkIndex) {
