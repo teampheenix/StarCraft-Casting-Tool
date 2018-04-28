@@ -76,11 +76,15 @@ class MapStatsManager:
         maps2refresh_full = list()
         
         for map, data in self.__maps.items():
-            last_refresh = data.get('refreshed', None)
+            is_none = False
             for key in ['creator', 'size', 'spawn-positions']:
                 if data.get(key, None) is None:
                     maps2refresh_full.append(map)
-                    continue
+                    is_none = True
+                    break
+            if is_none:
+                continue
+            last_refresh = data.get('refreshed', None)
             if (not last_refresh
                     or(time.time() - int(last_refresh)) > 24 * 60 * 60):
                 maps2refresh.append(map)
