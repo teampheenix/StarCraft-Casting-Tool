@@ -22,6 +22,7 @@ from PyQt5.QtWidgets import (QAction, QApplication, QColorDialog, QComboBox,
 import scctool.matchdata
 import scctool.settings.config
 import scctool.tasks.updater
+from scctool.tasks.tasksthread import TasksThread
 
 # create logger
 module_logger = logging.getLogger('scctool.view.widgets')
@@ -181,6 +182,108 @@ class MapDownloader(QProgressDialog):
             module_logger.exception("message")
 
 
+class HotkeyLayout(QHBoxLayout):
+
+    modified = pyqtSignal(str)
+
+    def __init__(self, parent, label="Hotkey", hotkey=""):
+        """Init box."""
+        super().__init__()
+        self.data = scctool.settings.config.loadHotkey(hotkey)
+        self.__parent = parent
+        self.__label = label
+        label = QLabel(label + ":")
+        label.setMinimumWidth(50)
+        self.addWidget(label, 1)
+        self.__preview = QLineEdit()
+        self.__preview.setReadOnly(True)
+        self.__preview.setText(self.data['name'])
+        self.__preview.setPlaceholderText(_("Not set"))
+        self.__preview.setAlignment(Qt.AlignCenter)
+        self.addWidget(self.__preview, 1)
+        # self.__pb_setHotKey = QPushButton(_('Set Hotkey'))
+        # self.__pb_setHotKey.clicked.connect(self.setHotkey)
+        # self.addWidget(self.__pb_setHotKey, 0)
+        self.__pb_set = QPushButton(_('Set Hotkey'))
+        self.__pb_set.clicked.connect(self.setKey)
+        self.addWidget(self.__pb_set, 0)
+        self.__pb_clear = QPushButton(_('Clear'))
+        self.__pb_clear.clicked.connect(self.clear)
+        self.addWidget(self.__pb_clear, 0)
+
+    def setKey(self):
+        recorder = HotkeyRecorder(self.__parent, self.data, self.__label)
+        self.data = recorder.run()
+        self.__preview.setText(self.data['name'])
+        self.modified.emit(self.data['name'])
+
+    def clear(self):
+        self.__preview.setText("")
+        self.data = {'name': '', 'scan_code': 0, 'is_keypad': False}
+        self.modified.emit("")
+
+    def getKey(self):
+        return self.data
+
+    def check_dublicate(self, key):
+        if str(key) and key == self.data['name']:
+            self.clear()
+
+
+class HotkeyRecorder(QProgressDialog):
+    """Map logo downloader dialog."""
+
+    def __init__(self, mainWindow, hotkeyData, name):
+        """Init progress dialog."""
+        super().__init__(mainWindow)
+        self.setWindowModality(Qt.ApplicationModal)
+        self.progress = 0
+        self.hotkeyData = hotkeyData
+        self.thread = TasksThread()
+
+        self.setWindowTitle(_("Recording Hotkey") + "...")
+        self.setLabelText(
+            _("Press a Hotkey for {}").format(name) + "...")
+        self.setRange(0, 0)
+        self.setValue(self.minimum())
+
+        self.resize(QSize(
+            mainWindow.size().width() * 0.8, self.sizeHint().height()))
+        relativeChange = QPoint(mainWindow.size().width() / 2,
+                                mainWindow.size().height() / 3)\
+            - QPoint(self.size().width() / 2,
+                     self.size().height() / 3)
+        self.move(mainWindow.pos() + relativeChange)
+
+    def run(self):
+
+        self.show()
+        self.thread = TasksThread()
+        self.thread.addTask('hotkey', self.__record)
+        self.thread.activateTask('hotkey')
+
+        while self.thread.isRunning() and not self.wasCanceled():
+            QApplication.processEvents()
+            time.sleep(0.05)
+
+        self.thread.terminate()
+        self.close()
+
+        return self.hotkeyData
+
+    def __record(self):
+        event = keyboard.read_event()
+
+        self.hotkeyData['scan_code'] = event.scan_code
+        self.hotkeyData['is_keypad'] = event.is_keypad
+        self.hotkeyData['name'] = event.name
+        if event.is_keypad:
+            self.hotkeyData['name'] = "num " + self.hotkeyData['name']
+        self.hotkeyData['name'] = self.hotkeyData['name'].upper().replace(
+            "LEFT ", '').replace("RIGHT ", '')
+        self.thread.deactivateTask('hotkey')
+
+
 class LogoDownloader(QProgressDialog):
     """Define logo downloader dialog."""
 
@@ -302,65 +405,6 @@ class BusyProgressBar(QProgressBar):
     def text(self):
         """Return the text of the bar."""
         return self._text
-
-
-class HotkeyLayout(QHBoxLayout):
-
-    modified = pyqtSignal(str)
-
-    def __init__(self, parent, label="Hotkey", hotkey=""):
-        """Init box."""
-        super().__init__()
-        self.data = scctool.settings.config.loadHotkey(hotkey)
-        self.__parent = parent
-        label = QLabel(label + ":")
-        label.setMinimumWidth(50)
-        self.addWidget(label, 1)
-        self.__preview = QLineEdit()
-        self.__preview.setReadOnly(True)
-        self.__preview.setText(self.data['name'])
-        self.__preview.setPlaceholderText(_("Not set"))
-        self.__preview.setAlignment(Qt.AlignCenter)
-        self.addWidget(self.__preview, 1)
-        # self.__pb_setHotKey = QPushButton(_('Set Hotkey'))
-        # self.__pb_setHotKey.clicked.connect(self.setHotkey)
-        # self.addWidget(self.__pb_setHotKey, 0)
-        self.__pb_set = QPushButton(_('Set Hotkey'))
-        self.__pb_set.clicked.connect(self.setKey)
-        self.addWidget(self.__pb_set, 0)
-        self.__pb_clear = QPushButton(_('Clear'))
-        self.__pb_clear.clicked.connect(self.clear)
-        self.addWidget(self.__pb_clear, 0)
-
-    def setKey(self):
-        event = keyboard.read_event()
-
-        self.data['scan_code'] = event.scan_code
-        self.data['is_keypad'] = event.is_keypad
-        self.data['name'] = event.name
-        if event.is_keypad:
-            self.data['name'] = "num " + self.data['name']
-        self.data['name'] = self.data['name'].upper().replace(
-            "LEFT ", '').replace("RIGHT ", '')
-        self.__preview.setText(self.data['name'])
-        self.modified.emit(self.data['name'])
-
-    def setHotkey(self):
-        key = keyboard.read_hotkey()
-        self.__preview.setText(key)
-        self.modified.emit(key)
-
-    def clear(self):
-        self.__preview.setText("")
-        self.data = {'name': '', 'scan_code': 0, 'is_keypad': False}
-        self.modified.emit("")
-
-    def getKey(self):
-        return self.data
-
-    def check_dublicate(self, key):
-        if str(key) and key == self.data['name']:
-            self.clear()
 
 
 class ColorLayout(QHBoxLayout):
