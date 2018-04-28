@@ -21,7 +21,7 @@ class MapStatsManager:
         self.__thread.newMapPool.connect(self._newMapPool)
         self.refreshMapPool()
         self.refreshMaps()
-                                 
+
     def _getMaps(self):
         return self.__maps.keys()
 
@@ -56,7 +56,7 @@ class MapStatsManager:
                 json.dump(data, outfile)
         except Exception as e:
             module_logger.exception("message")
-            
+
     def refreshMapPool(self):
         self.__thread.activateTask('refresh_mappool')
 
@@ -74,7 +74,7 @@ class MapStatsManager:
 
         maps2refresh = list()
         maps2refresh_full = list()
-        
+
         for map, data in self.__maps.items():
             is_none = False
             for key in ['creator', 'size', 'spawn-positions']:
@@ -88,11 +88,11 @@ class MapStatsManager:
             if (not last_refresh
                     or(time.time() - int(last_refresh)) > 24 * 60 * 60):
                 maps2refresh.append(map)
-                
+
         if len(maps2refresh) > 0:
             self.__thread.setMaps(maps2refresh)
             self.__thread.activateTask('refresh_stats')
-            
+
         if len(maps2refresh_full) > 0:
             self.__thread.setMaps(maps2refresh_full, True)
             self.__thread.activateTask('refresh_data')
@@ -100,7 +100,7 @@ class MapStatsManager:
     def _newData(self, map, data):
         for key, item in data.items():
             self.__maps[map][key] = item
-            
+
     def _newMapPool(self, data):
         if len(data) > 0:
             self.__currentMapPool = data
@@ -186,11 +186,10 @@ class MapStatsThread(TasksThread):
                 self.newMapData.emit(map, data)
         finally:
             self.deactivateTask('refresh_stats')
-            
+
     def __refresh_mappool(self):
         try:
             mappool = list(self.__grabber.get_ladder_mappool())
             self.newMapPool.emit(mappool)
         finally:
             self.deactivateTask('refresh_mappool')
-            

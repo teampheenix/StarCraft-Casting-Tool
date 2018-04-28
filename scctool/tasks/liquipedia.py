@@ -52,7 +52,6 @@ class LiquipediaGrabber:
                     continue
         except Exception:
             pass
-        
 
     def get_images(self, image):
         r = requests.get(self._base_url + image)
@@ -76,7 +75,7 @@ class LiquipediaGrabber:
             images[pixel] = link['href']
 
         return images
-        
+
     def get_images_new(self, image):
         print(image)
 
@@ -86,7 +85,7 @@ class LiquipediaGrabber:
         params['search'] = str(map_name).strip()
         params['limit'] = 1
         params['namespace'] = 0
-        
+
         url = '{}/starcraft2/api.php'.format(self._base_url)
         data = requests.get(url, headers=self._headers, params=params).json()
         map = data[1][0]
@@ -95,10 +94,11 @@ class LiquipediaGrabber:
             params['action'] = "parse"
             params['format'] = "json"
             params['page'] = map
-            
+
             url = '{}/starcraft2/api.php'.format(self._base_url)
-            
-            data = requests.get(url, headers=self._headers, params=params).json()
+
+            data = requests.get(url, headers=self._headers,
+                                params=params).json()
             content = data['parse']['text']['*']
             soup = BeautifulSoup(content, 'html.parser')
             map = LiquipediaMap(soup)
@@ -108,7 +108,7 @@ class LiquipediaGrabber:
                 return map
         else:
             raise MapNotFound
-        
+
     def get_ladder_mappool(self):
         params = dict()
         params['action'] = "parse"
@@ -117,18 +117,18 @@ class LiquipediaGrabber:
         params['contentmodel'] = "wikitext"
         params['utf8'] = 1
         params['text'] = "{{MapNavbox}}"
-        
+
         url = '{}/starcraft2/api.php'.format(self._base_url)
-        
+
         data = requests.get(url, headers=self._headers, params=params).json()
         content = data['parse']['text']['*']
         soup = BeautifulSoup(content, 'html.parser')
         for result in soup.find_all("td", class_="navbox-group"):
             if result.contents[0].strip() == "1 vs 1":
                 for map in result.findNext("td").find_all('a'):
-                    yield map.contents[0].replace("LE",'').strip()
+                    yield map.contents[0].replace("LE", '').strip()
                 break
-    
+
     def get_map_stats(self, maps):
         params = dict()
         params['action'] = "parse"
@@ -137,20 +137,22 @@ class LiquipediaGrabber:
         params['contentmodel'] = "wikitext"
         params['utf8'] = 1
         params['text'] = ""
-        
+
         if len(maps) < 1:
             return
-            
+
         for map in maps:
-            params['text'] = params['text']+"{{Map statistics|map="+map.strip()+"}}"
-            
+            params['text'] = params['text'] + \
+                "{{Map statistics|map=" + map.strip() + "}}"
+
         url = '{}/starcraft2/api.php'.format(self._base_url)
         data = requests.get(url, headers=self._headers, params=params).json()
         content = data['parse']['text']['*']
         soup = BeautifulSoup(content, 'html.parser')
         for map_stats in soup.find_all("tr", class_="stats-map-row"):
             data = dict()
-            data['map'] = map_stats.find('td', class_='stats-map-name').find('a').text.strip()
+            data['map'] = map_stats.find(
+                'td', class_='stats-map-name').find('a').text.strip()
             data['games'] = map_stats.find(
                 "td", class_="stats-map-number").text.strip()
             data['tvz'] = map_stats.find(
@@ -188,7 +190,7 @@ class LiquipediaMap:
             else:
                 if key:
                     try:
-                        key = key.lower().replace(" ","-")
+                        key = key.lower().replace(" ", "-")
                         data[key] = cell.contents[0].strip()
                         key = ""
                     except Exception:
@@ -199,7 +201,7 @@ class LiquipediaMap:
 
     def get_map_images(self):
         return self._soup.find('a', class_='image')['href']
-        
+
     def get_stats(self):
         data = dict()
         try:
