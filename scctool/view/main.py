@@ -214,7 +214,7 @@ class MainWindow(QMainWindow):
             myAct = QAction(QIcon(scctool.settings.getAbsPath(
                 'src/donate.ico')), _('Donate'), self)
             myAct.triggered.connect(lambda: self.controller.openURL(
-                "https://streamlabs.com/scpressure"))
+                "https://paypal.me/StarCraftCastingTool"))
             infoMenu.addAction(myAct)
 
             langMenu = menubar.addMenu(_('Language'))
