@@ -331,6 +331,7 @@ class LogoDownloader(QProgressDialog):
                     done = int(100 * dl / total_length)
                     self.setProgress(done)
 
+        self.close()
         return self.logo
 
     def setProgress(self, value):
