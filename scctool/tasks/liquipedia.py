@@ -6,7 +6,7 @@ import urllib.parse
 import requests
 from bs4 import BeautifulSoup
 
-# from scctool import __version__ as scct_version
+from scctool import __version__ as scct_version
 
 # create logger
 module_logger = logging.getLogger('scctool.tasks.liquipedia')
@@ -17,7 +17,10 @@ class LiquipediaGrabber:
     _base_url = 'http://liquipedia.net'
 
     def __init__(self):
-        pass
+        scct_url = "https://teampheenix.github.io/StarCraft-Casting-Tool/"
+        self._headers = dict()
+        self._headers["User-Agent"] = "StarCraftCastingTool v{} ({})".format(
+            scct_version, scct_url)
 
     def image_search(self, search_str):
         params = {'title': 'Special:Search',
@@ -49,6 +52,7 @@ class LiquipediaGrabber:
                     continue
         except Exception:
             pass
+        
 
     def get_images(self, image):
         r = requests.get(self._base_url + image)
@@ -72,44 +76,90 @@ class LiquipediaGrabber:
             images[pixel] = link['href']
 
         return images
+        
+    def get_images_new(self, image):
+        print(image)
 
     def get_map(self, map_name):
-        # "http://liquipedia.net/starcraft2/index.php?search=Blackpink"
-        # "http://liquipedia.net/starcraft2/api.php?action=opensearch&format=json&search=Blackpink&namespace=0&limit=1"
-        params = {}
+        params = dict()
+        params['action'] = "opensearch"
         params['search'] = str(map_name).strip()
-        source = '{}/starcraft2/index.php?{}'.format(
-            self._base_url, urllib.parse.urlencode(params))
-
-        urllib.parse.urlencode(params)
-        r = requests.get(source)
-        soup = BeautifulSoup(r.content, 'html.parser')
-
-        map = LiquipediaMap(soup)
-        if not map.is_map():
-            raise MapNotFound
+        params['limit'] = 1
+        params['namespace'] = 0
+        
+        url = '{}/starcraft2/api.php'.format(self._base_url)
+        data = requests.get(url, headers=self._headers, params=params).json()
+        map = data[1][0]
+        if map:
+            params = dict()
+            params['action'] = "parse"
+            params['format'] = "json"
+            params['page'] = map
+            
+            url = '{}/starcraft2/api.php'.format(self._base_url)
+            
+            data = requests.get(url, headers=self._headers, params=params).json()
+            content = data['parse']['text']['*']
+            soup = BeautifulSoup(content, 'html.parser')
+            map = LiquipediaMap(soup)
+            if not map.is_map():
+                raise MapNotFound
+            else:
+                return map
         else:
-            return map
-
-        # params = dict()
-        # params['action'] = "opensearch"
-        # params['search'] = str(map_name).strip()
-        # params['limit'] = 1
-        # params['namespace'] = 0
-        #
-        # scct_url = "https://teampheenix.github.io/StarCraft-Casting-Tool/"
-        # headers = dict()
-        # headers["User-Agent"] = "StarCraftCastingTool v{} ({})".format(
-        #     scct_version, scct_url)
-        # url = '{}/starcraft2/api.php'.format(self._base_url)
-        # print(headers["User-Agent"])
-        #
-        # data = requests.get(url, headers=headers, params=params).json()
-        # map_url = data[3][0]
-        # if map_url:
-        #     print(map_url)
-        # else:
-        #     raise MapNotFound
+            raise MapNotFound
+        
+    def get_ladder_mappool(self):
+        params = dict()
+        params['action'] = "parse"
+        params['format'] = "json"
+        params['prop'] = "text"
+        params['contentmodel'] = "wikitext"
+        params['utf8'] = 1
+        params['text'] = "{{MapNavbox}}"
+        
+        url = '{}/starcraft2/api.php'.format(self._base_url)
+        
+        data = requests.get(url, headers=self._headers, params=params).json()
+        content = data['parse']['text']['*']
+        soup = BeautifulSoup(content, 'html.parser')
+        for result in soup.find_all("td", class_="navbox-group"):
+            if result.contents[0].strip() == "1 vs 1":
+                for map in result.findNext("td").find_all('a'):
+                    yield map.contents[0].replace("LE",'').strip()
+                break
+    
+    def get_map_stats(self, maps):
+        params = dict()
+        params['action'] = "parse"
+        params['format'] = "json"
+        params['prop'] = "text"
+        params['contentmodel'] = "wikitext"
+        params['utf8'] = 1
+        params['text'] = ""
+        
+        if len(maps) < 1:
+            return
+            
+        for map in maps:
+            params['text'] = params['text']+"{{Map statistics|map="+map.strip()+"}}"
+            
+        url = '{}/starcraft2/api.php'.format(self._base_url)
+        data = requests.get(url, headers=self._headers, params=params).json()
+        content = data['parse']['text']['*']
+        soup = BeautifulSoup(content, 'html.parser')
+        for map_stats in soup.find_all("tr", class_="stats-map-row"):
+            data = dict()
+            data['map'] = map_stats.find('td', class_='stats-map-name').find('a').text.strip()
+            data['games'] = map_stats.find(
+                "td", class_="stats-map-number").text.strip()
+            data['tvz'] = map_stats.find(
+                "td", class_="stats-tvz-4").text.strip()
+            data['zvp'] = map_stats.find(
+                "td", class_="stats-zvp-4").text.strip()
+            data['pvt'] = map_stats.find(
+                "td", class_="stats-pvt-4").text.strip()
+            yield data
 
 
 class LiquipediaMap:
@@ -118,10 +168,7 @@ class LiquipediaMap:
         self._soup = soup
 
     def is_map(self):
-        for cat in self._soup.find("div", id="catlinks").find_all("a"):
-            if cat['title'] == "Category:Maps":
-                return True
-        return False
+        return self._soup.find(href='/starcraft2/Template:Infobox_map') is not None
 
     def get_name(self):
         infobox = self._soup.find("div", class_="fo-nttax-infobox")
@@ -141,6 +188,7 @@ class LiquipediaMap:
             else:
                 if key:
                     try:
+                        key = key.lower().replace(" ","-")
                         data[key] = cell.contents[0].strip()
                         key = ""
                     except Exception:
@@ -149,27 +197,23 @@ class LiquipediaMap:
                     raise ValueError('Key is missing in Infobox')
         return data
 
+    def get_map_images(self):
+        return self._soup.find('a', class_='image')['href']
+        
     def get_stats(self):
-        # http://liquipedia.net/starcraft2/Special:ApiSandbox#action=parse&format=json&text=%7B%7B%3ABlackpink_LE%7D%7D%0A&prop=text&contentmodel=wikitext
-        # http://liquipedia.net/starcraft2/Special:ApiSandbox#action=parse&format=json&text=%7B%7BMap+statistics%7Cmap%3DOvergrowth%7D%7D&prop=text&contentmodel=wikitext
-        # /starcraft2/api.php?action=parse&format=json&text=%7B%7BMap+statistics%7Cmap%3DOvergrowth%7D%7D&prop=text&contentmodel=wikitext
-        # /starcraft2/api.php?action=parse&format=json&text=%7B%7B%3ABlackpink_LE%7D%7D%0A&prop=text&contentmodel=wikitext
         data = dict()
         try:
             data['games'] = self._soup.find(
                 "td", class_="stats-map-number").text.strip()
-            data['TvZ'] = self._soup.find(
+            data['tvz'] = self._soup.find(
                 "td", class_="stats-tvz-4").text.strip()
-            data['ZvP'] = self._soup.find(
+            data['zvp'] = self._soup.find(
                 "td", class_="stats-zvp-4").text.strip()
-            data['PvT'] = self._soup.find(
+            data['pvt'] = self._soup.find(
                 "td", class_="stats-pvt-4").text.strip()
         except AttributeError:
             return dict()
         return data
-
-    def get_map_images(self):
-        return self._soup.find('a', class_='image')['href']
 
 
 class MapNotFound(Exception):

@@ -18,10 +18,12 @@ class MapStatsManager:
         self.loadJson()
         self.__thread = MapStatsThread(self)
         self.__thread.newMapData.connect(self._newData)
+        self.__thread.newMapPool.connect(self._newMapPool)
+        self.refreshMapPool()
         self.refreshMaps()
-        self.__currentMapPool = ["Abiogenesis", "Acid Plant",
-                                 "Backwater", "Blackpink", "Catalyst",
-                                 "Eastwatch", "Neon Violet Square"]
+                                 
+    def _getMaps(self):
+        return self.__maps.keys()
 
     def loadJson(self):
         """Read json data from file."""
@@ -34,17 +36,18 @@ class MapStatsManager:
             data = dict()
 
         self.__maps = data.get('maps', dict())
+        self.__currentMapPool = data.get('maps', list())
 
         if not isinstance(self.__maps, dict):
             self.__maps = dict()
-
-    def _getMaps(self):
-        return self.__maps.keys()
+        if not isinstance(self.__maps, list):
+            self.__currentMapPool = list()
 
     def dumpJson(self):
         """Write json data to file."""
         data = dict()
         data['maps'] = self.__maps
+        data['mappool'] = self.__currentMapPool
 
         try:
             with open(scctool.settings.mapstats_json_file,
@@ -53,31 +56,50 @@ class MapStatsManager:
                 json.dump(data, outfile)
         except Exception as e:
             module_logger.exception("message")
+            
+    def refreshMapPool(self):
+        self.__thread.activateTask('refresh_mappool')
 
     def refreshMaps(self):
         for map in scctool.settings.maps:
             if map != 'TBD' and map not in self.__maps.keys():
                 self.__maps[map] = dict()
-                self.__maps[map]['TvZ'] = None
-                self.__maps[map]['ZvP'] = None
-                self.__maps[map]['PvT'] = None
-                self.__maps[map]['Creator'] = None
-                self.__maps[map]['Size'] = None
-                self.__maps[map]['Spawn Positions'] = None
+                self.__maps[map]['tvz'] = None
+                self.__maps[map]['zvp'] = None
+                self.__maps[map]['pvt'] = None
+                self.__maps[map]['creator'] = None
+                self.__maps[map]['size'] = None
+                self.__maps[map]['spawn-positions'] = None
                 self.__maps[map]['refreshed'] = None
 
         maps2refresh = list()
+        maps2refresh_full = list()
+        
         for map, data in self.__maps.items():
             last_refresh = data.get('refreshed', None)
+            for key in ['creator', 'size', 'spawn-positions']:
+                if data.get(key, None) is None:
+                    maps2refresh_full.append(map)
+                    continue
             if (not last_refresh
                     or(time.time() - int(last_refresh)) > 24 * 60 * 60):
                 maps2refresh.append(map)
-
-        self.__thread.setMaps(maps2refresh)
-        self.__thread.activateTask('refresh_data')
+                
+        if len(maps2refresh) > 0:
+            self.__thread.setMaps(maps2refresh)
+            self.__thread.activateTask('refresh_stats')
+            
+        if len(maps2refresh_full) > 0:
+            self.__thread.setMaps(maps2refresh_full, True)
+            self.__thread.activateTask('refresh_data')
 
     def _newData(self, map, data):
-        self.__maps[map] = data
+        for key, item in data.items():
+            self.__maps[map][key] = item
+            
+    def _newMapPool(self, data):
+        if len(data) > 0:
+            self.__currentMapPool = data
 
     def close(self):
         self.__thread.terminate()
@@ -95,8 +117,7 @@ class MapStatsManager:
                     continue
                 if not item:
                     item = "?"
-                key = key.replace('Spawn Positions', 'positions')
-                key = key.lower().replace(' ', '-')
+                key = key.replace('spawn-positions', 'positions')
                 out_data[map][key] = item
 
         return out_data
@@ -105,6 +126,7 @@ class MapStatsManager:
 class MapStatsThread(TasksThread):
 
     newMapData = pyqtSignal(str, object)
+    newMapPool = pyqtSignal(object)
 
     def __init__(self, manager):
         super().__init__()
@@ -112,24 +134,29 @@ class MapStatsThread(TasksThread):
         self.__grabber = LiquipediaGrabber()
         self.setTimeout(30)
         self.addTask('refresh_data', self.__refresh_data)
+        self.addTask('refresh_stats', self.__refresh_stats)
+        self.addTask('refresh_mappool', self.__refresh_mappool)
 
-    def setMaps(self, maps):
-        self.__maps = maps
+    def setMaps(self, maps, full=False):
+        if full:
+            self.__fullmaps = maps
+        else:
+            self.__maps = maps
 
     def __refresh_data(self):
         try:
-            map = self.__maps.pop()
+            map = self.__fullmaps.pop()
             try:
                 liquipediaMap = self.__grabber.get_map(map)
                 stats = liquipediaMap.get_stats()
                 info = liquipediaMap.get_info()
                 data = dict()
-                data['TvZ'] = stats['TvZ']
-                data['ZvP'] = stats['ZvP']
-                data['PvT'] = stats['PvT']
-                data['Creator'] = info['Creator']
-                data['Size'] = info['Size']
-                data['Spawn Positions'] = info['Spawn Positions']
+                data['tvz'] = stats['tvz']
+                data['zvp'] = stats['zvp']
+                data['pvt'] = stats['pvt']
+                data['creator'] = info['creator']
+                data['size'] = info['size']
+                data['spawn-positions'] = info['spawn-positions']
                 data['refreshed'] = int(time.time())
                 self.newMapData.emit(map, data)
                 module_logger.info('Map {} found.'.format(map))
@@ -141,3 +168,25 @@ class MapStatsThread(TasksThread):
                 module_logger.exception("message")
         except IndexError:
             self.deactivateTask('refresh_data')
+
+    def __refresh_stats(self):
+        try:
+            for stats in self.__grabber.get_map_stats(self.__maps):
+                map = stats['map']
+                data = dict()
+                data['tvz'] = stats['tvz']
+                data['zvp'] = stats['zvp']
+                data['pvt'] = stats['pvt']
+                data['refreshed'] = int(time.time())
+                module_logger.info('Map {} found.'.format(map))
+                self.newMapData.emit(map, data)
+        finally:
+            self.deactivateTask('refresh_stats')
+            
+    def __refresh_mappool(self):
+        try:
+            mappool = list(self.__grabber.get_ladder_mappool())
+            self.newMapPool.emit(mappool)
+        finally:
+            self.deactivateTask('refresh_mappool')
+            
