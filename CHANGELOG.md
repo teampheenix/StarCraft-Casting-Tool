@@ -1,6 +1,13 @@
 # Changelog
 
 
+## v1.9.11 (2018-04-29)
+
+### New
+
+* Added a dialog for recording hotkeys.
+
+
 ## v1.9.9 (2018-04-25)
 
 ### Fix
