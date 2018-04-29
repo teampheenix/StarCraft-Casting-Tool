@@ -1,6 +1,17 @@
 # Changelog
 
 
+## v1.9.11 (2018-04-29)
+
+### New
+
+* Added a dialog for recording hotkeys.
+
+### Changes
+
+* `README.md`, `CHANGELOG.md` as well as the folder `src` and `locales` are now included in the executable - you are inclined to delete these files and folders.
+
+
 ## v1.9.9 (2018-04-25)
 
 ### Fix
