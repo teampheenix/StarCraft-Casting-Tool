@@ -10,7 +10,7 @@ from scctool.settings.client_config import ClientConfig
 
 module_logger = logging.getLogger('scctool.settings.profileManager')  # create logger
 
-#TODO: Import, export and copy profiles.
+#TODO: Tell browser sources what profile is used.
 
 class ProfileManager:
     
@@ -125,7 +125,7 @@ class ProfileManager:
         
         self._saveSettings()
     
-    def addProfile(self, name, current=False, default=False):
+    def addProfile(self, name, current=False, default=False, copy=''):
         name = name.strip()
         if not name:
             raise ValueError(_('You cannot use empty names.'))
@@ -133,6 +133,9 @@ class ProfileManager:
         for id, info in self._profiles.items():
             if info['name'] == name:
                 raise ValueError(_('The name is already in use.'))
+                
+        if copy and copy not in self._profiles.keys():
+            raise ValueError(_('Initial profile is not valid.'))
         
         profile = self._uniqid()
 
@@ -141,8 +144,14 @@ class ProfileManager:
         self._profiles[profile]['default'] = default
         
         dir = self.profiledir(profile)
-        if not os.path.exists(dir):
-            os.makedirs(dir)
+        
+        if copy:
+            if os.path.exists(dir):
+                shutil.rmtree(dir)
+            shutil.copytree(self.profiledir(copy), dir)
+        else:
+            if not os.path.exists(dir):
+                os.makedirs(dir)
         
         if current:
             self.setCurrent(profile)
@@ -164,7 +173,7 @@ class ProfileManager:
         if profile in self._profiles.keys():
             if len(self._profiles) <= 1:
                 raise ValueError("Last profile cannot be deleted.")
-            dir = self.profiledir(self.profiledir(profile))
+            dir = self.profiledir(profile)
             shutil.rmtree(dir)
             del self._profiles[profile]
             if self._current == profile or self._default == profile:
@@ -174,6 +183,20 @@ class ProfileManager:
             return True
         return False
         
+    def exportProfile(self, profile, filename):
+        filename, file_extension = os.path.splitext(filename)
+        if profile not in self._profiles.keys():
+            raise ValueError("Profile '{}' is not valid.".format(profile))
+        dir = self.profiledir(profile)
+        shutil.make_archive(filename, 'zip', dir)
+        
+    def importProfile(self, filename, name):
+        id = self.addProfile(name)
+        dir = self.profiledir(id)
+        shutil.unpack_archive(filename, dir)
+        self._saveSettings()
+        return id
+            
     def getProfiles(self):
         for id, info in self._profiles.items():
             data = dict()

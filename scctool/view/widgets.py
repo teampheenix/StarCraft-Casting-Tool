@@ -19,7 +19,7 @@ from PyQt5.QtWidgets import (QAbstractButton, QAction, QApplication,
                              QProgressDialog, QPushButton, QShortcut,
                              QSizePolicy, QStyle, QStyleOptionButton,
                              QTableWidget, QTableWidgetItem, QTextBrowser,
-                             QTreeWidget, QTreeWidgetItem, QInputDialog, QMessageBox)
+                             QTreeWidget, QTreeWidgetItem, QInputDialog, QMessageBox, QFileDialog)
 
 import scctool.matchdata
 import scctool.settings.config
@@ -1081,6 +1081,7 @@ class ProfileMenu(QMenu):
         action.triggered.connect(self.newProfile)
         
         action = self._menu.addAction(_('Duplicate'))
+        action.triggered.connect(self.duplicateProfile)
         
         action = self._menu.addAction(_('Rename'))
         action.triggered.connect(self.renameProfile)
@@ -1089,8 +1090,10 @@ class ProfileMenu(QMenu):
         action.triggered.connect(self.removeProfile)
         
         action = self._menu.addAction(_('Import'))
+        action.triggered.connect(self.importProfile)
         
         action = self._menu.addAction(_('Export'))
+        action.triggered.connect(self.exportProfile)
 
         self._menu.addSeparator()
         
@@ -1115,11 +1118,14 @@ class ProfileMenu(QMenu):
             QMessageBox.No)
         if buttonReply == QMessageBox.No:
             return
+        QApplication.setOverrideCursor(Qt.WaitCursor)
         try:
             scctool.settings.profileManager.deleteProfile(profile['id'])
             self._parent.restart(False)
         except Exception as e:
             QMessageBox.information(self._parent, _("Remove Profile"), str(e))
+        finally:
+            QApplication.restoreOverrideCursor()
             
     def newProfile(self):
         name = ''
@@ -1128,16 +1134,87 @@ class ProfileMenu(QMenu):
                 self._parent , _('Add Profile'), _('Please enter the name of the profile') + ':', text=name)
             if not ok:
                 return
+
+            QApplication.setOverrideCursor(Qt.WaitCursor)
             try:
                 id = scctool.settings.profileManager.addProfile(name)
                 self.addProfile(id, name, False)
                 self.selectProfile(id)
-                return
             except Exception as e:
                 QMessageBox.information(self._parent, _("Please enter a valid name"), str(e))
                 module_logger.exception("message")
                 continue
+            finally:
+                QApplication.restoreOverrideCursor()
+            return
+                
+    def duplicateProfile(self):
+        current = scctool.settings.profileManager.current()
+        name = current['name'] + ' 2'
+        while True:
+            name, ok = QInputDialog.getText(
+                self._parent , _('Duplicate Profile'), _('Please enter the name of the new profile') + ':', text=name)
+            if not ok:
+                return
+            QApplication.setOverrideCursor(Qt.WaitCursor)
+            try:
+                id = scctool.settings.profileManager.addProfile(name, copy=current['id'])
+                self.addProfile(id, name, False)
+                self.selectProfile(id)
+            except Exception as e:
+                QMessageBox.information(self._parent, _("Please enter a valid name"), str(e))
+                module_logger.exception("message")
+                continue
+            finally:
+                QApplication.restoreOverrideCursor()
+            return
+                
+    def exportProfile(self):
+        current = scctool.settings.profileManager.current()
+        filename = os.path.join(
+            scctool.settings.profileManager.basedir(),
+            'scct-profile-{}-{}.zip'.format(current['name'], time.strftime("%Y%m%d"))
+            )
+        filename, ok = QFileDialog.getSaveFileName(self._parent, 'Export Profile', filename, _("ZIP archive")+" (*.zip)")
+        if not ok:
+            return
 
+        QApplication.setOverrideCursor(Qt.WaitCursor)
+        try:
+            scctool.settings.profileManager.exportProfile(current['id'], filename)
+        except Exception as e:
+            QMessageBox.critical(self._parent, _("Error"), str(e))
+            module_logger.exception("message")
+        finally:
+            QApplication.restoreOverrideCursor()
+            
+    def importProfile(self):
+        filename, ok = QFileDialog.getOpenFileName(self._parent,
+            'Import Profile',
+            scctool.settings.profileManager.basedir(),
+             _("ZIP archive")+" (*.zip)")
+        if not ok:
+            return
+        name = ""
+        while True:
+            name, ok = QInputDialog.getText(
+                self._parent , _('Import Profile'), _('Please enter the name of the imported profile') + ':', text=name)
+            if not ok:
+                return
+            QApplication.setOverrideCursor(Qt.WaitCursor)
+            try:
+                id = scctool.settings.profileManager.importProfile(filename, name)
+                self.addProfile(id, name, False)
+                self.selectProfile(id)
+                pass
+            except Exception as e:
+                QMessageBox.information(self._parent, _("Please enter a valid name"), str(e))
+                module_logger.exception("message")
+                continue
+            finally:
+                QApplication.restoreOverrideCursor()
+            return
+        
 
     def selectProfile(self, myid):
         for id, action in self._profiles.items():
@@ -1156,12 +1233,15 @@ class ProfileMenu(QMenu):
                 self._parent , _('Rename Profile'), _('Please enter the name of the profile') + ':', text=name)
             if not ok:
                 return
+            QApplication.setOverrideCursor(Qt.WaitCursor)
             try:
                 scctool.settings.profileManager.renameProfile(profile['id'], name)
                 self._profiles[profile['id']].setText(name)
-                return
             except Exception as e:
                 QMessageBox.information(self._parent, _("Please enter a valid name"), str(e))
                 module_logger.exception("message")
                 continue
+            finally:
+                QApplication.restoreOverrideCursor()
+            return
         
