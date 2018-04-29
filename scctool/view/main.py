@@ -14,6 +14,7 @@ from PyQt5.QtWidgets import (QAction, QApplication, QCheckBox, QComboBox,
 
 import scctool.settings
 import scctool.settings.config
+from scctool.settings.client_config import ClientConfig
 from scctool.view.subConnections import SubwindowConnections
 from scctool.view.subLogos import SubwindowLogos
 from scctool.view.subMarkdown import SubwindowMarkdown
@@ -21,7 +22,6 @@ from scctool.view.subMisc import SubwindowMisc
 from scctool.view.subStyles import SubwindowStyles
 from scctool.view.widgets import (IconPushButton, LedIndicator, MapLineEdit,
                                   MonitoredLineEdit, ProfileMenu)
-from scctool.settings.client_config import ClientConfig
 
 # create logger
 module_logger = logging.getLogger('scctool.view.main')
@@ -36,7 +36,7 @@ class MainWindow(QMainWindow):
         """Init the main window."""
         try:
             super().__init__()
-            
+
             self._save = True
             self.tlock = TriggerLock()
             self.controller = controller
@@ -81,7 +81,8 @@ class MainWindow(QMainWindow):
             self.controller.refreshButtonStatus()
 
             self.processEvents()
-            self.settings = QSettings(ClientConfig.APP_NAME, ClientConfig.COMPANY_NAME)
+            self.settings = QSettings(
+                ClientConfig.APP_NAME, ClientConfig.COMPANY_NAME)
             self.restoreGeometry(self.settings.value(
                 "geometry", self.saveGeometry()))
             self.restoreState(self.settings.value(
@@ -217,9 +218,9 @@ class MainWindow(QMainWindow):
             myAct.triggered.connect(lambda: self.controller.openURL(
                 "https://paypal.me/StarCraftCastingTool"))
             infoMenu.addAction(myAct)
-            
-            profileMenu = ProfileMenu(self)
-            
+
+            ProfileMenu(self)
+
             langMenu = menubar.addMenu(_('Language'))
 
             language = scctool.settings.config.parser.get("SCT", "language")
@@ -248,7 +249,6 @@ class MainWindow(QMainWindow):
             myAct.setChecked(language == 'ru_RU')
             myAct.triggered.connect(lambda: self.changeLanguage('ru_RU'))
             langMenu.addAction(myAct)
-            
 
         except Exception as e:
             module_logger.exception("message")

@@ -75,7 +75,8 @@ def main_window(app, translator, cntlr=None, showChangelog=False):
         icon.addFile(getResFile('scct.png'), QSize(256, 256))
         app.setWindowIcon(icon)
         if cntlr is None:
-            cntlr = MainController()
+            pass
+        cntlr = MainController()
         MainWindow(cntlr, app, translator, showChangelog)
         logger.info("Starting...")
         return cntlr

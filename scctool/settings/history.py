@@ -1,8 +1,8 @@
 """Provide history manager for SCCTool."""
-import logging
 import json
+import logging
 
-from scctool.settings import history_json_file, race2idx, idx2race
+from scctool.settings import history_json_file, idx2race, race2idx
 
 module_logger = logging.getLogger(
     'scctool.settings.history')  # create logger

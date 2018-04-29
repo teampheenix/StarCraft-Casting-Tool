@@ -21,17 +21,20 @@ else:
 
 profileManager = ProfileManager()
 
+
 def getResFile(file):
     if hasattr(sys, '_MEIPASS'):
         return os.path.normpath(os.path.join(sys._MEIPASS, 'src', file))
     else:
         return os.path.normpath(os.path.join(basedir, 'src', file))
 
+
 def getLocalesDir():
     if hasattr(sys, '_MEIPASS'):
         return os.path.normpath(os.path.join(sys._MEIPASS, 'locales'))
     else:
         return os.path.normpath(os.path.join(basedir, 'locales'))
+
 
 def getLogFile():
     global profileManager
@@ -42,18 +45,21 @@ def getLogFile():
     else:
         # Delete old logfiles
         for f in os.listdir(logdir):
-            full = os.path.join(logdir,f)
+            full = os.path.join(logdir, f)
             if os.path.isfile(full) and os.stat(full).st_mtime < time.time() - 7 * 86400:
                 os.remove(full)
-            
-    filename = 'scct-{}-{}.log'.format(time.strftime("%Y%m%d-%H%M%S"), profileManager._current)
+
+    filename = 'scct-{}-{}.log'.format(time.strftime(
+        "%Y%m%d-%H%M%S"), profileManager._current)
     return os.path.normpath(os.path.join(logdir, filename))
+
 
 def getAbsPath(file):
     """Link to absolute path of a file."""
     global profileManager
-    
+
     return profileManager.getFile(file)
+
 
 configFile = getAbsPath("config.ini")
 
