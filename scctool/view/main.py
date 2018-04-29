@@ -713,8 +713,8 @@ class MainWindow(QMainWindow):
 
                     for i in range(4):
                         self.cb_race[team_idx][player_idx].addItem(
-                            QIcon(scctool.settings.getAbsPath(
-                                "src/" + str(i) + ".png")), "")
+                            QIcon(scctool.settings.getResFile(
+                                str(i) + ".png")), "")
 
                     self.cb_race[team_idx][player_idx].setFixedWidth(
                         self.raceWidth)
