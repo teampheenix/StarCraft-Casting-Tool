@@ -2,21 +2,24 @@
 import configparser
 import logging
 import os.path
+import sys
 
 module_logger = logging.getLogger('scctool.settings.config')  # create logger
 
-parser = None
+this = sys.modules[__name__]
+
+this.parser = None
 
 
 def init(file):
     """Init config."""
-    global parser, scoreUpdate
     # Reading the configuration from file
-    parser = configparser.ConfigParser()
+    module_logger.info(file)
+    this.parser = configparser.ConfigParser()
     try:
-        parser.read(file, encoding='utf-8-sig')
+        this.parser.read(file, encoding='utf-8-sig')
     except Exception:
-        parser.defaults()
+        this.parser.defaults()
 
     setDefaultConfigAll()
     renameConfigOptions()
@@ -41,51 +44,51 @@ def representsFloat(s):
 # Setting default values for config file
 def setDefaultConfig(sec, opt, value, func=None):
     """Set default value in config."""
-    if(not parser.has_section(sec)):
-        parser.add_section(sec)
+    if(not this.parser.has_section(sec)):
+        this.parser.add_section(sec)
 
-    if(not parser.has_option(sec, opt)):
+    if(not this.parser.has_option(sec, opt)):
         if(func):
             try:
                 value = func()
             except Exception:
                 pass
-        parser.set(sec, opt, value)
+        this.parser.set(sec, opt, value)
     elif(value in ["True", "False"]):
         try:
-            parser.getboolean(sec, opt)
+            this.parser.getboolean(sec, opt)
         except Exception:
             if(func):
                 try:
                     value = func()
                 except Exception:
                     pass
-            parser.set(sec, opt, value)
+            this.parser.set(sec, opt, value)
     elif(representsInt(value)):
         try:
-            parser.getint(sec, opt)
+            this.parser.getint(sec, opt)
         except Exception:
             if(func):
                 try:
                     value = func()
                 except Exception:
                     pass
-            parser.set(sec, opt, value)
+            this.parser.set(sec, opt, value)
     elif(representsFloat(value)):
         try:
-            parser.getfloat(sec, opt)
+            this.parser.getfloat(sec, opt)
         except Exception:
             if(func):
                 try:
                     value = func()
                 except Exception:
                     pass
-            parser.set(sec, opt, value)
+            this.parser.set(sec, opt, value)
 
 
 def findTesserAct(default="C:\\Program Files (x86)\\Tesseract-OCR\\tesseract.exe"):
     """Search for Tesseract exceutable via registry."""
-    if(not scctool.settings.windows):
+    if(sys.platform.system().lower() != "windows"):
         return default
     try:
         import winreg
@@ -98,13 +101,13 @@ def findTesserAct(default="C:\\Program Files (x86)\\Tesseract-OCR\\tesseract.exe
 
 def getTesserAct():
     """Get Tesseract exceutable via config or registry."""
-    tesseract = parser.get("SCT", "tesseract")
+    tesseract = this.parser.get("SCT", "tesseract")
     if(os.path.isfile(tesseract)):
         return tesseract
     else:
         new = findTesserAct(tesseract)
         if(new != tesseract):
-            parser.set("SCT", "tesseract", new)
+            this.parser.set("SCT", "tesseract", new)
         return new
 
 
@@ -172,25 +175,25 @@ def renameConfigOptions():
     """Delete and rename old config options."""
     from scctool.settings import nightbot_commands
     try:
-        value = parser.getboolean("SCT", "StrgShiftS")
-        parser.set("SCT", "CtrlShiftS", str(value))
-        parser.remove_option("SCT", "StrgShiftS")
+        value = this.parser.getboolean("SCT", "StrgShiftS")
+        this.parser.set("SCT", "CtrlShiftS", str(value))
+        this.parser.remove_option("SCT", "StrgShiftS")
     except Exception:
         pass
 
-    parser.remove_section("OBS")
-    parser.remove_section("FTP")
+    this.parser.remove_section("OBS")
+    this.parser.remove_section("FTP")
 
     try:
-        command = parser.get("Nightbot", "command")
-        message = parser.get("Nightbot", "message")
+        command = this.parser.get("Nightbot", "command")
+        message = this.parser.get("Nightbot", "message")
         nightbot_commands[command] = message
     except Exception:
         pass
 
     try:
-        parser.remove_option("Nightbot", "command")
-        parser.remove_option("Nightbot", "message")
+        this.parser.remove_option("Nightbot", "command")
+        this.parser.remove_option("Nightbot", "message")
     except Exception:
         pass
 
@@ -198,25 +201,25 @@ def renameConfigOptions():
 def nightbotIsValid():
     """Check if nightbot data is valid."""
     from scctool.settings import nightbot_commands
-    return (len(parser.get("Nightbot", "token")) > 0 and len(nightbot_commands) > 0)
+    return (len(this.parser.get("Nightbot", "token")) > 0 and len(nightbot_commands) > 0)
 
 
 def twitchIsValid():
     """Check if twitch data is valid."""
-    twitchChannel = parser.get("Twitch", "Channel")
-    oauth = parser.get("Twitch", "oauth")
+    twitchChannel = this.parser.get("Twitch", "Channel")
+    oauth = this.parser.get("Twitch", "oauth")
     return (len(oauth) > 0 and len(twitchChannel) > 0)
 
 
 def getMyTeams():
     """Enpack my teams."""
-    return list(map(str.strip, str(parser.get("SCT", "myteams")).split(',')))
+    return list(map(str.strip, str(this.parser.get("SCT", "myteams")).split(',')))
 
 
 def getMyPlayers(append=False):
     """Enpack my players."""
     players = list(
-        map(str.strip, str(parser.get("SCT", "commonplayers")).split(',')))
+        map(str.strip, str(this.parser.get("SCT", "commonplayers")).split(',')))
     if(append):
         players.append("TBD")
     return players

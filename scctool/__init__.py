@@ -8,6 +8,7 @@ from PyQt5.QtCore import QLocale, QTranslator
 from PyQt5.QtWidgets import QApplication, QStyleFactory
 
 import scctool.settings
+import scctool.settings.config
 
 logger = logging.getLogger('scctool')
 
@@ -33,7 +34,8 @@ def main():
             translator = choose_language(app, translator)
 
             icon = QIcon()
-            icon.addFile(scctool.settings.getResFile('scct.ico'), QSize(32, 32))
+            icon.addFile(scctool.settings.getResFile(
+                'scct.ico'), QSize(32, 32))
             app.setWindowIcon(icon)
 
             showChangelog = initial_download()

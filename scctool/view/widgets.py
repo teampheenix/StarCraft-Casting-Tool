@@ -8,8 +8,8 @@ import time
 import humanize
 import keyboard
 import requests
-from PyQt5.QtCore import (QMimeData, QPoint, QPointF, QSize, Qt, pyqtProperty,
-                          pyqtSignal)
+from PyQt5.QtCore import (QMimeData, QPoint, QPointF, QSettings, QSize, Qt,
+                          pyqtProperty, pyqtSignal)
 from PyQt5.QtGui import (QBrush, QColor, QDrag, QIcon, QKeySequence, QPainter,
                          QPen, QRadialGradient)
 from PyQt5.QtWidgets import (QAbstractButton, QAction, QApplication,
@@ -25,6 +25,7 @@ from PyQt5.QtWidgets import (QAbstractButton, QAction, QApplication,
 import scctool.matchdata
 import scctool.settings.config
 import scctool.tasks.updater
+from scctool.settings.client_config import ClientConfig
 from scctool.tasks.tasksthread import TasksThread
 
 # create logger
@@ -775,6 +776,16 @@ class InitialUpdater(QProgressDialog):
         self.setValue(50)
         self.version = version
 
+        settings = QSettings(ClientConfig.APP_NAME, ClientConfig.COMPANY_NAME)
+        self.restoreGeometry(settings.value("geometry", self.saveGeometry()))
+        m_width = self.size().width()
+        m_height = self.size().height()
+        self.resize(QSize(self.sizeHint().width(), self.sizeHint().height()))
+        relativeChange = QPoint(m_width / 2, m_height / 2)\
+            - QPoint(self.size().width() / 2,
+                     self.size().height() / 2)
+        self.move(self.pos() + relativeChange)
+
         self.show()
         for i in range(10):
             QApplication.processEvents()
@@ -1239,7 +1250,7 @@ class ProfileMenu(QMenu):
             else:
                 action.setChecked(False)
         scctool.settings.profileManager.setDefault(myid)
-        scctool.settings.profileManager.setCurrent(myid)
+        # scctool.settings.profileManager.setCurrent(myid)
         self._parent.restart()
 
     def renameProfile(self):

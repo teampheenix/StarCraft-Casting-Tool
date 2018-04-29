@@ -1,9 +1,8 @@
 """Define the main window."""
-import gettext
 import logging
 
 import markdown2
-from PyQt5.QtCore import QLocale, QSettings, Qt, QTranslator
+from PyQt5.QtCore import QSettings, Qt
 from PyQt5.QtGui import QIcon, QKeySequence, QPalette
 from PyQt5.QtWidgets import (QAction, QApplication, QCheckBox, QComboBox,
                              QCompleter, QFormLayout, QGridLayout, QGroupBox,

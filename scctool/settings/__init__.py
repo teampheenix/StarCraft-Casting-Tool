@@ -14,6 +14,8 @@ from scctool.settings.profileManager import ProfileManager
 
 module_logger = logging.getLogger('scctool.settings')
 
+this = sys.modules[__name__]
+
 if getattr(sys, 'frozen', False):
     basedir = os.path.dirname(sys.executable)
 else:
@@ -30,14 +32,18 @@ windows = (platform.system().lower() == "windows")
 max_no_sets = 9
 races = ("Random", "Terran", "Protoss", "Zerg")
 
+this.profileManager = ProfileManager()
+this.maps = []
+this.nightbot_commands = dict()
+
 
 def loadSettings():
-    global profileManager
 
-    profileManager = ProfileManager()
+    this.profileManager = ProfileManager()
+
+    initConfig(configFile())
 
     loadNightbotCommands()
-    initConfig(configFile())
 
     # Creating directories if not exisiting
     if not os.path.exists(getAbsPath(OBSdataDir)):
@@ -75,7 +81,6 @@ def configFile():
 
 
 def getLogFile():
-    global profileManager
     logdir = appdirs.user_log_dir(
         ClientConfig.APP_NAME, ClientConfig.COMPANY_NAME)
     if not os.path.exists(logdir):
@@ -88,20 +93,18 @@ def getLogFile():
                 os.remove(full)
 
     filename = 'scct-{}-{}.log'.format(time.strftime(
-        "%Y%m%d-%H%M%S"), profileManager._current)
+        "%Y%m%d-%H%M%S"), this.profileManager._current)
     return os.path.normpath(os.path.join(logdir, filename))
 
 
 def getAbsPath(file):
     """Link to absolute path of a file."""
-    global profileManager
 
-    return profileManager.getFile(file)
+    return this.profileManager.getFile(file)
 
 
 def loadMapList():
     """Load map list form dir."""
-    global maps
     data = []
     try:
         dir = os.path.normpath(os.path.join(getAbsPath(OBSmapDir), "src/maps"))
@@ -114,29 +117,27 @@ def loadMapList():
                 if mapName not in data:
                     data.append(mapName)
     finally:
-        maps = data
+        this.maps = data
         return data
 
 
 def loadNightbotCommands():
     """Read json data from file."""
-    global nightbot_commands
     try:
         with open(getJsonFile('nightbot'), 'r', encoding='utf-8-sig') as json_file:
             data = json.load(json_file)
     except Exception as e:
         data = dict()
 
-    nightbot_commands = data
+    this.nightbot_commands = data
     return data
 
 
 def saveNightbotCommands():
     """Write json data to file."""
-    global nightbot_commands
     try:
         with open(getJsonFile('nightbot'), 'w', encoding='utf-8-sig') as outfile:
-            json.dump(nightbot_commands, outfile)
+            json.dump(this.nightbot_commands, outfile)
     except Exception as e:
         module_logger.exception("message")
 
@@ -155,6 +156,3 @@ def idx2race(idx):
         return races[idx]
     except Exception:
         return races[0]
-
-
-loadSettings()
