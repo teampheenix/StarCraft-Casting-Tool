@@ -26,7 +26,7 @@ logger.addHandler(ch)
 logger.info("system: " + system)
 logger.info("pip-version: " + pip.__version__)
 
-modules = ['pip', 'pyqt5', 'requests', 'configparser', 'flask', 'keyboard', 'websockets', 'humanize', 'markdown2', 'pyupdater', 'beautifulsoup4']
+modules = ['pip', 'pyqt5', 'requests', 'configparser', 'flask', 'keyboard', 'websockets', 'humanize', 'markdown2', 'pyupdater', 'beautifulsoup4', 'appdirs']
 
 win_modules = ['pypiwin32', 'pytesseract', 'Pillow']
 
