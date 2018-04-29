@@ -13,7 +13,7 @@ from scctool.settings import getAbsPath
 
 logger = logging.getLogger('scctool')
 
-__version__ = "1.9.10"
+__version__ = "1.9.11"
 __latest_version__ = __version__
 __new_version__ = False
 
