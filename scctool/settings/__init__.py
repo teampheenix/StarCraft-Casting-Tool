@@ -43,6 +43,12 @@ def getLogFile():
         ClientConfig.APP_NAME, ClientConfig.COMPANY_NAME)
     if not os.path.exists(logdir):
         os.makedirs(logdir)
+    else:
+        # Delete old logfiles
+        for f in os.listdir(logdir):
+            full = os.path.join(logdir,f)
+            if os.path.isfile(full) and os.stat(full).st_mtime < time.time() - 7 * 86400:
+                os.remove(full)
     filename = 'scct-{}.log'.format(time.strftime("%Y%m%d-%H%M%S"))
     return os.path.normpath(os.path.join(logdir, filename))
 
