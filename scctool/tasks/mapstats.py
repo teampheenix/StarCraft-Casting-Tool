@@ -105,9 +105,10 @@ class MapStatsManager:
         if len(data) > 0:
             self.__currentMapPool = data
 
-    def close(self):
+    def close(self, save=True):
         self.__thread.terminate()
-        self.dumpJson()
+        if save:
+            self.dumpJson()
 
     def getData(self):
         out_data = dict()

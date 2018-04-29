@@ -19,7 +19,7 @@ from PyQt5.QtWidgets import (QAbstractButton, QAction, QApplication,
                              QProgressDialog, QPushButton, QShortcut,
                              QSizePolicy, QStyle, QStyleOptionButton,
                              QTableWidget, QTableWidgetItem, QTextBrowser,
-                             QTreeWidget, QTreeWidgetItem)
+                             QTreeWidget, QTreeWidgetItem, QInputDialog, QMessageBox)
 
 import scctool.matchdata
 import scctool.settings.config
@@ -1065,3 +1065,103 @@ class LedIndicator(QAbstractButton):
     @offColor2.setter
     def offColor2(self, color):
         self.off_color_2 = color
+        
+        
+class ProfileMenu(QMenu):
+    
+    def __init__(self, parrent_widget):
+        
+        self._parent = parrent_widget
+        
+        super().__init__(self._parent)
+        
+        self._menu = parrent_widget.menuBar().addMenu(_('Profile'))
+        
+        action = self._menu.addAction(_('New'))
+        action.triggered.connect(self.newProfile)
+        
+        action = self._menu.addAction(_('Duplicate'))
+        
+        action = self._menu.addAction(_('Rename'))
+        action.triggered.connect(self.renameProfile)
+        
+        action = self._menu.addAction(_('Remove'))
+        action.triggered.connect(self.removeProfile)
+        
+        action = self._menu.addAction(_('Import'))
+        
+        action = self._menu.addAction(_('Export'))
+
+        self._menu.addSeparator()
+        
+        self._profiles = dict()
+         
+        for profile in scctool.settings.profileManager.getProfiles():
+            self.addProfile(profile.get('id'), profile.get('name'), profile.get('current'))
+          
+    def addProfile(self, id, name, current):
+        action = self._menu.addAction(name)
+        action.triggered.connect(lambda x, id=id: self.selectProfile(id))
+        action.setCheckable(True)
+        action.setChecked(current)
+        self._profiles[id] = action
+        
+    def removeProfile(self):
+        profile = scctool.settings.profileManager.current()
+        buttonReply = QMessageBox.question(
+            self._parent, _("Remove Profile"), _(
+                "Are you sure you wish to remove profile '{}'?".format(profile['name'])),
+            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.No)
+        if buttonReply == QMessageBox.No:
+            return
+        try:
+            scctool.settings.profileManager.deleteProfile(profile['id'])
+            self._parent.restart(False)
+        except Exception as e:
+            QMessageBox.information(self._parent, _("Remove Profile"), str(e))
+            
+    def newProfile(self):
+        name = ''
+        while True:
+            name, ok = QInputDialog.getText(
+                self._parent , _('Add Profile'), _('Please enter the name of the profile') + ':', text=name)
+            if not ok:
+                return
+            try:
+                id = scctool.settings.profileManager.addProfile(name)
+                self.addProfile(id, name, False)
+                self.selectProfile(id)
+                return
+            except Exception as e:
+                QMessageBox.information(self._parent, _("Please enter a valid name"), str(e))
+                module_logger.exception("message")
+                continue
+
+
+    def selectProfile(self, myid):
+        for id, action in self._profiles.items():
+            if id == myid:
+                action.setChecked(True)
+            else:
+                action.setChecked(False)
+        scctool.settings.profileManager.setDefault(myid)
+        self._parent.restart()
+        
+    def renameProfile(self):
+        profile = scctool.settings.profileManager.current()
+        name = profile.get('name','')
+        while True:
+            name, ok = QInputDialog.getText(
+                self._parent , _('Rename Profile'), _('Please enter the name of the profile') + ':', text=name)
+            if not ok:
+                return
+            try:
+                scctool.settings.profileManager.renameProfile(profile['id'], name)
+                self._profiles[profile['id']].setText(name)
+                return
+            except Exception as e:
+                QMessageBox.information(self._parent, _("Please enter a valid name"), str(e))
+                module_logger.exception("message")
+                continue
+        

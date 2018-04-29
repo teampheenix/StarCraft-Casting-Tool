@@ -407,21 +407,22 @@ class MainController:
         except Exception as e:
             module_logger.exception("message")
 
-    def cleanUp(self):
+    def cleanUp(self, save=True):
         """Clean up all threads and save config to close program."""
         try:
             module_logger.info("cleanUp called")
             self.SC2ApiThread.requestTermination("ALL")
             self.webApp.terminate()
-            self.saveConfig()
             self.websocketThread.stop()
             self.autoRequestsThread.terminate()
-            self.matchData.writeJsonFile()
-            scctool.settings.saveNightbotCommands()
-            self.logoManager.dumpJson()
-            self.historyManager.dumpJson()
-            self.aliasManager.dumpJson()
-            self.mapstatsManager.close()
+            self.mapstatsManager.close(save)
+            if save:
+                self.saveConfig()
+                self.matchData.writeJsonFile()
+                scctool.settings.saveNightbotCommands()
+                self.logoManager.dumpJson()
+                self.historyManager.dumpJson()
+                self.aliasManager.dumpJson()
         except Exception as e:
             module_logger.exception("message")
 

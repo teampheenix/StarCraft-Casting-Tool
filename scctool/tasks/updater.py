@@ -141,7 +141,7 @@ def extractData(asset_update, handler=lambda x: None):
     if asset_update.is_downloaded():
         file = os.path.join(asset_update.update_folder,
                             asset_update.filename)
-        targetdir = scctool.settings.basedir
+        targetdir = scctool.settings.profileManager.profiledir()
         with zipfile.ZipFile(file, "r") as zip:
             zip.extractall(targetdir)
         handler(50)

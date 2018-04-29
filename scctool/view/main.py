@@ -20,7 +20,8 @@ from scctool.view.subMarkdown import SubwindowMarkdown
 from scctool.view.subMisc import SubwindowMisc
 from scctool.view.subStyles import SubwindowStyles
 from scctool.view.widgets import (IconPushButton, LedIndicator, MapLineEdit,
-                                  MonitoredLineEdit)
+                                  MonitoredLineEdit, ProfileMenu)
+from scctool.settings.client_config import ClientConfig
 
 # create logger
 module_logger = logging.getLogger('scctool.view.main')
@@ -35,7 +36,8 @@ class MainWindow(QMainWindow):
         """Init the main window."""
         try:
             super().__init__()
-
+            
+            self._save = True
             self.tlock = TriggerLock()
             self.controller = controller
             self.translator = translator
@@ -79,8 +81,7 @@ class MainWindow(QMainWindow):
             self.controller.refreshButtonStatus()
 
             self.processEvents()
-            self.settings = QSettings(
-                "team pheeniX", "StarCraft Casting Tool")
+            self.settings = QSettings(ClientConfig.APP_NAME, ClientConfig.COMPANY_NAME)
             self.restoreGeometry(self.settings.value(
                 "geometry", self.saveGeometry()))
             self.restoreState(self.settings.value(
@@ -123,7 +124,7 @@ class MainWindow(QMainWindow):
             finally:
                 self.settings.setValue("geometry", self.saveGeometry())
                 self.settings.setValue("windowState", self.saveState())
-                self.controller.cleanUp()
+                self.controller.cleanUp(self._save)
                 QMainWindow.closeEvent(self, event)
                 # event.accept()
         except Exception as e:
@@ -216,7 +217,9 @@ class MainWindow(QMainWindow):
             myAct.triggered.connect(lambda: self.controller.openURL(
                 "https://paypal.me/StarCraftCastingTool"))
             infoMenu.addAction(myAct)
-
+            
+            profileMenu = ProfileMenu(self)
+            
             langMenu = menubar.addMenu(_('Language'))
 
             language = scctool.settings.config.parser.get("SCT", "language")
@@ -245,6 +248,7 @@ class MainWindow(QMainWindow):
             myAct.setChecked(language == 'ru_RU')
             myAct.triggered.connect(lambda: self.changeLanguage('ru_RU'))
             langMenu.addAction(myAct)
+            
 
         except Exception as e:
             module_logger.exception("message")
@@ -1230,8 +1234,9 @@ class MainWindow(QMainWindow):
         for i in range(0, 10):
             self.app.processEvents()
 
-    def restart(self):
+    def restart(self, save=True):
         """Restart the main window."""
+        self._save = save
         self.close()
         self.app.exit(self.EXIT_CODE_REBOOT)
 

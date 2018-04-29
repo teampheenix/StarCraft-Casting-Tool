@@ -9,6 +9,7 @@ import time
 import appdirs
 
 from scctool.settings.client_config import ClientConfig
+from scctool.settings.profileManager import ProfileManager
 
 module_logger = logging.getLogger('scctool.settings')
 
@@ -18,11 +19,7 @@ if getattr(sys, 'frozen', False):
 else:
     basedir = os.path.dirname(sys.modules['__main__'].__file__)
 
-
-def getAbsPath(file):
-    """Link to absolute path of a file."""
-    return os.path.normpath(os.path.join(basedir, file))
-
+profileManager = ProfileManager()
 
 def getResFile(file):
     if hasattr(sys, '_MEIPASS'):
@@ -30,22 +27,26 @@ def getResFile(file):
     else:
         return os.path.normpath(os.path.join(basedir, 'src', file))
 
-
 def getLocalesDir():
     if hasattr(sys, '_MEIPASS'):
         return os.path.normpath(os.path.join(sys._MEIPASS, 'locales'))
     else:
         return os.path.normpath(os.path.join(basedir, 'locales'))
 
-
 def getLogFile():
+    global profileManager
     logdir = appdirs.user_log_dir(
         ClientConfig.APP_NAME, ClientConfig.COMPANY_NAME)
     if not os.path.exists(logdir):
         os.makedirs(logdir)
-    filename = 'scct-{}.log'.format(time.strftime("%Y%m%d-%H%M%S"))
+    filename = 'scct-{}-{}.log'.format(time.strftime("%Y%m%d-%H%M%S"), profileManager._current)
     return os.path.normpath(os.path.join(logdir, filename))
 
+def getAbsPath(file):
+    """Link to absolute path of a file."""
+    global profileManager
+    
+    return profileManager.getFile(file)
 
 configFile = getAbsPath("config.ini")
 
