@@ -12,8 +12,8 @@ import humanize
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
 
-from scctool.settings import (OBSdataDir, OBShtmlDir, getAbsPath,
-                              logos_json_file, logosDir)
+from scctool.settings import (OBSdataDir, OBShtmlDir, getAbsPath, getJsonFile,
+                              logosDir)
 
 module_logger = logging.getLogger(
     'scctool.settings.logoManager')  # create logger
@@ -78,7 +78,7 @@ class LogoManager:
         data['team2'] = self._team2.toDict()
 
         try:
-            with open(logos_json_file, 'w', encoding='utf-8-sig') as outfile:
+            with open(getJsonFile('logos'), 'w', encoding='utf-8-sig') as outfile:
                 json.dump(data, outfile)
         except Exception as e:
             module_logger.exception("message")
@@ -90,7 +90,7 @@ class LogoManager:
         data = dict()
 
         try:
-            with open(logos_json_file, 'r', encoding='utf-8-sig') as json_file:
+            with open(getJsonFile('logos'), 'r', encoding='utf-8-sig') as json_file:
                 data = json.load(json_file)
         except (OSError, IOError):
             return

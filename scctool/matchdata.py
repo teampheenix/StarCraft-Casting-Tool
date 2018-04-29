@@ -62,7 +62,7 @@ class matchData:
     def readJsonFile(self):
         """Read json data from file."""
         try:
-            with open(scctool.settings.matchdata_json_file,
+            with open(scctool.settings.getJsonFile('matchdata'),
                       'r', encoding='utf-8-sig') as json_file:
                 self.__data = json.load(json_file)
         except Exception as e:
@@ -73,7 +73,7 @@ class matchData:
     def writeJsonFile(self):
         """Write json data to file."""
         try:
-            with open(scctool.settings.matchdata_json_file,
+            with open(scctool.settings.getJsonFile('matchdata'),
                       'w', encoding='utf-8-sig') as outfile:
                 json.dump(self.__data, outfile)
         except Exception as e:

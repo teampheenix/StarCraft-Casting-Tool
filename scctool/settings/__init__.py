@@ -9,17 +9,47 @@ import time
 import appdirs
 
 from scctool.settings.client_config import ClientConfig
+from scctool.settings.config import init as initConfig
 from scctool.settings.profileManager import ProfileManager
 
 module_logger = logging.getLogger('scctool.settings')
-
 
 if getattr(sys, 'frozen', False):
     basedir = os.path.dirname(sys.executable)
 else:
     basedir = os.path.dirname(sys.modules['__main__'].__file__)
 
-profileManager = ProfileManager()
+OBSdataDir = "OBS_data"
+OBShtmlDir = "OBS_html"
+OBSmapDir = "OBS_mapicons"
+
+dataDir = "data"
+logosDir = os.path.join(dataDir, "logos")
+
+windows = (platform.system().lower() == "windows")
+max_no_sets = 9
+races = ("Random", "Terran", "Protoss", "Zerg")
+
+
+def loadSettings():
+    global profileManager
+
+    profileManager = ProfileManager()
+
+    loadNightbotCommands()
+    initConfig(configFile())
+
+    # Creating directories if not exisiting
+    if not os.path.exists(getAbsPath(OBSdataDir)):
+        os.makedirs(getAbsPath(OBSdataDir))
+    # Creating directories if not exisiting
+    if not os.path.exists(getAbsPath(OBSdataDir)):
+        os.makedirs(getAbsPath(dataDir))
+    # Creating directories if not exisiting
+    if not os.path.exists(getAbsPath(logosDir)):
+        os.makedirs(getAbsPath(logosDir))
+
+    loadMapList()
 
 
 def getResFile(file):
@@ -34,6 +64,14 @@ def getLocalesDir():
         return os.path.normpath(os.path.join(sys._MEIPASS, 'locales'))
     else:
         return os.path.normpath(os.path.join(basedir, 'locales'))
+
+
+def getJsonFile(scope):
+    return getAbsPath(dataDir + "/{}.json".format(scope))
+
+
+def configFile():
+    return getAbsPath("config.ini")
 
 
 def getLogFile():
@@ -61,42 +99,10 @@ def getAbsPath(file):
     return profileManager.getFile(file)
 
 
-configFile = getAbsPath("config.ini")
-
-OBSdataDir = "OBS_data"
-OBShtmlDir = "OBS_html"
-OBSmapDir = "OBS_mapicons"
-
-dataDir = "data"
-logosDir = os.path.join(dataDir, "logos")
-matchdata_json_file = getAbsPath(dataDir + "/matchdata.json")
-versiondata_json_file = getAbsPath(dataDir + "/versiondata.json")
-nightbot_json_file = getAbsPath(dataDir + "/nightbot.json")
-logos_json_file = getAbsPath(dataDir + "/logos.json")
-history_json_file = getAbsPath(dataDir + "/history.json")
-alias_json_file = getAbsPath(dataDir + "/alias.json")
-mapstats_json_file = getAbsPath(dataDir + "/mapstats.json")
-
-windows = (platform.system().lower() == "windows")
-
-max_no_sets = 9
-
-races = ("Random", "Terran", "Protoss", "Zerg")
-
-# Creating directories if not exisiting
-if not os.path.exists(getAbsPath(OBSdataDir)):
-    os.makedirs(getAbsPath(OBSdataDir))
-# Creating directories if not exisiting
-if not os.path.exists(getAbsPath(dataDir)):
-    os.makedirs(getAbsPath(dataDir))
-# Creating directories if not exisiting
-if not os.path.exists(getAbsPath(logosDir)):
-    os.makedirs(getAbsPath(logosDir))
-
-
 def loadMapList():
     """Load map list form dir."""
-    maps = []
+    global maps
+    data = []
     try:
         dir = os.path.normpath(os.path.join(getAbsPath(OBSmapDir), "src/maps"))
 
@@ -105,22 +111,18 @@ def loadMapList():
             name, ext = os.path.splitext(fname)
             if os.path.isfile(full_fname) and ext in ['.jpg', '.png']:
                 mapName = name.replace('_', " ")
-                if mapName not in maps:
-                    maps.append(mapName)
+                if mapName not in data:
+                    data.append(mapName)
     finally:
-        return maps
-
-
-maps = []
-
-nightbot_commands = []
+        maps = data
+        return data
 
 
 def loadNightbotCommands():
     """Read json data from file."""
     global nightbot_commands
     try:
-        with open(nightbot_json_file, 'r', encoding='utf-8-sig') as json_file:
+        with open(getJsonFile('nightbot'), 'r', encoding='utf-8-sig') as json_file:
             data = json.load(json_file)
     except Exception as e:
         data = dict()
@@ -133,7 +135,7 @@ def saveNightbotCommands():
     """Write json data to file."""
     global nightbot_commands
     try:
-        with open(nightbot_json_file, 'w', encoding='utf-8-sig') as outfile:
+        with open(getJsonFile('nightbot'), 'w', encoding='utf-8-sig') as outfile:
             json.dump(nightbot_commands, outfile)
     except Exception as e:
         module_logger.exception("message")
@@ -155,4 +157,4 @@ def idx2race(idx):
         return races[0]
 
 
-loadNightbotCommands()
+loadSettings()

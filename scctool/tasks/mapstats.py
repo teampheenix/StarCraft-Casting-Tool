@@ -28,7 +28,7 @@ class MapStatsManager:
     def loadJson(self):
         """Read json data from file."""
         try:
-            with open(scctool.settings.mapstats_json_file,
+            with open(scctool.settings.getJsonFile('mapstats'),
                       'r',
                       encoding='utf-8-sig') as json_file:
                 data = json.load(json_file)
@@ -50,7 +50,7 @@ class MapStatsManager:
         data['mappool'] = self.__currentMapPool
 
         try:
-            with open(scctool.settings.mapstats_json_file,
+            with open(scctool.settings.getJsonFile('mapstats'),
                       'w',
                       encoding='utf-8-sig') as outfile:
                 json.dump(data, outfile)

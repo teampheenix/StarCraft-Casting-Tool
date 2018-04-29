@@ -32,7 +32,7 @@ class MainWindow(QMainWindow):
 
     EXIT_CODE_REBOOT = -123
 
-    def __init__(self, controller, app, translator, showChangelog):
+    def __init__(self, controller, app, showChangelog):
         """Init the main window."""
         try:
             super().__init__()
@@ -40,7 +40,6 @@ class MainWindow(QMainWindow):
             self._save = True
             self.tlock = TriggerLock()
             self.controller = controller
-            self.translator = translator
 
             with self.tlock:
                 self.createFormMatchDataBox()
@@ -293,19 +292,6 @@ class MainWindow(QMainWindow):
 
     def changeLanguage(self, language):
         """Change the language."""
-        try:
-            lang = gettext.translation(
-                'messages', localedir=scctool.settings.getLocalesDir(), languages=[language])
-            lang.install()
-        except Exception:
-            lang = gettext.NullTranslations()
-
-        self.app.removeTranslator(self.translator)
-        self.translator = QTranslator(self.app)
-        self.translator.load(QLocale(language),
-                             "qtbase", "_", scctool.settings.getLocalesDir(), ".qm")
-        self.app.installTranslator(self.translator)
-
         scctool.settings.config.parser.set("SCT", "language", language)
         self.restart()
 

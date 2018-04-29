@@ -32,6 +32,7 @@ module_logger = logging.getLogger('scctool.controller')
 
 class MainController:
     """Control all other modules."""
+    webApp = FlaskThread()
 
     def __init__(self):
         """Init controller and connect them with other modules."""
@@ -41,7 +42,6 @@ class MainController:
             self.SC2ApiThread.requestScoreUpdate.connect(
                 self.requestScoreUpdate)
             self.versionHandler = VersionHandler(self)
-            self.webApp = FlaskThread()
             self.webApp.signal_twitch.connect(self.webAppDone_twitch)
             self.webApp.signal_nightbot.connect(self.webAppDone_nightbot)
             self.websocketThread = WebsocketThread(self)
@@ -56,7 +56,6 @@ class MainController:
             self.logoManager = LogoManager(self)
             self.aliasManager = AliasManager()
             self.historyManager = HistoryManager()
-            scctool.settings.maps = scctool.settings.loadMapList()
             self.mapstatsManager = MapStatsManager()
 
         except Exception as e:
@@ -442,7 +441,7 @@ class MainController:
             scctool.settings.config.parser.set("Form", "autonightbot", str(
                 self.view.cb_autoNightbot.isChecked()))
 
-            configFile = open(scctool.settings.configFile,
+            configFile = open(scctool.settings.configFile(),
                               'w', encoding='utf-8-sig')
             scctool.settings.config.parser.write(configFile)
             configFile.close()

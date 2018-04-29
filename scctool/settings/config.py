@@ -3,20 +3,18 @@ import configparser
 import logging
 import os.path
 
-from scctool.settings import configFile, windows
-
 module_logger = logging.getLogger('scctool.settings.config')  # create logger
 
 parser = None
 
 
-def init():
+def init(file):
     """Init config."""
     global parser, scoreUpdate
     # Reading the configuration from file
     parser = configparser.ConfigParser()
     try:
-        parser.read(configFile, encoding='utf-8-sig')
+        parser.read(file, encoding='utf-8-sig')
     except Exception:
         parser.defaults()
 
@@ -87,7 +85,7 @@ def setDefaultConfig(sec, opt, value, func=None):
 
 def findTesserAct(default="C:\\Program Files (x86)\\Tesseract-OCR\\tesseract.exe"):
     """Search for Tesseract exceutable via registry."""
-    if(not windows):
+    if(not scctool.settings.windows):
         return default
     try:
         import winreg
@@ -241,6 +239,3 @@ def dumpHotkey(data):
         return "{name}, {scan_code}, {is_keypad}".format(**data)
     except Exception:
         return ""
-
-
-init()

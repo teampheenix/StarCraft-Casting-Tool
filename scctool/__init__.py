@@ -8,8 +8,6 @@ from PyQt5.QtCore import QLocale, QTranslator
 from PyQt5.QtWidgets import QApplication, QStyleFactory
 
 import scctool.settings
-import scctool.settings.config
-from scctool.settings import getLocalesDir, getResFile
 
 logger = logging.getLogger('scctool')
 
@@ -17,41 +15,29 @@ __version__ = "2.0.0"
 __latest_version__ = __version__
 __new_version__ = False
 
-language = scctool.settings.config.parser.get("SCT", "language")
-
-try:
-    lang = gettext.translation(
-        'messages', localedir=getLocalesDir(), languages=[language])
-except Exception:
-    lang = gettext.NullTranslations()
-
-lang.install()
-
 
 def main():
     """Run StarCraft Casting Tool."""
-    global language
     from scctool.view.main import MainWindow
     from PyQt5.QtCore import QSize
     from PyQt5.QtGui import QIcon
 
+    translator = None
+
     currentExitCode = MainWindow.EXIT_CODE_REBOOT
-    cntlr = None
     while currentExitCode == MainWindow.EXIT_CODE_REBOOT:
         try:
+            scctool.settings.loadSettings()
             app = QApplication(sys.argv)
             app.setStyle(QStyleFactory.create('Fusion'))
-            translator = QTranslator(app)
-            translator.load(QLocale(language), "qtbase",
-                            "_",  getLocalesDir(), ".qm")
-            app.installTranslator(translator)
+            translator = choose_language(app, translator)
 
             icon = QIcon()
-            icon.addFile(getResFile('scct.ico'), QSize(32, 32))
+            icon.addFile(scctool.settings.getResFile('scct.ico'), QSize(32, 32))
             app.setWindowIcon(icon)
 
             showChangelog = initial_download()
-            cntlr = main_window(app, translator, cntlr, showChangelog)
+            main_window(app, showChangelog)
             currentExitCode = app.exec_()
             app = None
         except Exception as e:
@@ -61,7 +47,7 @@ def main():
     sys.exit(currentExitCode)
 
 
-def main_window(app, translator, cntlr=None, showChangelog=False):
+def main_window(app, showChangelog=False):
     """Run the main exectuable."""
     from PyQt5.QtCore import QSize
     from PyQt5.QtGui import QIcon
@@ -71,13 +57,11 @@ def main_window(app, translator, cntlr=None, showChangelog=False):
     try:
         """Run the main program."""
         icon = QIcon()
-        icon.addFile(getResFile('scct.ico'), QSize(32, 32))
-        icon.addFile(getResFile('scct.png'), QSize(256, 256))
+        icon.addFile(scctool.settings.getResFile('scct.ico'), QSize(32, 32))
+        icon.addFile(scctool.settings.getResFile('scct.png'), QSize(256, 256))
         app.setWindowIcon(icon)
-        if cntlr is None:
-            pass
         cntlr = MainController()
-        MainWindow(cntlr, app, translator, showChangelog)
+        MainWindow(cntlr, app, showChangelog)
         logger.info("Starting...")
         return cntlr
 
@@ -102,3 +86,22 @@ def initial_download():
     scctool.tasks.updater.setRestartFlag(False)
 
     return restart_flag
+
+
+def choose_language(app, translator):
+    language = scctool.settings.config.parser.get("SCT", "language")
+
+    try:
+        lang = gettext.translation(
+            'messages', localedir=scctool.settings.getLocalesDir(), languages=[language])
+    except Exception:
+        lang = gettext.NullTranslations()
+
+    lang.install()
+    app.removeTranslator(translator)
+    translator = QTranslator(app)
+    translator.load(QLocale(language), "qtbase",
+                    "_",  scctool.settings.getLocalesDir(), ".qm")
+    app.installTranslator(translator)
+
+    return translator
