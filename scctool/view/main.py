@@ -98,7 +98,7 @@ class MainWindow(QMainWindow):
     def showAbout(self):
         """Show subwindow with about info."""
         html = markdown2.markdown_path(
-            scctool.settings.getAbsPath("src/about.md"))
+            scctool.settings.getResFile("about.md"))
 
         html = html.replace("%VERSION%", scctool.__version__)
         if(not scctool.__new_version__):
@@ -133,42 +133,42 @@ class MainWindow(QMainWindow):
         try:
             menubar = self.menuBar()
             settingsMenu = menubar.addMenu(_('Settings'))
-            apiAct = QAction(QIcon(scctool.settings.getAbsPath(
-                'src/connection.png')), _('Connections'), self)
+            apiAct = QAction(QIcon(scctool.settings.getResFile(
+                'connection.png')), _('Connections'), self)
             apiAct.setToolTip(
                 _('Edit Intro-Settings and API-Settings for Twitch and Nightbot'))
             apiAct.triggered.connect(self.openApiDialog)
             settingsMenu.addAction(apiAct)
-            styleAct = QAction(QIcon(scctool.settings.getAbsPath(
-                'src/pantone.png')), _('Styles'), self)
+            styleAct = QAction(QIcon(scctool.settings.getResFile(
+                'pantone.png')), _('Styles'), self)
             styleAct.setToolTip('')
             styleAct.triggered.connect(self.openStyleDialog)
             settingsMenu.addAction(styleAct)
-            miscAct = QAction(QIcon(scctool.settings.getAbsPath(
-                'src/settings.png')), _('Misc'), self)
+            miscAct = QAction(QIcon(scctool.settings.getResFile(
+                'settings.png')), _('Misc'), self)
             miscAct.setToolTip('')
             miscAct.triggered.connect(self.openMiscDialog)
             settingsMenu.addAction(miscAct)
 
             infoMenu = menubar.addMenu(_('Info && Links'))
 
-            myAct = QAction(QIcon(scctool.settings.getAbsPath(
-                'src/about.png')), _('About'), self)
+            myAct = QAction(QIcon(scctool.settings.getResFile(
+                'about.png')), _('About'), self)
             myAct.triggered.connect(self.showAbout)
             infoMenu.addAction(myAct)
 
-            myAct = QAction(QIcon(scctool.settings.getAbsPath(
-                'src/readme.ico')), _('Readme'), self)
+            myAct = QAction(QIcon(scctool.settings.getResFile(
+                'readme.ico')), _('Readme'), self)
             myAct.triggered.connect(self.openReadme)
             infoMenu.addAction(myAct)
 
-            myAct = QAction(QIcon(scctool.settings.getAbsPath(
-                'src/update.png')), _('Check for new version'), self)
+            myAct = QAction(QIcon(scctool.settings.getResFile(
+                'update.png')), _('Check for new version'), self)
             myAct.triggered.connect(lambda: self.controller.checkVersion(True))
             infoMenu.addAction(myAct)
 
-            myAct = QAction(QIcon(scctool.settings.getAbsPath(
-                'src/changelog.png')), _('Changelog'), self)
+            myAct = QAction(QIcon(scctool.settings.getResFile(
+                'changelog.png')), _('Changelog'), self)
             myAct.triggered.connect(self.openChangelog)
             infoMenu.addAction(myAct)
 
@@ -176,7 +176,7 @@ class MainWindow(QMainWindow):
 
             websiteAct = QAction(
                 QIcon(
-                    scctool.settings.getAbsPath('src/scct.ico')),
+                    scctool.settings.getResFile('scct.ico')),
                 'StarCraft Casting Tool', self)
             websiteAct.triggered.connect(lambda: self.controller.openURL(
                 "https://teampheenix.github.io/StarCraft-Casting-Tool/"))
@@ -184,34 +184,34 @@ class MainWindow(QMainWindow):
 
             discordAct = QAction(
                 QIcon(
-                    scctool.settings.getAbsPath('src/discord.png')),
+                    scctool.settings.getResFile('discord.png')),
                 'Discord', self)
             discordAct.triggered.connect(lambda: self.controller.openURL(
                 "https://discord.gg/G9hFEfh"))
             infoMenu.addAction(discordAct)
 
-            ixAct = QAction(QIcon(scctool.settings.getAbsPath(
-                'src/icon.png')), 'team pheeniX', self)
+            ixAct = QAction(QIcon(scctool.settings.getResFile(
+                'icon.png')), 'team pheeniX', self)
             ixAct.triggered.connect(
                 lambda:  self.controller.openURL("http://team-pheenix.de"))
             infoMenu.addAction(ixAct)
 
-            alphaAct = QAction(QIcon(scctool.settings.getAbsPath(
-                'src/alpha.png')), 'AlphaTL', self)
+            alphaAct = QAction(QIcon(scctool.settings.getResFile(
+                'alpha.png')), 'AlphaTL', self)
             alphaAct.triggered.connect(
                 lambda: self.controller.openURL("http://alpha.tl"))
             infoMenu.addAction(alphaAct)
 
-            rstlAct = QAction(QIcon(scctool.settings.getAbsPath(
-                'src/rstl.png')), 'RSTL', self)
+            rstlAct = QAction(QIcon(scctool.settings.getResFile(
+                'rstl.png')), 'RSTL', self)
             rstlAct.triggered.connect(
                 lambda: self.controller.openURL("http://hdgame.net/en/"))
             infoMenu.addAction(rstlAct)
 
             infoMenu.addSeparator()
 
-            myAct = QAction(QIcon(scctool.settings.getAbsPath(
-                'src/donate.ico')), _('Donate'), self)
+            myAct = QAction(QIcon(scctool.settings.getResFile(
+                'donate.ico')), _('Donate'), self)
             myAct.triggered.connect(lambda: self.controller.openURL(
                 "https://paypal.me/StarCraftCastingTool"))
             infoMenu.addAction(myAct)
@@ -220,27 +220,27 @@ class MainWindow(QMainWindow):
 
             language = scctool.settings.config.parser.get("SCT", "language")
 
-            myAct = QAction(QIcon(scctool.settings.getAbsPath(
-                'src/de.png')), 'Deutsch', self, checkable=True)
+            myAct = QAction(QIcon(scctool.settings.getResFile(
+                'de.png')), 'Deutsch', self, checkable=True)
             myAct.setChecked(language == 'de_DE')
             myAct.triggered.connect(lambda: self.changeLanguage('de_DE'))
             langMenu.addAction(myAct)
 
-            myAct = QAction(QIcon(scctool.settings.getAbsPath(
-                'src/en.png')), 'English', self, checkable=True)
+            myAct = QAction(QIcon(scctool.settings.getResFile(
+                'en.png')), 'English', self, checkable=True)
             myAct.setChecked(language == 'en_US')
             myAct.triggered.connect(lambda: self.changeLanguage('en_US'))
             langMenu.addAction(myAct)
 
-            myAct = QAction(QIcon(scctool.settings.getAbsPath(
-                'src/fr.png')), 'Français', self, checkable=True)
+            myAct = QAction(QIcon(scctool.settings.getResFile(
+                'fr.png')), 'Français', self, checkable=True)
             myAct.setChecked(language == 'fr_FR')
             myAct.setDisabled(True)
             myAct.triggered.connect(lambda: self.changeLanguage('fr_FR'))
             langMenu.addAction(myAct)
 
-            myAct = QAction(QIcon(scctool.settings.getAbsPath(
-                'src/ru.png')), 'Pусский', self, checkable=True)
+            myAct = QAction(QIcon(scctool.settings.getResFile(
+                'ru.png')), 'Pусский', self, checkable=True)
             myAct.setChecked(language == 'ru_RU')
             myAct.triggered.connect(lambda: self.changeLanguage('ru_RU'))
             langMenu.addAction(myAct)
@@ -270,7 +270,10 @@ class MainWindow(QMainWindow):
         """Open subwindow with readme viewer."""
         self.mysubwindows['readme'] = SubwindowMarkdown()
         self.mysubwindows['readme'].createWindow(
-            self, _("Readme"), "src/readme.ico", "README.md")
+            self, _("Readme"),
+            scctool.settings.getResFile('readme.ico'),
+            scctool.settings.getResFile("../README.md")
+        )
         self.mysubwindows['readme'].show()
 
     def openChangelog(self):
@@ -278,14 +281,16 @@ class MainWindow(QMainWindow):
         self.mysubwindows['changelog'] = SubwindowMarkdown()
         self.mysubwindows['changelog'].createWindow(
             self, "StarCraft Casting Tool " + _("Changelog"),
-            "src/changelog.png", "CHANGELOG.md")
+            scctool.settings.getResFile("changelog.png"),
+            scctool.settings.getResFile("../CHANGELOG.md")
+        )
         self.mysubwindows['changelog'].show()
 
     def changeLanguage(self, language):
         """Change the language."""
         try:
             lang = gettext.translation(
-                'messages', localedir='locales', languages=[language])
+                'messages', localedir=scctool.settings.getLocalesDir(), languages=[language])
             lang.install()
         except Exception:
             lang = gettext.NullTranslations()
@@ -293,7 +298,7 @@ class MainWindow(QMainWindow):
         self.app.removeTranslator(self.translator)
         self.translator = QTranslator(self.app)
         self.translator.load(QLocale(language),
-                             "qtbase", "_",  scctool.settings.getAbsPath('locales'), ".qm")
+                             "qtbase", "_", scctool.settings.getLocalesDir(), ".qm")
         self.app.installTranslator(self.translator)
 
         scctool.settings.config.parser.set("SCT", "language", language)
@@ -350,14 +355,14 @@ class MainWindow(QMainWindow):
             container.addWidget(self.le_url, 1)
             button = QPushButton()
             pixmap = QIcon(
-                scctool.settings.getAbsPath('src/alpha.png'))
+                scctool.settings.getResFile('alpha.png'))
             button.setIcon(pixmap)
             button.clicked.connect(
                 lambda: self.controller.openURL("http://alpha.tl/"))
             container.addWidget(button, 0)
             button = QPushButton()
             pixmap = QIcon(
-                scctool.settings.getAbsPath('src/rstl.png'))
+                scctool.settings.getResFile('rstl.png'))
             button.setIcon(pixmap)
             button.clicked.connect(
                 lambda: self.controller.openURL("http://hdgame.net/en/"))
@@ -445,12 +450,6 @@ class MainWindow(QMainWindow):
             container.addWidget(label, 1)
 
             self.applycustom_is_highlighted = False
-
-            # act = QAction(QIcon(scctool.settings.getAbsPath(
-            #    'src/connection.png')), _('Connections'), self)
-            # act.setToolTip(
-            #    _('Edit Intro-Settings and API-Settings for Twitch and Nightbot'))
-            # act.triggered.connect(self.openApiDialog)
 
             self.pb_applycustom = QToolButton()
             action = QAction(_("Apply Format"))

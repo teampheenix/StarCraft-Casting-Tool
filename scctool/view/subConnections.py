@@ -29,7 +29,7 @@ class SubwindowConnections(QWidget):
             # self.setWindowFlags(Qt.WindowStaysOnTopHint)
 
             self.setWindowIcon(
-                QIcon(scctool.settings.getAbsPath('src/connection.png')))
+                QIcon(scctool.settings.getResFile('connection.png')))
             self.setWindowModality(Qt.ApplicationModal)
             self.mainWindow = mainWindow
             self.passEvent = False

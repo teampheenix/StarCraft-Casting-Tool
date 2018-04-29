@@ -31,7 +31,7 @@ class SubwindowMisc(QWidget):
             # self.setWindowFlags(Qt.WindowStaysOnTopHint)
 
             self.setWindowIcon(
-                QIcon(scctool.settings.getAbsPath('src/settings.png')))
+                QIcon(scctool.settings.getResFile('settings.png')))
             self.setWindowModality(Qt.ApplicationModal)
             self.mainWindow = mainWindow
             self.passEvent = False

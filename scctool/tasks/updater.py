@@ -43,8 +43,6 @@ def needInitialUpdate(version):
     """Check if data update is needed."""
     if version == '0.0.0':
         return True
-    elif not os.path.exists(scctool.settings.getAbsPath("src")):
-        return True
     elif not os.path.exists(scctool.settings.getAbsPath(scctool.settings.OBShtmlDir)):
         return True
     elif not os.path.exists(scctool.settings.getAbsPath(scctool.settings.OBSmapDir)):
