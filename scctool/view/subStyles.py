@@ -25,7 +25,7 @@ class SubwindowStyles(QWidget):
             super().__init__(parent)
 
             self.setWindowIcon(
-                QIcon(scctool.settings.getAbsPath('src/pantone.png')))
+                QIcon(scctool.settings.getResFile('pantone.png')))
             self.setWindowModality(Qt.ApplicationModal)
             self.mainWindow = mainWindow
             self.passEvent = False
@@ -95,68 +95,83 @@ class SubwindowStyles(QWidget):
         self.styleBox = QWidget()
         layout = QFormLayout()
 
-        container = QHBoxLayout()
-        self.qb_boxStyle = StyleComboBox(
-            scctool.settings.OBSmapDir + "/src/css/box_styles",
-            scctool.settings.config.parser.get("Style", "mapicon_box"))
-        self.qb_boxStyle.currentIndexChanged.connect(self.changed)
-        label = QLabel(_("Box Map Icons:"))
-        label.setMinimumWidth(110)
-        button = QPushButton(_("Show in Browser"))
-        button.clicked.connect(lambda: self.openHTML(
-            scctool.settings.OBSmapDir + "/icons_box/all_maps.html"))
-        container.addWidget(self.qb_boxStyle)
-        container.addWidget(button)
-        layout.addRow(label, container)
+        try:
+            container = QHBoxLayout()
+            self.qb_boxStyle = StyleComboBox(
+                scctool.settings.OBSmapDir + "/src/css/box_styles",
+                scctool.settings.config.parser.get("Style", "mapicon_box"))
+            self.qb_boxStyle.currentIndexChanged.connect(self.changed)
+            label = QLabel(_("Box Map Icons:"))
+            label.setMinimumWidth(110)
+            button = QPushButton(_("Show in Browser"))
+            button.clicked.connect(lambda: self.openHTML(
+                scctool.settings.OBSmapDir + "/icons_box/all_maps.html"))
+            container.addWidget(self.qb_boxStyle)
+            container.addWidget(button)
+            layout.addRow(label, container)
+        except Exception as e:
+            module_logger.exception("message")
+        
+        try:
+            container = QHBoxLayout()
+            self.qb_landscapeStyle = StyleComboBox(
+                scctool.settings.OBSmapDir + "/src/css/landscape_styles",
+                scctool.settings.config.parser.get("Style", "mapicon_landscape"))
+            self.qb_landscapeStyle.currentIndexChanged.connect(self.changed)
+            button = QPushButton(_("Show in Browser"))
+            button.clicked.connect(lambda: self.openHTML(
+                scctool.settings.OBSmapDir + "/icons_landscape/all_maps.html"))
+            container.addWidget(self.qb_landscapeStyle)
+            container.addWidget(button)
+            layout.addRow(QLabel(
+                _("Landscape Map Icons:")), container)
+        except Exception as e:
+            module_logger.exception("message")
 
-        container = QHBoxLayout()
-        self.qb_landscapeStyle = StyleComboBox(
-            scctool.settings.OBSmapDir + "/src/css/landscape_styles",
-            scctool.settings.config.parser.get("Style", "mapicon_landscape"))
-        self.qb_landscapeStyle.currentIndexChanged.connect(self.changed)
-        button = QPushButton(_("Show in Browser"))
-        button.clicked.connect(lambda: self.openHTML(
-            scctool.settings.OBSmapDir + "/icons_landscape/all_maps.html"))
-        container.addWidget(self.qb_landscapeStyle)
-        container.addWidget(button)
-        layout.addRow(QLabel(
-            _("Landscape Map Icons:")), container)
+        try:
+            container = QHBoxLayout()
+            self.qb_scoreStyle = StyleComboBox(
+                scctool.settings.OBShtmlDir + "/src/css/score_styles",
+                scctool.settings.config.parser.get("Style", "score"))
+            self.qb_scoreStyle.currentIndexChanged.connect(self.changed)
+            button = QPushButton(_("Show in Browser"))
+            button.clicked.connect(lambda: self.openHTML(
+                scctool.settings.OBShtmlDir + "/score.html"))
+            container.addWidget(self.qb_scoreStyle)
+            container.addWidget(button)
+            layout.addRow(QLabel(_("Score:")), container)
+        except Exception as e:
+            module_logger.exception("message")
 
-        container = QHBoxLayout()
-        self.qb_scoreStyle = StyleComboBox(
-            scctool.settings.OBShtmlDir + "/src/css/score_styles",
-            scctool.settings.config.parser.get("Style", "score"))
-        self.qb_scoreStyle.currentIndexChanged.connect(self.changed)
-        button = QPushButton(_("Show in Browser"))
-        button.clicked.connect(lambda: self.openHTML(
-            scctool.settings.OBShtmlDir + "/score.html"))
-        container.addWidget(self.qb_scoreStyle)
-        container.addWidget(button)
-        layout.addRow(QLabel(_("Score:")), container)
+        try:
+            container = QHBoxLayout()
+            self.qb_introStyle = StyleComboBox(
+                scctool.settings.OBShtmlDir + "/src/css/intro",
+                scctool.settings.config.parser.get("Style", "intro"))
+            self.qb_introStyle.currentIndexChanged.connect(self.changed)
+            button = QPushButton(_("Show in Browser"))
+            button.clicked.connect(lambda: self.openHTML(
+                scctool.settings.OBShtmlDir + "/intro.html"))
+            container.addWidget(self.qb_introStyle)
+            container.addWidget(button)
+            layout.addRow(QLabel(_("Intros:")), container)
+        except Exception as e:
+            module_logger.exception("message")
 
-        container = QHBoxLayout()
-        self.qb_introStyle = StyleComboBox(
-            scctool.settings.OBShtmlDir + "/src/css/intro",
-            scctool.settings.config.parser.get("Style", "intro"))
-        self.qb_introStyle.currentIndexChanged.connect(self.changed)
-        button = QPushButton(_("Show in Browser"))
-        button.clicked.connect(lambda: self.openHTML(
-            scctool.settings.OBShtmlDir + "/intro.html"))
-        container.addWidget(self.qb_introStyle)
-        container.addWidget(button)
-        layout.addRow(QLabel(_("Intros:")), container)
-
-        container = QHBoxLayout()
-        self.qb_mapstatsStyle = StyleComboBox(
-            scctool.settings.OBShtmlDir + "/src/css/mapstats",
-            scctool.settings.config.parser.get("Style", "mapstats"))
-        self.qb_mapstatsStyle.currentIndexChanged.connect(self.changed)
-        button = QPushButton(_("Show in Browser"))
-        button.clicked.connect(lambda: self.openHTML(
-            scctool.settings.OBShtmlDir + "/mapstats.html"))
-        container.addWidget(self.qb_mapstatsStyle)
-        container.addWidget(button)
-        layout.addRow(QLabel(_("Map Stats:")), container)
+        try:
+            container = QHBoxLayout()
+            self.qb_mapstatsStyle = StyleComboBox(
+                scctool.settings.OBShtmlDir + "/src/css/mapstats",
+                scctool.settings.config.parser.get("Style", "mapstats"))
+            self.qb_mapstatsStyle.currentIndexChanged.connect(self.changed)
+            button = QPushButton(_("Show in Browser"))
+            button.clicked.connect(lambda: self.openHTML(
+                scctool.settings.OBShtmlDir + "/mapstats.html"))
+            container.addWidget(self.qb_mapstatsStyle)
+            container.addWidget(button)
+            layout.addRow(QLabel(_("Map Stats:")), container)
+        except Exception as e:
+            module_logger.exception("message")
 
         self.pb_applyStyles = QPushButton(_("Apply"))
         self.pb_applyStyles.clicked.connect(self.applyStyles)

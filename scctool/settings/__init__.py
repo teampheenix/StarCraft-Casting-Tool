@@ -4,6 +4,11 @@ import logging
 import os
 import platform
 import sys
+import time
+
+import appdirs
+
+from scctool.settings.client_config import ClientConfig
 
 module_logger = logging.getLogger('scctool.settings')
 
@@ -17,6 +22,29 @@ else:
 def getAbsPath(file):
     """Link to absolute path of a file."""
     return os.path.normpath(os.path.join(basedir, file))
+
+
+def getResFile(file):
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.normpath(os.path.join(sys._MEIPASS, 'src', file))
+    else:
+        return os.path.normpath(os.path.join(basedir, 'src', file))
+
+
+def getLocalesDir():
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.normpath(os.path.join(sys._MEIPASS, 'locales'))
+    else:
+        return os.path.normpath(os.path.join(basedir, 'locales'))
+
+
+def getLogFile():
+    logdir = appdirs.user_log_dir(
+        ClientConfig.APP_NAME, ClientConfig.COMPANY_NAME)
+    if not os.path.exists(logdir):
+        os.makedirs(logdir)
+    filename = 'scct-{}.log'.format(time.strftime("%Y%m%d-%H%M%S"))
+    return os.path.normpath(os.path.join(logdir, filename))
 
 
 configFile = getAbsPath("config.ini")

@@ -9,7 +9,7 @@ from PyQt5.QtWidgets import QApplication, QStyleFactory
 
 import scctool.settings
 import scctool.settings.config
-from scctool.settings import getAbsPath
+from scctool.settings import getLocalesDir, getResFile
 
 logger = logging.getLogger('scctool')
 
@@ -21,7 +21,7 @@ language = scctool.settings.config.parser.get("SCT", "language")
 
 try:
     lang = gettext.translation(
-        'messages', localedir='locales', languages=[language])
+        'messages', localedir=getLocalesDir(), languages=[language])
 except Exception:
     lang = gettext.NullTranslations()
 
@@ -43,11 +43,11 @@ def main():
             app.setStyle(QStyleFactory.create('Fusion'))
             translator = QTranslator(app)
             translator.load(QLocale(language), "qtbase",
-                            "_",  getAbsPath('locales'), ".qm")
+                            "_",  getLocalesDir(), ".qm")
             app.installTranslator(translator)
 
             icon = QIcon()
-            icon.addFile(getAbsPath('src/scct.ico'), QSize(32, 32))
+            icon.addFile(getResFile('scct.ico'), QSize(32, 32))
             app.setWindowIcon(icon)
 
             showChangelog = initial_download()
@@ -71,8 +71,8 @@ def main_window(app, translator, cntlr=None, showChangelog=False):
     try:
         """Run the main program."""
         icon = QIcon()
-        icon.addFile(getAbsPath('src/scct.ico'), QSize(32, 32))
-        icon.addFile(getAbsPath('src/scct.png'), QSize(256, 256))
+        icon.addFile(getResFile('scct.ico'), QSize(32, 32))
+        icon.addFile(getResFile('scct.png'), QSize(256, 256))
         app.setWindowIcon(icon)
         if cntlr is None:
             cntlr = MainController()
