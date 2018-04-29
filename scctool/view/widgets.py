@@ -1223,6 +1223,7 @@ class ProfileMenu(QMenu):
             else:
                 action.setChecked(False)
         scctool.settings.profileManager.setDefault(myid)
+        scctool.settings.profileManager.setCurrent(myid)
         self._parent.restart()
         
     def renameProfile(self):

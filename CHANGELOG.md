@@ -1,6 +1,15 @@
 # Changelog
 
 
+## v2.0.0 (2018-04-29)
+
+### New
+
+* Added a Profile Manager.
+
+* Added LEDs to status bar indicating when browser sources are connected to StarCraft Casting Tool.
+
+
 ## v1.9.11 (2018-04-29)
 
 ### New

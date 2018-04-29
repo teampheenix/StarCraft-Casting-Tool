@@ -14,9 +14,10 @@ module_logger = logging.getLogger('scctool.settings.profileManager')  # create l
 
 class ProfileManager:
     
+    _settings = QSettings(ClientConfig.APP_NAME, ClientConfig.COMPANY_NAME)
+    
     def __init__(self, local=False):
         self.setupDirs(local)
-        self._settings = QSettings(ClientConfig.APP_NAME, ClientConfig.COMPANY_NAME)
         self._loadSettings()
             
     def basedir(self):
