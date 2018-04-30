@@ -121,6 +121,9 @@ class ProfileManager:
         data['current'] = True
         return data
 
+    def currentID(self):
+        return self._current
+
     def setDefault(self, profile):
         if self._default:
             self._profiles[self._default]['default'] = False

@@ -102,9 +102,33 @@ class WebsocketThread(QThread):
         finally:
             self.keyboard_state = dict()
 
+    def handle_path(self, path):
+        paths = path.split('/')[1:]
+        if len(paths) != 2:
+            return False
+
+        valid_scopes = ['intro', 'mapstats']
+        valid_profiles = [scctool.settings.profileManager.currentID()]
+        valid_scope = False
+        valid_profile = False
+        scope = ''
+
+        for path in paths:
+            if path in valid_scopes:
+                valid_scope = True
+                scope = path
+                continue
+            if path in valid_profiles:
+                valid_profile = True
+
+        if valid_scope and valid_profile:
+            return scope
+        else:
+            return ''
+
     async def handler(self, websocket, path):
-        path = path.replace('/', '')
-        if path not in ['intro', 'mapstats']:
+        path = self.handle_path(path)
+        if not path:
             module_logger.info("Client with incorrect path.")
             return
         self.registerConnection(websocket, path)
