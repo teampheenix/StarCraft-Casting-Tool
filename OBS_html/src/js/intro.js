@@ -29,7 +29,9 @@ function playSound3() {
 }
 
 function Connect() {
-        socket = new WebSocket("ws://127.0.0.1:4489/intro/".concat(profile));
+        path = "intro"
+        port = parseInt("0x".concat(profile), 16);
+        socket = new WebSocket("ws://127.0.0.1:".concat(port, "/", path));
 
         socket.onopen = function() {
                 console.log("Connected!");

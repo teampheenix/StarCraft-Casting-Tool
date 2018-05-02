@@ -192,5 +192,6 @@ class MapStatsThread(TasksThread):
         try:
             mappool = list(self.__grabber.get_ladder_mappool())
             self.newMapPool.emit(mappool)
+            module_logger.info('Current map pool found.')
         finally:
             self.deactivateTask('refresh_mappool')

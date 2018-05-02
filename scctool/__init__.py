@@ -38,7 +38,12 @@ def main():
                 'scct.ico'), QSize(32, 32))
             app.setWindowIcon(icon)
 
-            showChangelog = initial_download()
+            showChangelog, updater = initial_download()
+            if updater:
+                scctool.settings.loadSettings()
+                app = QApplication(sys.argv)
+                app.setStyle(QStyleFactory.create('Fusion'))
+                translator = choose_language(app, translator)
             main_window(app, showChangelog)
             currentExitCode = app.exec_()
             app = None
@@ -79,15 +84,18 @@ def initial_download():
 
     version = scctool.tasks.updater.getDataVersion()
     restart_flag = scctool.tasks.updater.getRestartFlag()
+    updater = False
 
     if scctool.tasks.updater.needInitialUpdate(version):
         InitialUpdater()
+        updater = True
     elif restart_flag:
         InitialUpdater(version)
+        updater = True
 
     scctool.tasks.updater.setRestartFlag(False)
 
-    return restart_flag
+    return restart_flag, updater
 
 
 def choose_language(app, translator):

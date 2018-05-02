@@ -1,8 +1,8 @@
 import logging
 import os
+import random
 import shutil
 import sys
-from time import time
 
 import appdirs
 from PyQt5.QtCore import QSettings
@@ -173,7 +173,7 @@ class ProfileManager:
 
     def _uniqid(self):
         while True:
-            uniqid = hex(int(time() * 10000000))[10:]
+            uniqid = hex(random.randint(49152, 65535))[2:]
             if uniqid not in self._profiles.keys():
                 return uniqid
 

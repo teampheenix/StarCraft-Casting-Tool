@@ -33,8 +33,12 @@ class WebsocketThread(QThread):
         self.__loop = asyncio.new_event_loop()
         asyncio.set_event_loop(self.__loop)
 
+        port = int(scctool.settings.profileManager.currentID(), 16)
+        print(scctool.settings.profileManager.currentID())
+        module_logger.info(
+            'Starting Websocket Server with port {}.'.format(port))
         # Create the server.
-        start_server = websockets.serve(self.handler, host='localhost', port=4489,
+        start_server = websockets.serve(self.handler, host='localhost', port=port,
                                         max_queue=16,
                                         max_size=10240,
                                         read_limit=10240,
@@ -104,29 +108,17 @@ class WebsocketThread(QThread):
 
     def handle_path(self, path):
         paths = path.split('/')[1:]
-        if len(paths) != 2:
-            return False
 
         valid_scopes = ['intro', 'mapstats']
-        valid_profiles = [scctool.settings.profileManager.currentID()]
-        valid_scope = False
-        valid_profile = False
-        scope = ''
 
         for path in paths:
             if path in valid_scopes:
-                valid_scope = True
-                scope = path
-                continue
-            if path in valid_profiles:
-                valid_profile = True
+                return path
 
-        if valid_scope and valid_profile:
-            return scope
-        else:
-            return ''
+        return ''
 
     async def handler(self, websocket, path):
+        print(path, self.handle_path(path))
         path = self.handle_path(path)
         if not path:
             module_logger.info("Client with incorrect path.")
