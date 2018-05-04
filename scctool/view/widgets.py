@@ -1089,22 +1089,28 @@ class ProfileMenu(QMenu):
 
         self._menu = parrent_widget.menuBar().addMenu(_('Profile'))
 
-        action = self._menu.addAction(_('New'))
+        action = self._menu.addAction(QIcon(scctool.settings.getResFile(
+            'add.png')), _('New'))
         action.triggered.connect(self.newProfile)
 
-        action = self._menu.addAction(_('Duplicate'))
+        action = self._menu.addAction(QIcon(scctool.settings.getResFile(
+            'copy.png')), _('Duplicate'))
         action.triggered.connect(self.duplicateProfile)
 
-        action = self._menu.addAction(_('Rename'))
+        action = self._menu.addAction(QIcon(scctool.settings.getResFile(
+            'edit.png')), _('Rename'))
         action.triggered.connect(self.renameProfile)
 
-        action = self._menu.addAction(_('Remove'))
+        action = self._menu.addAction(QIcon(scctool.settings.getResFile(
+            'delete.png')), _('Remove'))
         action.triggered.connect(self.removeProfile)
 
-        action = self._menu.addAction(_('Import'))
+        action = self._menu.addAction(QIcon(scctool.settings.getResFile(
+            'import.png')), _('Import'))
         action.triggered.connect(self.importProfile)
 
-        action = self._menu.addAction(_('Export'))
+        action = self._menu.addAction(QIcon(scctool.settings.getResFile(
+            'export.png')), _('Export'))
         action.triggered.connect(self.exportProfile)
 
         self._menu.addSeparator()

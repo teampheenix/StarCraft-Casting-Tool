@@ -167,9 +167,25 @@ class ProfileManager:
         if default:
             self.setDefault(profile)
 
+        self._createPortFile(profile)
+
         module_logger.info('Profile {} created.'.format(profile))
         self._saveSettings()
         return profile
+
+    def _createPortFile(self, profile=""):
+        from scctool.settings import OBShtmlDir
+        if not profile:
+            profile = self._current
+
+        dir = self.profiledir(profile)
+        dir = os.path.join(dir, OBShtmlDir, 'src/js')
+        if not os.path.exists(dir):
+            os.makedirs(dir)
+        file = os.path.join(dir, 'profile.js')
+
+        with open(file, 'w', encoding='utf-8') as o:
+            o.write("var profile = '{}';".format(profile))
 
     def _uniqid(self):
         while True:

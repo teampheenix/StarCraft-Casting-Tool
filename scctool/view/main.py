@@ -14,6 +14,7 @@ from PyQt5.QtWidgets import (QAction, QApplication, QCheckBox, QComboBox,
 import scctool.settings
 import scctool.settings.config
 from scctool.settings.client_config import ClientConfig
+from scctool.view.subBrowserSources import SubwindowBrowserSources
 from scctool.view.subConnections import SubwindowConnections
 from scctool.view.subLogos import SubwindowLogos
 from scctool.view.subMarkdown import SubwindowMarkdown
@@ -134,8 +135,15 @@ class MainWindow(QMainWindow):
         try:
             menubar = self.menuBar()
             settingsMenu = menubar.addMenu(_('Settings'))
+
             apiAct = QAction(QIcon(scctool.settings.getResFile(
-                'connection.png')), _('Connections'), self)
+                'browser.png')), _('Browser Sources'), self)
+            apiAct.setToolTip(
+                _('Edit Settings for all Browser Sources'))
+            apiAct.triggered.connect(self.openBrowserSourcesDialog)
+            settingsMenu.addAction(apiAct)
+            apiAct = QAction(QIcon(scctool.settings.getResFile(
+                'twitch.png')), _('Twitch && Nightbot'), self)
             apiAct.setToolTip(
                 _('Edit Intro-Settings and API-Settings for Twitch and Nightbot'))
             apiAct.triggered.connect(self.openApiDialog)
@@ -268,6 +276,12 @@ class MainWindow(QMainWindow):
         self.mysubwindows['misc'] = SubwindowMisc()
         self.mysubwindows['misc'].createWindow(self)
         self.mysubwindows['misc'].show()
+
+    def openBrowserSourcesDialog(self):
+        """Open subwindow with misc settings."""
+        self.mysubwindows['browser'] = SubwindowBrowserSources()
+        self.mysubwindows['browser'].createWindow(self)
+        self.mysubwindows['browser'].show()
 
     def openReadme(self):
         """Open subwindow with readme viewer."""

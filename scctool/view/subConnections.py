@@ -2,17 +2,15 @@
 import logging
 import weakref
 
-import keyboard
 from PyQt5.QtCore import QPoint, QSize, Qt
 from PyQt5.QtGui import QIcon, QKeySequence
-from PyQt5.QtWidgets import (QBoxLayout, QComboBox, QDoubleSpinBox,
-                             QFormLayout, QGroupBox, QHBoxLayout, QLabel,
-                             QLineEdit, QMessageBox, QPushButton, QScrollArea,
-                             QShortcut, QSizePolicy, QSlider, QSpacerItem,
-                             QTabWidget, QVBoxLayout, QWidget)
+from PyQt5.QtWidgets import (QBoxLayout, QFormLayout, QGroupBox, QHBoxLayout,
+                             QLabel, QLineEdit, QMessageBox, QPushButton,
+                             QScrollArea, QShortcut, QTabWidget, QVBoxLayout,
+                             QWidget)
 
 import scctool.settings
-from scctool.view.widgets import Completer, HotkeyLayout, MonitoredLineEdit
+from scctool.view.widgets import Completer, MonitoredLineEdit
 
 # create logger
 module_logger = logging.getLogger('scctool.view.subConnections')
@@ -29,7 +27,7 @@ class SubwindowConnections(QWidget):
             # self.setWindowFlags(Qt.WindowStaysOnTopHint)
 
             self.setWindowIcon(
-                QIcon(scctool.settings.getResFile('connection.png')))
+                QIcon(scctool.settings.getResFile('twitch.png')))
             self.setWindowModality(Qt.ApplicationModal)
             self.mainWindow = mainWindow
             self.passEvent = False
@@ -54,7 +52,7 @@ class SubwindowConnections(QWidget):
                        self.size().height() / 3)
             self.move(mainWindow.pos() + relativeChange)
 
-            self.setWindowTitle(_("Connections"))
+            self.setWindowTitle(_("Twitch & Nightbot Connections"))
 
         except Exception as e:
             module_logger.exception("message")
@@ -63,89 +61,14 @@ class SubwindowConnections(QWidget):
         """Create tabs."""
         self.tabs = QTabWidget()
 
-        self.createFormGroupWebsocket()
         self.createFormGroupTwitch()
         self.createFormGroupNightbot()
 
         # Add tabs
-        self.tabs.addTab(self.formGroupWebsocket, _("Intros && Hotkeys"))
-        self.tabs.addTab(self.formGroupTwitch, _("Twitch"))
-        self.tabs.addTab(self.formGroupNightbot, _("Nightbot"))
-
-    def addHotkey(self, ident, label):
-        element = HotkeyLayout(
-            self, label,
-            scctool.settings.config.parser.get("Intros", ident))
-        self.hotkeys[ident] = element
-        return element
-
-    def connectHotkeys(self):
-        for ident, key in self.hotkeys.items():
-            for ident2, key2 in self.hotkeys.items():
-                if ident == ident2:
-                    continue
-                key.modified.connect(key2.check_dublicate)
-            key.modified.connect(self.changed)
-
-    def createFormGroupWebsocket(self):
-        """Create forms for OBS websocket connection."""
-        self.formGroupWebsocket = QWidget()
-        mainLayout = QVBoxLayout()
-
-        self.hotkeyBox = QGroupBox(_("Intro Hotkeys"))
-        layout = QVBoxLayout()
-
-        try:
-            keyboard.unhook_all()
-        except AttributeError:
-            pass
-        self.hotkeys = dict()
-        layout.addLayout(self.addHotkey("hotkey_player1", _("Player 1")))
-        layout.addLayout(self.addHotkey("hotkey_player2", _("Player 2")))
-        layout.addLayout(self.addHotkey("hotkey_debug", _("Debug")))
-        self.connectHotkeys()
-        self.hotkeyBox.setLayout(layout)
-        mainLayout.addWidget(self.hotkeyBox)
-
-        self.introBox = QGroupBox(_("Intro Settings"))
-        layout = QFormLayout()
-        self.sl_sound = QSlider(Qt.Horizontal)
-        self.sl_sound.setMinimum(0)
-        self.sl_sound.setMaximum(10)
-        self.sl_sound.setValue(
-            scctool.settings.config.parser.getint("Intros", "sound_volume"))
-        self.sl_sound.setTickPosition(QSlider.TicksBothSides)
-        self.sl_sound.setTickInterval(1)
-        self.sl_sound.valueChanged.connect(self.changed)
-        layout.addRow(QLabel(
-            _("Sound Volume:") + " "), self.sl_sound)
-        self.sb_displaytime = QDoubleSpinBox()
-        self.sb_displaytime.setRange(0, 10)
-        self.sb_displaytime.setDecimals(1)
-        self.sb_displaytime.setValue(
-            scctool.settings.config.parser.getfloat("Intros", "display_time"))
-        self.sb_displaytime.setSuffix(" " + _("Seconds"))
-        self.sb_displaytime.valueChanged.connect(self.changed)
-        layout.addRow(QLabel(
-            _("Display Duration:") + " "), self.sb_displaytime)
-        self.cb_animation = QComboBox()
-        animation = scctool.settings.config.parser.get("Intros", "animation")
-        currentIdx = 0
-        idx = 0
-        for item in ["Fly-In", "Slide", "Fanfare"]:
-            self.cb_animation.addItem(item)
-            if(item == animation):
-                currentIdx = idx
-            idx += 1
-        self.cb_animation.setCurrentIndex(currentIdx)
-        layout.addRow(QLabel(
-            _("Animation:") + " "), self.cb_animation)
-        self.introBox.setLayout(layout)
-        mainLayout.addWidget(self.introBox)
-
-        mainLayout.addItem(QSpacerItem(
-            0, 0, QSizePolicy.Minimum, QSizePolicy.Expanding))
-        self.formGroupWebsocket.setLayout(mainLayout)
+        self.tabs.addTab(self.formGroupTwitch, QIcon(
+            scctool.settings.getResFile('twitch.png')), _("Twitch"))
+        self.tabs.addTab(self.formGroupNightbot, QIcon(
+            scctool.settings.getResFile('nightbot.ico')), _("Nightbot"))
 
     def createFormGroupTwitch(self):
         """Create forms for twitch."""
@@ -327,22 +250,6 @@ class SubwindowConnections(QWidget):
             "Twitch", "title_template", self.twitchTemplate.text().strip())
 
         scctool.settings.nightbot_commands = CommandDropBox.getData()
-
-        self.saveWebsocketdata()
-
-        self.controller.refreshButtonStatus()
-
-    def saveWebsocketdata(self):
-        """Save Websocket data."""
-        for ident, key in self.hotkeys.items():
-            string = scctool.settings.config.dumpHotkey(key.getKey())
-            scctool.settings.config.parser.set("Intros", ident, string)
-        scctool.settings.config.parser.set(
-            "Intros", "display_time", str(self.sb_displaytime.value()))
-        scctool.settings.config.parser.set(
-            "Intros", "sound_volume", str(self.sl_sound.value()))
-        scctool.settings.config.parser.set(
-            "Intros", "animation", self.cb_animation.currentText().strip())
 
     def saveCloseWindow(self):
         """Save and close window."""
