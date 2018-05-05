@@ -4,10 +4,11 @@ import logging
 import keyboard
 from PyQt5.QtCore import QPoint, QSize, Qt
 from PyQt5.QtGui import QIcon, QKeySequence
-from PyQt5.QtWidgets import (QComboBox, QDoubleSpinBox, QFormLayout, QGroupBox,
-                             QHBoxLayout, QLabel, QMessageBox, QPushButton,
-                             QShortcut, QSizePolicy, QSlider, QSpacerItem,
-                             QTabWidget, QVBoxLayout, QWidget)
+from PyQt5.QtWidgets import (QComboBox, QDoubleSpinBox, QFormLayout,
+                             QGridLayout, QGroupBox, QHBoxLayout, QInputDialog,
+                             QLabel, QListWidget, QListWidgetItem, QMessageBox,
+                             QPushButton, QShortcut, QSizePolicy, QSlider,
+                             QSpacerItem, QTabWidget, QVBoxLayout, QWidget)
 
 import scctool.settings
 from scctool.view.widgets import HotkeyLayout
@@ -91,9 +92,85 @@ class SubwindowBrowserSources(QWidget):
     def createFormGroupMapstats(self):
         self.formGroupMapstats = QWidget()
         mainLayout = QVBoxLayout()
+
+        box = QGroupBox(_("Map Pool to be displayed"))
+        layout = QVBoxLayout()
+        self.cb_mappool = QComboBox()
+        self.cb_mappool.addItem(_("Current Ladder Map Pool"))
+        self.cb_mappool.addItem(_("Custom Map Pool (defined below)"))
+        self.cb_mappool.addItem(_("Currently entered Maps only"))
+        self.cb_mappool.setCurrentIndex(
+            self.controller.mapstatsManager.getMapPoolType())
+        self.cb_mappool.currentIndexChanged.connect(self.changed)
+        layout.addWidget(self.cb_mappool)
+        box.setLayout(layout)
+
+        mainLayout.addWidget(box)
+
+        box = QGroupBox(_("Custom Map Pool"))
+        layout = QGridLayout()
+        self.maplist = QListWidget()
+        self.maplist.setSortingEnabled(True)
+
+        ls = list(self.controller.mapstatsManager.getCustomMapPool())
+        self.maplist.addItems(ls)
+        self.maplist.setCurrentItem(self.maplist.item(0))
+
+        layout.addWidget(self.maplist, 0, 0, 3, 1)
+
+        qb_add = QPushButton()
+        pixmap = QIcon(
+            scctool.settings.getResFile('add.png'))
+        qb_add.setIcon(pixmap)
+        qb_add.clicked.connect(self.addMap)
+        layout.addWidget(qb_add, 0, 1)
+
+        qb_remove = QPushButton()
+        pixmap = QIcon(
+            scctool.settings.getResFile('delete.png'))
+        qb_remove.clicked.connect(self.removeMap)
+        qb_remove.setIcon(pixmap)
+        layout.addWidget(qb_remove, 1, 1)
+
+        self.sc_removeMap = QShortcut(QKeySequence("Del"), self)
+        self.sc_removeMap.setAutoRepeat(False)
+        self.sc_removeMap.activated.connect(self.removeMap)
+
+        box.setLayout(layout)
+        mainLayout.addWidget(box)
+
         mainLayout.addItem(QSpacerItem(
             0, 0, QSizePolicy.Minimum, QSizePolicy.Expanding))
         self.formGroupMapstats.setLayout(mainLayout)
+
+    def addMap(self):
+        maplist = list(scctool.settings.maps)
+        maplist.remove('TBD')
+        for i in range(self.maplist.count()):
+            map = str(self.maplist.item(i).text())
+            if map in maplist:
+                maplist.remove(map)
+
+        if len(maplist) > 0:
+            map, ok = QInputDialog.getItem(
+                self, _('Add Map'),
+                _('Please select a map') + ':',
+                maplist, editable=False)
+
+            if ok:
+                self.__dataChanged = True
+                item = QListWidgetItem(map)
+                self.maplist.addItem(item)
+                self.maplist.setCurrentItem(item)
+        else:
+            QMessageBox.information(self, _(
+                "No maps available"), _('All available maps have already been added.'))
+
+    def removeMap(self):
+        item = self.maplist.currentItem()
+        if item:
+            self.maplist.takeItem(self.maplist.currentRow())
+            self.__dataChanged = True
 
     def createFormGroupMapBox(self):
         self.formGroupMapBox = QWidget()
@@ -200,6 +277,14 @@ class SubwindowBrowserSources(QWidget):
         """Save the data to config."""
 
         self.saveWebsocketdata()
+
+        maps = list()
+        for i in range(self.maplist.count()):
+            maps.append(str(self.maplist.item(i).text()).strip())
+
+        self.controller.mapstatsManager.setCustomMapPool(maps)
+        self.controller.mapstatsManager.setMapPoolType(
+            self.cb_mappool.currentIndex())
 
         # self.controller.refreshButtonStatus()
 

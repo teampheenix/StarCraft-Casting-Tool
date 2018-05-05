@@ -34,7 +34,6 @@ class WebsocketThread(QThread):
         asyncio.set_event_loop(self.__loop)
 
         port = int(scctool.settings.profileManager.currentID(), 16)
-        print(scctool.settings.profileManager.currentID())
         module_logger.info(
             'Starting Websocket Server with port {}.'.format(port))
         # Create the server.
@@ -62,8 +61,8 @@ class WebsocketThread(QThread):
     def __callback_on_hook(self, scan_code, is_keypad, e, callback):
         if e.is_keypad == is_keypad:
             if e.event_type == keyboard.KEY_DOWN:
-                if((scan_code, is_keypad) not in self.keyboard_state
-                        or self.keyboard_state[(scan_code, is_keypad)]):
+                if((scan_code, is_keypad) not in self.keyboard_state or
+                   self.keyboard_state[(scan_code, is_keypad)]):
                     try:
                         callback()
                     except Exception as e:
@@ -85,18 +84,15 @@ class WebsocketThread(QThread):
     def register_hotkeys(self):
         self.__register_hotkey(
             scctool.settings.config.parser.get("Intros", "hotkey_player1"),
-            lambda: self.showIntro(0)
-        )
+            lambda: self.showIntro(0))
 
         self.__register_hotkey(
             scctool.settings.config.parser.get("Intros", "hotkey_player2"),
-            lambda: self.showIntro(1)
-        )
+            lambda: self.showIntro(1))
 
         self.__register_hotkey(
             scctool.settings.config.parser.get("Intros", "hotkey_debug"),
-            lambda: self.sendData2Path("intro", "DEBUG_MODE", dict())
-        )
+            lambda: self.sendData2Path("intro", "DEBUG_MODE", dict()))
 
     def unregister_hotkeys(self):
         try:
@@ -118,7 +114,6 @@ class WebsocketThread(QThread):
         return ''
 
     async def handler(self, websocket, path):
-        print(path, self.handle_path(path))
         path = self.handle_path(path)
         if not path:
             module_logger.info("Client with incorrect path.")

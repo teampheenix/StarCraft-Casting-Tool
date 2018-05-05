@@ -399,6 +399,10 @@ class SubwindowMisc(QWidget):
         self.pb_removeMap = QPushButton(_("Remove"))
         self.pb_removeMap.clicked.connect(self.deleteMap)
 
+        self.sc_removeMap = QShortcut(QKeySequence("Del"), self)
+        self.sc_removeMap.setAutoRepeat(False)
+        self.sc_removeMap.activated.connect(self.deleteMap)
+
         box = QWidget()
         container = QHBoxLayout()
 
@@ -587,9 +591,11 @@ class SubwindowMisc(QWidget):
         if(map == "TBD"):
             self.pb_renameMap.setEnabled(False)
             self.pb_removeMap.setEnabled(False)
+            self.sc_removeMap.setEnabled(False)
         else:
             self.pb_removeMap.setEnabled(True)
             self.pb_renameMap.setEnabled(True)
+            self.sc_removeMap.setEnabled(True)
 
         file = self.controller.getMapImg(map, True)
         map = QPixmap(file)

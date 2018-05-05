@@ -460,8 +460,12 @@ class MainWindow(QMainWindow):
             action.triggered.connect(self.applycustom_click)
             self.pb_applycustom.setDefaultAction(action)
             self.custom_menu = QMenu(self.pb_applycustom)
-            for format in self.controller.matchData.getCustomFormats():
-                action = self.custom_menu.addAction(format)
+            for format, icon in self.controller.matchData.getCustomFormats():
+                if icon:
+                    action = self.custom_menu.addAction(
+                        QIcon(scctool.settings.getResFile(icon)), format)
+                else:
+                    action = self.custom_menu.addAction(format)
                 action.triggered.connect(
                     lambda x, format=format: self.applyCustomFormat(format))
             self.pb_applycustom.setMenu(self.custom_menu)

@@ -10,6 +10,7 @@ class MatchFormat(object):
     """Interface definition"""
 
     _name = ""
+    _icon = ""
 
     def __init__(self, matchData):
         """Init match grabber."""
@@ -26,6 +27,7 @@ class MatchFormatKoprulu(MatchFormat):
     """Interface definition"""
 
     _name = "Koprulu Team League"
+    _icon = "koprulu_league.png"
 
     def __init__(self, *args):
         """Init match grabber."""
@@ -44,6 +46,7 @@ class MatchFormatWardi(MatchFormat):
     """Interface definition"""
 
     _name = "WardiTV Team League Season 8"
+    _icon = "wardi.ico"
 
     def __init__(self, *args):
         """Init match grabber."""
@@ -62,6 +65,7 @@ class MatchFormatPsi(MatchFormat):
     """Interface definition"""
 
     _name = "PSISTORM Gaming Team League"
+    _icon = "psistorm.jpg"
 
     def __init__(self, *args):
         """Init match grabber."""
@@ -80,6 +84,7 @@ class MatchFormatAllInTheNydus(MatchFormat):
     """Interface definition"""
 
     _name = "All-In TheNydus"
+    _icon = "nydus.ico"
 
     def __init__(self, *args):
         """Init match grabber."""
@@ -98,6 +103,7 @@ class MatchFormatVSL(MatchFormat):
     """Interface definition"""
 
     _name = "Validity Star League"
+    _icon = "ValidityGaming.png"
 
     def __init__(self, *args):
         """Init match grabber."""
@@ -116,6 +122,7 @@ class MatchFormatChobo(MatchFormat):
     """Interface definition"""
 
     _name = "Chobo Team League"
+    _icon = "chobo.png"
 
     def __init__(self, *args):
         """Init match grabber."""

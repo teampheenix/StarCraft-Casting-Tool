@@ -240,5 +240,6 @@ function init() {
                 opacity: 1,
                 left: "105%"
         });
+        intro.style.setProperty('visibility', 'visible');
         Connect();
 }

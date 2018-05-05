@@ -50,7 +50,7 @@ class matchData:
 
     def getCustomFormats(self):
         for format in self.__CUSTOM_FORMATS.keys():
-            yield format
+            yield format, self.__CUSTOM_FORMATS[format]._icon
 
     def applyCustomFormat(self, name):
         if name in self.__CUSTOM_FORMATS:
@@ -406,6 +406,14 @@ class matchData:
         except Exception:
             return False
 
+    def yieldMaps(self):
+        yielded = set()
+        for idx in range(self.getNoSets()):
+            map = self.getMap(idx)
+            if map and map.lower() != "TBD" and map not in yielded:
+                yield map
+                yielded.add(map)
+
     def getScoreString(self, middleStr=':'):
         """Get the score as a string."""
         score = self.getScore()
@@ -507,8 +515,8 @@ class matchData:
     def setPlayer(self, team_idx, set_idx, name="TBD", race=False):
         """Set the player of a set."""
         try:
-            if(not (set_idx >= 0 and set_idx < self.__data['no_sets']
-                    and team_idx in range(2))):
+            if(not (set_idx >= 0 and set_idx < self.__data['no_sets'] and
+                    team_idx in range(2))):
                 return False
 
             if(self.__data['players'][team_idx][set_idx]['name'] != name):
@@ -535,8 +543,8 @@ class matchData:
     def getPlayer(self, team_idx, set_idx):
         """Get the player (name) of a set."""
         try:
-            if(not (set_idx >= 0 and set_idx < self.__data['no_sets']
-                    and team_idx in range(2))):
+            if(not (set_idx >= 0 and set_idx < self.__data['no_sets'] and
+                    team_idx in range(2))):
                 return False
 
             return self.__data['players'][team_idx][set_idx]['name'].strip()
@@ -547,8 +555,8 @@ class matchData:
     def setRace(self, team_idx, set_idx, race="Random"):
         """Set a players race."""
         try:
-            if(not (set_idx >= 0 and set_idx < self.__data['no_sets']
-                    and team_idx in range(2))):
+            if(not (set_idx >= 0 and set_idx < self.__data['no_sets']and
+                    team_idx in range(2))):
                 return False
 
             race = getRace(race)
@@ -563,8 +571,8 @@ class matchData:
     def getRace(self, team_idx, set_idx):
         """Get a players race."""
         try:
-            if(not (set_idx >= 0 and set_idx < self.__data['no_sets']
-                    and team_idx in range(2))):
+            if(not (set_idx >= 0 and set_idx < self.__data['no_sets'] and
+                    team_idx in range(2))):
                 return False
 
             return getRace(self.__data['players'][team_idx][set_idx]['race'])

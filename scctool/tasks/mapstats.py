@@ -14,7 +14,8 @@ module_logger = logging.getLogger('scctool.tasks.mapstats')
 
 class MapStatsManager:
 
-    def __init__(self):
+    def __init__(self, controller):
+        self.__controller = controller
         self.loadJson()
         self.__thread = MapStatsThread(self)
         self.__thread.newMapData.connect(self._newData)
@@ -36,18 +37,26 @@ class MapStatsManager:
             data = dict()
 
         self.__maps = data.get('maps', dict())
-        self.__currentMapPool = data.get('maps', list())
+        self.__customMapPool = data.get('custom_mappool', list())
+        self.__ladderMapPool = data.get('ladder_mappool', list())
+        self.__mappool_refresh = int(data.get('mappool_refresh', 0))
+        self.__mappool = int(data.get('mappool', 0))
 
         if not isinstance(self.__maps, dict):
             self.__maps = dict()
-        if not isinstance(self.__maps, list):
-            self.__currentMapPool = list()
+        if not isinstance(self.__customMapPool, list):
+            self.__customMapPool = list()
+        if not isinstance(self.__ladderMapPool, list):
+            self.__ladderMapPool = list()
 
     def dumpJson(self):
         """Write json data to file."""
         data = dict()
         data['maps'] = self.__maps
-        data['mappool'] = self.__currentMapPool
+        data['custom_mappool'] = self.__customMapPool
+        data['ladder_mappool'] = self.__ladderMapPool
+        data['mappool'] = self.__mappool
+        data['mappool_refresh'] = self.__mappool_refresh
 
         try:
             with open(scctool.settings.getJsonFile('mapstats'),
@@ -57,8 +66,42 @@ class MapStatsManager:
         except Exception as e:
             module_logger.exception("message")
 
+    def setMapPoolType(self, id):
+        self.__mappool = int(id)
+
+    def getMapPoolType(self):
+        return int(self.__mappool)
+
+    def getCustomMapPool(self):
+        if len(self.__customMapPool) == 0:
+            for map in self.getLadderMapPool():
+                yield map
+        else:
+            for map in self.__customMapPool:
+                yield map
+
+    def getLadderMapPool(self):
+        for map in self.__ladderMapPool:
+            yield map
+
+    def setCustomMapPool(self, maps):
+        self.__customMapPool = list(maps)
+
+    def getMapPool(self):
+        if self.__mappool == 0:
+            for map in self.getLadderMapPool():
+                yield map
+        elif self.__mappool == 1:
+            for map in self.getCustomMapPool():
+                yield map
+        else:
+            for map in self.__controller.matchData.yieldMaps():
+                yield map
+
     def refreshMapPool(self):
-        self.__thread.activateTask('refresh_mappool')
+        if (not self.__mappool_refresh or
+                (time.time() - int(self.__mappool_refresh)) > 24 * 60 * 60):
+            self.__thread.activateTask('refresh_mappool')
 
     def refreshMaps(self):
         for map in scctool.settings.maps:
@@ -85,8 +128,8 @@ class MapStatsManager:
             if is_none:
                 continue
             last_refresh = data.get('refreshed', None)
-            if (not last_refresh
-                    or(time.time() - int(last_refresh)) > 24 * 60 * 60):
+            if (not last_refresh or
+                    (time.time() - int(last_refresh)) > 24 * 60 * 60):
                 maps2refresh.append(map)
 
         if len(maps2refresh) > 0:
@@ -103,7 +146,8 @@ class MapStatsManager:
 
     def _newMapPool(self, data):
         if len(data) > 0:
-            self.__currentMapPool = data
+            self.__ladderMapPool = data
+            self.__mappool_refresh = int(time.time())
 
     def close(self, save=True):
         self.__thread.terminate()
@@ -113,7 +157,7 @@ class MapStatsManager:
     def getData(self):
         out_data = dict()
         for map, data in self.__maps.items():
-            if map not in self.__currentMapPool:
+            if map not in self.getMapPool():
                 continue
             out_data[map] = dict()
             out_data[map]['map-name'] = map

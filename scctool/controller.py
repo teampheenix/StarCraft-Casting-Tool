@@ -56,7 +56,7 @@ class MainController:
             self.logoManager = LogoManager(self)
             self.aliasManager = AliasManager()
             self.historyManager = HistoryManager()
-            self.mapstatsManager = MapStatsManager()
+            self.mapstatsManager = MapStatsManager(self)
 
         except Exception as e:
             module_logger.exception("message")
@@ -568,7 +568,6 @@ class MainController:
                     self.matchData.getPlayer(1, i),
                     translator=alias)
                 if found:
-                    print("Strong found")
                     break
             if not found:
                 for i in range(self.matchData.getNoSets()):
@@ -578,7 +577,6 @@ class MainController:
                         weak=True,
                         translator=alias)
                     if found:
-                        print("Weak found")
                         break
             if found:
                 score = self.matchData.getScore()

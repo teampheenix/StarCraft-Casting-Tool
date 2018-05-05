@@ -176,13 +176,13 @@ class SC2ApiThread(QThread):
                     # print("Providing player intros...")
                     self.controller.updatePlayerIntros(newData)
 
-                if(self.activeTask['updateScore'] and newData.isDecidedGame()
-                   and self.currentData != SC2MatchData()):
+                if(self.activeTask['updateScore'] and newData.isDecidedGame() and
+                   self.currentData != SC2MatchData()):
                     # print("Updating Score")
                     self.requestScoreUpdate.emit(newData)
 
-                if(newData.isLive() and (self.activeTask['toggleScore']
-                                         or self.activeTask['toggleProduction'])):
+                if(newData.isLive() and (self.activeTask['toggleScore'] or
+                                         self.activeTask['toggleProduction'])):
                     # print("Toggling")
                     self.tryToggle(newData)
 
@@ -194,8 +194,8 @@ class SC2ApiThread(QThread):
         """Wait until SC2 is in foreground and toggle production tab and score."""
         try:
             while self.exiting is False\
-                and (self.activeTask['toggleScore']
-                     or self.activeTask['toggleProduction']):
+                and (self.activeTask['toggleScore'] or
+                     self.activeTask['toggleProduction']):
                 if(isSC2onForeground()):
                     if(self.activeTask['toggleScore']):
                         TogglePlayerNames()
@@ -218,8 +218,8 @@ class SC2ApiThread(QThread):
 
             # Don't use OCR if the score is tied.
             score = self.controller.matchData.getScore()
-            if(score[0] == score[1]
-               and not scctool.settings.config.parser.getboolean("SCT", "CtrlX")):
+            if(score[0] == score[1] and
+               not scctool.settings.config.parser.getboolean("SCT", "CtrlX")):
                 return False
 
             pytesseract.pytesseract.tesseract_cmd = scctool.settings.config.getTesserAct()
@@ -353,8 +353,6 @@ class SC2MatchData:
 
         myplayers = [(p1, p2) for p1 in myplayers1 for p2 in myplayers2]
 
-        print(myplayers)
-
         if not (player1_notset or player2_notset):
             for p1, p2 in myplayers:
                 if(compareStr(p1, player1) and compareStr(p2, player2)):
@@ -370,11 +368,11 @@ class SC2MatchData:
                 raise ValueError
 
             for p1, p2 in myplayers:
-                if((player1_notset and compareStr(p2, player2))
-                        or (compareStr(p1, player1) and player2_notset)):
+                if((player1_notset and compareStr(p2, player2)) or
+                   (compareStr(p1, player1) and player2_notset)):
                     return True, True, self.result, noset_idx
-                elif((player1_notset and compareStr(p1, player1))
-                        or (compareStr(p2, player1) and player2_notset)):
+                elif((player1_notset and compareStr(p1, player1)) or
+                     (compareStr(p2, player1) and player2_notset)):
                     return True, False, -self.result, noset_idx
 
         return False, False, 0, -1
@@ -440,11 +438,11 @@ class SC2MatchData:
 
     def __eq__(self, other):
         """Compare data."""
-        return (self.player1 == other.player1
-                and self.player2 == other.player2
-                and self.race1 == other.race1
-                and self.race2 == other.race2
-                and self.result == other.result)
+        return (self.player1 == other.player1 and
+                self.player2 == other.player2 and
+                self.race1 == other.race1 and
+                self.race2 == other.race2 and
+                self.result == other.result)
 
     def getPlayerList(self):
         """Get list of players."""

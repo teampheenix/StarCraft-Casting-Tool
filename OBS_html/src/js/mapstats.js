@@ -24,12 +24,11 @@ function init() {
         loadStoredData();
         initHide();
         connectWebsocket();
-        setPoolName("Map Pool");
         if (Object.keys(mapData).length > 0) initAnimation(getCurrentMap());
 }
 
 function getCurrentMap() {
-        if (currentMap == "" || currentMap == undefined) {
+        if (currentMap == "" || currentMap == undefined || !Object.keys(mapData).includes(currentMap)) {
                 try {
                         currentMap = Object.keys(mapData)[0];
                 } catch {
@@ -63,6 +62,7 @@ function loadStoredData() {
         try {
                 setFont(font);
         } catch {}
+        loadImages();
         addMaps();
 }
 
@@ -89,8 +89,9 @@ function connectWebsocket() {
                 } else if (jsonObject.event == 'MAPSTATS') {
                         var doInit = Object.keys(mapData).length == 0;
                         mapData = jsonObject.data;
-                        addMaps();
+                        loadImages();
                         storeData("mapdata");
+                        outroAnimation();
                         if (doInit) initAnimation(getCurrentMap());
                 } else if (jsonObject.event == 'SELECT_MAP') {
                         selectMap(jsonObject.data.map)
@@ -108,11 +109,17 @@ function connectWebsocket() {
         }
 }
 
-function addMaps() {
+function loadImages() {
         for (var name in mapData) {
-                addMap(name);
                 mapData[name]['image'] = new Image();
                 mapData[name]['image'].src = 'src/img/maps/'.concat(name.replace(/\s/g, "_"), '.jpg');
+        }
+}
+
+function addMaps(){
+        removeMaps();
+        for (var name in mapData) {
+                addMap(name);
         }
 }
 
@@ -134,6 +141,19 @@ function addMap(name) {
         div.innerHTML = name;
         li.appendChild(div);
         ul_maplist.appendChild(li);
+}
+
+function removeMaps() {
+        var ul_maplist = document.getElementById('map-list');
+        var existing_maps = ul_maplist.getElementsByTagName("li");
+        for (var i = 0; i < existing_maps.length; i++) {
+                mapElement = existing_maps[i];
+                name = mapElement.getElementsByTagName('div')[0].innerHTML;
+                if(!Object.keys(mapData).includes(name)){
+                        ul_maplist.removeChild(mapElement);
+                }
+
+        }
 }
 
 function selectMap(name) {
@@ -182,6 +202,7 @@ function setPoolName(name) {
 }
 
 function initHide() {
+        var box = document.getElementById("map-stats");
         var map = document.getElementById("map-img");
         var mapname = document.getElementById("map-name");
         var element1 = document.getElementById("column-content");
@@ -191,11 +212,13 @@ function initHide() {
         tweenInitial.staggerTo([map, mapname, element1, element2, mappool], 0, {
                 opacity: "0"
         }, 0);
+        box.style.setProperty('visibility', 'visible');
+        setPoolName("Map Pool");
         initNeeded = true;
 }
 
 function initAnimation(init_map) {
-        if (initNeeded) {
+        if (!tweenInitial.isActive() && initNeeded) {
                 tweenInitial.clear();
                 var map = document.getElementById("map-img");
                 var mapname = document.getElementById("map-name");
