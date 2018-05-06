@@ -1,5 +1,6 @@
 """Define the main window."""
 import logging
+import os
 
 import markdown2
 from PyQt5.QtCore import QSettings, Qt
@@ -227,37 +228,68 @@ class MainWindow(QMainWindow):
 
             ProfileMenu(self)
 
-            langMenu = menubar.addMenu(_('Language'))
-
-            language = scctool.settings.config.parser.get("SCT", "language")
-
-            myAct = QAction(QIcon(scctool.settings.getResFile(
-                'de.png')), 'Deutsch', self, checkable=True)
-            myAct.setChecked(language == 'de_DE')
-            myAct.triggered.connect(lambda: self.changeLanguage('de_DE'))
-            langMenu.addAction(myAct)
-
-            myAct = QAction(QIcon(scctool.settings.getResFile(
-                'en.png')), 'English', self, checkable=True)
-            myAct.setChecked(language == 'en_US')
-            myAct.triggered.connect(lambda: self.changeLanguage('en_US'))
-            langMenu.addAction(myAct)
-
-            myAct = QAction(QIcon(scctool.settings.getResFile(
-                'fr.png')), 'Français', self, checkable=True)
-            myAct.setChecked(language == 'fr_FR')
-            myAct.setDisabled(True)
-            myAct.triggered.connect(lambda: self.changeLanguage('fr_FR'))
-            langMenu.addAction(myAct)
-
-            myAct = QAction(QIcon(scctool.settings.getResFile(
-                'ru.png')), 'Pусский', self, checkable=True)
-            myAct.setChecked(language == 'ru_RU')
-            myAct.triggered.connect(lambda: self.changeLanguage('ru_RU'))
-            langMenu.addAction(myAct)
+            self.createBrowserSrcMenu()
+            
+            self.createLangMenu()
 
         except Exception as e:
             module_logger.exception("message")
+
+    def createLangMenu(self):
+        menubar = self.menuBar()
+
+        langMenu = menubar.addMenu(_('Language'))
+
+        language = scctool.settings.config.parser.get("SCT", "language")
+
+        languages = []
+        languages.append({'handle': 'de_DE', 'icon': 'de.png',
+                          'name': 'Deutsch', 'active': True})
+        languages.append({'handle': 'en_US', 'icon': 'en.png',
+                          'name': 'English', 'active': True})
+        languages.append({'handle': 'fr_FR', 'icon': 'fr.png',
+                          'name': 'Français', 'active': False})
+        languages.append({'handle': 'ru_RU', 'icon': 'ru.png',
+                          'name': 'Pусский', 'active': True})
+
+        for lang in languages:
+            myAct = QAction(QIcon(scctool.settings.getResFile(
+                lang['icon'])), lang['name'], self, checkable=True)
+            myAct.setChecked(language == lang['handle'])
+            myAct.setDisabled(not lang['active'])
+            myAct.triggered.connect(
+                lambda x, handle=lang['handle']: self.changeLanguage(handle))
+            langMenu.addAction(myAct)
+
+    def createBrowserSrcMenu(self):
+        menubar = self.menuBar()
+        main_menu = menubar.addMenu(_('Browser Sources'))
+
+        srcs = []
+        srcs.append({'name': 'Intro', 'file': 'intro.html'})
+        srcs.append({'name': 'Mapstats', 'file': 'mapstats.html'})
+        srcs.append({'name': 'Score', 'file': 'score.html'})
+        
+        act = QAction(_('Open Folder'), self)
+        act.triggered.connect(lambda: os.startfile(
+            scctool.settings.getAbsPath(scctool.settings.OBShtmlDir)))
+        main_menu.addAction(act)
+        main_menu.addSeparator()
+
+        for src in srcs:
+            src['file'] = os.path.join(
+                scctool.settings.OBShtmlDir, src['file'])
+            myMenu = QMenu(src['name'], self)
+            act = QAction(_('Open in Browser'), self)
+            act.triggered.connect(lambda x, file=src['file']: self.controller.openURL(
+                scctool.settings.getAbsPath(file)))
+            myMenu.addAction(act)
+            act = QAction(_('Copy URL to Clipboard'), self)
+            act.triggered.connect(lambda x, file=src['file']:
+                                  QApplication.clipboard().setText(
+                                  scctool.settings.getAbsPath(file)))
+            myMenu.addAction(act)
+            main_menu.addMenu(myMenu)
 
     def openApiDialog(self):
         """Open subwindow with connection settings."""

@@ -8,7 +8,7 @@ var isopen = false;
 var reconnectIntervalMs = 5000;
 var myDefaultFont = null;
 var initNeeded = true;
-var storage = window.localStorage;
+var storage = null;
 
 var mapData = {};
 var colors = {};
@@ -32,7 +32,7 @@ function getCurrentMap() {
         if (currentMap == "" || currentMap == undefined || !Object.keys(mapData).includes(currentMap)) {
                 try {
                         currentMap = Object.keys(mapData)[0];
-                } catch {
+                } catch (e) {
                         currentMap = "";
                 }
 
@@ -43,33 +43,39 @@ function getCurrentMap() {
 }
 
 function storeData(scope = null) {
-        if (scope == null || scope == "mapdata") storage.setItem('scct-mapstats-mapdata', JSON.stringify(mapData));
-        if (scope == null || scope == "colors") storage.setItem('scct-mapstats-colors', JSON.stringify(colors));
-        if (scope == null || scope == "font") storage.setItem('scct-mapstats-font', font);
-        if (scope == null || scope == "currentmap") storage.setItem('scct-mapstats-currentmap', currentMap);
-        if (scope == null || scope == "css") storage.setItem('scct-mapstats-css', cssFile);
+        try {
+                var storage = window.localStorage;
+                if (scope == null || scope == "mapdata") storage.setItem('scct-mapstats-mapdata', JSON.stringify(mapData));
+                if (scope == null || scope == "colors") storage.setItem('scct-mapstats-colors', JSON.stringify(colors));
+                if (scope == null || scope == "font") storage.setItem('scct-mapstats-font', font);
+                if (scope == null || scope == "currentmap") storage.setItem('scct-mapstats-currentmap', currentMap);
+                if (scope == null || scope == "css") storage.setItem('scct-mapstats-css', cssFile);
+        } catch (e) {}
 }
 
 function loadStoredData() {
-        mapData = JSON.parse(storage.getItem('scct-mapstats-mapdata'));
-        colors = JSON.parse(storage.getItem('scct-mapstats-colors'));
-        font = storage.getItem('scct-mapstats-font');
-        currentMap = storage.getItem('scct-mapstats-currentmap');
-        cssFile = storage.getItem('scct-mapstats-css');
-        if (currentMap == null) currentMap = "";
-        if (colors == null) colors = {};
-        if (mapData == null) mapData = {};
         try {
-                setColors(colors['color1'], colors['color2']);
-        } catch {}
-        try {
-                changeCSS(cssFile, 0);
-        } catch {}
-        try {
-                setFont(font);
-        } catch {}
-        loadImages();
-        addMaps();
+                var storage = window.localStorage;
+                mapData = JSON.parse(storage.getItem('scct-mapstats-mapdata'));
+                colors = JSON.parse(storage.getItem('scct-mapstats-colors'));
+                font = storage.getItem('scct-mapstats-font');
+                currentMap = storage.getItem('scct-mapstats-currentmap');
+                cssFile = storage.getItem('scct-mapstats-css');
+                if (currentMap == null) currentMap = "";
+                if (colors == null) colors = {};
+                if (mapData == null) mapData = {};
+                try {
+                        setColors(colors['color1'], colors['color2']);
+                } catch (e) {}
+                try {
+                        changeCSS(cssFile, 0);
+                } catch (e) {}
+                try {
+                        setFont(font);
+                } catch (e) {}
+                loadImages();
+                addMaps();
+        } catch (e) {}
 }
 
 function connectWebsocket() {
@@ -95,8 +101,10 @@ function connectWebsocket() {
                 } else if (jsonObject.event == 'MAPSTATS') {
                         var doInit = Object.keys(mapData).length == 0;
                         change = newMapData(jsonObject.data);
-                        if(change) outroAnimation();
-                        if (doInit) initAnimation(getCurrentMap());
+                        if (doInit) {
+                                addMaps();
+                                initAnimation(getCurrentMap());
+                        } else if (change) outroAnimation();
                 } else if (jsonObject.event == 'SELECT_MAP') {
                         selectMap(jsonObject.data.map)
                 } else if (jsonObject.event == 'DEBUG_MODE') {}
@@ -113,10 +121,9 @@ function connectWebsocket() {
         }
 }
 
-function newMapData(newData){
+function newMapData(newData) {
         var change = false;
-        if(!Object.keys(newData).equals(Object.keys(mapData))){
-                console.log("new");
+        if (!Object.keys(newData).equals(Object.keys(mapData))) {
                 change = true;
         }
         mapData = newData;
@@ -132,7 +139,7 @@ function loadImages() {
         }
 }
 
-function addMaps(){
+function addMaps() {
         removeMaps();
         for (var name in mapData) {
                 addMap(name);
@@ -162,12 +169,10 @@ function addMap(name) {
 function removeMaps() {
         var ul_maplist = document.getElementById('map-list');
         var existing_maps = [].slice.call(ul_maplist.getElementsByTagName("li"));
-        console.log(existing_maps);
-        console.log(Object.keys(mapData));
         for (var i = 0; i < existing_maps.length; i++) {
                 mapElement = existing_maps[i];
                 name = mapElement.getElementsByTagName('div')[0].innerHTML;
-                if(!Object.keys(mapData).includes(name)){
+                if (!Object.keys(mapData).includes(name)) {
                         ul_maplist.removeChild(mapElement);
                 }
 
@@ -211,7 +216,7 @@ function setMapData(data) {
         for (var key in data) {
                 try {
                         document.getElementById(key).innerHTML = data[key];
-                } catch (err) {}
+                } catch (e) {}
         }
 }
 
@@ -236,20 +241,19 @@ function initHide() {
         initNeeded = true;
 }
 
-function initAnimation(init_map, select=true) {
+function initAnimation(init_map, select = true) {
         if (!tweenInitial.isActive() && initNeeded) {
-                console.log("Test");
+                console.log("init");
                 tweenInitial = new TimelineMax();
                 var maplist = document.getElementById('map-list');
                 var maps = document.getElementById('map-list').getElementsByTagName("li");
                 var mappool = document.getElementById("map-pool");
-                if(select) setTimeout(selectMap, 500, init_map);
+                if (select) setTimeout(selectMap, 500, init_map);
                 tweenInitial.delay(0.5)
                         .staggerTo([maplist, mappool], 0, {
                                 opacity: "1"
                         }, 0)
                         .to(mappool, 0, {
-                                opacity: "1",
                                 x: '+=110%'
                         }, 0)
                         .staggerTo(maps, 0, {
@@ -265,9 +269,8 @@ function initAnimation(init_map, select=true) {
         }
 }
 
-function outroAnimation(){
+function outroAnimation() {
         if (!tweenInitial.isActive() && tweenInitial.progress() == 1) {
-                console.log("outro");
                 initNeeded = true;
                 setTimeout(selectMap, 100, getCurrentMap());
                 tweenInitial.eventCallback("onReverseComplete", editMapList);
@@ -276,7 +279,7 @@ function outroAnimation(){
         }
 }
 
-function editMapList(){
+function editMapList() {
         addMaps();
         initAnimation(getCurrentMap(), 0);
 }
@@ -359,10 +362,11 @@ function changeCSS(newCssFile, cssLinkIndex) {
         newlink.setAttribute("rel", "stylesheet");
         newlink.setAttribute("type", "text/css");
         newlink.setAttribute("href", newCssFile);
-        if(newCssFile!="null"){
+        if (newCssFile && newCssFile != "null") {
+                console.log(newCssFile);
                 cssFile = newCssFile;
                 storeData("css");
-                if (oldlink.href != newlink.href){
+                if (oldlink.href != newlink.href) {
                         document.getElementsByTagName("head").item(0).replaceChild(newlink, oldlink);
                 }
         }
@@ -371,31 +375,32 @@ function changeCSS(newCssFile, cssLinkIndex) {
 
 
 // Warn if overriding existing method
-if(Array.prototype.equals)
-    console.warn("Overriding existing Array.prototype.equals. Possible causes: New API defines the method, there's a framework conflict or you've got double inclusions in your code.");
+if (Array.prototype.equals)
+        console.warn("Overriding existing Array.prototype.equals. Possible causes: New API defines the method, there's a framework conflict or you've got double inclusions in your code.");
 // attach the .equals method to Array's prototype to call it on any array
-Array.prototype.equals = function (array) {
-    // if the other array is a falsy value, return
-    if (!array)
-        return false;
-
-    // compare lengths - can save a lot of time
-    if (this.length != array.length)
-        return false;
-
-    for (var i = 0, l=this.length; i < l; i++) {
-        // Check if we have nested arrays
-        if (this[i] instanceof Array && array[i] instanceof Array) {
-            // recurse into the nested arrays
-            if (!this[i].equals(array[i]))
+Array.prototype.equals = function(array) {
+        // if the other array is a falsy value, return
+        if (!array)
                 return false;
+
+        // compare lengths - can save a lot of time
+        if (this.length != array.length)
+                return false;
+
+        for (var i = 0, l = this.length; i < l; i++) {
+                // Check if we have nested arrays
+                if (this[i] instanceof Array && array[i] instanceof Array) {
+                        // recurse into the nested arrays
+                        if (!this[i].equals(array[i]))
+                                return false;
+                } else if (this[i] != array[i]) {
+                        // Warning - two different object instances will never be equal: {x:20} != {x:20}
+                        return false;
+                }
         }
-        else if (this[i] != array[i]) {
-            // Warning - two different object instances will never be equal: {x:20} != {x:20}
-            return false;
-        }
-    }
-    return true;
+        return true;
 }
 // Hide method from for-in loops
-Object.defineProperty(Array.prototype, "equals", {enumerable: false});
+Object.defineProperty(Array.prototype, "equals", {
+        enumerable: false
+});
