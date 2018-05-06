@@ -45,8 +45,8 @@ class SubwindowBrowserSources(QWidget):
 
             self.setLayout(mainLayout)
 
-            self.resize(QSize(mainWindow.size().width()
-                              * 0.8, self.sizeHint().height()))
+            self.resize(QSize(mainWindow.size().width() * 0.8,
+                              self.sizeHint().height()))
             relativeChange = QPoint(mainWindow.size().width() / 2,
                                     mainWindow.size().height() / 3) -\
                 QPoint(self.size().width() / 2,
@@ -285,6 +285,8 @@ class SubwindowBrowserSources(QWidget):
         self.controller.mapstatsManager.setCustomMapPool(maps)
         self.controller.mapstatsManager.setMapPoolType(
             self.cb_mappool.currentIndex())
+            
+        self.controller.mapstatsManager.sendMapPool();
 
         # self.controller.refreshButtonStatus()
 

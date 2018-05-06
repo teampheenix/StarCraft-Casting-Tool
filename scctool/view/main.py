@@ -202,7 +202,7 @@ class MainWindow(QMainWindow):
             ixAct = QAction(QIcon(scctool.settings.getResFile(
                 'icon.png')), 'team pheeniX', self)
             ixAct.triggered.connect(
-                lambda:  self.controller.openURL("http://team-pheenix.de"))
+                lambda: self.controller.openURL("http://team-pheenix.de"))
             infoMenu.addAction(ixAct)
 
             alphaAct = QAction(QIcon(scctool.settings.getResFile(
@@ -289,8 +289,7 @@ class MainWindow(QMainWindow):
         self.mysubwindows['readme'].createWindow(
             self, _("Readme"),
             scctool.settings.getResFile('readme.ico'),
-            scctool.settings.getResFile("../README.md")
-        )
+            scctool.settings.getResFile("../README.md"))
         self.mysubwindows['readme'].show()
 
     def openChangelog(self):
@@ -299,8 +298,7 @@ class MainWindow(QMainWindow):
         self.mysubwindows['changelog'].createWindow(
             self, "StarCraft Casting Tool " + _("Changelog"),
             scctool.settings.getResFile("changelog.png"),
-            scctool.settings.getResFile("../CHANGELOG.md")
-        )
+            scctool.settings.getResFile("../CHANGELOG.md"))
         self.mysubwindows['changelog'].show()
 
     def changeLanguage(self, language):
@@ -589,7 +587,7 @@ class MainWindow(QMainWindow):
             self.max_no_sets = scctool.settings.max_no_sets
             self.scoreWidth = 35
             self.raceWidth = 45
-            self.labelWidth = 15
+            self.labelWidth = 25
             self.mimumLineEditWidth = 130
 
             self.fromMatchDataBox = QGroupBox(_("Match Data"))
@@ -615,7 +613,7 @@ class MainWindow(QMainWindow):
             self.sl_score = [QSlider(Qt.Horizontal)
                              for y in range(self.max_no_sets)]
             self.le_map = [MapLineEdit() for y in range(self.max_no_sets)]
-            self.label_set = [QLabel()
+            self.label_set = [QPushButton('#{}'.format(y + 1), self)
                               for y in range(self.max_no_sets)]
             self.setContainer = [QHBoxLayout()
                                  for y in range(self.max_no_sets)]
@@ -749,9 +747,14 @@ class MainWindow(QMainWindow):
                 # self.le_map[player_idx].setReadOnly(True)
 
                 self.setContainer[player_idx] = QHBoxLayout()
-                self.label_set[player_idx].setText("#" + str(player_idx + 1))
-                self.label_set[player_idx].setAlignment(
-                    Qt.AlignCenter)
+                # self.label_set[player_idx].setText("#" + str(player_idx + 1))
+                # self.label_set[player_idx].setAlignment(
+                #    Qt.AlignCenter)
+                self.label_set[player_idx].setToolTip(
+                    _("Select map on Mapstats Browser Source."))
+                self.label_set[player_idx].setEnabled(False)
+                self.label_set[player_idx].clicked.connect(
+                    lambda x, player_idx=player_idx: self.controller.showMap(player_idx))
                 self.label_set[player_idx].setFixedWidth(self.labelWidth)
                 self.setContainer[player_idx].addWidget(
                     self.label_set[player_idx], 0)

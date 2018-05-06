@@ -222,15 +222,18 @@ function fillText() {
         });
 }
 
-function changeCSS(cssFile, cssLinkIndex) {
+function changeCSS(newCssFile, cssLinkIndex) {
         var oldlink = document.getElementsByTagName("link").item(cssLinkIndex);
-
         var newlink = document.createElement("link");
         newlink.setAttribute("rel", "stylesheet");
         newlink.setAttribute("type", "text/css");
-        newlink.setAttribute("href", cssFile);
+        newlink.setAttribute("href", newCssFile);
+        if(newCssFile!="null"){
+                if (oldlink.href != newlink.href){
+                        document.getElementsByTagName("head").item(0).replaceChild(newlink, oldlink);
+                }
+        }
 
-        document.getElementsByTagName("head").item(0).replaceChild(newlink, oldlink);
 }
 
 

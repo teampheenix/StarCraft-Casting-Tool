@@ -727,12 +727,21 @@ class MainController:
         self._warning = False
         return warning
 
+    def showMap(self, player_idx):
+        self.websocketThread.selectMap(self.matchData.getMap(player_idx))
+
     def toogleLEDs(self, num, path):
         """Indicate when browser sources are connected."""
         self.view.leds[path].setChecked(num > 0)
         self.view.leds[path].setToolTip(
             _("{} {} Browser Source(s) connected.").format(num,
                                                            path.capitalize()))
+        if path == "mapstats":
+            self.updateMapButtons(num > 0)
+
+    def updateMapButtons(self, enabled):
+        for i in range(self.view.max_no_sets):
+            self.view.label_set[i].setEnabled(enabled)
 
     def newVersion(self, version, force=False):
         """Display dialog for new version."""

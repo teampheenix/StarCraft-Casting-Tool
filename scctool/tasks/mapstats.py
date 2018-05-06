@@ -170,6 +170,10 @@ class MapStatsManager:
                 out_data[map][key] = item
 
         return out_data
+        
+    def sendMapPool(self):
+        data = self.getData()
+        self.__controller.websocketThread.sendData2Path('mapstats', "MAPSTATS", data)
 
 
 class MapStatsThread(TasksThread):
