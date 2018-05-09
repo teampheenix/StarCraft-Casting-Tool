@@ -290,6 +290,24 @@ class MainWindow(QMainWindow):
                                   scctool.settings.getAbsPath(file)))
             myMenu.addAction(act)
             main_menu.addMenu(myMenu)
+            
+        main_menu.addSeparator()
+        
+        apiAct = QAction(QIcon(scctool.settings.getResFile(
+            'browser.png')), _('Settings'), self)
+        apiAct.setToolTip(
+            _('Edit Settings for all Browser Sources'))
+        apiAct.triggered.connect(self.openBrowserSourcesDialog)
+        main_menu.addAction(apiAct)
+     
+        styleAct = QAction(QIcon(scctool.settings.getResFile(
+            'pantone.png')), _('Styles'), self)
+        styleAct.setToolTip('')
+        styleAct.triggered.connect(self.openStyleDialog)
+        main_menu.addAction(styleAct)
+        
+        
+        
 
     def openApiDialog(self):
         """Open subwindow with connection settings."""
