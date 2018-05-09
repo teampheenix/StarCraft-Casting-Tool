@@ -1,11 +1,15 @@
 # Changelog
 
 
-## v1.9.12 (2018-04-29)
+## v1.10.0 (2018-05-09)
 
-### Fix
+### New
 
-* Race Icons are visible again.
+* Added upcoming Season 2 Ladder Maps.
+
+### Changes
+
+* Improved centering of mapname and label of landscape map icons.
 
 
 ## v2.0.0 (2018-04-29)
@@ -15,6 +19,13 @@
 * Added a Profile Manager.
 
 * Added LEDs to status bar indicating when browser sources are connected to StarCraft Casting Tool.
+
+
+## v1.9.12 (2018-04-29)
+
+### Fix
+
+* Race Icons are visible again.
 
 
 ## v1.9.11 (2018-04-29)
