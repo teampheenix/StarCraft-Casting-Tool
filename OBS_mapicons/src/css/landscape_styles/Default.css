@@ -111,8 +111,8 @@ div.lower-text {
 
 div.maplabel {
         position: absolute;
-        left: calc(0% + var(--border-radius) + 6px);
-        width: calc(100% - var(--border-radius) - 6px);
+        right: var(--border-radius);
+        width: calc(100% - var(--border-radius) - 5px);
         text-align: center;
         line-height: 30px;
         height: 100%;
@@ -120,8 +120,8 @@ div.maplabel {
 
 div.mapname {
         position: absolute;
-        left: calc(0% + var(--border-radius) + 8px);
-        width: calc(100% - 36px - var(--border-radius) - 10px);
+        left: var(--border-radius);
+        width: calc(100% - var(--border-radius) - 5px);
         text-align: center;
         line-height: 30px;
         height: 100%;
@@ -131,10 +131,10 @@ div.upper-text-right {
         position: absolute;
         top: 2px;
         height: calc(100% - var(--lower-text-height) - 10px);
-        left: calc(0% + var(--border-radius) + 6px);
-        width: calc(100% - var(--border-radius) - 6px);
         font-size: 28px;
         font-weight: bold;
+        left: var(--border-radius);
+        width: calc(100% - var(--border-radius) - 5px);
         text-align: center;
         line-height: 60px;
 }
@@ -143,10 +143,10 @@ div.upper-text-left {
         position: absolute;
         top: 2px;
         height: calc(100% - var(--lower-text-height) - 10px);
-        left: 3px;
-        width: calc(100% - var(--border-radius) - 6px);
         font-size: 28px;
         font-weight: bold;
+        right: var(--border-radius);
+        width: calc(100% - var(--border-radius) - 5px);
         text-align: center;
         line-height: 60px;
 }
