@@ -543,7 +543,7 @@ class SubwindowMisc(QWidget):
                     images = grabber.get_images(map.get_map_images())
                     image = ""
                     for size in sorted(images):
-                        if not image or size <= 2000 * 2000:
+                        if not image or size <= 2500 * 2500:
                             image = images[size]
                     url = grabber._base_url + image
 

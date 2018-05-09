@@ -13,7 +13,7 @@ from scctool.settings import getLocalesDir, getResFile
 
 logger = logging.getLogger('scctool')
 
-__version__ = "1.9.12"
+__version__ = "1.10.0"
 __latest_version__ = __version__
 __new_version__ = False
 
@@ -43,7 +43,7 @@ def main():
             app.setStyle(QStyleFactory.create('Fusion'))
             translator = QTranslator(app)
             translator.load(QLocale(language), "qtbase",
-                            "_",  getLocalesDir(), ".qm")
+                            "_", getLocalesDir(), ".qm")
             app.installTranslator(translator)
 
             icon = QIcon()

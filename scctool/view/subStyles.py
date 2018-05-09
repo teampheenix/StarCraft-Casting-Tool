@@ -158,21 +158,6 @@ class SubwindowStyles(QWidget):
         except Exception as e:
             module_logger.exception("message")
 
-        try:
-            container = QHBoxLayout()
-            self.qb_mapstatsStyle = StyleComboBox(
-                scctool.settings.OBShtmlDir + "/src/css/mapstats",
-                scctool.settings.config.parser.get("Style", "mapstats"))
-            self.qb_mapstatsStyle.currentIndexChanged.connect(self.changed)
-            button = QPushButton(_("Show in Browser"))
-            button.clicked.connect(lambda: self.openHTML(
-                scctool.settings.OBShtmlDir + "/mapstats.html"))
-            container.addWidget(self.qb_mapstatsStyle)
-            container.addWidget(button)
-            layout.addRow(QLabel(_("Map Stats:")), container)
-        except Exception as e:
-            module_logger.exception("message")
-
         self.pb_applyStyles = QPushButton(_("Apply"))
         self.pb_applyStyles.clicked.connect(self.applyStyles)
         layout.addRow(QLabel(), self.pb_applyStyles)
