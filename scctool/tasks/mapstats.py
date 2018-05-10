@@ -41,6 +41,7 @@ class MapStatsManager:
         self.__ladderMapPool = data.get('ladder_mappool', list())
         self.__mappool_refresh = int(data.get('mappool_refresh', 0))
         self.__mappool = int(data.get('mappool', 0))
+        self.__current_map = ''
 
         if not isinstance(self.__maps, dict):
             self.__maps = dict()
@@ -48,6 +49,8 @@ class MapStatsManager:
             self.__customMapPool = list()
         if not isinstance(self.__ladderMapPool, list):
             self.__ladderMapPool = list()
+        if not isinstance(self.__current_map, str):
+            self.__current_map = ""
 
     def dumpJson(self):
         """Write json data to file."""
@@ -65,6 +68,11 @@ class MapStatsManager:
                 json.dump(data, outfile)
         except Exception as e:
             module_logger.exception("message")
+
+    def selectMap(self, map):
+        if map in self.__maps.keys():
+            self.__current_map = map
+            self.__controller.websocketThread.selectMap(map)
 
     def setMapPoolType(self, id):
         self.__mappool = int(id)
@@ -96,7 +104,8 @@ class MapStatsManager:
                 yield map
         else:
             for map in self.__controller.matchData.yieldMaps():
-                yield map
+                if map and map != "TBD":
+                    yield map
 
     def refreshMapPool(self):
         if (not self.__mappool_refresh or
@@ -156,24 +165,27 @@ class MapStatsManager:
 
     def getData(self):
         out_data = dict()
+        out_data['map'] = self.__current_map
+        out_data['maps'] = dict()
         for map, data in self.__maps.items():
             if map not in self.getMapPool():
                 continue
-            out_data[map] = dict()
-            out_data[map]['map-name'] = map
+            out_data['maps'][map] = dict()
+            out_data['maps'][map]['map-name'] = map
             for key, item in data.items():
                 if key == 'refreshed':
                     continue
                 if not item:
                     item = "?"
                 key = key.replace('spawn-positions', 'positions')
-                out_data[map][key] = item
+                out_data['maps'][map][key] = item
 
         return out_data
-        
+
     def sendMapPool(self):
         data = self.getData()
-        self.__controller.websocketThread.sendData2Path('mapstats', "MAPSTATS", data)
+        self.__controller.websocketThread.sendData2Path(
+            'mapstats', "MAPSTATS", data)
 
 
 class MapStatsThread(TasksThread):

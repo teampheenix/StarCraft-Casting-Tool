@@ -173,6 +173,7 @@ class MainController:
 
             self.view.updatePlayerCompleters()
             self.view.updateTeamCompleters()
+            self.updateMapButtons()
             self.view.highlightOBSupdate(False, force=True)
 
         except Exception as e:
@@ -728,7 +729,7 @@ class MainController:
         return warning
 
     def showMap(self, player_idx):
-        self.websocketThread.selectMap(self.matchData.getMap(player_idx))
+        self.mapstatsManager.selectMap(self.matchData.getMap(player_idx))
 
     def toogleLEDs(self, num, path):
         """Indicate when browser sources are connected."""
@@ -736,12 +737,17 @@ class MainController:
         self.view.leds[path].setToolTip(
             _("{} {} Browser Source(s) connected.").format(num,
                                                            path.capitalize()))
-        if path == "mapstats":
-            self.updateMapButtons(num > 0)
 
-    def updateMapButtons(self, enabled):
+    def updateMapButtons(self):
+        mappool = list(self.mapstatsManager.getMapPool())
         for i in range(self.view.max_no_sets):
-            self.view.label_set[i].setEnabled(enabled)
+            map = self.matchData.getMap(i)
+            if map in mappool:
+                self.view.label_set[i].setEnabled(True)
+            else:
+                self.view.label_set[i].setEnabled(False)
+        if self.mapstatsManager.getMapPoolType() == 2:
+            self.mapstatsManager.sendMapPool()
 
     def newVersion(self, version, force=False):
         """Display dialog for new version."""

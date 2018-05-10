@@ -229,7 +229,7 @@ class MainWindow(QMainWindow):
             ProfileMenu(self)
 
             self.createBrowserSrcMenu()
-            
+
             self.createLangMenu()
 
         except Exception as e:
@@ -269,7 +269,7 @@ class MainWindow(QMainWindow):
         srcs.append({'name': 'Intro', 'file': 'intro.html'})
         srcs.append({'name': 'Mapstats', 'file': 'mapstats.html'})
         srcs.append({'name': 'Score', 'file': 'score.html'})
-        
+
         act = QAction(_('Open Folder'), self)
         act.triggered.connect(lambda: os.startfile(
             scctool.settings.getAbsPath(scctool.settings.OBShtmlDir)))
@@ -290,24 +290,21 @@ class MainWindow(QMainWindow):
                                   scctool.settings.getAbsPath(file)))
             myMenu.addAction(act)
             main_menu.addMenu(myMenu)
-            
+
         main_menu.addSeparator()
-        
+
         apiAct = QAction(QIcon(scctool.settings.getResFile(
             'browser.png')), _('Settings'), self)
         apiAct.setToolTip(
             _('Edit Settings for all Browser Sources'))
         apiAct.triggered.connect(self.openBrowserSourcesDialog)
         main_menu.addAction(apiAct)
-     
+
         styleAct = QAction(QIcon(scctool.settings.getResFile(
             'pantone.png')), _('Styles'), self)
         styleAct.setToolTip('')
         styleAct.triggered.connect(self.openStyleDialog)
         main_menu.addAction(styleAct)
-        
-        
-        
 
     def openApiDialog(self):
         """Open subwindow with connection settings."""
@@ -1226,6 +1223,7 @@ class MainWindow(QMainWindow):
         if not self.tlock.trigger():
             return
         self.controller.matchData.setMap(set_idx, self.le_map[set_idx].text())
+        self.controller.updateMapButtons()
         self.highlightOBSupdate()
 
     def highlightOBSupdate(self, highlight=True, force=False):

@@ -100,11 +100,22 @@ function connectWebsocket() {
                         setFont(jsonObject.data.font);
                 } else if (jsonObject.event == 'MAPSTATS') {
                         var doInit = Object.keys(mapData).length == 0;
-                        change = newMapData(jsonObject.data);
+                        select = jsonObject.data.map;
+                        console.log(select);
+                        change = newMapData(jsonObject.data.maps);
                         if (doInit) {
                                 addMaps();
-                                initAnimation(getCurrentMap());
-                        } else if (change) outroAnimation();
+                                if(select!=""){
+                                        initAnimation(select);
+                                }else{
+                                        initAnimation(getCurrentMap());
+                                }
+                        } else{
+                                if (change) outroAnimation();
+                                if (select != getCurrentMap()){
+                                        self.selectMap(select);
+                                }
+                        }
                 } else if (jsonObject.event == 'SELECT_MAP') {
                         selectMap(jsonObject.data.map)
                 } else if (jsonObject.event == 'DEBUG_MODE') {}
