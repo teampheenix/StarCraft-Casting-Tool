@@ -237,7 +237,8 @@ class MainController:
         try:
             self.matchData.parseURL(url)
             self.matchData.grabData()
-            self.matchData.autoSetMyTeam()
+            self.matchData.autoSetMyTeam(
+                swap=scctool.settings.config.parser.getboolean("SCT", "swap_myteam"))
             self.matchData.writeJsonFile()
             self.matchData.downloadLogos()
             try:
@@ -715,6 +716,13 @@ class MainController:
         """Delete map and file."""
         os.remove(self.getMapImg(map, True))
         scctool.settings.maps.remove(map)
+
+    def swapTeams(self):
+        self.matchData.swapTeams()
+        self.logoManager.swapTeamLogos()
+        self.updateForms()
+        self.updateLogos()
+        self.view.highlightOBSupdate(True, True)
 
     def displayWarning(self, msg="Warning: Something went wrong..."):
         """Display a warning in status bar."""

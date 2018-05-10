@@ -32,6 +32,13 @@ class MatchGrabber(MatchGrabberParent):
         data = data['data']
         self._rawData = data
 
+        overwrite = self._matchData.getURL().strip() != self.getURL().strip()
+        if overwrite:
+            self._matchData.resetSwap()
+        swap = self._matchData.isSwapped()
+        if swap:
+            self._matchData.swapTeams()
+
         if(data['game_format'] == "3"):
             self._matchData.setNoSets(7, 6, resetPlayers=True)
             self._matchData.setMinSets(4)
@@ -173,8 +180,8 @@ class MatchGrabber(MatchGrabberParent):
                                                    str(team_idx + 1)]):
                             try:
                                 idx = str(set_idx * 2 + 1)
-                                race = data['result'][idx]['r_name'
-                                                           + str(team_idx + 1)]
+                                race = data['result'][idx]['r_name' +
+                                                           str(team_idx + 1)]
                             except Exception:
                                 race = "Random"
                         else:
@@ -216,6 +223,9 @@ class MatchGrabber(MatchGrabberParent):
         else:
             module_logger.info("RSTL Format Unknown")
 
+        if swap:
+            self._matchData.swapTeams()
+
     def downloadLogos(self, logoManager):
         """Download team logos."""
 
@@ -229,6 +239,10 @@ class MatchGrabber(MatchGrabberParent):
                 logo.fromURL("http://hdgame.net" +
                              self._rawData['member' + str(idx)]['img_m'])
                 getattr(logoManager, 'setTeam{}Logo'.format(idx))(logo)
+                if self._matchData.isSwapped():
+                    getattr(logoManager, 'setTeam{}Logo'.format(3 - idx))(logo)
+                else:
+                    getattr(logoManager, 'setTeam{}Logo'.format(idx))(logo)
 
             except Exception as e:
                 module_logger.exception("message")
