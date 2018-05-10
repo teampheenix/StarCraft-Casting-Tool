@@ -1,7 +1,6 @@
 """Provide config for SCCTool."""
-import logging
 import configparser
-
+import logging
 import os.path
 
 from scctool.settings import configFile, windows

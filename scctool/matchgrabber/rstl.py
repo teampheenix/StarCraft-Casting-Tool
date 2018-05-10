@@ -31,7 +31,7 @@ class MatchGrabber(MatchGrabberParent):
 
         data = data['data']
         self._rawData = data
-        
+
         overwrite = self._matchData.getURL().strip() != self.getURL().strip()
         if overwrite:
             self._matchData.resetSwap()
@@ -180,8 +180,8 @@ class MatchGrabber(MatchGrabberParent):
                                                    str(team_idx + 1)]):
                             try:
                                 idx = str(set_idx * 2 + 1)
-                                race = data['result'][idx]['r_name'
-                                                           + str(team_idx + 1)]
+                                race = data['result'][idx]['r_name' +
+                                                           str(team_idx + 1)]
                             except Exception:
                                 race = "Random"
                         else:
@@ -222,7 +222,7 @@ class MatchGrabber(MatchGrabberParent):
             self._matchData.setAllKill(True)
         else:
             module_logger.info("RSTL Format Unknown")
-            
+
         if swap:
             self._matchData.swapTeams()
 

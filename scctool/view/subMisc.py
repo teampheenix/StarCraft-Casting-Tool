@@ -48,8 +48,8 @@ class SubwindowMisc(QWidget):
 
             self.setLayout(mainLayout)
 
-            self.resize(QSize(mainWindow.size().width()
-                              * .80, self.sizeHint().height()))
+            self.resize(QSize(mainWindow.size().width() * .80,
+                              self.sizeHint().height()))
             relativeChange = QPoint(mainWindow.size().width() / 2,
                                     mainWindow.size().height() / 3)\
                 - QPoint(self.size().width() / 2,
@@ -191,7 +191,8 @@ class SubwindowMisc(QWidget):
         self.list_favTeams.dataModified.connect(self.changed)
         self.list_favTeams.setFixedHeight(100)
         layout.addWidget(self.list_favTeams)
-        self.cb_swapTeams = QCheckBox(_('Swap my favorite team always to the left'))
+        self.cb_swapTeams = QCheckBox(
+            _('Swap my favorite team always to the left'))
         self.cb_swapTeams.setChecked(
             scctool.settings.config.parser.getboolean("SCT", "swap_myteam"))
         self.cb_swapTeams.stateChanged.connect(self.changed)

@@ -40,7 +40,7 @@ class MatchGrabber(MatchGrabberParent):
             swap = self._matchData.isSwapped()
             if swap:
                 self._matchData.swapTeams()
-                
+
             league = data['tournament']
             if not isinstance(league, str):
                 league = "TBD"
@@ -84,7 +84,7 @@ class MatchGrabber(MatchGrabberParent):
                 self._matchData.setMapScore(set_idx, score, overwrite)
 
             self._matchData.setAllKill(False)
-            
+
             if swap:
                 self._matchData.swapTeams()
 
@@ -93,7 +93,7 @@ class MatchGrabber(MatchGrabberParent):
         if self._rawData is None:
             raise ValueError(
                 "Error: No raw data.")
-        
+
         for idx in range(2):
             try:
                 logo = logoManager.newLogo()

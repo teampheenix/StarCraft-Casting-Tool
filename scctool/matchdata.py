@@ -68,7 +68,7 @@ class matchData:
         except Exception as e:
             # module_logger.exception("message")
             self.setCustom(5, False, False)
-            
+
         self.allSetsChanged()
 
     def writeJsonFile(self):
@@ -127,21 +127,22 @@ class matchData:
 
         self.__setsChanged = []
         self.__metaChanged = False
-        
-        
+
     def swapTeams(self):
         module_logger.info("Swapping teams")
         self.__data['swapped'] = not self.__data.get('swapped', False)
         self.__data['my_team'] = -self.__data['my_team']
-        self.__data['teams'][1], self.__data['teams'][0] = self.__data['teams'][0], self.__data['teams'][1]
-        self.__data['players'][1], self.__data['players'][0] = self.__data['players'][0], self.__data['players'][1]
+        self.__data['teams'][1], self.__data['teams'][0] = \
+            self.__data['teams'][0], self.__data['teams'][1]
+        self.__data['players'][1], self.__data['players'][0] = \
+            self.__data['players'][0], self.__data['players'][1]
         for set_idx in range(len(self.__data['sets'])):
-            self.__data['sets'][set_idx]['score'] = -self.__data['sets'][set_idx]['score']
-        
+            self.__data['sets'][set_idx]['score'] = - \
+                self.__data['sets'][set_idx]['score']
 
     def isSwapped(self):
         return bool(self.__data.get('swapped', False))
-        
+
     def resetSwap(self):
         self.__data['swapped'] = False
 
@@ -376,7 +377,7 @@ class matchData:
             self.__data['my_team'] = new
             for i in range(self.getNoSets()):
                 self.__setsChanged[i] = True
-                
+
         if swap and int(self.__data['my_team']) > 0:
             self.swapTeams()
             return True
@@ -531,8 +532,8 @@ class matchData:
     def setPlayer(self, team_idx, set_idx, name="TBD", race=False):
         """Set the player of a set."""
         try:
-            if(not (set_idx >= 0 and set_idx < self.__data['no_sets']
-                    and team_idx in range(2))):
+            if(not (set_idx >= 0 and set_idx < self.__data['no_sets'] and
+                    team_idx in range(2))):
                 return False
 
             if(self.__data['players'][team_idx][set_idx]['name'] != name):
@@ -559,8 +560,8 @@ class matchData:
     def getPlayer(self, team_idx, set_idx):
         """Get the player (name) of a set."""
         try:
-            if(not (set_idx >= 0 and set_idx < self.__data['no_sets']
-                    and team_idx in range(2))):
+            if(not (set_idx >= 0 and set_idx < self.__data['no_sets'] and
+                    team_idx in range(2))):
                 return False
 
             return self.__data['players'][team_idx][set_idx]['name'].strip()
@@ -571,8 +572,8 @@ class matchData:
     def setRace(self, team_idx, set_idx, race="Random"):
         """Set a players race."""
         try:
-            if(not (set_idx >= 0 and set_idx < self.__data['no_sets']
-                    and team_idx in range(2))):
+            if(not (set_idx >= 0 and set_idx < self.__data['no_sets'] and
+                    team_idx in range(2))):
                 return False
 
             race = getRace(race)
@@ -587,8 +588,8 @@ class matchData:
     def getRace(self, team_idx, set_idx):
         """Get a players race."""
         try:
-            if(not (set_idx >= 0 and set_idx < self.__data['no_sets']
-                    and team_idx in range(2))):
+            if(not (set_idx >= 0 and set_idx < self.__data['no_sets'] and
+                    team_idx in range(2))):
                 return False
 
             return getRace(self.__data['players'][team_idx][set_idx]['race'])

@@ -193,7 +193,7 @@ class MainWindow(QMainWindow):
             ixAct = QAction(QIcon(scctool.settings.getResFile(
                 'icon.png')), 'team pheeniX', self)
             ixAct.triggered.connect(
-                lambda:  self.controller.openURL("http://team-pheenix.de"))
+                lambda: self.controller.openURL("http://team-pheenix.de"))
             infoMenu.addAction(ixAct)
 
             alphaAct = QAction(QIcon(scctool.settings.getResFile(
@@ -272,8 +272,7 @@ class MainWindow(QMainWindow):
         self.mysubwindows['readme'].createWindow(
             self, _("Readme"),
             scctool.settings.getResFile('readme.ico'),
-            scctool.settings.getResFile("../README.md")
-        )
+            scctool.settings.getResFile("../README.md"))
         self.mysubwindows['readme'].show()
 
     def openChangelog(self):
@@ -282,8 +281,7 @@ class MainWindow(QMainWindow):
         self.mysubwindows['changelog'].createWindow(
             self, "StarCraft Casting Tool " + _("Changelog"),
             scctool.settings.getResFile("changelog.png"),
-            scctool.settings.getResFile("../CHANGELOG.md")
-        )
+            scctool.settings.getResFile("../CHANGELOG.md"))
         self.mysubwindows['changelog'].show()
 
     def changeLanguage(self, language):
@@ -1099,7 +1097,7 @@ class MainWindow(QMainWindow):
         try:
             if self.tlock.trigger():
                 if set_idx == -1:
-                    swap = self.controller.matchData.setMyTeam(value)
+                    self.controller.matchData.setMyTeam(value)
                 else:
                     self.controller.matchData.setMapScore(set_idx, value, True)
                     self.controller.allkillUpdate()
