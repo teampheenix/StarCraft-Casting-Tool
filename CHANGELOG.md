@@ -1,6 +1,15 @@
 # Changelog
 
 
+## v1.10.1 (2018-05-10)
+
+### New
+
+* Added option to auto swap a favorite team to the left at Misc Settings: Favorites.
+
+* Added button to swap the teams.
+
+
 ## v1.10.0 (2018-05-09)
 
 ### New
