@@ -30,11 +30,17 @@ class MatchGrabber(MatchGrabberParent):
             raise ValueError(msg)
         else:
             self._rawData = data
-            self._matchData.setURL(self.getURL())
+            overwrite = self._matchData.getURL().strip() != self.getURL().strip()
             self._matchData.setNoSets(5, resetPlayers=True)
             self._matchData.setMinSets(3)
             self._matchData.setSolo(False)
             self._matchData.resetLabels()
+            if overwrite:
+                self._matchData.resetSwap()
+            swap = self._matchData.isSwapped()
+            if swap:
+                self._matchData.swapTeams()
+                
             league = data['tournament']
             if not isinstance(league, str):
                 league = "TBD"
@@ -75,21 +81,27 @@ class MatchGrabber(MatchGrabberParent):
                 except Exception:
                     score = 0
 
-                self._matchData.setMapScore(set_idx, score)
+                self._matchData.setMapScore(set_idx, score, overwrite)
 
             self._matchData.setAllKill(False)
+            
+            if swap:
+                self._matchData.swapTeams()
 
     def downloadLogos(self, logoManager):
         """Download team logos."""
         if self._rawData is None:
             raise ValueError(
                 "Error: No raw data.")
-
+        
         for idx in range(2):
             try:
                 logo = logoManager.newLogo()
                 logo.fromURL(self._rawData['team' + str(idx + 1)]['logo'])
-                getattr(logoManager, 'setTeam{}Logo'.format(idx + 1))(logo)
+                if self._matchData.isSwapped():
+                    getattr(logoManager, 'setTeam{}Logo'.format(2 - idx))(logo)
+                else:
+                    getattr(logoManager, 'setTeam{}Logo'.format(idx + 1))(logo)
 
             except Exception as e:
                 module_logger.exception("message")

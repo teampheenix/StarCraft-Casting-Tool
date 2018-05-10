@@ -581,7 +581,7 @@ class MainWindow(QMainWindow):
             self.max_no_sets = scctool.settings.max_no_sets
             self.scoreWidth = 35
             self.raceWidth = 45
-            self.labelWidth = 15
+            self.labelWidth = 20
             self.mimumLineEditWidth = 130
 
             self.fromMatchDataBox = QGroupBox(_("Match Data"))
@@ -662,9 +662,15 @@ class MainWindow(QMainWindow):
 
             container = QGridLayout()
 
-            label = QLabel("")
-            label.setFixedWidth(self.labelWidth)
-            container.addWidget(label, 0, 0, 2, 1)
+            button = QPushButton()
+            pixmap = QIcon(
+                scctool.settings.getResFile('update.png'))
+            button.setIcon(pixmap)
+            button.clicked.connect(
+                lambda: self.controller.swapTeams())
+            button.setFixedWidth(self.labelWidth)
+            button.setToolTip(_("Swap teams and logos."))
+            container.addWidget(button, 0, 0, 2, 1)
 
             label = QLabel(_("League:"))
             label.setAlignment(Qt.AlignCenter)
@@ -1093,7 +1099,7 @@ class MainWindow(QMainWindow):
         try:
             if self.tlock.trigger():
                 if set_idx == -1:
-                    self.controller.matchData.setMyTeam(value)
+                    swap = self.controller.matchData.setMyTeam(value)
                 else:
                     self.controller.matchData.setMapScore(set_idx, value, True)
                     self.controller.allkillUpdate()

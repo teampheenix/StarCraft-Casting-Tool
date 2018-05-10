@@ -68,6 +68,7 @@ class matchData:
         except Exception as e:
             # module_logger.exception("message")
             self.setCustom(5, False, False)
+            
         self.allSetsChanged()
 
     def writeJsonFile(self):
@@ -117,6 +118,7 @@ class matchData:
         self.__data['allkill'] = False
         self.__data['solo'] = False
         self.__data['my_team'] = 0
+        self.__data['swapped'] = False
         self.__data['teams'] = []
         self.__data['teams'].append({'name': 'TBD', 'tag': None})
         self.__data['teams'].append({'name': 'TBD', 'tag': None})
@@ -125,6 +127,23 @@ class matchData:
 
         self.__setsChanged = []
         self.__metaChanged = False
+        
+        
+    def swapTeams(self):
+        module_logger.info("Swapping teams")
+        self.__data['swapped'] = not self.__data.get('swapped', False)
+        self.__data['my_team'] = -self.__data['my_team']
+        self.__data['teams'][1], self.__data['teams'][0] = self.__data['teams'][0], self.__data['teams'][1]
+        self.__data['players'][1], self.__data['players'][0] = self.__data['players'][0], self.__data['players'][1]
+        for set_idx in range(len(self.__data['sets'])):
+            self.__data['sets'][set_idx]['score'] = -self.__data['sets'][set_idx]['score']
+        
+
+    def isSwapped(self):
+        return bool(self.__data.get('swapped', False))
+        
+    def resetSwap(self):
+        self.__data['swapped'] = False
 
     def allChanged(self):
         """Mark all data changed."""
@@ -344,7 +363,7 @@ class matchData:
         except Exception as e:
             module_logger.exception("message")
 
-    def setMyTeam(self, myteam):
+    def setMyTeam(self, myteam, swap=False):
         """Set "my team"."""
         if(isinstance(myteam, str)):
             new = self.__selectMyTeam(myteam)
@@ -357,6 +376,11 @@ class matchData:
             self.__data['my_team'] = new
             for i in range(self.getNoSets()):
                 self.__setsChanged[i] = True
+                
+        if swap and int(self.__data['my_team']) > 0:
+            self.swapTeams()
+            return True
+        return False
 
     def getMyTeam(self):
         """Return my team: (-1,0,1)."""
@@ -1021,8 +1045,9 @@ class matchData:
         except Exception as e:
             module_logger.exception("message")
 
-    def autoSetMyTeam(self):
+    def autoSetMyTeam(self, swap=False):
         """Try to set team via fav teams."""
+        print(swap)
         try:
             team_matches = []
             for team_idx in range(2):
@@ -1034,7 +1059,7 @@ class matchData:
                 if(len(matches) > 0):
                     team_matches.append(team_idx)
             if len(team_matches) == 1:
-                self.setMyTeam(team_matches.pop() * 2 - 1)
+                self.setMyTeam(team_matches.pop() * 2 - 1, swap)
                 return True
             else:
                 self.setMyTeam(0)

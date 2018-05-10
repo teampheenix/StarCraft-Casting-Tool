@@ -122,6 +122,7 @@ def setDefaultConfigAll():
 
     setDefaultConfig("SCT", "myteams", "MiXed Minds, team pheeniX")
     setDefaultConfig("SCT", "commonplayers", "pressure")
+    setDefaultConfig("SCT", "swap_myteam", "False")
 
     setDefaultConfig("SCT", "fuzzymatch", "True")
     setDefaultConfig("SCT", "new_version_prompt", "True")

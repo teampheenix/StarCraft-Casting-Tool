@@ -31,6 +31,13 @@ class MatchGrabber(MatchGrabberParent):
 
         data = data['data']
         self._rawData = data
+        
+        overwrite = self._matchData.getURL().strip() != self.getURL().strip()
+        if overwrite:
+            self._matchData.resetSwap()
+        swap = self._matchData.isSwapped()
+        if swap:
+            self._matchData.swapTeams()
 
         if(data['game_format'] == "3"):
             self._matchData.setNoSets(7, 6, resetPlayers=True)
@@ -215,6 +222,9 @@ class MatchGrabber(MatchGrabberParent):
             self._matchData.setAllKill(True)
         else:
             module_logger.info("RSTL Format Unknown")
+            
+        if swap:
+            self._matchData.swapTeams()
 
     def downloadLogos(self, logoManager):
         """Download team logos."""
@@ -229,6 +239,10 @@ class MatchGrabber(MatchGrabberParent):
                 logo.fromURL("http://hdgame.net" +
                              self._rawData['member' + str(idx)]['img_m'])
                 getattr(logoManager, 'setTeam{}Logo'.format(idx))(logo)
+                if self._matchData.isSwapped():
+                    getattr(logoManager, 'setTeam{}Logo'.format(3 - idx))(logo)
+                else:
+                    getattr(logoManager, 'setTeam{}Logo'.format(idx))(logo)
 
             except Exception as e:
                 module_logger.exception("message")
