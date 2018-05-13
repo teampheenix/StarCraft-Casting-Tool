@@ -50,8 +50,8 @@ class SubwindowStyles(QWidget):
             mainLayout.addLayout(self.buttonGroup)
             self.setLayout(mainLayout)
 
-            self.resize(QSize(mainWindow.size().width()
-                              * .80, self.sizeHint().height()))
+            self.resize(QSize(mainWindow.size().width() * .80,
+                              self.sizeHint().height()))
             relativeChange = + QPoint(mainWindow.size().width() / 2,
                                       mainWindow.size().height() / 3)\
                 - QPoint(self.size().width() / 2,
@@ -111,7 +111,7 @@ class SubwindowStyles(QWidget):
             layout.addRow(label, container)
         except Exception as e:
             module_logger.exception("message")
-        
+
         try:
             container = QHBoxLayout()
             self.qb_landscapeStyle = StyleComboBox(
@@ -191,14 +191,13 @@ class SubwindowStyles(QWidget):
 
     def applyStyles(self):
         """Apply styles."""
-        self.qb_boxStyle.apply(
-            self.controller, scctool.settings.OBSmapDir + "/src/css/box.css")
         self.qb_landscapeStyle.apply(
             self.controller, scctool.settings.OBSmapDir + "/src/css/landscape.css")
         self.qb_scoreStyle.apply(
             self.controller, scctool.settings.OBShtmlDir + "/src/css/score.css")
         self.qb_introStyle.applyWebsocket(self.controller, 'intro')
         self.qb_mapstatsStyle.applyWebsocket(self.controller, 'mapstats')
+        self.qb_boxStyle.applyWebsocket(self.controller, 'mapicons_box')
 
     def createColorBox(self):
         """Create box for color selection."""
@@ -341,8 +340,8 @@ class SubwindowStyles(QWidget):
             self.mainWindow.highlightOBSupdate()
             self.controller.matchData.allChanged()
 
-            colors = {'color1': self.mapstats_color1.getColor(
-            ), 'color2': self.mapstats_color2.getColor()}
+            colors = {'color1': self.mapstats_color1.getColor(),
+                      'color2': self.mapstats_color2.getColor()}
             self.controller.websocketThread.changeColors('mapstats', colors)
             self.controller.websocketThread.changeFont('mapstats')
 

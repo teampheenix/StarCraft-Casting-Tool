@@ -739,12 +739,14 @@ class MainController:
     def showMap(self, player_idx):
         self.mapstatsManager.selectMap(self.matchData.getMap(player_idx))
 
-    def toogleLEDs(self, num, path):
+    def toogleLEDs(self, num, path, view=None):
         """Indicate when browser sources are connected."""
-        self.view.leds[path].setChecked(num > 0)
-        self.view.leds[path].setToolTip(
-            _("{} {} Browser Source(s) connected.").format(num,
-                                                           path.capitalize()))
+        if not view:
+            view = self.view
+        view.leds[path].setChecked(num > 0)
+        name = path.replace('_', ' ').title()
+        view.leds[path].setToolTip(
+            _("{} {} Browser Source(s) connected.").format(num, name))
 
     def updateMapButtons(self):
         mappool = list(self.mapstatsManager.getMapPool())

@@ -2,6 +2,7 @@
 import asyncio
 import json
 import logging
+import re
 
 import keyboard
 import websockets
@@ -18,6 +19,8 @@ class WebsocketThread(QThread):
 
     keyboard_state = dict()
     socketConnectionChanged = pyqtSignal(int, str)
+    valid_scopes = ['intro', 'mapstats', 'mapicons_box_[1-3]']
+    scopes = dict()
 
     def __init__(self, controller):
         """Init thread."""
@@ -25,6 +28,16 @@ class WebsocketThread(QThread):
         self.connected = dict()
         self.__loop = None
         self.__controller = controller
+        self.setup_scopes()
+
+    def setup_scopes(self):
+        self.scope_regex = re.compile(r'_\[\d-\d\]')
+        for scope in self.valid_scopes:
+            scope = self.scope_regex.sub('', scope)
+            self.scopes[scope] = set()
+
+    def get_primary_scopes(self):
+        return list(self.scopes.keys())
 
     def run(self):
         """Run thread."""
@@ -105,12 +118,18 @@ class WebsocketThread(QThread):
     def handle_path(self, path):
         paths = path.split('/')[1:]
 
-        valid_scopes = ['intro', 'mapstats']
-
         for path in paths:
-            if path in valid_scopes:
-                return path
+            for scope in self.valid_scopes:
+                if re.match(scope, path):
+                    return path
+        return ''
 
+    def get_primary_scope(self, path):
+        if path in self.scopes.keys():
+            return path
+        for scope in self.valid_scopes:
+            if re.match(scope, path):
+                return self.scope_regex.sub('', scope)
         return ''
 
     async def handler(self, websocket, path):
@@ -149,21 +168,27 @@ class WebsocketThread(QThread):
     def registerConnection(self, websocket, path):
         if path not in self.connected.keys():
             self.connected[path] = set()
+        primary_scope = self.get_primary_scope(path)
+        self.scopes[primary_scope].add(path)
         self.connected[path].add(websocket)
         self.socketConnectionChanged.emit(
-            len(self.connected[path]), path)
+            len(self.connected[path]), primary_scope)
 
     def unregisterConnection(self, websocket, path):
         if path in self.connected.keys():
             self.connected[path].remove(websocket)
+            primary_scope = self.get_primary_scope(path)
             self.socketConnectionChanged.emit(
-                len(self.connected[path]), path)
+                len(self.connected[path]), primary_scope)
 
     def changeStyle(self, path, style=None):
-        if path in ['intro', 'mapstats']:
+        primary_scope = self.get_primary_scope(path)
+        print(path, primary_scope)
+        if primary_scope:
             if style is None:
-                style = scctool.settings.config.parser.get("Style", path)
-            style_file = "src/css/{}/{}.css".format(path, style)
+                style = scctool.settings.config.parser.get(
+                    "Style", primary_scope)
+            style_file = "src/css/{}/{}.css".format(primary_scope, style)
             self.sendData2Path(path, "CHANGE_STYLE", {'file': style_file})
         else:
             raise ValueError('Change style is not available for this path.')
@@ -203,11 +228,15 @@ class WebsocketThread(QThread):
         data = dict()
         data['event'] = event
         data['data'] = input_data
-        connections = self.connected.get(path, set()).copy()
-        for websocket in connections:
-            module_logger.info("Sending data: %s" % data)
-            coro = websocket.send(json.dumps(data))
-            asyncio.run_coroutine_threadsafe(coro, self.__loop)
+
+        paths = self.scopes.get(path, list(path))
+
+        for path in paths:
+            connections = self.connected.get(path, set()).copy()
+            for websocket in connections:
+                module_logger.info("Sending data: %s" % data)
+                coro = websocket.send(json.dumps(data))
+                asyncio.run_coroutine_threadsafe(coro, self.__loop)
 
     def sendData2WS(self, websocket, event, input_data):
         data = dict()

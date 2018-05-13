@@ -139,6 +139,7 @@ class matchData:
         for set_idx in range(len(self.__data['sets'])):
             self.__data['sets'][set_idx]['score'] = - \
                 self.__data['sets'][set_idx]['score']
+        self.allChanged()
 
     def isSwapped(self):
         return bool(self.__data.get('swapped', False))
@@ -926,6 +927,7 @@ class matchData:
 
     def updateMapIcons(self):
         """Update map icons."""
+        websocket_data = dict()
         try:
             team = self.getMyTeam()
             score = [0, 0]
@@ -938,7 +940,6 @@ class matchData:
                 landscape_score_hide = ""
 
             for i in range(self.getNoSets()):
-
                 winner = self.getMapScore(i)
                 won = winner * team
                 opacity = "0.0"
@@ -1000,6 +1001,8 @@ class matchData:
                 data['opacity'] = opacity
                 data['status1'] = player1status
                 data['status2'] = player2status
+
+                websocket_data[i + 1] = data
                 data['vars'] = "--winner-color: {};".format(
                     scctool.settings.config.parser.get("MapIcons", "winner_highlight_color"))
                 if scctool.settings.config.parser.getboolean("Style", "use_custom_font"):
@@ -1035,6 +1038,9 @@ class matchData:
                 templateFile = scctool.settings.OBSmapDir + \
                     "/icons_landscape/data/template.html"
                 self._useTemplate(templateFile, dataFile, data)
+
+            self.__controller.websocketThread.sendData2Path(
+                'mapicons_box', 'DATA', websocket_data)
 
         except Exception as e:
             module_logger.exception("message")

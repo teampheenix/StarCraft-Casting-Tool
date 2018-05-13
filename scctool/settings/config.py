@@ -153,8 +153,8 @@ def setDefaultConfigAll():
     setDefaultConfig("MapIcons", "notplayed_color", "#aaaaaa")
     setDefaultConfig("MapIcons", "notplayed_opacity", "0.4")
 
-    setDefaultConfig("Style", "mapicon_box", "Default")
-    setDefaultConfig("Style", "mapicon_landscape", "Default")
+    setDefaultConfig("Style", "mapicons_box", "Default")
+    setDefaultConfig("Style", "mapicons_landscape", "Default")
     setDefaultConfig("Style", "score", "Default")
     setDefaultConfig("Style", "intro", "Default")
     setDefaultConfig("Style", "mapstats", "Default")
@@ -175,6 +175,21 @@ def setDefaultConfigAll():
 def renameConfigOptions():
     """Delete and rename old config options."""
     from scctool.settings import nightbot_commands
+
+    try:
+        value = this.parser.get("SCT", "mapicon_landscape")
+        this.parser.set("SCT", "mapicons_landscape", str(value))
+        this.parser.remove_option("SCT", "mapicon_landscape")
+    except Exception:
+        pass
+
+    try:
+        value = this.parser.get("SCT", "mapicon_box")
+        this.parser.set("SCT", "mapicons_box", str(value))
+        this.parser.remove_option("SCT", "mapicon_box")
+    except Exception:
+        pass
+
     try:
         value = this.parser.getboolean("SCT", "StrgShiftS")
         this.parser.set("SCT", "CtrlShiftS", str(value))

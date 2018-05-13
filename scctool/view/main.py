@@ -67,13 +67,11 @@ class MainWindow(QMainWindow):
             self.statusBar()
 
             self.leds = dict()
-            self.leds['intro'] = LedIndicator(self)
-            self.leds['mapstats'] = LedIndicator(self)
+            for scope in self.controller.websocketThread.get_primary_scopes():
+                self.leds[scope] = LedIndicator(self)
 
             for key, led in self.leds.items():
-                led.setDisabled(True)
-                led.setToolTip(
-                    _("{} {} Browser Source(s) connected.").format(0, key.capitalize()))
+                self.controller.toogleLEDs(0, key, self)
                 self.statusBar().addPermanentWidget(led)
 
             self.app = app
@@ -715,9 +713,15 @@ class MainWindow(QMainWindow):
 
             container = QGridLayout()
 
-            label = QLabel("")
-            label.setFixedWidth(self.labelWidth)
-            container.addWidget(label, 0, 0, 2, 1)
+            button = QPushButton()
+            pixmap = QIcon(
+                scctool.settings.getResFile('update.png'))
+            button.setIcon(pixmap)
+            button.clicked.connect(
+                lambda: self.controller.swapTeams())
+            button.setFixedWidth(self.labelWidth)
+            button.setToolTip(_("Swap teams and logos."))
+            container.addWidget(button, 0, 0, 2, 1)
 
             label = QLabel(_("League:"))
             label.setAlignment(Qt.AlignCenter)
