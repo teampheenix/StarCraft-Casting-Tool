@@ -718,11 +718,12 @@ class MainController:
         scctool.settings.maps.remove(map)
 
     def swapTeams(self):
-        self.matchData.swapTeams()
-        self.logoManager.swapTeamLogos()
-        self.updateForms()
-        self.updateLogos()
-        self.view.highlightOBSupdate(True, True)
+        with self.view.tlock:
+            self.matchData.swapTeams()
+            self.logoManager.swapTeamLogos()
+            self.updateForms()
+            self.updateLogos()
+            self.view.highlightOBSupdate(True, True)
 
     def displayWarning(self, msg="Warning: Something went wrong..."):
         """Display a warning in status bar."""

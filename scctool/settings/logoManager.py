@@ -414,8 +414,7 @@ class Logo:
     def equals(self, logo):
         if self._ident == logo._ident:
             return True
-        if (self._format == logo._format and self._size == logo._size
-            and self._height == logo._height
-            and self._width == logo._width
-                and filecmp.cmp(self.getAbsFile(), logo.getAbsFile())):
+        if (self._format == logo._format and self._size == logo._size and
+            self._height == logo._height and self._width == logo._width and
+                filecmp.cmp(self.getAbsFile(), logo.getAbsFile())):
             return True
