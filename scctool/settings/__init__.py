@@ -107,7 +107,8 @@ def loadMapList():
     """Load map list form dir."""
     data = []
     try:
-        dir = os.path.normpath(os.path.join(getAbsPath(OBSmapDir), "src/maps"))
+        dir = os.path.normpath(os.path.join(
+            getAbsPath(OBShtmlDir), "src/img/maps"))
 
         for fname in os.listdir(dir):
             full_fname = os.path.join(dir, fname)

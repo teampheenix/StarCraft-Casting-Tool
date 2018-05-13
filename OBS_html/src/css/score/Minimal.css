@@ -90,16 +90,16 @@ div.mapscore-right {
         height: 25px;
 }
 
-#circle {
+div.circle {
         background: #f00;
         position: relative;
-        bottom: 65px;
+        bottom: 45px;
         width: 28px;
         height: 20px;
         border-radius: 0px 10px 0px 10px;
         box-shadow: 0px 0px 2px white;
         display: inline-block;
-        margin: -15px;
+        margin: 5px;
 }
 
 div.box_middle {
@@ -108,7 +108,7 @@ div.box_middle {
         top: 0px;
         height: 100%;
         width: 100%;
-        background-image: url("../img/vs.png");
+        background-image: url("../../img/vs.png");
         background-repeat: no-repeat;
         background-position: center center;
         background-size: contain;

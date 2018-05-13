@@ -3,6 +3,7 @@ var socket = null;
 var isopen = false;
 var reconnectIntervalMs = 5000;
 var data = {};
+
 init();
 
 function init() {

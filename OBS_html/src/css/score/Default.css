@@ -21,7 +21,7 @@
         --side-width: calc((100% - var(--middle-width) - 2 * var(--logo-width)) / 2);
 }
 
-body{
+body {
         font-family: OrbitronAdv, Orbitron, Helvetica, Sans-Serif;
 }
 
@@ -46,7 +46,7 @@ div.box {
 }
 
 div.logo {
-        background-color: white;
+        /* background-color: white; */
         background-size: contain;
         background-position: center center;
         background-repeat: no-repeat;
@@ -56,10 +56,8 @@ div.box_veryleft {
         position: absolute;
         height: var(--total-height);
         top: calc(0px - var(--border-size));
-        left: calc(0px - var(--border-size));
+        left: calc(var(--border-radius) / 4);
         width: calc(var(--logo-width) + var(--border-radius) - 2 * var(--border-size));
-        border: var(--border-size) solid var(--border-color);
-        border-radius: 0px var(--border-radius) 0px var(--border-radius);
         overflow: hidden;
 }
 
@@ -67,22 +65,21 @@ div.box_veryright {
         position: absolute;
         height: var(--total-height);
         top: calc(0px - var(--border-size));
-        right: calc(0px - var(--border-size));
+        right: calc(var(--border-radius) / 4);
         width: calc(var(--logo-width) + var(--border-radius) - 2 * var(--border-size));
-        border: var(--border-size) solid var(--border-color);
-        border-radius: 0px var(--border-radius) 0px var(--border-radius);
         overflow: hidden;
 }
 
 div.box_left {
         position: absolute;
         height: 100%;
-        left: var(--logo-width);
-        width: calc(var(--side-width) + var(--border-radius));
-        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0, 0, 0, 0.4)), color-stop(8%, rgba(0, 0, 0, 0.05)), color-stop(50%, rgba(0, 0, 0, 0.0)), color-stop(92%, rgba(0, 0, 0, 0.40)), color-stop(100%, rgba(0, 0, 0, 0.20))), url("../img/textures/background-left.jpg");
+        left: 0px;
+        width: calc((100% - var(--middle-width) + 2 * var(--border-radius)) / 2);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0, 0, 0, 0.4)), color-stop(8%, rgba(0, 0, 0, 0.05)), color-stop(50%, rgba(0, 0, 0, 0.0)), color-stop(92%, rgba(0, 0, 0, 0.40)), color-stop(100%, rgba(0, 0, 0, 0.20))), url("../../img/textures/background-left.jpg");
         background-size: cover;
-        background-repeat: repeat;
-        background-position: -100px 0px;
+        background-repeat: no-repeat;
+        box-sizing: border-box;
+        overflow: hidden;
 }
 
 div.box_middle {
@@ -94,7 +91,7 @@ div.box_middle {
         border: var(--border-size) solid var(--border-color);
         border-radius: 0px var(--border-radius) 0px var(--border-radius);
         background-image: url("../texture1.jpg");
-        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0, 0, 0, 0.4)), color-stop(8%, rgba(0, 0, 0, 0.05)), color-stop(50%, rgba(0, 0, 0, 0.0)), color-stop(92%, rgba(0, 0, 0, 0.40)), color-stop(100%, rgba(0, 0, 0, 0.20))), url("../img/textures/texture1.jpg");
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0, 0, 0, 0.4)), color-stop(8%, rgba(0, 0, 0, 0.05)), color-stop(50%, rgba(0, 0, 0, 0.0)), color-stop(92%, rgba(0, 0, 0, 0.40)), color-stop(100%, rgba(0, 0, 0, 0.20))), url("../../img/textures/texture1.jpg");
         background-size: cover;
         overflow: hidden;
 }
@@ -138,19 +135,22 @@ div.score_middle {
 div.box_right {
         position: absolute;
         height: var(--total-height);
-        right: var(--logo-width);
-        width: calc(var(--side-width) + var(--border-radius));
-        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0, 0, 0, 0.4)), color-stop(8%, rgba(0, 0, 0, 0.05)), color-stop(50%, rgba(0, 0, 0, 0.0)), color-stop(92%, rgba(0, 0, 0, 0.40)), color-stop(100%, rgba(0, 0, 0, 0.20))), url("../img/textures/background-right.jpg");
+        right: 0px;
+        width: calc((100% - var(--middle-width) + 2 * var(--border-radius)) / 2);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0, 0, 0, 0.4)), color-stop(8%, rgba(0, 0, 0, 0.05)), color-stop(50%, rgba(0, 0, 0, 0.0)), color-stop(92%, rgba(0, 0, 0, 0.40)), color-stop(100%, rgba(0, 0, 0, 0.20))), url("../../img/textures/background-right.jpg");
         background-size: cover;
-        background-position: right bottom;
+        background-repeat: no-repeat;
+        background-position: -600px 0px;
+        box-sizing: border-box;
+        overflow: hidden;
 }
 
 div.upper-text-right {
         position: absolute;
         top: 0%;
         height: calc(100% - var(--lower-text-height));
-        right: calc(0% + var(--border-radius) + 15px);
-        width: calc(100% - 2 * var(--border-radius) - 30px);
+        right: calc(0% + var(--logo-width) + var(--border-radius) + 5px);
+        width: calc(100% - 2 * var(--border-radius) - var(--logo-width) - 10px);
         font-size: 36px;
         font-weight: bold;
         text-align: center;
@@ -162,8 +162,8 @@ div.upper-text-left {
         position: absolute;
         top: 0%;
         height: calc(100% - var(--lower-text-height));
-        left: calc(0% + var(--border-radius) + 15px);
-        width: calc(100% - 2 * var(--border-radius) - 30px);
+        left: calc(0% + var(--logo-width) + var(--border-radius) + 5px);
+        width: calc(100% - 2 * var(--border-radius) - var(--logo-width) - 10px);
         font-size: 36px;
         font-weight: bold;
         text-align: center;
@@ -181,7 +181,7 @@ div.lower-text {
         background: rgba(0, 0, 0, 0.6) !important;
 }
 
-#circle {
+div.circle {
         background: #f00;
         position: relative;
         bottom: 0px;
@@ -190,14 +190,14 @@ div.lower-text {
         border-radius: 0px 10px 0px 10px;
         box-shadow: 0px 0px 2px white;
         display: inline-block;
-        margin: 1.5px;
+        margin: 4px;
         margin-bottom: -6px;
 }
 
 div.mapscore-right {
         position: absolute;
-        left: calc(0% + var(--border-radius) + 6px);
-        width: calc(100% - var(--border-radius) - 6px);
+        right: calc(0% + var(--logo-width) + var(--border-radius) + 5px);
+        width: calc(100% - 2 * var(--border-radius) - var(--logo-width) - 10px);
         text-align: center;
         line-height: 25px;
         height: 100%;
@@ -205,8 +205,8 @@ div.mapscore-right {
 
 div.mapscore-left {
         position: absolute;
-        left: calc(0% + var(--border-radius) + 3px);
-        width: calc(100% - 2 * var(--border-radius) - 3px);
+        left: calc(0% + var(--logo-width) + var(--border-radius) + 5px);
+        width: calc(100% - 2 * var(--border-radius) - var(--logo-width) - 10px);
         text-align: center;
         line-height: 25px;
         height: 100%;
