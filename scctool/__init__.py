@@ -13,7 +13,7 @@ from scctool.settings import getLocalesDir, getResFile
 
 logger = logging.getLogger('scctool')
 
-__version__ = "1.10.1"
+__version__ = "1.10.2"
 __latest_version__ = __version__
 __new_version__ = False
 

@@ -46,7 +46,7 @@ def getLogFile():
     else:
         # Delete old logfiles
         for f in os.listdir(logdir):
-            full = os.path.join(logdir,f)
+            full = os.path.join(logdir, f)
             if os.path.isfile(full) and os.stat(full).st_mtime < time.time() - 7 * 86400:
                 os.remove(full)
     filename = 'scct-{}.log'.format(time.strftime("%Y%m%d-%H%M%S"))

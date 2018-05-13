@@ -139,6 +139,7 @@ class matchData:
         for set_idx in range(len(self.__data['sets'])):
             self.__data['sets'][set_idx]['score'] = - \
                 self.__data['sets'][set_idx]['score']
+        self.allChanged()
 
     def isSwapped(self):
         return bool(self.__data.get('swapped', False))
