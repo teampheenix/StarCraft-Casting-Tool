@@ -1,6 +1,13 @@
 # Changelog
 
 
+## v1.10.2 (2018-05-15)
+
+### Fix
+
+* Intro is no longer visible shortly when browser source is started/refreshed.
+
+
 ## v1.10.1 (2018-05-10)
 
 ### New
