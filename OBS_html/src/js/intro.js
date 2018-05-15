@@ -226,8 +226,8 @@ function changeCSS(newCssFile, cssLinkIndex) {
         newlink.setAttribute("rel", "stylesheet");
         newlink.setAttribute("type", "text/css");
         newlink.setAttribute("href", newCssFile);
-        if(newCssFile!="null"){
-                if (oldlink.href != newlink.href){
+        if (newCssFile != "null") {
+                if (oldlink.href != newlink.href) {
                         document.getElementsByTagName("head").item(0).replaceChild(newlink, oldlink);
                 }
         }

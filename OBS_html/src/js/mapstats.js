@@ -43,22 +43,22 @@ function getCurrentMap() {
 function storeData(scope = null) {
         try {
                 var storage = window.localStorage;
-                if (scope == null || scope == "mapdata") storage.setItem('scct-mapstats-mapdata', JSON.stringify(mapData));
-                if (scope == null || scope == "colors") storage.setItem('scct-mapstats-colors', JSON.stringify(colors));
-                if (scope == null || scope == "font") storage.setItem('scct-mapstats-font', font);
-                if (scope == null || scope == "currentmap") storage.setItem('scct-mapstats-currentmap', currentMap);
-                if (scope == null || scope == "css") storage.setItem('scct-mapstats-css', cssFile);
+                if (scope == null || scope == "mapdata") storage.setItem('scct-' + profile + '-mapstats-mapdata', JSON.stringify(mapData));
+                if (scope == null || scope == "colors") storage.setItem('scct-' + profile + '-mapstats-colors', JSON.stringify(colors));
+                if (scope == null || scope == "font") storage.setItem('scct-' + profile + '-mapstats-font', font);
+                if (scope == null || scope == "currentmap") storage.setItem('scct-' + profile + '-mapstats-currentmap', currentMap);
+                if (scope == null || scope == "css") storage.setItem('scct-' + profile + '-mapstats-css', cssFile);
         } catch (e) {}
 }
 
 function loadStoredData() {
         try {
                 var storage = window.localStorage;
-                mapData = JSON.parse(storage.getItem('scct-mapstats-mapdata'));
-                colors = JSON.parse(storage.getItem('scct-mapstats-colors'));
-                font = storage.getItem('scct-mapstats-font');
-                currentMap = storage.getItem('scct-mapstats-currentmap');
-                cssFile = storage.getItem('scct-mapstats-css');
+                mapData = JSON.parse(storage.getItem('scct-' + profile + '-mapstats-mapdata'));
+                colors = JSON.parse(storage.getItem('scct-' + profile + '-mapstats-colors'));
+                font = storage.getItem('scct-' + profile + '-mapstats-font');
+                currentMap = storage.getItem('scct-' + profile + '-mapstats-currentmap');
+                cssFile = storage.getItem('scct-' + profile + '-mapstats-css');
                 if (currentMap == null) currentMap = "";
                 if (colors == null) colors = {};
                 if (mapData == null) mapData = {};
