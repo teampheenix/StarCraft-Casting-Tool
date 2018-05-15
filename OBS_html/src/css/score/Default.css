@@ -134,7 +134,7 @@ div.score_middle {
 
 div.box_right {
         position: absolute;
-        height: var(--total-height);
+        height: 100%;
         right: 0px;
         width: calc((100% - var(--middle-width) + 2 * var(--border-radius)) / 2);
         background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0, 0, 0, 0.4)), color-stop(8%, rgba(0, 0, 0, 0.05)), color-stop(50%, rgba(0, 0, 0, 0.0)), color-stop(92%, rgba(0, 0, 0, 0.40)), color-stop(100%, rgba(0, 0, 0, 0.20))), url("../../img/textures/background-right.jpg");
