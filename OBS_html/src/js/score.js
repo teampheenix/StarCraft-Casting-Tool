@@ -155,7 +155,7 @@ function changeImage(id, new_value) {
 }
 
 
-function changeScoreIcon(team, set, color){
+function changeScoreIcon(team, set, color) {
         var object = $('#circle-' + team.toString() + '-' + set.toString());
         var tween = new TimelineMax();
         tween.to(object, 0.15, {
@@ -171,6 +171,6 @@ function changeScoreIcon(team, set, color){
                 }, "+=0.05");
 
         function _changeIcon(object, new_value) {
-                object.css("background-color",  new_value);
+                object.css("background-color", new_value);
         }
 }

@@ -16,9 +16,7 @@ var font = "DEFAULT";
 var currentMap = "";
 var cssFile = "";
 
-window.onload = function() {
-        init();
-}
+init();
 
 function init() {
         myDefaultFont = getComputedStyle(document.body).getPropertyValue('--font');
@@ -105,14 +103,14 @@ function connectWebsocket() {
                         change = newMapData(jsonObject.data.maps);
                         if (doInit) {
                                 addMaps();
-                                if(select!=""){
+                                if (select != "") {
                                         initAnimation(select);
-                                }else{
+                                } else {
                                         initAnimation(getCurrentMap());
                                 }
-                        } else{
+                        } else {
                                 if (change) outroAnimation();
-                                if (select != getCurrentMap()){
+                                if (select != getCurrentMap()) {
                                         self.selectMap(select);
                                 }
                         }
