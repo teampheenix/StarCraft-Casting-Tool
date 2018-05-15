@@ -12,6 +12,8 @@ myAudio2.volume = volume;
 var myAudio3 = new Audio("src/fanfare.wav");
 myAudio3.volume = volume;
 
+init();
+
 function playSound1() {
         myAudio1.play();
 }
@@ -235,5 +237,6 @@ function init() {
                 opacity: 1,
                 left: "105%"
         });
+        $('#intro').css('visibility', 'visible');
         Connect();
 }
