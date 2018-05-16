@@ -1,8 +1,11 @@
 var tweens = {};
 var socket = null;
 var isopen = false;
+var myDefaultFont = null;
 var reconnectIntervalMs = 5000;
 var data = {};
+var font = "DEFAULT";
+var cssFile = "";
 var tweenInitial = new TimelineMax();
 
 data['team1'] = "Team 1";
@@ -27,34 +30,67 @@ data['sets'][4][2] = 'grey';
 data['sets'][5] = {};
 data['sets'][5][1] = 'grey';
 data['sets'][5][2] = 'grey';
-
+//changeCSS("src/css/score/Alternative.css");
 init();
 
 function init() {
-        //connectWebsocket();
-        changeCSS("src/css/score/Minimal.css");
+        myDefaultFont = getComputedStyle(document.body).getPropertyValue('--font');
+        loadStoredData();
         initHide();
-        insertData();
+        //connectWebsocket();
         initAnimation();
+        // changeCSS("src/css/score/Alternative.css");
+        // setTimeout(function() {
+        //         changeText('team1', "team pheeniX");
+        // }, 2000);
+        // setTimeout(function() {
+        //         changeText('team2', "MindGaming");
+        // }, 3000);
+        // setTimeout(function() {
+        //         changeText('score1', "3");
+        // }, 4000);
+        // setTimeout(function() {
+        //         changeText('score2', "4");
+        // }, 4500);
+        // setTimeout(function() {
+        //         changeImage('logo1', "data/logos/679f86.png");
+        //         changeScoreIcon(1, 4, 'green')
+        //         changeScoreIcon(2, 4, 'red')
+        // }, 4000);
         setTimeout(function() {
-                changeText('team1', "team pheeniX");
-        }, 2000);
-        setTimeout(function() {
-                changeText('team2', "MindGaming");
+                outroAnimation();
         }, 3000);
-        setTimeout(function() {
-                changeText('score1', "3");
-        }, 4000);
-        setTimeout(function() {
-                changeText('score2', "4");
-        }, 4500);
-        setTimeout(function() {
-                changeImage('logo1', "data/logos/679f86.png");
-                changeScoreIcon(1, 4, 'green')
-                changeScoreIcon(2, 4, 'red')
-        }, 4000);
 }
 
+
+function storeData(scope = null) {
+        try {
+                var storage = window.localStorage;
+                if (scope == null || scope == "data") storage.setItem('scct-' + profile + '-score-data', JSON.stringify(data));
+                if (scope == null || scope == "font") storage.setItem('scct-' + profile + '-score-font', font);
+                if (scope == null || scope == "css") storage.setItem('scct-' + profile + '-score-css', cssFile);
+        } catch (e) {}
+}
+
+function loadStoredData() {
+        try {
+                var storage = window.localStorage;
+                data = JSON.parse(storage.getItem('scct-' + profile + '-score-data'));
+                font = storage.getItem('scct-' + profile + '-score-font');
+                cssFile = storage.getItem('scct-' + profile + '-score-css');
+                if (data == null) data = {};
+                else insertData();
+
+                try {
+                        changeCSS(cssFile);
+                } catch (e) {}
+
+                try {
+                        setFont(font);
+                } catch (e) {}
+
+        } catch (e) {}
+}
 
 function insertData() {
         $('#team1').text(data['team1']);
@@ -70,18 +106,26 @@ function insertData() {
 }
 
 function insertIcons() {
-        for (var i = 1; i <= Object.keys(data['sets']).length; i++) {
-                for (var j = 1; j <= 2; j++) {
-                        var color = data['sets'][i][j];
-                        $('#score' + j.toString() + '-box').append('<div class="circle" id="circle-' + j.toString() + '-' + i.toString() + '" style="background-color: ' + color + '"></div>');
-                }
+        for (var j = 1; j <= 2; j++) {
+                $('#score' + j.toString() + '-box').empty();
         }
+        try {
+                for (var i = 1; i <= Object.keys(data['sets']).length; i++) {
+                        for (var j = 1; j <= 2; j++) {
+                                var color = data['sets'][i][j];
+                                $('#score' + j.toString() + '-box').append('<div class="circle" id="circle-' + j.toString() + '-' + i.toString() + '" style="background-color: ' + color + '"></div>');
+                        }
+                }
+        } catch (e) {}
 }
 
 function changeCSS(newCssFile) {
-        console.log('CSS file changed to', newCssFile);
-        $('link[rel="stylesheet"]').attr('href', newCssFile);
-
+        if (newCssFile && newCssFile != "null") {
+                cssFile = newCssFile;
+                console.log('CSS file changed to', newCssFile);
+                $('link[rel="stylesheet"]').attr('href', newCssFile);
+                storeData("css");
+        }
 }
 
 function initHide() {
@@ -93,31 +137,58 @@ function initHide() {
 }
 
 function initAnimation() {
-        tweenInitial = new TimelineMax();
-        var content = $('#content');
-        var box = $('#box');
-        tweenInitial.delay(0.5)
-                .staggerTo([content], 0, {
-                        opacity: "1"
-                }, 0)
-                .from(box, 0.35, {
-                        scaleY: 0.0,
-                        force3D: true
-                })
-                .staggerFrom([$('#logo1'), $('#logo2')], 0.35, {
-                        scale: 0.0,
-                        force3D: true
-                }, 0, '-=0.1')
-                .staggerFrom([
-                        [$('#team1'), $('#team2')], $('#score'), [$('#score1'), $('#score2')]
-                ], 0.35, {
-                        opacity: '0'
-                }, 0.10, '-=0.35')
-                .staggerFrom([$('#score1-box > div.circle'), $('#score2-box > div.circle')], 0.25, {
-                        scale: 0.0,
-                        opacity: '0',
-                        force3D: true
-                }, 0.0, '-=0.50');
+        if (!tweenInitial.isActive()) {
+                tweenInitial = new TimelineMax();
+                tweenInitial.delay(0.5)
+                        .fromTo([$('#content')], 0, {
+                                opacity: "0"
+                        }, {
+                                opacity: "1"
+                        }, 0)
+                        .fromTo($('#box'), 0.35, {
+                                scaleY: 0.0,
+                                force3D: true
+                        }, {
+                                scaleY: 1.0,
+                                force3D: true
+                        })
+                        .staggerFromTo([$('#logo1'), $('#logo2')], 0.35, {
+                                scale: 0.0,
+                                force3D: true
+                        }, {
+                                scale: 1.0,
+                                force3D: true
+                        }, 0, '-=0.1')
+                        .staggerFromTo([
+                                [$('#team1'), $('#team2')], $('#score'), [$('#score1'), $('#score2')]
+                        ], 0.35, {
+                                opacity: '0'
+                        }, {
+                                opacity: '1'
+                        }, 0.10, '-=0.35')
+                        .staggerFromTo([$('#score1-box > div.circle'), $('#score2-box > div.circle')], 0.25, {
+                                scale: 0.0,
+                                opacity: '0',
+                                force3D: true
+                        }, {
+                                scale: 1.0,
+                                opacity: '1',
+                                force3D: true
+                        }, 0.0, '-=0.50');
+        }
+}
+
+function outroAnimation() {
+        if (!tweenInitial.isActive() && tweenInitial.progress() == 1) {
+                tweenInitial.eventCallback("onReverseComplete", refreshData);
+                tweenInitial.delay(0);
+                tweenInitial.reverse(0);
+        }
+}
+
+function refreshData() {
+        insertData();
+        initAnimation();
 }
 
 function changeText(id, new_value) {
