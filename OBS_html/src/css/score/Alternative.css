@@ -50,12 +50,13 @@ div.logo {
         background-size: contain;
         background-position: center center;
         background-repeat: no-repeat;
+        filter: drop-shadow(0px 0px 4px white);
 }
 
 div.box_veryleft {
         position: absolute;
-        height: var(--total-height);
-        top: calc(0px - var(--border-size));
+        height: calc(var(--total-height) - 6px);
+        top: calc(var(--border-size) + 3px);
         left: calc(var(--border-radius) / 4);
         width: calc(var(--logo-width) + var(--border-radius) - 2 * var(--border-size));
         overflow: hidden;
@@ -63,8 +64,8 @@ div.box_veryleft {
 
 div.box_veryright {
         position: absolute;
-        height: var(--total-height);
-        top: calc(0px - var(--border-size));
+        height: calc(var(--total-height) - 6px);
+        top: calc(var(--border-size) + 3px);
         right: calc(var(--border-radius) / 4);
         width: calc(var(--logo-width) + var(--border-radius) - 2 * var(--border-size));
         overflow: hidden;

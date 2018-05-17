@@ -180,7 +180,7 @@ class MainController:
             module_logger.exception("message")
             raise
 
-    def updateLogos(self):
+    def updateLogos(self, force=False):
         """Updata team logos in  view."""
 
         logo = self.logoManager.getTeam1()
@@ -191,7 +191,7 @@ class MainController:
 
         if self.logoManager.hasLogoChanged():
             self.view.highlightOBSupdate(force=True)
-        self.updateLogosHTML()
+        self.updateLogosHTML(force)
 
     def applyCustom(self, bestof, allkill, solo, minSets, url):
         """Apply a custom match format."""
@@ -205,6 +205,9 @@ class MainController:
             self.updateForms()
             self.view.resizeWindow()
             self.view.highlightOBSupdate(force=True)
+
+            data = self.matchData.getScoreData()
+            self.websocketThread.sendData2Path("score", "ALL_DATA", data)
 
         except Exception as e:
             msg = str(e)
@@ -224,6 +227,9 @@ class MainController:
             self.updateLogos()
             self.updateForms()
             self.view.highlightOBSupdate(force=True)
+
+            data = self.matchData.getScoreData()
+            self.websocketThread.sendData2Path("score", "ALL_DATA", data)
 
         except Exception as e:
             msg = str(e)
@@ -253,6 +259,9 @@ class MainController:
             self.updateForms()
             self.view.highlightOBSupdate(force=True)
             self.view.resizeWindow()
+
+            data = self.matchData.getScoreData()
+            self.websocketThread.sendData2Path("score", "ALL_DATA", data)
         except Exception as e:
             msg = str(e)
             module_logger.exception("message")
@@ -610,7 +619,7 @@ class MainController:
                 return file + ext
         return ""
 
-    def updateLogosHTML(self):
+    def updateLogosHTML(self, force=False):
         """Update html files with team logos."""
         for idx in range(2):
             logo = getattr(self.logoManager, 'getTeam{}'.format(idx + 1))()
@@ -619,6 +628,10 @@ class MainController:
             template = scctool.settings.OBShtmlDir + "/data/logo-template.html"
             self.matchData._useTemplate(
                 template, filename, {'logo': logo.getFile(True)})
+            if force:
+                self.websocketThread.sendData2Path(
+                    'score', 'CHANGE_IMAGE',
+                    {'id': 'logo{}'.format(idx + 1), 'img': logo.getFile(True)})
 
     def updateHotkeys(self):
         """Refresh hotkeys."""
@@ -722,7 +735,9 @@ class MainController:
             self.matchData.swapTeams()
             self.logoManager.swapTeamLogos()
             self.updateForms()
-            self.updateLogos()
+            self.updateLogos(False)
+            data = self.matchData.getScoreData()
+            self.websocketThread.sendData2Path("score", "ALL_DATA", data)
             self.view.highlightOBSupdate(True, True)
 
     def displayWarning(self, msg="Warning: Something went wrong..."):

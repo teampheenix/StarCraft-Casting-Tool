@@ -6,30 +6,31 @@ var reconnectIntervalMs = 5000;
 var data = {};
 var font = "DEFAULT";
 var cssFile = "";
+var initNeeded = true;
 var tweenInitial = new TimelineMax();
 
-data['team1'] = "Team 1";
-data['team2'] = "Team 2";
-data['score1'] = "1";
-data['score2'] = "2";
-data['logo1'] = "data/logos/64f38e.png";
-data['logo2'] = "data/logos/64f38e.png";
-data['sets'] = {};
-data['sets'][1] = {};
-data['sets'][1][1] = 'red';
-data['sets'][1][2] = 'green';
-data['sets'][2] = {};
-data['sets'][2][1] = 'red';
-data['sets'][2][2] = 'green';
-data['sets'][3] = {};
-data['sets'][3][1] = 'red';
-data['sets'][3][2] = 'green';
-data['sets'][4] = {};
-data['sets'][4][1] = 'grey';
-data['sets'][4][2] = 'grey';
-data['sets'][5] = {};
-data['sets'][5][1] = 'grey';
-data['sets'][5][2] = 'grey';
+// data['team1'] = "Team 1";
+// data['team2'] = "Team 2";
+// data['score1'] = "1";
+// data['score2'] = "2";
+// data['logo1'] = "data/logos/64f38e.png";
+// data['logo2'] = "data/logos/64f38e.png";
+// data['sets'] = {};
+// data['sets'][1] = {};
+// data['sets'][1][1] = 'red';
+// data['sets'][1][2] = 'green';
+// data['sets'][2] = {};
+// data['sets'][2][1] = 'red';
+// data['sets'][2][2] = 'green';
+// data['sets'][3] = {};
+// data['sets'][3][1] = 'red';
+// data['sets'][3][2] = 'green';
+// data['sets'][4] = {};
+// data['sets'][4][1] = 'grey';
+// data['sets'][4][2] = 'grey';
+// data['sets'][5] = {};
+// data['sets'][5][1] = 'grey';
+// data['sets'][5][2] = 'grey';
 //changeCSS("src/css/score/Alternative.css");
 init();
 
@@ -37,8 +38,10 @@ function init() {
         myDefaultFont = getComputedStyle(document.body).getPropertyValue('--font');
         loadStoredData();
         initHide();
-        //connectWebsocket();
-        initAnimation();
+        connectWebsocket();
+        setTimeout(function() {
+                initAnimation(false);
+        }, 1000);
         // changeCSS("src/css/score/Alternative.css");
         // setTimeout(function() {
         //         changeText('team1', "team pheeniX");
@@ -57,9 +60,48 @@ function init() {
         //         changeScoreIcon(1, 4, 'green')
         //         changeScoreIcon(2, 4, 'red')
         // }, 4000);
-        setTimeout(function() {
-                outroAnimation();
-        }, 3000);
+        // setTimeout(function() {
+        //         outroAnimation();
+        // }, 3000);
+}
+
+function connectWebsocket() {
+        console.time('connectWebsocket');
+        path = "score"
+        port = parseInt("0x".concat(profile), 16);
+        socket = new WebSocket("ws://127.0.0.1:".concat(port, "/", path));
+
+        socket.onopen = function() {
+                console.log("Connected!");
+                isopen = true;
+        }
+
+        socket.onmessage = function(message) {
+                var jsonObject = JSON.parse(message.data);
+                console.log("Message received");
+                if (jsonObject.event == 'CHANGE_STYLE') {
+                        changeCSS(jsonObject.data.file);
+                } else if (jsonObject.event == 'CHANGE_FONT') {
+                        setFont(jsonObject.data.font);
+                } else if (jsonObject.event == 'ALL_DATA') {
+                        data = jsonObject.data;
+                        initAnimation();
+                } else if (jsonObject.event == 'CHANGE_TEXT') {
+                        changeText(jsonObject.data.id, jsonObject.data.text);
+                } else if (jsonObject.event == 'CHANGE_IMAGE') {
+                        changeImage(jsonObject.data.id, jsonObject.data.img);
+                }
+        }
+
+        socket.onclose = function(e) {
+                console.timeEnd('connectWebsocket');
+                console.log("Connection closed.");
+                socket = null;
+                isopen = false
+                setTimeout(function() {
+                        connectWebsocket();
+                }, reconnectIntervalMs);
+        }
 }
 
 
@@ -79,8 +121,6 @@ function loadStoredData() {
                 font = storage.getItem('scct-' + profile + '-score-font');
                 cssFile = storage.getItem('scct-' + profile + '-score-css');
                 if (data == null) data = {};
-                else insertData();
-
                 try {
                         changeCSS(cssFile);
                 } catch (e) {}
@@ -93,12 +133,23 @@ function loadStoredData() {
 }
 
 function insertData() {
+        storeData('data');
         $('#team1').text(data['team1']);
         $('#team2').text(data['team2']);
         $('#score1').text(data['score1']);
         $('#score2').text(data['score2']);
         $('#logo1').css("background-image", "url('../" + data['logo1'] + "')");
-        $('#logo2').css("background-image", "url('../" + data['logo1'] + "')");
+        $('#logo2').css("background-image", "url('../" + data['logo2'] + "')");
+        if(data['winner'][0]){
+                $('#team1').addClass('winner');
+        }else{
+                $('#team1').removeClass('winner');
+        }
+        if(data['winner'][1]){
+                $('#team2').addClass('winner');
+        }else{
+                $('#team2').removeClass('winner');
+        }
         insertIcons();
         $(document).ready(function() {
                 $('#content').find(".text-fill").textfill();
@@ -106,14 +157,14 @@ function insertData() {
 }
 
 function insertIcons() {
-        for (var j = 1; j <= 2; j++) {
-                $('#score' + j.toString() + '-box').empty();
+        for (var j = 0; j < 2; j++) {
+                $('#score' + (j+1).toString() + '-box').empty();
         }
         try {
-                for (var i = 1; i <= Object.keys(data['sets']).length; i++) {
-                        for (var j = 1; j <= 2; j++) {
+                for (var i = 0; i < Object.keys(data['sets']).length; i++) {
+                        for (var j = 0; j < 2; j++) {
                                 var color = data['sets'][i][j];
-                                $('#score' + j.toString() + '-box').append('<div class="circle" id="circle-' + j.toString() + '-' + i.toString() + '" style="background-color: ' + color + '"></div>');
+                                $('#score' + (j+1).toString() + '-box').append('<div class="circle" id="circle-' + (j+1).toString() + '-' + (i+1).toString() + '" style="background-color: ' + color + '"></div>');
                         }
                 }
         } catch (e) {}
@@ -136,8 +187,10 @@ function initHide() {
         }, 0);
 }
 
-function initAnimation() {
-        if (!tweenInitial.isActive()) {
+function initAnimation(force = true) {
+        if (!tweenInitial.isActive() && initNeeded) {
+                console.log(1);
+                insertData();
                 tweenInitial = new TimelineMax();
                 tweenInitial.delay(0.5)
                         .fromTo([$('#content')], 0, {
@@ -175,24 +228,36 @@ function initAnimation() {
                                 opacity: '1',
                                 force3D: true
                         }, 0.0, '-=0.50');
+                initNeeded = false;
+        } else if (force && !tweenInitial.isActive()) {
+                console.log(2);
+                outroAnimation();
+        } else if (force) {
+                console.log(3);
+                setTimeout(function() {
+                        initAnimation();
+                }, 1000);
         }
 }
 
 function outroAnimation() {
         if (!tweenInitial.isActive() && tweenInitial.progress() == 1) {
-                tweenInitial.eventCallback("onReverseComplete", refreshData);
+                tweenInitial.eventCallback("onReverseComplete", initAnimation);
                 tweenInitial.delay(0);
                 tweenInitial.reverse(0);
+                initNeeded = true;
         }
-}
-
-function refreshData() {
-        insertData();
-        initAnimation();
 }
 
 function changeText(id, new_value) {
         var object = $('#' + id);
+        var object = $('#' + id);
+        if(data[id] == new_value){
+                return;
+        }else{
+                data[id] = new_value;
+                storeData('data');
+        }
         var tween = new TimelineMax();
         tween.to(object, 0.25, {
                         opacity: 0
@@ -204,11 +269,20 @@ function changeText(id, new_value) {
 
         function _changeText(object, new_value) {
                 object.text(new_value)
+                $(document).ready(function() {
+                        $('#content').find(".text-fill").textfill();
+                });
         }
 }
 
 function changeImage(id, new_value) {
         var object = $('#' + id);
+        if(data[id] == new_value){
+                return;
+        }else{
+                data[id] = new_value;
+                storeData('data');
+        }
         var tween = new TimelineMax();
         tween.to(object, 0.35, {
                         scale: 0,
@@ -244,4 +318,13 @@ function changeScoreIcon(team, set, color) {
         function _changeIcon(object, new_value) {
                 object.css("background-color", new_value);
         }
+}
+
+function setFont(newFont) {
+        if (newFont == 'DEFAULT') {
+                newFont = myDefaultFont;
+        }
+        font = newFont.trim();
+        document.documentElement.style.setProperty('--font', font);
+        storeData("font");
 }

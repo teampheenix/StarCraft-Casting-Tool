@@ -502,6 +502,7 @@ class matchData:
                             self.__metaChanged = True
                         self.__data['sets'][set_idx]['score'] = score
                         self.__setsChanged[set_idx] = True
+                        print('Map Score changed.')
                 return True
             else:
                 return False
@@ -637,6 +638,8 @@ class matchData:
         if(self.__data['teams'][team_idx]['name'] != new):
             self.__data['teams'][team_idx]['name'] = new
             self.__metaChanged = True
+            self.__controller.websocketThread.sendData2Path(
+                'score', 'CHANGE_TEXT', {'id': 'team{}'.format(team_idx + 1), 'text': new})
 
         if(tag):
             self.setTeamTag(team_idx, tag)
@@ -843,6 +846,59 @@ class matchData:
 
         except Exception as e:
             module_logger.exception("message")
+
+    def getScoreData(self):
+        data = dict()
+
+        if self.getSolo():
+            data['team1'] = self.getPlayer(0, 0)
+            data['team2'] = self.getPlayer(1, 0)
+        else:
+            data['team1'] = self.getTeam(0)
+            data['team2'] = self.getTeam(1)
+
+        data['logo1'] = self.__controller.logoManager.getTeam1().getFile(True)
+        data['logo2'] = self.__controller.logoManager.getTeam2().getFile(True)
+
+        score = [0, 0]
+        winner = [False, False]
+        sets = []
+        threshold = int(self.getBestOf() / 2)
+
+        for i in range(self.getNoSets()):
+            sets.insert(i, ["", ""])
+            if(max(score) > threshold and i >= self.getMinSets()):
+                sets[i][0] = scctool.settings.config.parser.get(
+                    "MapIcons", "notplayed_color")
+                sets[i][1] = scctool.settings.config.parser.get(
+                    "MapIcons", "notplayed_color")
+            elif(self.getMapScore(i) == -1):
+                sets[i][0] = scctool.settings.config.parser.get(
+                    "MapIcons", "win_color")
+                sets[i][1] = scctool.settings.config.parser.get(
+                    "MapIcons", "lose_color")
+                score[0] += 1
+            elif(self.getMapScore(i) == 1):
+                sets[i][0] = scctool.settings.config.parser.get(
+                    "MapIcons", "lose_color")
+                sets[i][1] = scctool.settings.config.parser.get(
+                    "MapIcons", "win_color")
+                score[1] += 1
+            else:
+                sets[i][0] = scctool.settings.config.parser.get(
+                    "MapIcons", "undecided_color")
+                sets[i][1] = scctool.settings.config.parser.get(
+                    "MapIcons", "undecided_color")
+
+        winner[0] = score[0] > threshold
+        winner[1] = score[1] > threshold
+
+        data['sets'] = sets
+        data['winner'] = winner
+        data['score1'] = score[0]
+        data['score2'] = score[1]
+
+        return data
 
     def updateScoreIcon(self):
         """Update scor icons."""

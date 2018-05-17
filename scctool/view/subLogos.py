@@ -373,7 +373,7 @@ class SubwindowLogos(QWidget):
     def closeEvent(self, event):
         """Handle close event."""
         try:
-            self.controller.updateLogos()
+            self.controller.updateLogos(True)
             self.controller.matchData.metaChanged()
             event.accept()
         except Exception as e:

@@ -286,7 +286,8 @@ class SubwindowBrowserSources(QWidget):
         self.controller.mapstatsManager.setMapPoolType(
             self.cb_mappool.currentIndex())
             
-        self.controller.mapstatsManager.sendMapPool();
+        self.controller.mapstatsManager.sendMapPool()
+        self.controller.updateMapButtons()
 
         # self.controller.refreshButtonStatus()
 

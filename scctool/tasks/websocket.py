@@ -19,7 +19,7 @@ class WebsocketThread(QThread):
 
     keyboard_state = dict()
     socketConnectionChanged = pyqtSignal(int, str)
-    valid_scopes = ['intro', 'mapstats', 'mapicons_box_[1-3]']
+    valid_scopes = ['score', 'mapicons_box_[1-3]', 'intro', 'mapstats']
     scopes = dict()
 
     def __init__(self, controller):
@@ -145,6 +145,10 @@ class WebsocketThread(QThread):
             self.changeFont(path)
             data = self.__controller.mapstatsManager.getData()
             self.sendData2WS(websocket, "MAPSTATS", data)
+        elif path == 'score':
+            self.changeFont(path)
+            data = self.__controller.matchData.getScoreData()
+            self.sendData2WS(websocket, "ALL_DATA", data)
 
         while True:
             try:
@@ -183,7 +187,6 @@ class WebsocketThread(QThread):
 
     def changeStyle(self, path, style=None):
         primary_scope = self.get_primary_scope(path)
-        print(path, primary_scope)
         if primary_scope:
             if style is None:
                 style = scctool.settings.config.parser.get(
@@ -206,7 +209,7 @@ class WebsocketThread(QThread):
             raise ValueError('Change style is not available for this path.')
 
     def changeFont(self, path, font=None):
-        if path in ['mapstats']:
+        if path in ['mapstats', 'score']:
             if font is None:
                 if not scctool.settings.config.parser.getboolean("Style", "use_custom_font"):
                     font = "DEFAULT"
