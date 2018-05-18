@@ -7,6 +7,8 @@ import shutil
 import time
 from collections import OrderedDict
 
+from PyQt5.QtCore import QObject, pyqtSignal
+
 import scctool.settings
 from scctool.matchformat import *
 from scctool.matchgrabber import *
@@ -15,17 +17,23 @@ from scctool.matchgrabber import *
 module_logger = logging.getLogger('scctool.matchdata')
 
 
-class matchData:
+class matchData(QObject):
     """Matchdata."""
+    dataChanged = pyqtSignal(str, object)
+    metaChangedSignal = pyqtSignal()
 
     def __init__(self, controller):
         """Init and define custom providers."""
+        super().__init__()
         self.__rawData = None
         self.__controller = controller
         self.__initProviderList()
         self.__initData()
         self.__initMatchGrabber()
         self.__initCustomFormats()
+
+        self.emitLock = EmitLock()
+        self.metaChangedSignal.connect(lambda: print('meta Changed'))
 
     def __initProviderList(self):
         self.__VALID_PROVIDERS = dict()
@@ -58,6 +66,13 @@ class matchData:
             customFormat.applyFormat()
         else:
             raise ValueError("Unknown Custom Match Format.")
+
+    def __emitSignal(self, scope, name='', object=None):
+        if not self.emitLock.locked():
+            if scope == 'data':
+                self.dataChanged.emit(name, object)
+            elif scope == 'meta':
+                self.metaChangedSignal.emit()
 
     def readJsonFile(self):
         """Read json data from file."""
@@ -140,6 +155,7 @@ class matchData:
             self.__data['sets'][set_idx]['score'] = - \
                 self.__data['sets'][set_idx]['score']
         self.allChanged()
+        self.__emitSignal('meta')
 
     def isSwapped(self):
         return bool(self.__data.get('swapped', False))
@@ -417,6 +433,8 @@ class matchData:
             if(self.__data['sets'][set_idx]['map'] != map):
                 self.__data['sets'][set_idx]['map'] = map
                 self.__setsChanged[set_idx] = True
+                self.__emitSignal(
+                    'data', 'map', {'set_idx': set_idx, 'value': map})
 
             return True
         except Exception:
@@ -502,7 +520,8 @@ class matchData:
                             self.__metaChanged = True
                         self.__data['sets'][set_idx]['score'] = score
                         self.__setsChanged[set_idx] = True
-                        print('Map Score changed.')
+                        self.__emitSignal('data', 'score', {
+                                          'set_idx': set_idx, 'value': score})
                 return True
             else:
                 return False
@@ -549,6 +568,8 @@ class matchData:
             if(self.__data['players'][team_idx][set_idx]['name'] != name):
                 self.__data['players'][team_idx][set_idx]['name'] = name
                 self.__setsChanged[set_idx] = True
+                self.__emitSignal('data', 'player', {
+                                  'team_idx': team_idx, 'set_idx': set_idx, 'value': name})
 
             if(race):
                 self.setRace(team_idx, set_idx, race)
@@ -591,6 +612,8 @@ class matchData:
             if(self.__data['players'][team_idx][set_idx]['race'] != race):
                 self.__data['players'][team_idx][set_idx]['race'] = race
                 self.__setsChanged[set_idx] = True
+                self.__emitSignal(
+                    'data', 'race', {'team_idx': team_idx, 'set_idx': set_idx, 'value': race})
             return True
         except Exception:
             return False
@@ -615,6 +638,8 @@ class matchData:
             if(self.__data['sets'][set_idx]['label'] != label):
                 self.__data['sets'][set_idx]['label'] = label
                 self.__setsChanged[set_idx] = True
+                self.__emitSignal('data', 'map_label', {
+                                  'set_idx': set_idx, 'value': name})
             return True
         except Exception:
             return False
@@ -1118,7 +1143,6 @@ class matchData:
 
     def autoSetMyTeam(self, swap=False):
         """Try to set team via fav teams."""
-        print(swap)
         try:
             team_matches = []
             for team_idx in range(2):
@@ -1181,3 +1205,27 @@ def getRace(str):
         pass
 
     return "Random"
+
+
+class EmitLock():
+    def __init__(self):
+        self.__locked = False
+        self.__useLock = True
+        self.__signal = None
+
+    def __call__(self, useLock=True, signal=None):
+        self.__useLock = bool(useLock)
+        self.__signal = signal
+        return self
+
+    def __enter__(self):
+        self.__locked = self.__useLock
+        return self
+
+    def __exit__(self, type, value, traceback):
+        self.__locked = False
+        if self.__useLock and self.__signal:
+            self.__signal.emit()
+
+    def locked(self):
+        return bool(self.__locked)

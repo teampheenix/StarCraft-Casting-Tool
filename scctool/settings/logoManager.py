@@ -6,7 +6,7 @@ import logging
 import os
 import shutil
 from time import time
-from urllib.request import urlretrieve
+from urllib.request import urlopen, urlretrieve
 
 import humanize
 from PyQt5.QtCore import Qt
@@ -346,16 +346,33 @@ class Logo:
 
         return True
 
-    def fromURL(self, url, download=True):
+    def fromURL(self, url, download=True, localFile=None):
         _, ext = os.path.splitext(url)
         self._format = ext.split("?")[0].replace(".", "").lower()
         self.generateIdentifier()
+
         fname = self.getAbsFile()
-        if download:
+
+        if not download:
+            return fname
+
+        if localFile:
+            with open(localFile, "rb") as in_file:
+                local_byte = in_file.read(512)
+
+            file = urlopen(url)
+            data = file.read(512)
+            if(data == local_byte):
+                needs_download = False
+            else:
+                needs_download = True
+
+        if needs_download:
             urlretrieve(url, fname)
             self.refreshData()
+            return True
         else:
-            return fname
+            return False
 
     def refreshData(self):
         file = self.getAbsFile()

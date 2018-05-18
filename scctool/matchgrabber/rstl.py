@@ -233,16 +233,25 @@ class MatchGrabber(MatchGrabberParent):
             raise ValueError(
                 "Error: No raw data.")
 
+        if self._rawData is None:
+            raise ValueError(
+                "Error: No raw data.")
+
         for idx in range(1, 3):
             try:
-                logo = logoManager.newLogo()
-                logo.fromURL("http://hdgame.net" +
-                             self._rawData['member' + str(idx)]['img_m'])
-                getattr(logoManager, 'setTeam{}Logo'.format(idx))(logo)
                 if self._matchData.isSwapped():
-                    getattr(logoManager, 'setTeam{}Logo'.format(3 - idx))(logo)
+                    logo_idx = 3 - idx
                 else:
-                    getattr(logoManager, 'setTeam{}Logo'.format(idx))(logo)
-
+                    logo_idx = idx
+                oldLogo = getattr(logoManager, 'getTeam{}'.format(logo_idx))()
+                logo = logoManager.newLogo()
+                new_logo = logo.fromURL(
+                    "http://hdgame.net" +
+                    self._rawData['member' + str(idx)]['img_m'],
+                    localFile=oldLogo.getAbsFile())
+                if new_logo:
+                    getattr(logoManager, 'setTeam{}Logo'.format(logo_idx))(logo)
+                else:
+                    module_logger.info("Logo download is not needed.")
             except Exception as e:
-                module_logger.exception("message")
+                module_logger.exception('message')

@@ -38,6 +38,7 @@ class MainController:
         """Init controller and connect them with other modules."""
         try:
             self.matchData = matchData(self)
+            self.matchData.dataChanged.connect(self.handleMatchDataChange)
             self.SC2ApiThread = SC2ApiThread(self)
             self.SC2ApiThread.requestScoreUpdate.connect(
                 self.requestScoreUpdate)
@@ -774,6 +775,9 @@ class MainController:
                 self.view.label_set[i].setEnabled(False)
         if self.mapstatsManager.getMapPoolType() == 2:
             self.mapstatsManager.sendMapPool()
+
+    def handleMatchDataChange(self, label, object):
+        print(label, object)
 
     def newVersion(self, version, force=False):
         """Display dialog for new version."""

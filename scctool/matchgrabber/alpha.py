@@ -1,7 +1,7 @@
 """Provide match grabber for AlphaTL."""
 
 import logging
-from urllib.request import urlretrieve
+from urllib.request import urlopen, urlretrieve
 
 import scctool.settings
 from scctool.matchgrabber.custom import MatchGrabber as MatchGrabberParent
@@ -31,62 +31,64 @@ class MatchGrabber(MatchGrabberParent):
         else:
             self._rawData = data
             overwrite = self._matchData.getURL().strip() != self.getURL().strip()
-            self._matchData.setNoSets(5, resetPlayers=True)
-            self._matchData.setMinSets(3)
-            self._matchData.setSolo(False)
-            self._matchData.resetLabels()
-            if overwrite:
-                self._matchData.resetSwap()
-            swap = self._matchData.isSwapped()
-            if swap:
-                self._matchData.swapTeams()
+            with self._matchData.emitLock(overwrite, self._matchData.metaChangedSignal):
+                self._matchData.setNoSets(5, resetPlayers=overwrite)
+                self._matchData.setMinSets(3)
+                self._matchData.setSolo(False)
+                self._matchData.resetLabels()
+                if overwrite:
+                    self._matchData.resetSwap()
+                swap = self._matchData.isSwapped()
+                if swap:
+                    self._matchData.swapTeams()
 
-            league = data['tournament']
-            if not isinstance(league, str):
-                league = "TBD"
-            league = league.replace('Non-pro', 'Non-Pro')
-            self._matchData.setLeague(league)
+                league = data['tournament']
+                if not isinstance(league, str):
+                    league = "TBD"
+                league = league.replace('Non-pro', 'Non-Pro')
+                self._matchData.setLeague(league)
 
-            for idx, map in enumerate(data['maps']):
-                if not isinstance(map, str):
-                    map = "TBD"
-                self._matchData.setMap(idx, map)
+                for idx, map in enumerate(data['maps']):
+                    if not isinstance(map, str):
+                        map = "TBD"
+                    self._matchData.setMap(idx, map)
 
-            self._matchData.setLabel(4, "Ace Map")
+                self._matchData.setLabel(4, "Ace Map")
 
-            for team_idx in range(2):
-                for set_idx, player in enumerate(data['lineup' +
-                                                      str(team_idx + 1)]):
+                for team_idx in range(2):
+                    for set_idx, player in enumerate(data['lineup' +
+                                                          str(team_idx + 1)]):
+                        try:
+                            playername = self._aliasPlayer(player['nickname'])
+                            if not isinstance(playername, str):
+                                playername = "TBD"
+                            self._matchData.setPlayer(
+                                team_idx, set_idx, playername, str(player['race']))
+                        except Exception:
+                            self._matchData.setPlayer(
+                                team_idx, set_idx, 'TBD', 'Random')
+
+                    team = data['team' + str(team_idx + 1)]
+                    name, tag = team['name'], team['tag']
+                    if not isinstance(name, str):
+                        name = "TBD"
+                    if not isinstance(tag, str):
+                        tag = ""
+                    self._matchData.setTeam(
+                        team_idx, self._aliasTeam(name), tag)
+
+                for set_idx in range(5):
                     try:
-                        playername = self._aliasPlayer(player['nickname'])
-                        if not isinstance(playername, str):
-                            playername = "TBD"
-                        self._matchData.setPlayer(
-                            team_idx, set_idx, playername, str(player['race']))
+                        score = int(data['games'][set_idx]) * 2 - 3
                     except Exception:
-                        self._matchData.setPlayer(
-                            team_idx, set_idx, 'TBD', 'Random')
+                        score = 0
 
-                team = data['team' + str(team_idx + 1)]
-                name, tag = team['name'], team['tag']
-                if not isinstance(name, str):
-                    name = "TBD"
-                if not isinstance(tag, str):
-                    tag = ""
-                self._matchData.setTeam(team_idx, self._aliasTeam(name), tag)
+                    self._matchData.setMapScore(set_idx, score, overwrite)
 
-            for set_idx in range(5):
-                try:
-                    score = int(data['games'][set_idx]) * 2 - 3
-                except Exception:
-                    score = 0
+                self._matchData.setAllKill(False)
 
-                self._matchData.setMapScore(set_idx, score, overwrite)
-
-            self._matchData.setAllKill(False)
-
-            if swap:
-                self._matchData.swapTeams()
+                if swap:
+                    self._matchData.swapTeams()
 
     def downloadLogos(self, logoManager):
         """Download team logos."""
@@ -96,12 +98,19 @@ class MatchGrabber(MatchGrabberParent):
 
         for idx in range(2):
             try:
-                logo = logoManager.newLogo()
-                logo.fromURL(self._rawData['team' + str(idx + 1)]['logo'])
                 if self._matchData.isSwapped():
-                    getattr(logoManager, 'setTeam{}Logo'.format(2 - idx))(logo)
+                    logo_idx = 2 - idx
                 else:
-                    getattr(logoManager, 'setTeam{}Logo'.format(idx + 1))(logo)
+                    logo_idx = idx + 1
+                oldLogo = getattr(logoManager, 'getTeam{}'.format(logo_idx))()
+                logo = logoManager.newLogo()
+                new_logo = logo.fromURL(
+                    self._rawData['team' + str(idx + 1)]['logo'],
+                    localFile=oldLogo.getAbsFile())
+                if new_logo:
+                    getattr(logoManager, 'setTeam{}Logo'.format(logo_idx))(logo)
+                else:
+                    module_logger.info("Logo download is not needed.")
 
             except Exception as e:
                 module_logger.exception("message")
@@ -125,8 +134,23 @@ class MatchGrabber(MatchGrabberParent):
         else:
             url = url + "?vs"
 
+        localFile = scctool.settings.getAbsPath(fname)
+        needs_download = True
         try:
-            urlretrieve(url, scctool.settings.getAbsPath(fname))
+            with open(localFile, "rb") as in_file:
+                local_byte = in_file.read(512)
 
+            file = urlopen(url)
+            data = file.read(512)
+
+            if(data == local_byte):
+                needs_download = False
         except Exception as e:
             module_logger.exception("message")
+
+        if needs_download:
+            try:
+                urlretrieve(url, scctool.settings.getAbsPath(fname))
+
+            except Exception as e:
+                module_logger.exception("message")
