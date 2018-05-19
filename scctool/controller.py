@@ -218,12 +218,11 @@ class MainController:
         """Reset data."""
         msg = ''
         try:
-
-            self.matchData.resetData(False)
-            self.matchData.writeJsonFile()
             self.logoManager.resetTeam1Logo()
             self.logoManager.resetTeam2Logo()
-            self.updateLogos()
+            self.matchData.resetData(False)
+            self.matchData.writeJsonFile()
+            self.updateLogos(True)
             self.updateForms()
             self.view.highlightOBSupdate(force=True)
 
@@ -246,7 +245,7 @@ class MainController:
                 self.matchData.downloadBanner()
             except Exception:
                 pass
-            self.updateLogos()
+            self.updateLogos(True)
             self.updateForms()
             self.view.highlightOBSupdate(force=True)
             self.view.resizeWindow()
