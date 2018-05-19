@@ -15,7 +15,7 @@ from scctool.view.widgets import LogoDownloader
 
 # create logger
 module_logger = logging.getLogger('scctool.view.subLiquipediaSearch')
-base_url = 'http://liquipedia.net'
+base_url = 'https://liquipedia.net'
 
 
 class SubwindowLiquipediaSearch(QWidget):
@@ -88,8 +88,8 @@ class SubwindowLiquipediaSearch(QWidget):
 
         self.setWindowTitle(_("Liqupedia Image Search"))
 
-        self.resize(QSize(mainWindow.size().width()
-                          * 0.9, self.sizeHint().height()))
+        self.resize(QSize(mainWindow.size().width() * 0.9,
+                          self.sizeHint().height()))
         relativeChange = QPoint(mainWindow.size().width() / 2,
                                 mainWindow.size().height() / 3)\
             - QPoint(self.size().width() / 2,
