@@ -39,6 +39,7 @@ class MainController:
         try:
             self.matchData = matchData(self)
             self.matchData.dataChanged.connect(self.handleMatchDataChange)
+            self.matchData.metaChangedSignal.connect(self.matchMetaDataChanged)
             self.SC2ApiThread = SC2ApiThread(self)
             self.SC2ApiThread.requestScoreUpdate.connect(
                 self.requestScoreUpdate)
@@ -207,9 +208,6 @@ class MainController:
             self.view.resizeWindow()
             self.view.highlightOBSupdate(force=True)
 
-            data = self.matchData.getScoreData()
-            self.websocketThread.sendData2Path("score", "ALL_DATA", data)
-
         except Exception as e:
             msg = str(e)
             module_logger.exception("message")
@@ -229,9 +227,6 @@ class MainController:
             self.updateForms()
             self.view.highlightOBSupdate(force=True)
 
-            data = self.matchData.getScoreData()
-            self.websocketThread.sendData2Path("score", "ALL_DATA", data)
-
         except Exception as e:
             msg = str(e)
             module_logger.exception("message")
@@ -242,16 +237,11 @@ class MainController:
         """Load data from match grabber."""
         msg = ''
         try:
-            self.matchData.parseURL(url)
-            self.matchData.grabData()
+            newProvider = self.matchData.parseURL(url)
+            self.matchData.grabData(newProvider, self.logoManager)
             self.matchData.autoSetMyTeam(
                 swap=scctool.settings.config.parser.getboolean("SCT", "swap_myteam"))
             self.matchData.writeJsonFile()
-            self.matchData.downloadLogos()
-            try:
-                pass
-            except Exception:
-                pass
             try:
                 self.matchData.downloadBanner()
             except Exception:
@@ -261,8 +251,6 @@ class MainController:
             self.view.highlightOBSupdate(force=True)
             self.view.resizeWindow()
 
-            data = self.matchData.getScoreData()
-            self.websocketThread.sendData2Path("score", "ALL_DATA", data)
         except Exception as e:
             msg = str(e)
             module_logger.exception("message")
@@ -305,7 +293,6 @@ class MainController:
         """Update txt-files and ioncs for OBS."""
         try:
             self.matchData.updateMapIcons()
-            self.matchData.updateScoreIcon()
             self.matchData.createOBStxtFiles()
             self.matchData.updateLeagueIcon()
             self.matchData.writeJsonFile()
@@ -733,12 +720,10 @@ class MainController:
 
     def swapTeams(self):
         with self.view.tlock:
-            self.matchData.swapTeams()
             self.logoManager.swapTeamLogos()
+            self.matchData.swapTeams()
             self.updateForms()
             self.updateLogos(False)
-            data = self.matchData.getScoreData()
-            self.websocketThread.sendData2Path("score", "ALL_DATA", data)
             self.view.highlightOBSupdate(True, True)
 
     def displayWarning(self, msg="Warning: Something went wrong..."):
@@ -776,8 +761,36 @@ class MainController:
         if self.mapstatsManager.getMapPoolType() == 2:
             self.mapstatsManager.sendMapPool()
 
+    def matchMetaDataChanged(self):
+        data = self.matchData.getScoreData()
+        self.websocketThread.sendData2Path("score", "ALL_DATA", data)
+
     def handleMatchDataChange(self, label, object):
         print(label, object)
+        if label == 'team':
+            self.websocketThread.sendData2Path(
+                'score', 'CHANGE_TEXT',
+                {'id': 'team{}'.format(object['idx'] + 1), 'text': object['value']})
+        elif label == 'score':
+            score = self.matchData.getScore()
+            for idx in range(0, 2):
+                self.websocketThread.sendData2Path('score', 'CHANGE_TEXT', {
+                                                   'id': 'score{}'.format(idx + 1),
+                                                   'text': str(score[idx])})
+                color = self.matchData.getScoreIconColor(
+                    idx, object['set_idx'])
+                self.websocketThread.sendData2Path('score', 'CHANGE_SCORE', {
+                                                   'teamid': idx + 1,
+                                                   'setid': object['set_idx'] + 1,
+                                                   'color': color})
+        elif label == 'color':
+            for idx in range(0, 2):
+                self.websocketThread.sendData2Path('score', 'CHANGE_SCORE', {
+                                                   'teamid': idx + 1,
+                                                   'setid': object['set_idx'] + 1,
+                                                   'color': object['color']})
+        elif label == 'outcome':
+            self.websocketThread.sendData2Path('score', 'SET_WINNER', object)
 
     def newVersion(self, version, force=False):
         """Display dialog for new version."""

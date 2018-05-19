@@ -8,6 +8,7 @@ var font = "DEFAULT";
 var cssFile = "";
 var initNeeded = true;
 var tweenInitial = new TimelineMax();
+var tweens = {};
 
 // data['team1'] = "Team 1";
 // data['team2'] = "Team 2";
@@ -84,12 +85,17 @@ function connectWebsocket() {
                 } else if (jsonObject.event == 'CHANGE_FONT') {
                         setFont(jsonObject.data.font);
                 } else if (jsonObject.event == 'ALL_DATA') {
-                        data = jsonObject.data;
-                        initAnimation();
+                        if (dataChanged(jsonObject.data)) {
+                                initAnimation();
+                        }
                 } else if (jsonObject.event == 'CHANGE_TEXT') {
                         changeText(jsonObject.data.id, jsonObject.data.text);
                 } else if (jsonObject.event == 'CHANGE_IMAGE') {
                         changeImage(jsonObject.data.id, jsonObject.data.img);
+                } else if (jsonObject.event == 'CHANGE_SCORE') {
+                        changeScoreIcon(jsonObject.data.teamid, jsonObject.data.setid, jsonObject.data.color);
+                } else if (jsonObject.event == 'SET_WINNER') {
+                        setWinner(jsonObject.data);
                 }
         }
 
@@ -104,6 +110,16 @@ function connectWebsocket() {
         }
 }
 
+
+function dataChanged(newData) {
+        if (JSON.stringify(data) === JSON.stringify(newData)) {
+                return false;
+        } else {
+                data = newData;
+                return true;
+        }
+
+}
 
 function storeData(scope = null) {
         try {
@@ -140,14 +156,14 @@ function insertData() {
         $('#score2').text(data['score2']);
         $('#logo1').css("background-image", "url('../" + data['logo1'] + "')");
         $('#logo2').css("background-image", "url('../" + data['logo2'] + "')");
-        if(data['winner'][0]){
+        if (data['winner'][0]) {
                 $('#team1').addClass('winner');
-        }else{
+        } else {
                 $('#team1').removeClass('winner');
         }
-        if(data['winner'][1]){
+        if (data['winner'][1]) {
                 $('#team2').addClass('winner');
-        }else{
+        } else {
                 $('#team2').removeClass('winner');
         }
         insertIcons();
@@ -156,15 +172,28 @@ function insertData() {
         });
 }
 
+function setWinner(winner) {
+        if (winner == 0) {
+                $('#team1').removeClass('winner');
+                $('#team2').removeClass('winner');
+        } else if (winner == 1) {
+                $('#team2').addClass('winner');
+                $('#team1').removeClass('winner');
+        } else if (winner == -1) {
+                $('#team1').addClass('winner');
+                $('#team2').removeClass('winner');
+        }
+}
+
 function insertIcons() {
         for (var j = 0; j < 2; j++) {
-                $('#score' + (j+1).toString() + '-box').empty();
+                $('#score' + (j + 1).toString() + '-box').empty();
         }
         try {
                 for (var i = 0; i < Object.keys(data['sets']).length; i++) {
                         for (var j = 0; j < 2; j++) {
                                 var color = data['sets'][i][j];
-                                $('#score' + (j+1).toString() + '-box').append('<div class="circle" id="circle-' + (j+1).toString() + '-' + (i+1).toString() + '" style="background-color: ' + color + '"></div>');
+                                $('#score' + (j + 1).toString() + '-box').append('<div class="circle" id="circle-' + (j + 1).toString() + '-' + (i + 1).toString() + '" style="background-color: ' + color + '"></div>');
                         }
                 }
         } catch (e) {}
@@ -251,15 +280,19 @@ function outroAnimation() {
 
 function changeText(id, new_value) {
         var object = $('#' + id);
-        var object = $('#' + id);
-        if(data[id] == new_value){
+        console.log(id, new_value);
+        if (data[id] == new_value) {
                 return;
-        }else{
+        } else {
                 data[id] = new_value;
                 storeData('data');
         }
-        var tween = new TimelineMax();
-        tween.to(object, 0.25, {
+
+        if (tweens[id] && tweens[id].isActive()) {
+                tweens[id].kill();
+        }
+        tweens[id] = new TimelineMax();
+        tweens[id].to(object, 0.25, {
                         opacity: 0
                 })
                 .call(_changeText, [object, new_value])
@@ -277,14 +310,17 @@ function changeText(id, new_value) {
 
 function changeImage(id, new_value) {
         var object = $('#' + id);
-        if(data[id] == new_value){
+        if (data[id] == new_value) {
                 return;
-        }else{
+        } else {
                 data[id] = new_value;
                 storeData('data');
         }
-        var tween = new TimelineMax();
-        tween.to(object, 0.35, {
+        if (tweens[id] && tweens[id].isActive()) {
+                tweens[id].kill();
+        }
+        tweens[id] = new TimelineMax();
+        tweens[id].to(object, 0.35, {
                         scale: 0,
                         force3D: true
                 })
@@ -301,9 +337,13 @@ function changeImage(id, new_value) {
 
 
 function changeScoreIcon(team, set, color) {
-        var object = $('#circle-' + team.toString() + '-' + set.toString());
-        var tween = new TimelineMax();
-        tween.to(object, 0.15, {
+        var id = '#circle-' + team.toString() + '-' + set.toString();
+        var object = $(id);
+        if (tweens[id] && tweens[id].isActive()) {
+                tweens[id].kill();
+        }
+        tweens[id] = new TimelineMax();
+        tweens[id].to(object, 0.15, {
                         scale: 0,
                         opacity: '0',
                         force3D: true

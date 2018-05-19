@@ -131,7 +131,7 @@ class SubwindowStyles(QWidget):
         try:
             container = QHBoxLayout()
             self.qb_scoreStyle = StyleComboBox(
-                scctool.settings.OBShtmlDir + "/src/css/score_styles",
+                scctool.settings.OBShtmlDir + "/src/css/score",
                 scctool.settings.config.parser.get("Style", "score"))
             self.qb_scoreStyle.currentIndexChanged.connect(self.changed)
             button = QPushButton(_("Show in Browser"))
@@ -193,8 +193,8 @@ class SubwindowStyles(QWidget):
         """Apply styles."""
         self.qb_landscapeStyle.apply(
             self.controller, scctool.settings.OBSmapDir + "/src/css/landscape.css")
-        self.qb_scoreStyle.apply(
-            self.controller, scctool.settings.OBShtmlDir + "/src/css/score.css")
+
+        self.qb_scoreStyle.applyWebsocket(self.controller, 'score')
         self.qb_introStyle.applyWebsocket(self.controller, 'intro')
         self.qb_mapstatsStyle.applyWebsocket(self.controller, 'mapstats')
         self.qb_boxStyle.applyWebsocket(self.controller, 'mapicons_box')

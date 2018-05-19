@@ -21,7 +21,7 @@ class MatchGrabber(MatchGrabberParent):
         self._urlprefix = "http://alpha.tl/match/"
         self._apiprefix = "http://alpha.tl/api?match="
 
-    def grabData(self):
+    def grabData(self, metaChange=False, logoManager=None):
         """Grab match data."""
         data = self._getJson()
 
@@ -30,7 +30,7 @@ class MatchGrabber(MatchGrabberParent):
             raise ValueError(msg)
         else:
             self._rawData = data
-            overwrite = self._matchData.getURL().strip() != self.getURL().strip()
+            overwrite = metaChange or self._matchData.getURL().strip() != self.getURL().strip()
             with self._matchData.emitLock(overwrite, self._matchData.metaChangedSignal):
                 self._matchData.setNoSets(5, resetPlayers=overwrite)
                 self._matchData.setMinSets(3)
@@ -38,9 +38,6 @@ class MatchGrabber(MatchGrabberParent):
                 self._matchData.resetLabels()
                 if overwrite:
                     self._matchData.resetSwap()
-                swap = self._matchData.isSwapped()
-                if swap:
-                    self._matchData.swapTeams()
 
                 league = data['tournament']
                 if not isinstance(league, str):
@@ -63,10 +60,13 @@ class MatchGrabber(MatchGrabberParent):
                             if not isinstance(playername, str):
                                 playername = "TBD"
                             self._matchData.setPlayer(
-                                team_idx, set_idx, playername, str(player['race']))
+                                self._matchData.getSwappedIdx(team_idx),
+                                set_idx,
+                                playername, str(player['race']))
                         except Exception:
                             self._matchData.setPlayer(
-                                team_idx, set_idx, 'TBD', 'Random')
+                                self._matchData.getSwappedIdx(team_idx),
+                                set_idx, 'TBD', 'Random')
 
                     team = data['team' + str(team_idx + 1)]
                     name, tag = team['name'], team['tag']
@@ -75,7 +75,7 @@ class MatchGrabber(MatchGrabberParent):
                     if not isinstance(tag, str):
                         tag = ""
                     self._matchData.setTeam(
-                        team_idx, self._aliasTeam(name), tag)
+                        self._matchData.getSwappedIdx(team_idx), self._aliasTeam(name), tag)
 
                 for set_idx in range(5):
                     try:
@@ -83,12 +83,12 @@ class MatchGrabber(MatchGrabberParent):
                     except Exception:
                         score = 0
 
-                    self._matchData.setMapScore(set_idx, score, overwrite)
+                    self._matchData.setMapScore(
+                        set_idx, score, overwrite, True)
 
                 self._matchData.setAllKill(False)
-
-                if swap:
-                    self._matchData.swapTeams()
+                if logoManager is not None:
+                    self.downloadLogos(logoManager)
 
     def downloadLogos(self, logoManager):
         """Download team logos."""
@@ -98,10 +98,7 @@ class MatchGrabber(MatchGrabberParent):
 
         for idx in range(2):
             try:
-                if self._matchData.isSwapped():
-                    logo_idx = 2 - idx
-                else:
-                    logo_idx = idx + 1
+                logo_idx = self._matchData.getSwappedIdx(idx) + 1
                 oldLogo = getattr(logoManager, 'getTeam{}'.format(logo_idx))()
                 logo = logoManager.newLogo()
                 new_logo = logo.fromURL(

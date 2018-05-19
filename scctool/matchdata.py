@@ -4,7 +4,6 @@ import json
 import logging
 import re
 import shutil
-import time
 from collections import OrderedDict
 
 from PyQt5.QtCore import QObject, pyqtSignal
@@ -73,6 +72,18 @@ class matchData(QObject):
                 self.dataChanged.emit(name, object)
             elif scope == 'meta':
                 self.metaChangedSignal.emit()
+            elif scope == 'outcome':
+                self.dataChanged.emit('outcome', self.getWinner())
+                if self.isDecided():
+                    color = scctool.settings.config.parser.get(
+                        "MapIcons", "notplayed_color")
+                else:
+                    color = scctool.settings.config.parser.get(
+                        "MapIcons", "undecided_color")
+                for idx in range(self.getNoSets()):
+                    if self.getMapScore(idx) == 0:
+                        self.__emitSignal('data', 'color', {
+                                          'set_idx': idx, 'color': color})
 
     def readJsonFile(self):
         """Read json data from file."""
@@ -109,13 +120,15 @@ class matchData(QObject):
         url = str(url).lower()
 
         if(url.find('alpha') != -1):
-            self.setProvider("AlphaSC2")
+            chg = self.setProvider("AlphaSC2")
         elif(url.find('hdgame') != -1):
-            self.setProvider("RSTL")
+            chg = self.setProvider("RSTL")
         else:
-            self.setProvider("Custom")
+            chg = self.setProvider("Custom")
 
         self.setID(re.findall('\d+', url)[-1])
+
+        return chg
     # except Exception as e:
         # self.setProvider("Custom")
         # self.setID(0)
@@ -156,6 +169,12 @@ class matchData(QObject):
                 self.__data['sets'][set_idx]['score']
         self.allChanged()
         self.__emitSignal('meta')
+
+    def getSwappedIdx(self, idx):
+        if self.isSwapped():
+            return 1 - idx
+        else:
+            return idx
 
     def isSwapped(self):
         return bool(self.__data.get('swapped', False))
@@ -262,37 +281,41 @@ class matchData(QObject):
 
     def setCustom(self, bestof, allkill, solo):
         """Set a custom match format."""
-        bestof = int(bestof)
-        allkill = bool(allkill)
-        if(bestof == 2):
-            no_sets = 2
-        else:
-            no_sets = bestof + 1 - bestof % 2
+        with self.emitLock():
+            bestof = int(bestof)
+            allkill = bool(allkill)
+            if(bestof == 2):
+                no_sets = 2
+            else:
+                no_sets = bestof + 1 - bestof % 2
 
-        self.setNoSets(no_sets, bestof)
-        self.resetLabels()
-        self.setAllKill(allkill)
-        self.setProvider("Custom")
-        self.setID(0)
-        self.setURL("")
-        self.setSolo(solo)
+            self.setNoSets(no_sets, bestof)
+            self.resetLabels()
+            self.setAllKill(allkill)
+            self.setProvider("Custom")
+            self.setID(0)
+            self.setURL("")
+            self.setSolo(solo)
+        self.__emitSignal('meta')
 
     def resetData(self, reset_options=True):
         """Reset all data to default values."""
-        for team_idx in range(2):
+        with self.emitLock():
+            for team_idx in range(2):
+                for set_idx in range(self.getNoSets()):
+                    self.setPlayer(team_idx, set_idx, "TBD", "Random")
+                self.setTeam(team_idx, "TBD", "TBD")
+
             for set_idx in range(self.getNoSets()):
-                self.setPlayer(team_idx, set_idx, "TBD", "Random")
-            self.setTeam(team_idx, "TBD", "TBD")
+                self.setMapScore(set_idx, 0, overwrite=True)
+                self.setMap(set_idx)
 
-        for set_idx in range(self.getNoSets()):
-            self.setMapScore(set_idx, 0, overwrite=True)
-            self.setMap(set_idx)
-
-        self.setLeague("TBD")
-        self.setMyTeam(0)
-        if reset_options:
-            self.setAllKill(False)
-            self.setSolo(False)
+            self.setLeague("TBD")
+            self.setMyTeam(0)
+            if reset_options:
+                self.setAllKill(False)
+                self.setSolo(False)
+        self.__emitSignal('meta')
 
     def resetLabels(self):
         """Reset the map labels."""
@@ -508,20 +531,35 @@ class matchData(QObject):
         """Check if match is decided."""
         return max(self.getScore()) > int(self.getBestOf() / 2)
 
-    def setMapScore(self, set_idx, score, overwrite=False):
+    def getWinner(self):
+        score = self.getScore()
+        if not self.isDecided() or score[0] == score[1]:
+            return 0
+        elif score[0] > score[1]:
+            return -1
+        else:
+            return 1
+
+    def setMapScore(self, set_idx, score, overwrite=False, applySwap=False):
         """Set the score of a set."""
         try:
             if(not (set_idx >= 0 and set_idx < self.__data['no_sets'])):
                 return False
             if(score in [-1, 0, 1]):
+                if applySwap and self.isSwapped():
+                    score = -score
                 if(overwrite or self.__data['sets'][set_idx]['score'] == 0):
                     if(self.__data['sets'][set_idx]['score'] != score):
                         if(self.isDecided()):
                             self.__metaChanged = True
+                        was_decided = self.isDecided()
                         self.__data['sets'][set_idx]['score'] = score
+                        outcome_changed = self.isDecided() != was_decided
+                        if outcome_changed:
+                            self.__emitSignal('outcome')
                         self.__setsChanged[set_idx] = True
-                        self.__emitSignal('data', 'score', {
-                                          'set_idx': set_idx, 'value': score})
+                        self.__emitSignal('data', 'score',
+                                          {'set_idx': set_idx, 'value': score})
                 return True
             else:
                 return False
@@ -663,8 +701,7 @@ class matchData(QObject):
         if(self.__data['teams'][team_idx]['name'] != new):
             self.__data['teams'][team_idx]['name'] = new
             self.__metaChanged = True
-            self.__controller.websocketThread.sendData2Path(
-                'score', 'CHANGE_TEXT', {'id': 'team{}'.format(team_idx + 1), 'text': new})
+            self.__emitSignal('data', 'team', {'idx': team_idx, 'value': new})
 
         if(tag):
             self.setTeamTag(team_idx, tag)
@@ -741,6 +778,7 @@ class matchData(QObject):
 
     def setProvider(self, provider):
         """Set the provider."""
+        provider_changed = False
         if(provider):
             matches = difflib.get_close_matches(
                 provider, self.__VALID_PROVIDERS.keys(), 1)
@@ -752,19 +790,20 @@ class matchData(QObject):
             if(self.__data['provider'] != new):
                 self.__data['provider'] = new
                 self.__metaChanged = True
+                provider_changed = True
         else:
             self.__data['provider'] = MatchGrabber._provider
 
         self.__initMatchGrabber()
-        return True
+        return provider_changed
 
     def getProvider(self):
         """Get the provider."""
         return str(self.__data['provider'])
 
-    def grabData(self):
+    def grabData(self, metaChange=False, logoManager=None):
         """Grab the match data via a provider."""
-        self.__matchGrabber.grabData()
+        self.__matchGrabber.grabData(metaChange, logoManager)
         self.setURL(self.__matchGrabber.getURL())
 
     def downloadBanner(self):
@@ -925,86 +964,18 @@ class matchData(QObject):
 
         return data
 
-    def updateScoreIcon(self):
-        """Update scor icons."""
-        if(not(self.hasMetaChanged() or self.hasAnySetChanged())):
-            return
-
-        score = [0, 0]
-        display = []
-        winner = ["", ""]
-        border_color = [[], []]
-        threshold = int(self.getBestOf() / 2)
-
-        for i in range(self.getNoSets()):
-            display.append("inline-block")
-
-            if(max(score) > threshold and i >= self.getMinSets()):
-                border_color[0].append(scctool.settings.config.parser.get(
-                    "MapIcons", "notplayed_color"))
-                border_color[1].append(scctool.settings.config.parser.get(
-                    "MapIcons", "notplayed_color"))
-            elif(self.getMapScore(i) == -1):
-                border_color[0].append(
-                    scctool.settings.config.parser.get("MapIcons", "win_color"))
-                border_color[1].append(
-                    scctool.settings.config.parser.get("MapIcons", "lose_color"))
-                score[0] += 1
-            elif(self.getMapScore(i) == 1):
-                border_color[0].append(
-                    scctool.settings.config.parser.get("MapIcons", "lose_color"))
-                border_color[1].append(
-                    scctool.settings.config.parser.get("MapIcons", "win_color"))
-                score[1] += 1
+    def getScoreIconColor(self, team_idx, set_idx):
+        score = self.getMapScore(set_idx)
+        team = 2 * team_idx - 1
+        if score == 0:
+            if max(self.getScore()) > int(self.getBestOf() / 2):
+                return scctool.settings.config.parser.get("MapIcons", "notplayed_color")
             else:
-                border_color[0].append(scctool.settings.config.parser.get(
-                    "MapIcons", "undecided_color"))
-                border_color[1].append(scctool.settings.config.parser.get(
-                    "MapIcons", "undecided_color"))
-
-        for i in range(self.getNoSets(), scctool.settings.max_no_sets):
-            display.append("none")
-            border_color[0].append(scctool.settings.config.parser.get(
-                "MapIcons", "notplayed_color"))
-            border_color[1].append(scctool.settings.config.parser.get(
-                "MapIcons", "notplayed_color"))
-
-        if(score[0] > threshold):
-            winner[0] = "winner"
-        elif(score[1] > threshold):
-            winner[1] = "winner"
-
-        dataFile = scctool.settings.OBShtmlDir + "/data/score-data.html"
-        templateFile = scctool.settings.OBShtmlDir + "/data/score-template.html"
-
-        data = dict()
-        if self.getSolo():
-            data['team1'] = self.getPlayer(0, 0)
-            data['team2'] = self.getPlayer(1, 0)
+                return scctool.settings.config.parser.get("MapIcons", "undecided_color")
+        elif score == team:
+            return scctool.settings.config.parser.get("MapIcons", "win_color")
         else:
-            data['team1'] = self.getTeam(0)
-            data['team2'] = self.getTeam(1)
-        data['logo1'] = self.__controller.logoManager.getTeam1().getFile(True)
-        data['logo2'] = self.__controller.logoManager.getTeam2().getFile(True)
-        data['winner1'] = winner[0]
-        data['winner2'] = winner[1]
-        data['vars'] = "--winner-color: {};".format(
-            scctool.settings.config.parser.get("MapIcons", "winner_highlight_color"))
-        data['score-t1'] = score[0]
-        data['score-t2'] = score[1]
-        data['score'] = "{} - {}".format(score[0], score[1])
-        data['timestamp'] = time.time()
-        if scctool.settings.config.parser.getboolean("Style", "use_custom_font"):
-            data['font'] = "font-family: {};".format(scctool.settings.config.parser.get(
-                "Style", "custom_font"))
-
-        for s_idx in range(scctool.settings.max_no_sets):
-            data['display-m{}'.format(s_idx + 1)] = display[s_idx]
-            for t_idx in range(2):
-                key = 'score-m{}-t{}'.format(s_idx + 1, t_idx + 1)
-                data[key] = border_color[t_idx][s_idx]
-
-        self._useTemplate(templateFile, dataFile, data)
+            return scctool.settings.config.parser.get("MapIcons", "lose_color")
 
     def updateMapIcons(self):
         """Update map icons."""
@@ -1132,8 +1103,8 @@ class matchData(QObject):
             return
 
         try:
-            filename_old = scctool.settings.OBShtmlDir + "/data/" + self.getProvider() + \
-                ".html"
+            filename_old = scctool.settings.OBShtmlDir + "/data/" +\
+                self.getProvider() + ".html"
             filename_new = scctool.settings.OBShtmlDir + "/data/league-data.html"
             shutil.copy(scctool.settings.getAbsPath(filename_old),
                         scctool.settings.getAbsPath(filename_new))
@@ -1183,6 +1154,8 @@ class matchData(QObject):
 
 def autoCorrectMap(map):
     """Corrects map using list in config."""
+    if not isinstance(map, str):
+        map = "TBD"
     try:
         matches = difflib.get_close_matches(
             map.lower(), scctool.settings.maps, 1)
