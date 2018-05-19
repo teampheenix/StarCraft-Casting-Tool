@@ -1,6 +1,13 @@
 # Changelog
 
 
+## v1.10.3 (2018-05-19)
+
+### Fix
+
+* Liquipedia Image Search fixed by switching to https.
+
+
 ## v1.10.2 (2018-05-15)
 
 ### Fix
