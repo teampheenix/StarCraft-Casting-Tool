@@ -14,7 +14,7 @@ module_logger = logging.getLogger('scctool.tasks.liquipedia')
 
 class LiquipediaGrabber:
 
-    _base_url = 'http://liquipedia.net'
+    _base_url = 'https://liquipedia.net'
 
     def __init__(self):
         scct_url = "https://teampheenix.github.io/StarCraft-Casting-Tool/"
