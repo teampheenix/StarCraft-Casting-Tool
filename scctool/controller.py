@@ -825,6 +825,12 @@ class MainController:
                     'color': object['color2']})
         elif label == 'outcome':
             self.websocketThread.sendData2Path('score', 'SET_WINNER', object)
+        elif label == 'player':
+            self.websocketThread.sendData2Path(
+                'mapicons_box', 'CHANGE_TEXT', {
+                    'icon': object['set_idx'] + 1,
+                    'label': 'player{}'.format(object['team_idx'] + 1),
+                    'text': object['value']})
 
     def newVersion(self, version, force=False):
         """Display dialog for new version."""

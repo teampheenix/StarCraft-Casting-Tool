@@ -3,6 +3,8 @@ var socket = null;
 var isopen = false;
 var reconnectIntervalMs = 5000;
 var data = {};
+var tweens = {};
+
 
 init();
 
@@ -43,6 +45,8 @@ function connectWebsocket() {
       changeCSS(jsonObject.data.file);
     } else if (jsonObject.event == 'CHANGE_SCORE') {
       changeScore(jsonObject.data.winner, jsonObject.data.setid, jsonObject.data.color);
+    } else if (jsonObject.event == 'CHANGE_TEXT') {
+      changeText(jsonObject.data.icon, jsonObject.data.label, jsonObject.data.text);
     } else if (jsonObject.event == 'CHANGE_BORDER_COLORS') {
       //setColors(jsonObject.data.color1, jsonObject.data.color2);
     } else if (jsonObject.event == 'CHANGE_FONT') {
@@ -90,6 +94,31 @@ function changeScore(winner, set, color) {
   }
 }
 
+function changeText(iconID, label, new_value) {
+  var icon = $('#mapicon' + iconID.toString());
+  var id = iconID.toString()+label;
+  var object = icon.find("span."+label);
+  if (tweens[id] && tweens[id].isActive()) {
+    tweens[id].kill();
+  }
+  tweens[id] = new TimelineMax();
+  tweens[id].to(object, 0.25, {
+      opacity: 0
+    })
+    .call(_changeText, [icon, object, new_value])
+    .to(object, 0.25, {
+      opacity: 1
+    }, "+=0.15");
+
+  function _changeText(parent, object, new_value) {
+    object.text(new_value)
+    $(document).ready(function() {
+      console.log(parent);
+      parent.find(".text-fill").textfill({debug: true});
+    });
+  }
+}
+
 function showHide(i) {
   var mapicon = $("#mapicon" + i.toString());
   var image = mapicon.find("div.image");
@@ -111,7 +140,6 @@ function showHide(i) {
 
 function fillBox(i) {
   var mapicon = "#mapicon" + i.toString();
-  console.log(i);
   var mapdata = data[i];
   $(mapicon).find("span.player1").text(mapdata['player1']);
   $(mapicon).find("div.player1").addClass(mapdata['status1']);

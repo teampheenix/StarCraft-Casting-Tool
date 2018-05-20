@@ -10,29 +10,6 @@ var initNeeded = true;
 var tweenInitial = new TimelineMax();
 var tweens = {};
 
-// data['team1'] = "Team 1";
-// data['team2'] = "Team 2";
-// data['score1'] = "1";
-// data['score2'] = "2";
-// data['logo1'] = "data/logos/64f38e.png";
-// data['logo2'] = "data/logos/64f38e.png";
-// data['sets'] = {};
-// data['sets'][1] = {};
-// data['sets'][1][1] = 'red';
-// data['sets'][1][2] = 'green';
-// data['sets'][2] = {};
-// data['sets'][2][1] = 'red';
-// data['sets'][2][2] = 'green';
-// data['sets'][3] = {};
-// data['sets'][3][1] = 'red';
-// data['sets'][3][2] = 'green';
-// data['sets'][4] = {};
-// data['sets'][4][1] = 'grey';
-// data['sets'][4][2] = 'grey';
-// data['sets'][5] = {};
-// data['sets'][5][1] = 'grey';
-// data['sets'][5][2] = 'grey';
-//changeCSS("src/css/score/Alternative.css");
 init();
 
 function init() {
@@ -43,27 +20,6 @@ function init() {
   setTimeout(function() {
     initAnimation(false);
   }, 1000);
-  // changeCSS("src/css/score/Alternative.css");
-  // setTimeout(function() {
-  //         changeText('team1', "team pheeniX");
-  // }, 2000);
-  // setTimeout(function() {
-  //         changeText('team2', "MindGaming");
-  // }, 3000);
-  // setTimeout(function() {
-  //         changeText('score1', "3");
-  // }, 4000);
-  // setTimeout(function() {
-  //         changeText('score2', "4");
-  // }, 4500);
-  // setTimeout(function() {
-  //         changeImage('logo1', "data/logos/679f86.png");
-  //         changeScoreIcon(1, 4, 'green')
-  //         changeScoreIcon(2, 4, 'red')
-  // }, 4000);
-  // setTimeout(function() {
-  //         outroAnimation();
-  // }, 3000);
 }
 
 function connectWebsocket() {
