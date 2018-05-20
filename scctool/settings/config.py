@@ -86,7 +86,8 @@ def setDefaultConfig(sec, opt, value, func=None):
             this.parser.set(sec, opt, value)
 
 
-def findTesserAct(default="C:\\Program Files (x86)\\Tesseract-OCR\\tesseract.exe"):
+def findTesserAct(
+        default="C:\\Program Files (x86)\\Tesseract-OCR\\tesseract.exe"):
     """Search for Tesseract exceutable via registry."""
     if(sys.platform.system().lower() != "windows"):
         return default
@@ -217,7 +218,8 @@ def renameConfigOptions():
 def nightbotIsValid():
     """Check if nightbot data is valid."""
     from scctool.settings import nightbot_commands
-    return (len(this.parser.get("Nightbot", "token")) > 0 and len(nightbot_commands) > 0)
+    return (len(this.parser.get("Nightbot", "token")) > 0 and
+            len(nightbot_commands) > 0)
 
 
 def twitchIsValid():
@@ -229,13 +231,15 @@ def twitchIsValid():
 
 def getMyTeams():
     """Enpack my teams."""
-    return list(map(str.strip, str(this.parser.get("SCT", "myteams")).split(',')))
+    return list(map(str.strip,
+                    str(this.parser.get("SCT", "myteams")).split(',')))
 
 
 def getMyPlayers(append=False):
     """Enpack my players."""
     players = list(
-        map(str.strip, str(this.parser.get("SCT", "commonplayers")).split(',')))
+        map(str.strip,
+            str(this.parser.get("SCT", "commonplayers")).split(',')))
     if(append):
         players.append("TBD")
     return players

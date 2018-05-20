@@ -78,7 +78,8 @@ class LogoManager:
         data['team2'] = self._team2.toDict()
 
         try:
-            with open(getJsonFile('logos'), 'w', encoding='utf-8-sig') as outfile:
+            with open(getJsonFile('logos'), 'w',
+                      encoding='utf-8-sig') as outfile:
                 json.dump(data, outfile)
         except Exception as e:
             module_logger.exception("message")
@@ -90,7 +91,8 @@ class LogoManager:
         data = dict()
 
         try:
-            with open(getJsonFile('logos'), 'r', encoding='utf-8-sig') as json_file:
+            with open(getJsonFile('logos'), 'r',
+                      encoding='utf-8-sig') as json_file:
                 data = json.load(json_file)
         except (OSError, IOError):
             return
@@ -416,7 +418,8 @@ class Logo:
 
     def getDesc(self):
         size = humanize.naturalsize(self._size)
-        return "{}, {}x{}px".format(self._format.upper(), self._width, self._height, str(size))
+        return "{}, {}x{}px".format(self._format.upper(),
+                                    self._width, self._height, str(size))
 
     def __str__(self):
         return str(self.toDict())

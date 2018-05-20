@@ -38,7 +38,8 @@ def updateTitle(newTitle):
         status_code = e.response.status_code
         error_msg = "Twitch API-Error: {}"
         if(status_code == 404):
-            msg = _("Not Found - Channel '{}' not found.").format(twitchChannel)
+            msg = _("Not Found - Channel '{}'"
+                    " not found.").format(twitchChannel)
             msg = error_msg.format(msg)
         elif(status_code == 403):
             msg = error_msg.format(_("Forbidden - Do you have permission?"))

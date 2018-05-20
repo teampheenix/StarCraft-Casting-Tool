@@ -18,7 +18,8 @@ class HistoryManager:
     def loadJson(self):
         """Read json data from file."""
         try:
-            with open(getJsonFile('history'), 'r', encoding='utf-8-sig') as json_file:
+            with open(getJsonFile('history'), 'r',
+                      encoding='utf-8-sig') as json_file:
                 data = json.load(json_file)
         except Exception as e:
             data = dict()
@@ -32,7 +33,8 @@ class HistoryManager:
         data['player'] = self.__player_history
         data['team'] = self.__team_history
         try:
-            with open(getJsonFile('history'), 'w', encoding='utf-8-sig') as outfile:
+            with open(getJsonFile('history'), 'w',
+                      encoding='utf-8-sig') as outfile:
                 json.dump(data, outfile)
         except Exception as e:
             module_logger.exception("message")

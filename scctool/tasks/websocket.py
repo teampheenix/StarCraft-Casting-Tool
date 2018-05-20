@@ -50,7 +50,9 @@ class WebsocketThread(QThread):
         module_logger.info(
             'Starting Websocket Server with port {}.'.format(port))
         # Create the server.
-        start_server = websockets.serve(self.handler, host='localhost', port=port,
+        start_server = websockets.serve(self.handler,
+                                        host='localhost',
+                                        port=port,
                                         max_queue=16,
                                         max_size=10240,
                                         read_limit=10240,
@@ -211,7 +213,9 @@ class WebsocketThread(QThread):
     def changeFont(self, path, font=None):
         if path in ['mapstats', 'score']:
             if font is None:
-                if not scctool.settings.config.parser.getboolean("Style", "use_custom_font"):
+                if not scctool.settings.config.parser.getboolean(
+                    "Style",
+                        "use_custom_font"):
                     font = "DEFAULT"
                 else:
                     font = scctool.settings.config.parser.get(

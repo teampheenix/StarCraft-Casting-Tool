@@ -136,7 +136,8 @@ def nightbot_callback():
     w.signal_nightbot.emit()
     shutdown_server()
 
-    return _("scctool: Succesfully recived access to Nightbot - you can close this tab now.")
+    return _("scctool: Succesfully recived access to Nightbot"
+             " - you can close this tab now.")
 
 
 @flask_app.route('/twitch_callback_token')
@@ -156,7 +157,8 @@ def twitch_callback():
     w.signal_twitch.emit()
     shutdown_server()
 
-    return _("scctool: Succesfully recived access to Twitch - you can close this tab now.")
+    return _("scctool: Succesfully recived access to Twitch"
+             " - you can close this tab now.")
 
 
 class FlaskThread(QtCore.QThread):

@@ -43,9 +43,11 @@ def needInitialUpdate(version):
     """Check if data update is needed."""
     if version == '0.0.0':
         return True
-    elif not os.path.exists(scctool.settings.getAbsPath(scctool.settings.OBShtmlDir)):
+    elif not os.path.exists(
+            scctool.settings.getAbsPath(scctool.settings.OBShtmlDir)):
         return True
-    elif not os.path.exists(scctool.settings.getAbsPath(scctool.settings.OBSmapDir)):
+    elif not os.path.exists(
+            scctool.settings.getAbsPath(scctool.settings.OBSmapDir)):
         return True
     else:
         return False
@@ -55,7 +57,8 @@ def getDataVersion():
     """Read data version from json file."""
     version = '0.0.0'
     try:
-        with open(scctool.settings.getJsonFile('versiondata'), 'r', encoding='utf-8-sig') as f:
+        with open(scctool.settings.getJsonFile('versiondata'), 'r',
+                  encoding='utf-8-sig') as f:
             data = json.load(f)
             version = data.get('data_version', version)
     finally:
@@ -66,14 +69,16 @@ def setDataVersion(version):
     """Write data version to json file."""
     data = {}
     data['data_version'] = version
-    with open(scctool.settings.getJsonFile('versiondata'), 'w', encoding='utf-8-sig') as o:
+    with open(scctool.settings.getJsonFile('versiondata'), 'w',
+              encoding='utf-8-sig') as o:
         json.dump(data, o)
 
 
 def getRestartFlag():
     flag = False
     try:
-        with open(scctool.settings.getJsonFile('versiondata'), 'r', encoding='utf-8-sig') as f:
+        with open(scctool.settings.getJsonFile('versiondata'), 'r',
+                  encoding='utf-8-sig') as f:
             data = json.load(f)
             flag = data.get('restart_flag', False)
     finally:
@@ -81,10 +86,12 @@ def getRestartFlag():
 
 
 def setRestartFlag(flag=True):
-    with open(scctool.settings.getJsonFile('versiondata'), 'r', encoding='utf-8-sig') as f:
+    with open(scctool.settings.getJsonFile('versiondata'), 'r',
+              encoding='utf-8-sig') as f:
         data = json.load(f)
     data['restart_flag'] = bool(flag)
-    with open(scctool.settings.getJsonFile('versiondata'), 'w', encoding='utf-8-sig') as o:
+    with open(scctool.settings.getJsonFile('versiondata'), 'w',
+              encoding='utf-8-sig') as o:
         json.dump(data, o)
 
 
@@ -156,15 +163,18 @@ def extractData(asset_update, handler=lambda x: None):
 
         copyStyleFile(scctool.settings.OBSmapDir + "/src/css/box_styles",
                       scctool.settings.OBSmapDir + "/src/css/box.css",
-                      scctool.settings.config.parser.get("Style", "mapicon_box"))
+                      scctool.settings.config.parser.get(
+                          "Style", "mapicon_box"))
 
         copyStyleFile(scctool.settings.OBSmapDir + "/src/css/landscape_styles",
                       scctool.settings.OBSmapDir + "/src/css/landscape.css",
-                      scctool.settings.config.parser.get("Style", "mapicon_landscape"))
+                      scctool.settings.config.parser.get(
+                          "Style", "mapicon_landscape"))
 
         copyStyleFile(scctool.settings.OBShtmlDir + "/src/css/score_styles",
                       scctool.settings.OBShtmlDir + "/src/css/score.css",
-                      scctool.settings.config.parser.get("Style", "score"))
+                      scctool.settings.config.parser.get(
+                          "Style", "score"))
 
         handler(100)
 
@@ -224,7 +234,8 @@ class VersionHandler(TasksThread):
 
     def isCompatible(self):
         """Check if data update is needed."""
-        return compareVersions(self.asset_update.latest, self.APP_VERSION, 3) < 1
+        return compareVersions(self.asset_update.latest,
+                               self.APP_VERSION, 3) < 1
 
     def update_progress(self, data):
         """Process progress updates."""

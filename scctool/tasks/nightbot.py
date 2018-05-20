@@ -25,7 +25,8 @@ def updateCommand(data):
     try:
         headers = base_headers()
         headers.update({"Authorization": "Bearer " +
-                        scctool.settings.config.parser.get("Nightbot", "token")})
+                        scctool.settings.config.parser.get("Nightbot",
+                                                           "token")})
 
         response = requests.get(
             "https://api.nightbot.tv/1/commands",
@@ -52,12 +53,14 @@ def updateCommand(data):
         module_logger.exception("message")
         yield '', msg, success, False
 
-    for cmdFound, skipUpdate, id, cmd, message in findCommands(response.json(), data):
+    for cmdFound, skipUpdate, id, cmd, message in \
+            findCommands(response.json(), data):
         try:
             deleted = False
             if(skipUpdate):
                 previousMsg[cmd] = message
-                msg = _("Nightbot command '{}' was already set to '{}'").format(
+                msg = _("Nightbot command '{}' " +
+                        "was already set to '{}'").format(
                     cmd, message)
                 success = True
                 yield cmd, msg, success, False
@@ -124,7 +127,8 @@ def findCommands(response, data):
     for cmd, msg in data.items():
         if cmd in commands_found:
             idx = commands_found[cmd]
-            if response['commands'][idx]['message'] == msg and msg != "__DELETE__":
+            if (response['commands'][idx]['message'] == msg and
+                    msg != "__DELETE__"):
                 yield True, True, response['commands'][idx]['_id'], cmd, msg
             else:
                 yield True, False, response['commands'][idx]['_id'], cmd, msg

@@ -32,9 +32,12 @@ class MatchGrabber(MatchGrabberParent):
         data = data['data']
         self._rawData = data
 
-        overwrite = metaChange or self._matchData.getURL().strip() != self.getURL().strip()
+        overwrite = (metaChange or
+                     self._matchData.getURL().strip() !=
+                     self.getURL().strip())
 
-        with self._matchData.emitLock(overwrite, self._matchData.metaChangedSignal):
+        with self._matchData.emitLock(overwrite,
+                                      self._matchData.metaChangedSignal):
             if overwrite:
                 self._matchData.resetSwap()
 
@@ -76,8 +79,9 @@ class MatchGrabber(MatchGrabberParent):
 
                             try:
                                 idx = str(5 + set_idx)
-                                temp_race = data['result'][idx]['r_name' +
-                                                                str(team_idx + 1)]
+                                temp_race = \
+                                    data['result'][idx]['r_name' +
+                                                        str(team_idx + 1)]
                                 if temp_race is not None:
                                     race = temp_race
                             finally:
@@ -85,7 +89,8 @@ class MatchGrabber(MatchGrabberParent):
                                     race = "Random"
                             try:
                                 temp_player = data['result'][str(
-                                    5 + set_idx)]['member_name' + str(team_idx + 1)]
+                                    5 + set_idx)]['member_name' +
+                                                  str(team_idx + 1)]
                                 if temp_player is not None:
                                     player = temp_player
                             finally:
@@ -94,8 +99,9 @@ class MatchGrabber(MatchGrabberParent):
 
                             player = self._aliasPlayer(player)
 
-                            self._matchData.setPlayer(self._matchData.getSwappedIdx(team_idx),
-                                                      set_idx, player, race)
+                            self._matchData.setPlayer(
+                                self._matchData.getSwappedIdx(team_idx),
+                                set_idx, player, race)
                         except Exception:
                             pass
 
@@ -184,18 +190,22 @@ class MatchGrabber(MatchGrabberParent):
                                                        str(team_idx + 1)]):
                                 try:
                                     idx = str(set_idx * 2 + 1)
-                                    race = data['result'][idx]['r_name' +
-                                                               str(team_idx + 1)]
+                                    race = \
+                                        data['result'][idx]['r_name' +
+                                                            str(team_idx + 1)]
                                 except Exception:
                                     race = "Random"
                             else:
                                 race = data['result'][str(
                                     set_idx * 2)]['r_name' + str(team_idx + 1)]
-                            player = data['result'][str(
-                                set_idx * 2)]['member_name' + str(team_idx + 1)]
+                            player = \
+                                data['result'][str(
+                                    set_idx * 2)]['member_name' +
+                                                  str(team_idx + 1)]
                             player = self._aliasPlayer(player)
-                            self._matchData.setPlayer(self._matchData.getSwappedIdx(team_idx),
-                                                      set_idx, player, race)
+                            self._matchData.setPlayer(
+                                self._matchData.getSwappedIdx(team_idx),
+                                set_idx, player, race)
                         except Exception:
                             pass
 
@@ -256,7 +266,8 @@ class MatchGrabber(MatchGrabberParent):
                     self._rawData['member' + str(idx)]['img_m'],
                     localFile=oldLogo.getAbsFile())
                 if new_logo:
-                    getattr(logoManager, 'setTeam{}Logo'.format(logo_idx))(logo)
+                    getattr(logoManager,
+                            'setTeam{}Logo'.format(logo_idx))(logo)
                 else:
                     module_logger.info("Logo download is not needed.")
             except Exception as e:

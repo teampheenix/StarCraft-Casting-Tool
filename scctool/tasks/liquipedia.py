@@ -33,16 +33,17 @@ class LiquipediaGrabber:
         r = requests.get(source)
 
         soup = BeautifulSoup(r.content, 'html.parser')
+        r = re.compile(
+            r'\((\d+,?\d*)\s+×\s+(\d+,?\d*)\s\((\d+)\s+([KM]*B)\)\)')
         try:
-            for result in soup.find("ul", class_="mw-search-results").find_all("li"):
+            for result in soup.find("ul",
+                                    class_="mw-search-results").find_all("li"):
                 try:
                     link = result.find("a", class_="image")
                     href = link['href']
                     thumb = link.find("img")['src']
                     data = result.find(
                         "div", class_="mw-search-result-data").contents[0]
-                    r = re.compile(
-                        r'\((\d+,?\d*)\s+×\s+(\d+,?\d*)\s\((\d+)\s+([KM]*B)\)\)')
                     data = r.match(data)
                     pixel = int(data.group(1).replace(",", "")) * \
                         int(data.group(2).replace(",", ""))
@@ -170,7 +171,8 @@ class LiquipediaMap:
         self._soup = soup
 
     def is_map(self):
-        return self._soup.find(href='/starcraft2/Template:Infobox_map') is not None
+        return self._soup.find(
+            href='/starcraft2/Template:Infobox_map') is not None
 
     def get_name(self):
         infobox = self._soup.find("div", class_="fo-nttax-infobox")

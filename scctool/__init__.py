@@ -103,7 +103,9 @@ def choose_language(app, translator):
 
     try:
         lang = gettext.translation(
-            'messages', localedir=scctool.settings.getLocalesDir(), languages=[language])
+            'messages',
+            localedir=scctool.settings.getLocalesDir(),
+            languages=[language])
     except Exception:
         lang = gettext.NullTranslations()
 

@@ -30,8 +30,11 @@ class MatchGrabber(MatchGrabberParent):
             raise ValueError(msg)
         else:
             self._rawData = data
-            overwrite = metaChange or self._matchData.getURL().strip() != self.getURL().strip()
-            with self._matchData.emitLock(overwrite, self._matchData.metaChangedSignal):
+            overwrite = (metaChange or
+                         self._matchData.getURL().strip() !=
+                         self.getURL().strip())
+            with self._matchData.emitLock(overwrite,
+                                          self._matchData.metaChangedSignal):
                 self._matchData.setNoSets(5, resetPlayers=overwrite)
                 self._matchData.setMinSets(3)
                 self._matchData.setSolo(False)
@@ -75,7 +78,8 @@ class MatchGrabber(MatchGrabberParent):
                     if not isinstance(tag, str):
                         tag = ""
                     self._matchData.setTeam(
-                        self._matchData.getSwappedIdx(team_idx), self._aliasTeam(name), tag)
+                        self._matchData.getSwappedIdx(team_idx),
+                        self._aliasTeam(name), tag)
 
                 for set_idx in range(5):
                     try:
@@ -105,7 +109,8 @@ class MatchGrabber(MatchGrabberParent):
                     self._rawData['team' + str(idx + 1)]['logo'],
                     localFile=oldLogo.getAbsFile())
                 if new_logo:
-                    getattr(logoManager, 'setTeam{}Logo'.format(logo_idx))(logo)
+                    getattr(logoManager,
+                            'setTeam{}Logo'.format(logo_idx))(logo)
                 else:
                     module_logger.info("Logo download is not needed.")
 

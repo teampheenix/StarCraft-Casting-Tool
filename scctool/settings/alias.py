@@ -16,7 +16,8 @@ class AliasManager:
     def loadJson(self):
         """Read json data from file."""
         try:
-            with open(getJsonFile('alias'), 'r', encoding='utf-8-sig') as json_file:
+            with open(getJsonFile('alias'), 'r',
+                      encoding='utf-8-sig') as json_file:
                 data = json.load(json_file)
         except Exception as e:
             data = dict()
@@ -36,7 +37,8 @@ class AliasManager:
         data['player'] = self.__player_alias
         data['team'] = self.__team_alias
         try:
-            with open(getJsonFile('alias'), 'w', encoding='utf-8-sig') as outfile:
+            with open(getJsonFile('alias'), 'w',
+                      encoding='utf-8-sig') as outfile:
                 json.dump(data, outfile)
         except Exception as e:
             module_logger.exception("message")

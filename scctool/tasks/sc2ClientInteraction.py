@@ -176,7 +176,8 @@ class SC2ApiThread(QThread):
                     # print("Providing player intros...")
                     self.controller.updatePlayerIntros(newData)
 
-                if(self.activeTask['updateScore'] and newData.isDecidedGame() and
+                if(self.activeTask['updateScore'] and
+                   newData.isDecidedGame() and
                    self.currentData != SC2MatchData()):
                     # print("Updating Score")
                     self.requestScoreUpdate.emit(newData)
@@ -191,7 +192,8 @@ class SC2ApiThread(QThread):
             module_logger.exception("message")
 
     def tryToggle(self, data):
-        """Wait until SC2 is in foreground and toggle production tab and score."""
+        """Wait until SC2 is in foreground and toggle"""
+        """production tab and score."""
         try:
             while self.exiting is False\
                 and (self.activeTask['toggleScore'] or
@@ -211,9 +213,11 @@ class SC2ApiThread(QThread):
             module_logger.info("Toggle not working on this OS.")
 
     def swapPlayers(self, data):
-        """Detect if players are swapped relative to SC2-Client-API data via ocr."""
+        """Detect if players are swapped relative"""
+        """to SC2-Client-API data via ocr."""
         try:
-            if(not scctool.settings.config.parser.getboolean("SCT", "use_ocr")):
+            if(not scctool.settings.config.parser.getboolean("SCT",
+                                                             "use_ocr")):
                 return False
 
             # Don't use OCR if the score is tied.
@@ -222,7 +226,8 @@ class SC2ApiThread(QThread):
                not scctool.settings.config.parser.getboolean("SCT", "CtrlX")):
                 return False
 
-            pytesseract.pytesseract.tesseract_cmd = scctool.settings.config.getTesserAct()
+            pytesseract.pytesseract.tesseract_cmd = \
+                scctool.settings.config.getTesserAct()
 
             players = data.getPlayerList()
             full_img = ImageGrab.grab().convert('L')
@@ -334,7 +339,8 @@ class SC2MatchData:
             self.time = 0
             self.ingame = False
 
-    def compare_returnScore(self, player1, player2, weak=False, translator=None):
+    def compare_returnScore(self, player1, player2, weak=False,
+                            translator=None):
         """Fuzzy compare playernames and return order and their score."""
         player1, player2 = player1.strip(), player2.strip()
         player1_notset = not player1 or player1.lower() == "tbd"
@@ -377,7 +383,8 @@ class SC2MatchData:
 
         return False, False, 0, -1
 
-    def compare_returnOrder(self, player1, player2, weak=False, translator=None):
+    def compare_returnOrder(self, player1, player2, weak=False,
+                            translator=None):
         """Fuzzy compare playernames and return the correct order."""
         found, inorder, _, _ = self.compare_returnScore(
             player1, player2, weak=weak, translator=translator)

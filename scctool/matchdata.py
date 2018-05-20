@@ -273,7 +273,8 @@ class matchData(QObject):
                 player = self.getPlayer(team_idx, set_idx).strip().lower()
                 if(player != "tbd" and player != ""):
                     continue
-                self.setPlayer(team_idx, set_idx, self.getPlayer(team_idx, set_idx - 1),
+                self.setPlayer(team_idx, set_idx, self.getPlayer(team_idx,
+                                                                 set_idx - 1),
                                self.getRace(team_idx, set_idx - 1))
                 return True
 
@@ -607,7 +608,9 @@ class matchData(QObject):
                 self.__data['players'][team_idx][set_idx]['name'] = name
                 self.__setsChanged[set_idx] = True
                 self.__emitSignal('data', 'player', {
-                                  'team_idx': team_idx, 'set_idx': set_idx, 'value': name})
+                                  'team_idx': team_idx,
+                                  'set_idx': set_idx,
+                                  'value': name})
 
             if(race):
                 self.setRace(team_idx, set_idx, race)
@@ -651,7 +654,9 @@ class matchData(QObject):
                 self.__data['players'][team_idx][set_idx]['race'] = race
                 self.__setsChanged[set_idx] = True
                 self.__emitSignal(
-                    'data', 'race', {'team_idx': team_idx, 'set_idx': set_idx, 'value': race})
+                    'data', 'race', {'team_idx': team_idx,
+                                     'set_idx': set_idx,
+                                     'value': race})
             return True
         except Exception:
             return False
@@ -677,7 +682,7 @@ class matchData(QObject):
                 self.__data['sets'][set_idx]['label'] = label
                 self.__setsChanged[set_idx] = True
                 self.__emitSignal('data', 'map_label', {
-                                  'set_idx': set_idx, 'value': name})
+                                  'set_idx': set_idx, 'value': label})
             return True
         except Exception:
             return False
@@ -819,12 +824,14 @@ class matchData(QObject):
         try:
 
             if(self.hasAnySetChanged()):
-                f = open(scctool.settings.getAbsPath(scctool.settings.OBSdataDir +
-                                                     "/lineup.txt"),
-                         mode='w', encoding='utf-8-sig')
-                f2 = open(scctool.settings.getAbsPath(scctool.settings.OBSdataDir +
-                                                      "/maps.txt"),
-                          mode='w', encoding='utf-8-sig')
+                f = open(scctool.settings.getAbsPath(
+                    scctool.settings.OBSdataDir +
+                    "/lineup.txt"),
+                    mode='w', encoding='utf-8-sig')
+                f2 = open(scctool.settings.getAbsPath(
+                    scctool.settings.OBSdataDir +
+                    "/maps.txt"),
+                    mode='w', encoding='utf-8-sig')
                 for idx in range(self.getNoSets()):
                     map = self.getMap(idx)
                     f.write(map + "\n")
@@ -845,66 +852,76 @@ class matchData(QObject):
                 except Exception:
                     score_str = "0 - 0"
 
-                f = open(scctool.settings.getAbsPath(scctool.settings.OBSdataDir +
-                                                     "/score.txt"), mode='w',
-                         encoding='utf-8-sig')
+                f = open(scctool.settings.getAbsPath(
+                    scctool.settings.OBSdataDir +
+                    "/score.txt"), mode='w',
+                    encoding='utf-8-sig')
                 f.write(score_str)
                 f.close()
 
-                f = open(scctool.settings.getAbsPath(scctool.settings.OBSdataDir +
-                                                     "/nextplayer1.txt"), mode='w',
-                         encoding='utf-8-sig')
+                f = open(scctool.settings.getAbsPath(
+                    scctool.settings.OBSdataDir +
+                    "/nextplayer1.txt"), mode='w',
+                    encoding='utf-8-sig')
                 f.write(self.getNextPlayer(0))
                 f.close()
 
-                f = open(scctool.settings.getAbsPath(scctool.settings.OBSdataDir +
-                                                     "/nextplayer2.txt"), mode='w',
-                         encoding='utf-8-sig')
+                f = open(scctool.settings.getAbsPath(
+                    scctool.settings.OBSdataDir +
+                    "/nextplayer2.txt"), mode='w',
+                    encoding='utf-8-sig')
                 f.write(self.getNextPlayer(1))
                 f.close()
 
-                f = open(scctool.settings.getAbsPath(scctool.settings.OBSdataDir +
-                                                     "/nextrace1.txt"), mode='w',
-                         encoding='utf-8-sig')
+                f = open(scctool.settings.getAbsPath(
+                    scctool.settings.OBSdataDir +
+                    "/nextrace1.txt"), mode='w',
+                    encoding='utf-8-sig')
                 f.write(self.getNextRace(0))
                 f.close()
 
-                f = open(scctool.settings.getAbsPath(scctool.settings.OBSdataDir +
-                                                     "/nextrace2.txt"), mode='w',
-                         encoding='utf-8-sig')
+                f = open(scctool.settings.getAbsPath(
+                    scctool.settings.OBSdataDir +
+                    "/nextrace2.txt"), mode='w',
+                    encoding='utf-8-sig')
                 f.write(self.getNextRace(1))
                 f.close()
 
             if(self.hasMetaChanged()):
 
-                f = open(scctool.settings.getAbsPath(scctool.settings.OBSdataDir +
-                                                     "/teams_vs_long.txt"),
-                         mode='w', encoding='utf-8-sig')
+                f = open(scctool.settings.getAbsPath(
+                    scctool.settings.OBSdataDir +
+                    "/teams_vs_long.txt"),
+                    mode='w', encoding='utf-8-sig')
                 f.write(self.getTeam(0) + ' vs ' + self.getTeam(1) + "\n")
                 f.close()
 
-                f = open(scctool.settings.getAbsPath(scctool.settings.OBSdataDir +
-                                                     "/teams_vs_short.txt"),
-                         mode='w', encoding='utf-8-sig')
+                f = open(scctool.settings.getAbsPath(
+                    scctool.settings.OBSdataDir +
+                    "/teams_vs_short.txt"),
+                    mode='w', encoding='utf-8-sig')
                 f.write(self.getTeamTag(0) + ' vs ' +
                         self.getTeamTag(1) + "\n")
                 f.close()
 
-                f = open(scctool.settings.getAbsPath(scctool.settings.OBSdataDir +
-                                                     "/team1.txt"),
-                         mode='w', encoding='utf-8-sig')
+                f = open(scctool.settings.getAbsPath(
+                    scctool.settings.OBSdataDir +
+                    "/team1.txt"),
+                    mode='w', encoding='utf-8-sig')
                 f.write(self.getTeam(0))
                 f.close()
 
-                f = open(scctool.settings.getAbsPath(scctool.settings.OBSdataDir +
-                                                     "/team2.txt"),
-                         mode='w', encoding='utf-8-sig')
+                f = open(scctool.settings.getAbsPath(
+                    scctool.settings.OBSdataDir +
+                    "/team2.txt"),
+                    mode='w', encoding='utf-8-sig')
                 f.write(self.getTeam(1))
                 f.close()
 
-                f = open(scctool.settings.getAbsPath(scctool.settings.OBSdataDir +
-                                                     "/tournament.txt"),
-                         mode='w', encoding='utf-8-sig')
+                f = open(scctool.settings.getAbsPath(
+                    scctool.settings.OBSdataDir +
+                    "/tournament.txt"),
+                    mode='w', encoding='utf-8-sig')
                 f.write(self.getLeague())
                 f.close()
 
@@ -969,13 +986,17 @@ class matchData(QObject):
         team = 2 * team_idx - 1
         if score == 0:
             if max(self.getScore()) > int(self.getBestOf() / 2):
-                return scctool.settings.config.parser.get("MapIcons", "notplayed_color")
+                return scctool.settings.config.parser.get("MapIcons",
+                                                          "notplayed_color")
             else:
-                return scctool.settings.config.parser.get("MapIcons", "undecided_color")
+                return scctool.settings.config.parser.get("MapIcons",
+                                                          "undecided_color")
         elif score == team:
-            return scctool.settings.config.parser.get("MapIcons", "win_color")
+            return scctool.settings.config.parser.get("MapIcons",
+                                                      "win_color")
         else:
-            return scctool.settings.config.parser.get("MapIcons", "lose_color")
+            return scctool.settings.config.parser.get("MapIcons",
+                                                      "lose_color")
 
     def updateMapIcons(self):
         """Update map icons."""
@@ -1056,14 +1077,18 @@ class matchData(QObject):
 
                 websocket_data[i + 1] = data
                 data['vars'] = "--winner-color: {};".format(
-                    scctool.settings.config.parser.get("MapIcons", "winner_highlight_color"))
-                if scctool.settings.config.parser.getboolean("Style", "use_custom_font"):
+                    scctool.settings.config.parser.get(
+                        "MapIcons", "winner_highlight_color"))
+                if scctool.settings.config.parser.getboolean(
+                        "Style", "use_custom_font"):
                     data['font'] = "font-family: {};".format(
-                        scctool.settings.config.parser.get("Style", "custom_font"))
+                        scctool.settings.config.parser.get("Style",
+                                                           "custom_font"))
 
                 dataFile = scctool.settings.OBSmapDir + \
                     "/icons_box/data/" + str(i + 1) + ".html"
-                templateFile = scctool.settings.OBSmapDir + "/icons_box/data/template.html"
+                templateFile = scctool.settings.OBSmapDir + \
+                    "/icons_box/data/template.html"
 
                 self._useTemplate(templateFile, dataFile, data)
 
@@ -1077,12 +1102,15 @@ class matchData(QObject):
             for i in range(self.getNoSets(), scctool.settings.max_no_sets):
                 data = dict()
                 data['hidden'] = 'visibility: hidden;'
-                if scctool.settings.config.parser.getboolean("Style", "use_custom_font"):
+                if scctool.settings.config.parser.getboolean(
+                        "Style", "use_custom_font"):
                     data['font'] = "font-family: {};".format(
-                        scctool.settings.config.parser.get("Style", "custom_font"))
+                        scctool.settings.config.parser.get("Style",
+                                                           "custom_font"))
                 dataFile = scctool.settings.OBSmapDir + \
                     "/icons_box/data/" + str(i + 1) + ".html"
-                templateFile = scctool.settings.OBSmapDir + "/icons_box/data/template.html"
+                templateFile = scctool.settings.OBSmapDir +\
+                    "/icons_box/data/template.html"
                 self._useTemplate(templateFile, dataFile, data)
 
                 dataFile = scctool.settings.OBSmapDir + \
@@ -1103,9 +1131,10 @@ class matchData(QObject):
             return
 
         try:
-            filename_old = scctool.settings.OBShtmlDir + "/data/" +\
+            filename_old = scctool.settings.OBShtmlDir + "/data/" + \
                 self.getProvider() + ".html"
-            filename_new = scctool.settings.OBShtmlDir + "/data/league-data.html"
+            filename_new = scctool.settings.OBShtmlDir + \
+                "/data/league-data.html"
             shutil.copy(scctool.settings.getAbsPath(filename_old),
                         scctool.settings.getAbsPath(filename_new))
 

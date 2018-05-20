@@ -70,7 +70,8 @@ class MatchFormatPsi(MatchFormat):
     def __init__(self, *args):
         """Init match grabber."""
         super().__init__(*args)
-        self._url = "http://liquipedia.net/starcraft2/PSISTORM_Gaming_Team_League"
+        self._url = "http://liquipedia.net/starcraft2" + \
+            "PSISTORM_Gaming_Team_League"
 
     def applyFormat(self):
         self._matchData.setCustom(5, False, False)
