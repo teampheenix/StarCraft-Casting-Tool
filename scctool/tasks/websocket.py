@@ -151,6 +151,11 @@ class WebsocketThread(QThread):
             self.changeFont(path)
             data = self.__controller.matchData.getScoreData()
             self.sendData2WS(websocket, "ALL_DATA", data)
+        elif self.get_primary_scope(path) == 'mapicons_box':
+            data = self.__controller.matchData.getMapIconsData()
+            self.sendData2WS(websocket, 'DATA', data)
+        else:
+            print(path)
 
         while True:
             try:

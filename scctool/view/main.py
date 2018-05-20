@@ -144,7 +144,8 @@ class MainWindow(QMainWindow):
             apiAct = QAction(QIcon(scctool.settings.getResFile(
                 'twitch.png')), _('Twitch && Nightbot'), self)
             apiAct.setToolTip(
-                _('Edit Intro-Settings and API-Settings for Twitch and Nightbot'))
+                _('Edit Intro-Settings and API-Settings'
+                  ' for Twitch and Nightbot'))
             apiAct.triggered.connect(self.openApiDialog)
             settingsMenu.addAction(apiAct)
             styleAct = QAction(QIcon(scctool.settings.getResFile(
@@ -279,8 +280,9 @@ class MainWindow(QMainWindow):
                 scctool.settings.OBShtmlDir, src['file'])
             myMenu = QMenu(src['name'], self)
             act = QAction(_('Open in Browser'), self)
-            act.triggered.connect(lambda x, file=src['file']: self.controller.openURL(
-                scctool.settings.getAbsPath(file)))
+            act.triggered.connect(lambda x,
+                                  file=src['file']: self.controller.openURL(
+                                      scctool.settings.getAbsPath(file)))
             myMenu.addAction(act)
             act = QAction(_('Copy URL to Clipboard'), self)
             act.triggered.connect(lambda x, file=src['file']:
@@ -375,7 +377,8 @@ class MainWindow(QMainWindow):
 
             completer = QCompleter(
                 ["http://alpha.tl/match/",
-                 "http://hdgame.net/en/tournaments/list/tournament/rstl-13/"], self.le_url)
+                 "http://hdgame.net/en/tournaments/list/tournament/rstl-13/"],
+                self.le_url)
             completer.setCaseSensitivity(Qt.CaseInsensitive)
             completer.setCompletionMode(
                 QCompleter.UnfilteredPopupCompletion)
@@ -457,9 +460,9 @@ class MainWindow(QMainWindow):
             for idx in range(0, scctool.settings.max_no_sets):
                 self.cb_bestof.addItem(str(idx + 1))
             self.cb_bestof.setCurrentIndex(3)
-            string = _('"Best of 6/4": First, a Bo5/3 is played and the ace map ' +
-                       'gets extended to a Bo3 if needed; Best of 2: Bo3 with ' +
-                       'only two maps played.')
+            string = _('"Best of 6/4": First, a Bo5/3 is played and the'
+                       ' ace map gets extended to a Bo3 if needed;'
+                       ' Best of 2: Bo3 with only two maps played.')
             self.cb_bestof.setToolTip(string)
             self.cb_bestof.setMaximumWidth(40)
             self.cb_bestof.currentIndexChanged.connect(self.changeBestOf)
@@ -470,7 +473,8 @@ class MainWindow(QMainWindow):
             self.cb_minSets = QComboBox()
 
             self.cb_minSets.setToolTip(
-                _('Minimum number of maps played (even if the match is decided already)'))
+                _('Minimum number of maps played (even if the match'
+                  ' is decided already)'))
             self.cb_minSets.setMaximumWidth(40)
             container.addWidget(self.cb_minSets, 0)
             container.addWidget(
@@ -481,7 +485,8 @@ class MainWindow(QMainWindow):
             self.cb_allkill = QCheckBox(_("All-Kill Format"))
             self.cb_allkill.setChecked(False)
             self.cb_allkill.setToolTip(
-                _('Winner stays and is automatically placed into the next set'))
+                _('Winner stays and is automatically'
+                  ' placed into the next set'))
             self.cb_allkill.stateChanged.connect(self.allkill_change)
             container.addWidget(self.cb_allkill, 0)
 
@@ -532,7 +537,8 @@ class MainWindow(QMainWindow):
             self.le_url_custom = MonitoredLineEdit()
             self.le_url_custom.setAlignment(Qt.AlignCenter)
             self.le_url_custom.setToolTip(
-                _('Optionally specify the Match-URL, e.g., for Nightbot commands'))
+                _('Optionally specify the Match-URL,'
+                  ' e.g., for Nightbot commands'))
             self.le_url_custom.setPlaceholderText(
                 _("Specify the Match-URL of your Custom Match"))
 
@@ -756,15 +762,20 @@ class MainWindow(QMainWindow):
                 self.le_map[player_idx].textModified.connect(
                     lambda player_idx=player_idx: self.map_changed(player_idx))
                 for team_idx in range(2):
-                    self.cb_race[team_idx][player_idx].currentIndexChanged.connect(
-                        lambda idx, t=team_idx, p=player_idx: self.race_changed(t, p))
+                    self.cb_race[team_idx][player_idx].\
+                        currentIndexChanged.connect(
+                        lambda idx,
+                        t=team_idx,
+                        p=player_idx: self.race_changed(t, p))
                     self.le_player[team_idx][player_idx].textModified.connect(
-                        lambda t=team_idx, p=player_idx: self.player_changed(t, p))
+                        lambda t=team_idx,
+                        p=player_idx: self.player_changed(t, p))
                     self.le_player[team_idx][player_idx].setText("TBD")
                     self.le_player[team_idx][player_idx].setAlignment(
                         Qt.AlignCenter)
                     self.le_player[team_idx][player_idx].setPlaceholderText(
-                        _("Player {} of team {}").format(player_idx + 1, team_idx + 1))
+                        _("Player {} of team {}").format(player_idx + 1,
+                                                         team_idx + 1))
                     self.le_player[team_idx][player_idx].setMinimumWidth(
                         self.mimumLineEditWidth)
 
@@ -783,7 +794,8 @@ class MainWindow(QMainWindow):
                     QSlider.TicksBothSides)
                 self.sl_score[player_idx].setTickInterval(1)
                 self.sl_score[player_idx].valueChanged.connect(
-                    lambda x, player_idx=player_idx: self.sl_changed(player_idx, x))
+                    lambda x,
+                    player_idx=player_idx: self.sl_changed(player_idx, x))
                 self.sl_score[player_idx].setToolTip(_('Set the score'))
                 self.sl_score[player_idx].setFixedWidth(self.scoreWidth)
 
@@ -805,7 +817,9 @@ class MainWindow(QMainWindow):
                     _("Select map on Mapstats Browser Source."))
                 self.label_set[player_idx].setEnabled(False)
                 self.label_set[player_idx].clicked.connect(
-                    lambda x, player_idx=player_idx: self.controller.showMap(player_idx))
+                    lambda x,
+                    player_idx=player_idx:
+                    self.controller.showMap(player_idx))
                 self.label_set[player_idx].setFixedWidth(self.labelWidth)
                 self.setContainer[player_idx].addWidget(
                     self.label_set[player_idx], 0)
@@ -881,8 +895,10 @@ class MainWindow(QMainWindow):
             self.cb_autoUpdate = QCheckBox(
                 _("Auto Score Update"))
             self.cb_autoUpdate.setChecked(False)
-            string = _('Automatically detects the outcome of SC2 matches that are ' +
-                       'played/observed in your SC2-client and updates the score accordingly.')
+            string = _('Automatically detects the outcome' +
+                       ' of SC2 matches that are ' +
+                       'played/observed in your SC2-client' +
+                       ' and updates the score accordingly.')
             self.cb_autoUpdate.setToolTip(string)
             self.cb_autoUpdate.stateChanged.connect(self.autoUpdate_change)
 
@@ -1032,11 +1048,12 @@ class MainWindow(QMainWindow):
         try:
             with self.tlock:
                 self.statusBar().showMessage(_('Applying Custom Match...'))
-                msg = self.controller.applyCustom(int(self.cb_bestof.currentText()),
-                                                  self.cb_allkill.isChecked(),
-                                                  self.cb_solo.isChecked(),
-                                                  int(self.cb_minSets.currentText()),
-                                                  self.le_url_custom.text().strip())
+                msg = self.controller.applyCustom(
+                    int(self.cb_bestof.currentText()),
+                    self.cb_allkill.isChecked(),
+                    self.cb_solo.isChecked(),
+                    int(self.cb_minSets.currentText()),
+                    self.le_url_custom.text().strip())
                 self.statusBar().showMessage(msg)
             self.highlightApplyCustom(False)
         except Exception as e:
@@ -1176,7 +1193,8 @@ class MainWindow(QMainWindow):
                     self.player_changed(team_idx, p_idx)
             self.controller.historyManager.insertPlayer(player, race)
             self.controller.matchData.setPlayer(
-                team_idx, player_idx, self.le_player[team_idx][player_idx].text())
+                team_idx, player_idx,
+                self.le_player[team_idx][player_idx].text())
 
             if race == 0:
                 new_race = scctool.settings.race2idx(
@@ -1199,8 +1217,10 @@ class MainWindow(QMainWindow):
         player = self.le_player[team_idx][player_idx].text().strip()
         race = self.cb_race[team_idx][player_idx].currentIndex()
         self.controller.historyManager.insertPlayer(player, race)
-        self.controller.matchData.setRace(team_idx, player_idx, scctool.settings.idx2race(
-            self.cb_race[team_idx][player_idx].currentIndex()))
+        self.controller.matchData.setRace(
+            team_idx, player_idx,
+            scctool.settings.idx2race(
+                self.cb_race[team_idx][player_idx].currentIndex()))
         try:
             if(player_idx == 0 and self.controller.matchData.getSolo()):
                 idx = self.cb_race[team_idx][0].currentIndex()

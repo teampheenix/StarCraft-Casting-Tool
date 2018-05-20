@@ -77,13 +77,18 @@ class matchData(QObject):
                 if self.isDecided():
                     color = scctool.settings.config.parser.get(
                         "MapIcons", "notplayed_color")
+                    color2 = color
                 else:
                     color = scctool.settings.config.parser.get(
                         "MapIcons", "undecided_color")
+                    color2 = scctool.settings.config.parser.get(
+                        "MapIcons", "default_border_color")
                 for idx in range(self.getNoSets()):
                     if self.getMapScore(idx) == 0:
                         self.__emitSignal('data', 'color', {
-                                          'set_idx': idx, 'color': color})
+                                          'set_idx': idx,
+                                          'color': color,
+                                          'color2': color2})
 
     def readJsonFile(self):
         """Read json data from file."""
@@ -986,17 +991,118 @@ class matchData(QObject):
         team = 2 * team_idx - 1
         if score == 0:
             if max(self.getScore()) > int(self.getBestOf() / 2):
-                return scctool.settings.config.parser.get("MapIcons",
-                                                          "notplayed_color")
+                return scctool.settings.config.parser.get(
+                    "MapIcons",
+                    "notplayed_color")
             else:
-                return scctool.settings.config.parser.get("MapIcons",
-                                                          "undecided_color")
+                return scctool.settings.config.parser.get(
+                    "MapIcons",
+                    "undecided_color")
         elif score == team:
-            return scctool.settings.config.parser.get("MapIcons",
-                                                      "win_color")
+            return scctool.settings.config.parser.get(
+                "MapIcons",
+                "win_color")
         else:
-            return scctool.settings.config.parser.get("MapIcons",
-                                                      "lose_color")
+            return scctool.settings.config.parser.get(
+                "MapIcons",
+                "lose_color")
+
+    def getBorderColor(self, set_idx):
+        score = self.getMapScore(set_idx)
+        team = self.getMyTeam()
+        won = score * team
+        if max(self.getScore()) > int(self.getBestOf() / 2):
+            return scctool.settings.config.parser.get(
+                "MapIcons",
+                "notplayed_color")
+        elif won == 1:
+            return scctool.settings.config.parser.get(
+                "MapIcons",
+                "win_color")
+        elif won == -1:
+            return scctool.settings.config.parser.get(
+                "MapIcons",
+                "lose_color")
+        else:
+            return scctool.settings.config.parser.get(
+                "MapIcons",
+                "default_border_color")
+
+    def getMapIconsData(self):
+        """Update map icons."""
+        websocket_data = dict()
+        try:
+            team = self.getMyTeam()
+            score = [0, 0]
+
+            if(team == 0):
+                landscape_score_hide = ";display: none"
+            else:
+                landscape_score_hide = ""
+
+            for i in range(self.getNoSets()):
+                winner = self.getMapScore(i)
+                won = winner * team
+                opacity = "0.0"
+
+                threshold = int(self.getBestOf() / 2)
+
+                if(max(score) > threshold and i >= self.getMinSets()):
+                    border_color = scctool.settings.config.parser.get(
+                        "MapIcons", "notplayed_color")
+                    score_color = scctool.settings.config.parser.get(
+                        "MapIcons", "notplayed_color")
+                    opacity = scctool.settings.config.parser.get(
+                        "MapIcons", "notplayed_opacity")
+                    winner = 0
+                elif(won == 1):
+                    border_color = scctool.settings.config.parser.get(
+                        "MapIcons", "win_color")
+                    score_color = scctool.settings.config.parser.get(
+                        "MapIcons", "win_color")
+                elif(won == -1):
+                    border_color = scctool.settings.config.parser.get(
+                        "MapIcons", "lose_color")
+                    score_color = scctool.settings.config.parser.get(
+                        "MapIcons", "lose_color")
+                else:
+                    border_color = scctool.settings.config.parser.get(
+                        "MapIcons", "default_border_color")
+                    score_color = scctool.settings.config.parser.get(
+                        "MapIcons", "undecided_color")
+
+                if(winner == -1):
+                    player1status = 'winner'
+                    player2status = 'loser'
+                    score[0] += 1
+                elif(winner == 1):
+                    player1status = 'loser'
+                    player2status = 'winner'
+                    score[1] += 1
+                else:
+                    player1status = ''
+                    player2status = ''
+
+                data = dict()
+                data['player1'] = self.getPlayer(0, i)
+                data['player2'] = self.getPlayer(1, i)
+                data['race1'] = self.getRace(0, i).lower()
+                data['race2'] = self.getRace(1, i).lower()
+                data['map_img'] = self.__controller.getMapImg(self.getMap(i))
+                data['map_name'] = self.getMap(i)
+                data['map_id'] = self.getLabel(i)
+                data['score_color'] = score_color + landscape_score_hide
+                data['border_color'] = border_color
+                data['opacity'] = opacity
+                data['status1'] = player1status
+                data['status2'] = player2status
+
+                websocket_data[i + 1] = data
+
+        except Exception as e:
+            module_logger.exception("message")
+
+        return websocket_data
 
     def updateMapIcons(self):
         """Update map icons."""
@@ -1119,8 +1225,8 @@ class matchData(QObject):
                     "/icons_landscape/data/template.html"
                 self._useTemplate(templateFile, dataFile, data)
 
-            self.__controller.websocketThread.sendData2Path(
-                'mapicons_box', 'DATA', websocket_data)
+            # self.__controller.websocketThread.sendData2Path(
+            #     'mapicons_box', 'DATA', websocket_data)
 
         except Exception as e:
             module_logger.exception("message")

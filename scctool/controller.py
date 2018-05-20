@@ -781,6 +781,8 @@ class MainController:
     def matchMetaDataChanged(self):
         data = self.matchData.getScoreData()
         self.websocketThread.sendData2Path("score", "ALL_DATA", data)
+        data = self.matchData.getMapIconsData()
+        self.websocketThread.sendData2Path('mapicons_box', 'DATA', data)
 
     def handleMatchDataChange(self, label, object):
         print(label, object)
@@ -792,29 +794,35 @@ class MainController:
         elif label == 'score':
             score = self.matchData.getScore()
             for idx in range(0, 2):
-                self.websocketThread.sendData2Path('score', 'CHANGE_TEXT', {
-                                                   'id':
-                                                   'score{}'.format(idx + 1),
-                                                   'text':
-                                                   str(score[idx])})
+                self.websocketThread.sendData2Path(
+                    'score', 'CHANGE_TEXT', {
+                        'id': 'score{}'.format(idx + 1),
+                        'text': str(score[idx])})
                 color = self.matchData.getScoreIconColor(
                     idx, object['set_idx'])
-                self.websocketThread.sendData2Path('score', 'CHANGE_SCORE', {
-                                                   'teamid':
-                                                   idx + 1,
-                                                   'setid':
-                                                   object['set_idx'] + 1,
-                                                   'color':
-                                                   color})
+                self.websocketThread.sendData2Path(
+                    'score', 'CHANGE_SCORE', {
+                        'teamid': idx + 1,
+                        'setid': object['set_idx'] + 1,
+                        'color': color})
+            color = self.matchData.getBorderColor(object['set_idx'])
+            self.websocketThread.sendData2Path(
+                'mapicons_box', 'CHANGE_SCORE', {
+                    'winner': object['value'],
+                    'setid': object['set_idx'] + 1,
+                    'color': color})
         elif label == 'color':
             for idx in range(0, 2):
-                self.websocketThread.sendData2Path('score', 'CHANGE_SCORE', {
-                                                   'teamid':
-                                                   idx + 1,
-                                                   'setid':
-                                                   object['set_idx'] + 1,
-                                                   'color':
-                                                   object['color']})
+                self.websocketThread.sendData2Path(
+                    'score', 'CHANGE_SCORE', {
+                        'teamid': idx + 1,
+                        'setid': object['set_idx'] + 1,
+                        'color': object['color']})
+            self.websocketThread.sendData2Path(
+                'mapicons_box', 'CHANGE_SCORE', {
+                    'winner': 0,
+                    'setid': object['set_idx'] + 1,
+                    'color': object['color2']})
         elif label == 'outcome':
             self.websocketThread.sendData2Path('score', 'SET_WINNER', object)
 
