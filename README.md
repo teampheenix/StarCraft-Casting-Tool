@@ -1,5 +1,6 @@
 [![Release](https://img.shields.io/github/release/teampheenix/StarCraft-Casting-Tool.svg)](https://github.com/teampheenix/StarCraft-Casting-Tool/releases/latest)
 ![GitHub (Pre-)Release Date](https://img.shields.io/github/release-date-pre/teampheenix/StarCraft-Casting-Tool.svg)
+![Downloads](https://img.shields.io/github/downloads/teampheenix/StarCraft-Casting-Tool/total.svg)
 ![GitHub last commit](https://img.shields.io/github/last-commit/teampheenix/StarCraft-Casting-Tool.svg)
 [![GitHub license](https://img.shields.io/github/license/teampheenix/StarCraft-Casting-Tool.svg)](https://github.com/teampheenix/StarCraft-Casting-Tool/blob/master/LICENSE)
 [![Discord](https://img.shields.io/discord/408901724355559435.svg)](https://discord.gg/G9hFEfh)
