@@ -9,8 +9,12 @@
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
+:root {
+  --font: OrbitronAdv, Orbitron;
+}
+
 body {
-  font-family: OrbitronAdv, Orbitron;
+  font-family: var(--font);
 }
 
 .image {
@@ -32,13 +36,13 @@ body {
 
 div.upper-panel {
   position: absolute;
-  height: 33px;
+  height: 35px;
   width: 100%;
   top: 0px;
   left: 0px;
   padding-bottom: 5px;
-  padding-left: 5px;
-  padding-right: 5px;
+  padding-left: 8px;
+  padding-right: 8px;
   white-space: nowrap;
   overflow: hidden;
   background: rgba(0, 0, 0, 0.6);
@@ -66,13 +70,13 @@ div.lower-panel {
 div.data {
   position: absolute;
   color: white;
-  font-size: 25px;
   font-weight: bold;
   background: none;
   padding: 4px;
   --outline-size: 2.5px;
   text-shadow: 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black;
   -webkit-font-smoothing: antialiased;
+  white-space: nowrap;
 }
 
 .winner {
@@ -132,24 +136,25 @@ div.opa {
   opacity: 0.0;
 }
 
-div.race-left {
+div.race1 {
   position: absolute;
   top: 75px;
   height: 100px;
-  left: 2px;
-  width: 100px;
+  left: -5px;
+  width: 110px;
+  ;
   background-repeat: no-repeat;
   background-position: center center;
   background-size: contain;
   filter: drop-shadow(0px 0px 3px white);
 }
 
-div.race-right {
+div.race2 {
   position: absolute;
   top: 75px;
   height: 100px;
-  right: 2px;
-  width: 100px;
+  right: -5px;
+  width: 110px;
   background-repeat: no-repeat;
   background-position: center center;
   background-size: contain;
@@ -164,8 +169,6 @@ div.race-right {
   background-image: url('../../img/races/Zerg.png');
   top: 70px;
   height: 110px;
-  width: 110px;
-  right: -3px;
 }
 
 #terran {
@@ -174,4 +177,6 @@ div.race-right {
 
 #random {
   background-image: url('../../img/races/Random.png');
+  top: 80px;
+  height: 90px;
 }

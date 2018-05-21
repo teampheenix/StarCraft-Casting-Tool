@@ -132,13 +132,20 @@ function setWinner(winner) {
   if (winner == 0) {
     $('#team1').removeClass('winner');
     $('#team2').removeClass('winner');
+    data['winner'][0] = false;
+    data['winner'][1] = false;
   } else if (winner == 1) {
     $('#team2').addClass('winner');
     $('#team1').removeClass('winner');
+    data['winner'][0] = false;
+    data['winner'][1] = true;
   } else if (winner == -1) {
     $('#team1').addClass('winner');
     $('#team2').removeClass('winner');
+    data['winner'][0] = true;
+    data['winner'][1] = false;
   }
+  storeData('data');
 }
 
 function insertIcons() {
@@ -174,7 +181,6 @@ function initHide() {
 
 function initAnimation(force = true) {
   if (!tweenInitial.isActive() && initNeeded) {
-    console.log(1);
     insertData();
     tweenInitial = new TimelineMax();
     tweenInitial.delay(0.5)
@@ -215,10 +221,8 @@ function initAnimation(force = true) {
       }, 0.0, '-=0.50');
     initNeeded = false;
   } else if (force && !tweenInitial.isActive()) {
-    console.log(2);
     outroAnimation();
   } else if (force) {
-    console.log(3);
     setTimeout(function() {
       initAnimation();
     }, 1000);
@@ -295,6 +299,12 @@ function changeImage(id, new_value) {
 function changeScoreIcon(team, set, color) {
   var id = '#circle-' + team.toString() + '-' + set.toString();
   var object = $(id);
+  if (data['sets'][set][team] == color) {
+    return;
+  } else {
+    data['sets'][set][team] = color;
+    storeData('data');
+  }
   if (tweens[id] && tweens[id].isActive()) {
     tweens[id].kill();
   }

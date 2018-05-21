@@ -116,7 +116,8 @@ class SubwindowStyles(QWidget):
             container = QHBoxLayout()
             self.qb_landscapeStyle = StyleComboBox(
                 scctool.settings.OBSmapDir + "/src/css/landscape_styles",
-                scctool.settings.config.parser.get("Style", "mapicon_landscape"))
+                scctool.settings.config.parser.get(
+                    "Style", "mapicon_landscape"))
             self.qb_landscapeStyle.currentIndexChanged.connect(self.changed)
             button = QPushButton(_("Show in Browser"))
             button.clicked.connect(lambda: self.openHTML(
@@ -192,7 +193,8 @@ class SubwindowStyles(QWidget):
     def applyStyles(self):
         """Apply styles."""
         self.qb_landscapeStyle.apply(
-            self.controller, scctool.settings.OBSmapDir + "/src/css/landscape.css")
+            self.controller,
+            scctool.settings.OBSmapDir + "/src/css/landscape.css")
 
         self.qb_scoreStyle.applyWebsocket(self.controller, 'score')
         self.qb_introStyle.applyWebsocket(self.controller, 'intro')
@@ -208,7 +210,9 @@ class SubwindowStyles(QWidget):
         layout = QVBoxLayout()
         self.default_color = ColorLayout(
             self, _("Default Border:"),
-            scctool.settings.config.parser.get("MapIcons", "default_border_color"), "#f29b00")
+            scctool.settings.config.parser.get(
+                "MapIcons", "default_border_color"),
+            "#f29b00")
         layout.addLayout(self.default_color)
         self.winner_color = ColorLayout(
             self, _("Winner Highlight:"),
@@ -218,19 +222,23 @@ class SubwindowStyles(QWidget):
         layout.addLayout(self.winner_color)
         self.win_color = ColorLayout(
             self, _("Win:"),
-            scctool.settings.config.parser.get("MapIcons", "win_color"), "#008000")
+            scctool.settings.config.parser.get("MapIcons", "win_color"),
+            "#008000")
         layout.addLayout(self.win_color)
         self.lose_color = ColorLayout(
             self, _("Lose:"),
-            scctool.settings.config.parser.get("MapIcons", "lose_color"), "#f22200")
+            scctool.settings.config.parser.get("MapIcons", "lose_color"),
+            "#f22200")
         layout.addLayout(self.lose_color)
         self.undecided_color = ColorLayout(
             self, _("Undecided:"),
-            scctool.settings.config.parser.get("MapIcons", "undecided_color"), "#aaaaaa")
+            scctool.settings.config.parser.get("MapIcons", "undecided_color"),
+            "#aaaaaa")
         layout.addLayout(self.undecided_color)
         self.notplayed_color = ColorLayout(
             self, _("Not played:"),
-            scctool.settings.config.parser.get("MapIcons", "notplayed_color"), "#aaaaaa")
+            scctool.settings.config.parser.get("MapIcons", "notplayed_color"),
+            "#aaaaaa")
         layout.addLayout(self.notplayed_color)
         box.setLayout(layout)
         mainLayout.addWidget(box)
@@ -239,11 +247,13 @@ class SubwindowStyles(QWidget):
         layout = QVBoxLayout()
         self.mapstats_color1 = ColorLayout(
             self, _("Color 1:"),
-            scctool.settings.config.parser.get("Mapstats", "color1"), "#6495ed")
+            scctool.settings.config.parser.get("Mapstats", "color1"),
+            "#6495ed")
         layout.addLayout(self.mapstats_color1)
         self.mapstats_color2 = ColorLayout(
             self, _("Color 2:"),
-            scctool.settings.config.parser.get("Mapstats", "color2"), "#000000")
+            scctool.settings.config.parser.get("Mapstats", "color2"),
+            "#000000")
         layout.addLayout(self.mapstats_color2)
         box.setLayout(layout)
         mainLayout.addWidget(box)
@@ -256,8 +266,9 @@ class SubwindowStyles(QWidget):
         layout = QGridLayout()
 
         label = QLabel(
-            _("Warning: Using a custom font instead of the regular font defined"
-              " in the Icon Styles can lead to unitentional appereance.") +
+            _("Warning: Using a custom font instead of the regular font"
+              " defined in the Icon Styles can lead to unitentional"
+              " appereance.") +
             _("The proper way is to create a custom skin."))
         label.setWordWrap(True)
         label.setAlignment(Qt.AlignJustify)
@@ -266,7 +277,9 @@ class SubwindowStyles(QWidget):
         label.setMinimumWidth(110)
         self.cb_usefont = QCheckBox(" ")
         self.cb_usefont.setChecked(
-            scctool.settings.config.parser.getboolean("Style", "use_custom_font"))
+            scctool.settings.config.parser.getboolean(
+                "Style",
+                "use_custom_font"))
         self.cb_usefont.stateChanged.connect(self.changed)
         layout.addWidget(label, 0, 0, alignment=Qt.AlignVCenter)
         layout.addWidget(self.cb_usefont, 0, 1,
@@ -303,39 +316,54 @@ class SubwindowStyles(QWidget):
         """Save data."""
         if(self.__dataChanged):
             scctool.settings.config.parser.set(
-                "MapIcons", "default_border_color", self.default_color.getColor())
+                "MapIcons", "default_border_color",
+                self.default_color.getColor())
             scctool.settings.config.parser.set(
-                "MapIcons", "undecided_color", self.undecided_color.getColor())
+                "MapIcons", "undecided_color",
+                self.undecided_color.getColor())
             scctool.settings.config.parser.set(
-                "MapIcons", "winner_highlight_color", self.winner_color.getColor())
+                "MapIcons", "winner_highlight_color",
+                self.winner_color.getColor())
             scctool.settings.config.parser.set(
-                "MapIcons", "win_color", self.win_color.getColor())
+                "MapIcons", "win_color",
+                self.win_color.getColor())
             scctool.settings.config.parser.set(
-                "MapIcons", "lose_color", self.lose_color.getColor())
+                "MapIcons", "lose_color",
+                self.lose_color.getColor())
             scctool.settings.config.parser.set(
-                "MapIcons", "notplayed_color", self.notplayed_color.getColor())
+                "MapIcons", "notplayed_color",
+                self.notplayed_color.getColor())
 
             scctool.settings.config.parser.set(
-                "Mapstats", "color1", self.mapstats_color1.getColor())
+                "Mapstats", "color1",
+                self.mapstats_color1.getColor())
             scctool.settings.config.parser.set(
-                "Mapstats", "color2", self.mapstats_color2.getColor())
+                "Mapstats", "color2",
+                self.mapstats_color2.getColor())
 
             scctool.settings.config.parser.set(
-                "Style", "mapicon_landscape", self.qb_landscapeStyle.currentText())
+                "Style", "mapicon_landscape",
+                self.qb_landscapeStyle.currentText())
             scctool.settings.config.parser.set(
-                "Style", "mapicon_box", self.qb_boxStyle.currentText())
+                "Style", "mapicon_box",
+                self.qb_boxStyle.currentText())
             scctool.settings.config.parser.set(
-                "Style", "score", self.qb_scoreStyle.currentText())
+                "Style", "score",
+                self.qb_scoreStyle.currentText())
             scctool.settings.config.parser.set(
-                "Style", "intro", self.qb_introStyle.currentText())
+                "Style", "intro",
+                self.qb_introStyle.currentText())
             scctool.settings.config.parser.set(
-                "Style", "mapstats", self.qb_mapstatsStyle.currentText())
+                "Style", "mapstats",
+                self.qb_mapstatsStyle.currentText())
 
             scctool.settings.config.parser.set(
-                "Style", "use_custom_font", str(self.cb_usefont.isChecked()))
+                "Style", "use_custom_font",
+                str(self.cb_usefont.isChecked()))
 
             scctool.settings.config.parser.set(
-                "Style", "custom_font", self.cb_font.currentText().strip())
+                "Style", "custom_font",
+                self.cb_font.currentText().strip())
 
             self.mainWindow.highlightOBSupdate()
             self.controller.matchData.allChanged()
@@ -343,7 +371,7 @@ class SubwindowStyles(QWidget):
             colors = {'color1': self.mapstats_color1.getColor(),
                       'color2': self.mapstats_color2.getColor()}
             self.controller.websocketThread.changeColors('mapstats', colors)
-            self.controller.websocketThread.changeFont('mapstats')
+            self.controller.websocketThread.changeFont()
 
     def saveCloseWindow(self):
         """Save and close window."""

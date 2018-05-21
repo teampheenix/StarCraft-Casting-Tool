@@ -2,29 +2,18 @@ var tweens = {};
 var socket = null;
 var isopen = false;
 var reconnectIntervalMs = 5000;
+var myDefaultFont = null;
 var data = {};
+var font = "DEFAULT";
+var cssFile = "";
 var tweens = {};
 
 
 init();
 
 function init() {
+  myDefaultFont = getComputedStyle(document.body).getPropertyValue('--font');
   connectWebsocket();
-  //changeCSS("src/css/mapicons_box/Square.css", 0);
-  // for (i = 1; i <= 8; i++) {
-  //         $('#container').append("<div class='block' id='mapicon" + i.toString() + "'></div>");
-  //         loadBox(i);
-  // };
-  // setTimeout(function() {
-  //         hideBoxs();
-  // }, 6000);
-  // setTimeout(function() {
-  //         $('#container').empty();
-  //         for (i = 1; i <= 3; i++) {
-  //                 $('#container').append("<div class='block' id='mapicon" + i.toString() + "'></div>");
-  //                 loadBox(i);
-  //         };
-  // }, 12000);
 }
 
 function connectWebsocket() {
@@ -44,17 +33,15 @@ function connectWebsocket() {
     if (jsonObject.event == 'CHANGE_STYLE') {
       changeCSS(jsonObject.data.file);
     } else if (jsonObject.event == 'CHANGE_SCORE') {
-      changeScore(jsonObject.data.winner, jsonObject.data.setid, jsonObject.data.color);
+      changeScore(jsonObject.data.winner, jsonObject.data.setid, jsonObject.data.color, jsonObject.data.opacity);
     } else if (jsonObject.event == 'CHANGE_TEXT') {
       changeText(jsonObject.data.icon, jsonObject.data.label, jsonObject.data.text);
     } else if (jsonObject.event == 'CHANGE_RACE') {
       changeRace(jsonObject.data.icon, jsonObject.data.team, jsonObject.data.race);
     } else if (jsonObject.event == 'CHANGE_MAP') {
       changeMap(jsonObject.data.icon, jsonObject.data.map, jsonObject.data.map_img);
-    } else if (jsonObject.event == 'CHANGE_BORDER_COLORS') {
-      //setColors(jsonObject.data.color1, jsonObject.data.color2);
     } else if (jsonObject.event == 'CHANGE_FONT') {
-      //setFont(jsonObject.data.font);
+      setFont(jsonObject.data.font);
     } else if (jsonObject.event == 'DATA') {
       handleData(jsonObject.data);
     }
@@ -71,6 +58,35 @@ function connectWebsocket() {
   }
 }
 
+function storeData(scope = null) {
+  try {
+    var storage = window.localStorage;
+    var key = 'scct-' + profile + '-mapicons_box_' + ident.toString() + '-';
+    if (scope == null || scope == "data") storage.setItem(key+'data', JSON.stringify(data));
+    if (scope == null || scope == "font") storage.setItem(key+'font', font);
+    if (scope == null || scope == "css") storage.setItem(key+'css', cssFile);
+  } catch (e) {}
+}
+
+function loadStoredData() {
+  try {
+    var storage = window.localStorage;
+    var key = 'scct-' + profile + '-mapicons_box_' + ident.toString() + '-';
+    data = JSON.parse(storage.getItem(key + 'data'));
+    font = storage.getItem(key + 'font');
+    cssFile = storage.getItem(key + 'css');
+    if (data == null) data = {};
+    try {
+      changeCSS(cssFile);
+    } catch (e) {}
+
+    try {
+      setFont(font);
+    } catch (e) {}
+
+  } catch (e) {}
+}
+
 
 function handleData(newData) {
   data = newData;
@@ -82,18 +98,26 @@ function handleData(newData) {
   }
 }
 
-function changeScore(winner, set, color) {
+function changeScore(winner, set, color, opacity) {
   var mapicon = $("#mapicon" + (set).toString());
   $(mapicon).find("div.image").css("border-color", color);
+  $(mapicon).find("div.opa").css('opacity', opacity);
+  data[set]['opacity'] = opacity;
   if (winner == 0) {
     $(mapicon).find("div.player1").removeClass('winner');
     $(mapicon).find("div.player2").removeClass('winner');
+    data[set]['status1'] = '';
+    data[set]['status2'] = '';
   } else if (winner == -1) {
     $(mapicon).find("div.player1").addClass('winner');
     $(mapicon).find("div.player2").removeClass('winner');
+    data[set]['status1'] = 'winner';
+    data[set]['status2'] = '';
   } else if (winner == 1) {
     $(mapicon).find("div.player1").removeClass('winner');
     $(mapicon).find("div.player2").addClass('winner');
+    data[set]['status1'] = '';
+    data[set]['status2'] = 'winner';
   }
 }
 
@@ -204,6 +228,7 @@ function fillBox(i) {
   $(mapicon).find("div.race2").attr("id", mapdata['race2']);
   $(mapicon).find("div.image").css("border-color", mapdata['border_color']);
   $(mapicon).find("div.image").css("background-image", 'url("src/img/maps/' + mapdata['map_img'] + '")');
+  $(mapicon).find("div.opa").css('opacity', mapdata['opacity']);
   $(mapicon).find(".text-fill").textfill();
   setTimeout(showBox.bind(null, i), 200 * (i - 1));
 }
@@ -260,9 +285,23 @@ function loadBox(i) {
   $(mapicon).load("data/mapicon-box-template.html", showHide.bind(null, i));
 }
 
-
 function changeCSS(newCssFile) {
-  console.log('CSS file changed to', newCssFile);
-  $('link[rel="stylesheet"]').attr('href', newCssFile);
+  if (newCssFile && newCssFile != "null") {
+    cssFile = newCssFile;
+    console.log('CSS file changed to', newCssFile);
+    $('link[rel="stylesheet"]').attr('href', newCssFile);
+    storeData("css");
+  }
+}
 
+function setFont(newFont) {
+  if (newFont == 'DEFAULT') {
+    newFont = myDefaultFont;
+  }
+  font = newFont.trim();
+  document.documentElement.style.setProperty('--font', font);
+  storeData("font");
+  $(document).ready(function() {
+    $('#container').find(".text-fill").textfill();
+  });
 }

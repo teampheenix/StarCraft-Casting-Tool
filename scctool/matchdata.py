@@ -78,17 +78,21 @@ class matchData(QObject):
                     color = scctool.settings.config.parser.get(
                         "MapIcons", "notplayed_color")
                     color2 = color
+                    opacity = scctool.settings.config.parser.get(
+                        "MapIcons", "notplayed_opacity")
                 else:
                     color = scctool.settings.config.parser.get(
                         "MapIcons", "undecided_color")
                     color2 = scctool.settings.config.parser.get(
                         "MapIcons", "default_border_color")
+                    opacity = 0.0
                 for idx in range(self.getNoSets()):
                     if self.getMapScore(idx) == 0:
                         self.__emitSignal('data', 'color', {
                                           'set_idx': idx,
                                           'color': color,
-                                          'color2': color2})
+                                          'color2': color2,
+                                          'opacity': opacity})
 
     def readJsonFile(self):
         """Read json data from file."""
@@ -1011,22 +1015,26 @@ class matchData(QObject):
         score = self.getMapScore(set_idx)
         team = self.getMyTeam()
         won = score * team
-        if max(self.getScore()) > int(self.getBestOf() / 2):
+        notplayed_opacity = scctool.settings.config.parser.get(
+            "MapIcons",
+            "notplayed_opacity")
+        if won == 1:
             return scctool.settings.config.parser.get(
                 "MapIcons",
-                "notplayed_color")
-        elif won == 1:
-            return scctool.settings.config.parser.get(
-                "MapIcons",
-                "win_color")
+                "win_color"), 0.0
         elif won == -1:
             return scctool.settings.config.parser.get(
                 "MapIcons",
-                "lose_color")
+                "lose_color"), 0.0
         else:
-            return scctool.settings.config.parser.get(
-                "MapIcons",
-                "default_border_color")
+            if max(self.getScore()) > int(self.getBestOf() / 2):
+                return scctool.settings.config.parser.get(
+                    "MapIcons",
+                    "notplayed_color"), notplayed_opacity
+            else:
+                return scctool.settings.config.parser.get(
+                    "MapIcons",
+                    "default_border_color"), 0.0
 
     def getMapIconsData(self):
         """Update map icons."""

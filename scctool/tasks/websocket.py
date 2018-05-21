@@ -142,20 +142,24 @@ class WebsocketThread(QThread):
         self.registerConnection(websocket, path)
         module_logger.info("Client connected!")
         self.changeStyle(path)
-        if path == 'mapstats':
-            self.changeColors(path)
-            self.changeFont(path)
+        primary_scope = self.get_primary_scope(path)
+        if primary_scope == 'mapstats':
+            self.changeColors(primary_scope)
+            self.changeFont(primary_scope)
             data = self.__controller.mapstatsManager.getData()
             self.sendData2WS(websocket, "MAPSTATS", data)
-        elif path == 'score':
-            self.changeFont(path)
+        elif primary_scope == 'score':
+            self.changeFont(primary_scope)
             data = self.__controller.matchData.getScoreData()
             self.sendData2WS(websocket, "ALL_DATA", data)
-        elif self.get_primary_scope(path) == 'mapicons_box':
+        elif primary_scope == 'mapicons_box':
+            self.changeFont(primary_scope)
             data = self.__controller.matchData.getMapIconsData()
             self.sendData2WS(websocket, 'DATA', data)
         else:
-            print(path)
+            module_logger.info(
+                "Couldn't connect websocket: {} {}".
+                format(path, primary_scope))
 
         while True:
             try:
@@ -215,8 +219,13 @@ class WebsocketThread(QThread):
         else:
             raise ValueError('Change style is not available for this path.')
 
-    def changeFont(self, path, font=None):
-        if path in ['mapstats', 'score']:
+    def changeFont(self, path=None, font=None):
+        valid_paths = ['mapstats', 'score', 'mapicons_box']
+        if path is None:
+            for path in valid_paths:
+                self.changeFont(path, font)
+            return
+        if path in valid_paths:
             if font is None:
                 if not scctool.settings.config.parser.getboolean(
                     "Style",
@@ -237,23 +246,29 @@ class WebsocketThread(QThread):
         self.sendData2Path('mapstats', 'SELECT_MAP', {'map': str(map)})
 
     def sendData2Path(self, path, event, input_data):
-        data = dict()
-        data['event'] = event
-        data['data'] = input_data
+        try:
+            data = dict()
+            data['event'] = event
+            data['data'] = input_data
 
-        paths = self.scopes.get(path, list(path))
+            paths = self.scopes.get(path, [path])
 
-        for path in paths:
-            connections = self.connected.get(path, set()).copy()
-            for websocket in connections:
-                module_logger.info("Sending data: %s" % data)
-                coro = websocket.send(json.dumps(data))
-                asyncio.run_coroutine_threadsafe(coro, self.__loop)
+            for path in paths:
+                connections = self.connected.get(path, set()).copy()
+                for websocket in connections:
+                    module_logger.info("Sending data: %s" % data)
+                    coro = websocket.send(json.dumps(data))
+                    asyncio.run_coroutine_threadsafe(coro, self.__loop)
+        except Exception as e:
+            module_logger.exception("message")
 
     def sendData2WS(self, websocket, event, input_data):
-        data = dict()
-        data['event'] = event
-        data['data'] = input_data
-        module_logger.info("Sending data: %s" % data)
-        coro = websocket.send(json.dumps(data))
-        asyncio.run_coroutine_threadsafe(coro, self.__loop)
+        try:
+            data = dict()
+            data['event'] = event
+            data['data'] = input_data
+            module_logger.info("Sending data: %s" % data)
+            coro = websocket.send(json.dumps(data))
+            asyncio.run_coroutine_threadsafe(coro, self.__loop)
+        except Exception as e:
+            module_logger.exception("message")
