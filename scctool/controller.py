@@ -831,6 +831,18 @@ class MainController:
                     'icon': object['set_idx'] + 1,
                     'label': 'player{}'.format(object['team_idx'] + 1),
                     'text': object['value']})
+        elif label == 'race':
+            self.websocketThread.sendData2Path(
+                'mapicons_box', 'CHANGE_RACE', {
+                    'icon': object['set_idx'] + 1,
+                    'team': object['team_idx'] + 1,
+                    'race': object['value'].lower()})
+        elif label == 'map':
+            self.websocketThread.sendData2Path(
+                'mapicons_box', 'CHANGE_MAP', {
+                    'icon': object['set_idx'] + 1,
+                    'map': object['value'],
+                    'map_img': self.getMapImg(object['value'])})
 
     def newVersion(self, version, force=False):
         """Display dialog for new version."""

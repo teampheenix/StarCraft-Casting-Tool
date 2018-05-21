@@ -133,7 +133,7 @@ div.opa {
   opacity: 0.0;
 }
 
-div.race-left {
+div.race1 {
   position: absolute;
   top: 75px;
   height: 100px;
@@ -145,7 +145,7 @@ div.race-left {
   filter: drop-shadow(0px 0px 3px white);
 }
 
-div.race-right {
+div.race2 {
   position: absolute;
   top: 75px;
   height: 100px;
@@ -173,4 +173,6 @@ div.race-right {
 
 #random {
   background-image: url('../../img/races/Random.png');
+  top: 80px;
+  height: 90px;
 }

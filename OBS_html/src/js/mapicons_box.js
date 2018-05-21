@@ -47,6 +47,10 @@ function connectWebsocket() {
       changeScore(jsonObject.data.winner, jsonObject.data.setid, jsonObject.data.color);
     } else if (jsonObject.event == 'CHANGE_TEXT') {
       changeText(jsonObject.data.icon, jsonObject.data.label, jsonObject.data.text);
+    } else if (jsonObject.event == 'CHANGE_RACE') {
+      changeRace(jsonObject.data.icon, jsonObject.data.team, jsonObject.data.race);
+    } else if (jsonObject.event == 'CHANGE_MAP') {
+      changeMap(jsonObject.data.icon, jsonObject.data.map, jsonObject.data.map_img);
     } else if (jsonObject.event == 'CHANGE_BORDER_COLORS') {
       //setColors(jsonObject.data.color1, jsonObject.data.color2);
     } else if (jsonObject.event == 'CHANGE_FONT') {
@@ -81,14 +85,13 @@ function handleData(newData) {
 function changeScore(winner, set, color) {
   var mapicon = $("#mapicon" + (set).toString());
   $(mapicon).find("div.image").css("border-color", color);
-  console.log(winner);
-  if(winner==0){
+  if (winner == 0) {
     $(mapicon).find("div.player1").removeClass('winner');
     $(mapicon).find("div.player2").removeClass('winner');
-  }else if(winner==-1){
+  } else if (winner == -1) {
     $(mapicon).find("div.player1").addClass('winner');
     $(mapicon).find("div.player2").removeClass('winner');
-  }else if(winner==1){
+  } else if (winner == 1) {
     $(mapicon).find("div.player1").removeClass('winner');
     $(mapicon).find("div.player2").addClass('winner');
   }
@@ -96,8 +99,8 @@ function changeScore(winner, set, color) {
 
 function changeText(iconID, label, new_value) {
   var icon = $('#mapicon' + iconID.toString());
-  var id = iconID.toString()+label;
-  var object = icon.find("span."+label);
+  var id = iconID.toString() + label;
+  var object = icon.find("span." + label);
   if (tweens[id] && tweens[id].isActive()) {
     tweens[id].kill();
   }
@@ -113,8 +116,58 @@ function changeText(iconID, label, new_value) {
   function _changeText(parent, object, new_value) {
     object.text(new_value)
     $(document).ready(function() {
-      console.log(parent);
-      parent.find(".text-fill").textfill({debug: true});
+      parent.find(".text-fill").textfill();
+    });
+  }
+}
+
+function changeRace(iconID, team, race) {
+  var icon = $('#mapicon' + iconID.toString());
+  var id = iconID.toString() + "race" + team.toString();
+  var object = icon.find("div.race" + team.toString());
+  if (tweens[id] && tweens[id].isActive()) {
+    tweens[id].kill();
+  }
+  tweens[id] = new TimelineMax();
+  tweens[id].to(object, 0.35, {
+      scale: 0,
+      force3D: true
+    })
+    .call(_changeRace, [object, race])
+    .to(object, 0.35, {
+      scale: 1,
+      force3D: true
+    }, "+=0.25");
+
+  function _changeRace(object, race) {
+    object.attr("id", race);
+  }
+}
+
+function changeMap(iconID, map, map_img) {
+  var icon = $('#mapicon' + iconID.toString());
+  var image = icon.find("div.image");
+  var name = icon.find("span.mapname")
+  var id = iconID.toString() + "map";
+  if (tweens[id] && tweens[id].isActive()) {
+    tweens[id].kill();
+  }
+  tweens[id] = new TimelineMax();
+  tweens[id].to(icon, 0.35, {
+      scale: 0,
+      force3D: true
+    })
+    .call(_changeMap, [icon, image, name, map, map_img])
+    .to(icon, 0.35, {
+      scale: 1,
+      force3D: true
+    }, "+=0.25");
+
+  function _changeMap(parent, image, name, map, map_img) {
+    name.text(map);
+    image.css("background-image", 'url("src/img/maps/' + map_img + '")');
+    $(document).ready(function() {
+      parent.find(".text-fill").textfill();
     });
   }
 }
@@ -122,8 +175,8 @@ function changeText(iconID, label, new_value) {
 function showHide(i) {
   var mapicon = $("#mapicon" + i.toString());
   var image = mapicon.find("div.image");
-  var race1 = mapicon.find("div.race-left");
-  var race2 = mapicon.find("div.race-right");
+  var race1 = mapicon.find("div.race1");
+  var race2 = mapicon.find("div.race2");
   var player1 = mapicon.find("div.player1");
   var player2 = mapicon.find("div.player2");
   var mapname = mapicon.find("div.upper-panel");
@@ -147,8 +200,8 @@ function fillBox(i) {
   $(mapicon).find("span.player2").text(mapdata['player2']);
   $(mapicon).find("span.mapname").text(mapdata['map_name']);
   $(mapicon).find("span.maplabel").text(mapdata['map_id']);
-  $(mapicon).find("div.race-left").attr("id", mapdata['race1']);
-  $(mapicon).find("div.race-right").attr("id", mapdata['race2']);
+  $(mapicon).find("div.race1").attr("id", mapdata['race1']);
+  $(mapicon).find("div.race2").attr("id", mapdata['race2']);
   $(mapicon).find("div.image").css("border-color", mapdata['border_color']);
   $(mapicon).find("div.image").css("background-image", 'url("src/img/maps/' + mapdata['map_img'] + '")');
   $(mapicon).find(".text-fill").textfill();
@@ -159,8 +212,8 @@ function showBox(i) {
   tweens[i] = new TimelineMax();
   var mapicon = $("#mapicon" + i.toString());
   var image = mapicon.find("div.image");
-  var race1 = mapicon.find("div.race-left");
-  var race2 = mapicon.find("div.race-right");
+  var race1 = mapicon.find("div.race1");
+  var race2 = mapicon.find("div.race2");
   var player1 = mapicon.find("div.player1");
   var player2 = mapicon.find("div.player2");
   var mapname = mapicon.find("div.upper-panel");
@@ -199,7 +252,6 @@ function hideBoxs() {
 }
 
 function hideBox(i) {
-  console.log(i);
   tweens[i].reverse(0);
 }
 
