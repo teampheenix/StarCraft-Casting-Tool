@@ -1,5 +1,6 @@
 """Interact with SC2-Client via thread."""
 import logging
+import os.path
 import re
 import time
 from difflib import SequenceMatcher
@@ -176,13 +177,15 @@ class SC2ApiThread(QThread):
                     # print("Providing player intros...")
                     self.controller.updatePlayerIntros(newData)
 
-                if(self.activeTask['updateScore'] and newData.isDecidedGame()
-                   and self.currentData != SC2MatchData()):
+                if(self.activeTask['updateScore'] and
+                   newData.isDecidedGame()and
+                   self.currentData != SC2MatchData()):
                     # print("Updating Score")
                     self.requestScoreUpdate.emit(newData)
 
-                if(newData.isLive() and (self.activeTask['toggleScore']
-                                         or self.activeTask['toggleProduction'])):
+                if(newData.isLive() and
+                   (self.activeTask['toggleScore'] or
+                        self.activeTask['toggleProduction'])):
                     # print("Toggling")
                     self.tryToggle(newData)
 
@@ -191,11 +194,12 @@ class SC2ApiThread(QThread):
             module_logger.exception("message")
 
     def tryToggle(self, data):
-        """Wait until SC2 is in foreground and toggle production tab and score."""
+        """Wait until SC2 is in foreground and toggle production tab"""
+        """and score."""
         try:
             while self.exiting is False\
-                and (self.activeTask['toggleScore']
-                     or self.activeTask['toggleProduction']):
+                and (self.activeTask['toggleScore'] or
+                     self.activeTask['toggleProduction']):
                 if(isSC2onForeground()):
                     if(self.activeTask['toggleScore']):
                         TogglePlayerNames()
@@ -211,19 +215,22 @@ class SC2ApiThread(QThread):
             module_logger.info("Toggle not working on this OS.")
 
     def swapPlayers(self, data):
-        """Detect if players are swapped relative to SC2-Client-API data via ocr."""
+        """Detect if players are swapped relative to SC2-Client-API data"""
+        """via OCR."""
         try:
-            if(not scctool.settings.config.parser.getboolean("SCT", "use_ocr")):
+            if(not scctool.settings.config.parser.getboolean(
+                    "SCT", "use_ocr")):
                 return False
 
             # Don't use OCR if the score is tied.
             score = self.controller.matchData.getScore()
-            if(score[0] == score[1]
-               and not scctool.settings.config.parser.getboolean("SCT", "CtrlX")):
+            if(score[0] == score[1] and
+               not scctool.settings.config.parser.getboolean(
+               "SCT", "CtrlX")):
                 return False
 
-            pytesseract.pytesseract.tesseract_cmd = scctool.settings.config.getTesserAct()
-
+            tesseract = scctool.settings.config.getTesserAct()
+            pytesseract.pytesseract.tesseract_cmd = tesseract
             players = data.getPlayerList()
             full_img = ImageGrab.grab().convert('L')
 
@@ -242,7 +249,7 @@ class SC2ApiThread(QThread):
 
             for crop_region in crop_regions:
                 img = cropImage(full_img, crop_region)
-                found, swap = ocr(players, img)
+                found, swap = ocr(players, img, tesseract)
                 if found:
                     break
 
@@ -256,8 +263,12 @@ class SC2ApiThread(QThread):
             return False
 
 
-def ocr(players, img):
-    crop_text = pytesseract.image_to_string(img, config='--psm 3 --oem 0')
+def ocr(players, img, dir=''):
+    cfg = '--psm 3 --oem 0'
+    if dir:
+        dir = os.path.join(os.path.dirname(dir), 'tessdata')
+        cfg = cfg + ' --tessdata-dir "{}"'.format(dir)
+    crop_text = pytesseract.image_to_string(img, config=cfg)
     items = re.split(r'\s+', crop_text)
     threshold = 0.35
     ratios = [0.0, 0.0]
@@ -334,7 +345,8 @@ class SC2MatchData:
             self.time = 0
             self.ingame = False
 
-    def compare_returnScore(self, player1, player2, weak=False, translator=None):
+    def compare_returnScore(self, player1, player2,
+                            weak=False, translator=None):
         """Fuzzy compare playernames and return order and their score."""
         player1, player2 = player1.strip(), player2.strip()
         player1_notset = not player1 or player1.lower() == "tbd"
@@ -370,16 +382,17 @@ class SC2MatchData:
                 raise ValueError
 
             for p1, p2 in myplayers:
-                if((player1_notset and compareStr(p2, player2))
-                        or (compareStr(p1, player1) and player2_notset)):
+                if((player1_notset and compareStr(p2, player2)) or
+                   (compareStr(p1, player1) and player2_notset)):
                     return True, True, self.result, noset_idx
-                elif((player1_notset and compareStr(p1, player1))
-                        or (compareStr(p2, player1) and player2_notset)):
+                elif((player1_notset and compareStr(p1, player1)) or
+                     (compareStr(p2, player1) and player2_notset)):
                     return True, False, -self.result, noset_idx
 
         return False, False, 0, -1
 
-    def compare_returnOrder(self, player1, player2, weak=False, translator=None):
+    def compare_returnOrder(self, player1, player2,
+                            weak=False, translator=None):
         """Fuzzy compare playernames and return the correct order."""
         found, inorder, _, _ = self.compare_returnScore(
             player1, player2, weak=weak, translator=translator)
@@ -440,11 +453,11 @@ class SC2MatchData:
 
     def __eq__(self, other):
         """Compare data."""
-        return (self.player1 == other.player1
-                and self.player2 == other.player2
-                and self.race1 == other.race1
-                and self.race2 == other.race2
-                and self.result == other.result)
+        return (self.player1 == other.player1 and
+                self.player2 == other.player2 and
+                self.race1 == other.race1 and
+                self.race2 == other.race2 and
+                self.result == other.result)
 
     def getPlayerList(self):
         """Get list of players."""
