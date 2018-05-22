@@ -28,7 +28,7 @@ logger.info("system: " + system)
 logger.info("pip-version: " + pip.__version__)
 
 modules = ['pip', 'pyqt5', 'requests', 'configparser', 'flask', 'keyboard',
-           'websockets', 'humanize', 'markdown2', 'pyupdater', 'beautifulsoup4', 'appdirs']
+           'websockets', 'humanize', 'markdown2', 'pyupdater', 'beautifulsoup4', 'appdirs', 'gTTS']
 
 win_modules = ['pypiwin32', 'pytesseract', 'Pillow']
 
