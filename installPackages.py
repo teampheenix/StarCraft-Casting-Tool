@@ -1,8 +1,9 @@
 """Install Packages for StarCraft Casting Tool."""
-import pip
-import platform
 import logging
+import platform
 import subprocess
+
+import pip
 
 system = platform.system()
 
@@ -26,18 +27,22 @@ logger.addHandler(ch)
 logger.info("system: " + system)
 logger.info("pip-version: " + pip.__version__)
 
-modules = ['pip', 'pyqt5', 'requests', 'configparser', 'flask', 'keyboard', 'websockets', 'humanize', 'markdown2', 'pyupdater', 'beautifulsoup4']
+modules = ['pip', 'pyqt5', 'requests', 'configparser', 'flask', 'keyboard',
+           'websockets', 'humanize', 'markdown2', 'pyupdater',
+           'beautifulsoup4', 'appdirs', 'gTTS']
 
 win_modules = ['pypiwin32', 'pytesseract', 'Pillow']
 
 try:
-    
+
     for module in modules:
-        subprocess.check_call(["python", '-m', 'pip', 'install',"--upgrade", module])
-        
+        subprocess.check_call(
+            ["python", '-m', 'pip', 'install', "--upgrade", module])
+
     if system == "Windows":
         for module in win_modules:
-            subprocess.check_call(["python", '-m', 'pip', 'install',"--upgrade", module])
+            subprocess.check_call(
+                ["python", '-m', 'pip', 'install', "--upgrade", module])
 
 except Exception as e:
     logger.exception("message")

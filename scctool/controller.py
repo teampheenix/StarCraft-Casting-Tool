@@ -81,10 +81,12 @@ class MainController:
     def placeholderSetup(self):
         """Define and connect placeholders."""
         self.placeholders = PlaceholderList()
-        self.placeholders.addConnection("Team1",
-                                        lambda: self.matchData.getTeamOrPlayer(0))
-        self.placeholders.addConnection("Team2",
-                                        lambda: self.matchData.getTeamOrPlayer(1))
+        self.placeholders.addConnection(
+            "Team1",
+            lambda: self.matchData.getTeamOrPlayer(0))
+        self.placeholders.addConnection(
+            "Team2",
+            lambda: self.matchData.getTeamOrPlayer(1))
         self.placeholders.addConnection("URL", self.matchData.getURL)
         self.placeholders.addConnection(
             "BestOf", lambda: str(self.matchData.getBestOfRaw()))
@@ -115,13 +117,15 @@ class MainController:
 
             self.view.cb_solo.setChecked(self.matchData.getSolo())
 
-            index = self.view.cb_bestof.findText(str(self.matchData.getBestOfRaw()),
-                                                 Qt.MatchFixedString)
+            index = self.view.cb_bestof.findText(
+                str(self.matchData.getBestOfRaw()),
+                Qt.MatchFixedString)
             if index >= 0:
                 self.view.cb_bestof.setCurrentIndex(index)
 
-            index = self.view.cb_minSets.findText(str(self.matchData.getMinSets()),
-                                                  Qt.MatchFixedString)
+            index = self.view.cb_minSets.findText(
+                str(self.matchData.getMinSets()),
+                Qt.MatchFixedString)
             if index >= 0:
                 self.view.cb_minSets.setCurrentIndex(index)
 
@@ -139,7 +143,8 @@ class MainController:
                     self.view.le_player[j][i].setReadOnly(
                         self.matchData.getSolo())
 
-            for i in range(min(self.view.max_no_sets, self.matchData.getNoSets())):
+            for i in range(min(
+                    self.view.max_no_sets, self.matchData.getNoSets())):
                 for j in range(2):
                     player = self.matchData.getPlayer(j, i)
                     race = self.matchData.getRace(j, i)
@@ -160,7 +165,8 @@ class MainController:
                 self.view.sl_score[i].hide()
                 self.view.label_set[i].hide()
 
-            for i in range(min(self.view.max_no_sets, self.matchData.getNoSets())):
+            for i in range(min(self.view.max_no_sets,
+                               self.matchData.getNoSets())):
                 for j in range(2):
                     self.view.le_player[j][i].show()
                     self.view.cb_race[j][i].show()
@@ -234,7 +240,8 @@ class MainController:
             self.matchData.parseURL(url)
             self.matchData.grabData()
             self.matchData.autoSetMyTeam(
-                swap=scctool.settings.config.parser.getboolean("SCT", "swap_myteam"))
+                swap=scctool.settings.config.parser.getboolean(
+                    "SCT", "swap_myteam"))
             self.matchData.writeJsonFile()
             self.matchData.downloadLogos()
             try:
@@ -260,22 +267,28 @@ class MainController:
         try:
 
             self.view.cb_autoUpdate.setChecked(
-                scctool.settings.config.parser.getboolean("Form", "scoreupdate"))
+                scctool.settings.config.parser.getboolean(
+                    "Form", "scoreupdate"))
 
             if scctool.settings.windows:
                 self.view.cb_autoToggleScore.setChecked(
-                    scctool.settings.config.parser.getboolean("Form", "togglescore"))
+                    scctool.settings.config.parser.getboolean(
+                        "Form", "togglescore"))
 
                 self.view.cb_autoToggleProduction.setChecked(
-                    scctool.settings.config.parser.getboolean("Form", "toggleprod"))
+                    scctool.settings.config.parser.getboolean(
+                        "Form", "toggleprod"))
 
             self.view.cb_playerIntros.setChecked(
-                scctool.settings.config.parser.getboolean("Form", "playerintros"))
+                scctool.settings.config.parser.getboolean(
+                    "Form", "playerintros"))
 
             self.view.cb_autoTwitch.setChecked(
-                scctool.settings.config.parser.getboolean("Form", "autotwitch"))
+                scctool.settings.config.parser.getboolean(
+                    "Form", "autotwitch"))
             self.view.cb_autoNightbot.setChecked(
-                scctool.settings.config.parser.getboolean("Form", "autonightbot"))
+                scctool.settings.config.parser.getboolean(
+                    "Form", "autonightbot"))
 
         except Exception as e:
             module_logger.exception("message")
@@ -460,15 +473,19 @@ class MainController:
             newscore = 0
             for j in range(2):
                 self.historyManager.insertPlayer(
-                    alias(newSC2MatchData.getPlayer(j)), newSC2MatchData.getRace(j))
+                    alias(newSC2MatchData.getPlayer(j)),
+                    newSC2MatchData.getRace(j))
             self.view.updatePlayerCompleters()
             if newSC2MatchData.result == 0:
                 return
             for i in range(self.matchData.getNoSets()):
                 player1 = self.matchData.getPlayer(0, i)
                 player2 = self.matchData.getPlayer(1, i)
-                found, in_order, newscore, _ = newSC2MatchData.compare_returnScore(
-                    player1, player2, translator=alias)
+                found, in_order, newscore, _ = \
+                    newSC2MatchData.compare_returnScore(
+                        player1,
+                        player2,
+                        translator=alias)
                 if found:
                     if(self.view.setScore(i, newscore)):
                         race1 = newSC2MatchData.getRace(0)
@@ -481,7 +498,8 @@ class MainController:
                         break
                     else:
                         continue
-            # If not found try again with weak search and set missing playernames
+            # If not found try again with weak search and
+            # set missing playernames
             if not found:
                 for i in range(self.matchData.getNoSets()):
                     player1 = self.matchData.getPlayer(0, i)
@@ -554,7 +572,8 @@ class MainController:
             '')
 
     def requestToggleScore(self, newSC2MatchData, swap=False):
-        """Check if SC2-Client-API players are present and toggle score accordingly."""
+        """Check if SC2-Client-API players are present"""
+        """and toggle score accordingly."""
         try:
             alias = self.aliasManager.translatePlayer
 
@@ -585,7 +604,8 @@ class MainController:
                     ToggleScore(score[0], score[1],
                                 self.matchData.getBestOf())
                 else:
-                    if scctool.settings.config.parser.getboolean("SCT", "CtrlX"):
+                    if scctool.settings.config.parser.getboolean(
+                            "SCT", "CtrlX"):
                         SwapPlayerNames()
                         ToggleScore(score[0], score[1],
                                     self.matchData.getBestOf())
@@ -643,7 +663,8 @@ class MainController:
             "Intros", "display_time")
         data['animation'] = scctool.settings.config.parser.get(
             "Intros", "animation") .strip().lower()
-        if scctool.settings.config.parser.getboolean("Style", "use_custom_font"):
+        if scctool.settings.config.parser.getboolean(
+                "Style", "use_custom_font"):
             data['font'] = scctool.settings.config.parser.get(
                 "Style", "custom_font")
         return data
@@ -695,7 +716,7 @@ class MainController:
                     else:
                         text = name
                     tts = gtts.gTTS(text=text, lang=tts_lang)
-                    tts_file = 'src/sound/player{}.mp3'.format(player_idx + 1)
+                    tts_file = 'src/player{}.mp3'.format(player_idx + 1)
                     file = os.path.normpath(os.path.join(
                         scctool.settings.getAbsPath(
                             scctool.settings.OBShtmlDir),

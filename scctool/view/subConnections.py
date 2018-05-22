@@ -2,10 +2,11 @@
 import logging
 import weakref
 
+import gtts
 import keyboard
 from PyQt5.QtCore import QPoint, QSize, Qt
 from PyQt5.QtGui import QIcon, QKeySequence
-from PyQt5.QtWidgets import (QBoxLayout, QComboBox, QDoubleSpinBox,
+from PyQt5.QtWidgets import (QBoxLayout, QCheckBox, QComboBox, QDoubleSpinBox,
                              QFormLayout, QGroupBox, QHBoxLayout, QLabel,
                              QLineEdit, QMessageBox, QPushButton, QScrollArea,
                              QShortcut, QSizePolicy, QSlider, QSpacerItem,
@@ -46,8 +47,8 @@ class SubwindowConnections(QWidget):
 
             self.setLayout(mainLayout)
 
-            self.resize(QSize(mainWindow.size().width()
-                              * 0.8, self.sizeHint().height()))
+            self.resize(QSize(mainWindow.size().width() * 0.8,
+                              self.sizeHint().height()))
             relativeChange = QPoint(mainWindow.size().width() / 2,
                                     mainWindow.size().height() / 3) -\
                 QPoint(self.size().width() / 2,
@@ -68,7 +69,7 @@ class SubwindowConnections(QWidget):
         self.createFormGroupNightbot()
 
         # Add tabs
-        self.tabs.addTab(self.formGroupWebsocket, _("Intros && Hotkeys"))
+        self.tabs.addTab(self.formGroupIntro, _("Intros && Hotkeys"))
         self.tabs.addTab(self.formGroupTwitch, _("Twitch"))
         self.tabs.addTab(self.formGroupNightbot, _("Nightbot"))
 
@@ -88,8 +89,8 @@ class SubwindowConnections(QWidget):
             key.modified.connect(self.changed)
 
     def createFormGroupWebsocket(self):
-        """Create forms for OBS websocket connection."""
-        self.formGroupWebsocket = QWidget()
+        """Create forms for websocket connection to intro."""
+        self.formGroupIntro = QWidget()
         mainLayout = QVBoxLayout()
 
         self.hotkeyBox = QGroupBox(_("Intro Hotkeys"))
@@ -138,14 +139,44 @@ class SubwindowConnections(QWidget):
                 currentIdx = idx
             idx += 1
         self.cb_animation.setCurrentIndex(currentIdx)
+        self.cb_animation.currentIndexChanged.connect(self.changed)
         layout.addRow(QLabel(
             _("Animation:") + " "), self.cb_animation)
         self.introBox.setLayout(layout)
         mainLayout.addWidget(self.introBox)
 
+        self.ttsBox = QGroupBox(_("Text-to-Speech Settings"))
+        layout = QFormLayout()
+
+        self.cb_tts_active = QCheckBox()
+        self.cb_tts_active.setChecked(
+            scctool.settings.config.parser.getboolean("Intros", "tts_active"))
+        self.cb_tts_active.stateChanged.connect(self.changed)
+        layout.addRow(QLabel(
+            _("Activate Text-to-Speech:") + " "), self.cb_tts_active)
+
+        self.cb_tts_lang = QComboBox()
+
+        currentIdx = 0
+        idx = 0
+        tts_langs = gtts.lang.tts_langs()
+        tts_lang = scctool.settings.config.parser.get("Intros", "tts_lang")
+        for key, name in tts_langs.items():
+            self.cb_tts_lang.addItem(name, key)
+            if(key == tts_lang):
+                currentIdx = idx
+            idx += 1
+        self.cb_tts_lang.setCurrentIndex(currentIdx)
+        self.cb_tts_lang.currentIndexChanged.connect(self.changed)
+        layout.addRow(QLabel(
+            _("Language:") + " "), self.cb_tts_lang)
+        self.ttsBox.setStyleSheet("QComboBox { combobox-popup: 0; }")
+        self.ttsBox.setLayout(layout)
+        mainLayout.addWidget(self.ttsBox)
+
         mainLayout.addItem(QSpacerItem(
             0, 0, QSizePolicy.Minimum, QSizePolicy.Expanding))
-        self.formGroupWebsocket.setLayout(mainLayout)
+        self.formGroupIntro.setLayout(mainLayout)
 
     def createFormGroupTwitch(self):
         """Create forms for twitch."""
@@ -160,7 +191,8 @@ class SubwindowConnections(QWidget):
         self.twitchChannel.setPlaceholderText(
             _("Name of the Twitch channel that should be updated"))
         self.twitchChannel.setToolTip(
-            _('The connected twitch user needs to have editor rights for this channel.'))
+            _('The connected twitch user needs to have'
+              ' editor rights for this channel.'))
         layout.addRow(QLabel(
             "Twitch-Channel:"), self.twitchChannel)
 
@@ -343,6 +375,10 @@ class SubwindowConnections(QWidget):
             "Intros", "sound_volume", str(self.sl_sound.value()))
         scctool.settings.config.parser.set(
             "Intros", "animation", self.cb_animation.currentText().strip())
+        scctool.settings.config.parser.set(
+            "Intros", "tts_lang", self.cb_tts_lang.currentData().strip())
+        scctool.settings.config.parser.set(
+            "Intros", "tts_active", str(self.cb_tts_active.isChecked()))
 
     def saveCloseWindow(self):
         """Save and close window."""
