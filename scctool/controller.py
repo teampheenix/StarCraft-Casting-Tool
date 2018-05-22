@@ -87,6 +87,7 @@ class MainController:
     def placeholderSetup(self):
         """Define and connect placeholders."""
         self.placeholders = PlaceholderList()
+
         self.placeholders.addConnection("Team1", lambda:
                                         self.matchData.getTeamOrPlayer(0))
         self.placeholders.addConnection("Team2", lambda:
@@ -244,8 +245,8 @@ class MainController:
             newProvider = self.matchData.parseURL(url)
             self.matchData.grabData(newProvider, self.logoManager)
             self.matchData.autoSetMyTeam(
-                swap=scctool.settings.config.parser.getboolean("SCT",
-                                                               "swap_myteam"))
+                swap=scctool.settings.config.parser.getboolean(
+                    "SCT", "swap_myteam"))
             self.matchData.writeJsonFile()
             try:
                 self.matchData.downloadBanner()
@@ -484,7 +485,9 @@ class MainController:
                 player2 = self.matchData.getPlayer(1, i)
                 found, in_order, newscore, _ = \
                     newSC2MatchData.compare_returnScore(
-                        player1, player2, translator=alias)
+                        player1,
+                        player2,
+                        translator=alias)
                 if found:
                     if(self.view.setScore(i, newscore)):
                         race1 = newSC2MatchData.getRace(0)
@@ -571,7 +574,7 @@ class MainController:
             '')
 
     def requestToggleScore(self, newSC2MatchData, swap=False):
-        """Check if SC2-Client-API players are present """
+        """Check if SC2-Client-API players are present"""
         """and toggle score accordingly."""
         try:
             alias = self.aliasManager.translatePlayer
@@ -601,8 +604,8 @@ class MainController:
                     ToggleScore(score[0], score[1],
                                 self.matchData.getBestOf())
                 else:
-                    if scctool.settings.config.parser.getboolean("SCT",
-                                                                 "CtrlX"):
+                    if scctool.settings.config.parser.getboolean(
+                            "SCT", "CtrlX"):
                         SwapPlayerNames()
                         ToggleScore(score[0], score[1],
                                     self.matchData.getBestOf())
@@ -665,8 +668,8 @@ class MainController:
             "Intros", "display_time")
         data['animation'] = scctool.settings.config.parser.get(
             "Intros", "animation") .strip().lower()
-        if scctool.settings.config.parser.getboolean("Style",
-                                                     "use_custom_font"):
+        if scctool.settings.config.parser.getboolean(
+                "Style", "use_custom_font"):
             data['font'] = scctool.settings.config.parser.get(
                 "Style", "custom_font")
         return data
