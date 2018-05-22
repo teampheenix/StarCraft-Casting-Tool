@@ -1,6 +1,17 @@
 # Changelog
 
 
+## v1.11.0 (2018-05-22)
+
+### New
+
+* Added option to use Text-to-Speech for the Intros reading the team and player name.
+
+### Fix
+
+* Fixed a bug where Tesseract-OCR would not work when installed on a different drive.
+
+
 ## v1.10.3 (2018-05-19)
 
 ### Fix
