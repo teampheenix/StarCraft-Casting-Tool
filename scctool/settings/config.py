@@ -95,7 +95,8 @@ def findTesserAct(
         import winreg
         key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE,
                              "SOFTWARE\\WOW6432Node\\Tesseract-OCR")
-        return winreg.QueryValueEx(key, "Path")[0] + '\\tesseract.exe'
+        return os.path.normpath(winreg.QueryValueEx(key, "Path")[0] +
+                                '\\tesseract.exe')
     except Exception:
         return default
 
@@ -104,12 +105,12 @@ def getTesserAct():
     """Get Tesseract exceutable via config or registry."""
     tesseract = this.parser.get("SCT", "tesseract")
     if(os.path.isfile(tesseract)):
-        return tesseract
+        return os.path.normpath(tesseract)
     else:
         new = findTesserAct(tesseract)
         if(new != tesseract):
             this.parser.set("SCT", "tesseract", new)
-        return new
+        return os.path.normpath(new)
 
 
 def setDefaultConfigAll():
@@ -168,6 +169,8 @@ def setDefaultConfigAll():
     setDefaultConfig("Intros", "sound_volume", "5")
     setDefaultConfig("Intros", "display_time", "3.0")
     setDefaultConfig("Intros", "animation", "Fly-In")
+    setDefaultConfig("Intros", "tts_active", "True")
+    setDefaultConfig("Intros", "tts_lang", "en")
 
     setDefaultConfig("Mapstats", "color1", "#6495ed")
     setDefaultConfig("Mapstats", "color2", "#000000")

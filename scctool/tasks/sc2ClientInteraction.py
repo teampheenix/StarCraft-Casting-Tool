@@ -1,5 +1,6 @@
 """Interact with SC2-Client via thread."""
 import logging
+import os.path
 import re
 import time
 from difflib import SequenceMatcher
@@ -226,9 +227,8 @@ class SC2ApiThread(QThread):
                not scctool.settings.config.parser.getboolean("SCT", "CtrlX")):
                 return False
 
-            pytesseract.pytesseract.tesseract_cmd = \
-                scctool.settings.config.getTesserAct()
-
+            tesseract = scctool.settings.config.getTesserAct()
+            pytesseract.pytesseract.tesseract_cmd = tesseract
             players = data.getPlayerList()
             full_img = ImageGrab.grab().convert('L')
 
@@ -247,7 +247,7 @@ class SC2ApiThread(QThread):
 
             for crop_region in crop_regions:
                 img = cropImage(full_img, crop_region)
-                found, swap = ocr(players, img)
+                found, swap = ocr(players, img, tesseract)
                 if found:
                     break
 
@@ -261,8 +261,12 @@ class SC2ApiThread(QThread):
             return False
 
 
-def ocr(players, img):
-    crop_text = pytesseract.image_to_string(img, config='--psm 3 --oem 0')
+def ocr(players, img, dir=''):
+    cfg = '--psm 3 --oem 0'
+    if dir:
+        dir = os.path.join(os.path.dirname(dir), 'tessdata')
+        cfg = cfg + ' --tessdata-dir "{}"'.format(dir)
+    crop_text = pytesseract.image_to_string(img, config=cfg)
     items = re.split(r'\s+', crop_text)
     threshold = 0.35
     ratios = [0.0, 0.0]

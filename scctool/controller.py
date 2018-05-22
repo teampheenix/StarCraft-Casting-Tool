@@ -5,6 +5,7 @@ import shutil
 import sys
 import webbrowser
 
+import gtts
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QCheckBox, QMessageBox
@@ -674,6 +675,11 @@ class MainController:
         """Update player intro files."""
         module_logger.info("updatePlayerIntros")
 
+        tts_active = scctool.settings.config.parser.getboolean(
+            "Intros", "tts_active")
+        tts_lang = scctool.settings.config.parser.get(
+            "Intros", "tts_lang")
+
         for player_idx in range(2):
             team1 = newData.playerInList(
                 player_idx,
@@ -696,14 +702,35 @@ class MainController:
                 logo = "../" + self.logoManager.getTeam2().getFile(True)
                 display = "block"
 
-            self.__playerIntroData[player_idx]['name'] = \
-                self.aliasManager.translatePlayer(
-                    newData.getPlayer(player_idx))
+            name = self.aliasManager.translatePlayer(
+                newData.getPlayer(player_idx))
+            self.__playerIntroData[player_idx]['name'] = name
             self.__playerIntroData[player_idx]['team'] = team
             self.__playerIntroData[player_idx]['race'] = newData.getRace(
                 player_idx).lower()
             self.__playerIntroData[player_idx]['logo'] = logo
             self.__playerIntroData[player_idx]['display'] = display
+
+            try:
+                if tts_active:
+                    if team:
+                        text = "{}'s {}".format(team, name)
+                    else:
+                        text = name
+                    tts = gtts.gTTS(text=text, lang=tts_lang)
+                    tts_file = 'src/sound/player{}.mp3'.format(player_idx + 1)
+                    file = os.path.normpath(os.path.join(
+                        scctool.settings.getAbsPath(
+                            scctool.settings.OBShtmlDir),
+                        tts_file))
+                    tts.save(file)
+                else:
+                    tts_file = None
+                self.__playerIntroData[player_idx]['tts'] = tts_file
+
+            except Exception as e:
+                self.__playerIntroData[player_idx]['tts'] = None
+                module_logger.exception("message")
 
     def getMapImg(self, map, fullpath=False):
         """Get map image from map name."""
