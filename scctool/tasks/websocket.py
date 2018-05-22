@@ -156,10 +156,6 @@ class WebsocketThread(QThread):
             self.changeFont(primary_scope)
             data = self.__controller.matchData.getMapIconsData()
             self.sendData2WS(websocket, 'DATA', data)
-        else:
-            module_logger.info(
-                "Couldn't connect websocket: {} {}".
-                format(path, primary_scope))
 
         while True:
             try:

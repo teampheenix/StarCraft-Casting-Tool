@@ -44,8 +44,8 @@ class SubwindowConnections(QWidget):
 
             self.setLayout(mainLayout)
 
-            self.resize(QSize(mainWindow.size().width()
-                              * 0.8, self.sizeHint().height()))
+            self.resize(QSize(mainWindow.size().width() * 0.8,
+                              self.sizeHint().height()))
             relativeChange = QPoint(mainWindow.size().width() / 2,
                                     mainWindow.size().height() / 3) -\
                 QPoint(self.size().width() / 2,
@@ -83,7 +83,8 @@ class SubwindowConnections(QWidget):
         self.twitchChannel.setPlaceholderText(
             _("Name of the Twitch channel that should be updated"))
         self.twitchChannel.setToolTip(
-            _('The connected twitch user needs to have editor rights for this channel.'))
+            _('The connected twitch user needs to have editor'
+              ' rights for this channel.'))
         layout.addRow(QLabel(
             "Twitch-Channel:"), self.twitchChannel)
 
