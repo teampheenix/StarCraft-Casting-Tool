@@ -75,86 +75,58 @@ function Connect() {
             .to(intro, 0, {
               opacity: 0,
               left: offset + "px",
-              height: "0px"
-            })
-            .to(racelogo, 0, {
-              height: logoTransHeight + "px"
+              transformOrigin: "right top",
+              scaleY: 0
             })
             .to(intro, 0.1, {
               opacity: 1,
-              height: "0px"
             })
             .to(intro, 0.35, {
               ease: Power2.easeOut,
-              height: introHeight + "px"
+              scaleY: 1
             })
-            .to(racelogo, 0.35, {
-              ease: Power2.easeOut,
-              height: racelogoHeight + "px"
-            }, "-=0.35")
             .call(playSound, [tts])
             .to(intro, jsonObject.data.display_time, {
-              height: introHeight + "px"
+              scaleY: 1
             })
             .to(intro, 0.35, {
-              height: "0px",
+              scaleY: 0,
               ease: Power1.easeOut
             })
-            .to(racelogo, 0.35, {
-              ease: Power2.easeOut,
-              height: logoTransHeight + "px"
-            }, "-=0.35")
             .to(intro, 0, {
               left: "105%",
+              transformOrigin: "center",
               opacity: 0,
-              height: ""
-            })
-            .to(racelogo, 0, {
               height: ""
             });
         } else if (animation == "slide") {
           tween.to(intro, 0, {
               opacity: 0,
-              left: offset + introWidth / 2 + "px",
-              width: "0px"
-            })
-            .to(racelogo, 0, {
-              width: logoTransWidth + "px"
+              left: offset + "px",
+              scaleX: 0
             })
             .to(intro, 0.1, {
-              opacity: 1,
-              left: offset + introWidth / 2 + "px",
+              opacity: 1
             })
             .call(playSound, [myAudio2])
             .to(intro, 0.35, {
               ease: Power2.easeOut,
-              width: introWidth + "px",
-              left: offset + "px"
+              scaleX: 1,
+              force3D: true
             })
-            .to(racelogo, 0.35, {
-              ease: Power2.easeOut,
-              width: racelogoWidth + "px"
-            }, "-=0.35")
             .call(playSound, [tts])
             .to(intro, jsonObject.data.display_time, {
-              width: introWidth + "px"
+              scaleX: 1
             })
             .call(playSound, [myAudio2])
             .to(intro, 0.35, {
-              left: offset + introWidth / 2 + "px",
-              width: "0px",
+              scaleX: 0,
+              force3D: true,
               ease: Power2.easeIn
             })
-            .to(racelogo, 0.35, {
-              ease: Power2.easeIn,
-              width: logoTransWidth + "px"
-            }, "-=0.35")
             .to(intro, 0, {
               left: "105%",
               opacity: 0,
-              width: ""
-            })
-            .to(racelogo, 0, {
               width: ""
             });
         } else {
