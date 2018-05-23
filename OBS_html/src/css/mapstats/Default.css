@@ -1,246 +1,246 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto');
 :root {
-        --width: 1600px;
-        --height: 850px;
-        --middle: 50%;
-        --side: calc((100% - var(--middle)) / 2);
-        --color: #6495ed;
-        --color2: black;
-        --font: Roboto;
+  --width: 1600px;
+  --height: 850px;
+  --middle: 50%;
+  --side: calc((100% - var(--middle)) / 2);
+  --color: #6495ed;
+  --color2: black;
+  --font: Roboto;
 }
 
 body {
-        font-family: var(--font);
+  font-family: var(--font);
 }
 
 div.box {
-        position: absolute;
-        width: var(--width);
-        height: var(--height);
-        left: calc((100% - var(--width)) / 2);
-        top: calc((100% - var(--height)) / 2);
-        overflow: hidden;
+  position: absolute;
+  width: var(--width);
+  height: var(--height);
+  left: calc((100% - var(--width)) / 2);
+  top: calc((100% - var(--height)) / 2);
+  overflow: hidden;
 }
 
 div.left-column {
-        box-sizing: border-box;
-        position: absolute;
-        height: 100%;
-        width: calc(var(--side) + 31px);
-        padding: 12px;
-        padding-right: 43px;
-        overflow: hidden;
+  box-sizing: border-box;
+  position: absolute;
+  height: 100%;
+  width: calc(var(--side) + 31px);
+  padding: 12px;
+  padding-right: 43px;
+  overflow: hidden;
 }
 
 div.right-column {
-        box-sizing: border-box;
-        position: absolute;
-        height: 90%;
-        right: 0%;
-        width: var(--side);
-        padding: 12px;
-        overflow: hidden;
+  box-sizing: border-box;
+  position: absolute;
+  height: 90%;
+  right: 0%;
+  width: var(--side);
+  padding: 12px;
+  overflow: hidden;
 }
 
 div.middle-column {
-        box-sizing: border-box;
-        position: absolute;
-        height: 90%;
-        left: calc(var(--side));
-        width: calc(var(--middle));
-        display: inline-block;
-        overflow: hidden;
+  box-sizing: border-box;
+  position: absolute;
+  height: 90%;
+  left: calc(var(--side));
+  width: calc(var(--middle));
+  display: inline-block;
+  overflow: hidden;
 }
 
 div.column-header {
-        box-sizing: border-box;
-        position: relative;
-        height: 325px;
-        color: var(--color);
-        font-size: 43px;
-        text-transform: uppercase;
-        letter-spacing: 6px;
+  box-sizing: border-box;
+  position: relative;
+  height: 325px;
+  color: var(--color);
+  font-size: 43px;
+  text-transform: uppercase;
+  letter-spacing: 6px;
 }
 
 div.column-header span {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
 }
 
 div.column-header.left {
-        text-align: right;
+  text-align: right;
 }
 
 div.column-header.right {
-        text-align: left;
+  text-align: left;
 }
 
 div.column-header span:after {
-        content: '';
-        width: 90%;
-        height: 3px;
-        background-color: var(--color);
-        display: inline-block;
+  content: '';
+  width: 90%;
+  height: 3px;
+  background-color: var(--color);
+  display: inline-block;
 }
 
 #map-img {
-        position: absolute;
-        box-sizing: border-box;
-        max-width: 90%;
-        max-height: 90%;
-        display: block;
-        bottom: 0%;
-        left: 50%;
-        transform: translate(-50%, 0%);
-        border: 3px solid var(--color);
+  position: absolute;
+  box-sizing: border-box;
+  max-width: 90%;
+  max-height: 90%;
+  display: block;
+  bottom: 0%;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  border: 3px solid var(--color);
 }
 
 #map-list {
-        color: var(--color2);
-        letter-spacing: 2px;
-        font-size: 25px;
-        line-height: 31px;
-        text-transform: uppercase;
-        text-align: right;
-        list-style-type: none;
-        position: absolute;
-        right: 0px;
+  color: var(--color2);
+  letter-spacing: 2px;
+  font-size: 25px;
+  line-height: 31px;
+  text-transform: uppercase;
+  text-align: right;
+  list-style-type: none;
+  position: absolute;
+  right: 0px;
 }
 
 ul {
-        margin-top: 0px;
+  margin-top: 0px;
 }
 
 ul li {
-        margin: 12px;
-        cursor: pointer;
-        white-space: nowrap;
+  margin: 12px;
+  cursor: pointer;
+  white-space: nowrap;
 }
 
-ul li div{
-        display: inline-block;
-        right: 31px;
-        display: inline-block;
+ul li div {
+  display: inline-block;
+  right: 31px;
+  display: inline-block;
 }
 
 ul li::after {
-        content: ' ';
-        width: 31px;
-        display: inline-block;
-        box-sizing: border-box;
+  content: ' ';
+  width: 31px;
+  display: inline-block;
+  box-sizing: border-box;
 }
 
 ul li.selected::after {
-        content: '⮜';
-        color: var(--color);
-        width: 31px;
-        display: inline-block;
-        box-sizing: border-box;
+  content: '⮜';
+  color: var(--color);
+  width: 31px;
+  display: inline-block;
+  box-sizing: border-box;
 }
 
 ul li.selected::before {
-        content: '⮞';
-        color: var(--color);
-        width: 31px;
-        text-align: left;
-        display: inline-block;
+  content: '⮞';
+  color: var(--color);
+  width: 31px;
+  text-align: left;
+  display: inline-block;
 }
 
 ul li::before {
-        content: '';
-        width: 31px;
-        text-align: left;
-        display: inline-block;
+  content: '';
+  width: 31px;
+  text-align: left;
+  display: inline-block;
 }
 
 div.stat {
-        margin-bottom: 43px;
+  margin-bottom: 43px;
 }
 
 div.stat>span {
-        font-size: 31px;
-        color: var(--color2);
-        position: relative;
-        top: 3px;
-        display: inline-block;
+  font-size: 31px;
+  color: var(--color2);
+  position: relative;
+  top: 3px;
+  display: inline-block;
 }
 
 div.stat>div {
-        letter-spacing: 0px;
-        color: var(--color);
-        font-size: 25px;
-        font-weight: bold;
-        margin-bottom: 0;
-        margin-right: 18px;
-        display: inline-block;
+  letter-spacing: 0px;
+  color: var(--color);
+  font-size: 25px;
+  font-weight: bold;
+  margin-bottom: 0;
+  margin-right: 18px;
+  display: inline-block;
 }
 
 div.stat>div::after {
-        content: ':';
+  content: ':';
 }
 
 div.small-stat>span {
-        letter-spacing: 0px;
-        font-size: 20px;
-        color: var(--color2);
+  letter-spacing: 0px;
+  font-size: 20px;
+  color: var(--color2);
 }
 
 div.small-stat>span.desc {
-        color: var(--color);
-        letter-spacing: 1px;
-        font-weight: bold;
-        text-transform: uppercase;
+  color: var(--color);
+  letter-spacing: 1px;
+  font-weight: bold;
+  text-transform: uppercase;
 }
 
 div.small-stat>span.desc::after {
-        content: ': '
+  content: ': '
 }
 
 #column-content {
-        position: relative;
+  position: relative;
 }
 
 #column-bottom {
-        position: absolute;
-        padding-left: 12px;
-        bottom: 0;
+  position: absolute;
+  padding-left: 12px;
+  bottom: 0;
 }
 
 div.race {
-        display: inline-block;
-        width: 2em;
-        height: 2.5em;
-        margin-bottom: -0.8em;
-        overflow: hidden;
+  display: inline-block;
+  width: 2em;
+  height: 2.5em;
+  margin-bottom: -0.8em;
+  overflow: hidden;
 }
 
 div.race>span {
-        background-image: url('../../img/races/protoss-black.png');
-        background-repeat: no-repeat;
-        background-position: center center;
-        background-size: contain;
-        display: block;
-        position: relative;
-        width: 2em;
-        filter: drop-shadow(100px 0px var(--color));
-        margin-left: -100px;
+  background-image: url('../../img/races/protoss-black.png');
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
+  display: block;
+  position: relative;
+  width: 2em;
+  filter: drop-shadow(100px 0px var(--color));
+  margin-left: -100px;
 }
 
 div.Protoss>span {
-        background-image: url('../../img/races/protoss-black.png');
-        height: 2.5em;
+  background-image: url('../../img/races/protoss-black.png');
+  height: 2.5em;
 }
 
 div.Terran>span {
-        background-image: url('../../img/races/terran-black.png');
-        height: 2.0em;
-        margin-top: 0.35em;
+  background-image: url('../../img/races/terran-black.png');
+  height: 2.0em;
+  margin-top: 0.35em;
 }
 
 div.Zerg>span {
-        background-image: url('../../img/races/zerg-black.png');
-        height: 2.0em;
-        margin-top: 0.35em;
+  background-image: url('../../img/races/zerg-black.png');
+  height: 2.0em;
+  margin-top: 0.35em;
 }

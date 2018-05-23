@@ -2,25 +2,25 @@
 <html lang="en">
 
 <head>
-        <meta charset="UTF-8">
-        <title>League</title>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <script>
-                function reloadContent() {
-                        $("#content").load("data/league-data.html");
-                        setTimeout(reloadContent, 1000);
-                }
+  <meta charset="UTF-8">
+  <title>League</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script>
+    function reloadContent() {
+      $("#content").load("data/league-data.html");
+      setTimeout(reloadContent, 1000);
+    }
 
-                $(document).ready(function() {
-                        reloadContent();
-                });
-        </script>
-        <link rel="stylesheet" href="src/css/league.css">
+    $(document).ready(function() {
+      reloadContent();
+    });
+  </script>
+  <link rel="stylesheet" href="src/css/league.css">
 </head>
 
 <body>
-        <div id="content">
-        </div>
+  <div id="content">
+  </div>
 </body>
 
 </html>
