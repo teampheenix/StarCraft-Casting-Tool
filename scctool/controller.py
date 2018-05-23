@@ -664,6 +664,8 @@ class MainController:
         data = self.__playerIntroData[idx]
         data['volume'] = scctool.settings.config.parser.getint(
             "Intros", "sound_volume")
+        data['tts_volume'] = scctool.settings.config.parser.getint(
+            "Intros", "tts_volume")
         data['display_time'] = scctool.settings.config.parser.getfloat(
             "Intros", "display_time")
         data['animation'] = scctool.settings.config.parser.get(
@@ -682,6 +684,8 @@ class MainController:
             "Intros", "tts_active")
         tts_lang = scctool.settings.config.parser.get(
             "Intros", "tts_lang")
+        tts_scope = scctool.settings.config.parser.get(
+            "Intros", "tts_scope")
 
         for player_idx in range(2):
             team1 = newData.playerInList(
@@ -716,7 +720,7 @@ class MainController:
 
             try:
                 if tts_active:
-                    if team:
+                    if team and tts_scope == 'team_player':
                         text = "{}'s {}".format(team, name)
                     else:
                         text = name

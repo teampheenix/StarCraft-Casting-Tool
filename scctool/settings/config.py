@@ -171,6 +171,8 @@ def setDefaultConfigAll():
     setDefaultConfig("Intros", "animation", "Fly-In")
     setDefaultConfig("Intros", "tts_active", "True")
     setDefaultConfig("Intros", "tts_lang", "en")
+    setDefaultConfig("Intros", 'tts_scope', "team_player")
+    setDefaultConfig("Intros", "tts_volume", "5")
 
     setDefaultConfig("Mapstats", "color1", "#6495ed")
     setDefaultConfig("Mapstats", "color2", "#000000")

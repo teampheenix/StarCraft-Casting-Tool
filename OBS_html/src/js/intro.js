@@ -41,6 +41,7 @@ function Connect() {
       if (!tween.isActive()) {
         console.log(jsonObject.data.tts);
         var tts = new Audio(jsonObject.data.tts);
+        tts.volume = jsonObject.data.tts_volume / 10.0;
         tween.clear();
         $(".race").prop('id', jsonObject.data.race);
         $(".logo").css("display", jsonObject.data.display)

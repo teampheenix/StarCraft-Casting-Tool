@@ -234,9 +234,13 @@ class SubwindowBrowserSources(QWidget):
         animation = scctool.settings.config.parser.get("Intros", "animation")
         currentIdx = 0
         idx = 0
-        for item in ["Fly-In", "Slide", "Fanfare"]:
-            self.cb_animation.addItem(item)
-            if(item == animation):
+        options = dict()
+        options['Fly-In'] = _("Fly-In")
+        options['Slide'] = _("Slide")
+        options['Fanfare'] = _("Fanfare")
+        for key, item in options.items():
+            self.cb_animation.addItem(item, key)
+            if(key == animation):
                 currentIdx = idx
             idx += 1
         self.cb_animation.setCurrentIndex(currentIdx)
@@ -274,6 +278,34 @@ class SubwindowBrowserSources(QWidget):
         self.ttsBox.setStyleSheet("QComboBox { combobox-popup: 0; }")
         self.ttsBox.setLayout(layout)
         mainLayout.addWidget(self.ttsBox)
+
+        self.cb_tts_scope = QComboBox()
+        scope = scctool.settings.config.parser.get("Intros", "tts_scope")
+        currentIdx = 0
+        idx = 0
+        options = dict()
+        options['team_player'] = _("Team & Player")
+        options['player'] = _("Player")
+        for key, item in options.items():
+            self.cb_tts_scope.addItem(item, key)
+            if(key == scope):
+                currentIdx = idx
+            idx += 1
+        self.cb_tts_scope.setCurrentIndex(currentIdx)
+        self.cb_tts_scope.currentIndexChanged.connect(self.changed)
+        layout.addRow(QLabel(
+            _("Scope:") + " "), self.cb_tts_scope)
+
+        self.sl_tts_sound = QSlider(Qt.Horizontal)
+        self.sl_tts_sound.setMinimum(0)
+        self.sl_tts_sound.setMaximum(10)
+        self.sl_tts_sound.setValue(
+            scctool.settings.config.parser.getint("Intros", "tts_volume"))
+        self.sl_tts_sound.setTickPosition(QSlider.TicksBothSides)
+        self.sl_tts_sound.setTickInterval(1)
+        self.sl_tts_sound.valueChanged.connect(self.changed)
+        layout.addRow(QLabel(
+            _("Sound Volume:") + " "), self.sl_tts_sound)
 
         mainLayout.addItem(QSpacerItem(
             0, 0, QSizePolicy.Minimum, QSizePolicy.Expanding))
@@ -334,11 +366,15 @@ class SubwindowBrowserSources(QWidget):
         scctool.settings.config.parser.set(
             "Intros", "sound_volume", str(self.sl_sound.value()))
         scctool.settings.config.parser.set(
-            "Intros", "animation", self.cb_animation.currentText().strip())
+            "Intros", "animation", self.cb_animation.currentData().strip())
         scctool.settings.config.parser.set(
             "Intros", "tts_lang", self.cb_tts_lang.currentData().strip())
         scctool.settings.config.parser.set(
+            "Intros", "tts_scope", self.cb_tts_scope.currentData().strip())
+        scctool.settings.config.parser.set(
             "Intros", "tts_active", str(self.cb_tts_active.isChecked()))
+        scctool.settings.config.parser.set(
+            "Intros", "tts_volume", str(self.sl_tts_sound.value()))
 
     def saveCloseWindow(self):
         """Save and close window."""
