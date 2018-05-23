@@ -244,9 +244,6 @@ class MainController:
         try:
             newProvider = self.matchData.parseURL(url)
             self.matchData.grabData(newProvider, self.logoManager)
-            self.matchData.autoSetMyTeam(
-                swap=scctool.settings.config.parser.getboolean(
-                    "SCT", "swap_myteam"))
             self.matchData.writeJsonFile()
             try:
                 self.matchData.downloadBanner()
@@ -859,6 +856,14 @@ class MainController:
                     'setid': object['set_idx'] + 1,
                     'color': object['color2'],
                     'opacity': object['opacity']})
+        elif label == 'border-color':
+            self.websocketThread.sendData2Path(
+                'mapicons_box', 'CHANGE_SCORE', {
+                    'winner': object['score'],
+                    'setid': object['set_idx'] + 1,
+                    'color': object['color'],
+                    'opacity': object['opacity']})
+
         elif label == 'outcome':
             self.websocketThread.sendData2Path('score', 'SET_WINNER', object)
         elif label == 'player':

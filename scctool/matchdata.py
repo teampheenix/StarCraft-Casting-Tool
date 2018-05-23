@@ -427,6 +427,16 @@ class matchData(QObject):
             self.__data['my_team'] = new
             for i in range(self.getNoSets()):
                 self.__setsChanged[i] = True
+                score = self.getMapScore(i)
+                if score != 0:
+                    color, opacity = self.getBorderColor(i)
+                    self.__emitSignal(
+                        'data',
+                        'border-color', {
+                            'set_idx': i,
+                            'score': score,
+                            'color': color,
+                            'opacity': opacity})
 
         if swap and int(self.__data['my_team']) > 0:
             self.swapTeams()
@@ -706,6 +716,7 @@ class matchData(QObject):
             return False
 
     def setTeam(self, team_idx, name, tag=False):
+        print("Set team called")
         """Set a team name."""
         if team_idx not in range(2):
             return False
@@ -1027,7 +1038,7 @@ class matchData(QObject):
                 "MapIcons",
                 "lose_color"), 0.0
         else:
-            if max(self.getScore()) > int(self.getBestOf() / 2):
+            if score == 0 and max(self.getScore()) > int(self.getBestOf() / 2):
                 return scctool.settings.config.parser.get(
                     "MapIcons",
                     "notplayed_color"), notplayed_opacity
@@ -1042,11 +1053,6 @@ class matchData(QObject):
         try:
             team = self.getMyTeam()
             score = [0, 0]
-
-            if(team == 0):
-                landscape_score_hide = ";display: none"
-            else:
-                landscape_score_hide = ""
 
             for i in range(self.getNoSets()):
                 winner = self.getMapScore(i)
@@ -1097,9 +1103,9 @@ class matchData(QObject):
                 data['race1'] = self.getRace(0, i).lower()
                 data['race2'] = self.getRace(1, i).lower()
                 data['map_img'] = self.__controller.getMapImg(self.getMap(i))
-                data['map_name'] = self.getMap(i)
-                data['map_id'] = self.getLabel(i)
-                data['score_color'] = score_color + landscape_score_hide
+                data['mapname'] = self.getMap(i)
+                data['maplabel'] = self.getLabel(i)
+                data['score_color'] = score_color
                 data['border_color'] = border_color
                 data['opacity'] = opacity
                 data['status1'] = player1status

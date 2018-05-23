@@ -242,6 +242,10 @@ class MatchGrabber(MatchGrabberParent):
             if logoManager is not None:
                 self.downloadLogos(logoManager)
 
+            self._matchData.autoSetMyTeam(
+                swap=scctool.settings.config.parser.getboolean(
+                    "SCT", "swap_myteam"))
+
     def downloadLogos(self, logoManager):
         """Download team logos."""
 
