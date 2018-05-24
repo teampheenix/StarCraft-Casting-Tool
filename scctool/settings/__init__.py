@@ -21,8 +21,8 @@ if getattr(sys, 'frozen', False):
 else:
     basedir = os.path.dirname(sys.modules['__main__'].__file__)
 
-streaming_data_dir = "Streaming_data"
-streaming_html_dir = "Streaming_html"
+streaming_data_dir = "streaming_data"
+streaming_html_dir = "streaming_html"
 
 dataDir = "data"
 logosDir = os.path.join(dataDir, "logos")
