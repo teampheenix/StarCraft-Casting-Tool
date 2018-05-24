@@ -162,7 +162,8 @@ function Connect() {
         var offset = (window.innerWidth - intro.offsetWidth) / 2;
         TweenLite.to(intro, 0, {
           opacity: 1,
-          left: offset + "px"
+          left: offset + "px",
+          scale: 1
         });
         debug = true;
       } else {
