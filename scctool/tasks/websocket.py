@@ -19,7 +19,8 @@ class WebsocketThread(QThread):
 
     keyboard_state = dict()
     socketConnectionChanged = pyqtSignal(int, str)
-    valid_scopes = ['score', 'mapicons_box_[1-3]', 'intro', 'mapstats']
+    valid_scopes = ['score', 'mapicons_box_[1-3]',
+                    'mapicons_landscape_[1-3]', 'intro', 'mapstats']
     scopes = dict()
 
     def __init__(self, controller):
@@ -152,7 +153,7 @@ class WebsocketThread(QThread):
             self.changeFont(primary_scope)
             data = self.__controller.matchData.getScoreData()
             self.sendData2WS(websocket, "ALL_DATA", data)
-        elif primary_scope == 'mapicons_box':
+        elif primary_scope in ['mapicons_box', 'mapicons_landscape']:
             self.changeFont(primary_scope)
             data = self.__controller.matchData.getMapIconsData()
             self.sendData2WS(websocket, 'DATA', data)
@@ -216,7 +217,8 @@ class WebsocketThread(QThread):
             raise ValueError('Change style is not available for this path.')
 
     def changeFont(self, path=None, font=None):
-        valid_paths = ['mapstats', 'score', 'mapicons_box']
+        valid_paths = ['mapstats', 'score',
+                       'mapicons_box', 'mapicons_landscape']
         if path is None:
             for path in valid_paths:
                 self.changeFont(path, font)
@@ -242,6 +244,10 @@ class WebsocketThread(QThread):
         self.sendData2Path('mapstats', 'SELECT_MAP', {'map': str(map)})
 
     def sendData2Path(self, path, event, input_data):
+        if isinstance(path, list):
+            for item in path:
+                self.sendData2Path(item, event, input_data)
+            return
         try:
             data = dict()
             data['event'] = event
@@ -259,6 +265,10 @@ class WebsocketThread(QThread):
             module_logger.exception("message")
 
     def sendData2WS(self, websocket, event, input_data):
+        if isinstance(websocket, list):
+            for item in websocket:
+                self.sendData2WS(item, event, input_data)
+            return
         try:
             data = dict()
             data['event'] = event

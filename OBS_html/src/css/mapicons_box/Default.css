@@ -168,16 +168,18 @@ div.race2 {
 
 #zerg {
   background-image: url('../../img/races/Zerg.png');
-  top: 70px;
-  height: 110px;
+  top: 77.5px !important;
+  height: 95px !important;
 }
 
 #terran {
   background-image: url('../../img/races/Terran.png');
+  top: 85px !important;
+  height: 80px !important;
 }
 
 #random {
   background-image: url('../../img/races/Random.png');
-  top: 80px;
-  height: 90px;
+  top: 85px !important;
+  height: 80px !important;
 }

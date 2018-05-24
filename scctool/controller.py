@@ -813,7 +813,10 @@ class MainController:
         data = self.matchData.getScoreData()
         self.websocketThread.sendData2Path("score", "ALL_DATA", data)
         data = self.matchData.getMapIconsData()
-        self.websocketThread.sendData2Path('mapicons_box', 'DATA', data)
+        self.websocketThread.sendData2Path(
+            ['mapicons_box', 'mapicons_landscape'],
+            'DATA',
+            data)
 
     def handleMatchDataChange(self, label, object):
         print(label, object)
@@ -838,7 +841,8 @@ class MainController:
                         'color': color})
             color, opacity = self.matchData.getBorderColor(object['set_idx'])
             self.websocketThread.sendData2Path(
-                'mapicons_box', 'CHANGE_SCORE', {
+                ['mapicons_box', 'mapicons_landscape'],
+                'CHANGE_SCORE', {
                     'winner': object['value'],
                     'setid': object['set_idx'] + 1,
                     'color': color,
@@ -851,7 +855,8 @@ class MainController:
                         'setid': object['set_idx'] + 1,
                         'color': object['color']})
             self.websocketThread.sendData2Path(
-                'mapicons_box', 'CHANGE_SCORE', {
+                ['mapicons_box', 'mapicons_landscape'],
+                'CHANGE_SCORE', {
                     'winner': 0,
                     'setid': object['set_idx'] + 1,
                     'color': object['color2'],
@@ -868,19 +873,22 @@ class MainController:
             self.websocketThread.sendData2Path('score', 'SET_WINNER', object)
         elif label == 'player':
             self.websocketThread.sendData2Path(
-                'mapicons_box', 'CHANGE_TEXT', {
+                ['mapicons_box', 'mapicons_landscape'],
+                'CHANGE_TEXT', {
                     'icon': object['set_idx'] + 1,
                     'label': 'player{}'.format(object['team_idx'] + 1),
                     'text': object['value']})
         elif label == 'race':
             self.websocketThread.sendData2Path(
-                'mapicons_box', 'CHANGE_RACE', {
+                ['mapicons_box', 'mapicons_landscape'],
+                'CHANGE_RACE', {
                     'icon': object['set_idx'] + 1,
                     'team': object['team_idx'] + 1,
                     'race': object['value'].lower()})
         elif label == 'map':
             self.websocketThread.sendData2Path(
-                'mapicons_box', 'CHANGE_MAP', {
+                ['mapicons_box', 'mapicons_landscape'],
+                'CHANGE_MAP', {
                     'icon': object['set_idx'] + 1,
                     'map': object['value'],
                     'map_img': self.getMapImg(object['value'])})

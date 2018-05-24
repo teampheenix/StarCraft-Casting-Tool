@@ -331,7 +331,7 @@ function initAnimation() {
     mapicon_tweens.push(local_tween);
   }
   tweenInitial.delay(0.3);
-  tweenInitial.add(mapicon_tweens, "+=0", "sequence", -0.15);
+  tweenInitial.add(mapicon_tweens, "+=0", "sequence", -0.25);
 }
 
 function outroAnimation() {
