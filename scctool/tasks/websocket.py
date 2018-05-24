@@ -30,6 +30,7 @@ class WebsocketThread(QThread):
         self.__loop = None
         self.__controller = controller
         self.setup_scopes()
+        self._hotkeys_active = False
 
     def setup_scopes(self):
         self.scope_regex = re.compile(r'_\[\d-\d\]')
@@ -59,7 +60,6 @@ class WebsocketThread(QThread):
                                         read_limit=10240,
                                         write_limit=10240)
         self.__server = self.__loop.run_until_complete(start_server)
-        self.register_hotkeys()
         self.__loop.run_forever()
 
         # Shut down the server.
@@ -98,17 +98,22 @@ class WebsocketThread(QThread):
             data['scan_code'], data['is_keypad'], e, callback))
 
     def register_hotkeys(self):
-        self.__register_hotkey(
-            scctool.settings.config.parser.get("Intros", "hotkey_player1"),
-            lambda: self.showIntro(0))
+        if (not self._hotkeys_active and
+                len(self.connected.get('intro', [])) > 0):
+            module_logger.info('Register intro hotkeys.')
+            self.__register_hotkey(
+                scctool.settings.config.parser.get("Intros", "hotkey_player1"),
+                lambda: self.showIntro(0))
 
-        self.__register_hotkey(
-            scctool.settings.config.parser.get("Intros", "hotkey_player2"),
-            lambda: self.showIntro(1))
+            self.__register_hotkey(
+                scctool.settings.config.parser.get("Intros", "hotkey_player2"),
+                lambda: self.showIntro(1))
 
-        self.__register_hotkey(
-            scctool.settings.config.parser.get("Intros", "hotkey_debug"),
-            lambda: self.sendData2Path("intro", "DEBUG_MODE", dict()))
+            self.__register_hotkey(
+                scctool.settings.config.parser.get("Intros", "hotkey_debug"),
+                lambda: self.sendData2Path("intro", "DEBUG_MODE", dict()))
+
+            self._hotkeys_active = True
 
     def unregister_hotkeys(self):
         try:
@@ -116,6 +121,8 @@ class WebsocketThread(QThread):
         except AttributeError:
             pass
         finally:
+            module_logger.info('Unregister intro hotkeys.')
+            self._hotkeys_active = False
             self.keyboard_state = dict()
 
     def handle_path(self, path):
@@ -185,13 +192,17 @@ class WebsocketThread(QThread):
         self.connected[path].add(websocket)
         self.socketConnectionChanged.emit(
             len(self.connected[path]), primary_scope)
+        if path == 'intro':
+            self.register_hotkeys()
 
     def unregisterConnection(self, websocket, path):
         if path in self.connected.keys():
             self.connected[path].remove(websocket)
             primary_scope = self.get_primary_scope(path)
-            self.socketConnectionChanged.emit(
-                len(self.connected[path]), primary_scope)
+            num = len(self.connected[path])
+            self.socketConnectionChanged.emit(num, primary_scope)
+            if path == 'intro' and num == 0:
+                self.unregister_hotkeys()
 
     def changeStyle(self, path, style=None):
         primary_scope = self.get_primary_scope(path)

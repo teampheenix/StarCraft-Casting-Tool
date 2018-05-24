@@ -39,8 +39,9 @@ class SubwindowLogos(QWidget):
         box = QGroupBox(
             _("Logo Team 1") + " - {}".format(mainWindow.le_team[0].text()))
         layout = QGridLayout()
-        self.team1_icon = DragImageLabel(self,
-                                         self.controller.logoManager.getTeam1(), 1)
+        self.team1_icon = DragImageLabel(
+            self,
+            self.controller.logoManager.getTeam1(), 1)
         layout.addWidget(self.team1_icon, 0, 0, 5, 1)
         button = QPushButton(_("Load from File"))
         button.clicked.connect(lambda: self.logoFromFileDialog(1))
@@ -86,8 +87,9 @@ class SubwindowLogos(QWidget):
             _("Logo Team 2") + " - {}".format(mainWindow.le_team[1].text()))
         box.setAlignment(Qt.AlignRight)
         layout = QGridLayout()
-        self.team2_icon = DragImageLabel(self,
-                                         self.controller.logoManager.getTeam2(), 2)
+        self.team2_icon = DragImageLabel(
+            self,
+            self.controller.logoManager.getTeam2(), 2)
         layout.addWidget(self.team2_icon, 0, 1, 5, 1)
         button = QPushButton(_("Load from File"))
         button.clicked.connect(lambda: self.logoFromFileDialog(2))
@@ -111,7 +113,8 @@ class SubwindowLogos(QWidget):
         box = QGroupBox(_("Favorites"))
         layout = QHBoxLayout()
         self.fav_list = DragDropLogoList(
-            self.controller.logoManager, self.controller.logoManager.addFavorite)
+            self.controller.logoManager,
+            self.controller.logoManager.addFavorite)
         self.fav_list.itemDoubleClicked.connect(self.doubleClicked)
         self.fav_list.setContextMenuPolicy(Qt.CustomContextMenu)
         self.fav_list.customContextMenuRequested.connect(
@@ -233,13 +236,15 @@ class SubwindowLogos(QWidget):
         self.refreshLastUsed()
 
     def doubleClicked(self, item):
+        if self.team == 0:
+            return
         map = item.icon().pixmap(self.iconsize)
         ident = self.controller.logoManager.pixmap2ident(map)
         logo = self.controller.logoManager.findLogo(ident)
         if self.team == 1:
             self.controller.logoManager.setTeam1Logo(logo)
             self.team1_icon.setPixmap(map)
-        else:
+        elif self.team == 2:
             self.controller.logoManager.setTeam2Logo(logo)
             self.team2_icon.setPixmap(map)
         self.refreshLastUsed()
@@ -341,7 +346,8 @@ class SubwindowLogos(QWidget):
 
                 if not regex.match(url):
                     QMessageBox.critical(
-                        self, "Invalid URL", _('{} is not a valid URL.').format(url))
+                        self,
+                        "Invalid URL", _('{} is not a valid URL.').format(url))
                     continue
                 else:
                     logo = LogoDownloader(
@@ -374,7 +380,6 @@ class SubwindowLogos(QWidget):
         """Handle close event."""
         try:
             self.controller.updateLogos(True)
-            self.controller.matchData.metaChanged()
             event.accept()
         except Exception as e:
             module_logger.exception("message")

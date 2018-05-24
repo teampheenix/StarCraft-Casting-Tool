@@ -143,7 +143,6 @@ def setDefaultConfigAll():
     setDefaultConfig("Form", "scoreupdate", "False")
     setDefaultConfig("Form", "togglescore", "False")
     setDefaultConfig("Form", "toggleprod", "False")
-    setDefaultConfig("Form", "playerintros", "False")
     setDefaultConfig("Form", "autotwitch", "False")
     setDefaultConfig("Form", "autonightbot", "False")
 
@@ -216,6 +215,11 @@ def renameConfigOptions():
     try:
         this.parser.remove_option("Nightbot", "command")
         this.parser.remove_option("Nightbot", "message")
+    except Exception:
+        pass
+
+    try:
+        this.parser.remove_option('Form', 'playerintros')
     except Exception:
         pass
 

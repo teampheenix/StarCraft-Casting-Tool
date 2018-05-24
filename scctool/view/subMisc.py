@@ -23,7 +23,7 @@ module_logger = logging.getLogger('scctool.view.subMisc')
 class SubwindowMisc(QWidget):
     """Show subwindow with miscellaneous settings."""
 
-    def createWindow(self, mainWindow):
+    def createWindow(self, mainWindow, tab=''):
         """Create subwindow with miscellaneous settings."""
         try:
             parent = None
@@ -39,7 +39,7 @@ class SubwindowMisc(QWidget):
             self.__dataChanged = False
 
             self.createButtonGroup()
-            self.createTabs()
+            self.createTabs(tab)
 
             mainLayout = QVBoxLayout()
 
@@ -61,7 +61,7 @@ class SubwindowMisc(QWidget):
         except Exception as e:
             module_logger.exception("message")
 
-    def createTabs(self):
+    def createTabs(self, tab=''):
         """Create tabs."""
         self.tabs = QTabWidget()
 
@@ -77,6 +77,14 @@ class SubwindowMisc(QWidget):
         self.tabs.addTab(self.aliasBox, _("Alias"))
         self.tabs.addTab(self.ocrBox, _("OCR"))
         self.tabs.addTab(self.alphaBox, _("AlphaTL && Ingame Score"))
+
+        table = dict()
+        table['mapmanager'] = 0
+        table['favorites'] = 1
+        table['alias'] = 2
+        table['ocr'] = 3
+        table['alphatl'] = 4
+        self.tabs.setCurrentIndex(table.get(tab, -1))
 
     def changed(self):
         """Handle changes."""
@@ -214,11 +222,12 @@ class SubwindowMisc(QWidget):
         self.aliasBox = QWidget()
         mainLayout = QGridLayout()
 
-        aliasDesc = _('Player and team aliases are replaced by the actual name when' +
-                      ' encountered by the match grabber. Additionally, SC2 player' +
-                      ' names listed as aliases are replaced in the intros' +
-                      ' and used to identify players by the automatic' +
-                      ' background tasks "Auto Score Update" and "Set Ingame Score".')
+        aliasDesc = _(
+            'Player and team aliases are replaced by the actual name when' +
+            ' encountered by the match grabber. Additionally, SC2 player' +
+            ' names listed as aliases are replaced in the intros' +
+            ' and used to identify players by the automatic' +
+            ' background tasks "Auto Score Update" and "Set Ingame Score".')
         label = QLabel(aliasDesc)
         label.setAlignment(Qt.AlignJustify)
         label.setWordWrap(True)
@@ -293,7 +302,8 @@ class SubwindowMisc(QWidget):
         mainLayout = QVBoxLayout()
 
         box = QGroupBox(
-            _("Optical Character Recognition for Automatic Setting of Ingame Score"))
+            _("Optical Character Recognition for"
+              " Automatic Setting of Ingame Score"))
 
         layout = QGridLayout()
 
@@ -316,12 +326,14 @@ class SubwindowMisc(QWidget):
         self.browse = QPushButton(_("Browse..."))
         self.browse.clicked.connect(self.selectTesseract)
 
-        text = _("Sometimes the order of players given by the SC2-Client-API differs" +
-                 " from the order in the Observer-UI resulting in a swapped match score." +
-                 " To correct this via Optical Character Recognition you have to download" +
-                 " {} and install and select the exectuable below, if it is not detected" +
-                 " automatically.")
-        url = 'https://github.com/UB-Mannheim/tesseract/wiki#tesseract-at-ub-mannheim'
+        text = _(
+            "Sometimes the order of players given by the SC2-Client-API"
+            " differs from the order in the Observer-UI resulting in a"
+            " swapped match score. To correct this via Optical Character"
+            " Recognition you have to download {} and install and select the"
+            " exectuable below, if it is not detected automatically.")
+        url = 'https://github.com/UB-Mannheim/tesseract' + \
+            '/wiki#tesseract-at-ub-mannheim'
         href = "<a href='{}'>" + "Tesseract-OCR" + "</a>"
         href = href.format(url)
 
@@ -530,7 +542,8 @@ class SubwindowMisc(QWidget):
                         QMessageBox.critical(
                             self,
                             _("Error"),
-                            _('"{}" is not a valid map name.').format(search_str))
+                            _('"{}" is not a valid map name.')
+                            .format(search_str))
                         continue
                     try:
                         map = grabber.get_map(search_str)
@@ -538,14 +551,16 @@ class SubwindowMisc(QWidget):
                         QMessageBox.critical(
                             self,
                             _("Map not found"),
-                            _('"{}" was not found on Liquipedia.').format(search_str))
+                            _('"{}" was not found on Liquipedia.')
+                            .format(search_str))
                         continue
                     map_name = map.get_name()
 
                     if(map_name in scctool.settings.maps):
                         buttonReply = QMessageBox.warning(
                             self, _("Duplicate Entry"), _(
-                                "Map {} is already in list! Overwrite?".format(map_name)),
+                                "Map {} is already in list! Overwrite?"
+                                .format(map_name)),
                             QMessageBox.Yes | QMessageBox.No,
                             QMessageBox.No)
                         if buttonReply == QMessageBox.No:
@@ -647,13 +662,15 @@ class SubwindowMisc(QWidget):
             scctool.settings.config.parser.set(
                 "SCT", "myteams", ", ".join(self.list_favTeams.getData()))
             scctool.settings.config.parser.set(
-                "SCT", "commonplayers", ", ".join(self.list_favPlayers.getData()))
+                "SCT", "commonplayers",
+                ", ".join(self.list_favPlayers.getData()))
             scctool.settings.config.parser.set(
                 "SCT", "tesseract", self.tesseract.text().strip())
             scctool.settings.config.parser.set(
                 "SCT", "use_ocr", str(self.cb_useocr.isChecked()))
             scctool.settings.config.parser.set(
-                "SCT", "transparent_match_banner", str(self.cb_trans_banner.isChecked()))
+                "SCT", "transparent_match_banner",
+                str(self.cb_trans_banner.isChecked()))
             scctool.settings.config.parser.set(
                 "SCT", "CtrlShiftS", str(self.cb_ctrlshifts.isChecked()))
             scctool.settings.config.parser.set(

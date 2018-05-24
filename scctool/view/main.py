@@ -159,6 +159,12 @@ class MainWindow(QMainWindow):
             miscAct.triggered.connect(self.openMiscDialog)
             settingsMenu.addAction(miscAct)
 
+            self.createBrowserSrcMenu()
+
+            ProfileMenu(self)
+
+            self.createLangMenu()
+
             infoMenu = menubar.addMenu(_('Info && Links'))
 
             myAct = QAction(QIcon(scctool.settings.getResFile(
@@ -225,12 +231,6 @@ class MainWindow(QMainWindow):
                 "https://paypal.me/StarCraftCastingTool"))
             infoMenu.addAction(myAct)
 
-            ProfileMenu(self)
-
-            self.createBrowserSrcMenu()
-
-            self.createLangMenu()
-
         except Exception as e:
             module_logger.exception("message")
 
@@ -265,9 +265,46 @@ class MainWindow(QMainWindow):
         main_menu = menubar.addMenu(_('Browser Sources'))
 
         srcs = []
-        srcs.append({'name': 'Intro', 'file': 'intro.html'})
-        srcs.append({'name': 'Mapstats', 'file': 'mapstats.html'})
-        srcs.append({'name': 'Score', 'file': 'score.html'})
+        srcs.append({'name': _('Intro'),
+                     'file': 'intro.html',
+                     'settings': lambda: self.openBrowserSourcesDialog(
+                     'intro')})
+        srcs.append({'name': _('Mapstats'),
+                     'file': 'mapstats.html',
+                     'settings': lambda: self.openBrowserSourcesDialog(
+                     'mapstats')})
+        srcs.append({'name': _('Score'),
+                     'file': 'score.html'})
+        srcs.append({'name': _('Map Icons Box'),
+                     'settings': lambda: self.openBrowserSourcesDialog(
+                     'mapicons_box'),
+                     'sub': [{'name': _('Icon Set {}').format(1),
+                              'file': 'mapicons_box_1.html'},
+                             {'name': _('Icon Set {}').format(2),
+                              'file': 'mapicons_box_2.html'},
+                             {'name': _('Icon Set {}').format(3),
+                              'file': 'mapicons_box_3.html'}]})
+        srcs.append({'name': _('Map Icons Landscape'),
+                     'settings': lambda: self.openBrowserSourcesDialog(
+                     "mapicons_landscape"),
+                     'sub': [{'name': _('Icon Set {}').format(1),
+                              'file': 'mapicons_landscape_1.html'},
+                             {'name': _('Icon Set {}').format(2),
+                              'file': 'mapicons_landscape_2.html'},
+                             {'name': _('Icon Set {}').format(3),
+                              'file': 'mapicons_landscape_3.html'}]})
+        srcs.append({'name': _('Misc'),
+                     'sub': [{'name': _('Logo {}').format(1),
+                              'file': 'logo1.html'},
+                             {'name': _('Logo {}').format(2),
+                              'file': 'logo2.html'},
+                             {'name': _('League (ALphaTL && RSTL only)'),
+                              'file': 'league.html'},
+                             {'name': _('Matchbanner (AlphaTL)'),
+                              'file': 'matchbanner.html',
+                              'settings': lambda:
+                              self.openMiscDialog('alphatl')}
+                             ]})
 
         act = QAction(_('Open Folder'), self)
         act.triggered.connect(lambda: os.startfile(
@@ -276,19 +313,50 @@ class MainWindow(QMainWindow):
         main_menu.addSeparator()
 
         for src in srcs:
-            src['file'] = os.path.join(
-                scctool.settings.streaming_html_dir, src['file'])
             myMenu = QMenu(src['name'], self)
-            act = QAction(_('Open in Browser'), self)
-            act.triggered.connect(lambda x,
-                                  file=src['file']: self.controller.openURL(
-                                      scctool.settings.getAbsPath(file)))
-            myMenu.addAction(act)
-            act = QAction(_('Copy URL to Clipboard'), self)
-            act.triggered.connect(lambda x, file=src['file']:
-                                  QApplication.clipboard().setText(
-                                  scctool.settings.getAbsPath(file)))
-            myMenu.addAction(act)
+            sub = src.get('sub', False)
+            if sub:
+                for icon in sub:
+                    mySubMenu = QMenu(icon['name'], self)
+                    icon['file'] = os.path.join(
+                        scctool.settings.streaming_html_dir, icon['file'])
+                    act = QAction(_('Open in Browser'), self)
+                    act.triggered.connect(
+                        lambda x,
+                        file=icon['file']: self.controller.openURL(
+                            scctool.settings.getAbsPath(file)))
+                    mySubMenu.addAction(act)
+                    act = QAction(_('Copy URL to Clipboard'), self)
+                    act.triggered.connect(
+                        lambda x, file=icon['file']:
+                        QApplication.clipboard().setText(
+                            scctool.settings.getAbsPath(file)))
+                    mySubMenu.addAction(act)
+                    if icon.get('settings', None) is not None:
+                        act = QAction(_('Settings'), self)
+                        act.triggered.connect(icon['settings'])
+                        mySubMenu.addAction(act)
+                    myMenu.addMenu(mySubMenu)
+            else:
+                src['file'] = os.path.join(
+                    scctool.settings.streaming_html_dir, src['file'])
+                act = QAction(_('Open in Browser'), self)
+                act.triggered.connect(
+                    lambda x,
+                    file=src['file']: self.controller.openURL(
+                        scctool.settings.getAbsPath(file)))
+                myMenu.addAction(act)
+                act = QAction(_('Copy URL to Clipboard'), self)
+                act.triggered.connect(
+                    lambda x, file=src['file']:
+                    QApplication.clipboard().setText(
+                        scctool.settings.getAbsPath(file)))
+                myMenu.addAction(act)
+
+            if src.get('settings', None) is not None:
+                act = QAction(_('Settings'), self)
+                act.triggered.connect(src['settings'])
+                myMenu.addAction(act)
             main_menu.addMenu(myMenu)
 
         main_menu.addSeparator()
@@ -318,16 +386,16 @@ class MainWindow(QMainWindow):
         self.mysubwindows['styles'].createWindow(self)
         self.mysubwindows['styles'].show()
 
-    def openMiscDialog(self):
+    def openMiscDialog(self, tab=''):
         """Open subwindow with misc settings."""
         self.mysubwindows['misc'] = SubwindowMisc()
-        self.mysubwindows['misc'].createWindow(self)
+        self.mysubwindows['misc'].createWindow(self, tab)
         self.mysubwindows['misc'].show()
 
-    def openBrowserSourcesDialog(self):
+    def openBrowserSourcesDialog(self, tab=''):
         """Open subwindow with misc settings."""
         self.mysubwindows['browser'] = SubwindowBrowserSources()
-        self.mysubwindows['browser'].createWindow(self)
+        self.mysubwindows['browser'].createWindow(self, tab)
         self.mysubwindows['browser'].show()
 
     def openReadme(self):
@@ -890,13 +958,6 @@ class MainWindow(QMainWindow):
             self.cb_autoUpdate.setToolTip(string)
             self.cb_autoUpdate.stateChanged.connect(self.autoUpdate_change)
 
-            self.cb_playerIntros = QCheckBox(
-                _("Provide Player Intros"))
-            self.cb_playerIntros.setChecked(False)
-            self.cb_playerIntros.setToolTip(
-                _('Update player intros files via SC2-Client-API'))
-            self.cb_playerIntros.stateChanged.connect(self.playerIntros_change)
-
             self.cb_autoToggleScore = QCheckBox(
                 _("Set Ingame Score"))
             self.cb_autoToggleScore.setChecked(False)
@@ -938,9 +999,8 @@ class MainWindow(QMainWindow):
 
             layout = QGridLayout()
 
-            layout.addWidget(self.cb_playerIntros, 0, 0)
-            layout.addWidget(self.cb_autoTwitch, 0, 1)
-            layout.addWidget(self.cb_autoNightbot, 0, 2)
+            layout.addWidget(self.cb_autoTwitch, 0, 0)
+            layout.addWidget(self.cb_autoNightbot, 0, 1)
 
             layout.addWidget(self.cb_autoUpdate, 1, 0)
             layout.addWidget(self.cb_autoToggleScore, 1, 1)
@@ -978,18 +1038,6 @@ class MainWindow(QMainWindow):
                 self.controller.runSC2ApiThread("updateScore")
             else:
                 self.controller.stopSC2ApiThread("updateScore")
-        except Exception as e:
-            module_logger.exception("message")
-
-    def playerIntros_change(self):
-        """Handle change of player intros check box."""
-        try:
-            if(self.cb_playerIntros.isChecked()):
-                self.controller.runSC2ApiThread("playerIntros")
-                # self.controller.runWebsocketThread()
-            else:
-                self.controller.stopSC2ApiThread("playerIntros")
-                # self.controller.stopWebsocketThread()
         except Exception as e:
             module_logger.exception("message")
 

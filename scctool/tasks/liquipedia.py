@@ -142,9 +142,11 @@ class LiquipediaGrabber:
         if len(maps) < 1:
             return
 
+        # TODO: Problem - since liquipedia use a module for map stats 'LE'
+        # needs to be added for some maps, but not all, e.g. Catallena.
         for map in maps:
             params['text'] = params['text'] + \
-                "{{Map statistics|map=" + map.strip() + "}}"
+                "{{Map statistics|map=" + map.strip() + " LE}}"
 
         url = '{}/starcraft2/api.php'.format(self._base_url)
         data = requests.get(url, headers=self._headers, params=params).json()
@@ -153,7 +155,8 @@ class LiquipediaGrabber:
         for map_stats in soup.find_all("tr", class_="stats-map-row"):
             data = dict()
             data['map'] = map_stats.find(
-                'td', class_='stats-map-name').find('a').text.strip()
+                'td', class_='stats-map-name').find('a').text.replace(
+                    'LE', '').strip()
             data['games'] = map_stats.find(
                 "td", class_="stats-map-number").text.strip()
             data['tvz'] = map_stats.find(

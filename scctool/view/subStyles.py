@@ -99,7 +99,7 @@ class SubwindowStyles(QWidget):
             container = QHBoxLayout()
             self.qb_boxStyle = StyleComboBox(
                 scctool.settings.streaming_html_dir + "/src/css/mapicons_box",
-                scctool.settings.config.parser.get("Style", "mapicon_box"))
+                scctool.settings.config.parser.get("Style", "mapicons_box"))
             self.qb_boxStyle.currentIndexChanged.connect(self.changed)
             label = QLabel(_("Box Map Icons:"))
             label.setMinimumWidth(110)
@@ -115,13 +115,15 @@ class SubwindowStyles(QWidget):
         try:
             container = QHBoxLayout()
             self.qb_landscapeStyle = StyleComboBox(
-                scctool.settings.streaming_html_dir + "/src/css/mapicons_landscape",
+                scctool.settings.streaming_html_dir +
+                "/src/css/mapicons_landscape",
                 scctool.settings.config.parser.get(
-                    "Style", "mapicon_landscape"))
+                    "Style", "mapicons_landscape"))
             self.qb_landscapeStyle.currentIndexChanged.connect(self.changed)
             button = QPushButton(_("Show in Browser"))
             button.clicked.connect(lambda: self.openHTML(
-                scctool.settings.streaming_html_dir + "/mapicons_landscape_1.html"))
+                scctool.settings.streaming_html_dir +
+                "/mapicons_landscape_1.html"))
             container.addWidget(self.qb_landscapeStyle)
             container.addWidget(button)
             layout.addRow(QLabel(
@@ -366,9 +368,6 @@ class SubwindowStyles(QWidget):
             scctool.settings.config.parser.set(
                 "Style", "custom_font",
                 self.cb_font.currentText().strip())
-
-            self.mainWindow.highlightOBSupdate()
-            self.controller.matchData.allChanged()
 
             colors = {'color1': self.mapstats_color1.getColor(),
                       'color2': self.mapstats_color2.getColor()}

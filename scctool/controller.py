@@ -273,10 +273,6 @@ class MainController:
                     scctool.settings.config.parser.getboolean("Form",
                                                               "toggleprod"))
 
-            self.view.cb_playerIntros.setChecked(
-                scctool.settings.config.parser.getboolean("Form",
-                                                          "playerintros"))
-
             self.view.cb_autoTwitch.setChecked(
                 scctool.settings.config.parser.getboolean("Form",
                                                           "autotwitch"))
@@ -427,8 +423,6 @@ class MainController:
                 self.view.cb_autoToggleScore.isChecked()))
             scctool.settings.config.parser.set("Form", "toggleprod", str(
                 self.view.cb_autoToggleProduction.isChecked()))
-            scctool.settings.config.parser.set("Form", "playerintros", str(
-                self.view.cb_playerIntros.isChecked()))
             scctool.settings.config.parser.set("Form", "autotwitch", str(
                 self.view.cb_autoTwitch.isChecked()))
             scctool.settings.config.parser.set("Form", "autonightbot", str(
@@ -782,6 +776,11 @@ class MainController:
         name = path.replace('_', ' ').title()
         view.leds[path].setToolTip(
             _("{} {} Browser Source(s) connected.").format(num, name))
+        if path == 'intro':
+            if num > 0:
+                self.runSC2ApiThread("playerIntros")
+            else:
+                self.stopSC2ApiThread("playerIntros")
 
     def updateMapButtons(self):
         mappool = list(self.mapstatsManager.getMapPool())

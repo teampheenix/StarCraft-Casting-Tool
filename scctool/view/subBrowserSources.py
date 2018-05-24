@@ -21,7 +21,7 @@ module_logger = logging.getLogger('scctool.view.subConnections')
 class SubwindowBrowserSources(QWidget):
     """Show connections settings sub window."""
 
-    def createWindow(self, mainWindow):
+    def createWindow(self, mainWindow, tab=''):
         """Create window."""
         try:
             parent = None
@@ -37,7 +37,7 @@ class SubwindowBrowserSources(QWidget):
             self.__dataChanged = False
 
             self.createButtonGroup()
-            self.createTabs()
+            self.createTabs(tab)
 
             mainLayout = QVBoxLayout()
 
@@ -59,7 +59,7 @@ class SubwindowBrowserSources(QWidget):
         except Exception as e:
             module_logger.exception("message")
 
-    def createTabs(self):
+    def createTabs(self, tab):
         """Create tabs."""
         self.tabs = QTabWidget()
 
@@ -74,6 +74,13 @@ class SubwindowBrowserSources(QWidget):
 
         self.tabs.addTab(self.formGroupMapBox, _("Box Map Icons"))
         self.tabs.addTab(self.formGroupMapLandscape, _("Landscape Map Icons"))
+
+        table = dict()
+        table['intro'] = 0
+        table['mapstats'] = 1
+        table['mapicons_box'] = 2
+        table['mapicons_landscape'] = 3
+        self.tabs.setCurrentIndex(table.get(tab, -1))
 
     def addHotkey(self, ident, label):
         element = HotkeyLayout(
