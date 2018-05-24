@@ -194,7 +194,7 @@ class SubwindowBrowserSources(QWidget):
         self.formGroupIntro = QWidget()
         mainLayout = QVBoxLayout()
 
-        self.hotkeyBox = QGroupBox(_("Intro Hotkeys"))
+        self.hotkeyBox = QGroupBox(_("Hotkeys"))
         layout = QVBoxLayout()
 
         try:
@@ -209,7 +209,7 @@ class SubwindowBrowserSources(QWidget):
         self.hotkeyBox.setLayout(layout)
         mainLayout.addWidget(self.hotkeyBox)
 
-        self.introBox = QGroupBox(_("Intro Settings"))
+        self.introBox = QGroupBox(_("Animation"))
         layout = QFormLayout()
         self.sl_sound = QSlider(Qt.Horizontal)
         self.sl_sound.setMinimum(0)
@@ -250,7 +250,7 @@ class SubwindowBrowserSources(QWidget):
         self.introBox.setLayout(layout)
         mainLayout.addWidget(self.introBox)
 
-        self.ttsBox = QGroupBox(_("Text-to-Speech Settings"))
+        self.ttsBox = QGroupBox(_("Text-to-Speech"))
         layout = QFormLayout()
 
         self.cb_tts_active = QCheckBox()

@@ -819,7 +819,6 @@ class MainController:
             data)
 
     def handleMatchDataChange(self, label, object):
-        print(label, object)
         if label == 'team':
             self.websocketThread.sendData2Path(
                 'score', 'CHANGE_TEXT',
@@ -839,14 +838,16 @@ class MainController:
                         'teamid': idx + 1,
                         'setid': object['set_idx'] + 1,
                         'color': color})
-            color, opacity = self.matchData.getBorderColor(object['set_idx'])
+            colorData = self.matchData.getColorData(object['set_idx'])
             self.websocketThread.sendData2Path(
                 ['mapicons_box', 'mapicons_landscape'],
                 'CHANGE_SCORE', {
                     'winner': object['value'],
                     'setid': object['set_idx'] + 1,
-                    'color': color,
-                    'opacity': opacity})
+                    'score_color': colorData['score_color'],
+                    'border_color': colorData['border_color'],
+                    'hide': colorData['hide'],
+                    'opacity': colorData['opacity']})
         elif label == 'color':
             for idx in range(0, 2):
                 self.websocketThread.sendData2Path(
@@ -859,16 +860,19 @@ class MainController:
                 'CHANGE_SCORE', {
                     'winner': 0,
                     'setid': object['set_idx'] + 1,
-                    'color': object['color2'],
+                    'score_color': object['score_color'],
+                    'border_color': object['border_color'],
+                    'hide': object['hide'],
                     'opacity': object['opacity']})
-        elif label == 'border-color':
+        elif label == 'color-data':
             self.websocketThread.sendData2Path(
-                'mapicons_box', 'CHANGE_SCORE', {
+                ['mapicons_box', 'mapicons_landscape'], 'CHANGE_SCORE', {
                     'winner': object['score'],
                     'setid': object['set_idx'] + 1,
-                    'color': object['color'],
+                    'score_color': object['score_color'],
+                    'border_color': object['border_color'],
+                    'hide': object['hide'],
                     'opacity': object['opacity']})
-
         elif label == 'outcome':
             self.websocketThread.sendData2Path('score', 'SET_WINNER', object)
         elif label == 'player':

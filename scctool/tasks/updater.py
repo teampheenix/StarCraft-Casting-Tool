@@ -3,7 +3,6 @@
 import json
 import logging
 import os
-import shutil
 import sys
 import tarfile
 import zipfile
@@ -95,55 +94,8 @@ def setRestartFlag(flag=True):
         json.dump(data, o)
 
 
-def deleteObsoleteFiles():
-    """Remove obsolete files."""
-    # mv OBS_html/src/css/intro_styles to OBS_html/src/css/intro
-    try:
-        old = scctool.settings.getAbsPath(os.path.join(
-            scctool.settings.OBShtmlDir, 'src/css/intro_styles'))
-        new = scctool.settings.getAbsPath(os.path.join(
-            scctool.settings.OBShtmlDir, 'src/css/intro'))
-        os.rename(old, new)
-    except Exception as e:
-        pass
-
-    # rm OBS_html/src/css/intro.css
-    try:
-        file = scctool.settings.getAbsPath(os.path.join(
-            scctool.settings.OBShtmlDir, 'src/css/intro.css'))
-        os.remove(file)
-    except Exception as e:
-        pass
-
-    # rm OBS_html/intro1.html
-    try:
-        file = scctool.settings.getAbsPath(os.path.join(
-            scctool.settings.OBShtmlDir, 'intro1.html'))
-        os.remove(file)
-    except Exception as e:
-        pass
-
-    # rm OBS_html/intro2.html
-    try:
-        file = scctool.settings.getAbsPath(os.path.join(
-            scctool.settings.OBShtmlDir, 'intro2.html'))
-        os.remove(file)
-    except Exception as e:
-        pass
-
-    # rm OBS_html/data/intro-template.html
-    try:
-        file = scctool.settings.getAbsPath(os.path.join(
-            scctool.settings.OBShtmlDir, 'data/intro-template.html'))
-        os.remove(file)
-    except Exception as e:
-        pass
-
-
 def extractData(asset_update, handler=lambda x: None):
     """Extract data."""
-    handler(5)
-    deleteObsoleteFiles()
     handler(10)
     if asset_update.is_downloaded():
         file = os.path.join(asset_update.update_folder,
@@ -160,41 +112,7 @@ def extractData(asset_update, handler=lambda x: None):
         os.remove(file)
         handler(95)
         setDataVersion(asset_update.latest)
-
-        copyStyleFile(scctool.settings.OBSmapDir + "/src/css/box_styles",
-                      scctool.settings.OBSmapDir + "/src/css/box.css",
-                      scctool.settings.config.parser.get(
-                          "Style", "mapicon_box"))
-
-        copyStyleFile(scctool.settings.OBSmapDir + "/src/css/landscape_styles",
-                      scctool.settings.OBSmapDir + "/src/css/landscape.css",
-                      scctool.settings.config.parser.get(
-                          "Style", "mapicon_landscape"))
-
-        copyStyleFile(scctool.settings.OBShtmlDir + "/src/css/score_styles",
-                      scctool.settings.OBShtmlDir + "/src/css/score.css",
-                      scctool.settings.config.parser.get(
-                          "Style", "score"))
-
         handler(100)
-
-
-def copyStyleFile(style_dir, css_file, value):
-    """Copy the style files after update."""
-    try:
-        new_file = os.path.join(style_dir, value + ".css")
-
-        new_file = scctool.settings.getAbsPath(new_file)
-        css_file = scctool.settings.getAbsPath(css_file)
-
-        if not os.path.isfile(new_file):
-            new_file = scctool.settings.getAbsPath(
-                os.path.join(style_dir, "Default.css"))
-
-        shutil.copy(new_file, css_file)
-
-    except Exception as e:
-        module_logger.exception("message")
 
 
 class VersionHandler(TasksThread):

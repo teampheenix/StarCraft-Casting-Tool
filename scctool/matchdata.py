@@ -74,24 +74,26 @@ class matchData(QObject):
                 self.metaChangedSignal.emit()
             elif scope == 'outcome':
                 self.dataChanged.emit('outcome', self.getWinner())
+                hide = self.getMyTeam() == 0
                 if self.isDecided():
-                    color = scctool.settings.config.parser.get(
+                    score_color = scctool.settings.config.parser.get(
                         "MapIcons", "notplayed_color")
-                    color2 = color
+                    border_color = score_color
                     opacity = scctool.settings.config.parser.get(
                         "MapIcons", "notplayed_opacity")
                 else:
-                    color = scctool.settings.config.parser.get(
+                    score_color = scctool.settings.config.parser.get(
                         "MapIcons", "undecided_color")
-                    color2 = scctool.settings.config.parser.get(
+                    border_color = scctool.settings.config.parser.get(
                         "MapIcons", "default_border_color")
                     opacity = 0.0
                 for idx in range(self.getNoSets()):
                     if self.getMapScore(idx) == 0:
                         self.__emitSignal('data', 'color', {
                                           'set_idx': idx,
-                                          'color': color,
-                                          'color2': color2,
+                                          'score_color': score_color,
+                                          'border_color': border_color,
+                                          'hide': hide,
                                           'opacity': opacity})
 
     def readJsonFile(self):
@@ -428,15 +430,16 @@ class matchData(QObject):
             for i in range(self.getNoSets()):
                 self.__setsChanged[i] = True
                 score = self.getMapScore(i)
-                if score != 0:
-                    color, opacity = self.getBorderColor(i)
-                    self.__emitSignal(
-                        'data',
-                        'border-color', {
-                            'set_idx': i,
-                            'score': score,
-                            'color': color,
-                            'opacity': opacity})
+                colorData = self.getColorData(i)
+                self.__emitSignal(
+                    'data',
+                    'color-data', {
+                        'set_idx': i,
+                        'score': score,
+                        'score_color': colorData['score_color'],
+                        'border_color': colorData['border_color'],
+                        'hide': colorData['hide'],
+                        'opacity': colorData['opacity']})
 
         if swap and int(self.__data['my_team']) > 0:
             self.swapTeams()
@@ -1022,30 +1025,45 @@ class matchData(QObject):
                 "MapIcons",
                 "lose_color")
 
-    def getBorderColor(self, set_idx):
+    def getColorData(self, set_idx):
         score = self.getMapScore(set_idx)
         team = self.getMyTeam()
         won = score * team
-        notplayed_opacity = scctool.settings.config.parser.get(
+        hide = team == 0
+        opacity = scctool.settings.config.parser.get(
             "MapIcons",
             "notplayed_opacity")
         if won == 1:
-            return scctool.settings.config.parser.get(
+            border_color = scctool.settings.config.parser.get(
                 "MapIcons",
-                "win_color"), 0.0
+                "win_color")
+            score_color = border_color
+            opacity = 0.0
         elif won == -1:
-            return scctool.settings.config.parser.get(
+            border_color = scctool.settings.config.parser.get(
                 "MapIcons",
-                "lose_color"), 0.0
+                "lose_color")
+            score_color = border_color
+            opacity = 0.0
         else:
             if score == 0 and max(self.getScore()) > int(self.getBestOf() / 2):
-                return scctool.settings.config.parser.get(
+                border_color = scctool.settings.config.parser.get(
                     "MapIcons",
-                    "notplayed_color"), notplayed_opacity
+                    "notplayed_color")
+                score_color = border_color
             else:
-                return scctool.settings.config.parser.get(
+                border_color = scctool.settings.config.parser.get(
                     "MapIcons",
-                    "default_border_color"), 0.0
+                    "default_border_color")
+                score_color = scctool.settings.config.parser.get(
+                    "MapIcons",
+                    "notplayed_color")
+                opacity = 0.0
+
+        return {'score_color': score_color,
+                'border_color': border_color,
+                'opacity': opacity,
+                'hide': hide}
 
     def getMapIconsData(self):
         """Update map icons."""
@@ -1053,6 +1071,8 @@ class matchData(QObject):
         try:
             team = self.getMyTeam()
             score = [0, 0]
+
+            hide_scoreicon = team == 0
 
             for i in range(self.getNoSets()):
                 winner = self.getMapScore(i)
@@ -1107,6 +1127,7 @@ class matchData(QObject):
                 data['maplabel'] = self.getLabel(i)
                 data['score_color'] = score_color
                 data['border_color'] = border_color
+                data['hide_scoreicon'] = hide_scoreicon
                 data['opacity'] = opacity
                 data['status1'] = player1status
                 data['status2'] = player2status

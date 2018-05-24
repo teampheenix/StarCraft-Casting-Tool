@@ -67,7 +67,7 @@ function connectWebsocket() {
     if (jsonObject.event == 'CHANGE_STYLE') {
       changeCSS(jsonObject.data.file);
     } else if (jsonObject.event == 'CHANGE_SCORE') {
-      changeScore(jsonObject.data.winner, jsonObject.data.setid, jsonObject.data.color, jsonObject.data.opacity);
+      changeScore(jsonObject.data.winner, jsonObject.data.setid, jsonObject.data.border_color, jsonObject.data.opacity);
     } else if (jsonObject.event == 'CHANGE_TEXT') {
       changeText(jsonObject.data.icon, jsonObject.data.label, jsonObject.data.text);
     } else if (jsonObject.event == 'CHANGE_RACE') {
