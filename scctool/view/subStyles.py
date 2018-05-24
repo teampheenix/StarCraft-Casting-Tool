@@ -98,14 +98,14 @@ class SubwindowStyles(QWidget):
         try:
             container = QHBoxLayout()
             self.qb_boxStyle = StyleComboBox(
-                scctool.settings.OBSmapDir + "/src/css/box_styles",
+                scctool.settings.OBShtmlDir + "/src/css/mapicons_box",
                 scctool.settings.config.parser.get("Style", "mapicon_box"))
             self.qb_boxStyle.currentIndexChanged.connect(self.changed)
             label = QLabel(_("Box Map Icons:"))
             label.setMinimumWidth(110)
             button = QPushButton(_("Show in Browser"))
             button.clicked.connect(lambda: self.openHTML(
-                scctool.settings.OBSmapDir + "/icons_box/all_maps.html"))
+                scctool.settings.OBShtmlDir + "/mapicons_box_1.html"))
             container.addWidget(self.qb_boxStyle)
             container.addWidget(button)
             layout.addRow(label, container)
@@ -115,13 +115,13 @@ class SubwindowStyles(QWidget):
         try:
             container = QHBoxLayout()
             self.qb_landscapeStyle = StyleComboBox(
-                scctool.settings.OBSmapDir + "/src/css/landscape_styles",
+                scctool.settings.OBShtmlDir + "/src/css/mapicons_landscape",
                 scctool.settings.config.parser.get(
                     "Style", "mapicon_landscape"))
             self.qb_landscapeStyle.currentIndexChanged.connect(self.changed)
             button = QPushButton(_("Show in Browser"))
             button.clicked.connect(lambda: self.openHTML(
-                scctool.settings.OBSmapDir + "/icons_landscape/all_maps.html"))
+                scctool.settings.OBShtmlDir + "/mapicons_landscape_1.html"))
             container.addWidget(self.qb_landscapeStyle)
             container.addWidget(button)
             layout.addRow(QLabel(
@@ -192,14 +192,16 @@ class SubwindowStyles(QWidget):
 
     def applyStyles(self):
         """Apply styles."""
-        self.qb_landscapeStyle.apply(
-            self.controller,
-            scctool.settings.OBSmapDir + "/src/css/landscape.css")
-
-        self.qb_scoreStyle.applyWebsocket(self.controller, 'score')
-        self.qb_introStyle.applyWebsocket(self.controller, 'intro')
-        self.qb_mapstatsStyle.applyWebsocket(self.controller, 'mapstats')
-        self.qb_boxStyle.applyWebsocket(self.controller, 'mapicons_box')
+        self.qb_scoreStyle.applyWebsocket(
+            self.controller, 'score')
+        self.qb_introStyle.applyWebsocket(
+            self.controller, 'intro')
+        self.qb_mapstatsStyle.applyWebsocket(
+            self.controller, 'mapstats')
+        self.qb_boxStyle.applyWebsocket(
+            self.controller, 'mapicons_box')
+        self.qb_landscapeStyle.applyWebsocket(
+            self.controller, 'mapicons_landscape')
 
     def createColorBox(self):
         """Create box for color selection."""
@@ -342,10 +344,10 @@ class SubwindowStyles(QWidget):
                 self.mapstats_color2.getColor())
 
             scctool.settings.config.parser.set(
-                "Style", "mapicon_landscape",
+                "Style", "mapicons_landscape",
                 self.qb_landscapeStyle.currentText())
             scctool.settings.config.parser.set(
-                "Style", "mapicon_box",
+                "Style", "mapicons_box",
                 self.qb_boxStyle.currentText())
             scctool.settings.config.parser.set(
                 "Style", "score",

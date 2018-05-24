@@ -183,16 +183,16 @@ def renameConfigOptions():
     from scctool.settings import nightbot_commands
 
     try:
-        value = this.parser.get("SCT", "mapicon_landscape")
-        this.parser.set("SCT", "mapicons_landscape", str(value))
-        this.parser.remove_option("SCT", "mapicon_landscape")
+        value = this.parser.get("Style", "mapicon_landscape")
+        this.parser.set("Style", "mapicons_landscape", str(value))
+        this.parser.remove_option("Style", "mapicon_landscape")
     except Exception:
         pass
 
     try:
-        value = this.parser.get("SCT", "mapicon_box")
-        this.parser.set("SCT", "mapicons_box", str(value))
-        this.parser.remove_option("SCT", "mapicon_box")
+        value = this.parser.get("Style", "mapicon_box")
+        this.parser.set("Style", "mapicons_box", str(value))
+        this.parser.remove_option("Style", "mapicon_box")
     except Exception:
         pass
 

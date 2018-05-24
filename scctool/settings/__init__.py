@@ -23,7 +23,6 @@ else:
 
 OBSdataDir = "OBS_data"
 OBShtmlDir = "OBS_html"
-OBSmapDir = "OBS_mapicons"
 
 dataDir = "data"
 logosDir = os.path.join(dataDir, "logos")
@@ -48,9 +47,6 @@ def loadSettings():
     # Creating directories if not exisiting
     if not os.path.exists(getAbsPath(OBSdataDir)):
         os.makedirs(getAbsPath(OBSdataDir))
-    # Creating directories if not exisiting
-    if not os.path.exists(getAbsPath(OBSdataDir)):
-        os.makedirs(getAbsPath(dataDir))
     # Creating directories if not exisiting
     if not os.path.exists(getAbsPath(logosDir)):
         os.makedirs(getAbsPath(logosDir))

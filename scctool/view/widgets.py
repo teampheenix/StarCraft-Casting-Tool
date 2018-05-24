@@ -135,11 +135,11 @@ class MapDownloader(QProgressDialog):
         base, ext = os.path.splitext(url)
         ext = ext.split("?")[0].lower()
         map = map_name.strip().replace(" ", "_") + ext
-        mapdir = scctool.settings.getAbsPath(scctool.settings.OBSmapDir)
+        mapdir = scctool.settings.getAbsPath(scctool.settings.OBShtmlDir)
         if ext not in ['.jpg', '.png']:
             raise ValueError('Not supported image format.')
         self.file_name = os.path.normpath(
-            os.path.join(mapdir, "src/maps", map))
+            os.path.join(mapdir, "src/img/maps", map))
 
         self.setWindowTitle(_("Map Downloader"))
         self.setLabelText(
@@ -384,8 +384,8 @@ class ToolUpdater(QProgressDialog):
         """Set the progress of the bar."""
         # TODO: What is the data structure in case of a patch?
         try:
-            text = _(
-                'Downloading a new version: Total file size {}, Time remaining {}.')
+            text = _('Downloading a new version: Total file size {},'
+                     ' Time remaining {}.')
             text = text.format(humanize.naturalsize(
                 data['total']), data['time'])
             self.setLabelText(text)
@@ -416,7 +416,8 @@ class BusyProgressBar(QProgressBar):
 class ColorLayout(QHBoxLayout):
     """Define box the select colors."""
 
-    def __init__(self, parent, label="Color:", color="#ffffff", default_color="#ffffff"):
+    def __init__(self, parent, label="Color:",
+                 color="#ffffff", default_color="#ffffff"):
         """Init box."""
         super().__init__()
         self.__parent = parent
@@ -823,8 +824,8 @@ class InitialUpdater(QProgressDialog):
         # TODO: What is the data structure in case of a patch?
         module_logger.info("Progress {}".format(data))
         try:
-            text = _(
-                'Downloading required files...: Total file size {}, Time remaining {}.')
+            text = _('Downloading required files...:'
+                     ' Total file size {}, Time remaining {}.')
             text = text.format(humanize.naturalsize(
                 data['total']), data['time'])
             self.setLabelText(text)
@@ -846,8 +847,8 @@ class DragDropLogoList(QListWidget):
 
     def dragEnterEvent(self, e):
         data = e.mimeData()
-        if(data.hasFormat("application/x-qabstractitemmodeldatalist")
-                and e.source() != self):
+        if(data.hasFormat("application/x-qabstractitemmodeldatalist") and
+           e.source() != self):
             e.accept()
         elif data.hasFormat("logo/ident"):
             e.accept()
@@ -856,8 +857,8 @@ class DragDropLogoList(QListWidget):
 
     def dragMoveEvent(self, e):
         data = e.mimeData()
-        if(data.hasFormat("application/x-qabstractitemmodeldatalist")
-                or data.hasFormat("logo/ident")):
+        if(data.hasFormat("application/x-qabstractitemmodeldatalist") or
+           data.hasFormat("logo/ident")):
             e.setDropAction(Qt.CopyAction)
             e.accept()
         else:
@@ -865,8 +866,8 @@ class DragDropLogoList(QListWidget):
 
     def dropEvent(self, e):
         data = e.mimeData()
-        if(data.hasFormat("application/x-qabstractitemmodeldatalist")
-                and e.source() != self):
+        if(data.hasFormat("application/x-qabstractitemmodeldatalist") and
+           e.source() != self):
             item = e.source().currentItem()
             map = item.icon().pixmap(self._iconsize)
             ident = self._logoManager.pixmap2ident(map)
@@ -1131,8 +1132,9 @@ class ProfileMenu(QMenu):
     def removeProfile(self):
         profile = scctool.settings.profileManager.current()
         buttonReply = QMessageBox.question(
-            self._parent, _("Remove Profile"), _(
-                "Are you sure you wish to remove profile '{}'?".format(profile['name'])),
+            self._parent, _("Remove Profile"),
+            _("Are you sure you wish to remove profile '{}'?".format(
+                profile['name'])),
             QMessageBox.Yes | QMessageBox.No,
             QMessageBox.No)
         if buttonReply == QMessageBox.No:
@@ -1203,7 +1205,8 @@ class ProfileMenu(QMenu):
                                             time.strftime("%Y%m%d"))
         )
         filename, ok = QFileDialog.getSaveFileName(
-            self._parent, 'Export Profile', filename, _("ZIP archive") + " (*.zip)")
+            self._parent, 'Export Profile',
+            filename, _("ZIP archive") + " (*.zip)")
         if not ok:
             return
 
@@ -1218,10 +1221,11 @@ class ProfileMenu(QMenu):
             QApplication.restoreOverrideCursor()
 
     def importProfile(self):
-        filename, ok = QFileDialog.getOpenFileName(self._parent,
-                                                   'Import Profile',
-                                                   scctool.settings.profileManager.basedir(),
-                                                   _("ZIP archive") + " (*.zip)")
+        filename, ok = QFileDialog.getOpenFileName(
+            self._parent,
+            'Import Profile',
+            scctool.settings.profileManager.basedir(),
+            _("ZIP archive") + " (*.zip)")
         if not ok:
             return
         name = ""

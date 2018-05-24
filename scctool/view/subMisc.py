@@ -93,7 +93,8 @@ class SubwindowMisc(QWidget):
         self.cb_trans_banner = QCheckBox(
             " " + _("Download transparent Banner of the Match"))
         self.cb_trans_banner.setChecked(
-            scctool.settings.config.parser.getboolean("SCT", "transparent_match_banner"))
+            scctool.settings.config.parser.getboolean(
+                "SCT", "transparent_match_banner"))
         self.cb_trans_banner.stateChanged.connect(self.changed)
 
         layout.addWidget(self.cb_trans_banner)
@@ -105,7 +106,8 @@ class SubwindowMisc(QWidget):
         layout = QVBoxLayout()
 
         self.cb_ctrlx = QCheckBox(
-            " " + _('Automatically press Ctrl+X to apply the correct player order ingame.'))
+            " " + _('Automatically press Ctrl+X to apply the'
+                    ' correct player order ingame.'))
         self.cb_ctrlx.setToolTip(
             _("This will ensure that the player of the first team is always"
               " on the left/top in the ingame Observer UI."))
@@ -115,7 +117,8 @@ class SubwindowMisc(QWidget):
         layout.addWidget(self.cb_ctrlx)
 
         self.cb_ctrln = QCheckBox(
-            " " + _('Automatically press Ctrl+N before OCR to display player names.'))
+            " " + _('Automatically press Ctrl+N before'
+                    ' OCR to display player names.'))
         self.cb_ctrln.setToolTip(
             _("This is recommended for Standard and Gawliq Observer UI."))
         self.cb_ctrln.setChecked(
@@ -124,10 +127,11 @@ class SubwindowMisc(QWidget):
         layout.addWidget(self.cb_ctrln)
 
         self.cb_ctrlshifts = QCheckBox(
-            " " + _('Automatically press Ctrl+Shift+S to display the ingame score'))
+            " " + _('Automatically press Ctrl+Shift+S to display'
+                    ' the ingame score'))
         self.cb_ctrlshifts.setToolTip(
-            _("Ctrl+Shift+S is needed for the WCS-Gameheart Oberserver Overlay," +
-              " but disables the sound for other overlays."))
+            _("Ctrl+Shift+S is needed for the WCS-Gameheart Oberserver"
+              " Overlay, but disables the sound for other overlays."))
         self.cb_ctrlshifts.setChecked(
             scctool.settings.config.parser.getboolean("SCT", "CtrlShiftS"))
         self.cb_ctrlshifts.stateChanged.connect(self.changed)

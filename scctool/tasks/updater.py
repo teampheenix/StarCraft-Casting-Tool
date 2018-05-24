@@ -45,9 +45,6 @@ def needInitialUpdate(version):
     elif not os.path.exists(
             scctool.settings.getAbsPath(scctool.settings.OBShtmlDir)):
         return True
-    elif not os.path.exists(
-            scctool.settings.getAbsPath(scctool.settings.OBSmapDir)):
-        return True
     else:
         return False
 

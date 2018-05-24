@@ -301,7 +301,6 @@ class MainController:
     def updateOBS(self):
         """Update txt-files and ioncs for OBS."""
         try:
-            self.matchData.updateMapIcons()
             self.matchData.createOBStxtFiles()
             self.matchData.updateLeagueIcon()
             self.matchData.writeJsonFile()
@@ -738,25 +737,26 @@ class MainController:
 
     def getMapImg(self, map, fullpath=False):
         """Get map image from map name."""
-        mapdir = scctool.settings.getAbsPath(scctool.settings.OBSmapDir)
+        mapdir = scctool.settings.getAbsPath(scctool.settings.OBShtmlDir)
         mapimg = os.path.normpath(os.path.join(
-            mapdir, "src/maps", map.replace(" ", "_")))
+            mapdir, "src/img/maps", map.replace(" ", "_")))
         mapimg = os.path.basename(self.linkFile(mapimg))
         if not mapimg:
             mapimg = "TBD.jpg"
             self.displayWarning(_("Warning: Map '{}' not found!").format(map))
 
         if(fullpath):
-            return mapdir + "/src/maps/" + mapimg
+            return os.path.normpath(os.path.join(
+                mapdir, "src/img/maps", mapimg))
         else:
             return mapimg
 
     def addMap(self, file, mapname):
         """Add a new map via file and name."""
         _, ext = os.path.splitext(file)
-        mapdir = scctool.settings.getAbsPath(scctool.settings.OBSmapDir)
+        mapdir = scctool.settings.getAbsPath(scctool.settings.OBShtmlDir)
         map = mapname.strip().replace(" ", "_") + ext.lower()
-        newfile = os.path.normpath(os.path.join(mapdir, "src/maps", map))
+        newfile = os.path.normpath(os.path.join(mapdir, "src/img/maps", map))
         shutil.copy(file, newfile)
         if mapname not in scctool.settings.maps:
             scctool.settings.maps.append(mapname)
