@@ -22,6 +22,7 @@ from scctool.tasks.autorequests import AutoRequestsThread
 from scctool.tasks.mapstats import MapStatsManager
 from scctool.tasks.sc2ClientInteraction import (SC2ApiThread, SwapPlayerNames,
                                                 ToggleScore)
+from scctool.tasks.textfiles import TextFilesThread
 from scctool.tasks.updater import VersionHandler
 from scctool.tasks.webapp import FlaskThread
 from scctool.tasks.websocket import WebsocketThread
@@ -39,6 +40,7 @@ class MainController:
         """Init controller and connect them with other modules."""
         try:
             self.matchData = matchData(self)
+            self.textFilesThread = TextFilesThread(self.matchData)
             self.matchData.dataChanged.connect(self.handleMatchDataChange)
             self.matchData.metaChangedSignal.connect(self.matchMetaDataChanged)
             self.SC2ApiThread = SC2ApiThread(self)
@@ -182,7 +184,6 @@ class MainController:
             self.view.updatePlayerCompleters()
             self.view.updateTeamCompleters()
             self.updateMapButtons()
-            self.view.highlightOBSupdate(False, force=True)
 
         except Exception as e:
             module_logger.exception("message")
@@ -197,8 +198,6 @@ class MainController:
         logo = self.logoManager.getTeam2()
         self.view.qb_logo2.setIcon(QIcon(logo.provideQPixmap()))
 
-        if self.logoManager.hasLogoChanged():
-            self.view.highlightOBSupdate(force=True)
         self.updateLogosHTML(force)
 
     def applyCustom(self, bestof, allkill, solo, minSets, url):
@@ -212,7 +211,6 @@ class MainController:
             self.matchData.writeJsonFile()
             self.updateForms()
             self.view.resizeWindow()
-            self.view.highlightOBSupdate(force=True)
 
         except Exception as e:
             msg = str(e)
@@ -230,7 +228,6 @@ class MainController:
             self.matchData.writeJsonFile()
             self.updateLogos(True)
             self.updateForms()
-            self.view.highlightOBSupdate(force=True)
 
         except Exception as e:
             msg = str(e)
@@ -251,7 +248,6 @@ class MainController:
                 pass
             self.updateLogos(True)
             self.updateForms()
-            self.view.highlightOBSupdate(force=True)
             self.view.resizeWindow()
 
         except Exception as e:
@@ -297,17 +293,6 @@ class MainController:
             self.view.cb_autoTwitch.setChecked(False)
         elif(cb == 'nightbot'):
             self.view.cb_autoNightbot.setChecked(False)
-
-    def updateOBS(self):
-        """Update txt-files and ioncs for OBS."""
-        try:
-            self.matchData.createOBStxtFiles()
-            self.matchData.updateLeagueIcon()
-            self.matchData.writeJsonFile()
-            self.matchData.resetChanged()
-            self.view.highlightOBSupdate(False, force=True)
-        except Exception as e:
-            module_logger.exception("message")
 
     def allkillUpdate(self):
         """In case of allkill move the winner to the next set."""
@@ -400,14 +385,14 @@ class MainController:
             module_logger.exception("message")
 
     def runWebsocketThread(self):
-        """Run OBS websocket thread."""
+        """Run websocket thread."""
         if(not self.websocketThread.isRunning()):
             self.websocketThread.start()
         else:
             module_logger.exception("Thread is still running")
 
     def stopWebsocketThread(self):
-        """Stop OBS websocket thread."""
+        """Stop websocket thread."""
         try:
             self.websocketThread.stop()
         except Exception as e:
@@ -419,7 +404,8 @@ class MainController:
             module_logger.info("cleanUp called")
             self.SC2ApiThread.requestTermination("ALL")
             self.webApp.terminate()
-            self.websocketThread.stop()
+            self.stopWebsocketThread()
+            self.textFilesThread.terminate()
             self.autoRequestsThread.terminate()
             self.mapstatsManager.close(save)
             if save:
@@ -462,7 +448,6 @@ class MainController:
                 with self.view.tlock:
                     self.view.cb_race[team_idx][set_idx].setCurrentIndex(
                         race_idx)
-                    self.view.highlightOBSupdate()
 
     def requestScoreUpdate(self, newSC2MatchData):
         """Update score based on result of SC2-Client-API."""
@@ -492,7 +477,6 @@ class MainController:
                             race1, race2 = race2, race1
                         self.setRace(0, i, race1)
                         self.setRace(1, i, race2)
-                        self.updateOBS()
                         break
                     else:
                         continue
@@ -522,7 +506,6 @@ class MainController:
                                 self.view.le_player[notset_idx][i].setText(
                                     player)
                             self.allkillUpdate()
-                            self.updateOBS()
                             break
                         else:
                             continue
@@ -626,9 +609,10 @@ class MainController:
         """Update html files with team logos."""
         for idx in range(2):
             logo = getattr(self.logoManager, 'getTeam{}'.format(idx + 1))()
-            filename = scctool.settings.OBShtmlDir + \
+            filename = scctool.settings.streaming_html_dir + \
                 "/data/logo" + str(idx + 1) + "-data.html"
-            template = scctool.settings.OBShtmlDir + "/data/logo-template.html"
+            template = scctool.settings.streaming_html_dir + \
+                "/data/logo-template.html"
             self.matchData._useTemplate(
                 template, filename, {'logo': logo.getFile(True)})
             if force:
@@ -724,7 +708,7 @@ class MainController:
                     tts_file = 'src/sound/player{}.mp3'.format(player_idx + 1)
                     file = os.path.normpath(os.path.join(
                         scctool.settings.getAbsPath(
-                            scctool.settings.OBShtmlDir),
+                            scctool.settings.streaming_html_dir),
                         tts_file))
                     tts.save(file)
                 else:
@@ -737,7 +721,8 @@ class MainController:
 
     def getMapImg(self, map, fullpath=False):
         """Get map image from map name."""
-        mapdir = scctool.settings.getAbsPath(scctool.settings.OBShtmlDir)
+        mapdir = scctool.settings.getAbsPath(
+            scctool.settings.streaming_html_dir)
         mapimg = os.path.normpath(os.path.join(
             mapdir, "src/img/maps", map.replace(" ", "_")))
         mapimg = os.path.basename(self.linkFile(mapimg))
@@ -754,7 +739,8 @@ class MainController:
     def addMap(self, file, mapname):
         """Add a new map via file and name."""
         _, ext = os.path.splitext(file)
-        mapdir = scctool.settings.getAbsPath(scctool.settings.OBShtmlDir)
+        mapdir = scctool.settings.getAbsPath(
+            scctool.settings.streaming_html_dir)
         map = mapname.strip().replace(" ", "_") + ext.lower()
         newfile = os.path.normpath(os.path.join(mapdir, "src/img/maps", map))
         shutil.copy(file, newfile)
@@ -772,7 +758,6 @@ class MainController:
             self.matchData.swapTeams()
             self.updateForms()
             self.updateLogos(False)
-            self.view.highlightOBSupdate(True, True)
 
     def displayWarning(self, msg="Warning: Something went wrong..."):
         """Display a warning in status bar."""
@@ -854,7 +839,7 @@ class MainController:
                     'score', 'CHANGE_SCORE', {
                         'teamid': idx + 1,
                         'setid': object['set_idx'] + 1,
-                        'color': object['color']})
+                        'color': object['score_color']})
             self.websocketThread.sendData2Path(
                 ['mapicons_box', 'mapicons_landscape'],
                 'CHANGE_SCORE', {

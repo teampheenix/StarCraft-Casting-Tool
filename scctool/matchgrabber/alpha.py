@@ -122,7 +122,7 @@ class MatchGrabber(MatchGrabberParent):
 
     def downloadBanner(self):
         """Download team logos."""
-        dir = scctool.settings.OBSdataDir
+        dir = scctool.settings.streaming_data_dir
         transparent = scctool.settings.config.parser.getboolean(
             "SCT", "transparent_match_banner")
 

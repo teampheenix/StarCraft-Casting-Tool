@@ -4,13 +4,13 @@ import os
 
 import markdown2
 from PyQt5.QtCore import QSettings, Qt
-from PyQt5.QtGui import QIcon, QKeySequence, QPalette
+from PyQt5.QtGui import QIcon, QPalette
 from PyQt5.QtWidgets import (QAction, QApplication, QCheckBox, QComboBox,
                              QCompleter, QFormLayout, QGridLayout, QGroupBox,
                              QHBoxLayout, QLabel, QLineEdit, QMainWindow,
-                             QMenu, QMessageBox, QPushButton, QShortcut,
-                             QSizePolicy, QSlider, QSpacerItem, QTabWidget,
-                             QToolButton, QVBoxLayout, QWidget)
+                             QMenu, QMessageBox, QPushButton, QSizePolicy,
+                             QSlider, QSpacerItem, QTabWidget, QToolButton,
+                             QVBoxLayout, QWidget)
 
 import scctool.settings
 import scctool.settings.config
@@ -271,13 +271,13 @@ class MainWindow(QMainWindow):
 
         act = QAction(_('Open Folder'), self)
         act.triggered.connect(lambda: os.startfile(
-            scctool.settings.getAbsPath(scctool.settings.OBShtmlDir)))
+            scctool.settings.getAbsPath(scctool.settings.streaming_html_dir)))
         main_menu.addAction(act)
         main_menu.addSeparator()
 
         for src in srcs:
             src['file'] = os.path.join(
-                scctool.settings.OBShtmlDir, src['file'])
+                scctool.settings.streaming_html_dir, src['file'])
             myMenu = QMenu(src['name'], self)
             act = QAction(_('Open in Browser'), self)
             act.triggered.connect(lambda x,
@@ -866,21 +866,9 @@ class MainWindow(QMainWindow):
             self.pb_resetscore = QPushButton(_("Reset Score"))
             self.pb_resetscore.clicked.connect(self.resetscore_click)
 
-            self.pb_obsupdate = QPushButton(
-                _("Update OB&S Data"))
-            self.pb_obsupdate.clicked.connect(self.updateobs_click)
-            self.pb_obsupdate.setToolTip(_("Shortcut: {}").format("Ctrl+S"))
-            self.shortcut = QShortcut(QKeySequence("Ctrl+S"), self)
-            self.shortcut.setAutoRepeat(False)
-            self.shortcut.activated.connect(self.updateobs_click)
-
-            self.defaultButtonPalette = self.pb_obsupdate.palette()
-            self.obsupdate_is_highlighted = False
-
             layout.addWidget(self.pb_twitchupdate)
             layout.addWidget(self.pb_nightbotupdate)
             layout.addWidget(self.pb_resetscore)
-            layout.addWidget(self.pb_obsupdate)
 
             self.horizontalGroupBox.setLayout(layout)
         except Exception as e:
@@ -1034,7 +1022,6 @@ class MainWindow(QMainWindow):
                 self.controller.matchData.applyCustomFormat(format)
                 self.controller.updateForms()
                 self.resizeWindow()
-                self.highlightOBSupdate(force=True)
             self.highlightApplyCustom(False)
         except Exception as e:
             module_logger.exception("message")
@@ -1115,16 +1102,6 @@ class MainWindow(QMainWindow):
         except Exception as e:
             module_logger.exception("message")
 
-    def updateobs_click(self):
-        """Handle click to apply changes to OBS_data."""
-        try:
-            self.statusBar().showMessage(_('Updating OBS Data...'))
-            self.controller.updateOBS()
-            if not self.controller.resetWarning():
-                self.statusBar().showMessage('')
-        except Exception as e:
-            module_logger.exception("message")
-
     def resetscore_click(self, myteam=False):
         """Handle click to reset the score."""
         try:
@@ -1137,7 +1114,6 @@ class MainWindow(QMainWindow):
                 if myteam:
                     self.sl_team.setValue(0)
                     self.controller.matchData.setMyTeam(0)
-                self.controller.updateOBS()
                 if not self.controller.resetWarning():
                     self.statusBar().showMessage('')
         except Exception as e:
@@ -1165,7 +1141,6 @@ class MainWindow(QMainWindow):
         if not self.tlock.trigger():
             return
         self.controller.matchData.setLeague(self.le_league.text())
-        self.highlightOBSupdate()
 
     def sl_changed(self, set_idx, value):
         """Handle a new score value."""
@@ -1176,7 +1151,6 @@ class MainWindow(QMainWindow):
                 else:
                     self.controller.matchData.setMapScore(set_idx, value, True)
                     self.controller.allkillUpdate()
-                self.controller.updateOBS()
         except Exception as e:
             module_logger.exception("message")
 
@@ -1207,8 +1181,6 @@ class MainWindow(QMainWindow):
             self.updatePlayerCompleters()
         except Exception as e:
             module_logger.exception("message")
-        finally:
-            self.highlightOBSupdate()
 
     def race_changed(self, team_idx, player_idx):
         """Handle a change of player names."""
@@ -1229,8 +1201,6 @@ class MainWindow(QMainWindow):
 
         except Exception as e:
             module_logger.exception("message")
-        finally:
-            self.highlightOBSupdate()
 
     def team_changed(self, team_idx):
         if not self.tlock.trigger():
@@ -1239,7 +1209,6 @@ class MainWindow(QMainWindow):
         self.controller.historyManager.insertTeam(team)
         self.updateTeamCompleters()
         self.controller.matchData.setTeam(team_idx, team)
-        self.highlightOBSupdate()
         self.controller.matchData.autoSetMyTeam()
         self.sl_team.setValue(self.controller.matchData.getMyTeam())
 
@@ -1248,29 +1217,6 @@ class MainWindow(QMainWindow):
             return
         self.controller.matchData.setMap(set_idx, self.le_map[set_idx].text())
         self.controller.updateMapButtons()
-        self.highlightOBSupdate()
-
-    def highlightOBSupdate(self, highlight=True, force=False):
-        if not force and not self.tlock.trigger():
-            return
-        try:
-            if self.obsupdate_is_highlighted == highlight:
-                return highlight
-        except AttributeError:
-            return False
-
-        if highlight:
-            myPalette = self.pb_obsupdate.palette()
-            myPalette.setColor(QPalette.Background,
-                               Qt.darkBlue)
-            myPalette.setColor(QPalette.ButtonText,
-                               Qt.darkBlue)
-            self.pb_obsupdate.setPalette(myPalette)
-        else:
-            self.pb_obsupdate.setPalette(self.defaultButtonPalette)
-
-        self.obsupdate_is_highlighted = highlight
-        return highlight
 
     def highlightApplyCustom(self, highlight=True, force=False):
         if not force and not self.tlock.trigger():

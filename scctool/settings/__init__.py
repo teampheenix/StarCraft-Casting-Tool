@@ -21,8 +21,8 @@ if getattr(sys, 'frozen', False):
 else:
     basedir = os.path.dirname(sys.modules['__main__'].__file__)
 
-OBSdataDir = "OBS_data"
-OBShtmlDir = "OBS_html"
+streaming_data_dir = "Streaming_data"
+streaming_html_dir = "Streaming_html"
 
 dataDir = "data"
 logosDir = os.path.join(dataDir, "logos")
@@ -45,8 +45,8 @@ def loadSettings():
     loadNightbotCommands()
 
     # Creating directories if not exisiting
-    if not os.path.exists(getAbsPath(OBSdataDir)):
-        os.makedirs(getAbsPath(OBSdataDir))
+    if not os.path.exists(getAbsPath(streaming_data_dir)):
+        os.makedirs(getAbsPath(streaming_data_dir))
     # Creating directories if not exisiting
     if not os.path.exists(getAbsPath(logosDir)):
         os.makedirs(getAbsPath(logosDir))
@@ -105,7 +105,7 @@ def loadMapList():
     data = []
     try:
         dir = os.path.normpath(os.path.join(
-            getAbsPath(OBShtmlDir), "src/img/maps"))
+            getAbsPath(streaming_html_dir), "src/img/maps"))
 
         for fname in os.listdir(dir):
             full_fname = os.path.join(dir, fname)

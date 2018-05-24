@@ -32,7 +32,6 @@ class matchData(QObject):
         self.__initCustomFormats()
 
         self.emitLock = EmitLock()
-        self.metaChangedSignal.connect(lambda: print('meta Changed'))
 
     def __initProviderList(self):
         self.__VALID_PROVIDERS = dict()
@@ -106,8 +105,6 @@ class matchData(QObject):
             # module_logger.exception("message")
             self.setCustom(5, False, False)
 
-        self.allSetsChanged()
-
     def writeJsonFile(self):
         """Write json data to file."""
         try:
@@ -164,9 +161,6 @@ class matchData(QObject):
         self.__data['sets'] = []
         self.__data['players'] = [[], []]
 
-        self.__setsChanged = []
-        self.__metaChanged = False
-
     def swapTeams(self):
         module_logger.info("Swapping teams")
         self.__data['swapped'] = not self.__data.get('swapped', False)
@@ -178,7 +172,6 @@ class matchData(QObject):
         for set_idx in range(len(self.__data['sets'])):
             self.__data['sets'][set_idx]['score'] = - \
                 self.__data['sets'][set_idx]['score']
-        self.allChanged()
         self.__emitSignal('meta')
 
     def getSwappedIdx(self, idx):
@@ -192,42 +185,6 @@ class matchData(QObject):
 
     def resetSwap(self):
         self.__data['swapped'] = False
-
-    def allChanged(self):
-        """Mark all data changed."""
-        self.allSetsChanged()
-        self.__metaChanged = True
-
-    def allSetsChanged(self):
-        """Mark all sets changed."""
-        self.__setsChanged = [True] * self.getNoSets()
-
-    def resetChanged(self):
-        """Reset the changed status of the data."""
-        self.__setsChanged = [False] * self.getNoSets()
-        self.__metaChanged = False
-
-    def metaChanged(self):
-        """Mark meta data has changed."""
-        self.__metaChanged = True
-
-    def hasMetaChanged(self):
-        """Check if meta data has changed."""
-        return bool(self.__metaChanged)
-
-    def hasAnySetChanged(self):
-        """Check if any set data has changed."""
-        for i in range(self.getNoSets()):
-            if(self.hasSetChanged(i)):
-                return True
-        return False
-
-    def hasSetChanged(self, set_idx):
-        """Check if data of a set has changed."""
-        try:
-            return bool(self.__setsChanged[set_idx])
-        except Exception:
-            return False
 
     def setMinSets(self, minSets):
         """Set minium number of sets that are played."""
@@ -370,7 +327,6 @@ class matchData(QObject):
                 self.__data['best_of'] = int(bestof)
 
             sets = []
-            changed = []
             players = [[], []]
 
             for i in range(no_sets):
@@ -405,13 +361,11 @@ class matchData(QObject):
                         {'name': player_name, 'race': player_race})
 
                 sets.append({'label': label, 'map': map, 'score': score})
-                changed.append(True)
 
             self.__data['no_sets'] = no_sets
             self.__data['min_sets'] = 0
             self.__data['sets'] = sets
             self.__data['players'] = players
-            self.__setsChanged = changed
 
         except Exception as e:
             module_logger.exception("message")
@@ -428,7 +382,6 @@ class matchData(QObject):
         if(new != self.__data['my_team']):
             self.__data['my_team'] = new
             for i in range(self.getNoSets()):
-                self.__setsChanged[i] = True
                 score = self.getMapScore(i)
                 colorData = self.getColorData(i)
                 self.__emitSignal(
@@ -478,7 +431,6 @@ class matchData(QObject):
             map, _ = autoCorrectMap(map)
             if(self.__data['sets'][set_idx]['map'] != map):
                 self.__data['sets'][set_idx]['map'] = map
-                self.__setsChanged[set_idx] = True
                 self.__emitSignal(
                     'data', 'map', {'set_idx': set_idx, 'value': map})
 
@@ -573,16 +525,14 @@ class matchData(QObject):
                     score = -score
                 if(overwrite or self.__data['sets'][set_idx]['score'] == 0):
                     if(self.__data['sets'][set_idx]['score'] != score):
-                        if(self.isDecided()):
-                            self.__metaChanged = True
                         was_decided = self.isDecided()
                         self.__data['sets'][set_idx]['score'] = score
                         outcome_changed = self.isDecided() != was_decided
                         if outcome_changed:
                             self.__emitSignal('outcome')
-                        self.__setsChanged[set_idx] = True
                         self.__emitSignal('data', 'score',
-                                          {'set_idx': set_idx, 'value': score})
+                                          {'set_idx': set_idx,
+                                           'value': score})
                 return True
             else:
                 return False
@@ -628,7 +578,6 @@ class matchData(QObject):
 
             if(self.__data['players'][team_idx][set_idx]['name'] != name):
                 self.__data['players'][team_idx][set_idx]['name'] = name
-                self.__setsChanged[set_idx] = True
                 self.__emitSignal('data', 'player', {
                                   'team_idx': team_idx,
                                   'set_idx': set_idx,
@@ -674,7 +623,6 @@ class matchData(QObject):
 
             if(self.__data['players'][team_idx][set_idx]['race'] != race):
                 self.__data['players'][team_idx][set_idx]['race'] = race
-                self.__setsChanged[set_idx] = True
                 self.__emitSignal(
                     'data', 'race', {'team_idx': team_idx,
                                      'set_idx': set_idx,
@@ -702,7 +650,6 @@ class matchData(QObject):
                 return False
             if(self.__data['sets'][set_idx]['label'] != label):
                 self.__data['sets'][set_idx]['label'] = label
-                self.__setsChanged[set_idx] = True
                 self.__emitSignal('data', 'map_label', {
                                   'set_idx': set_idx, 'value': label})
             return True
@@ -719,7 +666,6 @@ class matchData(QObject):
             return False
 
     def setTeam(self, team_idx, name, tag=False):
-        print("Set team called")
         """Set a team name."""
         if team_idx not in range(2):
             return False
@@ -728,7 +674,6 @@ class matchData(QObject):
 
         if(self.__data['teams'][team_idx]['name'] != new):
             self.__data['teams'][team_idx]['name'] = new
-            self.__metaChanged = True
             self.__emitSignal('data', 'team', {'idx': team_idx, 'value': new})
 
         if(tag):
@@ -759,7 +704,6 @@ class matchData(QObject):
 
         if(self.__data['teams'][team_idx]['tag'] != new):
             self.__data['teams'][team_idx]['tag'] = new
-            self.__metaChanged = True
 
         return True
 
@@ -788,7 +732,7 @@ class matchData(QObject):
         league = str(league)
         if(self.__data['league'] != league):
             self.__data['league'] = league
-            self.__metaChanged = True
+            self.__emitSignal('data', 'league', league)
         return True
 
     def getLeague(self):
@@ -817,7 +761,6 @@ class matchData(QObject):
 
             if(self.__data['provider'] != new):
                 self.__data['provider'] = new
-                self.__metaChanged = True
                 provider_changed = True
         else:
             self.__data['provider'] = MatchGrabber._provider
@@ -842,17 +785,17 @@ class matchData(QObject):
         """Grab the team logos via a provider."""
         self.__matchGrabber.downloadLogos(self.__controller.logoManager)
 
-    def createOBStxtFiles(self):
+    def createStreamingTextFiles(self):
         """Create OBS txt files."""
         try:
 
             if(self.hasAnySetChanged()):
                 f = open(scctool.settings.getAbsPath(
-                    scctool.settings.OBSdataDir +
+                    scctool.settings.streaming_data_dir +
                     "/lineup.txt"),
                     mode='w', encoding='utf-8-sig')
                 f2 = open(scctool.settings.getAbsPath(
-                    scctool.settings.OBSdataDir +
+                    scctool.settings.streaming_data_dir +
                     "/maps.txt"),
                     mode='w', encoding='utf-8-sig')
                 for idx in range(self.getNoSets()):
@@ -876,35 +819,35 @@ class matchData(QObject):
                     score_str = "0 - 0"
 
                 f = open(scctool.settings.getAbsPath(
-                    scctool.settings.OBSdataDir +
+                    scctool.settings.streaming_data_dir +
                     "/score.txt"), mode='w',
                     encoding='utf-8-sig')
                 f.write(score_str)
                 f.close()
 
                 f = open(scctool.settings.getAbsPath(
-                    scctool.settings.OBSdataDir +
+                    scctool.settings.streaming_data_dir +
                     "/nextplayer1.txt"), mode='w',
                     encoding='utf-8-sig')
                 f.write(self.getNextPlayer(0))
                 f.close()
 
                 f = open(scctool.settings.getAbsPath(
-                    scctool.settings.OBSdataDir +
+                    scctool.settings.streaming_data_dir +
                     "/nextplayer2.txt"), mode='w',
                     encoding='utf-8-sig')
                 f.write(self.getNextPlayer(1))
                 f.close()
 
                 f = open(scctool.settings.getAbsPath(
-                    scctool.settings.OBSdataDir +
+                    scctool.settings.streaming_data_dir +
                     "/nextrace1.txt"), mode='w',
                     encoding='utf-8-sig')
                 f.write(self.getNextRace(0))
                 f.close()
 
                 f = open(scctool.settings.getAbsPath(
-                    scctool.settings.OBSdataDir +
+                    scctool.settings.streaming_data_dir +
                     "/nextrace2.txt"), mode='w',
                     encoding='utf-8-sig')
                 f.write(self.getNextRace(1))
@@ -913,14 +856,14 @@ class matchData(QObject):
             if(self.hasMetaChanged()):
 
                 f = open(scctool.settings.getAbsPath(
-                    scctool.settings.OBSdataDir +
+                    scctool.settings.streaming_data_dir +
                     "/teams_vs_long.txt"),
                     mode='w', encoding='utf-8-sig')
                 f.write(self.getTeam(0) + ' vs ' + self.getTeam(1) + "\n")
                 f.close()
 
                 f = open(scctool.settings.getAbsPath(
-                    scctool.settings.OBSdataDir +
+                    scctool.settings.streaming_data_dir +
                     "/teams_vs_short.txt"),
                     mode='w', encoding='utf-8-sig')
                 f.write(self.getTeamTag(0) + ' vs ' +
@@ -928,21 +871,21 @@ class matchData(QObject):
                 f.close()
 
                 f = open(scctool.settings.getAbsPath(
-                    scctool.settings.OBSdataDir +
+                    scctool.settings.streaming_data_dir +
                     "/team1.txt"),
                     mode='w', encoding='utf-8-sig')
                 f.write(self.getTeam(0))
                 f.close()
 
                 f = open(scctool.settings.getAbsPath(
-                    scctool.settings.OBSdataDir +
+                    scctool.settings.streaming_data_dir +
                     "/team2.txt"),
                     mode='w', encoding='utf-8-sig')
                 f.write(self.getTeam(1))
                 f.close()
 
                 f = open(scctool.settings.getAbsPath(
-                    scctool.settings.OBSdataDir +
+                    scctool.settings.streaming_data_dir +
                     "/tournament.txt"),
                     mode='w', encoding='utf-8-sig')
                 f.write(self.getLeague())
@@ -1145,9 +1088,9 @@ class matchData(QObject):
             return
 
         try:
-            filename_old = scctool.settings.OBShtmlDir + "/data/" + \
+            filename_old = scctool.settings.streaming_html_dir + "/data/" + \
                 self.getProvider() + ".html"
-            filename_new = scctool.settings.OBShtmlDir + \
+            filename_new = scctool.settings.streaming_html_dir + \
                 "/data/league-data.html"
             shutil.copy(scctool.settings.getAbsPath(filename_old),
                         scctool.settings.getAbsPath(filename_new))

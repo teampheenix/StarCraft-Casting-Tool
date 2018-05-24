@@ -135,7 +135,7 @@ class MapDownloader(QProgressDialog):
         base, ext = os.path.splitext(url)
         ext = ext.split("?")[0].lower()
         map = map_name.strip().replace(" ", "_") + ext
-        mapdir = scctool.settings.getAbsPath(scctool.settings.OBShtmlDir)
+        mapdir = scctool.settings.getAbsPath(scctool.settings.streaming_html_dir)
         if ext not in ['.jpg', '.png']:
             raise ValueError('Not supported image format.')
         self.file_name = os.path.normpath(
