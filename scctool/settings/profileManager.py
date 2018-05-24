@@ -174,12 +174,12 @@ class ProfileManager:
         return profile
 
     def _createPortFile(self, profile=""):
-        from scctool.settings import streaming_html_dir
+        from scctool.settings import casting_html_dir
         if not profile:
             profile = self._current
 
         dir = self.profiledir(profile)
-        dir = os.path.join(dir, streaming_html_dir, 'src/js')
+        dir = os.path.join(dir, casting_html_dir, 'src/js')
         if not os.path.exists(dir):
             os.makedirs(dir)
         file = os.path.join(dir, 'profile.js')

@@ -43,7 +43,7 @@ def needInitialUpdate(version):
     if version == '0.0.0':
         return True
     elif not os.path.exists(
-            scctool.settings.getAbsPath(scctool.settings.streaming_html_dir)):
+            scctool.settings.getAbsPath(scctool.settings.casting_html_dir)):
         return True
     else:
         return False

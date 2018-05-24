@@ -12,7 +12,7 @@ import humanize
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
 
-from scctool.settings import (streaming_data_dir, streaming_html_dir, getAbsPath, getJsonFile,
+from scctool.settings import (casting_data_dir, casting_html_dir, getAbsPath, getJsonFile,
                               logosDir)
 
 module_logger = logging.getLogger(
@@ -46,7 +46,7 @@ class LogoManager:
     def fromOldFormat(self):
         if not self._team1.isLogo():
             file = getAbsPath(self.__controller.linkFile(
-                streaming_data_dir + "/" + "logo1"))
+                casting_data_dir + "/" + "logo1"))
             if os.path.isfile(file):
                 logo = Logo(self)
                 logo.fromFile(file)
@@ -55,7 +55,7 @@ class LogoManager:
 
         if not self._team2.isLogo():
             file = getAbsPath(self.__controller.linkFile(
-                streaming_data_dir + "/" + "logo2"))
+                casting_data_dir + "/" + "logo2"))
             if os.path.isfile(file):
                 logo = Logo(self)
                 logo.fromFile(file)
@@ -317,7 +317,7 @@ class Logo:
 
     def getFile(self, web=False):
         if self._format == "none":
-            file = os.path.join(streaming_html_dir, "src/img/SC2.png")
+            file = os.path.join(casting_html_dir, "src/img/SC2.png")
         else:
             file = os.path.join(logosDir, "{}.{}".format(
                 self._ident, self._format))

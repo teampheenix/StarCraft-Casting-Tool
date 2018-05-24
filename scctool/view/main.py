@@ -308,7 +308,7 @@ class MainWindow(QMainWindow):
 
         act = QAction(_('Open Folder'), self)
         act.triggered.connect(lambda: os.startfile(
-            scctool.settings.getAbsPath(scctool.settings.streaming_html_dir)))
+            scctool.settings.getAbsPath(scctool.settings.casting_html_dir)))
         main_menu.addAction(act)
         main_menu.addSeparator()
 
@@ -319,7 +319,7 @@ class MainWindow(QMainWindow):
                 for icon in sub:
                     mySubMenu = QMenu(icon['name'], self)
                     icon['file'] = os.path.join(
-                        scctool.settings.streaming_html_dir, icon['file'])
+                        scctool.settings.casting_html_dir, icon['file'])
                     act = QAction(_('Open in Browser'), self)
                     act.triggered.connect(
                         lambda x,
@@ -339,7 +339,7 @@ class MainWindow(QMainWindow):
                     myMenu.addMenu(mySubMenu)
             else:
                 src['file'] = os.path.join(
-                    scctool.settings.streaming_html_dir, src['file'])
+                    scctool.settings.casting_html_dir, src['file'])
                 act = QAction(_('Open in Browser'), self)
                 act.triggered.connect(
                     lambda x,

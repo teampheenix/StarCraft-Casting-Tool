@@ -791,11 +791,11 @@ class matchData(QObject):
 
             if(self.hasAnySetChanged()):
                 f = open(scctool.settings.getAbsPath(
-                    scctool.settings.streaming_data_dir +
+                    scctool.settings.casting_data_dir +
                     "/lineup.txt"),
                     mode='w', encoding='utf-8-sig')
                 f2 = open(scctool.settings.getAbsPath(
-                    scctool.settings.streaming_data_dir +
+                    scctool.settings.casting_data_dir +
                     "/maps.txt"),
                     mode='w', encoding='utf-8-sig')
                 for idx in range(self.getNoSets()):
@@ -819,35 +819,35 @@ class matchData(QObject):
                     score_str = "0 - 0"
 
                 f = open(scctool.settings.getAbsPath(
-                    scctool.settings.streaming_data_dir +
+                    scctool.settings.casting_data_dir +
                     "/score.txt"), mode='w',
                     encoding='utf-8-sig')
                 f.write(score_str)
                 f.close()
 
                 f = open(scctool.settings.getAbsPath(
-                    scctool.settings.streaming_data_dir +
+                    scctool.settings.casting_data_dir +
                     "/nextplayer1.txt"), mode='w',
                     encoding='utf-8-sig')
                 f.write(self.getNextPlayer(0))
                 f.close()
 
                 f = open(scctool.settings.getAbsPath(
-                    scctool.settings.streaming_data_dir +
+                    scctool.settings.casting_data_dir +
                     "/nextplayer2.txt"), mode='w',
                     encoding='utf-8-sig')
                 f.write(self.getNextPlayer(1))
                 f.close()
 
                 f = open(scctool.settings.getAbsPath(
-                    scctool.settings.streaming_data_dir +
+                    scctool.settings.casting_data_dir +
                     "/nextrace1.txt"), mode='w',
                     encoding='utf-8-sig')
                 f.write(self.getNextRace(0))
                 f.close()
 
                 f = open(scctool.settings.getAbsPath(
-                    scctool.settings.streaming_data_dir +
+                    scctool.settings.casting_data_dir +
                     "/nextrace2.txt"), mode='w',
                     encoding='utf-8-sig')
                 f.write(self.getNextRace(1))
@@ -856,14 +856,14 @@ class matchData(QObject):
             if(self.hasMetaChanged()):
 
                 f = open(scctool.settings.getAbsPath(
-                    scctool.settings.streaming_data_dir +
+                    scctool.settings.casting_data_dir +
                     "/teams_vs_long.txt"),
                     mode='w', encoding='utf-8-sig')
                 f.write(self.getTeam(0) + ' vs ' + self.getTeam(1) + "\n")
                 f.close()
 
                 f = open(scctool.settings.getAbsPath(
-                    scctool.settings.streaming_data_dir +
+                    scctool.settings.casting_data_dir +
                     "/teams_vs_short.txt"),
                     mode='w', encoding='utf-8-sig')
                 f.write(self.getTeamTag(0) + ' vs ' +
@@ -871,21 +871,21 @@ class matchData(QObject):
                 f.close()
 
                 f = open(scctool.settings.getAbsPath(
-                    scctool.settings.streaming_data_dir +
+                    scctool.settings.casting_data_dir +
                     "/team1.txt"),
                     mode='w', encoding='utf-8-sig')
                 f.write(self.getTeam(0))
                 f.close()
 
                 f = open(scctool.settings.getAbsPath(
-                    scctool.settings.streaming_data_dir +
+                    scctool.settings.casting_data_dir +
                     "/team2.txt"),
                     mode='w', encoding='utf-8-sig')
                 f.write(self.getTeam(1))
                 f.close()
 
                 f = open(scctool.settings.getAbsPath(
-                    scctool.settings.streaming_data_dir +
+                    scctool.settings.casting_data_dir +
                     "/tournament.txt"),
                     mode='w', encoding='utf-8-sig')
                 f.write(self.getLeague())
@@ -1088,9 +1088,9 @@ class matchData(QObject):
             return
 
         try:
-            filename_old = scctool.settings.streaming_html_dir + "/data/" + \
+            filename_old = scctool.settings.casting_html_dir + "/data/" + \
                 self.getProvider() + ".html"
-            filename_new = scctool.settings.streaming_html_dir + \
+            filename_new = scctool.settings.casting_html_dir + \
                 "/data/league-data.html"
             shutil.copy(scctool.settings.getAbsPath(filename_old),
                         scctool.settings.getAbsPath(filename_new))

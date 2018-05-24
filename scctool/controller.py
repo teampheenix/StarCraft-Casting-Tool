@@ -603,9 +603,9 @@ class MainController:
         """Update html files with team logos."""
         for idx in range(2):
             logo = getattr(self.logoManager, 'getTeam{}'.format(idx + 1))()
-            filename = scctool.settings.streaming_html_dir + \
+            filename = scctool.settings.casting_html_dir + \
                 "/data/logo" + str(idx + 1) + "-data.html"
-            template = scctool.settings.streaming_html_dir + \
+            template = scctool.settings.casting_html_dir + \
                 "/data/logo-template.html"
             self.matchData._useTemplate(
                 template, filename, {'logo': logo.getFile(True)})
@@ -702,7 +702,7 @@ class MainController:
                     tts_file = 'src/sound/player{}.mp3'.format(player_idx + 1)
                     file = os.path.normpath(os.path.join(
                         scctool.settings.getAbsPath(
-                            scctool.settings.streaming_html_dir),
+                            scctool.settings.casting_html_dir),
                         tts_file))
                     tts.save(file)
                 else:
@@ -716,7 +716,7 @@ class MainController:
     def getMapImg(self, map, fullpath=False):
         """Get map image from map name."""
         mapdir = scctool.settings.getAbsPath(
-            scctool.settings.streaming_html_dir)
+            scctool.settings.casting_html_dir)
         mapimg = os.path.normpath(os.path.join(
             mapdir, "src/img/maps", map.replace(" ", "_")))
         mapimg = os.path.basename(self.linkFile(mapimg))
@@ -734,7 +734,7 @@ class MainController:
         """Add a new map via file and name."""
         _, ext = os.path.splitext(file)
         mapdir = scctool.settings.getAbsPath(
-            scctool.settings.streaming_html_dir)
+            scctool.settings.casting_html_dir)
         map = mapname.strip().replace(" ", "_") + ext.lower()
         newfile = os.path.normpath(os.path.join(mapdir, "src/img/maps", map))
         shutil.copy(file, newfile)

@@ -3,10 +3,10 @@ scctool/*/__pycache__/
 .pyupdater/
 pyu-data/
 pyupdater-usage.md
-streaming_data/
+casting_data/
 data/*
 config.ini
-streaming_html/data/*-data.html
+casting_html/data/*-data.html
 __pycache__/*
 StarCraftCastingTool.spec
 *.spec
@@ -16,6 +16,6 @@ build_app.py
 build_data.py
 sign.py
 *Ducklings.css
-streaming_html/src/ducklings/
-streaming_html/src/sound/player1.mp3
-streaming_html/src/sound/player2.mp3
+casting_html/src/ducklings/
+casting_html/src/sound/player1.mp3
+casting_html/src/sound/player2.mp3
