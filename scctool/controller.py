@@ -211,6 +211,7 @@ class MainController:
             self.matchData.writeJsonFile()
             self.updateForms()
             self.view.resizeWindow()
+            self.matchData.updateLeagueIcon()
 
         except Exception as e:
             msg = str(e)
@@ -249,6 +250,7 @@ class MainController:
             self.updateLogos(True)
             self.updateForms()
             self.view.resizeWindow()
+            self.matchData.updateLeagueIcon()
 
         except Exception as e:
             msg = str(e)

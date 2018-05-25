@@ -299,10 +299,11 @@ function changeImage(id, new_value) {
 function changeScoreIcon(team, set, color) {
   var id = '#circle-' + team.toString() + '-' + set.toString();
   var object = $(id);
-  if (data['sets'][set][team] == color) {
+  console.log(team, set, color, id);
+  if (data['sets'][set-1][team] == color) {
     return;
   } else {
-    data['sets'][set][team] = color;
+    data['sets'][set-1][team] = color;
     storeData('data');
   }
   if (tweens[id] && tweens[id].isActive()) {

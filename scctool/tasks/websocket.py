@@ -269,7 +269,8 @@ class WebsocketThread(QThread):
             for path in paths:
                 connections = self.connected.get(path, set()).copy()
                 for websocket in connections:
-                    module_logger.info("Sending data: %s" % data)
+                    module_logger.info(
+                        "Sending data to '{}': {}".format(path, data))
                     coro = websocket.send(json.dumps(data))
                     asyncio.run_coroutine_threadsafe(coro, self.__loop)
         except Exception as e:

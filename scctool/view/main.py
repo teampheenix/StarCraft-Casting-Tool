@@ -590,6 +590,8 @@ class MainWindow(QMainWindow):
             self.pb_applycustom.setFixedWidth(150)
             container.addWidget(self.pb_applycustom, 0)
 
+            self.defaultButtonPalette = self.pb_applycustom.palette()
+
             self.tab2.layout.addLayout(container)
 
             container = QHBoxLayout()
@@ -939,6 +941,7 @@ class MainWindow(QMainWindow):
             layout.addWidget(self.pb_resetscore)
 
             self.horizontalGroupBox.setLayout(layout)
+
         except Exception as e:
             module_logger.exception("message")
 
