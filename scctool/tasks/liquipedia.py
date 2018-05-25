@@ -137,17 +137,15 @@ class LiquipediaGrabber:
         params['prop'] = "text"
         params['contentmodel'] = "wikitext"
         params['utf8'] = 1
-        params['text'] = ""
+        params['text'] = "{{Tournament statistics/intro}}"
 
         if len(maps) < 1:
             return
 
-        # TODO: Problem - since liquipedia use a module for map stats 'LE'
-        # needs to be added for some maps, but not all, e.g. Catallena.
         for map in maps:
             params['text'] = params['text'] + \
-                "{{Map statistics|map=" + map.strip() + " LE}}"
-
+                "{{Map statistics row|tournament=+|map=" + map.strip() + "}}"
+        params['text'] = params['text'] + "</div>"
         url = '{}/starcraft2/api.php'.format(self._base_url)
         data = requests.get(url, headers=self._headers, params=params).json()
         content = data['parse']['text']['*']

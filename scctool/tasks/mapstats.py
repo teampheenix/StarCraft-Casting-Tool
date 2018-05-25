@@ -129,24 +129,24 @@ class MapStatsManager:
 
         for map, data in self.__maps.items():
             # TODO: Old elegant version is currently no longer possible:
-            # is_none = False
-            # for key in ['creator', 'size', 'spawn-positions']:
-            #     if data.get(key, None) is None:
-            #         maps2refresh_full.append(map)
-            #         is_none = True
-            #         break
-            # if is_none:
-            #     continue
+            is_none = False
+            for key in ['creator', 'size', 'spawn-positions']:
+                if data.get(key, None) is None:
+                    maps2refresh_full.append(map)
+                    is_none = True
+                    break
+            if is_none:
+                continue
+            last_refresh = data.get('refreshed', None)
+            if (not last_refresh or
+                    (time.time() - int(last_refresh)) > 0 * 24 * 60 * 60):
+                maps2refresh.append(map)
+
+            # Unelegant way:
             # last_refresh = data.get('refreshed', None)
             # if (not last_refresh or
             #         (time.time() - int(last_refresh)) > 24 * 60 * 60):
-            #     maps2refresh.append(map)
-
-            # Unelegant way:
-            last_refresh = data.get('refreshed', None)
-            if (not last_refresh or
-                    (time.time() - int(last_refresh)) > 24 * 60 * 60):
-                maps2refresh_full.append(map)
+            #     maps2refresh_full.append(map)
 
         if len(maps2refresh) > 0:
             self.__thread.setMaps(maps2refresh)
