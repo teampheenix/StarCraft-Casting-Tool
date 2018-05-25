@@ -139,7 +139,7 @@ class MapStatsManager:
                 continue
             last_refresh = data.get('refreshed', None)
             if (not last_refresh or
-                    (time.time() - int(last_refresh)) > 0 * 24 * 60 * 60):
+                    (time.time() - int(last_refresh)) > 24 * 60 * 60):
                 maps2refresh.append(map)
 
             # Unelegant way:
