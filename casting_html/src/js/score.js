@@ -299,7 +299,6 @@ function changeImage(id, new_value) {
 function changeScoreIcon(team, set, color) {
   var id = '#circle-' + team.toString() + '-' + set.toString();
   var object = $(id);
-  console.log(team, set, color, id);
   if (data['sets'][set-1][team] == color) {
     return;
   } else {
