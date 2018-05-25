@@ -403,16 +403,20 @@ class MainController:
             self.stopWebsocketThread()
             self.textFilesThread.terminate()
             self.autoRequestsThread.terminate()
-            self.mapstatsManager.close(save)
+            self.mapstatsManager.close(False)
             if save:
-                self.saveConfig()
-                self.matchData.writeJsonFile()
-                scctool.settings.saveNightbotCommands()
-                self.logoManager.dumpJson()
-                self.historyManager.dumpJson()
-                self.aliasManager.dumpJson()
+                self.saveAll()
         except Exception as e:
             module_logger.exception("message")
+
+    def saveAll(self):
+        self.saveConfig()
+        self.matchData.writeJsonFile()
+        scctool.settings.saveNightbotCommands()
+        self.logoManager.dumpJson()
+        self.historyManager.dumpJson()
+        self.aliasManager.dumpJson()
+        self.mapstatsManager.dumpJson()
 
     def saveConfig(self):
         """Save the settings to the config file."""

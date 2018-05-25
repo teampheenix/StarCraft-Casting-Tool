@@ -51,6 +51,22 @@ def loadSettings():
     if not os.path.exists(getAbsPath(logosDir)):
         os.makedirs(getAbsPath(logosDir))
 
+    # Create a symnolic link to the profiles directory
+    # Not working on Windows 10 - admin rights needed
+    # link = os.path.normpath(os.path.join(basedir, 'profiles'))
+    # profiles = this.profileManager.profilesdir()
+    # if not os.path.exists(link):
+    #     module_logger.info('Creating symbolic link.')
+    #     os.symlink(link, profiles)
+    # elif os.path.islink(link) and os.readlink(link) != profiles:
+    #     module_logger.info('Updating symbolic link.')
+    #     os.unlink(link)
+    #     os.symlink(link, profiles)
+    # elif not os.path.islink(link):
+    #     module_logger.info('Deleting file and creating symbolic link.')
+    #     os.remove(link)
+    #     os.symlink(link, profiles)
+
     loadMapList()
 
 

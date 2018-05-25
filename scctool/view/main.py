@@ -161,7 +161,7 @@ class MainWindow(QMainWindow):
 
             self.createBrowserSrcMenu()
 
-            ProfileMenu(self)
+            ProfileMenu(self, self.controller)
 
             self.createLangMenu()
 

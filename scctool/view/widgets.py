@@ -1082,9 +1082,10 @@ class LedIndicator(QAbstractButton):
 
 class ProfileMenu(QMenu):
 
-    def __init__(self, parrent_widget):
+    def __init__(self, parrent_widget, controller):
 
         self._parent = parrent_widget
+        self._controller = controller
 
         super().__init__(self._parent)
 
@@ -1184,6 +1185,7 @@ class ProfileMenu(QMenu):
                 return
             QApplication.setOverrideCursor(Qt.WaitCursor)
             try:
+                self._controller.saveAll()
                 id = scctool.settings.profileManager.addProfile(
                     name, copy=current['id'])
                 self.addProfile(id, name, False)
@@ -1212,6 +1214,7 @@ class ProfileMenu(QMenu):
 
         QApplication.setOverrideCursor(Qt.WaitCursor)
         try:
+            self._controller.saveAll()
             scctool.settings.profileManager.exportProfile(
                 current['id'], filename)
         except Exception as e:
