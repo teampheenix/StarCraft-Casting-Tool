@@ -54,6 +54,7 @@ function storeData(scope = null) {
 function loadStoredData() {
   try {
     var storage = window.localStorage;
+    console.log(storage);
     mapData = JSON.parse(storage.getItem('scct-' + profile + '-mapstats-mapdata'));
     colors = JSON.parse(storage.getItem('scct-' + profile + '-mapstats-colors'));
     font = storage.getItem('scct-' + profile + '-mapstats-font');
@@ -62,6 +63,7 @@ function loadStoredData() {
     if (currentMap == null) currentMap = "";
     if (colors == null) colors = {};
     if (mapData == null) mapData = {};
+    console.log(mapData);
     try {
       setColors(colors['color1'], colors['color2']);
     } catch (e) {}
@@ -309,6 +311,7 @@ function animateInOut(mapElement, name) {
       var element2 = document.getElementById("column-bottom");
       var element1s = Array.prototype.slice.call(document.getElementById('column-content').getElementsByClassName("stat"));
       var element2s = Array.prototype.slice.call(document.getElementById('column-bottom').getElementsByTagName("div"));
+      var liquipedia = document.getElementById("liquipedia");
       var mappool = document.getElementById("map-pool");
       tweenShowMap.clear();
       tweenShowMap.staggerTo([map, mapname, element1, element2], 0, {
@@ -318,7 +321,7 @@ function animateInOut(mapElement, name) {
           bottom: '-=100%',
           ease: Power1.easeOut
         })
-        .staggerFrom([mapname].concat(element1s, element2s), 0.3, {
+        .staggerFrom([mapname, liquipedia].concat(element1s, element2s), 0.3, {
           x: '-=110%'
         }, 0.05, '-=0.2');
       selectMapAnimation(name, mapElement, 0.2);

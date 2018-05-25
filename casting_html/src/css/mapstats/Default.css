@@ -1,8 +1,8 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto');
 :root {
-  --width: 1600px;
+  --width: 1700px;
   --height: 850px;
-  --middle: 50%;
+  --middle: 800px;
   --side: calc((100% - var(--middle)) / 2);
   --color: #6495ed;
   --color2: black;
@@ -79,7 +79,7 @@ div.column-header.right {
 
 div.column-header span:after {
   content: '';
-  width: 90%;
+  width: 85%;
   height: 3px;
   background-color: var(--color);
   display: inline-block;
@@ -107,6 +107,17 @@ div.column-header span:after {
   list-style-type: none;
   position: absolute;
   right: 0px;
+}
+
+#liquipedia{
+  font-weight: bold;
+  font-size: 20px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  color: var(--color);
+  letter-spacing: 1px;
+  right: calc(var(--side) + var(--middle) * 0.1 + 15px);
 }
 
 ul {
@@ -204,7 +215,7 @@ div.small-stat>span.desc::after {
 
 #column-bottom {
   position: absolute;
-  padding-left: 12px;
+  padding-left: 10px;
   bottom: 0;
 }
 

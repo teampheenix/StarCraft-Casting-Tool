@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>StarCraft Casting Tool - Map Statistics</title>
+  <title>StarCraft Casting Tool - Map Statistics powered by Liquipedia</title>
   <link rel="stylesheet" type="text/css" href="src/css/mapstats/Default.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
@@ -25,6 +25,9 @@
     <div class="right-column">
       <div class="column-header right"><span id='map-name'></span></div>
       <div id="column-content">
+        <div id="liquipedia">
+          <span>Statistics by Liquipedia</span>
+        </div>
         <div class="stat">
           <div>
             <div class='race Terran'><span></span></div>
@@ -54,10 +57,10 @@
         <div class="small-stat"><span class="desc">Creator</span><span id='creator'></span></div>
         <div class="small-stat"><span class="desc">Size</span><span id='size'></span></div>
         <div class="small-stat"><span class="desc">Spawn Positions</span><span id='positions'><span></div>
-                        </div>
-                </div>
-        </div>
-        <script src="src/js/mapstats.js"></script>
+      </div>
+    </div>
+  </div>
+  <script src="src/js/mapstats.js"></script>
 </body>
 
 </html>
