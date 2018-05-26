@@ -211,7 +211,8 @@ class SubwindowConnections(QWidget):
 
         self.pb_getTwitch = QPushButton(_('Get'))
         self.pb_getTwitch.setFixedWidth(100)
-        self.pb_getTwitch.clicked.connect(self.controller.getTwitchToken)
+        self.pb_getTwitch.clicked.connect(
+            lambda: self.controller.authThread.requestToken('twitch'))
         container.addWidget(self.pb_getTwitch)
 
         layout.addRow(QLabel(_("Access-Token:")), container)
@@ -266,7 +267,8 @@ class SubwindowConnections(QWidget):
             _("Press 'Get' to generate a token."))
         container.addWidget(self.nightbotToken)
         self.pb_getNightbot = QPushButton(_('Get'))
-        self.pb_getNightbot.clicked.connect(self.controller.getNightbotToken)
+        self.pb_getNightbot.clicked.connect(
+            lambda: self.controller.authThread.requestToken('nightbot'))
         self.pb_getNightbot.setFixedWidth(100)
         # self.pb_getNightbot.setEnabled(False)
         container.addWidget(self.pb_getNightbot)

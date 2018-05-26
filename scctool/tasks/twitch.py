@@ -4,7 +4,7 @@ import logging
 import requests
 
 import scctool.settings
-import scctool.tasks.webapp
+from scctool.tasks.auth import TWITCH_CLIENT_ID
 
 # create logger
 module_logger = logging.getLogger('scctool.tasks.twitch')
@@ -19,7 +19,7 @@ def updateTitle(newTitle):
     try:
         twitchChannel = scctool.settings.config.parser.get(
             "Twitch", "Channel").strip()
-        clientID = scctool.tasks.webapp.TWITCH_CLIENT_ID
+        clientID = TWITCH_CLIENT_ID
         oauth = scctool.settings.config.parser.get("Twitch", "oauth")
 
         headers = {'Accept': 'application/vnd.twitchtv.v3+json',
