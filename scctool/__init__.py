@@ -41,9 +41,6 @@ def main():
             showChangelog, updater = initial_download()
             if updater:
                 scctool.settings.loadSettings()
-                app = QApplication(sys.argv)
-                app.setStyle(QStyleFactory.create('Fusion'))
-                translator = choose_language(app, translator)
             main_window(app, showChangelog)
             currentExitCode = app.exec_()
             app = None
@@ -110,10 +107,7 @@ def choose_language(app, translator):
         lang = gettext.NullTranslations()
 
     lang.install()
-    try:
-        app.removeTranslator(translator)
-    except Exception:
-        pass
+    app.removeTranslator(translator)
     translator = QTranslator(app)
     translator.load(QLocale(language), "qtbase",
                     "_", scctool.settings.getLocalesDir(), ".qm")
