@@ -1,6 +1,64 @@
 # Changelog
 
 
+## (unreleased)
+
+### New
+
+* Added scope and volume to Text-to-Speech settings.
+
+* The Score Icon is now connect via websocket to SCCT and fully animated.
+
+* Logos and Matchbanner are no longer download if they are identical to the current logos or banner.
+
+* Restructured the settings.
+
+
+## v1.11.0 (2018-05-22)
+
+### New
+
+* Added option to use Text-to-Speech for the Intros reading the team and player name.
+
+### Fix
+
+* Fixed a bug where Tesseract-OCR would not work when installed on a different drive.
+
+
+## v1.10.3 (2018-05-19)
+
+### Fix
+
+* Liquipedia Image Search fixed by switching to https.
+
+
+## v1.10.2 (2018-05-15)
+
+### Fix
+
+* Intro is no longer visible shortly when browser source is started/refreshed.
+
+
+## v1.10.1 (2018-05-10)
+
+### New
+
+* Added option to auto swap a favorite team to the left at Misc Settings: Favorites.
+
+* Added button to swap the teams.
+
+
+## v1.10.0 (2018-05-09)
+
+### New
+
+* Added upcoming Season 2 Ladder Maps.
+
+### Changes
+
+* Improved centering of mapname and label of landscape map icons.
+
+
 ## v2.0.0 (2018-04-29)
 
 ### New
@@ -262,3 +320,5 @@
 ### Changes
 
 * Nighbot commands that are deleted in SCCT get now deleted in Nightbot as well.
+
+

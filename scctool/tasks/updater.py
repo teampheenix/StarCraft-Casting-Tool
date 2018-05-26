@@ -19,6 +19,8 @@ module_logger = logging.getLogger('scctool.tasks.updater')
 
 def compareVersions(v1, v2, maximum=5):
     """Compare two versions."""
+    v1 = v1.replace('beta', '.')
+    v2 = v2.replace('beta', '.')
     v1 = v1.split(".")
     v2 = v2.split(".")
     max_idx = min(max(len(v1), len(v2)), maximum)
@@ -36,6 +38,15 @@ def compareVersions(v1, v2, maximum=5):
         elif n2 > n1:
             return 1
     return 0
+
+
+def getChannel(version=None):
+    if version is None:
+        version = scctool.__version__
+    if 'beta' in version:
+        return 'beta'
+    else:
+        return 'stable'
 
 
 def needInitialUpdate(version):
@@ -161,9 +172,11 @@ class VersionHandler(TasksThread):
             self.client.add_progress_hook(self.update_progress)
             self.client.refresh()
             self.ASSET_VERSION = getDataVersion()
+            channel = getChannel(self.APP_VERSION)
+            print(channel)
             self.app_update = self.client.update_check(self.APP_NAME,
                                                        self.APP_VERSION,
-                                                       channel='stable')
+                                                       channel=channel)
             if self.asset_update is not None:
                 self.newData.emit(self.asset_update.latest)
                 module_logger.info("Asset: " + self.asset_update.latest)

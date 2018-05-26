@@ -802,8 +802,11 @@ class InitialUpdater(QProgressDialog):
             client.refresh()
             client.add_progress_hook(self.setProgress)
 
+            channel = scctool.tasks.updater.getChannel()
             lib_update = client.update_check(
-                scctool.tasks.updater.VersionHandler.ASSET_NAME, self.version)
+                scctool.tasks.updater.VersionHandler.ASSET_NAME,
+                self.version,
+                channel=channel)
             if lib_update is not None:
                 lib_update.download(async=False)
                 self.setValue(500)
