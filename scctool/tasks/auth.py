@@ -109,7 +109,11 @@ class AuthThread(http.server.HTTPServer, QtCore.QThread):
         self.terminate()
 
     def terminate(self):
-        self.shutdown()
+        if self.isRunning():
+            assassin = threading.Thread(target=self.shutdown)
+            assassin.daemon = True
+            assassin.start()
+            self.server_close()
 
     def emit_token(self, scope, token):
         self.pending_requests.remove(scope)
