@@ -39,9 +39,6 @@ class MainController:
             self.matchData = matchData(self)
             self.authThread = AuthThread()
             self.authThread.tokenRecived.connect(self.tokenRecived)
-            self.textFilesThread = TextFilesThread(self.matchData)
-            self.matchData.dataChanged.connect(self.handleMatchDataChange)
-            self.matchData.metaChangedSignal.connect(self.matchMetaDataChanged)
             self.SC2ApiThread = SC2ApiThread(self)
             self.SC2ApiThread.requestScoreUpdate.connect(
                 self.requestScoreUpdate)
@@ -393,7 +390,6 @@ class MainController:
             self.SC2ApiThread.requestTermination("ALL")
             self.authThread.terminate()
             self.stopWebsocketThread()
-            self.textFilesThread.terminate()
             self.autoRequestsThread.terminate()
             self.matchData.writeJsonFile()
             scctool.settings.saveNightbotCommands()
