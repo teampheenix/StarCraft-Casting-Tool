@@ -85,7 +85,8 @@ def setDefaultConfig(sec, opt, value, func=None):
             parser.set(sec, opt, value)
 
 
-def findTesserAct(default="C:\\Program Files (x86)\\Tesseract-OCR\\tesseract.exe"):
+def findTesserAct(
+        default="C:\\Program Files (x86)\\Tesseract-OCR\\tesseract.exe"):
     """Search for Tesseract exceutable via registry."""
     if(not windows):
         return default
@@ -205,7 +206,8 @@ def ftpIsValid():
 def nightbotIsValid():
     """Check if nightbot data is valid."""
     from scctool.settings import nightbot_commands
-    return (len(parser.get("Nightbot", "token")) > 0 and len(nightbot_commands) > 0)
+    return (len(parser.get("Nightbot", "token")) > 0 and
+            len(nightbot_commands) > 0)
 
 
 def twitchIsValid():
