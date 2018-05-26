@@ -173,7 +173,6 @@ class VersionHandler(TasksThread):
             self.client.refresh()
             self.ASSET_VERSION = getDataVersion()
             channel = getChannel(self.APP_VERSION)
-            print(channel)
             self.app_update = self.client.update_check(self.APP_NAME,
                                                        self.APP_VERSION,
                                                        channel=channel)

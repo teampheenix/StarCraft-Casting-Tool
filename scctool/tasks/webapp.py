@@ -185,5 +185,8 @@ class FlaskThread(QtCore.QThread):
     def run(self):
         """Run thread."""
         module_logger.info("WebApp started")
-        self.application.run(port=65010)
+        try:
+            self.application.run(port=65010)
+        except Exception as e:
+            module_logger.exception("message")
         module_logger.info("WebApp done")
