@@ -110,7 +110,10 @@ def choose_language(app, translator):
         lang = gettext.NullTranslations()
 
     lang.install()
-    app.removeTranslator(translator)
+    try:
+        app.removeTranslator(translator)
+    except Exception:
+        pass
     translator = QTranslator(app)
     translator.load(QLocale(language), "qtbase",
                     "_", scctool.settings.getLocalesDir(), ".qm")

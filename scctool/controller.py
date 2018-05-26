@@ -18,13 +18,13 @@ from scctool.settings.alias import AliasManager
 from scctool.settings.history import HistoryManager
 from scctool.settings.logoManager import LogoManager
 from scctool.settings.placeholders import PlaceholderList
+from scctool.tasks.auth import AuthThread
 from scctool.tasks.autorequests import AutoRequestsThread
 from scctool.tasks.mapstats import MapStatsManager
 from scctool.tasks.sc2ClientInteraction import (SC2ApiThread, SwapPlayerNames,
                                                 ToggleScore)
 from scctool.tasks.textfiles import TextFilesThread
 from scctool.tasks.updater import VersionHandler
-from scctool.tasks.webapp import FlaskThread
 from scctool.tasks.websocket import WebsocketThread
 from scctool.view.widgets import ToolUpdater
 
@@ -34,12 +34,13 @@ module_logger = logging.getLogger('scctool.controller')
 
 class MainController:
     """Control all other modules."""
-    webApp = FlaskThread()
 
     def __init__(self):
         """Init controller and connect them with other modules."""
         try:
             self.matchData = matchData(self)
+            self.authThread = AuthThread()
+            self.authThread.tokenRecived.connect(self.tokenRecived)
             self.textFilesThread = TextFilesThread(self.matchData)
             self.matchData.dataChanged.connect(self.handleMatchDataChange)
             self.matchData.metaChangedSignal.connect(self.matchMetaDataChanged)
@@ -47,8 +48,6 @@ class MainController:
             self.SC2ApiThread.requestScoreUpdate.connect(
                 self.requestScoreUpdate)
             self.versionHandler = VersionHandler(self)
-            self.webApp.signal_twitch.connect(self.webAppDone_twitch)
-            self.webApp.signal_nightbot.connect(self.webAppDone_nightbot)
             self.websocketThread = WebsocketThread(self)
             self.websocketThread.socketConnectionChanged.connect(
                 self.toogleLEDs)
@@ -299,53 +298,20 @@ class MainController:
         if(self.matchData.allkillUpdate()):
             self.updateForms()
 
-    def webAppDone_nightbot(self):
-        """Call to return of nightbot token."""
+    def tokenRecived(self, scope, token):
+        """Call to return of token."""
         try:
-            self.view.mysubwindow1.nightbotToken.setTextMonitored(
-                FlaskThread._single.token_nightbot)
+            subwindow = self.view.mysubwindows['connections']
+            getattr(subwindow, '{}Token'.format(scope)).setTextMonitored(token)
 
             self.view.raise_()
             self.view.show()
             self.view.activateWindow()
 
-            self.view.mysubwindow1.raise_()
-            self.view.mysubwindow1.show()
-            self.view.mysubwindow1.activateWindow()
+            subwindow.raise_()
+            subwindow.show()
+            subwindow.activateWindow()
 
-        except Exception as e:
-            module_logger.exception("message")
-
-    def webAppDone_twitch(self):
-        """Call to return of twitch token."""
-        try:
-            self.view.mysubwindow1.twitchToken.setTextMonitored(
-                FlaskThread._single.token_twitch)
-
-            self.view.raise_()
-            self.view.show()
-            self.view.activateWindow()
-
-            self.view.mysubwindow1.raise_()
-            self.view.mysubwindow1.show()
-            self.view.mysubwindow1.activateWindow()
-
-        except Exception as e:
-            module_logger.exception("message")
-
-    def getNightbotToken(self):
-        """Get nightbot token."""
-        try:
-            self.webApp.start()
-            webbrowser.open("http://localhost:65010/nightbot")
-        except Exception as e:
-            module_logger.exception("message")
-
-    def getTwitchToken(self):
-        """Get twitch token."""
-        try:
-            self.webApp.start()
-            webbrowser.open("http://localhost:65010/twitch")
         except Exception as e:
             module_logger.exception("message")
 
@@ -403,7 +369,7 @@ class MainController:
         try:
             module_logger.info("cleanUp called")
             self.SC2ApiThread.requestTermination("ALL")
-            self.webApp.terminate()
+            self.authThread.terminate()
             self.stopWebsocketThread()
             self.textFilesThread.terminate()
             self.autoRequestsThread.terminate()
