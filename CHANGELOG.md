@@ -1,6 +1,23 @@
 # Changelog
 
 
+## (unreleased)
+
+### New
+
+* Added scope and volume to Text-to-Speech settings.
+
+* The Score Icon is now connect via websocket to SCCT and fully animated.
+
+* Logos and Matchbanner are no longer download if they are identical to the current logos or banner.
+
+* Restructured the settings.
+
+### Fix
+
+* Text-to-Speech is now disabled by default.
+
+
 ## v1.11.0 (2018-05-22)
 
 ### New
@@ -307,5 +324,3 @@
 ### Changes
 
 * Nighbot commands that are deleted in SCCT get now deleted in Nightbot as well.
-
-

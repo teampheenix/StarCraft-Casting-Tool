@@ -27,7 +27,7 @@ logger.addHandler(ch)
 logger.info("system: " + system)
 logger.info("pip-version: " + pip.__version__)
 
-modules = ['pip', 'pyqt5', 'requests', 'configparser', 'flask', 'keyboard',
+modules = ['pip', 'pyqt5', 'requests', 'configparser', 'keyboard',
            'websockets', 'humanize', 'markdown2', 'pyupdater',
            'beautifulsoup4', 'appdirs', 'gTTS']
 
