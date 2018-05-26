@@ -240,11 +240,15 @@ function outroAnimation() {
 
 function changeText(id, new_value) {
   var object = $('#' + id);
-  console.log(id, new_value);
+  if (id == 'score1' || id == 'score2') {
+    new_data_value = parseInt(new_value);
+  } else {
+    new_data_value = new_value;
+  }
   if (data[id] == new_value) {
     return;
   } else {
-    data[id] = new_value;
+    data[id] = new_data_value;
     storeData('data');
   }
 
@@ -299,10 +303,10 @@ function changeImage(id, new_value) {
 function changeScoreIcon(team, set, color) {
   var id = '#circle-' + team.toString() + '-' + set.toString();
   var object = $(id);
-  if (data['sets'][set-1][team] == color) {
+  if (data['sets'][set - 1][team - 1] == color) {
     return;
   } else {
-    data['sets'][set-1][team] = color;
+    data['sets'][set - 1][team - 1] = color;
     storeData('data');
   }
   if (tweens[id] && tweens[id].isActive()) {

@@ -95,6 +95,7 @@ function connectWebsocket() {
 }
 
 function dataChanged(newData) {
+  newData = processData(newData);
   if (JSON.stringify(data) === JSON.stringify(newData)) {
     return false;
   } else {
@@ -104,18 +105,26 @@ function dataChanged(newData) {
   }
 }
 
+function processData(myData) {
+  var length = Object.keys(data).length;
+  for (var i = 1; i <= length; i++) {
+    delete myData[i]['border_color'];
+  }
+  return myData;
+}
+
 function changeScore(winner, set, color, opacity, hide) {
   var mapicon = $("#mapicon" + (set).toString());
   $(mapicon).find("div.circle").css("background-color", color);
   $(mapicon).find("div.opa").css('opacity', opacity);
-  if (hide){
-      $(mapicon).find("div.circle").css('visibility', 'hidden');
-  }else{
-      $(mapicon).find("div.circle").css('visibility', 'visible');
+  if (hide) {
+    $(mapicon).find("div.circle").css('visibility', 'hidden');
+  } else {
+    $(mapicon).find("div.circle").css('visibility', 'visible');
   }
   data[set]['hide_scoreicon'] = hide;
   data[set]['opacity'] = opacity;
-  storeData('data');
+  data[set]['score_color'] = color;
   if (winner == 0) {
     $(mapicon).find("div.player1").removeClass('winner');
     $(mapicon).find("div.player2").removeClass('winner');
@@ -125,13 +134,14 @@ function changeScore(winner, set, color, opacity, hide) {
     $(mapicon).find("div.player1").addClass('winner');
     $(mapicon).find("div.player2").removeClass('winner');
     data[set]['status1'] = 'winner';
-    data[set]['status2'] = '';
+    data[set]['status2'] = 'loser';
   } else if (winner == 1) {
     $(mapicon).find("div.player1").removeClass('winner');
     $(mapicon).find("div.player2").addClass('winner');
-    data[set]['status1'] = '';
+    data[set]['status1'] = 'loser';
     data[set]['status2'] = 'winner';
   }
+  storeData('data');
 }
 
 function changeText(iconID, label, new_value) {
@@ -285,10 +295,10 @@ function fillBox(i) {
   $(mapicon).find("div.race1").attr("id", mapdata['race1']);
   $(mapicon).find("div.race2").attr("id", mapdata['race2']);
   $(mapicon).find("div.circle").css("background-color", mapdata['score_color']);
-  if (mapdata['hide_scoreicon']){
-      $(mapicon).find("div.circle").css('visibility', 'hidden');
-  }else{
-      $(mapicon).find("div.circle").css('visibility', 'visible');
+  if (mapdata['hide_scoreicon']) {
+    $(mapicon).find("div.circle").css('visibility', 'hidden');
+  } else {
+    $(mapicon).find("div.circle").css('visibility', 'visible');
   }
   $(mapicon).find("div.mapimg").css("background-image", 'url("src/img/maps/' + mapdata['map_img'] + '")');
   $(mapicon).find("div.opa").css('opacity', mapdata['opacity']);

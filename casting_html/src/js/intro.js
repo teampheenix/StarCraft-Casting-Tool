@@ -14,9 +14,22 @@ myAudio3.volume = volume;
 
 init();
 
-function playSound(audio){
-  try{
-    audio.play();
+function playSound(audio) {
+  try {
+    if (audio.duration > 0 && !audio.paused) {
+
+      //already playing
+      audio.pause();
+      audio.currentTime = 0;
+      audio.play();
+
+    } else {
+
+      //not playing
+
+      audio.play();
+
+    }
   } catch (e) {}
 }
 

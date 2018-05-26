@@ -54,7 +54,7 @@ class MainController:
                 self.toogleLEDs)
             self.runWebsocketThread()
             self.autoRequestsThread = AutoRequestsThread(self)
-            self.placeholderSetup()
+            self.placeholders = self.placeholderSetup()
             self._warning = False
             self.checkVersion()
             self.initPlayerIntroData()
@@ -88,17 +88,19 @@ class MainController:
 
     def placeholderSetup(self):
         """Define and connect placeholders."""
-        self.placeholders = PlaceholderList()
+        placeholders = PlaceholderList()
 
-        self.placeholders.addConnection("Team1", lambda:
-                                        self.matchData.getTeamOrPlayer(0))
-        self.placeholders.addConnection("Team2", lambda:
-                                        self.matchData.getTeamOrPlayer(1))
-        self.placeholders.addConnection("URL", self.matchData.getURL)
-        self.placeholders.addConnection(
+        placeholders.addConnection("Team1", lambda:
+                                   self.matchData.getTeamOrPlayer(0))
+        placeholders.addConnection("Team2", lambda:
+                                   self.matchData.getTeamOrPlayer(1))
+        placeholders.addConnection("URL", self.matchData.getURL)
+        placeholders.addConnection(
             "BestOf", lambda: str(self.matchData.getBestOfRaw()))
-        self.placeholders.addConnection("League", self.matchData.getLeague)
-        self.placeholders.addConnection("Score", self.matchData.getScoreString)
+        placeholders.addConnection("League", self.matchData.getLeague)
+        placeholders.addConnection("Score", self.matchData.getScoreString)
+
+        return placeholders
 
     def setView(self, view):
         """Connect view."""
@@ -113,7 +115,7 @@ class MainController:
             module_logger.exception("message")
 
     def updateForms(self):
-        """Update data in froms."""
+        """Update data in forms."""
         try:
             if(self.matchData.getProvider() == "Custom"):
                 self.view.tabs.setCurrentIndex(1)
@@ -810,10 +812,11 @@ class MainController:
 
     def handleMatchDataChange(self, label, object):
         if label == 'team':
-            self.websocketThread.sendData2Path(
-                'score', 'CHANGE_TEXT',
-                {'id': 'team{}'.format(object['idx'] + 1),
-                 'text': object['value']})
+            if not self.matchData.getSolo():
+                self.websocketThread.sendData2Path(
+                    'score', 'CHANGE_TEXT',
+                    {'id': 'team{}'.format(object['idx'] + 1),
+                     'text': object['value']})
         elif label == 'score':
             score = self.matchData.getScore()
             for idx in range(0, 2):
@@ -872,6 +875,11 @@ class MainController:
                     'icon': object['set_idx'] + 1,
                     'label': 'player{}'.format(object['team_idx'] + 1),
                     'text': object['value']})
+            if object['set_idx'] == 0 and self.matchData.getSolo():
+                self.websocketThread.sendData2Path(
+                    'score', 'CHANGE_TEXT',
+                    {'id': 'team{}'.format(object['team_idx'] + 1),
+                     'text': object['value']})
         elif label == 'race':
             self.websocketThread.sendData2Path(
                 ['mapicons_box', 'mapicons_landscape'],

@@ -95,6 +95,7 @@ function connectWebsocket() {
 }
 
 function dataChanged(newData) {
+  newData = processData(newData);
   if (JSON.stringify(data) === JSON.stringify(newData)) {
     return false;
   } else {
@@ -104,12 +105,20 @@ function dataChanged(newData) {
   }
 }
 
+function processData(myData){
+  var length = Object.keys(data).length;
+  for(var i = 1; i<= length; i++){
+    delete myData[i]['score_color'];
+  }
+  return myData;
+}
+
 function changeScore(winner, set, color, opacity) {
   var mapicon = $("#mapicon" + (set).toString());
   $(mapicon).find("div.image").css("border-color", color);
   $(mapicon).find("div.opa").css('opacity', opacity);
   data[set]['opacity'] = opacity;
-  storeData('data');
+  data[set]['border_color'] = color;
   if (winner == 0) {
     $(mapicon).find("div.player1").removeClass('winner');
     $(mapicon).find("div.player2").removeClass('winner');
@@ -119,13 +128,14 @@ function changeScore(winner, set, color, opacity) {
     $(mapicon).find("div.player1").addClass('winner');
     $(mapicon).find("div.player2").removeClass('winner');
     data[set]['status1'] = 'winner';
-    data[set]['status2'] = '';
+    data[set]['status2'] = 'loser';
   } else if (winner == 1) {
     $(mapicon).find("div.player1").removeClass('winner');
     $(mapicon).find("div.player2").addClass('winner');
-    data[set]['status1'] = '';
+    data[set]['status1'] = 'loser';
     data[set]['status2'] = 'winner';
   }
+  storeData('data');
 }
 
 function changeText(iconID, label, new_value) {

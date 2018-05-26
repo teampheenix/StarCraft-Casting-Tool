@@ -55,8 +55,8 @@ class matchData(QObject):
         self.__CUSTOM_FORMATS = OrderedDict(sorted(formats.items()))
 
     def getCustomFormats(self):
-        for format in self.__CUSTOM_FORMATS.keys():
-            yield format, self.__CUSTOM_FORMATS[format]._icon
+        for custom_format in self.__CUSTOM_FORMATS.keys():
+            yield custom_format, self.__CUSTOM_FORMATS[custom_format]._icon
 
     def applyCustomFormat(self, name):
         if name in self.__CUSTOM_FORMATS:
@@ -65,10 +65,10 @@ class matchData(QObject):
         else:
             raise ValueError("Unknown Custom Match Format.")
 
-    def __emitSignal(self, scope, name='', object=None):
+    def __emitSignal(self, scope, name='', data=None):
         if not self.emitLock.locked():
             if scope == 'data':
-                self.dataChanged.emit(name, object)
+                self.dataChanged.emit(name, data)
             elif scope == 'meta':
                 self.metaChangedSignal.emit()
             elif scope == 'outcome':
@@ -1012,7 +1012,7 @@ class matchData(QObject):
             for i in range(self.getNoSets()):
                 winner = self.getMapScore(i)
                 won = winner * team
-                opacity = "0.0"
+                opacity = 0.0
 
                 threshold = int(self.getBestOf() / 2)
 
