@@ -151,7 +151,10 @@ class WebsocketThread(QThread):
         module_logger.info("Client connected!")
         primary_scope = self.get_primary_scope(path)
         self.changeStyle(path, websocket=websocket)
-        self.changeFont(primary_scope, websocket=websocket)
+        try:
+            self.changeFont(primary_scope, websocket=websocket)
+        except ValueError:
+            pass
         if primary_scope == 'mapstats':
             self.changeColors(primary_scope, websocket=websocket)
             data = self.__controller.mapstatsManager.getData()
