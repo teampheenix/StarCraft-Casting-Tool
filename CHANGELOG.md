@@ -13,6 +13,10 @@
 
 * Restructured the settings.
 
+### Fix
+
+* Text-to-Speech is now disabled by default.
+
 
 ## v1.11.0 (2018-05-22)
 
