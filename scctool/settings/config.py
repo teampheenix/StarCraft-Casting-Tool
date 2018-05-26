@@ -170,7 +170,7 @@ def setDefaultConfigAll():
     setDefaultConfig("Intros", "sound_volume", "5")
     setDefaultConfig("Intros", "display_time", "3.0")
     setDefaultConfig("Intros", "animation", "Fly-In")
-    setDefaultConfig("Intros", "tts_active", "True")
+    setDefaultConfig("Intros", "tts_active", "False")
     setDefaultConfig("Intros", "tts_lang", "en")
     setDefaultConfig("Intros", 'tts_scope', "team_player")
     setDefaultConfig("Intros", "tts_volume", "5")
