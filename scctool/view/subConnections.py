@@ -242,15 +242,17 @@ class SubwindowConnections(QWidget):
 
     def saveData(self):
         """Save the data to config."""
+        if(self.__dataChanged):
+            scctool.settings.config.parser.set(
+                "Twitch", "channel", self.twitchChannel.text().strip())
+            scctool.settings.config.parser.set(
+                "Twitch", "oauth", self.twitchToken.text().strip())
+            scctool.settings.config.parser.set(
+                "Twitch", "title_template", self.twitchTemplate.text().strip())
 
-        scctool.settings.config.parser.set(
-            "Twitch", "channel", self.twitchChannel.text().strip())
-        scctool.settings.config.parser.set(
-            "Twitch", "oauth", self.twitchToken.text().strip())
-        scctool.settings.config.parser.set(
-            "Twitch", "title_template", self.twitchTemplate.text().strip())
+            scctool.settings.nightbot_commands = CommandDropBox.getData()
 
-        scctool.settings.nightbot_commands = CommandDropBox.getData()
+            self.__dataChanged = False
 
     def saveCloseWindow(self):
         """Save and close window."""

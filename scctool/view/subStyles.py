@@ -373,6 +373,8 @@ class SubwindowStyles(QWidget):
                       'color2': self.mapstats_color2.getColor()}
             self.controller.websocketThread.changeColors('mapstats', colors)
             self.controller.websocketThread.changeFont()
+            self.controller.matchMetaDataChanged()
+            self.__dataChanged = False
 
     def saveCloseWindow(self):
         """Save and close window."""

@@ -1092,6 +1092,10 @@ class ProfileMenu(QMenu):
         self._menu = parrent_widget.menuBar().addMenu(_('Profile'))
 
         action = self._menu.addAction(QIcon(scctool.settings.getResFile(
+            'folder.png')), _('Open current folder'))
+        action.triggered.connect(self.openFolder)
+
+        action = self._menu.addAction(QIcon(scctool.settings.getResFile(
             'add.png')), _('New'))
         action.triggered.connect(self.newProfile)
 
@@ -1148,6 +1152,9 @@ class ProfileMenu(QMenu):
             QMessageBox.information(self._parent, _("Remove Profile"), str(e))
         finally:
             QApplication.restoreOverrideCursor()
+
+    def openFolder(self):
+        os.startfile(scctool.settings.profileManager.profiledir())
 
     def newProfile(self):
         name = ''

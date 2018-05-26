@@ -6,6 +6,7 @@ var myDefaultFont = null;
 var data = {};
 var font = "DEFAULT";
 var cssFile = "";
+var padding = "2px";
 var tweens = {};
 var tweenInitial = new TimelineMax();
 var initNeeded = true;
@@ -25,16 +26,20 @@ function loadStoredData() {
   try {
     var storage = window.localStorage;
     var key = 'scct-' + profile + '-mapicons_landscape_' + ident.toString() + '-';
-    data = JSON.parse(storage.getItem(key + 'data'));
+    data = JSON.parse(storage.getItem(key + 'data')) || {};
     font = storage.getItem(key + 'font');
     cssFile = storage.getItem(key + 'css');
-    if (data == null) data = {};
+    padding = storage.getItem(key + 'padding') || '2px';
     try {
       changeCSS(cssFile);
     } catch (e) {}
 
     try {
       setFont(font);
+    } catch (e) {}
+
+    try {
+      setPadding(font);
     } catch (e) {}
 
   } catch (e) {}
@@ -46,6 +51,7 @@ function storeData(scope = null) {
     var key = 'scct-' + profile + '-mapicons_landscape_' + ident.toString() + '-';
     if (scope == null || scope == "data") storage.setItem(key + 'data', JSON.stringify(data));
     if (scope == null || scope == "font") storage.setItem(key + 'font', font);
+    if (scope == null || scope == "padding") storage.setItem(key + 'padding', padding);
     if (scope == null || scope == "css") storage.setItem(key + 'css', cssFile);
   } catch (e) {}
 }
@@ -76,6 +82,8 @@ function connectWebsocket() {
       changeMap(jsonObject.data.icon, jsonObject.data.map, jsonObject.data.map_img);
     } else if (jsonObject.event == 'CHANGE_FONT') {
       setFont(jsonObject.data.font);
+    } else if (jsonObject.event == 'CHANGE_PADDING') {
+      setPadding(jsonObject.data.padding);
     } else if (jsonObject.event == 'DATA') {
       if (dataChanged(jsonObject.data)) {
         handleData();
@@ -234,6 +242,11 @@ function changeCSS(newCssFile) {
     $('link[rel="stylesheet"]').attr('href', newCssFile);
     storeData("css");
   }
+}
+
+function setPadding(padding) {
+  document.documentElement.style.setProperty('--padding', padding);
+  storeData("padding");
 }
 
 function setFont(newFont) {

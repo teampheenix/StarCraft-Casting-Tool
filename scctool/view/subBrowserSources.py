@@ -185,6 +185,19 @@ class SubwindowBrowserSources(QWidget):
     def createFormGroupMapBox(self):
         self.formGroupMapBox = QWidget()
         mainLayout = QVBoxLayout()
+        box = QGroupBox(_("General"))
+        layout = QFormLayout()
+        self.sb_padding_box = QDoubleSpinBox()
+        self.sb_padding_box.setRange(0, 30)
+        self.sb_padding_box.setDecimals(1)
+        self.sb_padding_box.setValue(
+            scctool.settings.config.parser.getfloat("MapIcons", "padding_box"))
+        self.sb_padding_box.setSuffix(" " + _("Pixel"))
+        self.sb_padding_box.valueChanged.connect(self.changed)
+        layout.addRow(QLabel(
+            _("Icon Padding:") + " "), self.sb_padding_box)
+        box.setLayout(layout)
+        mainLayout.addWidget(box)
         mainLayout.addItem(QSpacerItem(
             0, 0, QSizePolicy.Minimum, QSizePolicy.Expanding))
         self.formGroupMapBox.setLayout(mainLayout)
@@ -192,6 +205,20 @@ class SubwindowBrowserSources(QWidget):
     def createFormGroupMapLandscape(self):
         self.formGroupMapLandscape = QWidget()
         mainLayout = QVBoxLayout()
+        box = QGroupBox(_("General"))
+        layout = QFormLayout()
+        self.sb_padding_landscape = QDoubleSpinBox()
+        self.sb_padding_landscape.setRange(0, 30)
+        self.sb_padding_landscape.setDecimals(1)
+        self.sb_padding_landscape.setValue(
+            scctool.settings.config.parser.getfloat(
+                "MapIcons", "padding_landscape"))
+        self.sb_padding_landscape.setSuffix(" " + _("Pixel"))
+        self.sb_padding_landscape.valueChanged.connect(self.changed)
+        layout.addRow(QLabel(
+            _("Icon Padding:") + " "), self.sb_padding_landscape)
+        box.setLayout(layout)
+        mainLayout.addWidget(box)
         mainLayout.addItem(QSpacerItem(
             0, 0, QSizePolicy.Minimum, QSizePolicy.Expanding))
         self.formGroupMapLandscape.setLayout(mainLayout)
@@ -347,21 +374,25 @@ class SubwindowBrowserSources(QWidget):
 
     def saveData(self):
         """Save the data to config."""
+        if(self.__dataChanged):
+            self.saveWebsocketdata()
 
-        self.saveWebsocketdata()
+            maps = list()
+            for i in range(self.maplist.count()):
+                maps.append(str(self.maplist.item(i).text()).strip())
 
-        maps = list()
-        for i in range(self.maplist.count()):
-            maps.append(str(self.maplist.item(i).text()).strip())
+            self.controller.mapstatsManager.setCustomMapPool(maps)
+            self.controller.mapstatsManager.setMapPoolType(
+                self.cb_mappool.currentIndex())
 
-        self.controller.mapstatsManager.setCustomMapPool(maps)
-        self.controller.mapstatsManager.setMapPoolType(
-            self.cb_mappool.currentIndex())
+            self.controller.mapstatsManager.sendMapPool()
+            self.controller.updateMapButtons()
 
-        self.controller.mapstatsManager.sendMapPool()
-        self.controller.updateMapButtons()
+            self.controller.websocketThread.changePadding('mapicons_box')
+            self.controller.websocketThread.changePadding('mapicons_landscape')
 
-        # self.controller.refreshButtonStatus()
+            self.__dataChanged = False
+            # self.controller.refreshButtonStatus()
 
     def saveWebsocketdata(self):
         """Save Websocket data."""
@@ -382,6 +413,13 @@ class SubwindowBrowserSources(QWidget):
             "Intros", "tts_active", str(self.cb_tts_active.isChecked()))
         scctool.settings.config.parser.set(
             "Intros", "tts_volume", str(self.sl_tts_sound.value()))
+
+        scctool.settings.config.parser.set(
+            "MapIcons", "padding_box",
+            str(self.sb_padding_box.value()))
+        scctool.settings.config.parser.set(
+            "MapIcons", "padding_landscape",
+            str(self.sb_padding_landscape.value()))
 
     def saveCloseWindow(self):
         """Save and close window."""

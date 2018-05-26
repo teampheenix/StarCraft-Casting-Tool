@@ -149,19 +149,18 @@ class WebsocketThread(QThread):
             return
         self.registerConnection(websocket, path)
         module_logger.info("Client connected!")
-        self.changeStyle(path)
         primary_scope = self.get_primary_scope(path)
+        self.changeStyle(path, websocket=websocket)
+        self.changeFont(primary_scope, websocket=websocket)
         if primary_scope == 'mapstats':
-            self.changeColors(primary_scope)
-            self.changeFont(primary_scope)
+            self.changeColors(primary_scope, websocket=websocket)
             data = self.__controller.mapstatsManager.getData()
             self.sendData2WS(websocket, "MAPSTATS", data)
         elif primary_scope == 'score':
-            self.changeFont(primary_scope)
             data = self.__controller.matchData.getScoreData()
             self.sendData2WS(websocket, "ALL_DATA", data)
         elif primary_scope in ['mapicons_box', 'mapicons_landscape']:
-            self.changeFont(primary_scope)
+            self.changePadding(primary_scope, websocket=websocket)
             data = self.__controller.matchData.getMapIconsData()
             self.sendData2WS(websocket, 'DATA', data)
 
@@ -204,18 +203,36 @@ class WebsocketThread(QThread):
             if path == 'intro' and num == 0:
                 self.unregister_hotkeys()
 
-    def changeStyle(self, path, style=None):
+    def changeStyle(self, path, style=None, websocket=None):
         primary_scope = self.get_primary_scope(path)
         if primary_scope:
             if style is None:
                 style = scctool.settings.config.parser.get(
                     "Style", primary_scope)
             style_file = "src/css/{}/{}.css".format(primary_scope, style)
-            self.sendData2Path(path, "CHANGE_STYLE", {'file': style_file})
+            if websocket is None:
+                self.sendData2Path(path, "CHANGE_STYLE", {'file': style_file})
+            else:
+                self.sendData2WS(websocket, "CHANGE_STYLE",
+                                 {'file': style_file})
         else:
             raise ValueError('Change style is not available for this path.')
 
-    def changeColors(self, path, colors=None):
+    def changePadding(self, path, padding=None, websocket=None):
+        primary_scope = self.get_primary_scope(path)
+        if primary_scope in ['mapicons_box', 'mapicons_landscape']:
+            setting = primary_scope.replace('mapicons', 'padding')
+            padding = scctool.settings.config.parser.getfloat(
+                "MapIcons", setting)
+            padding = '{}px'.format(padding)
+            if websocket is None:
+                self.sendData2Path(path, "CHANGE_PADDING",
+                                   {'padding': padding})
+            else:
+                self.sendData2WS(websocket, "CHANGE_PADDING",
+                                 {'padding': padding})
+
+    def changeColors(self, path, colors=None, websocket=None):
         if path in ['mapstats']:
             if colors is None:
                 colors = dict()
@@ -223,11 +240,15 @@ class WebsocketThread(QThread):
                     key = 'color{}'.format(i)
                     colors[key] = scctool.settings.config.parser.get(
                         "Mapstats", key)
-            self.sendData2Path(path, "CHANGE_COLORS", colors)
+            if websocket is None:
+                self.sendData2Path(path, "CHANGE_COLORS", colors)
+            else:
+                self.sendData2WS(websocket, "CHANGE_COLORS", colors)
+
         else:
             raise ValueError('Change style is not available for this path.')
 
-    def changeFont(self, path=None, font=None):
+    def changeFont(self, path=None, font=None, websocket=None):
         valid_paths = ['mapstats', 'score',
                        'mapicons_box', 'mapicons_landscape']
         if path is None:
@@ -243,7 +264,10 @@ class WebsocketThread(QThread):
                 else:
                     font = scctool.settings.config.parser.get(
                         "Style", "custom_font")
-            self.sendData2Path(path, "CHANGE_FONT", {'font': font})
+            if websocket is None:
+                self.sendData2Path(path, "CHANGE_FONT", {'font': font})
+            else:
+                self.sendData2WS(websocket, "CHANGE_FONT", {'font': font})
         else:
             raise ValueError('Change font is not available for this path.')
 

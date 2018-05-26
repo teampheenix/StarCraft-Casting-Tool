@@ -153,6 +153,8 @@ def setDefaultConfigAll():
     setDefaultConfig("MapIcons", "undecided_color", "#aaaaaa")
     setDefaultConfig("MapIcons", "notplayed_color", "#aaaaaa")
     setDefaultConfig("MapIcons", "notplayed_opacity", "0.4")
+    setDefaultConfig("MapIcons", "padding_landscape", "2")
+    setDefaultConfig("MapIcons", "padding_box", "2")
 
     setDefaultConfig("Style", "mapicons_box", "Default")
     setDefaultConfig("Style", "mapicons_landscape", "Default")

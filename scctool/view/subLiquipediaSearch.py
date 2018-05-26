@@ -41,8 +41,10 @@ class SubwindowLiquipediaSearch(QWidget):
         self.qle_search = QLineEdit(placeholder)
         self.qle_search.setAlignment(Qt.AlignCenter)
         self.qle_search.returnPressed.connect(self.search)
-        completer = QCompleter(scctool.settings.config.getMyTeams() +
-                               self.controller.historyManager.getTeamList(), self.qle_search)
+        completer = QCompleter(
+            scctool.settings.config.getMyTeams() +
+            self.controller.historyManager.getTeamList(),
+            self.qle_search)
         completer.setCaseSensitivity(Qt.CaseInsensitive)
         completer.setCompletionMode(
             QCompleter.UnfilteredPopupCompletion)

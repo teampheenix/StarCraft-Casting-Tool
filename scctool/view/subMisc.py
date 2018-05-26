@@ -684,6 +684,8 @@ class SubwindowMisc(QWidget):
             scctool.settings.config.parser.set(
                 "SCT", "CtrlShiftR", str(self.cb_ctrlshiftr.currentText()))
 
+            self.__dataChanged = False
+
     def saveCloseWindow(self):
         """Save and close window."""
         self.saveData()

@@ -89,6 +89,7 @@ class MainWindow(QMainWindow):
             self.mysubwindows = dict()
 
             self.show()
+            self.raise_()
 
             if showChangelog:
                 self.openChangelog()
@@ -306,7 +307,8 @@ class MainWindow(QMainWindow):
                               self.openMiscDialog('alphatl')}
                              ]})
 
-        act = QAction(_('Open Folder'), self)
+        act = QAction(QIcon(scctool.settings.getResFile(
+            'folder.png')), _('Open Folder'), self)
         act.triggered.connect(lambda: os.startfile(
             scctool.settings.getAbsPath(scctool.settings.casting_html_dir)))
         main_menu.addAction(act)
@@ -320,33 +322,38 @@ class MainWindow(QMainWindow):
                     mySubMenu = QMenu(icon['name'], self)
                     icon['file'] = os.path.join(
                         scctool.settings.casting_html_dir, icon['file'])
-                    act = QAction(_('Open in Browser'), self)
+                    act = QAction(QIcon(scctool.settings.getResFile(
+                        'html.png')), _('Open in Browser'), self)
                     act.triggered.connect(
                         lambda x,
                         file=icon['file']: self.controller.openURL(
                             scctool.settings.getAbsPath(file)))
                     mySubMenu.addAction(act)
-                    act = QAction(_('Copy URL to Clipboard'), self)
+                    act = QAction(QIcon(scctool.settings.getResFile(
+                        'copy.png')), _('Copy URL to Clipboard'), self)
                     act.triggered.connect(
                         lambda x, file=icon['file']:
                         QApplication.clipboard().setText(
                             scctool.settings.getAbsPath(file)))
                     mySubMenu.addAction(act)
                     if icon.get('settings', None) is not None:
-                        act = QAction(_('Settings'), self)
+                        act = QAction(QIcon(scctool.settings.getResFile(
+                            'browser.png')), _('Settings'), self)
                         act.triggered.connect(icon['settings'])
                         mySubMenu.addAction(act)
                     myMenu.addMenu(mySubMenu)
             else:
                 src['file'] = os.path.join(
                     scctool.settings.casting_html_dir, src['file'])
-                act = QAction(_('Open in Browser'), self)
+                act = QAction(QIcon(scctool.settings.getResFile(
+                    'html.png')), _('Open in Browser'), self)
                 act.triggered.connect(
                     lambda x,
                     file=src['file']: self.controller.openURL(
                         scctool.settings.getAbsPath(file)))
                 myMenu.addAction(act)
-                act = QAction(_('Copy URL to Clipboard'), self)
+                act = QAction(QIcon(scctool.settings.getResFile(
+                    'copy.png')), _('Copy URL to Clipboard'), self)
                 act.triggered.connect(
                     lambda x, file=src['file']:
                     QApplication.clipboard().setText(
@@ -354,7 +361,8 @@ class MainWindow(QMainWindow):
                 myMenu.addAction(act)
 
             if src.get('settings', None) is not None:
-                act = QAction(_('Settings'), self)
+                act = QAction(QIcon(scctool.settings.getResFile(
+                    'browser.png')), _('Settings'), self)
                 act.triggered.connect(src['settings'])
                 myMenu.addAction(act)
             main_menu.addMenu(myMenu)
