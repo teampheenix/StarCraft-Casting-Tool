@@ -18,6 +18,22 @@
 * Text-to-Speech is now disabled by default.
 
 
+## v1.12.1 (2018-05-26)
+
+### Fix
+
+* Fixed a bug that prevented StarCraft Casting Tool from terminating.
+
+
+## v1.12.0 (2018-05-26)
+
+### Fix
+
+* Text-to-Speech is now disabled by default.
+
+* Fixed the authentification flow with Twitch and Nightbot.
+
+
 ## v1.11.0 (2018-05-22)
 
 ### New
@@ -324,3 +340,5 @@
 ### Changes
 
 * Nighbot commands that are deleted in SCCT get now deleted in Nightbot as well.
+
+

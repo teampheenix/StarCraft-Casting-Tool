@@ -22,3 +22,4 @@ casting_html/src/sound/player2.mp3
 OBS_*/
 .idea/
 scctool/__init__.pyc
+.gitchangelog.rc
