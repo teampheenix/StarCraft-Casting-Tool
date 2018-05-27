@@ -1,11 +1,10 @@
 [![Release](https://img.shields.io/github/release/teampheenix/StarCraft-Casting-Tool.svg)](https://github.com/teampheenix/StarCraft-Casting-Tool/releases/latest)
-![GitHub (Pre-)Release Date](https://img.shields.io/github/release-date-pre/teampheenix/StarCraft-Casting-Tool.svg)
-![Downloads](https://img.shields.io/github/downloads/teampheenix/StarCraft-Casting-Tool/total.svg)
-![GitHub last commit](https://img.shields.io/github/last-commit/teampheenix/StarCraft-Casting-Tool.svg)
+[![GitHub (Pre-)Release Date](https://img.shields.io/github/release-date-pre/teampheenix/StarCraft-Casting-Tool.svg)](https://github.com/teampheenix/StarCraft-Casting-Tool/releases)
+[![Downloads](https://img.shields.io/github/downloads/teampheenix/StarCraft-Casting-Tool/total.svg)](https://github.com/teampheenix/StarCraft-Casting-Tool/releases/latest)
 [![GitHub license](https://img.shields.io/github/license/teampheenix/StarCraft-Casting-Tool.svg)](https://github.com/teampheenix/StarCraft-Casting-Tool/blob/master/LICENSE)
 [![Discord](https://img.shields.io/discord/408901724355559435.svg)](https://discord.gg/G9hFEfh)
-[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/StarCraftCastingTool)
-[![Twitter](https://img.shields.io/twitter/url/https/github.com/teampheenix/StarCraft-Casting-Tool.svg?style=social)](https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fteampheenix%2FStarCraft-Casting-Tool)
+[![Patreon](https://img.shields.io/badge/Support-Patroen-orange.svg)](https://www.patreon.com/StarCraftCastingTool)
+[![Paypal](https://img.shields.io/badge/Donate-PayPal-blue.svg)](https://www.paypal.me/StarCraftCastingTool)
 
 # StarCraft Casting Tool
 
@@ -97,3 +96,5 @@ Some basic options for customization can be found under *Settings: Styles*, for 
 If you need help, have bugs to report, have suggestions to make, or want to contribute to this project in any way join the Discord Server of this project via https://discord.gg/G9hFEfh and/or message me (*pres.sure#5247*) on [Discord](https://discordapp.com/).
 
 In the case of a bug report please provide the log-file that can be found in the directory `C:\Users\username\AppData\Local\team pheeniX\StarCraft-Casting-Tool\Log`.
+
+You can support StarCraft Casting Tool via [Patreon](https://www.patreon.com/StarCraftCastingTool) or [Paypal](https://www.paypal.me/StarCraftCastingTool).
