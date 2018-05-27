@@ -8,7 +8,7 @@
 
 # StarCraft Casting Tool
 
-StarCraft Casting Tool (SCC Tool) is a program written in Python 3 that can grab all relevant data of a Stracraft 2 Team League Match from either [Alpha SC2 Teamleague](http://alpha.tl/) (AlphaTL) or [Russian StarCraft Team League](http://hdgame.net/en/tournaments/list/tournament/rstl-13/) (RSTL) and process it such that the information can be readily included for streaming, e.g., in OBS-Studio, X-Split or any other similar streaming tool. Alternatively, the format of a *Custom Match* can be specified. The title of your Twitch stream and your Nightbot chat commands can be updated accordingly by a single click.
+StarCraft Casting Tool (SCC Tool) is a free to use open source program that makes casting StarCraft 2 simple while increasing the production value substantially by providing a match grabber, predefined custom formats, and various sets of animated icons and browser sources to be shown to the viewer. 
 
 ![streaming-tool](https://user-images.githubusercontent.com/26044736/38167067-7b78fd10-352f-11e8-8676-50a7b0bf9e98.png)
 
@@ -20,7 +20,7 @@ StarCraft Casting Tool (SCC Tool) is a program written in Python 3 that can grab
 ## Feature List
 
 * **Match Grabber** for [AlphaTL](http://alpha.tl/) and [RSTL](http://hdgame.net/en/tournaments/list/tournament/rstl-12/)
-* **Custom Match Format**: Bo1-Bo9, All-Kill format, 1vs1 - including predefined Formats for Chobo, Koprulu, WardiTV, and PSISTOM Gaming Team League, ...
+* **Custom Match Format**: Bo1-Bo9, all-kill format, 1vs1 - including predefined formats for Chobo, Koprulu, WardiTV, and PSISTOM Gaming Team League, ...
 * Two sets of **Map Icons**: Box and Landscape in `OBS_mapicons/icons_box` and `OBS_mapicons/icons_landscape`
 * **Scoreboard** including team icons in `OBS_html`
 * **Animated Player Intros** in `OBS_html` including playername & race via SC2-Client, team with logo via SCC Tool
