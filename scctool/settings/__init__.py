@@ -93,8 +93,7 @@ def configFile():
 
 
 def getLogFile():
-    logdir = appdirs.user_log_dir(
-        ClientConfig.APP_NAME, ClientConfig.COMPANY_NAME)
+    logdir = getLogDir()
     if not os.path.exists(logdir):
         os.makedirs(logdir)
     else:
@@ -108,6 +107,11 @@ def getLogFile():
     filename = 'scct-{}-{}.log'.format(time.strftime(
         "%Y%m%d-%H%M%S"), this.profileManager._current)
     return os.path.normpath(os.path.join(logdir, filename))
+
+
+def getLogDir():
+    return appdirs.user_log_dir(
+        ClientConfig.APP_NAME, ClientConfig.COMPANY_NAME)
 
 
 def getAbsPath(file):

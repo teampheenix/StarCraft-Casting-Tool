@@ -842,7 +842,7 @@ class DragDropLogoList(QListWidget):
         super().__init__()
         self.setViewMode(QListWidget.IconMode)
         self.setIconSize(QSize(75, 75))
-        self.setMaximumHeight(160)
+        # self.setMaximumHeight(200)
         self.setDragEnabled(True)
         self._logoManager = logoManager
         self._iconsize = scctool.settings.logoManager.Logo._iconsize

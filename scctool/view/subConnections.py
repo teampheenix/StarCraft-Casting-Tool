@@ -6,8 +6,8 @@ from PyQt5.QtCore import QPoint, QSize, Qt
 from PyQt5.QtGui import QIcon, QKeySequence
 from PyQt5.QtWidgets import (QBoxLayout, QFormLayout, QGroupBox, QHBoxLayout,
                              QLabel, QLineEdit, QMessageBox, QPushButton,
-                             QScrollArea, QShortcut, QTabWidget, QVBoxLayout,
-                             QWidget)
+                             QScrollArea, QShortcut, QSizePolicy, QSpacerItem,
+                             QTabWidget, QVBoxLayout, QWidget)
 
 import scctool.settings
 from scctool.view.widgets import Completer, MonitoredLineEdit
@@ -138,6 +138,9 @@ class SubwindowConnections(QWidget):
         label.setFixedWidth(100)
         layout.addRow(label, container)
 
+        layout.addItem(QSpacerItem(
+            0, 0, QSizePolicy.Minimum, QSizePolicy.Expanding))
+
         self.formGroupTwitch.setLayout(layout)
 
     def createFormGroupNightbot(self):
@@ -204,6 +207,9 @@ class SubwindowConnections(QWidget):
         else:
             for cmd, msg in data.items():
                 self.addCommand(cmd, msg)
+
+        mainLayout.addItem(QSpacerItem(
+            0, 0, QSizePolicy.Minimum, QSizePolicy.Expanding))
 
         self.formGroupNightbot.setLayout(mainLayout)
 

@@ -188,6 +188,12 @@ class MainWindow(QMainWindow):
             myAct.triggered.connect(self.openChangelog)
             infoMenu.addAction(myAct)
 
+            myAct = QAction(QIcon(scctool.settings.getResFile(
+                'folder.png')), _('Open log folder'), self)
+            myAct.triggered.connect(lambda: os.startfile(
+                scctool.settings.getAbsPath(scctool.settings.getLogDir())))
+            infoMenu.addAction(myAct)
+
             infoMenu.addSeparator()
 
             websiteAct = QAction(
@@ -227,7 +233,13 @@ class MainWindow(QMainWindow):
             infoMenu.addSeparator()
 
             myAct = QAction(QIcon(scctool.settings.getResFile(
-                'donate.ico')), _('Donate'), self)
+                'patreon.png')), _('Support via Patreon'), self)
+            myAct.triggered.connect(lambda: self.controller.openURL(
+                "https://www.patreon.com/StarCraftCastingTool"))
+            infoMenu.addAction(myAct)
+
+            myAct = QAction(QIcon(scctool.settings.getResFile(
+                'donate.ico')), _('Donate via PayPal'), self)
             myAct.triggered.connect(lambda: self.controller.openURL(
                 "https://paypal.me/StarCraftCastingTool"))
             infoMenu.addAction(myAct)
