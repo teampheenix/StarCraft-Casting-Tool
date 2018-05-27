@@ -4,7 +4,7 @@
 [![GitHub license](https://img.shields.io/github/license/teampheenix/StarCraft-Casting-Tool.svg)](https://github.com/teampheenix/StarCraft-Casting-Tool/blob/master/LICENSE)
 [![Discord](https://img.shields.io/discord/408901724355559435.svg)](https://discord.gg/G9hFEfh)
 [![Patreon](https://img.shields.io/badge/Support-Patroen-orange.svg)](https://www.patreon.com/StarCraftCastingTool)
-[![Paypal](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/StarCraftCastingTool)
+[![Paypal](https://img.shields.io/badge/Donate-PayPal-blue.svg)](https://www.paypal.me/StarCraftCastingTool)
 
 # StarCraft Casting Tool
 
