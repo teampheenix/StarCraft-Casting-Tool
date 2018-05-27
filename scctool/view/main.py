@@ -233,7 +233,7 @@ class MainWindow(QMainWindow):
             infoMenu.addSeparator()
 
             myAct = QAction(QIcon(scctool.settings.getResFile(
-                'patreon.png')), _('Support via Patreon'), self)
+                'patreon.png')), _('Become a Patron'), self)
             myAct.triggered.connect(lambda: self.controller.openURL(
                 "https://www.patreon.com/StarCraftCastingTool"))
             infoMenu.addAction(myAct)
