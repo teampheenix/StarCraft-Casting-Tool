@@ -20,6 +20,12 @@ class matchData(QObject):
     """Matchdata."""
     dataChanged = pyqtSignal(str, object)
     metaChangedSignal = pyqtSignal()
+    scopes = {'all': 'All Maps',
+              'not-ace': 'None Ace Maps',
+              'ace': 'Ace maps',
+              'decided': 'Decided Maps',
+              'decided+1': 'Decided Maps + 1',
+              'undecided': 'Undecided Maps'}
 
     def __init__(self, controller):
         """Init and define custom providers."""
@@ -267,6 +273,7 @@ class matchData(QObject):
             for set_idx in range(self.getNoSets()):
                 self.setMapScore(set_idx, 0, overwrite=True)
                 self.setMap(set_idx)
+                self.setAce(set_idx, False)
 
             self.setLeague("TBD")
             self.setMyTeam(0)
@@ -291,9 +298,11 @@ class matchData(QObject):
 
         for set_idx in range(no_sets):
             self.setLabel(set_idx, "Map " + str(set_idx + 1))
+            self.setAce(set_idx, False)
 
         if ace:
             for set_idx in range(ace_start, no_sets):
+                self.setAce(set_idx, True)
                 if(skip_one):
                     self.setLabel(set_idx, "Ace Map")
                 else:
@@ -331,6 +340,10 @@ class matchData(QObject):
                     label = self.__data['sets'][i]['label']
                 except Exception:
                     label = 'Map ' + str(i + 1)
+                try:
+                    ace = bool(self.__data['sets'][i].get('ace', False))
+                except Exception:
+                    ace = False
                 for j in range(2):
                     if(not resetPlayers):
                         try:
@@ -349,7 +362,8 @@ class matchData(QObject):
                     players[j].append(
                         {'name': player_name, 'race': player_race})
 
-                sets.append({'label': label, 'map': map, 'score': score})
+                sets.append({'label': label, 'map': map,
+                             'score': score, 'ace': ace})
 
             self.__data['no_sets'] = no_sets
             self.__data['min_sets'] = 0
@@ -629,6 +643,25 @@ class matchData(QObject):
 
             return getRace(self.__data['players'][team_idx][set_idx]['race'])
 
+        except Exception:
+            return False
+
+    def setAce(self, set_idx, ace):
+        """Label set as ace."""
+        ace = bool(ace)
+        try:
+            if(not (set_idx >= 0 and set_idx < self.__data['no_sets'])):
+                return False
+            if(self.__data['sets'][set_idx]['ace'] != ace):
+                self.__data['sets'][set_idx]['ace'] = ace
+            return True
+        except Exception:
+            return False
+
+    def isAce(self, set_idx):
+        """Return if set is labeld as ace."""
+        try:
+            return bool(self.__data['sets'][set_idx].get('ace', False))
         except Exception:
             return False
 
@@ -1125,6 +1158,64 @@ class matchData(QObject):
                         line = line.replace(placeholder, value)
                     line = regex.sub("", line)
                     fout.write(line)
+
+    def parseScope(self, scope='all'):
+        if scope == 'all':
+            for idx in range(0, self.getNoSets()):
+                yield idx
+            return
+        if scope == 'not-ace':
+            for idx in range(0, self.getNoSets()):
+                if not self.isAce(idx):
+                    yield idx
+            return
+        if scope == 'ace':
+            for idx in range(0, self.getNoSets()):
+                if self.isAce(idx):
+                    yield idx
+            return
+        if scope == 'decided':
+            for idx in range(0, self.getNoSets()):
+                if self.getMapScore(idx) != 0:
+                    yield idx
+            return
+        if scope == 'decided+1':
+            stop = False
+            for idx in range(0, self.getNoSets()):
+                if self.getMapScore(idx) != 0:
+                    stop = False
+                    yield idx
+                elif not stop:
+                    stop = True
+                    yield idx
+                else:
+                    return
+            return
+        if scope == 'undecided':
+            for idx in range(0, self.getNoSets()):
+                if self.getMapScore(idx) == 0:
+                    yield idx
+            return
+        m = re.match(r'^(\d+)-(\d+)$', scope)
+        if m and int(m.group(1)) <= int(m.group(2)):
+            for idx in range(max(int(m.group(1)) - 1, 0),
+                             min(int(m.group(2)), self.getNoSets())):
+                yield idx
+            return
+        else:
+            for idx in range(0, self.getNoSets()):
+                yield idx
+            return
+
+    def isValidScope(self, scope):
+        if scope in self.scopes.keys():
+            return True
+        else:
+            m = re.match(r'^(\d+)-(\d+)$', scope)
+            if m and int(m.group(1)) <= int(m.group(2)):
+                return int(m.group(1)) > 0
+            else:
+                return False
 
 
 def autoCorrectMap(map):

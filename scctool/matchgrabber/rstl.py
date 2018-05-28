@@ -110,9 +110,9 @@ class MatchGrabber(MatchGrabberParent):
                         self._matchData.getSwappedIdx(team_idx),
                         self._aliasTeam(team['name']), team['tag'])
 
-                self._matchData.setLabel(4, "Ace Map 1")
-                self._matchData.setLabel(5, "Ace Map 2")
-                self._matchData.setLabel(6, "Ace Map 3")
+                for idx in range(4, 7):
+                    self._matchData(idx, "Ace Map {}".format(idx - 3))
+                    self._matchData.setAce(idx, True)
 
                 for set_idx in range(4):
                     try:

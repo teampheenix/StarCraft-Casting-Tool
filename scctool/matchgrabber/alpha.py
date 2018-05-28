@@ -54,6 +54,7 @@ class MatchGrabber(MatchGrabberParent):
                     self._matchData.setMap(idx, map)
 
                 self._matchData.setLabel(4, "Ace Map")
+                self._matchData.setAce(4, True)
 
                 for team_idx in range(2):
                     for set_idx, player in enumerate(data['lineup' +
@@ -150,6 +151,8 @@ class MatchGrabber(MatchGrabberParent):
 
             if(data == local_byte):
                 needs_download = False
+        except FileNotFoundError as e:
+            pass
         except Exception as e:
             module_logger.exception("message")
 
