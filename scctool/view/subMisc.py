@@ -115,7 +115,7 @@ class SubwindowMisc(QWidget):
 
         self.cb_ctrlx = QCheckBox(
             " " + _('Automatically press Ctrl+X to apply the'
-                    ' correct player order ingame.'))
+                    ' correct player order ingame'))
         self.cb_ctrlx.setToolTip(
             _("This will ensure that the player of the first team is always"
               " on the left/top in the ingame Observer UI."))
@@ -126,7 +126,7 @@ class SubwindowMisc(QWidget):
 
         self.cb_ctrln = QCheckBox(
             " " + _('Automatically press Ctrl+N before'
-                    ' OCR to display player names.'))
+                    ' OCR to display player names'))
         self.cb_ctrln.setToolTip(
             _("This is recommended for Standard and Gawliq Observer UI."))
         self.cb_ctrln.setChecked(

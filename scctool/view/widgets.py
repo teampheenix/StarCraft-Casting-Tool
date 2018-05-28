@@ -387,7 +387,7 @@ class ToolUpdater(QProgressDialog):
             text = _('Downloading a new version: Total file size {},'
                      ' Time remaining {}.')
             text = text.format(humanize.naturalsize(
-                data.get('total',0)), data.get('time',0))
+                data.get('total', 0)), data.get('time', 0))
             self.setLabelText(text)
             self.setValue(int(float(data['percent_complete']) * 10))
         except Exception as e:
