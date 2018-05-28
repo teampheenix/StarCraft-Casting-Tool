@@ -144,7 +144,8 @@ class MainController:
             for i in range(2):
                 team = self.matchData.getTeam(i)
                 self.view.le_team[i].setText(team)
-                self.historyManager.insertTeam(team)
+                logo = self.logoManager.getTeam(i + 1).getIdent()
+                self.historyManager.insertTeam(team, logo)
 
             for j in range(2):
                 for i in range(1, self.matchData.getNoSets()):
@@ -198,6 +199,11 @@ class MainController:
 
         logo = self.logoManager.getTeam2()
         self.view.qb_logo2.setIcon(QIcon(logo.provideQPixmap()))
+
+        for idx in range(2):
+            team = self.matchData.getTeam(idx)
+            logo = self.logoManager.getTeam(idx + 1).getIdent()
+            self.historyManager.insertTeam(team, logo)
 
         self.updateLogosHTML(force)
 
@@ -326,7 +332,7 @@ class MainController:
     def openURL(self, url):
         """Open URL in Browser."""
         if(len(url) < 5):
-            url = "http://alpha.tl/match/2392"
+            url = "https://teampheenix.github.io/StarCraft-Casting-Tool/"
         try:
             webbrowser.open(url)
         except Exception as e:

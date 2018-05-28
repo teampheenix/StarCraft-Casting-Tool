@@ -14,6 +14,7 @@ class HistoryManager:
 
     def __init__(self):
         self.loadJson()
+        self.updateDataStructure()
 
     def loadJson(self):
         """Read json data from file."""
@@ -39,6 +40,11 @@ class HistoryManager:
         except Exception as e:
             module_logger.exception("message")
 
+    def updateDataStructure(self):
+        for idx, item in enumerate(self.__team_history):
+            if isinstance(item, str):
+                self.__team_history[idx] = {'team': item, 'logo': '0'}
+
     def insertPlayer(self, player, race):
         player = player.strip()
         if not player or player.lower() == "tbd":
@@ -55,14 +61,17 @@ class HistoryManager:
         self.__player_history.insert(0, {"player": player, "race": race})
         self.enforeMaxLength("player")
 
-    def insertTeam(self, team):
+    def insertTeam(self, team, logo='0'):
         team = team.strip()
         if not team or team.lower() == "tbd":
             return
         for item in self.__team_history:
-            if item.lower() == team.lower():
+            if item.get('team', '').lower() == team.lower():
                 self.__team_history.remove(item)
-        self.__team_history.insert(0, team)
+                if logo == '0':
+                    logo = item.get('logo', '0')
+                break
+        self.__team_history.insert(0, {"team": team, "logo": logo})
         self.enforeMaxLength("team")
 
     def enforeMaxLength(self, scope=None):
@@ -83,7 +92,8 @@ class HistoryManager:
 
     def getTeamList(self):
         teamList = list()
-        for team in self.__team_history:
+        for item in self.__team_history:
+            team = item.get('team')
             if team not in teamList:
                 teamList.append(team)
         return teamList
@@ -96,3 +106,12 @@ class HistoryManager:
                 race = item.get('race', 'Random')
                 break
         return race
+
+    def getLogo(self, team):
+        team = team.lower().strip()
+        logo = '0'
+        for item in self.__team_history:
+            if item.get('team', '').lower() == team:
+                logo = item.get('logo', '0')
+                break
+        return logo

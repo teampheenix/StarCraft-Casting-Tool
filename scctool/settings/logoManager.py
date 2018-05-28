@@ -12,8 +12,8 @@ import humanize
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
 
-from scctool.settings import (casting_data_dir, casting_html_dir, getAbsPath, getJsonFile,
-                              logosDir)
+from scctool.settings import (casting_data_dir, casting_html_dir, getAbsPath,
+                              getJsonFile, logosDir)
 
 module_logger = logging.getLogger(
     'scctool.settings.logoManager')  # create logger
@@ -132,9 +132,14 @@ class LogoManager:
             self._last_used.append(logo)
         self.trimLastUsed()
 
+    def setTeamLogo(self, idx, logo):
+        return getattr(self, 'setTeam{}Logo'.format(idx))(logo)
+
     def setTeam1Logo(self, logo):
         if type(logo) is str:
             logo = self.findLogo(logo)
+            if logo is None:
+                return False
 
         if self._team1.equals(logo):
             logo.delete(False)
@@ -155,6 +160,8 @@ class LogoManager:
     def setTeam2Logo(self, logo):
         if type(logo) is str:
             logo = self.findLogo(logo)
+            if logo is None:
+                return False
 
         if self._team2.equals(logo):
             logo.delete(False)
@@ -271,6 +278,9 @@ class LogoManager:
 
     def getTeam2(self):
         return self._team2
+
+    def getTeam(self, idx):
+        return getattr(self, 'getTeam{}'.format(idx))()
 
     def pixmap2ident(self, pixmap):
         for ident, map in self._ident2map.items():

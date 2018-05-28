@@ -1277,7 +1277,13 @@ class MainWindow(QMainWindow):
         if not self.tlock.trigger():
             return
         team = self.le_team[team_idx].text().strip()
-        self.controller.historyManager.insertTeam(team)
+        logo = self.controller.logoManager.getTeam(team_idx + 1).getIdent()
+        if logo == '0':
+            logo = self.controller.historyManager.getLogo(team)
+            if logo != '0':
+                self.controller.logoManager.setTeamLogo(team_idx + 1, logo)
+                self.controller.updateLogos(True)
+        self.controller.historyManager.insertTeam(team, logo)
         self.updateTeamCompleters()
         self.controller.matchData.setTeam(team_idx, team)
         self.controller.matchData.autoSetMyTeam()
