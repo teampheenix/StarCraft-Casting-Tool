@@ -368,23 +368,14 @@ function setFont(newFont) {
   storeData("font");
 }
 
-function changeCSS(newCssFile, cssLinkIndex) {
-  var oldlink = document.getElementsByTagName("link").item(cssLinkIndex);
-  var newlink = document.createElement("link");
-  newlink.setAttribute("rel", "stylesheet");
-  newlink.setAttribute("type", "text/css");
-  newlink.setAttribute("href", newCssFile);
+function changeCSS(newCssFile) {
   if (newCssFile && newCssFile != "null") {
-    console.log(newCssFile);
     cssFile = newCssFile;
+    console.log('CSS file changed to', newCssFile);
+    $('link[rel="stylesheet"]').attr('href', newCssFile);
     storeData("css");
-    if (oldlink.href != newlink.href) {
-      document.getElementsByTagName("head").item(0).replaceChild(newlink, oldlink);
-    }
   }
-
 }
-
 
 // Warn if overriding existing method
 if (Array.prototype.equals)

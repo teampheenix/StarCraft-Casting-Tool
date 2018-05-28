@@ -168,6 +168,9 @@ function changeCSS(newCssFile) {
     console.log('CSS file changed to', newCssFile);
     $('link[rel="stylesheet"]').attr('href', newCssFile);
     storeData("css");
+    $(document).ready(function() {
+      $('#content').find(".text-fill").textfill();
+    });
   }
 }
 
