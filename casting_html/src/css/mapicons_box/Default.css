@@ -25,7 +25,9 @@ body {
   height: 100%;
   position: absolute;
   display: flex;
+  flex-direction: row;
   align-items: center;
+  align-content: center;
   justify-content: center;
   flex-wrap: wrap;
 }

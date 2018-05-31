@@ -201,12 +201,19 @@ class SubwindowBrowserSources(QWidget):
         box = QGroupBox(_("General"))
         layout = QFormLayout()
 
-        stylcb = StyleComboBox(
+        container = QHBoxLayout()
+        self.qb_boxStyle = StyleComboBox(
             scctool.settings.casting_html_dir + "/src/css/mapicons_box",
             "mapicons_box")
-        stylcb.connect2WS(self.controller, 'mapicons_box')
-        layout.addRow(QLabel(
-            _("Style:") + " "), stylcb)
+        self.qb_boxStyle.connect2WS(self.controller, 'mapicons_box')
+        label = QLabel(_("Style:"))
+        label.setMinimumWidth(120)
+        button = QPushButton(_("Show in Browser"))
+        button.clicked.connect(lambda: self.openHTML(
+            scctool.settings.casting_html_dir + "/mapicons_box_1.html"))
+        container.addWidget(self.qb_boxStyle, 2)
+        container.addWidget(button, 1)
+        layout.addRow(label, container)
 
         self.sb_padding_box = QDoubleSpinBox()
         self.sb_padding_box.setRange(0, 30)
@@ -214,7 +221,8 @@ class SubwindowBrowserSources(QWidget):
         self.sb_padding_box.setValue(
             scctool.settings.config.parser.getfloat("MapIcons", "padding_box"))
         self.sb_padding_box.setSuffix(" " + _("Pixel"))
-        self.sb_padding_box.valueChanged.connect(self.changed)
+        self.sb_padding_box.valueChanged.connect(
+            lambda x: self.changePadding('box', x))
         layout.addRow(QLabel(
             _("Icon Padding:") + " "), self.sb_padding_box)
         box.setLayout(layout)
@@ -229,12 +237,19 @@ class SubwindowBrowserSources(QWidget):
         box = QGroupBox(_("General"))
         layout = QFormLayout()
 
-        stylcb = StyleComboBox(
+        container = QHBoxLayout()
+        self.qb_boxStyle = StyleComboBox(
             scctool.settings.casting_html_dir + "/src/css/mapicons_landscape",
             "mapicons_landscape")
-        stylcb.connect2WS(self.controller, 'mapicons_landscape')
-        layout.addRow(QLabel(
-            _("Style:") + " "), stylcb)
+        self.qb_boxStyle.connect2WS(self.controller, 'mapicons_landscape')
+        label = QLabel(_("Style:"))
+        label.setMinimumWidth(120)
+        button = QPushButton(_("Show in Browser"))
+        button.clicked.connect(lambda: self.openHTML(
+            scctool.settings.casting_html_dir + "/mapicons_landscape_1.html"))
+        container.addWidget(self.qb_boxStyle, 2)
+        container.addWidget(button, 1)
+        layout.addRow(label, container)
 
         self.sb_padding_landscape = QDoubleSpinBox()
         self.sb_padding_landscape.setRange(0, 30)
@@ -243,7 +258,8 @@ class SubwindowBrowserSources(QWidget):
             scctool.settings.config.parser.getfloat(
                 "MapIcons", "padding_landscape"))
         self.sb_padding_landscape.setSuffix(" " + _("Pixel"))
-        self.sb_padding_landscape.valueChanged.connect(self.changed)
+        self.sb_padding_landscape.valueChanged.connect(
+            lambda x: self.changePadding('landscape', x))
         layout.addRow(QLabel(
             _("Icon Padding:") + " "), self.sb_padding_landscape)
         box.setLayout(layout)
@@ -290,7 +306,7 @@ class SubwindowBrowserSources(QWidget):
         layout = QFormLayout()
         self.sl_sound = QSlider(Qt.Horizontal)
         self.sl_sound.setMinimum(0)
-        self.sl_sound.setMaximum(10)
+        self.sl_sound.setMaximum(20)
         self.sl_sound.setValue(
             scctool.settings.config.parser.getint("Intros", "sound_volume"))
         self.sl_sound.setTickPosition(QSlider.TicksBothSides)
@@ -322,8 +338,9 @@ class SubwindowBrowserSources(QWidget):
             idx += 1
         self.cb_animation.setCurrentIndex(currentIdx)
         self.cb_animation.currentIndexChanged.connect(self.changed)
-        layout.addRow(QLabel(
-            _("Animation:") + " "), self.cb_animation)
+        label = QLabel(_("Animation:") + " ")
+        label.setMinimumWidth(120)
+        layout.addRow(label, self.cb_animation)
         self.introBox.setLayout(layout)
         mainLayout.addWidget(self.introBox)
 
@@ -334,8 +351,9 @@ class SubwindowBrowserSources(QWidget):
         self.cb_tts_active.setChecked(
             scctool.settings.config.parser.getboolean("Intros", "tts_active"))
         self.cb_tts_active.stateChanged.connect(self.changed)
-        layout.addRow(QLabel(
-            _("Activate Text-to-Speech:") + " "), self.cb_tts_active)
+        label = QLabel(_("Activate Text-to-Speech:") + " ")
+        label.setMinimumWidth(120)
+        layout.addRow(label, self.cb_tts_active)
 
         self.cb_tts_lang = QComboBox()
 
@@ -375,7 +393,7 @@ class SubwindowBrowserSources(QWidget):
 
         self.sl_tts_sound = QSlider(Qt.Horizontal)
         self.sl_tts_sound.setMinimum(0)
-        self.sl_tts_sound.setMaximum(10)
+        self.sl_tts_sound.setMaximum(20)
         self.sl_tts_sound.setValue(
             scctool.settings.config.parser.getint("Intros", "tts_volume"))
         self.sl_tts_sound.setTickPosition(QSlider.TicksBothSides)
@@ -431,9 +449,6 @@ class SubwindowBrowserSources(QWidget):
             self.controller.mapstatsManager.sendMapPool()
             self.controller.updateMapButtons()
 
-            self.controller.websocketThread.changePadding('mapicons_box')
-            self.controller.websocketThread.changePadding('mapicons_landscape')
-
             self.__dataChanged = False
             # self.controller.refreshButtonStatus()
 
@@ -457,16 +472,16 @@ class SubwindowBrowserSources(QWidget):
         scctool.settings.config.parser.set(
             "Intros", "tts_volume", str(self.sl_tts_sound.value()))
 
-        scctool.settings.config.parser.set(
-            "MapIcons", "padding_box",
-            str(self.sb_padding_box.value()))
-        scctool.settings.config.parser.set(
-            "MapIcons", "padding_landscape",
-            str(self.sb_padding_landscape.value()))
-
     def openHTML(self, file):
         """Open file in browser."""
         self.controller.openURL(scctool.settings.getAbsPath(file))
+
+    def changePadding(self, scope, padding):
+        scctool.settings.config.parser.set(
+            "MapIcons", "padding_{}".format(scope),
+            str(padding))
+        self.controller.websocketThread.changePadding(
+            "mapicons_{}".format(scope), padding)
 
     def saveCloseWindow(self):
         """Save and close window."""

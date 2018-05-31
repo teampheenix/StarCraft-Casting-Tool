@@ -234,6 +234,8 @@ class WebsocketThread(QThread):
             else:
                 self.sendData2WS(websocket, "CHANGE_PADDING",
                                  {'padding': padding})
+        else:
+            module_logger.info('Path or scope "{}" unknown.'.format(path))
 
     def changeColors(self, path, colors=None, websocket=None):
         if path in ['mapstats']:

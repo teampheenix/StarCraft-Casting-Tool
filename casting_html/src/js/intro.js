@@ -18,18 +18,13 @@ init();
 function playSound(audio) {
   try {
     if (audio.duration > 0 && !audio.paused) {
-
       //already playing
       audio.pause();
       audio.currentTime = 0;
       audio.play();
-
     } else {
-
       //not playing
-
       audio.play();
-
     }
   } catch (e) {}
 }
@@ -53,9 +48,10 @@ function Connect() {
     console.log("Message received");
     if (jsonObject.event == 'SHOW_INTRO') {
       if (!tween.isActive()) {
-        console.log(jsonObject.data.tts);
-        var tts = new Audio(jsonObject.data.tts);
-        tts.volume = jsonObject.data.tts_volume / 10.0;
+        try {
+          var tts = new Audio(jsonObject.data.tts);
+          tts.volume = jsonObject.data.tts_volume / 20.0;
+        } catch (e) {}
         tween.clear();
         $(".race").prop('id', jsonObject.data.race);
         $(".logo").css("display", jsonObject.data.display)
@@ -65,9 +61,9 @@ function Connect() {
         fillText();
         var racelogo = document.getElementsByClassName("race")[0];
         var offset = (window.innerWidth - intro.offsetWidth) / 2;
-        myAudio1.volume = jsonObject.data.volume / 10.0;
-        myAudio2.volume = jsonObject.data.volume / 10.0;
-        myAudio3.volume = jsonObject.data.volume / 10.0;
+        myAudio1.volume = jsonObject.data.volume / 40.0;
+        myAudio2.volume = jsonObject.data.volume / 40.0;
+        myAudio3.volume = jsonObject.data.volume / 40.0;
         var animation = "default";
         if (jsonObject.data.hasOwnProperty('animation')) {
           animation = jsonObject.data.animation;
@@ -78,7 +74,7 @@ function Connect() {
           tween.call(playSound, [myAudio3])
             .to(intro, 0, {
               opacity: 0,
-              left: offset + "px",
+              clearProps: 'left',
               transformOrigin: "right top",
               scaleY: 0
             })
@@ -99,9 +95,8 @@ function Connect() {
             })
             .to(intro, 0, {
               left: "105%",
-              transformOrigin: "center",
-              opacity: 0,
-              height: ""
+              clearProps: "transform, transformOrigin",
+              opacity: 0
             });
         } else if (animation == "slide") {
           tween.to(intro, 0, {
@@ -131,7 +126,7 @@ function Connect() {
             .to(intro, 0, {
               left: "105%",
               opacity: 0,
-              width: ""
+              clearProps: "transform"
             });
         } else {
           tween.call(playSound, [myAudio1])
@@ -152,7 +147,8 @@ function Connect() {
               ease: Power1.easeInOut
             })
             .to(intro, 0, {
-              left: "105%"
+              left: "105%",
+              opacity: 0
             });
         }
       }
