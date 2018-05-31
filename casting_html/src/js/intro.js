@@ -4,6 +4,7 @@ var reconnectIntervalMs = 5000;
 var volume = 1.0;
 var debug = false;
 var displayTime = 3.0;
+var cssFile = "";
 var tween = new TimelineMax()
 var myAudio1 = new Audio("src/sound/flyin.wav");
 myAudio1.volume = volume;
@@ -64,16 +65,6 @@ function Connect() {
         fillText();
         var racelogo = document.getElementsByClassName("race")[0];
         var offset = (window.innerWidth - intro.offsetWidth) / 2;
-        var introWidth = intro.clientWidth;
-        var introHeight = intro.clientHeight;
-        var racelogoWidth = racelogo.clientWidth;
-        var racelogoHeight = racelogo.clientHeight;
-        var logoTransHeight = racelogoHeight;
-        var logoTransWidth = racelogoWidth;
-        if ((racelogoHeight - introHeight) > 0) {
-          logoTransHeight = 0;
-          logoTransWidth = 0;
-        };
         myAudio1.volume = jsonObject.data.volume / 10.0;
         myAudio2.volume = jsonObject.data.volume / 10.0;
         myAudio3.volume = jsonObject.data.volume / 10.0;
@@ -200,33 +191,52 @@ function Connect() {
   }
 };
 
+function storeData(scope = null) {
+  try {
+    var storage = window.localStorage;
+    if (scope == null || scope == "css") storage.setItem('scct-' + profile + '-intro-css', cssFile);
+  } catch (e) {}
+}
+
+function loadStoredData() {
+  try {
+    var storage = window.localStorage;
+    cssFile = storage.getItem('scct-' + profile + '-intro-css');
+    try {
+      changeCSS(cssFile, true);
+    } catch (e) {}
+  } catch (e) {}
+}
+
 function fillText() {
   $("div.box").find(".text-fill").textfill({
     maxFontPixels: 60
   });
 }
 
-function changeCSS(newCssFile, cssLinkIndex) {
-  var oldlink = document.getElementsByTagName("link").item(cssLinkIndex);
-  var newlink = document.createElement("link");
-  newlink.setAttribute("rel", "stylesheet");
-  newlink.setAttribute("type", "text/css");
-  newlink.setAttribute("href", newCssFile);
-  if (newCssFile != "null") {
-    if (oldlink.href != newlink.href) {
-      document.getElementsByTagName("head").item(0).replaceChild(newlink, oldlink);
-    }
+function changeCSS(newCssFile, initial=false) {
+  console.log(cssFile, newCssFile);
+  if (newCssFile && newCssFile != "null" && newCssFile != cssFile) {
+    cssFile = newCssFile;
+    console.log('CSS file changed to', newCssFile);
+    storeData("css");
+    location.reload(true);
+  }else if(initial){
+    console.log('CSS file set to', newCssFile);
+    $('link[rel="stylesheet"]').attr('href', newCssFile);
   }
-
 }
 
 
 function init() {
   var intro = document.getElementById("intro");
-  TweenLite.to(intro, 0, {
-    opacity: 1,
-    left: "105%"
+  loadStoredData();
+  $(document).ready(function() {
+    TweenLite.to(intro, 0, {
+      opacity: 1,
+      left: "105%"
+    });
+    $('#intro').css('visibility', 'visible');
+    Connect();
   });
-  $('#intro').css('visibility', 'visible');
-  Connect();
 }

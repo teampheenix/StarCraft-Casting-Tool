@@ -29,13 +29,13 @@ div.box {
   text-align: center;
   left: calc((100% - var(--width)) / 2);
   top: calc((100% - var(--height)) / 2);
-  transform: skewX(-10deg);
   background-size: cover;
   border-radius: 8px;
   border: 1px solid #000000;
   box-shadow: 0px 1px 1px rgba(000, 000, 000, 0.5), inset 1px 1px 0px rgba(255, 255, 255, 0.4);
   text-shadow: 1px 1px 1px rgba(000, 000, 000, 0.7), 0px 1px 0px rgba(255, 255, 255, 0.4);
   overflow: hidden;
+  transform: skewX(-10deg);
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0, 0, 0, 0.4)), color-stop(8%, rgba(0, 0, 0, 0.05)), color-stop(50%, rgba(0, 0, 0, 0.0)), color-stop(92%, rgba(0, 0, 0, 0.40)), color-stop(100%, rgba(0, 0, 0, 0.60))), url("../../img/textures/texture2.jpg") no-repeat;
 }
 
