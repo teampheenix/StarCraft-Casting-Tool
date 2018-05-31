@@ -99,8 +99,8 @@ class SubwindowStyles(QWidget):
             container = QHBoxLayout()
             self.qb_boxStyle = StyleComboBox(
                 scctool.settings.casting_html_dir + "/src/css/mapicons_box",
-                scctool.settings.config.parser.get("Style", "mapicons_box"))
-            self.qb_boxStyle.currentIndexChanged.connect(self.changed)
+                "mapicons_box")
+            self.qb_boxStyle.connect2WS(self.controller, 'mapicons_box')
             label = QLabel(_("Box Map Icons:"))
             label.setMinimumWidth(110)
             button = QPushButton(_("Show in Browser"))
@@ -117,9 +117,9 @@ class SubwindowStyles(QWidget):
             self.qb_landscapeStyle = StyleComboBox(
                 scctool.settings.casting_html_dir +
                 "/src/css/mapicons_landscape",
-                scctool.settings.config.parser.get(
-                    "Style", "mapicons_landscape"))
-            self.qb_landscapeStyle.currentIndexChanged.connect(self.changed)
+                "mapicons_landscape")
+            self.qb_landscapeStyle.connect2WS(
+                self.controller, 'mapicons_landscape')
             button = QPushButton(_("Show in Browser"))
             button.clicked.connect(lambda: self.openHTML(
                 scctool.settings.casting_html_dir +
@@ -135,8 +135,8 @@ class SubwindowStyles(QWidget):
             container = QHBoxLayout()
             self.qb_scoreStyle = StyleComboBox(
                 scctool.settings.casting_html_dir + "/src/css/score",
-                scctool.settings.config.parser.get("Style", "score"))
-            self.qb_scoreStyle.currentIndexChanged.connect(self.changed)
+                "score")
+            self.qb_scoreStyle.connect2WS(self.controller, 'score')
             button = QPushButton(_("Show in Browser"))
             button.clicked.connect(lambda: self.openHTML(
                 scctool.settings.casting_html_dir + "/score.html"))
@@ -150,8 +150,8 @@ class SubwindowStyles(QWidget):
             container = QHBoxLayout()
             self.qb_introStyle = StyleComboBox(
                 scctool.settings.casting_html_dir + "/src/css/intro",
-                scctool.settings.config.parser.get("Style", "intro"))
-            self.qb_introStyle.currentIndexChanged.connect(self.changed)
+                "intro")
+            self.qb_introStyle.connect2WS(self.controller, 'intro')
             button = QPushButton(_("Show in Browser"))
             button.clicked.connect(lambda: self.openHTML(
                 scctool.settings.casting_html_dir + "/intro.html"))
@@ -165,8 +165,8 @@ class SubwindowStyles(QWidget):
             container = QHBoxLayout()
             self.qb_mapstatsStyle = StyleComboBox(
                 scctool.settings.casting_html_dir + "/src/css/mapstats",
-                scctool.settings.config.parser.get("Style", "mapstats"))
-            self.qb_mapstatsStyle.currentIndexChanged.connect(self.changed)
+                "mapstats")
+            self.qb_mapstatsStyle.connect2WS(self.controller, 'mapstats')
             button = QPushButton(_("Show in Browser"))
             button.clicked.connect(lambda: self.openHTML(
                 scctool.settings.casting_html_dir + "/mapstats.html"))
@@ -176,34 +176,11 @@ class SubwindowStyles(QWidget):
         except Exception as e:
             module_logger.exception("message")
 
-        self.pb_applyStyles = QPushButton(_("Apply"))
-        self.pb_applyStyles.clicked.connect(self.applyStyles)
-        layout.addRow(QLabel(), self.pb_applyStyles)
-
-        txt = _("Note that to make these changes visible in OBS" +
-                " you have to refresh the cache of your browser sources.")
-        label = QLabel(txt)
-        label.setWordWrap(True)
-        layout.addRow(QLabel(), label)
-
         self.styleBox.setLayout(layout)
 
     def openHTML(self, file):
         """Open file in browser."""
         self.controller.openURL(scctool.settings.getAbsPath(file))
-
-    def applyStyles(self):
-        """Apply styles."""
-        self.qb_scoreStyle.applyWebsocket(
-            self.controller, 'score')
-        self.qb_introStyle.applyWebsocket(
-            self.controller, 'intro')
-        self.qb_mapstatsStyle.applyWebsocket(
-            self.controller, 'mapstats')
-        self.qb_boxStyle.applyWebsocket(
-            self.controller, 'mapicons_box')
-        self.qb_landscapeStyle.applyWebsocket(
-            self.controller, 'mapicons_landscape')
 
     def createColorBox(self):
         """Create box for color selection."""
@@ -344,22 +321,6 @@ class SubwindowStyles(QWidget):
             scctool.settings.config.parser.set(
                 "Mapstats", "color2",
                 self.mapstats_color2.getColor())
-
-            scctool.settings.config.parser.set(
-                "Style", "mapicons_landscape",
-                self.qb_landscapeStyle.currentText())
-            scctool.settings.config.parser.set(
-                "Style", "mapicons_box",
-                self.qb_boxStyle.currentText())
-            scctool.settings.config.parser.set(
-                "Style", "score",
-                self.qb_scoreStyle.currentText())
-            scctool.settings.config.parser.set(
-                "Style", "intro",
-                self.qb_introStyle.currentText())
-            scctool.settings.config.parser.set(
-                "Style", "mapstats",
-                self.qb_mapstatsStyle.currentText())
 
             scctool.settings.config.parser.set(
                 "Style", "use_custom_font",

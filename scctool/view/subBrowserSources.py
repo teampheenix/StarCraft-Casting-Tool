@@ -12,7 +12,7 @@ from PyQt5.QtWidgets import (QCheckBox, QComboBox, QDoubleSpinBox, QFormLayout,
                              QSpacerItem, QTabWidget, QVBoxLayout, QWidget)
 
 import scctool.settings
-from scctool.view.widgets import HotkeyLayout
+from scctool.view.widgets import HotkeyLayout, StyleComboBox
 
 # create logger
 module_logger = logging.getLogger('scctool.view.subConnections')
@@ -101,6 +101,20 @@ class SubwindowBrowserSources(QWidget):
         self.formGroupMapstats = QWidget()
         mainLayout = QVBoxLayout()
 
+        box = QGroupBox(_("Style"))
+        layout = QHBoxLayout()
+        self.qb_mapstatsStyle = StyleComboBox(
+            scctool.settings.casting_html_dir + "/src/css/mapstats",
+            "mapstats")
+        self.qb_mapstatsStyle.connect2WS(self.controller, 'mapstats')
+        button = QPushButton(_("Show in Browser"))
+        button.clicked.connect(lambda: self.openHTML(
+            scctool.settings.casting_html_dir + "/mapstats.html"))
+        layout.addWidget(self.qb_mapstatsStyle, 2)
+        layout.addWidget(button, 1)
+        box.setLayout(layout)
+        mainLayout.addWidget(box)
+
         box = QGroupBox(_("Map Pool to be displayed"))
         layout = QVBoxLayout()
         self.cb_mappool = QComboBox()
@@ -112,7 +126,6 @@ class SubwindowBrowserSources(QWidget):
         self.cb_mappool.currentIndexChanged.connect(self.changed)
         layout.addWidget(self.cb_mappool)
         box.setLayout(layout)
-
         mainLayout.addWidget(box)
 
         box = QGroupBox(_("Custom Map Pool"))
@@ -187,6 +200,14 @@ class SubwindowBrowserSources(QWidget):
         mainLayout = QVBoxLayout()
         box = QGroupBox(_("General"))
         layout = QFormLayout()
+
+        stylcb = StyleComboBox(
+            scctool.settings.casting_html_dir + "/src/css/mapicons_box",
+            "mapicons_box")
+        stylcb.connect2WS(self.controller, 'mapicons_box')
+        layout.addRow(QLabel(
+            _("Style:") + " "), stylcb)
+
         self.sb_padding_box = QDoubleSpinBox()
         self.sb_padding_box.setRange(0, 30)
         self.sb_padding_box.setDecimals(1)
@@ -207,6 +228,14 @@ class SubwindowBrowserSources(QWidget):
         mainLayout = QVBoxLayout()
         box = QGroupBox(_("General"))
         layout = QFormLayout()
+
+        stylcb = StyleComboBox(
+            scctool.settings.casting_html_dir + "/src/css/mapicons_landscape",
+            "mapicons_landscape")
+        stylcb.connect2WS(self.controller, 'mapicons_landscape')
+        layout.addRow(QLabel(
+            _("Style:") + " "), stylcb)
+
         self.sb_padding_landscape = QDoubleSpinBox()
         self.sb_padding_landscape.setRange(0, 30)
         self.sb_padding_landscape.setDecimals(1)
@@ -227,6 +256,20 @@ class SubwindowBrowserSources(QWidget):
         """Create forms for websocket connection to intro."""
         self.formGroupIntro = QWidget()
         mainLayout = QVBoxLayout()
+
+        box = QGroupBox(_("Style"))
+        layout = QHBoxLayout()
+        styleqb = StyleComboBox(
+            scctool.settings.casting_html_dir + "/src/css/intro",
+            "intro")
+        styleqb.connect2WS(self.controller, 'intro')
+        button = QPushButton(_("Show in Browser"))
+        button.clicked.connect(lambda: self.openHTML(
+            scctool.settings.casting_html_dir + "/intro.html"))
+        layout.addWidget(styleqb, 2)
+        layout.addWidget(button, 1)
+        box.setLayout(layout)
+        mainLayout.addWidget(box)
 
         self.hotkeyBox = QGroupBox(_("Hotkeys"))
         layout = QVBoxLayout()
@@ -420,6 +463,10 @@ class SubwindowBrowserSources(QWidget):
         scctool.settings.config.parser.set(
             "MapIcons", "padding_landscape",
             str(self.sb_padding_landscape.value()))
+
+    def openHTML(self, file):
+        """Open file in browser."""
+        self.controller.openURL(scctool.settings.getAbsPath(file))
 
     def saveCloseWindow(self):
         """Save and close window."""

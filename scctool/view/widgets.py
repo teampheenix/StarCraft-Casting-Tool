@@ -2,7 +2,6 @@
 import logging
 import os
 import re
-import shutil
 import time
 
 import humanize
@@ -91,12 +90,14 @@ class MonitoredLineEdit(QLineEdit):
 class StyleComboBox(QComboBox):
     """Define combo box to change the styles."""
 
-    def __init__(self, style_dir, default="Default"):
+    def __init__(self, style_dir, scope):
         """Init combo box to change the styles."""
         super().__init__()
 
         self.__style_dir = style_dir
+        self.__scope = scope
         style_dir = scctool.settings.getAbsPath(style_dir)
+        default = scctool.settings.config.parser.get("Style", self.__scope)
 
         for fname in os.listdir(style_dir):
             full_fname = os.path.join(style_dir, fname)
@@ -112,14 +113,27 @@ class StyleComboBox(QComboBox):
             if index >= 0:
                 self.setCurrentIndex(index)
 
-    def apply(self, controller, file):
-        """Apply the changes to the css files."""
-        new_file = os.path.join(self.__style_dir, self.currentText() + ".css")
-        new_file = scctool.settings.getAbsPath(new_file)
-        shutil.copy(new_file, scctool.settings.getAbsPath(file))
+        self.currentIndexChanged.connect(self.save)
 
-    def applyWebsocket(self, controller, path):
+    def connect2WS(self, controller, path):
+        self.currentIndexChanged.connect(
+            lambda x, controller=controller, path=path:
+            self.applyWS(controller, path))
+
+    def applyWS(self, controller, path):
         controller.websocketThread.changeStyle(path, self.currentText())
+
+    def save(self):
+        scctool.settings.config.parser.set(
+            "Style", self.__scope,
+            self.currentText())
+
+        # def apply(self, controller, file):
+        #     """Apply the changes to the css files."""
+        #     new_file = os.path.join(self.__style_dir,
+        #                             self.currentText() + ".css")
+        #     new_file = scctool.settings.getAbsPath(new_file)
+        #     shutil.copy(new_file, scctool.settings.getAbsPath(file))
 
 
 class MapDownloader(QProgressDialog):

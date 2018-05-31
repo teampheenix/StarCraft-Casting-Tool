@@ -116,7 +116,9 @@ function dataChanged(newData) {
 function processData(myData) {
   var length = Object.keys(data).length;
   for (var i = 1; i <= length; i++) {
-    delete myData[i]['border_color'];
+    try{
+      delete myData[i]['border_color'];
+    } catch (e) {}
   }
   return myData;
 }
