@@ -35,6 +35,10 @@
 
 If you need support, have questions, want to be up-to-date on, or like to contribute to this project, join our [Discord Server](https://discord.gg/G9hFEfh).
 
+## Twitch Community
+
+Join the [StarCraft Casting Tool Twitch Community](https://www.twitch.tv/communities/starcraftcastingtool) to find other streams that are using the StarCraft Casting Tool and promote your own stream when using it.
+
 ## Links
 
 [Changelog](https://github.com/teampheenix/StarCraft-Casting-Tool/blob/master/CHANGELOG.md) | [Icon Preview](https://teampheenix.github.io/SCCT-archive/) | [Discord Server](https://discord.gg/G9hFEfh)
