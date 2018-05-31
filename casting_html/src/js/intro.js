@@ -158,23 +158,18 @@ function Connect() {
       }
 
     } else if (jsonObject.event == 'CHANGE_STYLE') {
-      changeCSS(jsonObject.data.file, 0);
-      fillText();
+      changeCSS(jsonObject.data.file);
     } else if (jsonObject.event == 'DEBUG_MODE') {
       if (!debug) {
         tween.kill()
         var offset = (window.innerWidth - intro.offsetWidth) / 2;
-        TweenLite.to(intro, 0, {
-          opacity: 1,
-          left: offset + "px",
-          scale: 1
-        });
+        $('#intro').css('opacity', '1');
+        $('#intro').css('left', offset.toString() + "px");
         debug = true;
       } else {
         tween.kill()
-        TweenLite.to(intro, 0, {
-          opacity: 0
-        });
+        $('#intro').css('opacity', '0');
+        $('#intro').css('left', '105%');
         debug = false;
       }
 
@@ -191,52 +186,23 @@ function Connect() {
   }
 };
 
-function storeData(scope = null) {
-  try {
-    var storage = window.localStorage;
-    if (scope == null || scope == "css") storage.setItem('scct-' + profile + '-intro-css', cssFile);
-  } catch (e) {}
-}
-
-function loadStoredData() {
-  try {
-    var storage = window.localStorage;
-    cssFile = storage.getItem('scct-' + profile + '-intro-css');
-    try {
-      changeCSS(cssFile, true);
-    } catch (e) {}
-  } catch (e) {}
-}
-
 function fillText() {
   $("div.box").find(".text-fill").textfill({
     maxFontPixels: 60
   });
 }
 
-function changeCSS(newCssFile, initial=false) {
-  console.log(cssFile, newCssFile);
-  if (newCssFile && newCssFile != "null" && newCssFile != cssFile) {
-    cssFile = newCssFile;
-    console.log('CSS file changed to', newCssFile);
-    storeData("css");
-    location.reload(true);
-  }else if(initial){
-    console.log('CSS file set to', newCssFile);
+function changeCSS(newCssFile) {
+  if (newCssFile && newCssFile != "null") {
     $('link[rel="stylesheet"]').attr('href', newCssFile);
+    fillText();
   }
 }
 
 
 function init() {
   var intro = document.getElementById("intro");
-  loadStoredData();
-  $(document).ready(function() {
-    TweenLite.to(intro, 0, {
-      opacity: 1,
-      left: "105%"
-    });
-    $('#intro').css('visibility', 'visible');
-    Connect();
-  });
+  $('#intro').css('visibility', 'visible');
+  $('#intro').css('left', '105%');
+  Connect();
 }

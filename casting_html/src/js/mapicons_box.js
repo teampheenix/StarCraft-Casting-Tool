@@ -29,7 +29,6 @@ function loadStoredData() {
     data = JSON.parse(storage.getItem(key + 'data')) || {};
     font = storage.getItem(key + 'font');
     cssFile = storage.getItem(key + 'css');
-    padding = storage.getItem(key + 'padding') || '2px';
     try {
       changeCSS(cssFile);
     } catch (e) {}
@@ -39,7 +38,7 @@ function loadStoredData() {
     } catch (e) {}
 
     try {
-      setPadding(font);
+      setPadding(storage.getItem(key + 'padding') || '2px');
     } catch (e) {}
 
   } catch (e) {}
@@ -113,10 +112,10 @@ function dataChanged(newData) {
   }
 }
 
-function processData(myData){
+function processData(myData) {
   var length = Object.keys(data).length;
-  for(var i = 1; i<= length; i++){
-    try{
+  for (var i = 1; i <= length; i++) {
+    try {
       delete myData[i]['score_color'];
     } catch (e) {}
   }
@@ -254,9 +253,12 @@ function setFont(newFont) {
   });
 }
 
-function setPadding(padding) {
-  document.documentElement.style.setProperty('--padding', padding);
-  storeData("padding");
+function setPadding(newPadding) {
+  if (padding != newPadding) {
+    padding = newPadding;
+    document.documentElement.style.setProperty('--padding', padding);
+    storeData("padding");
+  }
 }
 
 function handleData(force = true) {
