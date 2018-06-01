@@ -299,30 +299,14 @@ class SubwindowBrowserSources(QWidget):
         layout.addLayout(self.addHotkey("hotkey_player2", _("Player 2")))
         layout.addLayout(self.addHotkey("hotkey_debug", _("Debug")))
         self.connectHotkeys()
+        label = QLabel(_("Player 1 is always the player your observer"
+                         " camera is centered on at start of a game."))
+        layout.addWidget(label)
         self.hotkeyBox.setLayout(layout)
         mainLayout.addWidget(self.hotkeyBox)
 
         self.introBox = QGroupBox(_("Animation"))
         layout = QFormLayout()
-        self.sl_sound = QSlider(Qt.Horizontal)
-        self.sl_sound.setMinimum(0)
-        self.sl_sound.setMaximum(20)
-        self.sl_sound.setValue(
-            scctool.settings.config.parser.getint("Intros", "sound_volume"))
-        self.sl_sound.setTickPosition(QSlider.TicksBothSides)
-        self.sl_sound.setTickInterval(1)
-        self.sl_sound.valueChanged.connect(self.changed)
-        layout.addRow(QLabel(
-            _("Sound Volume:") + " "), self.sl_sound)
-        self.sb_displaytime = QDoubleSpinBox()
-        self.sb_displaytime.setRange(0, 10)
-        self.sb_displaytime.setDecimals(1)
-        self.sb_displaytime.setValue(
-            scctool.settings.config.parser.getfloat("Intros", "display_time"))
-        self.sb_displaytime.setSuffix(" " + _("Seconds"))
-        self.sb_displaytime.valueChanged.connect(self.changed)
-        layout.addRow(QLabel(
-            _("Display Duration:") + " "), self.sb_displaytime)
         self.cb_animation = QComboBox()
         animation = scctool.settings.config.parser.get("Intros", "animation")
         currentIdx = 0
@@ -341,6 +325,25 @@ class SubwindowBrowserSources(QWidget):
         label = QLabel(_("Animation:") + " ")
         label.setMinimumWidth(120)
         layout.addRow(label, self.cb_animation)
+        self.sb_displaytime = QDoubleSpinBox()
+        self.sb_displaytime.setRange(0, 10)
+        self.sb_displaytime.setDecimals(1)
+        self.sb_displaytime.setValue(
+            scctool.settings.config.parser.getfloat("Intros", "display_time"))
+        self.sb_displaytime.setSuffix(" " + _("Seconds"))
+        self.sb_displaytime.valueChanged.connect(self.changed)
+        layout.addRow(QLabel(
+            _("Display Duration:") + " "), self.sb_displaytime)
+        self.sl_sound = QSlider(Qt.Horizontal)
+        self.sl_sound.setMinimum(0)
+        self.sl_sound.setMaximum(20)
+        self.sl_sound.setValue(
+            scctool.settings.config.parser.getint("Intros", "sound_volume"))
+        self.sl_sound.setTickPosition(QSlider.TicksBothSides)
+        self.sl_sound.setTickInterval(1)
+        self.sl_sound.valueChanged.connect(self.changed)
+        layout.addRow(QLabel(
+            _("Sound Volume:") + " "), self.sl_sound)
         self.introBox.setLayout(layout)
         mainLayout.addWidget(self.introBox)
 
