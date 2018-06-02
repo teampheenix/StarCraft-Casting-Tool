@@ -2,7 +2,6 @@ var tweens = {};
 var socket = null;
 var isopen = false;
 var reconnectIntervalMs = 5000;
-var myDefaultFont = null;
 var data = {};
 var font = "DEFAULT";
 var cssFile = "";
@@ -14,7 +13,6 @@ var initNeeded = true;
 init();
 
 function init() {
-  myDefaultFont = getComputedStyle(document.body).getPropertyValue('--font');
   loadStoredData();
   connectWebsocket();
   setTimeout(function() {
@@ -243,7 +241,7 @@ function changeCSS(newCssFile) {
     $('link[rel="stylesheet"]').attr('href', newCssFile);
     storeData("css");
     $(document).ready(function() {
-      $('#content').find(".text-fill").textfill();
+      $('#container').find(".text-fill").textfill();
     });
   }
 }
@@ -258,10 +256,11 @@ function setPadding(newPadding) {
 
 function setFont(newFont) {
   if (newFont == 'DEFAULT') {
-    newFont = myDefaultFont;
+    document.documentElement.style.removeProperty('--font');
+  }else{
+    font = newFont.trim();
+    document.documentElement.style.setProperty('--font', font);
   }
-  font = newFont.trim();
-  document.documentElement.style.setProperty('--font', font);
   storeData("font");
   $(document).ready(function() {
     $('#container').find(".text-fill").textfill();

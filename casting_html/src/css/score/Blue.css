@@ -1,12 +1,13 @@
-@import url('https://fonts.googleapis.com/css?family=Kanit');
-@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+
 :root {
   --width: 1280px;
   --height: 100px;
   --middle: 130px;
   --side: calc((var(--width) - var(--middle)) / 2);
   --logo: 105px;
-  --font: 'Open Sans';
+  --font: Roboto;
   --bcolor: #2d6199;
 }
 
@@ -41,8 +42,7 @@ body {
 }
 
 .score {
-  font-size: 55px;
-  font-family: 'Kanit';
+  font-size: 45px;
   line-height: 100px;
 }
 
@@ -87,7 +87,6 @@ div.box_left {
 div.upper-text-right {
   position: absolute;
   font-size: 40px;
-  font-weight: bold;
   line-height: 55px;
   height: 100%;
   padding: 10px;
@@ -103,7 +102,6 @@ div.upper-text-left {
   position: absolute;
   font-size: 40px;
   line-height: 55px;
-  font-weight: bold;
   height: 100%;
   padding: 10px;
   width: calc(var(--side) - var(--logo));

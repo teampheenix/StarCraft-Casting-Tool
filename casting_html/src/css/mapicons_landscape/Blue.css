@@ -1,22 +1,14 @@
-@import url('https://fonts.googleapis.com/css?family=Orbitron:350,400');
+@import url('https://fonts.googleapis.com/css?family=Roboto');
 /* latin */
 
-@font-face {
-  font-family: 'OrbitronAdv';
-  font-style: normal;
-  font-weight: 400;
-  src: local('OrbitronAdv Regular'), local('OrbitronAdv-Regular'), url(https://fonts.gstatic.com/s/orbitron/v9/yMJRMIlzdpvBhQQL_Qq7dy0.woff2) format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-
 :root {
-  --font: OrbitronAdv, Orbitron;
+  --font: Roboto;
   --padding: 2px;
-  --border-size: 3px;
-  --border-color: black;
+  --border-size: 1px;
+  --border-color: #2d6199;
   --total-width: 1005px;
   --total-height: 105px;
-  --border-radius: 20px;
+  --border-radius: 8px;
   --middle-width: 25%;
   --lower-text-height: 33%;
   --side-width: calc((100% - var(--middle-width)) / 2);
@@ -25,7 +17,6 @@
 body {
   font-family: var(--font);
 }
-
 
 #container {
   top: 0px;
@@ -48,14 +39,13 @@ body {
 .text-item {
   color: white;
   font-size: 18px;
-  font-weight: bold;
-  --outline-size: 2.5px;
+  --outline-size: 2.0px;
   text-shadow: 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black;
   -webkit-font-smoothing: antialiased;
 }
 
 .winner {
-  --winner-color: #f29b00;
+  --winner-color: #2d6199;
   --size: 8px;
   color: white !important;
   text-shadow: 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color) !important;
@@ -78,7 +68,7 @@ div.box_left {
   background-size: 125%;
   background-position: 15% 15%;
   border: var(--border-size) solid var(--border-color);
-  border-radius: 0px 0px 0px var(--border-radius);
+  border-radius: var(--border-radius) 0px 0px var(--border-radius);
   box-sizing: border-box;
   overflow: hidden;
 }
@@ -90,19 +80,23 @@ div.box_middle {
   width: var(--middle-width);
   top: 0px;
   border: var(--border-size) solid var(--border-color);
-  border-radius: 0px var(--border-radius) 0px var(--border-radius);
-  background-image: url("../../img/textures/texture1.jpg");
-  background-size: cover;
-  font-size: 40px;
-  font-weight: bold;
+  background-image: url("../../img/textures/bg_blur.jpg");
+  background-position: center center;
   text-align: center;
   line-height: calc(var(--total-height) - var(--border-size));
   --winner-color: white;
   --size: 4px;
   color: white !important;
-  text-shadow: 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color) !important;
   -webkit-font-smoothing: antialiased;
   box-sizing: border-box;
+  text-shadow: none;
+}
+
+span.vs{
+  font-size: 40px;
+  font-weight: bold;
+  text-transform: uppercase;
+  filter: drop-shadow(0px 0px 2px #2d6199);
 }
 
 div.box_right {
@@ -114,7 +108,7 @@ div.box_right {
   background-size: 125%;
   background-position: 80% 80%;
   border: var(--border-size) solid var(--border-color);
-  border-radius: 0px var(--border-radius) 0px 0px;
+  border-radius: 0px var(--border-radius) var(--border-radius) 0px;
   box-sizing: border-box;
   overflow: hidden
 }
@@ -122,12 +116,12 @@ div.box_right {
 div.lower-text {
   position: absolute;
   left: 0%;
-  bottom: 0%;
+  bottom: -1px;
   height: var(--lower-text-height);
   width: 100%;
   text-align: center;
   line-height: 40px;
-  background: rgba(0, 0, 0, 0.6) !important;
+  background: rgba(12, 30, 51, 0.8);
 }
 
 div.maplabel {
@@ -135,7 +129,7 @@ div.maplabel {
   right: var(--border-radius);
   width: calc(100% - var(--border-radius) - 5px);
   text-align: center;
-  line-height: 30px;
+  line-height: 32px;
   height: 100%;
 }
 
@@ -144,7 +138,7 @@ div.mapname {
   left: var(--border-radius);
   width: calc(100% - var(--border-radius) - 5px);
   text-align: center;
-  line-height: 30px;
+  line-height: 32px;
   height: 100%;
 }
 
@@ -153,11 +147,10 @@ div.upper-text-right {
   top: 2px;
   height: calc(100% - var(--lower-text-height) - 10px);
   font-size: 28px;
-  font-weight: bold;
   left: var(--border-radius);
   width: calc(100% - var(--border-radius) - 5px);
   text-align: center;
-  line-height: 60px;
+  line-height: 65px;
 }
 
 div.upper-text-left {
@@ -165,11 +158,10 @@ div.upper-text-left {
   top: 2px;
   height: calc(100% - var(--lower-text-height) - 10px);
   font-size: 28px;
-  font-weight: bold;
   right: var(--border-radius);
   width: calc(100% - var(--border-radius) - 5px);
   text-align: center;
-  line-height: 60px;
+  line-height: 65px;
 }
 
 div.race1 {
@@ -181,7 +173,7 @@ div.race1 {
   background-repeat: no-repeat;
   background-position: center center;
   background-size: contain;
-  filter: drop-shadow(0px 0px 4px #6BC2F9);
+  filter: invert(1) drop-shadow(1px 1px 1px #24456c);
 }
 
 div.race2 {
@@ -193,29 +185,28 @@ div.race2 {
   background-repeat: no-repeat;
   background-position: center center;
   background-size: contain;
-  filter: drop-shadow(0px 0px 4px #6BC2F9);
+  filter: invert(1) drop-shadow(1px 1px 1px #24456c);
 }
 
 #protoss {
   height: calc(100% - 2px);
   top: 0px !important;
-  background-image: url('../../img/races/Protoss.png');
+  background-image: url('../../img/races/protoss-black.png');
 }
 
 #zerg {
-  background-image: url('../../img/races/Zerg.png');
+  background-image: url('../../img/races/zerg-black.png');
 }
 
 #terran {
-  background-image: url('../../img/races/Terran.png');
+  background-image: url('../../img/races/terran-black.png');
   height: calc(100% - 24px);
   top: 12px !important;
 }
 
 #random {
-  background-image: url('../../img/races/Random.png');
-  height: calc(100% - 20px);
-  top: 13px !important;
+  background-image: url('../../img/races/random-black.png');
+  top: 5px !important;
 }
 
 div.circle {
@@ -223,10 +214,11 @@ div.circle {
   background: #f00;
   right: 5px;
   bottom: 5px;
-  width: 35px;
+  width: 32px;
   height: 25px;
-  border-radius: 0px 10px 0px 10px;
-  box-shadow: 0px 0px 2px white;
+  border-radius: 4px 4px 4px 4px;
+  box-shadow: 0px 0px 2px #2d6199;
+  opacity: 0.85;
 }
 
 div.opa {
