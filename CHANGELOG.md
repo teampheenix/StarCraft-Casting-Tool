@@ -18,6 +18,13 @@
 * Text-to-Speech is now disabled by default.
 
 
+## v1.12.2 (2018-06-01)
+
+### Fix
+
+* Fixed a bug that prevented using a non-default skin for the intros.
+
+
 ## v1.12.1 (2018-05-26)
 
 ### Fix
