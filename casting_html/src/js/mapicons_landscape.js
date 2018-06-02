@@ -255,10 +255,10 @@ function setPadding(newPadding) {
 }
 
 function setFont(newFont) {
-  if (newFont == 'DEFAULT') {
+  font = newFont.trim();
+  if (font == 'DEFAULT') {
     document.documentElement.style.removeProperty('--font');
   }else{
-    font = newFont.trim();
     document.documentElement.style.setProperty('--font', font);
   }
   storeData("font");

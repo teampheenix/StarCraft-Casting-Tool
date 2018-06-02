@@ -57,6 +57,10 @@ div.box {
   width: var(--total-width);
   height: var(--total-height);
   overflow: hidden;
+  border: var(--border-size) solid var(--border-color);
+  border-radius: var(--border-radius) var(--border-radius) var(--border-radius) var(--border-radius);
+  box-sizing: border-box;
+  box-shadow: 2px 4px 4px -2px rgba(0, 0, 0, 0.6);
 }
 
 div.box_left {
@@ -67,9 +71,6 @@ div.box_left {
   background-color: gray;
   background-size: 125%;
   background-position: 15% 15%;
-  border: var(--border-size) solid var(--border-color);
-  border-radius: var(--border-radius) 0px 0px var(--border-radius);
-  box-sizing: border-box;
   overflow: hidden;
 }
 
@@ -79,7 +80,8 @@ div.box_middle {
   left: var(--side-width);
   width: var(--middle-width);
   top: 0px;
-  border: var(--border-size) solid var(--border-color);
+  border-left: 2px solid var(--border-color);
+  border-right: 2px solid var(--border-color);
   background-image: url("../../img/textures/bg_blur.jpg");
   background-position: center center;
   text-align: center;
@@ -107,21 +109,20 @@ div.box_right {
   background-color: gray;
   background-size: 125%;
   background-position: 80% 80%;
-  border: var(--border-size) solid var(--border-color);
-  border-radius: 0px var(--border-radius) var(--border-radius) 0px;
   box-sizing: border-box;
   overflow: hidden
 }
 
 div.lower-text {
   position: absolute;
-  left: 0%;
+  left: -1%;
   bottom: -1px;
   height: var(--lower-text-height);
-  width: 100%;
+  width: 105%;
   text-align: center;
   line-height: 40px;
-  background: rgba(12, 30, 51, 0.8);
+  border-top: 2px solid var(--border-color);
+  background: rgba(12, 30, 51, 0.7);
 }
 
 div.maplabel {
@@ -212,11 +213,13 @@ div.race2 {
 div.circle {
   position: absolute;
   background: #f00;
-  right: 5px;
-  bottom: 5px;
+  right: 3px;
+  bottom: 3px;
   width: 32px;
   height: 25px;
-  border-radius: 4px 4px 4px 4px;
+  border-radius: 2px 2px 8px 2px;
+  border: 1px solid var(--border-color);
+  box-sizing: border-box;
   box-shadow: 0px 0px 2px #2d6199;
   opacity: 0.85;
 }
