@@ -98,8 +98,9 @@ div.label {
   left: 125px;
   width: calc(100% - 125px - 130px);
   background: rgba(12, 30, 51, 0.7);
-  border-bottom: 1px solid var(--border-color);
-  border-top: 1px solid var(--border-color);
+  border-bottom: 2px solid var(--border-color);
+  border-top: 2px solid var(--border-color);
+  box-sizing: border-box;
 }
 
 div.label2{
@@ -107,7 +108,7 @@ div.label2{
   height: 100%;
   width: 125px;
   background: rgba(36,69,108, 0.8);
-  border-right: 1px solid var(--border-color);
+  border-right: 2px solid var(--border-color);
   box-sizing: border-box;
 }
 
@@ -117,19 +118,23 @@ div.label3{
   width: 130px;
   right: 0px;
   background-color: rgba(36,69,108, 0.8);
-  border-left: 1px solid var(--border-color);
+  border-left: 2px solid var(--border-color);
   box-sizing: border-box;
 }
 
 div.name {
   position: absolute;
-  top: calc(40% - 5px);
+  top: calc(40% - 8px);
   left: 140px;
   width: calc(100% - 140px - 150px);
   height: 62px;
   /*line-height: 55px;
     */
   text-align: center;
+}
+
+div.name.name{
+  filter: drop-shadow(2px 2px 2px black);
 }
 
 div.team {
