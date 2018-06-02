@@ -94,7 +94,7 @@ div.box_middle {
   text-shadow: none;
 }
 
-span.vs{
+span.vs {
   font-size: 40px;
   font-weight: bold;
   text-transform: uppercase;
@@ -132,6 +132,7 @@ div.maplabel {
   text-align: center;
   line-height: 32px;
   height: 100%;
+  text-shadow: none;
 }
 
 div.mapname {
@@ -141,6 +142,11 @@ div.mapname {
   text-align: center;
   line-height: 32px;
   height: 100%;
+  text-shadow: none;
+}
+
+span.maplabel, span.mapname {
+  text-shadow: 1px 1px 1px black, 1px -1px 1px black, -1px 1px 1px black, -1px -1px 1px black;
 }
 
 div.upper-text-right {
