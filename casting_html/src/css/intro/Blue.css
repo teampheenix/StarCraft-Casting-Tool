@@ -1,0 +1,147 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+:root {
+  --width: 750px;
+  --height: 130px;
+  --border-size: 2px;
+  --border-color: #2d6199;
+  --border-radius: 30px;
+}
+
+body {
+  overflow: hidden;
+  font-family: Roboto, Sans-Serif;
+}
+
+div.box {
+  width: var(--width);
+  height: var(--height);
+  position: absolute;
+  text-align: center;
+  left: calc((100% - var(--width)) / 2);
+  top: calc((100% - var(--height)) / 2);
+  background-size: cover;
+  border-radius: 8px;
+  border: 1px solid #2d6199;
+  overflow: hidden;
+  background-image: url('../../img/textures/bg_blur.jpg');
+  background-size: cover;
+  background-position: center bottom;
+  box-shadow: 2px 4px 4px -2px rgba(0, 0, 0, 0.6);
+}
+
+div.race {
+  position: absolute;
+  width: 125px;
+  height: 100%;
+  background-size: contain;
+  background-position: center center;
+  background-repeat: no-repeat;
+  border: inset 15px transparent;
+  box-sizing: border-box;
+}
+
+#random {
+  background-image: url("../../img/races/random-black.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
+  filter: invert(1) drop-shadow(2px 2px 2px black);
+}
+
+#protoss {
+  background-image: url("../../img/races/protoss-black.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
+  border: inset 5px transparent;
+  filter: invert(1) drop-shadow(2px 2px 2px black);
+}
+
+#zerg {
+  background-image: url("../../img/races/zerg-black.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
+  filter: invert(1) drop-shadow(2px 2px 2px black);
+}
+
+#terran {
+  background-image: url("../../img/races/terran-black.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
+  filter: invert(1) drop-shadow(1px 1px 1px black);
+}
+
+div.logo {
+  position: absolute;
+  background-size: contain;
+  background-position: center center;
+  background-repeat: no-repeat;
+  height: 100%;
+  width: 130px;
+  right: 0px;
+  overflow: hidden;
+  filter: drop-shadow(2px 2px 2px black);
+  background-size: contain;
+  background-position: center center;
+  background-repeat: no-repeat;
+  border: inset 5px transparent;
+  box-sizing: border-box;
+}
+
+div.label {
+  position: absolute;
+  top: calc(40% - 5px);
+  height: 60px;
+  left: 125px;
+  width: calc(100% - 125px - 130px);
+  background: rgba(12, 30, 51, 0.7);
+  border-bottom: 1px solid var(--border-color);
+  border-top: 1px solid var(--border-color);
+}
+
+div.label2{
+  position: absolute;
+  height: 100%;
+  width: 125px;
+  background: rgba(36,69,108, 0.8);
+  border-right: 1px solid var(--border-color);
+  box-sizing: border-box;
+}
+
+div.label3{
+  position: absolute;
+  height: 100%;
+  width: 130px;
+  right: 0px;
+  background-color: rgba(36,69,108, 0.8);
+  border-left: 1px solid var(--border-color);
+  box-sizing: border-box;
+}
+
+div.name {
+  position: absolute;
+  top: calc(40% - 5px);
+  left: 140px;
+  width: calc(100% - 140px - 150px);
+  height: 62px;
+  /*line-height: 55px;
+    */
+  text-align: center;
+}
+
+div.team {
+  position: absolute;
+  top: 0px;
+  left: 140px;
+  width: calc(100% - 140px - 180px);
+  text-align: center;
+  font-size: 30px !important;
+}
+
+.text-item {
+  color: white;
+  font-size: 44px !important;
+}
