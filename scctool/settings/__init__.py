@@ -28,7 +28,7 @@ dataDir = "data"
 logosDir = os.path.join(dataDir, "logos")
 
 windows = (platform.system().lower() == "windows")
-max_no_sets = 9
+max_no_sets = 15
 races = ("Random", "Terran", "Protoss", "Zerg")
 
 this.profileManager = ProfileManager()

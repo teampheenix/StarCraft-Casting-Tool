@@ -115,14 +115,14 @@ div.box_right {
 
 div.lower-text {
   position: absolute;
-  left: -1%;
-  bottom: -1px;
+  bottom: 0px;
   height: var(--lower-text-height);
-  width: 105%;
+  width: 100%;
   text-align: center;
   line-height: 40px;
   border-top: 2px solid var(--border-color);
   background: rgba(12, 30, 51, 0.7);
+  box-sizing: border-box;
 }
 
 div.maplabel {
@@ -203,6 +203,8 @@ div.race2 {
 
 #zerg {
   background-image: url('../../img/races/zerg-black.png');
+  height: calc(100% - 24px);
+  top: 12px !important;
 }
 
 #terran {

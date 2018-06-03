@@ -188,31 +188,31 @@ div.circle {
   bottom: 0px;
   width: 28px;
   height: 20px;
-  border-radius: 0px 10px 0px 10px;
-  box-shadow: 0px 0px 2px white;
-  display: inline-block;
+  border-radius: 2px 8px 2px 8px;
+  box-shadow: 2px 2px 2px black;
   margin: 4px;
-  margin-bottom: -6px;
+  flex-shrink: 1;
 }
 
 div.mapscore-right {
   position: absolute;
-  right: calc(0% + var(--logo-width) + var(--border-radius) + 5px);
-  width: calc(100% - 2 * var(--border-radius) - var(--logo-width) - 10px);
-  text-align: center;
-  line-height: 25px;
+  right: calc(0% + var(--logo-width) + var(--border-radius) + 8px);
+  width: calc(100% - 2 * var(--border-radius) - var(--logo-width) - 16px);
   height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 div.mapscore-left {
   position: absolute;
-  left: calc(0% + var(--logo-width) + var(--border-radius) + 5px);
-  width: calc(100% - 2 * var(--border-radius) - var(--logo-width) - 10px);
-  text-align: center;
-  line-height: 25px;
+  left: calc(0% + var(--logo-width) + var(--border-radius) + 8px);
+  width: calc(100% - 2 * var(--border-radius) - var(--logo-width) - 16px);
   height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-
 .winner {
   --winner-color: #f29b00;
   --size: 8px;

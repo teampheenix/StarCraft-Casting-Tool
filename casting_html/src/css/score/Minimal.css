@@ -26,7 +26,6 @@ div.box {
   position: relative;
   width: 1000px;
   height: 300px;
-  overflow: hidden;
   display: inline-block;
 }
 
@@ -58,15 +57,6 @@ div.upper-text-left {
   visibility: hidden;
 }
 
-div.mapscore-left {
-  position: absolute;
-  bottom: 20px;
-  left: 40px;
-  width: 350px;
-  text-align: center;
-  line-height: 25px;
-  height: 25px;
-}
 
 div.box_right {
   position: absolute;
@@ -80,26 +70,42 @@ div.upper-text-right {
   visibility: hidden;
 }
 
+div.mapscore-left {
+  position: absolute;
+  bottom: -10px;
+  left: 40px;
+  width: 350px;
+  height: 65px;
+  display: flex;
+  align-items: center;
+  align-content: flex-start;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
 div.mapscore-right {
   position: absolute;
-  bottom: 20px;
+  bottom: -10px;
   right: 40px;
   width: 350px;
-  text-align: center;
-  line-height: 25px;
-  height: 25px;
+  height: 65px;
+  display: flex;
+  align-items: center;
+  align-content: flex-start;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 div.circle {
   background: #f00;
   position: relative;
-  bottom: 45px;
   width: 28px;
   height: 20px;
   border-radius: 0px 10px 0px 10px;
   box-shadow: 0px 0px 2px white;
-  display: inline-block;
-  margin: 5px;
+  margin: 4px;
+  flex-shrink: 0;
+  filter: drop-shadow(2px 2px 3px black);
 }
 
 div.box_middle {
@@ -112,6 +118,7 @@ div.box_middle {
   background-repeat: no-repeat;
   background-position: center center;
   background-size: contain;
+  filter: drop-shadow(2px 2px 3px black);
 }
 
 div.score_middle {
@@ -140,7 +147,7 @@ div.score_right {
   --winner-color: white;
   --size: 5px;
   color: white !important;
-  text-shadow: 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color) !important;
+  text-shadow: 0px 0px 2px black;
   -webkit-font-smoothing: antialiased;
 }
 
