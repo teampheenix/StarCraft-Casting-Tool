@@ -3,6 +3,7 @@ import asyncio
 import json
 import logging
 import re
+from uuid import uuid4
 
 import keyboard
 import websockets
@@ -22,6 +23,8 @@ class WebsocketThread(QThread):
     valid_scopes = ['score', 'mapicons_box_[1-3]',
                     'mapicons_landscape_[1-3]', 'intro', 'mapstats']
     scopes = dict()
+    intro_state = ''
+    introShown = pyqtSignal()
 
     def __init__(self, controller):
         """Init thread."""
@@ -87,27 +90,39 @@ class WebsocketThread(QThread):
             if e.event_type == keyboard.KEY_UP:
                 self.keyboard_state[(scan_code, is_keypad)] = True
 
-    def __register_hotkey(self, string, callback):
-        data = scctool.settings.config.loadHotkey(string)
-        if not data['name']:
+    def __register_hotkey(self, hotkey, callback):
+        if isinstance(hotkey, str):
+            hotkey = scctool.settings.config.loadHotkey(hotkey)
+        if not hotkey['name']:
             return
-        if data['scan_code'] == 0:
+        if hotkey['scan_code'] == 0:
             return
 
-        keyboard.hook_key(data['scan_code'], lambda e: self.__callback_on_hook(
-            data['scan_code'], data['is_keypad'], e, callback))
+        keyboard.hook_key(
+            hotkey['scan_code'],
+            lambda e, hotkey=hotkey: self.__callback_on_hook(
+                hotkey['scan_code'],
+                hotkey['is_keypad'],
+                e,
+                callback))
 
     def register_hotkeys(self):
         if (not self._hotkeys_active and
                 len(self.connected.get('intro', [])) > 0):
             module_logger.info('Register intro hotkeys.')
-            self.__register_hotkey(
-                scctool.settings.config.parser.get("Intros", "hotkey_player1"),
-                lambda: self.showIntro(0))
+            player1 = scctool.settings.config.loadHotkey(
+                scctool.settings.config.parser.get("Intros", "hotkey_player1"))
+            player2 = scctool.settings.config.loadHotkey(
+                scctool.settings.config.parser.get("Intros", "hotkey_player2"))
+            if player1 == player2:
+                self.__register_hotkey(player1,
+                                       lambda: self.showIntro(-1))
+            else:
+                self.__register_hotkey(player1,
+                                       lambda: self.showIntro(0))
 
-            self.__register_hotkey(
-                scctool.settings.config.parser.get("Intros", "hotkey_player2"),
-                lambda: self.showIntro(1))
+                self.__register_hotkey(player2,
+                                       lambda: self.showIntro(1))
 
             self.__register_hotkey(
                 scctool.settings.config.parser.get("Intros", "hotkey_debug"),
@@ -169,7 +184,10 @@ class WebsocketThread(QThread):
 
         while True:
             try:
-                await asyncio.wait_for(websocket.recv(), timeout=20)
+                msg = await asyncio.wait_for(websocket.recv(), timeout=20)
+                if msg == self.intro_state:
+                    self.intro_state = ''
+                    self.introShown.emit()
             except asyncio.TimeoutError:
                 try:
                     pong_waiter = await websocket.ping()
@@ -277,21 +295,26 @@ class WebsocketThread(QThread):
             raise ValueError('Change font is not available for this path.')
 
     def showIntro(self, idx):
-        self.sendData2Path("intro", "SHOW_INTRO",
-                           self.__controller.getPlayerIntroData(idx))
+        self.intro_state = self.sendData2Path(
+            "intro", "SHOW_INTRO",
+            self.__controller.getPlayerIntroData(idx))
 
     def selectMap(self, map):
         self.sendData2Path('mapstats', 'SELECT_MAP', {'map': str(map)})
 
-    def sendData2Path(self, path, event, input_data):
+    def sendData2Path(self, path, event, input_data, state=''):
+        if not state:
+            state = str(uuid4())
+
         if isinstance(path, list):
             for item in path:
-                self.sendData2Path(item, event, input_data)
+                self.sendData2Path(item, event, input_data, state)
             return
         try:
             data = dict()
             data['event'] = event
             data['data'] = input_data
+            data['state'] = state
 
             paths = self.scopes.get(path, [path])
 
@@ -305,17 +328,25 @@ class WebsocketThread(QThread):
         except Exception as e:
             module_logger.exception("message")
 
-    def sendData2WS(self, websocket, event, input_data):
+        return state
+
+    def sendData2WS(self, websocket, event, input_data, state=''):
+        if not state:
+            state = str(uuid4())
+
         if isinstance(websocket, list):
             for item in websocket:
-                self.sendData2WS(item, event, input_data)
+                self.sendData2WS(item, event, input_data, state)
             return
         try:
             data = dict()
             data['event'] = event
             data['data'] = input_data
+            data['state'] = state
             module_logger.info("Sending data: %s" % data)
             coro = websocket.send(json.dumps(data))
             asyncio.run_coroutine_threadsafe(coro, self.__loop)
         except Exception as e:
             module_logger.exception("message")
+
+        return state

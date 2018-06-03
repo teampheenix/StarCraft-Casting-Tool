@@ -51,16 +51,17 @@ class MainController:
             self.websocketThread = WebsocketThread(self)
             self.websocketThread.socketConnectionChanged.connect(
                 self.toogleLEDs)
+            self.websocketThread.introShown.connect(self.updatePlayerIntroIdx)
             self.runWebsocketThread()
             self.autoRequestsThread = AutoRequestsThread(self)
             self.placeholders = self.placeholderSetup()
             self._warning = False
             self.checkVersion()
-            self.initPlayerIntroData()
             self.logoManager = LogoManager(self)
             self.aliasManager = AliasManager()
             self.historyManager = HistoryManager()
             self.mapstatsManager = MapStatsManager(self)
+            self.initPlayerIntroData()
 
         except Exception as e:
             module_logger.exception("message")
@@ -601,20 +602,26 @@ class MainController:
             self.websocketThread.unregister_hotkeys()
             self.websocketThread.register_hotkeys()
 
+    def updatePlayerIntroIdx(self):
+        self.__playerIntroIdx = (self.__playerIntroIdx + 1) % 2
+
     def initPlayerIntroData(self):
         """Initalize player intro data."""
         self.__playerIntroData = dict()
+        self.__playerIntroIdx = 0
         for player_idx in range(2):
             data = dict()
-            data['name'] = ""
-            data['race'] = "random"
-            data['logo'] = ""
-            data['team'] = ""
-            data['display'] = "none"
+            data['name'] = "pressure"
+            data['race'] = "protoss"
+            data['logo'] = "../" + self.logoManager.newLogo().getFile(True)
+            data['team'] = "team pheeniX"
+            data['display'] = "block"
             self.__playerIntroData[player_idx] = data
 
     def getPlayerIntroData(self, idx):
         """Return player intro."""
+        if idx == -1:
+            idx = self.__playerIntroIdx
         data = self.__playerIntroData[idx]
         data['volume'] = scctool.settings.config.parser.getint(
             "Intros", "sound_volume")
@@ -671,6 +678,7 @@ class MainController:
                 player_idx).lower()
             self.__playerIntroData[player_idx]['logo'] = logo
             self.__playerIntroData[player_idx]['display'] = display
+            self.__playerIntroIdx = 0
 
             try:
                 if tts_active:

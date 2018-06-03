@@ -202,26 +202,24 @@ class MapDownloader(QProgressDialog):
 
 class HotkeyLayout(QHBoxLayout):
 
-    modified = pyqtSignal(str)
+    modified = pyqtSignal(str, str)
 
-    def __init__(self, parent, label="Hotkey", hotkey=""):
+    def __init__(self, parent, ident, label="Hotkey", hotkey=""):
         """Init box."""
         super().__init__()
         self.data = scctool.settings.config.loadHotkey(hotkey)
         self.__parent = parent
         self.__label = label
-        label = QLabel(label + ":")
-        label.setMinimumWidth(50)
-        self.addWidget(label, 1)
+        self.__ident = ident
+        self.__qlabel = QLabel(label + ":")
+        self.__qlabel.setMinimumWidth(50)
+        self.addWidget(self.__qlabel, 1)
         self.__preview = QLineEdit()
         self.__preview.setReadOnly(True)
         self.__preview.setText(self.data['name'])
         self.__preview.setPlaceholderText(_("Not set"))
         self.__preview.setAlignment(Qt.AlignCenter)
         self.addWidget(self.__preview, 1)
-        # self.__pb_setHotKey = QPushButton(_('Set Hotkey'))
-        # self.__pb_setHotKey.clicked.connect(self.setHotkey)
-        # self.addWidget(self.__pb_setHotKey, 0)
         self.__pb_set = QPushButton(_('Set Hotkey'))
         self.__pb_set.clicked.connect(self.setKey)
         self.addWidget(self.__pb_set, 0)
@@ -229,21 +227,32 @@ class HotkeyLayout(QHBoxLayout):
         self.__pb_clear.clicked.connect(self.clear)
         self.addWidget(self.__pb_clear, 0)
 
+    def setDisabled(self, disabled=True):
+        self.__preview.setDisabled(disabled)
+        self.__pb_set.setDisabled(disabled)
+        self.__pb_clear.setDisabled(disabled)
+        self.__qlabel.setDisabled(disabled)
+
     def setKey(self):
         recorder = HotkeyRecorder(self.__parent, self.data, self.__label)
         self.data = recorder.run()
         self.__preview.setText(self.data['name'])
-        self.modified.emit(self.data['name'])
+        self.modified.emit(self.data['name'], self.__ident)
+
+    def setData(self, data):
+        self.data = data
+        self.__preview.setText(self.data['name'])
+        self.modified.emit(self.data['name'], self.__ident)
 
     def clear(self):
         self.__preview.setText("")
         self.data = {'name': '', 'scan_code': 0, 'is_keypad': False}
-        self.modified.emit("")
+        self.modified.emit("", self.__ident)
 
     def getKey(self):
         return self.data
 
-    def check_dublicate(self, key):
+    def check_dublicate(self, key, ident):
         if str(key) and key == self.data['name']:
             self.clear()
 

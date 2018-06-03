@@ -52,6 +52,7 @@ function Connect() {
           var tts = new Audio(jsonObject.data.tts);
           tts.volume = jsonObject.data.tts_volume / 20.0;
         } catch (e) {}
+        socket.send(jsonObject.state);
         tween.clear();
         $(".race").prop('id', jsonObject.data.race);
         $(".logo").css("display", jsonObject.data.display)

@@ -84,18 +84,49 @@ class SubwindowBrowserSources(QWidget):
 
     def addHotkey(self, ident, label):
         element = HotkeyLayout(
-            self, label,
+            self, ident, label,
             scctool.settings.config.parser.get("Intros", ident))
         self.hotkeys[ident] = element
         return element
 
     def connectHotkeys(self):
         for ident, key in self.hotkeys.items():
-            for ident2, key2 in self.hotkeys.items():
-                if ident == ident2:
-                    continue
-                key.modified.connect(key2.check_dublicate)
-            key.modified.connect(self.changed)
+            if ident == 'hotkey_debug':
+                for ident2, key2 in self.hotkeys.items():
+                    if ident == ident2:
+                        continue
+                    key.modified.connect(key2.check_dublicate)
+            key.modified.connect(self.hotkeyChanged)
+
+    def hotkeyChanged(self, key, ident):
+        self.changed()
+
+        if(ident == 'hotkey_player1' and self.cb_single_hotkey.isChecked()):
+            self.hotkeys['hotkey_player2'].setData(
+                self.hotkeys['hotkey_player1'].getKey())
+
+        if not key:
+            return
+
+        if((ident == 'hotkey_player1' and
+            key == self.hotkeys['hotkey_player2'].getKey()['name']) or
+           (ident == 'hotkey_player2' and
+                key == self.hotkeys['hotkey_player1'].getKey()['name'])):
+            self.cb_single_hotkey.setChecked(True)
+
+        if(ident in ['hotkey_player1', 'hotkey_player2'] and
+           key == self.hotkeys['hotkey_debug'].getKey()['name']):
+            self.hotkeys['hotkey_debug'].clear()
+
+    def singleHotkeyChanged(self):
+        checked = self.cb_single_hotkey.isChecked()
+        self.hotkeys['hotkey_player2'].setDisabled(checked)
+        if checked:
+            self.hotkeys['hotkey_player2'].setData(
+                self.hotkeys['hotkey_player1'].getKey())
+        elif(self.hotkeys['hotkey_player1'].getKey() ==
+             self.hotkeys['hotkey_player2'].getKey()):
+            self.hotkeys['hotkey_player2'].clear()
 
     def createFormGroupMapstats(self):
         self.formGroupMapstats = QWidget()
@@ -289,15 +320,24 @@ class SubwindowBrowserSources(QWidget):
 
         self.hotkeyBox = QGroupBox(_("Hotkeys"))
         layout = QVBoxLayout()
-
         try:
             keyboard.unhook_all()
         except AttributeError:
             pass
+
+        self.cb_single_hotkey = QCheckBox(
+            _("Use a single hotkey for both players"))
+        self.cb_single_hotkey.stateChanged.connect(self.singleHotkeyChanged)
+        layout.addWidget(self.cb_single_hotkey)
+
         self.hotkeys = dict()
         layout.addLayout(self.addHotkey("hotkey_player1", _("Player 1")))
         layout.addLayout(self.addHotkey("hotkey_player2", _("Player 2")))
         layout.addLayout(self.addHotkey("hotkey_debug", _("Debug")))
+
+        self.cb_single_hotkey.setChecked(
+            self.hotkeys['hotkey_player1'].getKey() ==
+            self.hotkeys['hotkey_player2'].getKey())
         self.connectHotkeys()
         label = QLabel(_("Player 1 is always the player your observer"
                          " camera is centered on at start of a game."))
