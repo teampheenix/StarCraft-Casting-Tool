@@ -5,6 +5,8 @@
 
 ### New
 
+* Added a 'Blue' skin/style for the score icon, the landscape map icons, and the player intro.
+
 * Added scope and volume to Text-to-Speech settings.
 
 * The Score Icon is now connect via websocket to SCCT and fully animated.
@@ -12,6 +14,10 @@
 * Logos and Matchbanner are no longer download if they are identical to the current logos or banner.
 
 * Restructured the settings.
+
+### Changes
+
+* One can now use a single combined hotkey for both player intros. This option is the new default.
 
 ### Fix
 
