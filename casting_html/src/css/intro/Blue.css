@@ -139,8 +139,9 @@ div.name.name{
 
 div.team {
   position: absolute;
-  top: 0px;
+  top: 5px;
   left: 140px;
+  height: calc(30%);
   width: calc(100% - 140px - 180px);
   text-align: center;
   font-size: 30px !important;
