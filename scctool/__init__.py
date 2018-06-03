@@ -12,7 +12,7 @@ import scctool.settings.config
 
 logger = logging.getLogger('scctool')
 
-__version__ = "2.0.0beta9"
+__version__ = "2.0.0beta10"
 __latest_version__ = __version__
 __new_version__ = False
 
