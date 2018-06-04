@@ -85,6 +85,7 @@ class SC2ApiThread(QThread):
             self.activeTask['toggleProduction'] = False
             self.activeTask['playerIntros'] = False
             self.currentData = SC2MatchData()
+            self.introData = SC2MatchData()
             self.controller = controller
             self.currentÍngameStatus = False
         except Exception as e:
@@ -142,50 +143,35 @@ class SC2ApiThread(QThread):
                             SC2MatchData(GAMEresponse, UIresponse))
 
                 except requests.exceptions.ConnectionError:
-                    # print("StarCraft 2 not running!")
                     time.sleep(10)
                 except ValueError:
-                    # print("StarCraft 2 starting.")
                     time.sleep(10)
 
                 time.sleep(1)
 
-            # print('terminated')
         except Exception as e:
             module_logger.exception("message")
 
     def parseMatchData(self, newData):
         """Parse SC2-Client-API data and run tasks accordingly."""
-        # print("Prasing")
-        # print(newData)
-        # print(self.currentData)
-        # print(newData.time)
-        # print(self.currentData.time)
         try:
-            if(self.exiting is False and
+            if(not self.exiting and self.activeTask['playerIntros'] and
+               self.introData != newData):
+                self.controller.updatePlayerIntros(newData)
+                self.introData = newData
+
+            if(not self.exiting and
                 (newData != self.currentData or
                  newData.time < self.currentData.time or
                  newData.isLive() != self.currentData.isLive())):
 
-                # Skip initial data
-                # if(self.currentData == SC2MatchData()):
-                #    print("Skipping initial")
-                #    self.currentData = newData
-                #    return
-
-                if(self.activeTask['playerIntros']):
-                    # print("Providing player intros...")
-                    self.controller.updatePlayerIntros(newData)
-
                 if(self.activeTask['updateScore'] and
                    newData.isDecidedGame() and
                    self.currentData != SC2MatchData()):
-                    # print("Updating Score")
                     self.requestScoreUpdate.emit(newData)
 
                 if(newData.isLive() and (self.activeTask['toggleScore'] or
                                          self.activeTask['toggleProduction'])):
-                    # print("Toggling")
                     self.tryToggle(newData)
 
                 self.currentData = newData
@@ -208,7 +194,6 @@ class SC2ApiThread(QThread):
                         ToggleProduction()
                     break
                 else:
-                    # print("SC2 not on foreground... waiting.")
                     time.sleep(0.1)
         except Exception:
             module_logger.info("Toggle not working on this OS.")
