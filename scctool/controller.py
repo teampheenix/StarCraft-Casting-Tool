@@ -187,6 +187,7 @@ class MainController:
             self.view.updatePlayerCompleters()
             self.view.updateTeamCompleters()
             self.updateMapButtons()
+            self.autoSetNextMap()
 
         except Exception as e:
             module_logger.exception("message")
@@ -769,6 +770,12 @@ class MainController:
                 self.runSC2ApiThread("playerIntros")
             else:
                 self.stopSC2ApiThread("playerIntros")
+
+    def autoSetNextMap(self):
+        if scctool.settings.config.parser.getboolean(
+                "Mapstats", "autoset_next_map"):
+            self.mapstatsManager.selectMap(
+                self.matchData.getNextMap())
 
     def updateMapButtons(self):
         mappool = list(self.mapstatsManager.getMapPool())

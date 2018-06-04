@@ -177,6 +177,7 @@ def setDefaultConfigAll():
 
     setDefaultConfig("Mapstats", "color1", "#6495ed")
     setDefaultConfig("Mapstats", "color2", "#000000")
+    setDefaultConfig("Mapstats", "autoset_next_map", "True")
 
 
 def renameConfigOptions():

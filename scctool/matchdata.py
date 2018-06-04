@@ -552,6 +552,19 @@ class matchData(QObject):
         except Exception:
             return False
 
+    def getNextSet(self):
+        for set_idx in range(self.getNoSets()):
+            if self.getMapScore(set_idx) == 0:
+                return set_idx
+        return -1
+
+    def getNextMap(self):
+        set_idx = self.getNextSet()
+        if set_idx == -1:
+            return "TBD"
+        else:
+            return self.getMap(set_idx)
+
     def getNextPlayer(self, team_idx):
         """Get the player of the next undecided set."""
         player = "TBD"

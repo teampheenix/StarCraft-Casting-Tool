@@ -790,6 +790,7 @@ class MainWindow(QMainWindow):
             self.qb_logo2.setIcon(QIcon(logo.provideQPixmap()))
 
             self.sl_team = QSlider(Qt.Horizontal)
+            self.sl_team.setTracking(False)
             self.sl_team.setMinimum(-1)
             self.sl_team.setMaximum(1)
             self.sl_team.setValue(0)
@@ -883,6 +884,7 @@ class MainWindow(QMainWindow):
                 self.sl_score[player_idx].setTickPosition(
                     QSlider.TicksBothSides)
                 self.sl_score[player_idx].setTickInterval(1)
+                self.sl_score[player_idx].setTracking(False)
                 self.sl_score[player_idx].valueChanged.connect(
                     lambda x,
                     player_idx=player_idx: self.sl_changed(player_idx, x))
@@ -1182,11 +1184,13 @@ class MainWindow(QMainWindow):
                     self.sl_score[set_idx].setValue(0)
                     self.controller.matchData.setMapScore(
                         set_idx, 0, overwrite=True)
+                self.controller.autoSetNextMap()
                 if myteam:
                     self.sl_team.setValue(0)
                     self.controller.matchData.setMyTeam(0)
                 if not self.controller.resetWarning():
                     self.statusBar().showMessage('')
+
         except Exception as e:
             module_logger.exception("message")
 
@@ -1200,6 +1204,7 @@ class MainWindow(QMainWindow):
                     self.controller.matchData.setMapScore(idx, score, True)
                     if allkill:
                         self.controller.allkillUpdate()
+                    self.controller.autoSetNextMap()
                     if not self.controller.resetWarning():
                         self.statusBar().showMessage('')
                 return True
@@ -1222,6 +1227,7 @@ class MainWindow(QMainWindow):
                 else:
                     self.controller.matchData.setMapScore(set_idx, value, True)
                     self.controller.allkillUpdate()
+                    self.controller.autoSetNextMap()
         except Exception as e:
             module_logger.exception("message")
 

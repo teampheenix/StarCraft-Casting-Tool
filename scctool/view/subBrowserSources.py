@@ -132,22 +132,23 @@ class SubwindowBrowserSources(QWidget):
         self.formGroupMapstats = QWidget()
         mainLayout = QVBoxLayout()
 
-        box = QGroupBox(_("Style"))
-        layout = QHBoxLayout()
-        self.qb_mapstatsStyle = StyleComboBox(
+        box = QGroupBox(_("General"))
+        layout = QFormLayout()
+
+        container = QHBoxLayout()
+        self.qb_boxStyle = StyleComboBox(
             scctool.settings.casting_html_dir + "/src/css/mapstats",
             "mapstats")
-        self.qb_mapstatsStyle.connect2WS(self.controller, 'mapstats')
+        self.qb_boxStyle.connect2WS(self.controller, 'mapstats')
+        label = QLabel(_("Style:"))
+        label.setMinimumWidth(120)
         button = QPushButton(_("Show in Browser"))
         button.clicked.connect(lambda: self.openHTML(
             scctool.settings.casting_html_dir + "/mapstats.html"))
-        layout.addWidget(self.qb_mapstatsStyle, 2)
-        layout.addWidget(button, 1)
-        box.setLayout(layout)
-        mainLayout.addWidget(box)
+        container.addWidget(self.qb_boxStyle, 2)
+        container.addWidget(button, 1)
+        layout.addRow(label, container)
 
-        box = QGroupBox(_("Map Pool to be displayed"))
-        layout = QVBoxLayout()
         self.cb_mappool = QComboBox()
         self.cb_mappool.addItem(_("Current Ladder Map Pool"))
         self.cb_mappool.addItem(_("Custom Map Pool (defined below)"))
@@ -155,7 +156,17 @@ class SubwindowBrowserSources(QWidget):
         self.cb_mappool.setCurrentIndex(
             self.controller.mapstatsManager.getMapPoolType())
         self.cb_mappool.currentIndexChanged.connect(self.changed)
-        layout.addWidget(self.cb_mappool)
+        layout.addRow(QLabel(_("Map Pool:")), self.cb_mappool)
+
+        self.cb_autoset_map = QCheckBox(_("Select the next map automatically"))
+        self.cb_autoset_map.setChecked(
+            scctool.settings.config.parser.getboolean(
+                "Mapstats", "autoset_next_map"))
+        self.cb_autoset_map.stateChanged.connect(self.changed)
+        label = QLabel(_("Next Map:"))
+        label.setMinimumWidth(120)
+        layout.addRow(label, self.cb_autoset_map)
+
         box.setLayout(layout)
         mainLayout.addWidget(box)
 
@@ -488,6 +499,11 @@ class SubwindowBrowserSources(QWidget):
             self.controller.mapstatsManager.setCustomMapPool(maps)
             self.controller.mapstatsManager.setMapPoolType(
                 self.cb_mappool.currentIndex())
+
+            scctool.settings.config.parser.set(
+                "Mapstats",
+                "autoset_next_map",
+                str(self.cb_autoset_map.isChecked()))
 
             self.controller.mapstatsManager.sendMapPool()
             self.controller.updateMapButtons()
