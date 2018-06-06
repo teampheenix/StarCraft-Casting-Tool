@@ -221,7 +221,7 @@ class MainWindow(QMainWindow):
             alphaAct = QAction(QIcon(scctool.settings.getResFile(
                 'alpha.png')), 'AlphaTL', self)
             alphaAct.triggered.connect(
-                lambda: self.controller.openURL("http://alpha.tl"))
+                lambda: self.controller.openURL("https://alpha.tl"))
             infoMenu.addAction(alphaAct)
 
             rstlAct = QAction(QIcon(scctool.settings.getResFile(
@@ -460,11 +460,11 @@ class MainWindow(QMainWindow):
             self.le_url = QLineEdit()
             self.le_url.setAlignment(Qt.AlignCenter)
 
-            self.le_url.setPlaceholderText("http://alpha.tl/match/3000")
+            self.le_url.setPlaceholderText("https://alpha.tl/match/3000")
             self.le_url.returnPressed.connect(self.refresh_click)
 
             completer = QCompleter(
-                ["http://alpha.tl/match/",
+                ["https://alpha.tl/match/",
                  "http://hdgame.net/en/tournaments/list/tournament/rstl-13/"],
                 self.le_url)
             completer.setCaseSensitivity(Qt.CaseInsensitive)
@@ -496,7 +496,7 @@ class MainWindow(QMainWindow):
                 scctool.settings.getResFile('alpha.png'))
             button.setIcon(pixmap)
             button.clicked.connect(
-                lambda: self.controller.openURL("http://alpha.tl/"))
+                lambda: self.controller.openURL("https://alpha.tl/"))
             container.addWidget(button, 0)
             button = QPushButton()
             pixmap = QIcon(
@@ -1300,6 +1300,7 @@ class MainWindow(QMainWindow):
             return
         self.controller.matchData.setMap(set_idx, self.le_map[set_idx].text())
         self.controller.updateMapButtons()
+        self.controller.autoSetNextMap(set_idx)
 
     def highlightApplyCustom(self, highlight=True, force=False):
         if not force and not self.tlock.trigger():

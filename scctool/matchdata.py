@@ -558,12 +558,12 @@ class matchData(QObject):
                 return set_idx
         return -1
 
-    def getNextMap(self):
+    def getNextMap(self, next_idx=-1):
         set_idx = self.getNextSet()
-        if set_idx == -1:
-            return "TBD"
-        else:
+        if set_idx != -1 and (next_idx == -1 or set_idx == next_idx):
             return self.getMap(set_idx)
+        else:
+            return "TBD"
 
     def getNextPlayer(self, team_idx):
         """Get the player of the next undecided set."""

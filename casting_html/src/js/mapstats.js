@@ -191,6 +191,7 @@ function removeMaps() {
 }
 
 function selectMap(name) {
+  if (name == getCurrentMap()) return;
   var maps = document.getElementById('map-list').getElementsByTagName("li");
   for (var i = 0; i < maps.length; i++) {
     mapElement = maps[i];

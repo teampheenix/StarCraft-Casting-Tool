@@ -19,7 +19,7 @@
 
 ## Feature List
 
-* **Match Grabber** for [AlphaTL](http://alpha.tl/) and [RSTL](http://hdgame.net/en/tournaments/list/tournament/rstl-12/)
+* **Match Grabber** for [AlphaTL](https://alpha.tl/) and [RSTL](http://hdgame.net/en/tournaments/list/tournament/rstl-12/)
 * **Custom Match Format**: Bo1-Bo9, All-Kill format, 1vs1 - including predefined formats for Chobo, Koprulu, WardiTV, and PSISTOM Gaming Team League.
 * Two sets of **Map Icons**: Box and Landscape in `casting_html`
 * **Scoreboard** including team icons in `casting_html`
@@ -64,7 +64,7 @@ This tool should run on any operating system that supports Python 3, e.g., Windo
 
 ## Instructions for Use
 
-Run StarCraft Casting Tool via `StarCraft-Casting-Tool.exe` (or `StarCraftCastingTool.pyw`). Enter the Match-URL of an AlphaTL or RSTL match in the *Match Grabber* tab, e.g., "http://alpha.tl/match/3000", and press *Load Data from URL*. Alternatively one can create a match in the *Custom Match* tab.  Edit the data if necessary. The sliders control the score of each map. The top slider is to select *your* team. Once selected the border of the Map Icons turn (by default) green or red depending on the result. To select your team automatically you can add it to *Favorite Teams* list under *Settings: Misc*. Similarly you can enter your players' nicknames into *Favorite Players* for auto completion.
+Run StarCraft Casting Tool via `StarCraft-Casting-Tool.exe` (or `StarCraftCastingTool.pyw`). Enter the Match-URL of an AlphaTL or RSTL match in the *Match Grabber* tab, e.g., "https://alpha.tl/match/3000", and press *Load Data from URL*. Alternatively one can create a match in the *Custom Match* tab.  Edit the data if necessary. The sliders control the score of each map. The top slider is to select *your* team. Once selected the border of the Map Icons turn (by default) green or red depending on the result. To select your team automatically you can add it to *Favorite Teams* list under *Settings: Misc*. Similarly you can enter your players' nicknames into *Favorite Players* for auto completion.
 
 ### Data for Streaming
 All data (placed in `casting_data` or `casting_html`) can be found in the respective *profile folder* that can be accessed conveniently by via SCCT's menu *Profile: Open current folder*.

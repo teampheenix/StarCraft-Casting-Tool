@@ -771,11 +771,11 @@ class MainController:
             else:
                 self.stopSC2ApiThread("playerIntros")
 
-    def autoSetNextMap(self):
+    def autoSetNextMap(self, idx=-1):
         if scctool.settings.config.parser.getboolean(
                 "Mapstats", "autoset_next_map"):
             self.mapstatsManager.selectMap(
-                self.matchData.getNextMap())
+                self.matchData.getNextMap(idx))
 
     def updateMapButtons(self):
         mappool = list(self.mapstatsManager.getMapPool())
