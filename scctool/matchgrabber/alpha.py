@@ -18,8 +18,8 @@ class MatchGrabber(MatchGrabberParent):
     def __init__(self, *args):
         """Init match grabber."""
         super().__init__(*args)
-        self._urlprefix = "http://alpha.tl/match/"
-        self._apiprefix = "http://alpha.tl/api?match="
+        self._urlprefix = "https://alpha.tl/match/"
+        self._apiprefix = "https://alpha.tl/api?match="
 
     def grabData(self, metaChange=False, logoManager=None):
         """Grab match data."""
@@ -132,7 +132,7 @@ class MatchGrabber(MatchGrabberParent):
                 "Error: No raw data.")
 
         fname = dir + "/matchbanner.png"
-        url = "http://alpha.tl/announcement/"\
+        url = "https://alpha.tl/announcement/"\
             + str(self.getID())
 
         if transparent:
