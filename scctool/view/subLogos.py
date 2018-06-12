@@ -306,7 +306,7 @@ class SubwindowLogos(QWidget):
 
         fileName, status = QFileDialog.getOpenFileName(
             self, _("Select Team Logo"), "",
-            (_("Supported Images") + " ({})").format("*.png *.jpg"))
+            (_("Supported Images") + " ({})").format("*.png *.jpg *.gif"))
         if fileName:
             logo = self.controller.logoManager.newLogo()
             logo.fromFile(fileName)
