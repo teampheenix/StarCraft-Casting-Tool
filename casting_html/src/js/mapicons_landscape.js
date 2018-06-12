@@ -135,16 +135,34 @@ function changeScore(winner, set, color, opacity, hide) {
   if (winner == 0) {
     $(mapicon).find("div.player1").removeClass('winner');
     $(mapicon).find("div.player2").removeClass('winner');
+    $(mapicon).find("div.player1").removeClass('loser');
+    $(mapicon).find("div.player2").removeClass('loser');
+    $(mapicon).find("div.race1").removeClass('winner');
+    $(mapicon).find("div.race2").removeClass('winner');
+    $(mapicon).find("div.race1").removeClass('loser');
+    $(mapicon).find("div.race2").removeClass('loser');
     data[set]['status1'] = '';
     data[set]['status2'] = '';
   } else if (winner == -1) {
+    $(mapicon).find("div.player1").removeClass('loser');
     $(mapicon).find("div.player1").addClass('winner');
     $(mapicon).find("div.player2").removeClass('winner');
+    $(mapicon).find("div.player2").addClass('loser');
+    $(mapicon).find("div.rac1").removeClass('loser');
+    $(mapicon).find("div.race1").addClass('winner');
+    $(mapicon).find("div.race2").removeClass('winner');
+    $(mapicon).find("div.race2").addClass('loser');
     data[set]['status1'] = 'winner';
     data[set]['status2'] = 'loser';
   } else if (winner == 1) {
-    $(mapicon).find("div.player1").removeClass('winner');
+    $(mapicon).find("div.player2").removeClass('loser');
     $(mapicon).find("div.player2").addClass('winner');
+    $(mapicon).find("div.player1").removeClass('winner');
+    $(mapicon).find("div.player1").addClass('loser');
+    $(mapicon).find("div.race2").removeClass('loser');
+    $(mapicon).find("div.race2").addClass('winner');
+    $(mapicon).find("div.race1").removeClass('winner');
+    $(mapicon).find("div.race1").addClass('loser');
     data[set]['status1'] = 'loser';
     data[set]['status2'] = 'winner';
   }
@@ -166,7 +184,7 @@ function changeText(iconID, label, new_value) {
     })
     .call(_changeText, [icon, object, new_value])
     .to(object, 0.25, {
-      opacity: 1
+      clearProps: "opacity"
     }, "+=0.15");
 
   function _changeText(parent, object, new_value) {
@@ -228,6 +246,7 @@ function changeMap(iconID, map, map_img) {
   function _changeMap(parent, image, name, map, map_img) {
     name.text(map);
     image.css("background-image", 'url("src/img/maps/' + map_img + '")');
+    document.documentElement.style.setProperty('--color', color1);
     $(document).ready(function() {
       parent.find(".text-fill").textfill();
     });
@@ -308,6 +327,8 @@ function fillBox(i) {
   $(mapicon).find("span.player1").text(mapdata['player1']);
   $(mapicon).find("div.player1").addClass(mapdata['status1']);
   $(mapicon).find("div.player2").addClass(mapdata['status2']);
+  $(mapicon).find("div.race1").addClass(mapdata['status1']);
+  $(mapicon).find("div.race2").addClass(mapdata['status2']);
   $(mapicon).find("span.player2").text(mapdata['player2']);
   $(mapicon).find("span.mapname").text(mapdata['mapname']);
   $(mapicon).find("span.maplabel").text(mapdata['maplabel']);
@@ -359,7 +380,7 @@ function initAnimation() {
         y: '+=100%'
       }, 0.0)
       .staggerTo([vs, [race1, race2]], 0.15, {
-        opacity: "1.0"
+        clearProps: "opacity"
       }, 0.20, '=-0.05')
       .from(player1, 0.20, {
         x: '-=110%'

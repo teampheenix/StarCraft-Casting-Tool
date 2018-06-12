@@ -102,10 +102,11 @@ class StyleComboBox(QComboBox):
         for fname in os.listdir(style_dir):
             full_fname = os.path.join(style_dir, fname)
             if os.path.isfile(full_fname):
-                label = re.search('^(.+)\.css$', fname).group(1)
+                label = re.search(
+                    '^(.+)\.css$', fname).group(1).replace('-', ' ')
                 self.addItem(label)
 
-        index = self.findText(default, Qt.MatchFixedString)
+        index = self.findText(default.replace('-', ' '), Qt.MatchFixedString)
         if index >= 0:
             self.setCurrentIndex(index)
         else:
@@ -121,12 +122,13 @@ class StyleComboBox(QComboBox):
             self.applyWS(controller, path))
 
     def applyWS(self, controller, path):
-        controller.websocketThread.changeStyle(path, self.currentText())
+        controller.websocketThread.changeStyle(
+            path, self.currentText().replace(' ', '-'))
 
     def save(self):
         scctool.settings.config.parser.set(
             "Style", self.__scope,
-            self.currentText())
+            self.currentText().replace(' ', '-'))
 
         # def apply(self, controller, file):
         #     """Apply the changes to the css files."""

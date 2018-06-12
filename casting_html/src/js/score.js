@@ -114,11 +114,13 @@ function insertData() {
   $('#logo2').css("background-image", "url('../" + data['logo2'] + "')");
   if (data['winner'][0]) {
     $('#team1').addClass('winner');
+    $('#team2').addClass('loser');
   } else {
     $('#team1').removeClass('winner');
   }
   if (data['winner'][1]) {
     $('#team2').addClass('winner');
+    $('#team1').addClass('loser');
   } else {
     $('#team2').removeClass('winner');
   }
@@ -132,16 +134,22 @@ function setWinner(winner) {
   if (winner == 0) {
     $('#team1').removeClass('winner');
     $('#team2').removeClass('winner');
+    $('#team1').removeClass('loser');
+    $('#team2').removeClass('loser');
     data['winner'][0] = false;
     data['winner'][1] = false;
   } else if (winner == 1) {
+    $('#team2').removeClass('loser');
     $('#team2').addClass('winner');
     $('#team1').removeClass('winner');
+    $('#team2').addClass('loser');
     data['winner'][0] = false;
     data['winner'][1] = true;
   } else if (winner == -1) {
+    $('#team1').removeClass('loser');
     $('#team1').addClass('winner');
     $('#team2').removeClass('winner');
+    $('#team2').addClass('loser');
     data['winner'][0] = true;
     data['winner'][1] = false;
   }

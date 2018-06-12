@@ -156,3 +156,7 @@ div.logo {
   background-position: center center;
   background-repeat: no-repeat;
 }
+
+.loser{
+  filter: brightness(75%);
+}

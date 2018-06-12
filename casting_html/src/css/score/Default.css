@@ -221,6 +221,10 @@ div.mapscore-left {
   -webkit-font-smoothing: antialiased;
 }
 
+.loser{
+  filter: brightness(75%);
+}
+
 .score {
   --winner-color: white;
   --size: 5px;

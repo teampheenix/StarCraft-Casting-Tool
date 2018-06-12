@@ -17,6 +17,8 @@
 
 ### Changes
 
+* Added the GIFf format to the list of supported file types for the team logo.
+
 * One can now use a single combined hotkey for both player intros. This option is the new default.
 
 ### Fix
