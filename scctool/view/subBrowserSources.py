@@ -556,7 +556,6 @@ class SubwindowBrowserSources(QWidget):
         """Handle close event."""
         try:
             if(not self.__dataChanged):
-                self.controller.updateHotkeys()
                 event.accept()
                 return
             if(not self.passEvent):

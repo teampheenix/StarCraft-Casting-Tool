@@ -277,7 +277,6 @@ class SubwindowConnections(QWidget):
         """Handle close event."""
         try:
             if(not self.__dataChanged):
-                self.controller.updateHotkeys()
                 CommandDropBox.clean()
                 event.accept()
                 return
@@ -290,7 +289,6 @@ class SubwindowConnections(QWidget):
                     QMessageBox.No)
                 if buttonReply == QMessageBox.Yes:
                     self.saveData()
-            self.controller.updateHotkeys()
             CommandDropBox.clean()
             event.accept()
         except Exception as e:

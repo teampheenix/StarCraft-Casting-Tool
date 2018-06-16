@@ -84,6 +84,7 @@ class SC2ApiThread(QThread):
             self.activeTask['toggleScore'] = False
             self.activeTask['toggleProduction'] = False
             self.activeTask['playerIntros'] = False
+            self.activeTask['playerLogos'] = False
             self.currentData = SC2MatchData()
             self.introData = SC2MatchData()
             self.controller = controller
@@ -126,7 +127,7 @@ class SC2ApiThread(QThread):
     def run(self):
         """Run the thread."""
         try:
-            module_logger.info("Start  Thread")
+            module_logger.info("Start Sc2 Interation Thread")
             self.exiting = False
 
             GAMEurl = "http://localhost:6119/game"
@@ -171,7 +172,8 @@ class SC2ApiThread(QThread):
                     self.requestScoreUpdate.emit(newData)
 
                 if(newData.isLive() and (self.activeTask['toggleScore'] or
-                                         self.activeTask['toggleProduction'])):
+                                         self.activeTask['toggleProduction'] or
+                                         self.activeTask['playerLogos'])):
                     self.tryToggle(newData)
 
                 self.currentData = newData
@@ -184,12 +186,20 @@ class SC2ApiThread(QThread):
         try:
             while self.exiting is False\
                 and (self.activeTask['toggleScore'] or
-                     self.activeTask['toggleProduction']):
+                     self.activeTask['toggleProduction'] or
+                     self.activeTask['playerLogos']):
                 if(isSC2onForeground()):
-                    if(self.activeTask['toggleScore']):
+                    if(self.activeTask['toggleScore'] or
+                       self.activeTask['playerLogos']):
                         TogglePlayerNames()
-                        swapPlayers = self.swapPlayers(data)
-                        self.controller.requestToggleScore(data, swapPlayers)
+                        swapPlayers = self.swapPlayers(
+                            data, self.activeTask['playerLogos'])
+                        if(self.activeTask['playerLogos']):
+                            self.controller.requestScoreLogoUpdate(data,
+                                                                   swapPlayers)
+                        if(self.activeTask['toggleScore']):
+                            self.controller.requestToggleScore(
+                                data, swapPlayers)
                     if(self.activeTask['toggleProduction']):
                         ToggleProduction()
                     break
@@ -198,7 +208,7 @@ class SC2ApiThread(QThread):
         except Exception:
             module_logger.info("Toggle not working on this OS.")
 
-    def swapPlayers(self, data):
+    def swapPlayers(self, data, force=False):
         """Detect if players are swapped relative"""
         """to SC2-Client-API data via ocr."""
         try:
@@ -209,7 +219,9 @@ class SC2ApiThread(QThread):
             # Don't use OCR if the score is tied.
             score = self.controller.matchData.getScore()
             if(score[0] == score[1] and
-               not scctool.settings.config.parser.getboolean("SCT", "CtrlX")):
+               (not scctool.settings.config.parser.getboolean(
+                   "SCT", "CtrlX")) and
+               not force):
                 return False
 
             tesseract = scctool.settings.config.getTesserAct()
@@ -238,6 +250,8 @@ class SC2ApiThread(QThread):
 
             if found:
                 module_logger.info("OCR was successfull.")
+            else:
+                module_logger.info("OCR was not successfull.")
 
             return swap
 

@@ -1,4 +1,3 @@
-var tweens = {};
 var socket = null;
 var isopen = false;
 var reconnectIntervalMs = 5000;

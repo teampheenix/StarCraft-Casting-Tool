@@ -528,6 +528,36 @@ class MainController:
             _('Specify your Nightbot Settings to use this feature'),
             '')
 
+    def requestScoreLogoUpdate(self, data, swap=False):
+        print("requestScoreLogoUpdate")
+        for player_idx in range(2):
+            team1 = data.playerInList(
+                player_idx,
+                self.matchData.getPlayerList(0),
+                self.aliasManager.translatePlayer)
+            team2 = data.playerInList(
+                player_idx, self.matchData.getPlayerList(1),
+                self.aliasManager.translatePlayer)
+
+            if swap:
+                path = 'ui_logo_{}'.format(2 - player_idx)
+            else:
+                path = 'ui_logo_{}'.format(player_idx + 1)
+
+            if(not team1 and not team2):
+                logo = ""
+                display = "none"
+            elif(team1):
+                logo = "../" + self.logoManager.getTeam1().getFile(True)
+                display = "block"
+            elif(team2):
+                logo = "../" + self.logoManager.getTeam2().getFile(True)
+                display = "block"
+
+            self.websocketThread.sendData2Path(
+                path, 'DATA',
+                {'logo': logo, 'display': display})
+
     def requestToggleScore(self, newSC2MatchData, swap=False):
         """Check if SC2-Client-API players are present"""
         """and toggle score accordingly."""
@@ -600,7 +630,7 @@ class MainController:
     def updateHotkeys(self):
         """Refresh hotkeys."""
         if(self.websocketThread.isRunning()):
-            self.websocketThread.unregister_hotkeys()
+            self.websocketThread.unregister_hotkeys(force=True)
             self.websocketThread.register_hotkeys()
 
     def updatePlayerIntroIdx(self):
@@ -770,6 +800,11 @@ class MainController:
                 self.runSC2ApiThread("playerIntros")
             else:
                 self.stopSC2ApiThread("playerIntros")
+        if path == 'ui_logo':
+            if num > 0:
+                self.runSC2ApiThread("playerLogos")
+            else:
+                self.stopSC2ApiThread("playerLogos")
 
     def autoSetNextMap(self, idx=-1):
         if scctool.settings.config.parser.getboolean(

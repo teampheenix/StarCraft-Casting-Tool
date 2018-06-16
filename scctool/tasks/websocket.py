@@ -19,9 +19,10 @@ class WebsocketThread(QThread):
     """Thread for websocket interaction."""
 
     keyboard_state = dict()
+    hooked_keys = dict()
     socketConnectionChanged = pyqtSignal(int, str)
-    valid_scopes = ['score', 'mapicons_box_[1-3]',
-                    'mapicons_landscape_[1-3]', 'intro', 'mapstats']
+    valid_scopes = ['score', 'mapicons_box_[1-3]', 'mapicons_landscape_[1-3]',
+                    'intro', 'mapstats', 'ui_logo_[1-3]']
     scopes = dict()
     intro_state = ''
     introShown = pyqtSignal()
@@ -34,6 +35,8 @@ class WebsocketThread(QThread):
         self.__controller = controller
         self.setup_scopes()
         self._hotkeys_active = False
+        self.hooked_keys['intro'] = set()
+        self.hooked_keys['ctrlx'] = set()
 
     def setup_scopes(self):
         self.scope_regex = re.compile(r'_\[\d-\d\]')
@@ -68,7 +71,7 @@ class WebsocketThread(QThread):
         # Shut down the server.
         self.__server.close()
         self.__loop.run_until_complete(self.__server.wait_closed())
-        self.unregister_hotkeys()
+        self.unregister_hotkeys(force=True)
 
         module_logger.info("WebSocketThread finished!")
 
@@ -90,7 +93,7 @@ class WebsocketThread(QThread):
             if e.event_type == keyboard.KEY_UP:
                 self.keyboard_state[(scan_code, is_keypad)] = True
 
-    def __register_hotkey(self, hotkey, callback):
+    def __register_hotkey(self, hotkey, callback, scope='intro'):
         if isinstance(hotkey, str):
             hotkey = scctool.settings.config.loadHotkey(hotkey)
         if not hotkey['name']:
@@ -98,47 +101,73 @@ class WebsocketThread(QThread):
         if hotkey['scan_code'] == 0:
             return
 
-        keyboard.hook_key(
+        value = keyboard.hook_key(
             hotkey['scan_code'],
             lambda e, hotkey=hotkey: self.__callback_on_hook(
                 hotkey['scan_code'],
                 hotkey['is_keypad'],
                 e,
                 callback))
+        self.hooked_keys[scope].add(value)
 
-    def register_hotkeys(self):
-        if (not self._hotkeys_active and
-                len(self.connected.get('intro', [])) > 0):
-            module_logger.info('Register intro hotkeys.')
-            player1 = scctool.settings.config.loadHotkey(
-                scctool.settings.config.parser.get("Intros", "hotkey_player1"))
-            player2 = scctool.settings.config.loadHotkey(
-                scctool.settings.config.parser.get("Intros", "hotkey_player2"))
-            if player1 == player2:
-                self.__register_hotkey(player1,
-                                       lambda: self.showIntro(-1))
-            else:
-                self.__register_hotkey(player1,
-                                       lambda: self.showIntro(0))
+    def register_hotkeys(self, scope=''):
+        if not scope:
+            for scope in self.hooked_keys:
+                self.register_hotkeys(scope)
+            return
+        elif scope == 'intro':
+            if (not self.hooked_keys[scope] and
+                    len(self.connected.get('intro', [])) > 0):
+                module_logger.info('Register intro hotkeys.')
+                player1 = scctool.settings.config.loadHotkey(
+                    scctool.settings.config.parser.get(
+                        "Intros", "hotkey_player1"))
+                player2 = scctool.settings.config.loadHotkey(
+                    scctool.settings.config.parser.get(
+                        "Intros", "hotkey_player2"))
+                if player1 == player2:
+                    self.__register_hotkey(player1,
+                                           lambda: self.showIntro(-1))
+                else:
+                    self.__register_hotkey(player1,
+                                           lambda: self.showIntro(0))
 
-                self.__register_hotkey(player2,
-                                       lambda: self.showIntro(1))
+                    self.__register_hotkey(player2,
+                                           lambda: self.showIntro(1))
 
-            self.__register_hotkey(
-                scctool.settings.config.parser.get("Intros", "hotkey_debug"),
-                lambda: self.sendData2Path("intro", "DEBUG_MODE", dict()))
-
-            self._hotkeys_active = True
-
-    def unregister_hotkeys(self):
-        try:
-            keyboard.unhook_all()
-        except AttributeError:
+                self.__register_hotkey(
+                    scctool.settings.config.parser.get(
+                        "Intros", "hotkey_debug"),
+                    lambda: self.sendData2Path("intro", "DEBUG_MODE", dict()))
+        elif scope == 'ctrlx':
             pass
-        finally:
-            module_logger.info('Unregister intro hotkeys.')
-            self._hotkeys_active = False
+
+        module_logger.info('Registered {} hotkeys.'.format(scope))
+
+    def unregister_hotkeys(self, scope='', force=False):
+        if not scope:
+            for scope in self.hooked_keys:
+                self.unregister_hotkeys(scope)
+            if force:
+                try:
+                    keyboard.unhook_all()
+                except AttributeError:
+                    pass
             self.keyboard_state = dict()
+        else:
+            while self.hooked_keys[scope]:
+                if scope == 'ctrlx':
+                    try:
+                        keyboard.remove_hotkey(self.hooked_keys[scope].pop())
+                    except ValueError:
+                        pass
+                else:
+                    try:
+                        keyboard.unhook(self.hooked_keys[scope].pop())
+                    except ValueError:
+                        pass
+
+            module_logger.info('Unregistered {} hotkeys.'.format(scope))
 
     def handle_path(self, path):
         paths = path.split('/')[1:]
@@ -165,7 +194,8 @@ class WebsocketThread(QThread):
         self.registerConnection(websocket, path)
         module_logger.info("Client connected!")
         primary_scope = self.get_primary_scope(path)
-        self.changeStyle(path, websocket=websocket)
+        if primary_scope != 'ui_logo':
+            self.changeStyle(path, websocket=websocket)
         try:
             self.changeFont(primary_scope, websocket=websocket)
         except ValueError:
@@ -212,8 +242,11 @@ class WebsocketThread(QThread):
         self.connected[path].add(websocket)
         self.socketConnectionChanged.emit(
             len(self.connected[path]), primary_scope)
-        if path == 'intro':
-            self.register_hotkeys()
+        if primary_scope == 'intro':
+            self.register_hotkeys('intro')
+        if primary_scope == 'ui_logo':
+            pass
+            # self.register_hotkeys('ctrlx')
 
     def unregisterConnection(self, websocket, path):
         if path in self.connected.keys():
@@ -221,8 +254,11 @@ class WebsocketThread(QThread):
             primary_scope = self.get_primary_scope(path)
             num = len(self.connected[path])
             self.socketConnectionChanged.emit(num, primary_scope)
-            if path == 'intro' and num == 0:
-                self.unregister_hotkeys()
+            if primary_scope == 'intro' and num == 0:
+                self.unregister_hotkeys('intro')
+            if primary_scope == 'ui_logo' and num == 0:
+                pass
+                # self.unregister_hotkeys('ctrlx')
 
     def changeStyle(self, path, style=None, websocket=None):
         primary_scope = self.get_primary_scope(path)
