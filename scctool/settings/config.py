@@ -2,6 +2,7 @@
 import configparser
 import logging
 import os.path
+import platform
 import sys
 
 module_logger = logging.getLogger('scctool.settings.config')  # create logger
@@ -89,14 +90,15 @@ def setDefaultConfig(sec, opt, value, func=None):
 def findTesserAct(
         default="C:\\Program Files (x86)\\Tesseract-OCR\\tesseract.exe"):
     """Search for Tesseract exceutable via registry."""
-    if(sys.platform.system().lower() != "windows"):
-        return default
     try:
-        import winreg
-        key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE,
-                             "SOFTWARE\\WOW6432Node\\Tesseract-OCR")
-        return os.path.normpath(winreg.QueryValueEx(key, "Path")[0] +
-                                '\\tesseract.exe')
+        if(platform.system().lower() != "windows"):
+            return default
+        else:
+            import winreg
+            key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE,
+                                 "SOFTWARE\\WOW6432Node\\Tesseract-OCR")
+            return os.path.normpath(winreg.QueryValueEx(key, "Path")[0] +
+                                    '\\tesseract.exe')
     except Exception:
         return default
 
