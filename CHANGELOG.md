@@ -17,11 +17,13 @@
 
 ### Changes
 
-* Added the GIFf format to the list of supported file types for the team logo.
+* Added the GIF format to the list of supported file types for the team logo.
 
 * One can now use a single combined hotkey for both player intros. This option is the new default.
 
 ### Fix
+
+* Fixed a bug in connection with tesseract OCR.
 
 * Text-to-Speech is now disabled by default.
 
