@@ -100,16 +100,16 @@ class MatchFormatAllInTheNydus(MatchFormat):
         self._matchData.writeJsonFile()
 
 
-class MatchFormatVSL(MatchFormat):
+class MatchFormatVTL(MatchFormat):
     """Interface definition"""
 
-    _name = "Validity Star League"
-    _icon = "ValidityGaming.png"
+    _name = "Validity Team League"
+    _icon = "VTL.png"
 
     def __init__(self, *args):
         """Init match grabber."""
         super().__init__(*args)
-        self._url = "http://liquipedia.net/starcraft2/Validity_Star_League"
+        self._url = "https://liquipedia.net/starcraft2/Validity_Team_League"
 
     def applyFormat(self):
         self._matchData.setCustom(7, True, False)
