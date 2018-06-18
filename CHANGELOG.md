@@ -23,11 +23,7 @@
 
 ### Fix
 
-<<<<<<< HEAD
 * Fixed a bug that would prevent the Nightbot token from being saved.
-=======
-* Fixed a bug the would prevent the Nightbot token from being saved.
->>>>>>> a40c0219a462685fea62256739c24bd9200a9fc0
 
 * Fixed a bug in connection with tesseract OCR.
 
@@ -363,5 +359,3 @@
 ### Changes
 
 * Nighbot commands that are deleted in SCCT get now deleted in Nightbot as well.
-
-
