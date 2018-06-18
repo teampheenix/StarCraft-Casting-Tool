@@ -258,6 +258,9 @@ class SubwindowConnections(QWidget):
             scctool.settings.config.parser.set(
                 "Twitch", "title_template", self.twitchTemplate.text().strip())
 
+            scctool.settings.config.parser.set(
+                "Nightbot", "token", self.nightbotToken.text().strip())
+
             scctool.settings.nightbot_commands = CommandDropBox.getData()
 
             self.__dataChanged = False
