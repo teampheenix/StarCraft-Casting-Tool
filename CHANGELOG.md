@@ -23,6 +23,8 @@
 
 ### Fix
 
+* Fixed a bug the would prevent the Nightbot token from being saved.
+
 * Fixed a bug in connection with tesseract OCR.
 
 * Text-to-Speech is now disabled by default.
