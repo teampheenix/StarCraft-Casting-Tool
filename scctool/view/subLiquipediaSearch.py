@@ -33,7 +33,7 @@ class SubwindowLiquipediaSearch(QWidget):
         self.team = team
         self.liquipediaGrabber = LiquipediaGrabber()
         self.setWindowIcon(
-            QIcon(scctool.settings.getAbsPath("src/liquipedia.png")))
+            QIcon(scctool.settings.getResFile("liquipedia.png")))
 
         self.setWindowModality(Qt.ApplicationModal)
 
@@ -108,7 +108,7 @@ class SubwindowLiquipediaSearch(QWidget):
             Qt.WaitCursor)
         self.clean()
         loading_map = QPixmap(
-            scctool.settings.getAbsPath("src/loading.png"))
+            scctool.settings.getResFile("loading.png"))
         try:
             self.result_list.clear()
             idx = 0
