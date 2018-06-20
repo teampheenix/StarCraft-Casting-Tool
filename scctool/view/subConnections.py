@@ -261,10 +261,10 @@ class SubwindowConnections(QWidget):
             scctool.settings.config.parser.set(
                 "Nightbot", "token", self.nightbotToken.text().strip())
 
-            scctool.settings.nightbot_commands = CommandDropBox.getData()
-
             self.__dataChanged = False
             self.controller.refreshButtonStatus()
+
+        scctool.settings.nightbot_commands = CommandDropBox.getData()
 
     def saveCloseWindow(self):
         """Save and close window."""
