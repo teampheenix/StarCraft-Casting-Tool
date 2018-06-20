@@ -17,11 +17,15 @@
 
 ### Changes
 
+* Added option to import and overwrite current profile.
+
 * Added the GIF format to the list of supported file types for the team logo.
 
 * One can now use a single combined hotkey for both player intros. This option is the new default.
 
 ### Fix
+
+* Fixed a bug to save nightbot commands.
 
 * Fixed a bug the would prevent the Nightbot token from being saved.
 
