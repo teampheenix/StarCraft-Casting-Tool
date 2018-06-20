@@ -133,19 +133,22 @@ class ProfileManager:
 
         self._saveSettings()
 
-    def addProfile(self, name, current=False, default=False, copy=''):
+    def addProfile(self, name, current=False, default=False, copy='', id=''):
         name = name.strip()
         if not name:
             raise ValueError(_('You cannot use empty names.'))
 
-        for id, info in self._profiles.items():
+        for info in self._profiles.values():
             if info['name'] == name:
                 raise ValueError(_('The name is already in use.'))
 
         if copy and copy not in self._profiles.keys():
             raise ValueError(_('Initial profile is not valid.'))
 
-        profile = self._uniqid()
+        if id and id not in self._profiles.keys():
+            profile = id
+        else:
+            profile = self._uniqid()
 
         self._profiles[profile] = dict()
         self._profiles[profile]['name'] = name
@@ -193,9 +196,9 @@ class ProfileManager:
             if uniqid not in self._profiles.keys():
                 return uniqid
 
-    def deleteProfile(self, profile):
+    def deleteProfile(self, profile, force=False):
         if profile in self._profiles.keys():
-            if len(self._profiles) <= 1:
+            if not force and len(self._profiles) <= 1:
                 raise ValueError("Last profile cannot be deleted.")
             dir = self.profiledir(profile)
             shutil.rmtree(dir)
@@ -214,8 +217,8 @@ class ProfileManager:
         dir = self.profiledir(profile)
         shutil.make_archive(filename, 'zip', dir)
 
-    def importProfile(self, filename, name):
-        id = self.addProfile(name)
+    def importProfile(self, filename, name, id=''):
+        id = self.addProfile(name, id=id)
         dir = self.profiledir(id)
         shutil.unpack_archive(filename, dir)
         self._saveSettings()

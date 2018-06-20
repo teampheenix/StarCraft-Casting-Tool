@@ -1140,8 +1140,12 @@ class ProfileMenu(QMenu):
         action.triggered.connect(self.removeProfile)
 
         action = self._menu.addAction(QIcon(scctool.settings.getResFile(
-            'import.png')), _('Import'))
+            'import.png')), _('Import as New'))
         action.triggered.connect(self.importProfile)
+
+        action = self._menu.addAction(QIcon(scctool.settings.getResFile(
+            'import.png')), _('Import && Overwrite'))
+        action.triggered.connect(self.importProfileOverwrite)
 
         action = self._menu.addAction(QIcon(scctool.settings.getResFile(
             'export.png')), _('Export'))
@@ -1290,6 +1294,40 @@ class ProfileMenu(QMenu):
             finally:
                 QApplication.restoreOverrideCursor()
             return
+
+    def importProfileOverwrite(self):
+        filename, ok = QFileDialog.getOpenFileName(
+            self._parent,
+            'Import Profile',
+            scctool.settings.profileManager.basedir(),
+            _("ZIP archive") + " (*.zip)")
+        if not ok:
+            return
+        profile = scctool.settings.profileManager.current()
+        id = profile['id']
+        name = profile['name']
+        buttonReply = QMessageBox.question(
+            self._parent, _("Overwrite Profile"),
+            _("Are you sure you wish to overwrite"
+              " the current profile '{}'?".format(
+                  name)),
+            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.No)
+        if buttonReply == QMessageBox.No:
+            return
+
+        QApplication.setOverrideCursor(Qt.WaitCursor)
+        try:
+            scctool.settings.profileManager.deleteProfile(id, True)
+            id = scctool.settings.profileManager.importProfile(
+                filename, name, id)
+            self.addProfile(id, name, False)
+            self.selectProfile(id)
+        except Exception as e:
+            QMessageBox.information(self._parent, _(
+                "Import && Overwrite Profile"), str(e))
+        finally:
+            QApplication.restoreOverrideCursor()
 
     def selectProfile(self, myid):
         for id, action in self._profiles.items():
