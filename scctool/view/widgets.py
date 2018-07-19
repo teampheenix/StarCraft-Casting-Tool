@@ -13,10 +13,11 @@ from PyQt5.QtGui import (QBrush, QColor, QDrag, QIcon, QKeySequence, QPainter,
                          QPen, QRadialGradient)
 from PyQt5.QtWidgets import (QAbstractButton, QAction, QApplication,
                              QColorDialog, QComboBox, QCompleter, QFileDialog,
-                             QFrame, QHBoxLayout, QHeaderView, QInputDialog,
-                             QLabel, QLineEdit, QListWidget, QListWidgetItem,
-                             QMenu, QMessageBox, QProgressBar, QProgressDialog,
-                             QPushButton, QShortcut, QSizePolicy, QStyle,
+                             QFormLayout, QFrame, QGroupBox, QHBoxLayout,
+                             QHeaderView, QInputDialog, QLabel, QLineEdit,
+                             QListWidget, QListWidgetItem, QMenu, QMessageBox,
+                             QProgressBar, QProgressDialog, QPushButton,
+                             QRadioButton, QShortcut, QSizePolicy, QStyle,
                              QStyleOptionButton, QTableWidget,
                              QTableWidgetItem, QTextBrowser, QTreeWidget,
                              QTreeWidgetItem)
@@ -1362,3 +1363,102 @@ class ProfileMenu(QMenu):
             finally:
                 QApplication.restoreOverrideCursor()
             return
+
+
+class ScopeGroupBox(QGroupBox):
+    """Define QGroupBox for icon scope."""
+
+    dataModified = pyqtSignal()
+
+    def __init__(self, name='', options=list(), scope='all', parent=None):
+        """Init lineedit."""
+        super().__init__(name, parent)
+        layout = QFormLayout()
+        self.bt_dynamic = QRadioButton(_("Dynamic:"))
+        self.bt_dynamic.toggled.connect(lambda: self.btnstate('dynamic'))
+        self.bt_dynamic.setMinimumWidth(120)
+        self.scope_box = QComboBox()
+        found = False
+        idx = 0
+        for key, item in options.items():
+            self.scope_box.addItem(item, key)
+            if key == scope:
+                self.scope_box.setCurrentIndex(idx)
+                self.bt_dynamic.setChecked(True)
+                found = True
+            idx = idx + 1
+        layout.addRow(self.bt_dynamic, self.scope_box)
+
+        self.bt_static = QRadioButton(_("Static:"))
+        self.bt_static.toggled.connect(lambda: self.btnstate('static'))
+        self.bt_static.setMinimumWidth(120)
+
+        container = QHBoxLayout()
+        self.label1 = QLabel(_('From'))
+        container.addWidget(self.label1)
+        self.cb_lower = QComboBox()
+        for set_idx in range(0, scctool.settings.max_no_sets):
+            self.cb_lower.addItem(_('Map {}').format(set_idx + 1), set_idx)
+        self.cb_lower.currentIndexChanged.connect(self.adjustRangeUpper)
+        container.addWidget(self.cb_lower, 0)
+        self.label2 = QLabel(_('to'))
+        self.label2.setAlignment(Qt.AlignCenter)
+        container.addWidget(self.label2, 0)
+        self.cb_upper = QComboBox()
+        for set_idx in range(0, scctool.settings.max_no_sets):
+            self.cb_upper.addItem(_('Map {}').format(set_idx + 1), set_idx)
+        container.addWidget(self.cb_upper, 0)
+        layout.addRow(self.bt_static, container)
+
+        if not found:
+            m = re.match(r'^(\d+)-(\d+)$', scope)
+            if m and int(m.group(1)) <= int(m.group(2)):
+                self.bt_static.setChecked(True)
+                self.cb_upper.setCurrentIndex(int(m.group(2)) - 1)
+                self.cb_lower.setCurrentIndex(int(m.group(1)) - 1)
+
+        self.setLayout(layout)
+
+        self.btnstate('dynamic')
+        self.btnstate('static')
+
+        self.bt_dynamic.toggled.connect(self.triggerSignal)
+        self.bt_static.toggled.connect(self.triggerSignal)
+        self.cb_upper.currentIndexChanged.connect(self.triggerSignal)
+        self.cb_lower.currentIndexChanged.connect(self.triggerSignal)
+        self.scope_box.currentIndexChanged.connect(self.triggerSignal)
+
+    def btnstate(self, b):
+        if b == 'dynamic':
+            self.scope_box.setEnabled(self.bt_dynamic.isChecked())
+        elif b == 'static':
+            self.cb_lower.setEnabled(self.bt_static.isChecked())
+            self.cb_upper.setEnabled(self.bt_static.isChecked())
+            self.label1.setEnabled(self.bt_static.isChecked())
+            self.label2.setEnabled(self.bt_static.isChecked())
+
+    def adjustRangeUpper(self, lower):
+        current_idx = self.cb_upper.itemData(self.cb_upper.currentIndex())
+        self.cb_upper.clear()
+        rg = range(lower, scctool.settings.max_no_sets)
+        if current_idx not in rg:
+            current_idx = lower
+        idx = 0
+        for set_idx in rg:
+            self.cb_upper.addItem(_('Map {}').format(set_idx + 1), set_idx)
+            if set_idx == current_idx:
+                self.cb_upper.setCurrentIndex(idx)
+            idx = idx + 1
+
+    def getScope(self):
+        if self.bt_dynamic.isChecked():
+            return self.scope_box.itemData(self.scope_box.currentIndex())
+        else:
+            lower = int(self.cb_lower.itemData(
+                self.cb_lower.currentIndex())) + 1
+            upper = int(self.cb_upper.itemData(
+                self.cb_upper.currentIndex())) + 1
+            return '{}-{}'.format(lower, upper)
+
+    def triggerSignal(self):
+        self.dataModified.emit()

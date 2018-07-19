@@ -22,9 +22,11 @@ class matchData(QObject):
     metaChangedSignal = pyqtSignal()
     scopes = {'all': 'All Maps',
               'not-ace': 'None Ace Maps',
-              'ace': 'Ace maps',
+              'ace': 'Ace Maps',
               'decided': 'Decided Maps',
               'decided+1': 'Decided Maps + 1',
+              'current': 'Current Map',
+              'current+1': 'Current and Previous Map',
               'undecided': 'Undecided Maps'}
 
     def __init__(self, controller):
@@ -1208,6 +1210,28 @@ class matchData(QObject):
             for idx in range(0, self.getNoSets()):
                 if self.getMapScore(idx) == 0:
                     yield idx
+            return
+        if scope == 'current':
+            idx = self.getNextSet()
+            if idx == -1:
+                if self.getNoSets() > 0:
+                    yield self.getNoSets() - 1
+            else:
+                yield idx
+            return
+        if scope == 'current+1':
+            idx = self.getNextSet()
+            if idx == -1:
+                if self.getNoSets() > 0:
+                    yield self.getNoSets() - 1
+                if self.getNoSets() - 1 > 0:
+                    yield self.getNoSets() - 2
+            else:
+                yield idx
+                if idx > 0:
+                    yield idx - 1
+                elif idx < self.getNoSets():
+                    yield idx + 1
             return
         m = re.match(r'^(\d+)-(\d+)$', scope)
         if m and int(m.group(1)) <= int(m.group(2)):

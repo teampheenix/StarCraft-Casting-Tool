@@ -12,7 +12,7 @@ from PyQt5.QtWidgets import (QCheckBox, QComboBox, QDoubleSpinBox, QFormLayout,
                              QSpacerItem, QTabWidget, QVBoxLayout, QWidget)
 
 import scctool.settings
-from scctool.view.widgets import HotkeyLayout, StyleComboBox
+from scctool.view.widgets import HotkeyLayout, ScopeGroupBox, StyleComboBox
 
 # create logger
 module_logger = logging.getLogger('scctool.view.subConnections')
@@ -269,6 +269,19 @@ class SubwindowBrowserSources(QWidget):
             _("Icon Padding:") + " "), self.sb_padding_box)
         box.setLayout(layout)
         mainLayout.addWidget(box)
+
+        options = self.controller.matchData.scopes
+        self.scope_box = dict()
+        for idx in range(0, 3):
+            self.scope_box[idx] = ScopeGroupBox(
+                _("Icon Set {} Scope".format(idx + 1)),
+                options,
+                scctool.settings.config.parser.get(
+                    "MapIcons", "scope_box_{}".format(idx + 1)),
+                self)
+            self.scope_box[idx].dataModified.connect(self.changed)
+            mainLayout.addWidget(self.scope_box[idx])
+
         mainLayout.addItem(QSpacerItem(
             0, 0, QSizePolicy.Minimum, QSizePolicy.Expanding))
         self.formGroupMapBox.setLayout(mainLayout)
@@ -306,6 +319,19 @@ class SubwindowBrowserSources(QWidget):
             _("Icon Padding:") + " "), self.sb_padding_landscape)
         box.setLayout(layout)
         mainLayout.addWidget(box)
+
+        options = self.controller.matchData.scopes
+        self.scope_landscape = dict()
+        for idx in range(0, 3):
+            self.scope_landscape[idx] = ScopeGroupBox(
+                _("Icon Set {} Scope".format(idx + 1)),
+                options,
+                scctool.settings.config.parser.get(
+                    "MapIcons", "scope_landscape_{}".format(idx + 1)),
+                self)
+            self.scope_landscape[idx].dataModified.connect(self.changed)
+            mainLayout.addWidget(self.scope_landscape[idx])
+
         mainLayout.addItem(QSpacerItem(
             0, 0, QSizePolicy.Minimum, QSizePolicy.Expanding))
         self.formGroupMapLandscape.setLayout(mainLayout)
@@ -507,6 +533,14 @@ class SubwindowBrowserSources(QWidget):
 
             self.controller.mapstatsManager.sendMapPool()
             self.controller.updateMapButtons()
+
+            for idx in range(0, 3):
+                scctool.settings.config.parser.set(
+                    "MapIcons", "scope_box_{}".format(idx + 1),
+                    self.scope_box[idx].getScope())
+                scctool.settings.config.parser.set(
+                    "MapIcons", "scope_landscape_{}".format(idx + 1),
+                    self.scope_landscape[idx].getScope())
 
             self.__dataChanged = False
             # self.controller.refreshButtonStatus()

@@ -157,6 +157,12 @@ def setDefaultConfigAll():
     setDefaultConfig("MapIcons", "notplayed_opacity", "0.4")
     setDefaultConfig("MapIcons", "padding_landscape", "2.0")
     setDefaultConfig("MapIcons", "padding_box", "2.0")
+    setDefaultConfig("MapIcons", "scope_box_1", "all")
+    setDefaultConfig("MapIcons", "scope_box_2", "not-ace")
+    setDefaultConfig("MapIcons", "scope_box_3", "ace")
+    setDefaultConfig("MapIcons", "scope_landscape_1", "all")
+    setDefaultConfig("MapIcons", "scope_landscape_2", "not-ace")
+    setDefaultConfig("MapIcons", "scope_landscape_3", "ace")
 
     setDefaultConfig("Style", "mapicons_box", "Default")
     setDefaultConfig("Style", "mapicons_landscape", "Default")
