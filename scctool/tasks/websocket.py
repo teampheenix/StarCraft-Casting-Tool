@@ -23,6 +23,7 @@ class WebsocketThread(QThread):
     socketConnectionChanged = pyqtSignal(int, str)
     valid_scopes = ['score', 'mapicons_box_[1-3]', 'mapicons_landscape_[1-3]',
                     'intro', 'mapstats', 'ui_logo_[1-3]']
+    mapicon_sets = dict()
     scopes = dict()
     intro_state = ''
     introShown = pyqtSignal()
@@ -215,8 +216,10 @@ class WebsocketThread(QThread):
                 scope = 'all'
             data = self.__controller.matchData.getMapIconsData()
             processedData = dict()
+            self.mapicon_sets[path] = set()
             for idx in self.__controller.matchData.parseScope(scope):
                 processedData[idx + 1] = data[idx + 1]
+                self.mapicon_sets[path].add(idx + 1)
             self.sendData2WS(websocket, 'DATA', processedData)
 
         while True:
@@ -393,3 +396,27 @@ class WebsocketThread(QThread):
             module_logger.exception("message")
 
         return state
+
+    def compareMapIconSets(self, path):
+
+        scope = path.replace('mapicons', 'scope')
+        scope = scctool.settings.config.parser.get("MapIcons", scope)
+        if not self.__controller.matchData.isValidScope(scope):
+            scope = 'all'
+        old_set = self.mapicon_sets.get(path, set())
+        new_set = set()
+        for idx in self.__controller.matchData.parseScope(scope):
+            new_set.add(idx + 1)
+
+        # This can later be used to animate single items in and out:
+        # for idx in (old_set - new_set):
+        #     yield idx, True
+        #
+        # for idx in (new_set - old_set):
+        #     yield idx, False
+
+        self.mapicon_sets[path] = new_set
+
+        if old_set != new_set:
+            for item in new_set:
+                yield item

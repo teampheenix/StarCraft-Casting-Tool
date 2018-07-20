@@ -830,19 +830,19 @@ class MainController:
 
         for type in ['box', 'landscape']:
             for idx in range(0, 3):
-                path = 'mapicons_{}_{}'.format(type, idx)
-                scope = 'scope_{}_{}'.format(type, idx)
+                path = 'mapicons_{}_{}'.format(type, idx + 1)
+                scope = 'scope_{}_{}'.format(type, idx + 1)
                 scope = scctool.settings.config.parser.get("MapIcons", scope)
                 if not self.matchData.isValidScope(scope):
                     scope = 'all'
                 processedData = dict()
+                self.websocketThread.mapicon_sets[path] = set()
                 for idx in self.matchData.parseScope(scope):
                     processedData[idx + 1] = data[idx + 1]
+                    self.websocketThread.mapicon_sets[path].add(idx + 1)
                 self.websocketThread.sendData2Path(path,
                                                    'DATA',
                                                    processedData)
-                module_logger.info('MetaDataChange: {} {} {}'.format(
-                    type, idx, processedData))
 
     def handleMatchDataChange(self, label, object):
         if label == 'team':
@@ -928,6 +928,20 @@ class MainController:
                     'icon': object['set_idx'] + 1,
                     'map': object['value'],
                     'map_img': self.getMapImg(object['value'])})
+
+        data = self.matchData.getMapIconsData()
+        for type in ['box', 'landscape']:
+            for idx in range(0, 3):
+                path = 'mapicons_{}_{}'.format(type, idx + 1)
+                if len(self.websocketThread.connected.get(path, set())) > 0:
+                    processedData = dict()
+                    for set_idx in \
+                            self.websocketThread.compareMapIconSets(path):
+                        processedData[set_idx] = data[set_idx]
+                    if(len(processedData) > 0):
+                        self.websocketThread.sendData2Path(path,
+                                                           'DATA',
+                                                           processedData)
 
     def newVersion(self, version, force=False):
         """Display dialog for new version."""

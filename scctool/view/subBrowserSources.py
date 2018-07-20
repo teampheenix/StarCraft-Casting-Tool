@@ -541,7 +541,7 @@ class SubwindowBrowserSources(QWidget):
                 scctool.settings.config.parser.set(
                     "MapIcons", "scope_landscape_{}".format(idx + 1),
                     self.scope_landscape[idx].getScope())
-
+            self.controller.matchMetaDataChanged()
             self.__dataChanged = False
             # self.controller.refreshButtonStatus()
 
