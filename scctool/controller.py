@@ -827,10 +827,22 @@ class MainController:
         data = self.matchData.getScoreData()
         self.websocketThread.sendData2Path("score", "ALL_DATA", data)
         data = self.matchData.getMapIconsData()
-        self.websocketThread.sendData2Path(
-            ['mapicons_box', 'mapicons_landscape'],
-            'DATA',
-            data)
+
+        for type in ['box', 'landscape']:
+            for idx in range(0, 3):
+                path = 'mapicons_{}_{}'.format(type, idx)
+                scope = 'scope_{}_{}'.format(type, idx)
+                scope = scctool.settings.config.parser.get("MapIcons", scope)
+                if not self.matchData.isValidScope(scope):
+                    scope = 'all'
+                processedData = dict()
+                for idx in self.matchData.parseScope(scope):
+                    processedData[idx + 1] = data[idx + 1]
+                self.websocketThread.sendData2Path(path,
+                                                   'DATA',
+                                                   processedData)
+                module_logger.info('MetaDataChange: {} {} {}'.format(
+                    type, idx, processedData))
 
     def handleMatchDataChange(self, label, object):
         if label == 'team':

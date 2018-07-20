@@ -110,8 +110,7 @@ function dataChanged(newData) {
 }
 
 function processData(myData) {
-  var length = Object.keys(data).length;
-  for (var i = 1; i <= length; i++) {
+  for (var i in data) {
     try {
       delete myData[i]['score_color'];
     } catch (e) {}
@@ -121,6 +120,7 @@ function processData(myData) {
 
 function changeScore(winner, set, color, opacity) {
   var mapicon = $("#mapicon" + (set).toString());
+  if(!mapicon.length) return;
   $(mapicon).find("div.image").css("border-color", color);
   $(mapicon).find("div.opa").css('opacity', opacity);
   data[set]['opacity'] = opacity;
@@ -164,6 +164,7 @@ function changeScore(winner, set, color, opacity) {
 
 function changeText(iconID, label, new_value) {
   var icon = $('#mapicon' + iconID.toString());
+  if(!icon.length) return;
   var id = iconID.toString() + label;
   var object = icon.find("span." + label);
   data[iconID][label] = new_value;
@@ -191,6 +192,7 @@ function changeText(iconID, label, new_value) {
 
 function changeRace(iconID, team, race) {
   var icon = $('#mapicon' + iconID.toString());
+  if(!icon.length) return;
   var id = iconID.toString() + "race" + team.toString();
   var object = icon.find("div.race" + team.toString());
   data[iconID]["race" + team.toString()] = race;
@@ -216,6 +218,7 @@ function changeRace(iconID, team, race) {
 
 function changeMap(iconID, map, map_img) {
   var icon = $('#mapicon' + iconID.toString());
+  if(!icon.length) return;
   var image = icon.find("div.image");
   var name = icon.find("span.mapname")
   var id = iconID.toString() + "map";
@@ -315,7 +318,8 @@ function hideFill(i) {
 function fillBox(i) {
   var mapicon = "#mapicon" + i.toString();
   var mapdata = data[i];
-  var length = Object.keys(data).length;
+  var keys = Object.keys(data)
+  var length = keys[keys.length - 1];
   $(mapicon).find("span.player1").text(mapdata['player1']);
   $(mapicon).find("div.player1").addClass(mapdata['status1']);
   $(mapicon).find("div.player2").addClass(mapdata['status2']);
@@ -341,9 +345,8 @@ function fillBox(i) {
 
 function initAnimation() {
   tweenInitial = new TimelineMax();
-  var length = Object.keys(data).length;
   var mapicon_tweens = [];
-  for (var i = 1; i <= length; i++) {
+  for (var i in data) {
     var mapicon = $("#mapicon" + i.toString());
     var image = mapicon.find("div.image");
     var image = mapicon.find("div.image");

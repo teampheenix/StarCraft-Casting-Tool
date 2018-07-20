@@ -209,8 +209,15 @@ class WebsocketThread(QThread):
             self.sendData2WS(websocket, "ALL_DATA", data)
         elif primary_scope in ['mapicons_box', 'mapicons_landscape']:
             self.changePadding(primary_scope, websocket=websocket)
+            scope = path.replace('mapicons', 'scope')
+            scope = scctool.settings.config.parser.get("MapIcons", scope)
+            if not self.__controller.matchData.isValidScope(scope):
+                scope = 'all'
             data = self.__controller.matchData.getMapIconsData()
-            self.sendData2WS(websocket, 'DATA', data)
+            processedData = dict()
+            for idx in self.__controller.matchData.parseScope(scope):
+                processedData[idx + 1] = data[idx + 1]
+            self.sendData2WS(websocket, 'DATA', processedData)
 
         while True:
             try:
