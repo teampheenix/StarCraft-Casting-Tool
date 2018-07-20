@@ -69,7 +69,8 @@ class matchData(QObject):
     def applyCustomFormat(self, name):
         if name in self.__CUSTOM_FORMATS:
             customFormat = self.__CUSTOM_FORMATS[name](self)
-            customFormat.applyFormat()
+            with self.emitLock(True, self.metaChangedSignal):
+                customFormat.applyFormat()
         else:
             raise ValueError("Unknown Custom Match Format.")
 
@@ -247,22 +248,20 @@ class matchData(QObject):
 
     def setCustom(self, bestof, allkill, solo):
         """Set a custom match format."""
-        with self.emitLock():
-            bestof = int(bestof)
-            allkill = bool(allkill)
-            if(bestof == 2):
-                no_sets = 2
-            else:
-                no_sets = bestof + 1 - bestof % 2
+        bestof = int(bestof)
+        allkill = bool(allkill)
+        if(bestof == 2):
+            no_sets = 2
+        else:
+            no_sets = bestof + 1 - bestof % 2
 
-            self.setNoSets(no_sets, bestof)
-            self.resetLabels()
-            self.setAllKill(allkill)
-            self.setProvider("Custom")
-            self.setID(0)
-            self.setURL("")
-            self.setSolo(solo)
-        self.__emitSignal('meta')
+        self.setNoSets(no_sets, bestof)
+        self.resetLabels()
+        self.setAllKill(allkill)
+        self.setProvider("Custom")
+        self.setID(0)
+        self.setURL("")
+        self.setSolo(solo)
 
     def resetData(self, reset_options=True):
         """Reset all data to default values."""

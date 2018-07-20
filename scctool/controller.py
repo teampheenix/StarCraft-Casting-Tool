@@ -213,14 +213,15 @@ class MainController:
         """Apply a custom match format."""
         msg = ''
         try:
-
-            self.matchData.setCustom(bestof, allkill, solo)
-            self.matchData.setMinSets(minSets)
-            self.matchData.setURL(url)
-            self.matchData.writeJsonFile()
-            self.updateForms()
-            self.view.resizeWindow()
-            self.matchData.updateLeagueIcon()
+            with self.matchData.emitLock(True,
+                                         self.matchData.metaChangedSignal):
+                self.matchData.setCustom(bestof, allkill, solo)
+                self.matchData.setMinSets(minSets)
+                self.matchData.setURL(url)
+                self.matchData.writeJsonFile()
+                self.updateForms()
+                self.view.resizeWindow()
+                self.matchData.updateLeagueIcon()
 
         except Exception as e:
             msg = str(e)
