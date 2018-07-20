@@ -30,7 +30,8 @@ class MatchGrabber(MatchGrabberParent):
             raise ValueError(msg)
         else:
             self._rawData = data
-            overwrite = self._matchData.getURL().strip() != self.getURL().strip()
+            overwrite = self._matchData.getURL().strip() != \
+                self.getURL().strip()
             self._matchData.setNoSets(5, resetPlayers=True)
             self._matchData.setMinSets(3)
             self._matchData.setSolo(False)

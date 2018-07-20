@@ -33,8 +33,9 @@ class MatchFormatKoprulu(MatchFormat):
         self._url = "http://koprulu-league.fr.nf"
 
     def applyFormat(self):
-        self._matchData.setCustom(7, True, False)
-        self._matchData.setMinSets(4)
+        self._matchData.setCustom(5, False, False)
+        self._matchData.setMinSets(3)
+        self._matchData.setLabel(4, "Ace Map")
         self._matchData.setURL(self._url)
         self._matchData.setLeague(self._name)
         self._matchData.writeJsonFile()
@@ -66,7 +67,8 @@ class MatchFormatPsi(MatchFormat):
     def __init__(self, *args):
         """Init match grabber."""
         super().__init__(*args)
-        self._url = "http://liquipedia.net/starcraft2/PSISTORM_Gaming_Team_League"
+        self._url = \
+            "http://liquipedia.net/starcraft2/PSISTORM_Gaming_Team_League"
 
     def applyFormat(self):
         self._matchData.setCustom(5, False, False)
