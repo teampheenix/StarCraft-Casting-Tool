@@ -166,6 +166,7 @@ function markPlayed(map, played) {
     console.log(e);
     return;
   }
+  storeData("mapdata");
   var ul_maplist = document.getElementById('map-list');
   var existing_maps = ul_maplist.getElementsByTagName("li");
   for (var i = 0; i < existing_maps.length; i++) {
