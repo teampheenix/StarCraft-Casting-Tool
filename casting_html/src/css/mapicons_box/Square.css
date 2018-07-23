@@ -61,6 +61,10 @@ div.image {
   -webkit-font-smoothing: antialiased;
 }
 
+div.tbd {
+  background-image: url("../../img/textures/TBD_1.jpg")
+}
+
 div.upper-panel {
   position: absolute;
   height: 35px;

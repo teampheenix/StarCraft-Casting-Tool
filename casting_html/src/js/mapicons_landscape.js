@@ -247,8 +247,14 @@ function changeMap(iconID, map, map_img) {
 
   function _changeMap(parent, image, name, map, map_img) {
     name.text(map);
-    image.css("background-image", 'url("src/img/maps/' + map_img + '")');
-    document.documentElement.style.setProperty('--color', color1);
+    if(map == "TBD"){
+      image.addClass('tbd');
+      image.css("background-image", '');
+    }else{
+      image.removeClass('tbd');
+      image.css("background-image", 'url("src/img/maps/' + map_img + '")');
+    }
+
     $(document).ready(function() {
       parent.find(".text-fill").textfill();
     });
@@ -343,7 +349,14 @@ function fillBox(i) {
   } else {
     $(mapicon).find("div.circle").css('visibility', 'visible');
   }
-  $(mapicon).find("div.mapimg").css("background-image", 'url("src/img/maps/' + mapdata['map_img'] + '")');
+  var image = $(mapicon).find("div.mapimg");
+  if(mapdata['mapname'] == "TBD"){
+    image.addClass('tbd');
+    image.css("background-image", '');
+  }else{
+    image.removeClass('tbd');
+    image.css("background-image", 'url("src/img/maps/' + mapdata['map_img'] + '")');
+  }
   $(mapicon).find("div.opa").css('opacity', mapdata['opacity']);
   $(mapicon).ready(function() {
     $(mapicon).find(".text-fill").textfill();

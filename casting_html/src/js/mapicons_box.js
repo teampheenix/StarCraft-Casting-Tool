@@ -241,7 +241,13 @@ function changeMap(iconID, map, map_img) {
 
   function _changeMap(parent, image, name, map, map_img) {
     name.text(map);
-    image.css("background-image", 'url("src/img/maps/' + map_img + '")');
+    if(map == "TBD"){
+      image.addClass('tbd');
+      image.css("background-image", '');
+    }else{
+      image.removeClass('tbd');
+      image.css("background-image", 'url("src/img/maps/' + map_img + '")');
+    }
     $(document).ready(function() {
       parent.find(".text-fill").textfill();
     });
@@ -331,7 +337,14 @@ function fillBox(i) {
   $(mapicon).find("div.race1").attr("id", mapdata['race1']);
   $(mapicon).find("div.race2").attr("id", mapdata['race2']);
   $(mapicon).find("div.image").css("border-color", mapdata['border_color']);
-  $(mapicon).find("div.image").css("background-image", 'url("src/img/maps/' + mapdata['map_img'] + '")');
+  var image = $(mapicon).find("div.image");
+  if(mapdata['mapname'] == "TBD"){
+    image.addClass('tbd');
+    image.css("background-image", '');
+  }else{
+    image.removeClass('tbd');
+    image.css("background-image", 'url("src/img/maps/' + mapdata['map_img'] + '")');
+  }
   $(mapicon).find("div.opa").css('opacity', mapdata['opacity']);
   $(mapicon).ready(function() {
     $(mapicon).find(".text-fill").textfill();

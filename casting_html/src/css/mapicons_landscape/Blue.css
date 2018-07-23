@@ -139,6 +139,10 @@ div.lower-text {
   box-sizing: border-box;
 }
 
+div.tbd {
+  background-image: url("../../img/textures/TBD_1.jpg")
+}
+
 div.maplabel {
   position: absolute;
   right: var(--border-radius);

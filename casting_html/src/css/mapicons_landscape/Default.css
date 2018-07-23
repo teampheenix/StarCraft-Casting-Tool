@@ -145,6 +145,10 @@ div.lower-text {
   background: rgba(0, 0, 0, 0.6) !important;
 }
 
+div.tbd {
+  background-image: url("../../img/textures/TBD_1.jpg")
+}
+
 div.maplabel {
   position: absolute;
   right: var(--border-radius);
