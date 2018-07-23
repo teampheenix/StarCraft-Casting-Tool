@@ -104,7 +104,11 @@ class StyleComboBox(QComboBox):
             full_fname = os.path.join(style_dir, fname)
             if os.path.isfile(full_fname):
                 label = re.search(
-                    '^(.+)\.css$', fname).group(1).replace('-', ' ')
+                    '^(.+)\.css$', fname).group(1)
+                if ' ' in label:
+                    os.rename(full_fname, os.path.join(
+                        style_dir, label.replace(' ', '-') + '.css'))
+                label = label.replace('-', ' ')
                 self.addItem(label)
 
         index = self.findText(default.replace('-', ' '), Qt.MatchFixedString)
