@@ -5,6 +5,8 @@
 
 ### New
 
+* Already played maps can be marked in the mapstats browser source. [2press]
+
 * Added a 'Blue' skin/style for the score icon, the landscape map icons, and the player intro. [2press]
 
 * Added scope and volume to Text-to-Speech settings. [2press]
@@ -27,6 +29,8 @@
 
 ### Fix
 
+* Custom css-files with whitespaces are automatically renamed. [2press]
+
 * Fixed a bug to save nightbot commands. [2press]
 
 * Fixed a bug the would prevent the Nightbot token from being saved. [2press]
@@ -36,6 +40,13 @@
 * Fixed a bug in connection with tesseract OCR. [2press]
 
 * Text-to-Speech is now disabled by default. [2press]
+
+
+## v1.12.3 (2018-07-20)
+
+### Changes
+
+* Changed Koprulu League format to Pro League. [2press]
 
 
 ## v1.12.2 (2018-06-01)
