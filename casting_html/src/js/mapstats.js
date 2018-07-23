@@ -54,7 +54,6 @@ function storeData(scope = null) {
 function loadStoredData() {
   try {
     var storage = window.localStorage;
-    console.log(storage);
     mapData = JSON.parse(storage.getItem('scct-' + profile + '-mapstats-mapdata'));
     colors = JSON.parse(storage.getItem('scct-' + profile + '-mapstats-colors'));
     font = storage.getItem('scct-' + profile + '-mapstats-font');
@@ -63,7 +62,6 @@ function loadStoredData() {
     if (currentMap == null) currentMap = "";
     if (colors == null) colors = {};
     if (mapData == null) mapData = {};
-    console.log(mapData);
     try {
       setColors(colors['color1'], colors['color2']);
     } catch (e) {}
@@ -118,8 +116,10 @@ function connectWebsocket() {
       }
     } else if (jsonObject.event == 'SELECT_MAP') {
       if (jsonObject.data.map != getCurrentMap()) {
-        self.selectMap(jsonObject.data.map);
+        self.selectMap(jsonObject.data.map, jsonObject.data.played);
       }
+    } else if (jsonObject.event == 'MARK_PLAYED'){
+      markPlayed(jsonObject.data.map, jsonObject.data.played);
     } else if (jsonObject.event == 'DEBUG_MODE') {}
   }
 
@@ -155,16 +155,43 @@ function loadImages() {
 function addMaps() {
   removeMaps();
   for (var name in mapData) {
-    addMap(name);
+    addMap(name, mapData[name]['played']);
   }
 }
 
-function addMap(name) {
+function markPlayed(map, played) {
+  try {
+    mapData[map][played] = played;
+  } catch (e) {
+    console.log(e);
+    return;
+  }
+  var ul_maplist = document.getElementById('map-list');
+  var existing_maps = ul_maplist.getElementsByTagName("li");
+  for (var i = 0; i < existing_maps.length; i++) {
+    mapElement = existing_maps[i];
+    if (mapElement.getElementsByTagName('div')[0].innerHTML.toLowerCase() == map.toLowerCase()) {
+      if (played) {
+        mapElement.getElementsByTagName('div')[0].classList.add("played");
+      } else {
+        mapElement.getElementsByTagName('div')[0].classList.remove("played");
+      }
+      return
+    }
+  }
+}
+
+function addMap(name, played) {
   var ul_maplist = document.getElementById('map-list');
   var existing_maps = ul_maplist.getElementsByTagName("li");
   for (var i = 0; i < existing_maps.length; i++) {
     mapElement = existing_maps[i];
     if (mapElement.getElementsByTagName('div')[0].innerHTML.toLowerCase() == name.toLowerCase()) {
+      if (played) {
+        mapElement.getElementsByTagName('div')[0].classList.add("played");
+      } else {
+        mapElement.getElementsByTagName('div')[0].classList.remove("played");
+      }
       return
     }
   }
@@ -175,6 +202,9 @@ function addMap(name) {
   };
   var div = document.createElement("div")
   div.innerHTML = name;
+  if (played) {
+    div.classList.add("played");
+  }
   li.appendChild(div);
   ul_maplist.appendChild(li);
 }
@@ -192,11 +222,16 @@ function removeMaps() {
   }
 }
 
-function selectMap(name) {
+function selectMap(name, played) {
   var maps = document.getElementById('map-list').getElementsByTagName("li");
   for (var i = 0; i < maps.length; i++) {
     mapElement = maps[i];
     if (mapElement.getElementsByTagName('div')[0].innerHTML.toLowerCase() == name.toLowerCase()) {
+      if (played) {
+        mapElement.getElementsByTagName('div')[0].classList.add("played");
+      } else {
+        mapElement.getElementsByTagName('div')[0].classList.remove("played");
+      }
       animateInOut(mapElement, name);
       currentMap = name;
       storeData('currentmap');

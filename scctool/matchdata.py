@@ -566,6 +566,13 @@ class matchData(QObject):
         else:
             return "TBD"
 
+    def wasMapPlayed(self, map):
+        for set_idx in range(self.getNoSets()):
+            if (map.lower() == self.getMap(set_idx).lower() and
+                    self.getMapScore(set_idx) != 0):
+                return True
+        return False
+
     def getNextPlayer(self, team_idx):
         """Get the player of the next undecided set."""
         player = "TBD"

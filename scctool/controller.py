@@ -876,6 +876,12 @@ class MainController:
                     'border_color': colorData['border_color'],
                     'hide': colorData['hide'],
                     'opacity': colorData['opacity']})
+            if scctool.settings.config.parser.getboolean(
+                    "Mapstats", "mark_played",):
+                map = self.matchData.getMap(object['set_idx'])
+                played = object['value'] != 0
+                self.websocketThread.sendData2Path(
+                    'mapstats', 'MARK_PLAYED', {'map': map, 'played': played})
         elif label == 'color':
             for idx in range(0, 2):
                 self.websocketThread.sendData2Path(

@@ -166,6 +166,10 @@ ul li::before {
   display: inline-block;
 }
 
+div.played{
+  filter: opacity(0.30);
+}
+
 div.stat {
   margin-bottom: 43px;
 }

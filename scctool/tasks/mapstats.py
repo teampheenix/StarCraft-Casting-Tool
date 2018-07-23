@@ -72,7 +72,12 @@ class MapStatsManager:
     def selectMap(self, map):
         if map in self.__maps.keys():
             self.__current_map = map
-            self.__controller.websocketThread.selectMap(map)
+            if scctool.settings.config.parser.getboolean(
+                    "Mapstats", "mark_played",):
+                played = self.__controller.matchData.wasMapPlayed(map)
+            else:
+                played = False
+            self.__controller.websocketThread.selectMap(map, played)
 
     def setMapPoolType(self, id):
         self.__mappool = int(id)
@@ -179,6 +184,12 @@ class MapStatsManager:
                 continue
             out_data['maps'][map] = dict()
             out_data['maps'][map]['map-name'] = map
+            if scctool.settings.config.parser.getboolean(
+                    "Mapstats", "mark_played",):
+                out_data['maps'][map]['played'] = \
+                    self.__controller.matchData.wasMapPlayed(map)
+            else:
+                out_data['maps'][map]['played'] = False
             for key, item in data.items():
                 if key == 'refreshed':
                     continue

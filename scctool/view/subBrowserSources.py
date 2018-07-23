@@ -167,6 +167,15 @@ class SubwindowBrowserSources(QWidget):
         label.setMinimumWidth(120)
         layout.addRow(label, self.cb_autoset_map)
 
+        self.cb_mark_played = QCheckBox(_("Mark already played maps"))
+        self.cb_mark_played.setChecked(
+            scctool.settings.config.parser.getboolean(
+                "Mapstats", "mark_played"))
+        self.cb_mark_played.stateChanged.connect(self.changed)
+        label = QLabel(_("Mark:"))
+        label.setMinimumWidth(120)
+        layout.addRow(label, self.cb_mark_played)
+
         box.setLayout(layout)
         mainLayout.addWidget(box)
 
@@ -530,6 +539,11 @@ class SubwindowBrowserSources(QWidget):
                 "Mapstats",
                 "autoset_next_map",
                 str(self.cb_autoset_map.isChecked()))
+
+            scctool.settings.config.parser.set(
+                "Mapstats",
+                "mark_played",
+                str(self.cb_mark_played.isChecked()))
 
             self.controller.mapstatsManager.sendMapPool()
             self.controller.updateMapButtons()
