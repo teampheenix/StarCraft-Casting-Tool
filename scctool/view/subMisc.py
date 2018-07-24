@@ -392,6 +392,7 @@ class SubwindowMisc(QWidget):
 
         self.maplist = QListWidget()
         self.maplist.setSortingEnabled(True)
+        print(scctool.settings.maps)
         for map in scctool.settings.maps:
             self.maplist.addItem(QListWidgetItem(map))
         self.maplist.setCurrentItem(self.maplist.item(0))

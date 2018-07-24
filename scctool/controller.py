@@ -735,13 +735,15 @@ class MainController:
 
     def getMapImg(self, map, fullpath=False):
         """Get map image from map name."""
+        if map == 'TBD':
+            return map
         mapdir = scctool.settings.getAbsPath(
             scctool.settings.casting_html_dir)
         mapimg = os.path.normpath(os.path.join(
             mapdir, "src/img/maps", map.replace(" ", "_")))
         mapimg = os.path.basename(self.linkFile(mapimg))
         if not mapimg:
-            mapimg = "TBD.jpg"
+            mapimg = "TBD"
             self.displayWarning(_("Warning: Map '{}' not found!").format(map))
 
         if(fullpath):
