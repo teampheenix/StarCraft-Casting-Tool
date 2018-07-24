@@ -4,10 +4,10 @@ import weakref
 
 from PyQt5.QtCore import QPoint, QSize, Qt
 from PyQt5.QtGui import QIcon, QKeySequence
-from PyQt5.QtWidgets import (QBoxLayout, QFormLayout, QGroupBox, QHBoxLayout,
-                             QLabel, QLineEdit, QMessageBox, QPushButton,
-                             QScrollArea, QShortcut, QSizePolicy, QSpacerItem,
-                             QTabWidget, QVBoxLayout, QWidget)
+from PyQt5.QtWidgets import (QBoxLayout, QCheckBox, QFormLayout, QGroupBox,
+                             QHBoxLayout, QLabel, QLineEdit, QMessageBox,
+                             QPushButton, QScrollArea, QShortcut, QSizePolicy,
+                             QSpacerItem, QTabWidget, QVBoxLayout, QWidget)
 
 import scctool.settings
 from scctool.view.widgets import Completer, MonitoredLineEdit
@@ -138,6 +138,26 @@ class SubwindowConnections(QWidget):
         label.setFixedWidth(100)
         layout.addRow(label, container)
 
+        container = QVBoxLayout()
+
+        self.cb_set_game = QCheckBox(_("Set Game to 'StarCraft II'"))
+        self.cb_set_game.setChecked(
+            scctool.settings.config.parser.getboolean("Twitch", "set_game"))
+        self.cb_set_game.stateChanged.connect(self.changed)
+        container.addWidget(self.cb_set_game)
+
+        self.cb_set_community = QCheckBox(
+            _("Add to Community 'StarCraft Casting Tool'"))
+        self.cb_set_community.setChecked(
+            scctool.settings.config.parser.getboolean(
+                "Twitch", "set_community"))
+        self.cb_set_community.stateChanged.connect(self.changed)
+        container.addWidget(self.cb_set_community)
+
+        label = QLabel(_("Options:") + " ")
+        label.setMinimumWidth(120)
+        layout.addRow(label, container)
+
         layout.addItem(QSpacerItem(
             0, 0, QSizePolicy.Minimum, QSizePolicy.Expanding))
 
@@ -257,6 +277,14 @@ class SubwindowConnections(QWidget):
                 "Twitch", "oauth", self.twitchToken.text().strip())
             scctool.settings.config.parser.set(
                 "Twitch", "title_template", self.twitchTemplate.text().strip())
+            scctool.settings.config.parser.set(
+                "Twitch",
+                "set_game",
+                str(self.cb_set_game.isChecked()))
+            scctool.settings.config.parser.set(
+                "Twitch",
+                "set_community",
+                str(self.cb_set_community.isChecked()))
 
             scctool.settings.config.parser.set(
                 "Nightbot", "token", self.nightbotToken.text().strip())

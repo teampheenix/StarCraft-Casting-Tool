@@ -121,6 +121,8 @@ def setDefaultConfigAll():
     setDefaultConfig("Twitch", "oauth", "")
     setDefaultConfig("Twitch", "title_template",
                      "(League) – (Team1) vs (Team2)")
+    setDefaultConfig("Twitch", "set_game", "True")
+    setDefaultConfig("Twitch", "set_community", "True")
 
     setDefaultConfig("Nightbot", "token", "")
 
