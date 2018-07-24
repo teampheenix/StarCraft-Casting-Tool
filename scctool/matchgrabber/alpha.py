@@ -109,14 +109,16 @@ class MatchGrabber(MatchGrabberParent):
                 logo_idx = self._matchData.getSwappedIdx(idx) + 1
                 oldLogo = getattr(logoManager, 'getTeam{}'.format(logo_idx))()
                 logo = logoManager.newLogo()
-                new_logo = logo.fromURL(
-                    self._rawData['team' + str(idx + 1)]['logo'],
-                    localFile=oldLogo.getAbsFile())
-                if new_logo:
-                    getattr(logoManager,
-                            'setTeam{}Logo'.format(logo_idx))(logo)
-                else:
-                    module_logger.info("Logo download is not needed.")
+                url = self._rawData['team' + str(idx + 1)]['logo']
+                if url:
+                    new_logo = logo.fromURL(
+                        self._rawData['team' + str(idx + 1)]['logo'],
+                        localFile=oldLogo.getAbsFile())
+                    if new_logo:
+                        getattr(logoManager,
+                                'setTeam{}Logo'.format(logo_idx))(logo)
+                    else:
+                        module_logger.info("Logo download is not needed.")
 
             except Exception as e:
                 module_logger.exception("message")
