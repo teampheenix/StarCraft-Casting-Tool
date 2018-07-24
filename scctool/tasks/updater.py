@@ -93,13 +93,16 @@ def getRestartFlag():
 
 
 def setRestartFlag(flag=True):
-    with open(scctool.settings.getJsonFile('versiondata'), 'r',
-              encoding='utf-8-sig') as f:
-        data = json.load(f)
-    data['restart_flag'] = bool(flag)
-    with open(scctool.settings.getJsonFile('versiondata'), 'w',
-              encoding='utf-8-sig') as o:
-        json.dump(data, o)
+    try:
+        with open(scctool.settings.getJsonFile('versiondata'), 'r',
+                  encoding='utf-8-sig') as f:
+            data = json.load(f)
+        data['restart_flag'] = bool(flag)
+        with open(scctool.settings.getJsonFile('versiondata'), 'w',
+                  encoding='utf-8-sig') as o:
+            json.dump(data, o)
+    except Exception as e:
+        pass
 
 
 def extractData(asset_update, handler=lambda x: None):
