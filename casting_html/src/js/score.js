@@ -113,18 +113,16 @@ function insertData() {
   $('#logo1').css("background-image", "url('../" + data['logo1'] + "')");
   $('#logo2').css("background-image", "url('../" + data['logo2'] + "')");
   if (data['winner'][0]) {
+    $('#team1').removeClass('loser');
     $('#team1').addClass('winner');
+    $('#team2').removeClass('winner');
     $('#team2').addClass('loser');
-  } else {
-    $('#team1').removeClass('winner');
-  }
-  if (data['winner'][1]) {
+  } else if (data['winner'][1]) {
+    $('#team2').removeClass('loser');
     $('#team2').addClass('winner');
+    $('#team1').removeClass('winner');
     $('#team1').addClass('loser');
   } else {
-    $('#team2').removeClass('winner');
-  }
-  if (!(data['winner'][0] || data['winner'][1])) {
     $('#team1').removeClass('winner');
     $('#team1').removeClass('loser');
     $('#team2').removeClass('winner');
