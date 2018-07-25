@@ -19,6 +19,8 @@
 
 ### Changes
 
+* Updated to Twitch-API v5 and included the option to set game to 'StarCraft 2' and community to 'StarCraft Casting Tool'. [2press]
+
 * Changed Koprulu League format to Pro League. [2press]
 
 * Added option to import and overwrite current profile. [2press]
@@ -28,6 +30,8 @@
 * One can now use a single combined hotkey for both player intros. This option is the new default. [2press]
 
 ### Fix
+
+* Fixed a bug in the AlphaTL match grabber that occured if a team has no logo. [2press]
 
 * Custom css-files with whitespaces are automatically renamed. [2press]
 
