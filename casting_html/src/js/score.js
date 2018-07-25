@@ -124,6 +124,12 @@ function insertData() {
   } else {
     $('#team2').removeClass('winner');
   }
+  if (!(data['winner'][0] || data['winner'][1])) {
+    $('#team1').removeClass('winner');
+    $('#team1').removeClass('loser');
+    $('#team2').removeClass('winner');
+    $('#team2').removeClass('loser');
+  }
   insertIcons();
   $(document).ready(function() {
     $('#content').find(".text-fill").textfill();
@@ -142,7 +148,7 @@ function setWinner(winner) {
     $('#team2').removeClass('loser');
     $('#team2').addClass('winner');
     $('#team1').removeClass('winner');
-    $('#team2').addClass('loser');
+    $('#team1').addClass('loser');
     data['winner'][0] = false;
     data['winner'][1] = true;
   } else if (winner == -1) {

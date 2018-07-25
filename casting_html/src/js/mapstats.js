@@ -109,7 +109,11 @@ function connectWebsocket() {
           initAnimation(getCurrentMap());
         }
       } else {
-        if (change) outroAnimation();
+        if (change) {
+          outroAnimation();
+        } else {
+          markMaps();
+        }
         if (select != getCurrentMap()) {
           self.selectMap(select);
         }
@@ -118,7 +122,7 @@ function connectWebsocket() {
       if (jsonObject.data.map != getCurrentMap()) {
         self.selectMap(jsonObject.data.map, jsonObject.data.played);
       }
-    } else if (jsonObject.event == 'MARK_PLAYED'){
+    } else if (jsonObject.event == 'MARK_PLAYED') {
       markPlayed(jsonObject.data.map, jsonObject.data.played);
     } else if (jsonObject.event == 'DEBUG_MODE') {}
   }
@@ -159,6 +163,12 @@ function addMaps() {
   }
 }
 
+function markMaps() {
+  for (var name in mapData) {
+    markPlayed(name, mapData[name]['played']);
+  }
+}
+
 function markPlayed(map, played) {
   try {
     mapData[map][played] = played;
@@ -182,6 +192,8 @@ function markPlayed(map, played) {
   }
 }
 
+
+
 function addMap(name, played) {
   var ul_maplist = document.getElementById('map-list');
   var existing_maps = ul_maplist.getElementsByTagName("li");
@@ -199,7 +211,7 @@ function addMap(name, played) {
 
   var li = document.createElement("li");
   li.onclick = function() {
-    selectMap(name, 0.5)
+    selectMap(name, false)
   };
   var div = document.createElement("div")
   div.innerHTML = name;
@@ -223,15 +235,13 @@ function removeMaps() {
   }
 }
 
-function selectMap(name, played) {
+function selectMap(name, alreadyplayed = false) {
   var maps = document.getElementById('map-list').getElementsByTagName("li");
   for (var i = 0; i < maps.length; i++) {
     mapElement = maps[i];
     if (mapElement.getElementsByTagName('div')[0].innerHTML.toLowerCase() == name.toLowerCase()) {
-      if (played) {
+      if (alreadyplayed) {
         mapElement.getElementsByTagName('div')[0].classList.add("played");
-      } else {
-        mapElement.getElementsByTagName('div')[0].classList.remove("played");
       }
       animateInOut(mapElement, name);
       currentMap = name;
