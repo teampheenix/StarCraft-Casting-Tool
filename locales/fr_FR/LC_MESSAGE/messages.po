@@ -17,16 +17,16 @@ msgstr ""
 
 #: controller.py:76
 msgid "This version is up to date."
-msgstr ""
+msgstr "Cette version est à jour."
 
 #: controller.py:531 controller.py:539
 msgid "Specify your Twitch Settings to use this feature"
-msgstr ""
+msgstr "Indiquez vos réglages Twitch pour utiliser cette fonctionnalité"
 
 #: controller.py:534
 msgid ""
 "Automatically update the title of your twitch channel in the background."
-msgstr ""
+msgstr "Mettre à jour automatiquement le titre de votre chaine Twitch en arrière-plan."
 
 #: controller.py:545 controller.py:552
 msgid "Specify your Nightbot Settings to use this feature"
@@ -38,31 +38,31 @@ msgstr ""
 
 #: controller.py:693
 msgid "Warning: Map '{}' not found!"
-msgstr ""
+msgstr "Attention: Carte '{}' introuvable!"
 
 #: controller.py:740
 msgid "A new version {} is available."
-msgstr ""
+msgstr "Une nouvelle version {} est disponible."
 
 #: controller.py:742
 msgid "Update to new version?"
-msgstr ""
+msgstr "Mettre à jour vers la nouvelle version?"
 
 #: controller.py:743
 msgid "New SCC-Tool Version"
-msgstr ""
+msgstr "Nouvelle version de SCC-Tool"
 
 #: controller.py:752
 msgid "Don't show on startup."
-msgstr ""
+msgstr "Ne pas afficher au démarrage."
 
 #: controller.py:761
 msgid "A new version {} is available on GitHub!"
-msgstr ""
+msgstr "Une nouvelle version {} est disponible sur GitHub!"
 
 #: tasks/nightbot.py:39 tasks/nightbot.py:101 tasks/twitch.py:44
 msgid "Forbidden - Do you have permission?"
-msgstr ""
+msgstr "Refusé - Avez-vous la permission?"
 
 #: tasks/nightbot.py:41 tasks/nightbot.py:103 tasks/twitch.py:46
 msgid "Unauthorized - Refresh your token!"
@@ -70,7 +70,7 @@ msgstr ""
 
 #: tasks/nightbot.py:43 tasks/nightbot.py:105 tasks/twitch.py:48
 msgid "Too Many Requests."
-msgstr ""
+msgstr "Trop de requêtes."
 
 #: tasks/nightbot.py:60
 msgid "Nightbot command '{}' was already set to '{}'"
@@ -78,7 +78,7 @@ msgstr ""
 
 #: tasks/nightbot.py:90
 msgid "Deleted command '{}'"
-msgstr ""
+msgstr "Commande '{}' effacé"
 
 #: tasks/nightbot.py:92
 msgid "Updated Nightbot command '{}' to '{}'"
@@ -90,21 +90,21 @@ msgstr ""
 
 #: tasks/twitch.py:41
 msgid "Not Found - Channel '{}' not found."
-msgstr ""
+msgstr "Introuvable - Chaine '{}' introuvable."
 
 #: tasks/updater.py:270
 msgid "Updated data files!"
-msgstr ""
+msgstr "Fichiers de données mise à jour!"
 
 #: tasks/webapp.py:139
 msgid ""
 "scctool: Succesfully recived access to Nightbot - you can close this tab now."
-msgstr ""
+msgstr "scctool: Accès réussi à Nightbot - Vous pouvez fermer cet onglet maintenant."
 
 #: tasks/webapp.py:159
 msgid ""
 "scctool: Succesfully recived access to Twitch - you can close this tab now."
-msgstr ""
+msgstr "scctool: Accès réussi à Twitch - Vous pouvez fermer cet onglet maintenant."
 
 #: view/main.py:105
 msgid "StarCraft Casting Tool is up to date."
@@ -112,7 +112,7 @@ msgstr ""
 
 #: view/main.py:107
 msgid "The new version {} is available!"
-msgstr ""
+msgstr "La version {} est disponible!"
 
 #: view/main.py:113
 msgid "StarCraft Casting Tool - About"
@@ -120,11 +120,11 @@ msgstr ""
 
 #: view/main.py:135
 msgid "Settings"
-msgstr ""
+msgstr "Réglages"
 
 #: view/main.py:137 view/subConnections.py:57
 msgid "Connections"
-msgstr ""
+msgstr "Connexions"
 
 #: view/main.py:139
 msgid "Edit Intro-Settings and API-Settings for Twitch and Nightbot"
@@ -132,11 +132,11 @@ msgstr ""
 
 #: view/main.py:143 view/subStyles.py:41
 msgid "Styles"
-msgstr ""
+msgstr "Styles"
 
 #: view/main.py:148
 msgid "Misc"
-msgstr ""
+msgstr "Divers"
 
 #: view/main.py:153
 msgid "Info && Links"
@@ -144,15 +144,15 @@ msgstr ""
 
 #: view/main.py:156
 msgid "About"
-msgstr ""
+msgstr "À propos"
 
 #: view/main.py:161 view/main.py:273
 msgid "Readme"
-msgstr ""
+msgstr "Lisez-moi"
 
 #: view/main.py:166
 msgid "Check for new version"
-msgstr ""
+msgstr "Vérifier pour une mise à jour"
 
 #: view/main.py:171 view/main.py:282
 msgid "Changelog"
@@ -160,11 +160,11 @@ msgstr ""
 
 #: view/main.py:214
 msgid "Donate"
-msgstr ""
+msgstr "Faire une contribution"
 
 #: view/main.py:219
 msgid "Language"
-msgstr ""
+msgstr "Langue"
 
 #: view/main.py:315
 msgid "Match Grabber for AlphaTL && RSTL"
@@ -172,23 +172,23 @@ msgstr ""
 
 #: view/main.py:316
 msgid "Custom Match"
-msgstr ""
+msgstr "Match personnalisé"
 
 #: view/main.py:340
 msgid "Open in Browser"
-msgstr ""
+msgstr "Ouvrir dans le navigateur"
 
 #: view/main.py:350 view/main.py:475
 msgid "Match-URL:"
-msgstr ""
+msgstr "Match-URL:"
 
 #: view/main.py:383
 msgid "Load Data from URL"
-msgstr ""
+msgstr "Charger les données du URL"
 
 #: view/main.py:401
 msgid "Match Format:"
-msgstr ""
+msgstr "Format du match: "
 
 #: view/main.py:405
 msgid "Best of"
@@ -202,15 +202,15 @@ msgstr ""
 
 #: view/main.py:419
 msgid " but at least"
-msgstr ""
+msgstr "mais au moins"
 
 #: view/main.py:424
 msgid "Minimum number of maps played (even if the match is decided already)"
-msgstr ""
+msgstr "Nombre minimum de cartes joués (même si le vainqueur est déjà déterminé)"
 
 #: view/main.py:428
 msgid "maps"
-msgstr ""
+msgstr "cartes"
 
 #: view/main.py:432
 msgid "All-Kill Format"
@@ -218,19 +218,19 @@ msgstr ""
 
 #: view/main.py:435
 msgid "Winner stays and is automatically placed into the next set"
-msgstr ""
+msgstr "Le gagnant reste et est automatiquement placé dans le prochain set"
 
 #: view/main.py:439
 msgid "1vs1"
-msgstr ""
+msgstr "1c1"
 
 #: view/main.py:442
 msgid "Select for solo (non-team matches)"
-msgstr ""
+msgstr "Choisir pour solo (matchs sans équipe"
 
 #: view/main.py:453
 msgid "Apply Format"
-msgstr ""
+msgstr "Appliquer le format"
 
 #: view/main.py:482
 msgid "Optionally specify the Match-URL, e.g., for Nightbot commands"
@@ -238,31 +238,31 @@ msgstr ""
 
 #: view/main.py:484
 msgid "Specify the Match-URL of your Custom Match"
-msgstr ""
+msgstr "Indiquer le Match-URL de votre match personnalisé"
 
 #: view/main.py:502
 msgid "Reset Match Data"
-msgstr ""
+msgstr "Réinitialiser les données du match"
 
 #: view/main.py:585
 msgid "Match Data"
-msgstr ""
+msgstr "Données du match"
 
 #: view/main.py:651
 msgid "Choose your team"
-msgstr ""
+msgstr "Choisissez votre équipe"
 
 #: view/main.py:670
 msgid "Swap teams and logos."
-msgstr ""
+msgstr "Inverser les équipes et logos."
 
 #: view/main.py:673
 msgid "League:"
-msgstr ""
+msgstr "Ligue:"
 
 #: view/main.py:683
 msgid "Maps \\ Teams:"
-msgstr ""
+msgstr "Carte \\ Équipes:"
 
 #: view/main.py:714
 msgid "Player {} of team {}"
