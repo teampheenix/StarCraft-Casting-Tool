@@ -751,14 +751,18 @@ class MainController:
             "SCT", "new_version_prompt")
         if hasattr(sys, "frozen") and prompt:
             messagebox = QMessageBox()
-            text = _("A new version {} is available.")
+            text = _("A new <b>major upgrade</b> to version {} is available. <b>Warning:" +
+                     " Upgrading requires you to redo your streaming setup</b> as" +
+                     " the folder structure has been changed.")
             messagebox.setText(text.format(version))
-            messagebox.setInformativeText(_("Update to new version?"))
-            messagebox.setWindowTitle(_("New SCC-Tool Version"))
+            messagebox.setInformativeText(
+                _("<b>Do you really whish to upgrade to the new version now?</b>"))
+            messagebox.setWindowTitle(
+                _("Upgrade to SCC-Tool Version 2.0"))
             messagebox.setStandardButtons(
                 QMessageBox.Yes | QMessageBox.No)
-            messagebox.setDefaultButton(QMessageBox.Yes)
-            messagebox.setIcon(QMessageBox.Information)
+            messagebox.setDefaultButton(QMessageBox.No)
+            messagebox.setIcon(QMessageBox.Critical)
             messagebox.setWindowModality(Qt.ApplicationModal)
             cb = QCheckBox()
             cb.setChecked(not scctool.settings.config.parser.getboolean(

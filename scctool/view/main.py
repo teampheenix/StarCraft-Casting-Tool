@@ -163,7 +163,7 @@ class MainWindow(QMainWindow):
             infoMenu.addAction(myAct)
 
             myAct = QAction(QIcon(scctool.settings.getResFile(
-                'update.png')), _('Check for new version'), self)
+                'update.png')), _('Upgrade to v2.0 release'), self)
             myAct.triggered.connect(lambda: self.controller.checkVersion(True))
             infoMenu.addAction(myAct)
 
