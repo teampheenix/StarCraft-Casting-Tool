@@ -1,15 +1,20 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: StarCraft Casting Tool\n"
+<<<<<<< HEAD
 "POT-Creation-Date: 2018-05-28 22:14+0200\n"
 "PO-Revision-Date: 2018-05-28 22:16+0200\n"
+=======
+"POT-Creation-Date: 2018-07-29 14:36+0200\n"
+"PO-Revision-Date: 2018-07-29 14:48+0200\n"
+>>>>>>> master
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.7\n"
+"X-Generator: Poedit 2.1.1\n"
 "X-Poedit-Basepath: ../../../scctool\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -19,15 +24,24 @@ msgstr ""
 msgid "This version is up to date."
 msgstr "Diese Version ist aktuell."
 
+<<<<<<< HEAD
 #: controller.py:505 controller.py:513
 msgid "Specify your Twitch Settings to use this feature"
 msgstr "Geben Sie Ihre Twitch-Einstellungen an, um diese Funktion zu verwenden"
 
 #: controller.py:508
+=======
+#: controller.py:515 controller.py:523
+msgid "Specify your Twitch Settings to use this feature"
+msgstr "Geben Sie Ihre Twitch-Einstellungen an, um diese Funktion zu verwenden"
+
+#: controller.py:518
+>>>>>>> master
 msgid ""
 "Automatically update the title of your twitch channel in the background."
 msgstr "Automatische Hintergrund-Aktualisierung des Twitch Titel."
 
+<<<<<<< HEAD
 #: controller.py:519 controller.py:526
 msgid "Specify your Nightbot Settings to use this feature"
 msgstr "Geben Sie Ihre Nightbot-Einstellungen an, um diese Funktion zu nutzen"
@@ -76,11 +90,52 @@ msgstr "Dieser Name wird bereits verwendet."
 msgid "Initial profile is not valid."
 msgstr "Eingehendes Profil ist ungültig."
 
+=======
+#: controller.py:529 controller.py:536
+msgid "Specify your Nightbot Settings to use this feature"
+msgstr "Geben Sie Ihre Nightbot-Einstellungen an, um diese Funktion zu nutzen"
+
+#: controller.py:530
+msgid "Automatically update the commands of your nightbot in the background."
+msgstr "Automatische Hintergrund-Aktualisierung der Nightbot Kommandos."
+
+#: controller.py:706
+msgid "Warning: Map '{}' not found!"
+msgstr "Warnung: Karte '{}' nicht gefunden!"
+
+#: controller.py:754
+msgid ""
+"A new <b>major upgrade</b> to version {} is available. <b>Warning: Upgrading "
+"requires you to redo your streaming setup</b> as the folder structure has "
+"been changed."
+msgstr ""
+"Ein neues<b>großes Upgrade</b> zu Version {} ist verfügbar. <b>Warnung: Nach "
+"dem Upgrade muss der Streaming-Setup</b> angepasst werden, da sich die "
+"Ordnerstrukur geändert hat."
+
+#: controller.py:759
+msgid "<b>Do you really whish to upgrade to the new version now?</b>"
+msgstr "<b>Wollen Sie wirklich jetzt auf die neue Version upgraden?</b>"
+
+#: controller.py:761
+msgid "Upgrade to SCC-Tool Version 2.0"
+msgstr "Upgrade zu SCC-Tool Version 2.0"
+
+#: controller.py:770
+msgid "Don't show on startup."
+msgstr "Nicht mehr beim Programm-Start zeigen."
+
+#: controller.py:779
+msgid "A new version {} is available on GitHub!"
+msgstr "Die neue Version {} ist bei GitHub verfügbar!"
+
+>>>>>>> master
 #: tasks/auth.py:47
 msgid ""
 "StarCraft Casting Tool: Succesfully recived access to {} - you can close "
 "this tab now."
 msgstr ""
+<<<<<<< HEAD
 "StarCraft Casting Tool:  Erfolgreich Zugang zu Twitch erhalten - dieser Tab "
 "kann nun geschlossen werden."
 
@@ -93,6 +148,20 @@ msgid "Unauthorized - Refresh your token!"
 msgstr "Nicht autorisiert - Erneure deinen Token!"
 
 #: tasks/nightbot.py:44 tasks/nightbot.py:108 tasks/twitch.py:49
+=======
+"StarCraft Casting Tool: Erfolgreich Zugangs zu Twitch erhalten - dieses Tab "
+"kann nun geschlossen werden."
+
+#: tasks/nightbot.py:39 tasks/nightbot.py:101 tasks/twitch.py:49
+msgid "Forbidden - Do you have permission?"
+msgstr "Nicht erlaubt - Rechte vorhanden?"
+
+#: tasks/nightbot.py:41 tasks/nightbot.py:103 tasks/twitch.py:51
+msgid "Unauthorized - Refresh your token!"
+msgstr "Nicht autorisiert - Erneure deinen Token!"
+
+#: tasks/nightbot.py:43 tasks/nightbot.py:105 tasks/twitch.py:53
+>>>>>>> master
 msgid "Too Many Requests."
 msgstr "Zu viele Anfragen."
 
@@ -108,11 +177,11 @@ msgstr "Kommando '{}' gelöscht"
 msgid "Updated Nightbot command '{}' to '{}'"
 msgstr "Nightbot Kommand '{}' auf '{}' aktualisiert"
 
-#: tasks/twitch.py:32
+#: tasks/twitch.py:36
 msgid "Updated Twitch title of {} to: \"{}\""
 msgstr "Aktualisiere Twitch Titel von {} auf \"{}\""
 
-#: tasks/twitch.py:41
+#: tasks/twitch.py:45
 msgid "Not Found - Channel '{}' not found."
 msgstr "Nicht gefunden - Kanal '{}' nicht gefunden."
 
@@ -120,7 +189,11 @@ msgstr "Nicht gefunden - Kanal '{}' nicht gefunden."
 msgid "Updated data files!"
 msgstr "Daten aktualisiert!"
 
+<<<<<<< HEAD
 #: view/main.py:107
+=======
+#: view/main.py:105
+>>>>>>> master
 msgid "StarCraft Casting Tool is up to date."
 msgstr "StarCraft Casting Tool ist aktuell."
 
@@ -136,6 +209,7 @@ msgstr "StarCraft Casting Tool - Über"
 msgid "Settings"
 msgstr "Einstellungen"
 
+<<<<<<< HEAD
 #: view/main.py:140 view/main.py:278 view/subBrowserSources.py:57
 msgid "Browser Sources"
 msgstr "Browser Quellen"
@@ -147,6 +221,11 @@ msgstr "Ändere die Einstellungen für alle Browser Quellen."
 #: view/main.py:146
 msgid "Twitch && Nightbot"
 msgstr "Twitch && Nightbot"
+=======
+#: view/main.py:137 view/subConnections.py:58
+msgid "Connections"
+msgstr "Verbinndungen"
+>>>>>>> master
 
 #: view/main.py:148
 msgid "Edit Intro-Settings and API-Settings for Twitch and Nightbot"
@@ -172,9 +251,15 @@ msgstr "Über"
 msgid "Readme"
 msgstr "Liesmich"
 
+<<<<<<< HEAD
 #: view/main.py:182
 msgid "Check for new version"
 msgstr "Auf eine neue Version prüfen"
+=======
+#: view/main.py:166
+msgid "Upgrade to v2.0 release"
+msgstr "Upgrade zum v2.0 Release"
+>>>>>>> master
 
 #: view/main.py:187 view/main.py:434
 msgid "Changelog"
@@ -376,7 +461,20 @@ msgstr "Aktualisere Nightbot"
 msgid "Reset Score"
 msgstr "Setze Ergebnisse zurück"
 
+<<<<<<< HEAD
 #: view/main.py:972
+=======
+#: view/main.py:798
+msgid "Update OB&S Data"
+msgstr "Aktualisiere OB&S-Daten"
+
+#: view/main.py:800 view/subBrowserSources.py:294 view/subConnections.py:338
+#: view/subMisc.py:623 view/subStyles.py:82
+msgid "Shortcut: {}"
+msgstr "Tastenkürzel: {}"
+
+#: view/main.py:821
+>>>>>>> master
 msgid "Background Tasks"
 msgstr "Hintergrund-Aufgaben"
 
@@ -450,6 +548,7 @@ msgstr "Setze Ergebnisse zurück..."
 msgid "Updating Score..."
 msgstr "Aktualisiere Ergebnisstand..."
 
+<<<<<<< HEAD
 #: view/subBrowserSources.py:72
 msgid "Intros"
 msgstr "Intros"
@@ -458,10 +557,29 @@ msgstr "Intros"
 msgid "Box Map Icons"
 msgstr "Box Karten Icons"
 
+=======
+#: view/subBrowserSources.py:57
+msgid "Browser Sources"
+msgstr "Browser-Quellen"
+
+#: view/subBrowserSources.py:72
+msgid "Intros"
+msgstr "Intros"
+
+#: view/subBrowserSources.py:73
+msgid "Mapstats"
+msgstr "Kartenstatistiken"
+
+#: view/subBrowserSources.py:75
+msgid "Box Map Icons"
+msgstr "Box Karten Icons"
+
+>>>>>>> master
 #: view/subBrowserSources.py:76
 msgid "Landscape Map Icons"
 msgstr "Querformat Karten Icons"
 
+<<<<<<< HEAD
 #: view/subBrowserSources.py:104
 msgid "Map Pool to be displayed"
 msgstr "Kartenpool der angezeigt werden soll"
@@ -588,10 +706,103 @@ msgid "Cancel"
 msgstr "Abbrechen"
 
 #: view/subBrowserSources.py:359 view/subConnections.py:235 view/subMisc.py:647
+=======
+#: view/subBrowserSources.py:97
+msgid "Map Pool to be displayed"
+msgstr "Anzuzeigender Kartenpool"
+
+#: view/subBrowserSources.py:100
+msgid "Current Ladder Map Pool"
+msgstr "Aktuellerer Ranglisten-Kartenppol"
+
+#: view/subBrowserSources.py:101
+msgid "Custom Map Pool (defined below)"
+msgstr "Benutzerdefinierter Kartenpool (wie unten definiert)"
+
+#: view/subBrowserSources.py:102
+msgid "Currently entered Maps only"
+msgstr "Nur aktuell eingetragene Karten"
+
+#: view/subBrowserSources.py:111
+msgid "Custom Map Pool"
+msgstr "Benutzerdefinierte Kartenpool"
+
+#: view/subBrowserSources.py:157
+msgid "Add Map"
+msgstr "Karte hinzufügen"
+
+#: view/subBrowserSources.py:158
+msgid "Please select a map"
+msgstr "Bitte eine Karte auswählen"
+
+#: view/subBrowserSources.py:169
+msgid "No maps available"
+msgstr "Keine Karten verfügbar"
+
+#: view/subBrowserSources.py:170
+msgid "All available maps have already been added."
+msgstr "Alle verfügbaren Karten sind bereits hinzugefügt"
+
+#: view/subBrowserSources.py:197 view/subConnections.py:96
+msgid "Intro Hotkeys"
+msgstr "Intros Tastenkürzel"
+
+#: view/subBrowserSources.py:205 view/subConnections.py:104
+msgid "Player 1"
+msgstr "Spieler 1"
+
+#: view/subBrowserSources.py:206 view/subConnections.py:105
+msgid "Player 2"
+msgstr "Spieler 2"
+
+#: view/subBrowserSources.py:207 view/subConnections.py:106
+msgid "Debug"
+msgstr "Debug"
+
+#: view/subBrowserSources.py:212 view/subConnections.py:111
+msgid "Intro Settings"
+msgstr "Intro Einstellungen"
+
+#: view/subBrowserSources.py:223 view/subConnections.py:122
+msgid "Sound Volume:"
+msgstr "Lautstärke:"
+
+#: view/subBrowserSources.py:229 view/subConnections.py:128
+msgid "Seconds"
+msgstr "Sekunden"
+
+#: view/subBrowserSources.py:232 view/subConnections.py:131
+msgid "Display Duration:"
+msgstr "Anzeigedauer:"
+
+#: view/subBrowserSources.py:245 view/subConnections.py:144
+msgid "Animation:"
+msgstr "Animation:"
+
+#: view/subBrowserSources.py:249 view/subConnections.py:148
+msgid "Text-to-Speech Settings"
+msgstr "Text-zu-Sprache-Einstellungen"
+
+#: view/subBrowserSources.py:257 view/subConnections.py:156
+msgid "Activate Text-to-Speech:"
+msgstr "Text-zu-Sprache aktivieren:"
+
+#: view/subBrowserSources.py:273 view/subConnections.py:172
+msgid "Language:"
+msgstr "Sprache:"
+
+#: view/subBrowserSources.py:289 view/subConnections.py:333
+#: view/subLiquipediaSearch.py:80 view/subMisc.py:618 view/subStyles.py:77
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: view/subBrowserSources.py:293 view/subConnections.py:337 view/subMisc.py:622
+>>>>>>> master
 #: view/subStyles.py:81
 msgid "&Save && Close"
 msgstr "&Speichern && Schließen"
 
+<<<<<<< HEAD
 #: view/subBrowserSources.py:360 view/subConnections.py:236 view/subMisc.py:648
 #: view/subStyles.py:82
 msgid "Shortcut: {}"
@@ -623,11 +834,40 @@ msgid "Name of the Twitch channel that should be updated"
 msgstr "Name des Twitch-Kanal der aktualisiert werden soll"
 
 #: view/subConnections.py:86
+=======
+#: view/subBrowserSources.py:364 view/subConnections.py:407 view/subMisc.py:682
+#: view/subStyles.py:325
+msgid "Save data?"
+msgstr "Daten speichern?"
+
+#: view/subBrowserSources.py:364 view/subConnections.py:407
+msgid "Do you want to save the data?"
+msgstr "Möchten Sie die Daten speichern?"
+
+#: view/subConnections.py:72
+msgid "Intros && Hotkeys"
+msgstr "Intros && Tastenkürzel"
+
+#: view/subConnections.py:73
+msgid "Twitch"
+msgstr "Twitch"
+
+#: view/subConnections.py:74
+msgid "Nightbot"
+msgstr "Nightbot"
+
+#: view/subConnections.py:192
+msgid "Name of the Twitch channel that should be updated"
+msgstr "Name des Twitch-Kanal der aktualisiert werden soll"
+
+#: view/subConnections.py:194
+>>>>>>> master
 msgid "The connected twitch user needs to have editor rights for this channel."
 msgstr ""
 "Der verbundene Twitch-Benutzer muss Editoren-Rechte für den angegeben Kanal "
 "haben."
 
+<<<<<<< HEAD
 #: view/subConnections.py:99 view/subConnections.py:160
 msgid "Press 'Get' to generate a token"
 msgstr "Drücke 'Erzeugen' um einen Token zu generieren"
@@ -673,6 +913,53 @@ msgid "message, e.g.,"
 msgstr "Nachricht, z.B."
 
 #: view/subConnections.py:339
+=======
+#: view/subConnections.py:207 view/subConnections.py:265
+msgid "Press 'Get' to generate a token"
+msgstr "Drücke 'Erzeugen' um einen Token zu generieren"
+
+#: view/subConnections.py:209
+msgid "Press 'Get' to generate a new token."
+msgstr "Drücke 'Erzeugen' um einen neuen Token zu generieren."
+
+#: view/subConnections.py:212 view/subConnections.py:269
+msgid "Get"
+msgstr "Erzeugen"
+
+#: view/subConnections.py:218
+msgid "Access-Token:"
+msgstr "Zugangs-Token:"
+
+#: view/subConnections.py:229 view/subConnections.py:446
+msgid "Available placeholders:"
+msgstr "Verfügbare Platzhalter:"
+
+#: view/subConnections.py:239 view/subConnections.py:454
+msgid "Test"
+msgstr "Testen"
+
+#: view/subConnections.py:245
+msgid "Title Template:"
+msgstr "Titel Vorlage:"
+
+#: view/subConnections.py:267
+msgid "Press 'Get' to generate a token."
+msgstr "Drücke 'Erzeugen' um einen Token zu generieren."
+
+#: view/subConnections.py:302
+msgid "Add Command"
+msgstr "Kommando hinzufügen"
+
+#: view/subConnections.py:421 view/subConnections.py:498
+msgid "Output:"
+msgstr "Ausgabe:"
+
+#: view/subConnections.py:444
+msgid "message, e.g.,"
+msgstr "Nachricht, z.B."
+
+#: view/subConnections.py:459
+>>>>>>> master
 msgid "Delete"
 msgstr "Löschen"
 
@@ -1143,7 +1430,11 @@ msgstr "Setze Kürzel"
 msgid "Clear"
 msgstr "Löschen"
 
+<<<<<<< HEAD
 #: view/widgets.py:248
+=======
+#: view/widgets.py:244
+>>>>>>> master
 msgid "Recording Hotkey"
 msgstr "Nehme Tastenkürzel auf"
 
@@ -1204,6 +1495,7 @@ msgid "Downloading required files...: Total file size {}, Time remaining {}."
 msgstr ""
 "Lade benötigte Dateien herunter...:  {} Gesamtgröße, {} Zeit verbleibend."
 
+<<<<<<< HEAD
 #: view/widgets.py:1095
 msgid "Profile"
 msgstr "Profil"
@@ -1272,6 +1564,13 @@ msgstr "Bitte Namen für das importierte Profile eingeben"
 #: view/widgets.py:1284
 msgid "Rename Profile"
 msgstr "Profil umbenennen"
+=======
+#~ msgid "A new version {} is available."
+#~ msgstr "Eine neue Version {} ist verfügbar."
+
+#~ msgid "Update to new version?"
+#~ msgstr "Auf die neue Version aktualisieren?"
+>>>>>>> master
 
 #~ msgid ""
 #~ "scctool: Succesfully recived access to Nightbot - you can close this tab "
@@ -1280,6 +1579,7 @@ msgstr "Profil umbenennen"
 #~ "scctool: Erfolgreich Zugangs zu Nightbot erhalten - dieses Tab kann nun "
 #~ "geschlossen werden."
 
+<<<<<<< HEAD
 #~ msgid "Connections"
 #~ msgstr "Verbinndungen"
 
@@ -1306,6 +1606,10 @@ msgstr "Profil umbenennen"
 
 #~ msgid "Intro Settings"
 #~ msgstr "Intro Einstellungen"
+=======
+#~ msgid "Check for new version"
+#~ msgstr "Auf eine neue Version prüfen"
+>>>>>>> master
 
 #~ msgid "Add"
 #~ msgstr "Hinzufügen"
