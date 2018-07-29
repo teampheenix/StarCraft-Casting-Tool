@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: StarCraft Casting Tool\n"
-"POT-Creation-Date: 2018-07-29 15:07+0200\n"
+"POT-Creation-Date: 2018-07-29 22:55+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -22,7 +22,8 @@ msgid "Specify your Twitch Settings to use this feature"
 msgstr "Geben Sie Ihre Twitch-Einstellungen an, um diese Funktion zu verwenden"
 
 #: controller.py:511
-msgid "Automatically update the title of your twitch channel in the background."
+msgid ""
+"Automatically update the title of your twitch channel in the background."
 msgstr "Automatische Hintergrund-Aktualisierung des Twitch Titel."
 
 #: controller.py:522 controller.py:529
@@ -75,8 +76,8 @@ msgstr "Eingehendes Profil ist ungültig."
 
 #: tasks/auth.py:47
 msgid ""
-"StarCraft Casting Tool: Succesfully recived access to {} - you can close this "
-"tab now."
+"StarCraft Casting Tool: Succesfully recived access to {} - you can close "
+"this tab now."
 msgstr ""
 "StarCraft Casting Tool: Erfolgreich Zugang zu {} erhalten - dieses Tab kann "
 "nur geschlossen werden."
@@ -276,8 +277,8 @@ msgid ""
 "Bo3 if needed; Best of 2: Bo3 with only two maps played."
 msgstr ""
 "\"Best of 6/4\": Zuerst wird eine Bo5/3 gespielt und, falls eine "
-"Entscheidungs-Partie benötigt wird, wird diese zu einem Bo3 ausgeweitet; Best "
-"of 2: Bo3, wobei nur zwei Karten gespielt werden."
+"Entscheidungs-Partie benötigt wird, wird diese zu einem Bo3 ausgeweitet; "
+"Best of 2: Bo3, wobei nur zwei Karten gespielt werden."
 
 #: view/main.py:563
 msgid " but at least"
@@ -392,7 +393,8 @@ msgid ""
 "your SC2-client and updates the score accordingly."
 msgstr ""
 "Detektiert automatisch das Ergebnis einer SC2-Partie, die im SC-Clienten "
-"gespielt oder beobachtet werden, und aktualisiert den Spielstand entsprechend."
+"gespielt oder beobachtet werden, und aktualisiert den Spielstand "
+"entsprechend."
 
 #: view/main.py:995
 msgid "Set Ingame Score"
@@ -400,8 +402,8 @@ msgstr "Setzte Spielstand im Spiel"
 
 #: view/main.py:997
 msgid ""
-"Automatically sets the score of your ingame UI-interface at the begining of a "
-"game."
+"Automatically sets the score of your ingame UI-interface at the begining of "
+"a game."
 msgstr ""
 "Setzt automatisch den Spielstand des UI-Interface zu Beginn einer Partie."
 
@@ -570,8 +572,8 @@ msgstr "Debug"
 
 #: view/subBrowserSources.py:388
 msgid ""
-"Player 1 is always the player your observer camera is centered on at start of "
-"a game."
+"Player 1 is always the player your observer camera is centered on at start "
+"of a game."
 msgstr ""
 "Spieler 1 ist stehts der Spieler, auf den die Kamera zu Beginn des Spieles "
 "zentriert ist."
@@ -633,21 +635,21 @@ msgid "Scope:"
 msgstr "Bereich:"
 
 #: view/subBrowserSources.py:505 view/subConnections.py:251
-#: view/subLiquipediaSearch.py:82 view/subMisc.py:644 view/subStyles.py:77
+#: view/subLiquipediaSearch.py:82 view/subMisc.py:671 view/subStyles.py:77
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: view/subBrowserSources.py:509 view/subConnections.py:255 view/subMisc.py:648
+#: view/subBrowserSources.py:509 view/subConnections.py:255 view/subMisc.py:675
 #: view/subStyles.py:81
 msgid "&Save && Close"
 msgstr "&Speichern && SchlieÃŸen"
 
-#: view/subBrowserSources.py:510 view/subConnections.py:256 view/subMisc.py:649
+#: view/subBrowserSources.py:510 view/subConnections.py:256 view/subMisc.py:676
 #: view/subStyles.py:82
 msgid "Shortcut: {}"
 msgstr "Tastenkürzel: {}"
 
-#: view/subBrowserSources.py:613 view/subConnections.py:318 view/subMisc.py:712
+#: view/subBrowserSources.py:613 view/subConnections.py:318 view/subMisc.py:743
 #: view/subStyles.py:361
 msgid "Save data?"
 msgstr "Daten speichern?"
@@ -786,7 +788,7 @@ msgstr "Auf Liquipedia suchen"
 msgid "Add to Favorites"
 msgstr "Zu Favoriten hinzufügen"
 
-#: view/subLogos.py:59 view/subLogos.py:107 view/subMisc.py:421
+#: view/subLogos.py:59 view/subLogos.py:107 view/subMisc.py:448
 #: view/widgets.py:1144
 msgid "Remove"
 msgstr "LÃ¶schen"
@@ -827,7 +829,7 @@ msgstr "Von Favoriten entfernen"
 msgid "Select Team Logo"
 msgstr "WÃ¤hle das Team Logo aus"
 
-#: view/subLogos.py:309 view/subMisc.py:483 view/subMisc.py:496
+#: view/subLogos.py:309 view/subMisc.py:510 view/subMisc.py:523
 msgid "Supported Images"
 msgstr "Unterstütze Bild-Formate"
 
@@ -851,7 +853,7 @@ msgstr "Verschiedene Einstellungen"
 msgid "Map Manager"
 msgstr "Karten Manager"
 
-#: view/subMisc.py:77 view/subMisc.py:282
+#: view/subMisc.py:77 view/subMisc.py:310
 msgid "Alias"
 msgstr "Alias"
 
@@ -885,8 +887,8 @@ msgid ""
 "This will ensure that the player of the first team is always on the left/top "
 "in the ingame Observer UI."
 msgstr ""
-"Dies stellt sicher, dass der Spieler des ersten Teams immer links bzw. rechts "
-"im Observer UI steht."
+"Dies stellt sicher, dass der Spieler des ersten Teams immer links bzw. "
+"rechts im Observer UI steht."
 
 #: view/subMisc.py:128
 msgid "Automatically press Ctrl+N before OCR to display player names"
@@ -902,8 +904,8 @@ msgstr "Drücke automatisch Strg+Shift+S, um den Spielstand im Spiel anzuzeigen"
 
 #: view/subMisc.py:141
 msgid ""
-"Ctrl+Shift+S is needed for the WCS-Gameheart Oberserver Overlay, but disables "
-"the sound for other overlays."
+"Ctrl+Shift+S is needed for the WCS-Gameheart Oberserver Overlay, but "
+"disables the sound for other overlays."
 msgstr ""
 "Strg+Shift+S wird für das WCS-GameHeart Overlay benötigt, aber deaktiviert "
 "den Ton bei Verwendung anderer Overlays."
@@ -920,77 +922,96 @@ msgstr "Drücke automatisch Strg+Shift+R "
 msgid " time(s)"
 msgstr " mal, um das Rasse-Icon zu wechseln"
 
-#: view/subMisc.py:187
+#: view/subMisc.py:174
+msgid "Activate Blacklist for Ingame Score"
+msgstr "Aktiviere schwarze List für den Ingame Spielstand"
+
+#: view/subMisc.py:185
+#, fuzzy
+#| msgid "Set Ingame Score"
+msgid "Blacklist for Ingame Score"
+msgstr "Setzte Spielstand im Spiel"
+
+#: view/subMisc.py:188
+msgid ""
+"Enter your SC2 client usernames to deactivate automatically setting the "
+"ingame score and when you are playing yourself. Replays are exempt."
+msgstr ""
+"Gebe deine Benutzernamen im SC2-Client ein, um zu deaktivieren, dass die "
+"Ingame Spielstand automatische gesetzt, wenn du selbst spielst. Replays sind "
+"davon ausgenommen."
+
+#: view/subMisc.py:215
 msgid "Players"
 msgstr "Spieler"
 
-#: view/subMisc.py:199
+#: view/subMisc.py:227
 msgid "Teams"
 msgstr "Teams"
 
-#: view/subMisc.py:207
+#: view/subMisc.py:235
 msgid "Swap my favorite team always to the left"
 msgstr "Platziere mein Favoriten-Team immer links"
 
-#: view/subMisc.py:226
+#: view/subMisc.py:254
 msgid ""
 "Player and team aliases are replaced by the actual name when encountered by "
 "the match grabber. Additionally, SC2 player names listed as aliases are "
 "replaced in the intros and used to identify players by the automatic "
 "background tasks \"Auto Score Update\" and \"Set Ingame Score\"."
 msgstr ""
-"Spieler- und Teamaliase werden durch den eigentlichen Namen ersetzen wenn die "
-"Partie-Kralle auf diese trifft. Zudem, werden SC2 Spielernamen, die als Alias "
-"gelistet sind, für die Intros ersetz und verwendet um Spieler innerhalb der "
-"Hintergrund-Aufgaben \"Auto Ergebnis Aktual.\" und \"Setzte Spielstand im "
-"Spiel\" zu identifizieren."
+"Spieler- und Teamaliase werden durch den eigentlichen Namen ersetzen wenn "
+"die Partie-Kralle auf diese trifft. Zudem, werden SC2 Spielernamen, die als "
+"Alias gelistet sind, für die Intros ersetz und verwendet um Spieler "
+"innerhalb der Hintergrund-Aufgaben \"Auto Ergebnis Aktual.\" und \"Setzte "
+"Spielstand im Spiel\" zu identifizieren."
 
-#: view/subMisc.py:237
+#: view/subMisc.py:265
 msgid "Player Aliases"
 msgstr "Spieleraliase"
 
-#: view/subMisc.py:243 view/subMisc.py:256 view/widgets.py:656
+#: view/subMisc.py:271 view/subMisc.py:284 view/widgets.py:656
 msgid "Add Alias"
 msgstr "Alias hinzufügen"
 
-#: view/subMisc.py:245
+#: view/subMisc.py:273
 msgid "Player Name"
 msgstr "Spielername"
 
-#: view/subMisc.py:250
+#: view/subMisc.py:278
 msgid "Team Aliases"
 msgstr "Teamaliase"
 
-#: view/subMisc.py:258
+#: view/subMisc.py:286
 msgid "Team Name"
 msgstr "Teamname"
 
-#: view/subMisc.py:282
+#: view/subMisc.py:310
 msgid "Alias of {}"
 msgstr "Alias von {}"
 
-#: view/subMisc.py:296 view/subMisc.py:462 view/subMisc.py:508
-#: view/subMisc.py:545 view/subMisc.py:593 view/widgets.py:1265
+#: view/subMisc.py:324 view/subMisc.py:489 view/subMisc.py:535
+#: view/subMisc.py:572 view/subMisc.py:620 view/widgets.py:1265
 msgid "Error"
 msgstr "Fehler"
 
-#: view/subMisc.py:305
+#: view/subMisc.py:333
 msgid "Optical Character Recognition for Automatic Setting of Ingame Score"
 msgstr "Optische Zeichenerkennung zum automatischen Setzen des Spielstandes"
 
-#: view/subMisc.py:311
+#: view/subMisc.py:339
 msgid "Activate Optical Character Recognition"
 msgstr "Optische Zeichenerkennung aktivieren"
 
-#: view/subMisc.py:324 view/subMisc.py:349 view/subMisc.py:379
+#: view/subMisc.py:352 view/subMisc.py:377 view/subMisc.py:407
 msgid "Tesseract-OCR Executable"
 msgstr "Tesseract-OCR Programmdatei"
 
-#: view/subMisc.py:326
+#: view/subMisc.py:354
 msgid "Browse..."
 msgstr "Durchsuchen..."
 
-#: view/subMisc.py:330
+#: view/subMisc.py:358
 msgid ""
 "Sometimes the order of players given by the SC2-Client-API differs from the "
 "order in the Observer-UI resulting in a swapped match score. To correct this "
@@ -1003,75 +1024,75 @@ msgstr ""
 "{} heruntergeladen, installiert und unten ausgewählt werden, sofern nicht "
 "automatisch geschehen."
 
-#: view/subMisc.py:363 view/subMisc.py:367 view/subMisc.py:371
+#: view/subMisc.py:391 view/subMisc.py:395 view/subMisc.py:399
 msgid "This feature is only available in Windows."
 msgstr "Nur für Windows verfügbar."
 
-#: view/subMisc.py:378
+#: view/subMisc.py:406
 msgid "Select Tesseract-OCR Executable"
 msgstr "Tesseract-OCR Programmdatei auswÃ¤hlen"
 
-#: view/subMisc.py:380
+#: view/subMisc.py:408
 msgid "Executable"
 msgstr "Programmdatei"
 
-#: view/subMisc.py:380
+#: view/subMisc.py:408
 msgid "All files"
 msgstr "Alle Dateien"
 
-#: view/subMisc.py:413
+#: view/subMisc.py:440
 msgid "Add from Liquipedia"
 msgstr "Aus Liquipedia hinzufügen"
 
-#: view/subMisc.py:415
+#: view/subMisc.py:442
 msgid "Add from File"
 msgstr "Aus Datei hinzufügen"
 
-#: view/subMisc.py:417 view/widgets.py:1140
+#: view/subMisc.py:444 view/widgets.py:1140
 msgid "Rename"
 msgstr "Umbennen"
 
-#: view/subMisc.py:419
+#: view/subMisc.py:446
 msgid "Change Image"
 msgstr "Ã„ndere Bild"
 
-#: view/subMisc.py:453 view/subMisc.py:502 view/subMisc.py:538
+#: view/subMisc.py:480 view/subMisc.py:529 view/subMisc.py:565
 msgid "Map Name"
 msgstr "Karten-Name"
 
-#: view/subMisc.py:463 view/subMisc.py:509 view/subMisc.py:546
+#: view/subMisc.py:490 view/subMisc.py:536 view/subMisc.py:573
 msgid "\"{}\" is not a valid map name."
 msgstr "\"{}\" ist kein gültiger Kartenname."
 
-#: view/subMisc.py:467 view/subMisc.py:514 view/subMisc.py:562
+#: view/subMisc.py:494 view/subMisc.py:541 view/subMisc.py:589
 msgid "Duplicate Entry"
 msgstr "Doppelter Eintrag"
 
-#: view/subMisc.py:468 view/subMisc.py:515
+#: view/subMisc.py:495 view/subMisc.py:542
 msgid "Map is already in list! Overwrite?"
 msgstr "Karte ist bereits in der Liste! Überschreiben?"
 
-#: view/subMisc.py:482 view/subMisc.py:495
+#: view/subMisc.py:509 view/subMisc.py:522
 msgid "Select Map Image (> 500x500px recommended)"
 msgstr "WÃ¤he Karten-Bild aus (> 500x500px empfohlen)"
 
-#: view/subMisc.py:554
+#: view/subMisc.py:581
 msgid "Map not found"
 msgstr "Karte nicht gefunden"
 
-#: view/subMisc.py:555
+#: view/subMisc.py:582
 msgid "\"{}\" was not found on Liquipedia."
 msgstr "\"{}\" wurde nicht auf Liquipedia gefunden."
 
-#: view/subMisc.py:563
+#: view/subMisc.py:590
 msgid "Map {} is already in list! Overwrite?"
 msgstr "Karte {} ist bereits in der Liste! Überschreiben?"
 
-#: view/subMisc.py:602
+#: view/subMisc.py:629
 msgid "Delete map?"
 msgstr "Karte löschen?"
 
-#: view/subMisc.py:603
+#: view/subMisc.py:630
 msgid "Delete '{}' permanently?"
 msgstr "Soll '{}' permanent gelöschtt werden?"
 
@@ -1246,7 +1267,8 @@ msgstr "Fertig."
 
 #: view/widgets.py:860
 msgid "Downloading required files...: Total file size {}, Time remaining {}."
-msgstr "Lade benötige Dateien herunter...: {} Gesamtgröße, {} Zeit verbleibend."
+msgstr ""
+"Lade benötige Dateien herunter...: {} Gesamtgröße, {} Zeit verbleibend."
 
 #: view/widgets.py:1125
 msgid "Profile"
@@ -1502,8 +1524,8 @@ msgstr "bis"
 #~ "{host}:{port} is unreachable. Is OBS Studio with obs-websocket plugin "
 #~ "launched?"
 #~ msgstr ""
-#~ "{host}:{port} kann nicht erreicht werden. Ist OBS Studio mit obs-websocket "
-#~ "Plugin gestartet?"
+#~ "{host}:{port} kann nicht erreicht werden. Ist OBS Studio mit obs-"
+#~ "websocket Plugin gestartet?"
 
 #~ msgid "Couldn't auth to obs-websocket. Correct password?"
 #~ msgstr ""
