@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: StarCraft Casting Tool\n"
-"POT-Creation-Date: 2018-05-10 23:28+0200\n"
-"PO-Revision-Date: 2018-05-10 23:29+0200\n"
+"POT-Creation-Date: 2018-07-29 14:48+0200\n"
+"PO-Revision-Date: 2018-07-29 14:55+0200\n"
 "Last-Translator: \n"
 "Language-Team: Mayhem, TanTall\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.7\n"
+"X-Generator: Poedit 2.1.1\n"
 "X-Poedit-Basepath: ../../..\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
@@ -22,60 +22,76 @@ msgstr ""
 msgid "This version is up to date."
 msgstr "Вы используете новейшую версию."
 
-#: scctool/controller.py:531 scctool/controller.py:539
+#: scctool/controller.py:515 scctool/controller.py:523
 msgid "Specify your Twitch Settings to use this feature"
 msgstr "Укажите настройки Twitch для использования этой возможности"
 
-#: scctool/controller.py:534
+#: scctool/controller.py:518
 msgid ""
 "Automatically update the title of your twitch channel in the background."
 msgstr ""
 "Автоматическое обновление заголовка вашего Twitch-канала в фоновом режиме."
 
-#: scctool/controller.py:545 scctool/controller.py:552
+#: scctool/controller.py:529 scctool/controller.py:536
 msgid "Specify your Nightbot Settings to use this feature"
 msgstr "Укажите настройки Nightbot для использования этой возможности"
 
-#: scctool/controller.py:546
+#: scctool/controller.py:530
 msgid "Automatically update the commands of your nightbot in the background."
 msgstr "Автоматическое обновление команд nightbot в фоновом режиме."
 
-#: scctool/controller.py:693
+#: scctool/controller.py:706
 msgid "Warning: Map '{}' not found!"
 msgstr "Внимание: Карта '{}' Не найдена!"
 
-#: scctool/controller.py:740
-msgid "A new version {} is available."
-msgstr "Доступна новая версия {}."
+# Google Translate
+#: scctool/controller.py:754
+msgid ""
+"A new <b>major upgrade</b> to version {} is available. <b>Warning: Upgrading "
+"requires you to redo your streaming setup</b> as the folder structure has "
+"been changed."
+msgstr ""
+"A new <b>major upgrade</b> to version {} is available. <b>Warning: Upgrading "
+"requires you to redo your streaming setup</b> as the folder structure has "
+"been changed."
 
-#: scctool/controller.py:742
-msgid "Update to new version?"
-msgstr "Загрузить новую версию?"
+# Google Translate
+#: scctool/controller.py:759
+msgid "<b>Do you really whish to upgrade to the new version now?</b>"
+msgstr "<b>Вы действительно хотите перейти на новую версию сейчас?</b>"
 
-#: scctool/controller.py:743
-msgid "New SCC-Tool Version"
-msgstr "Новая версия SCC-Tool"
+#: scctool/controller.py:761
+msgid "Upgrade to SCC-Tool Version 2.0"
+msgstr "Обновление до версии SCC-Tool версии 2.0"
 
-#: scctool/controller.py:752
+#: scctool/controller.py:770
 msgid "Don't show on startup."
 msgstr "Не показывать при запуске."
 
-#: scctool/controller.py:761
+#: scctool/controller.py:779
 msgid "A new version {} is available on GitHub!"
 msgstr "Новая версия {} доступна на GitHub!"
 
+#: scctool/tasks/auth.py:47
+msgid ""
+"StarCraft Casting Tool: Succesfully recived access to {} - you can close "
+"this tab now."
+msgstr ""
+"StarCraft Casting Tool: Успешно получен доступ к Twitch - теперь вы можете "
+"закрыть эту вкладку."
+
 #: scctool/tasks/nightbot.py:39 scctool/tasks/nightbot.py:101
-#: scctool/tasks/twitch.py:44
+#: scctool/tasks/twitch.py:49
 msgid "Forbidden - Do you have permission?"
 msgstr "Запрещено! У вас есть разрешение?"
 
 #: scctool/tasks/nightbot.py:41 scctool/tasks/nightbot.py:103
-#: scctool/tasks/twitch.py:46
+#: scctool/tasks/twitch.py:51
 msgid "Unauthorized - Refresh your token!"
 msgstr "Неавторизован - обновите ваш токен!"
 
 #: scctool/tasks/nightbot.py:43 scctool/tasks/nightbot.py:105
-#: scctool/tasks/twitch.py:48
+#: scctool/tasks/twitch.py:53
 msgid "Too Many Requests."
 msgstr "Слишком много запросов."
 
@@ -91,31 +107,17 @@ msgstr "Удалить команду '{}'"
 msgid "Updated Nightbot command '{}' to '{}'"
 msgstr "Обновить команду Nightbot '{}' на '{}'"
 
-#: scctool/tasks/twitch.py:32
+#: scctool/tasks/twitch.py:36
 msgid "Updated Twitch title of {} to: \"{}\""
 msgstr "Изменить заголовок Twitch из {} на: \"{}\""
 
-#: scctool/tasks/twitch.py:41
+#: scctool/tasks/twitch.py:45
 msgid "Not Found - Channel '{}' not found."
 msgstr "Не найдено - канал '{}' не найден."
 
 #: scctool/tasks/updater.py:270
 msgid "Updated data files!"
 msgstr "Данные обновлены!"
-
-#: scctool/tasks/webapp.py:139
-msgid ""
-"scctool: Succesfully recived access to Nightbot - you can close this tab now."
-msgstr ""
-"scctool: Успешно получен доступ к Nightbot - теперь вы можете закрыть эту "
-"вкладку."
-
-#: scctool/tasks/webapp.py:159
-msgid ""
-"scctool: Succesfully recived access to Twitch - you can close this tab now."
-msgstr ""
-"scctool: Успешно получен доступ к Twitch - теперь вы можете закрыть эту "
-"вкладку."
 
 #: scctool/view/main.py:105
 msgid "StarCraft Casting Tool is up to date."
@@ -133,7 +135,7 @@ msgstr "StarCraft Casting Tool - О программе"
 msgid "Settings"
 msgstr "Настройки"
 
-#: scctool/view/main.py:137 scctool/view/subConnections.py:57
+#: scctool/view/main.py:137 scctool/view/subConnections.py:58
 msgid "Connections"
 msgstr "Соединения"
 
@@ -161,9 +163,10 @@ msgstr "О программе"
 msgid "Readme"
 msgstr "Прочти"
 
+# Google Translate
 #: scctool/view/main.py:166
-msgid "Check for new version"
-msgstr "Проверить наличие обновлений"
+msgid "Upgrade to v2.0 release"
+msgstr "Обновление до версии v2.0"
 
 #: scctool/view/main.py:171 scctool/view/main.py:282
 msgid "Changelog"
@@ -309,10 +312,11 @@ msgstr "Сбросить счет"
 msgid "Update OB&S Data"
 msgstr "Обновить данные OB&S"
 
-#: scctool/view/main.py:800 scctool/view/subConnections.py:304
-#: scctool/view/subMisc.py:623 scctool/view/subStyles.py:82
+#: scctool/view/main.py:800 scctool/view/subBrowserSources.py:294
+#: scctool/view/subConnections.py:338 scctool/view/subMisc.py:623
+#: scctool/view/subStyles.py:82
 msgid "Shortcut: {}"
-msgstr "горячая клавиша: {}"
+msgstr "Горячая клавиша: {}"
 
 #: scctool/view/main.py:821
 msgid "Background Tasks"
@@ -399,128 +403,209 @@ msgstr "Сброс счета..."
 msgid "Updating Score..."
 msgstr "Обновление счета..."
 
-#: scctool/view/subConnections.py:71
-msgid "Intros && Hotkeys"
-msgstr "Интро и хоткеи"
+#: scctool/view/subBrowserSources.py:57
+msgid "Browser Sources"
+msgstr "Ресурсы"
 
-#: scctool/view/subConnections.py:72
-msgid "Twitch"
-msgstr "Twitch"
+#: scctool/view/subBrowserSources.py:72
+msgid "Intros"
+msgstr "Заставки"
 
-#: scctool/view/subConnections.py:73
-msgid "Nightbot"
-msgstr "Nightbot"
+# Google Translate
+#: scctool/view/subBrowserSources.py:73
+msgid "Mapstats"
+msgstr "Статистика карт"
 
-#: scctool/view/subConnections.py:95
+#: scctool/view/subBrowserSources.py:75
+msgid "Box Map Icons"
+msgstr "Пиктограммы карт"
+
+#: scctool/view/subBrowserSources.py:76
+msgid "Landscape Map Icons"
+msgstr "Ландшафт карт"
+
+# Google Translate
+#: scctool/view/subBrowserSources.py:97
+msgid "Map Pool to be displayed"
+msgstr "Отобразится пул карт"
+
+# Google Translate
+#: scctool/view/subBrowserSources.py:100
+msgid "Current Ladder Map Pool"
+msgstr "Текущая карта лестничной карты"
+
+# Google Translate
+#: scctool/view/subBrowserSources.py:101
+msgid "Custom Map Pool (defined below)"
+msgstr "Пользовательский пул карт (определенный ниже)"
+
+# Google Translate
+#: scctool/view/subBrowserSources.py:102
+msgid "Currently entered Maps only"
+msgstr "В настоящее время введены только Карты"
+
+# Google Translate
+#: scctool/view/subBrowserSources.py:111
+msgid "Custom Map Pool"
+msgstr "Пользовательский пул карт"
+
+# Google Translate
+#: scctool/view/subBrowserSources.py:157
+msgid "Add Map"
+msgstr "Добавить карту"
+
+# Google Translate
+#: scctool/view/subBrowserSources.py:158
+msgid "Please select a map"
+msgstr "Выберите карту"
+
+# Google Translate
+#: scctool/view/subBrowserSources.py:169
+msgid "No maps available"
+msgstr "Нет доступных карт"
+
+# Google Translate
+#: scctool/view/subBrowserSources.py:170
+msgid "All available maps have already been added."
+msgstr "Все доступные карты уже добавлены."
+
+#: scctool/view/subBrowserSources.py:197 scctool/view/subConnections.py:96
 msgid "Intro Hotkeys"
 msgstr "Интро хоткеи"
 
-#: scctool/view/subConnections.py:103
+#: scctool/view/subBrowserSources.py:205 scctool/view/subConnections.py:104
 msgid "Player 1"
 msgstr "Игрок 1"
 
-#: scctool/view/subConnections.py:104
+#: scctool/view/subBrowserSources.py:206 scctool/view/subConnections.py:105
 msgid "Player 2"
 msgstr "Игрок 2"
 
-#: scctool/view/subConnections.py:105
+#: scctool/view/subBrowserSources.py:207 scctool/view/subConnections.py:106
 msgid "Debug"
 msgstr "Отладка"
 
-#: scctool/view/subConnections.py:110
+#: scctool/view/subBrowserSources.py:212 scctool/view/subConnections.py:111
 msgid "Intro Settings"
 msgstr "Интро настройки"
 
-#: scctool/view/subConnections.py:121
+#: scctool/view/subBrowserSources.py:223 scctool/view/subConnections.py:122
 msgid "Sound Volume:"
 msgstr "Громкость:"
 
-#: scctool/view/subConnections.py:127
+#: scctool/view/subBrowserSources.py:229 scctool/view/subConnections.py:128
 msgid "Seconds"
 msgstr "Секунд"
 
-#: scctool/view/subConnections.py:130
+#: scctool/view/subBrowserSources.py:232 scctool/view/subConnections.py:131
 msgid "Display Duration:"
 msgstr "Длительность показа:"
 
-#: scctool/view/subConnections.py:142
+#: scctool/view/subBrowserSources.py:245 scctool/view/subConnections.py:144
 msgid "Animation:"
 msgstr "Анимация:"
 
-#: scctool/view/subConnections.py:161
+# Google Translate
+#: scctool/view/subBrowserSources.py:249 scctool/view/subConnections.py:148
+msgid "Text-to-Speech Settings"
+msgstr "Настройки текста в речь"
+
+# Google Translate
+#: scctool/view/subBrowserSources.py:257 scctool/view/subConnections.py:156
+msgid "Activate Text-to-Speech:"
+msgstr "Активация текста в речь:"
+
+#: scctool/view/subBrowserSources.py:273 scctool/view/subConnections.py:172
+msgid "Language:"
+msgstr "Язык:"
+
+#: scctool/view/subBrowserSources.py:289 scctool/view/subConnections.py:333
+#: scctool/view/subLiquipediaSearch.py:80 scctool/view/subMisc.py:618
+#: scctool/view/subStyles.py:77
+msgid "Cancel"
+msgstr "Отмена"
+
+#: scctool/view/subBrowserSources.py:293 scctool/view/subConnections.py:337
+#: scctool/view/subMisc.py:622 scctool/view/subStyles.py:81
+msgid "&Save && Close"
+msgstr "Сохранить и закрыть"
+
+#: scctool/view/subBrowserSources.py:364 scctool/view/subConnections.py:407
+#: scctool/view/subMisc.py:682 scctool/view/subStyles.py:325
+msgid "Save data?"
+msgstr "Сохранить данные?"
+
+#: scctool/view/subBrowserSources.py:364 scctool/view/subConnections.py:407
+msgid "Do you want to save the data?"
+msgstr "Вы хотите сохранить данные?"
+
+#: scctool/view/subConnections.py:72
+msgid "Intros && Hotkeys"
+msgstr "Интро и хоткеи"
+
+#: scctool/view/subConnections.py:73
+msgid "Twitch"
+msgstr "Twitch"
+
+#: scctool/view/subConnections.py:74
+msgid "Nightbot"
+msgstr "Nightbot"
+
+#: scctool/view/subConnections.py:192
 msgid "Name of the Twitch channel that should be updated"
 msgstr "Название канала Twitch, который должен быть обновлен"
 
-#: scctool/view/subConnections.py:163
+#: scctool/view/subConnections.py:194
 msgid "The connected twitch user needs to have editor rights for this channel."
 msgstr ""
 "Подключенный пользователь twitch должен обладать правами редактора для этого "
 "канала."
 
-#: scctool/view/subConnections.py:175 scctool/view/subConnections.py:232
+#: scctool/view/subConnections.py:207 scctool/view/subConnections.py:265
 msgid "Press 'Get' to generate a token"
 msgstr "Нажмите 'Получить' для генерации токена"
 
-#: scctool/view/subConnections.py:177
+#: scctool/view/subConnections.py:209
 msgid "Press 'Get' to generate a new token."
 msgstr "Нажмите 'Получить' для генерации нового токена."
 
-#: scctool/view/subConnections.py:180 scctool/view/subConnections.py:236
+#: scctool/view/subConnections.py:212 scctool/view/subConnections.py:269
 msgid "Get"
 msgstr "Получить"
 
-#: scctool/view/subConnections.py:185
+#: scctool/view/subConnections.py:218
 msgid "Access-Token:"
 msgstr "Токен доступа:"
 
-#: scctool/view/subConnections.py:196 scctool/view/subConnections.py:408
+#: scctool/view/subConnections.py:229 scctool/view/subConnections.py:446
 msgid "Available placeholders:"
 msgstr "Доступные заглушки:"
 
-#: scctool/view/subConnections.py:206 scctool/view/subConnections.py:416
+#: scctool/view/subConnections.py:239 scctool/view/subConnections.py:454
 msgid "Test"
 msgstr "Тест"
 
-#: scctool/view/subConnections.py:212
+#: scctool/view/subConnections.py:245
 msgid "Title Template:"
 msgstr "Шаблон заголовка:"
 
-#: scctool/view/subConnections.py:234
+#: scctool/view/subConnections.py:267
 msgid "Press 'Get' to generate a token."
 msgstr "Нажмите 'Получить', чтобы создать токен."
 
-#: scctool/view/subConnections.py:268
+#: scctool/view/subConnections.py:302
 msgid "Add Command"
 msgstr "Добавить команду"
 
-#: scctool/view/subConnections.py:299 scctool/view/subLiquipediaSearch.py:80
-#: scctool/view/subMisc.py:618 scctool/view/subStyles.py:77
-msgid "Cancel"
-msgstr "Отмена"
-
-#: scctool/view/subConnections.py:303 scctool/view/subMisc.py:622
-#: scctool/view/subStyles.py:81
-msgid "&Save && Close"
-msgstr "Сохранить и закрыть"
-
-#: scctool/view/subConnections.py:369 scctool/view/subMisc.py:682
-#: scctool/view/subStyles.py:325
-msgid "Save data?"
-msgstr "Сохранить данные?"
-
-#: scctool/view/subConnections.py:369
-msgid "Do you want to save the data?"
-msgstr "Вы хотите сохранить данные?"
-
-#: scctool/view/subConnections.py:383 scctool/view/subConnections.py:460
+#: scctool/view/subConnections.py:421 scctool/view/subConnections.py:498
 msgid "Output:"
 msgstr "Вывод:"
 
-#: scctool/view/subConnections.py:406
+#: scctool/view/subConnections.py:444
 msgid "message, e.g.,"
 msgstr "сообщение,"
 
-#: scctool/view/subConnections.py:421
+#: scctool/view/subConnections.py:459
 msgid "Delete"
 msgstr "Удалить"
 
@@ -980,11 +1065,10 @@ msgstr "Установить хоткей"
 msgid "Clear"
 msgstr "Очистить"
 
+# Google Translate
 #: scctool/view/widgets.py:244
-#, fuzzy
-#| msgid "Set Hotkey"
 msgid "Recording Hotkey"
-msgstr "Установить хоткей"
+msgstr "Горячая клавиша записи"
 
 # Needs to be checked by Russian.
 #: scctool/view/widgets.py:246
@@ -1042,6 +1126,22 @@ msgstr "Готово."
 #: scctool/view/widgets.py:812
 msgid "Downloading required files...: Total file size {}, Time remaining {}."
 msgstr "Загрузка необходимых файлов...: размер файла {}, осталось времени {}."
+
+#~ msgid "A new version {} is available."
+#~ msgstr "Доступна новая версия {}."
+
+#~ msgid "Update to new version?"
+#~ msgstr "Загрузить новую версию?"
+
+#~ msgid ""
+#~ "scctool: Succesfully recived access to Nightbot - you can close this tab "
+#~ "now."
+#~ msgstr ""
+#~ "scctool: Успешно получен доступ к Nightbot - теперь вы можете закрыть эту "
+#~ "вкладку."
+
+#~ msgid "Check for new version"
+#~ msgstr "Проверить наличие обновлений"
 
 #~ msgid "Add"
 #~ msgstr "Добавить"
@@ -1141,9 +1241,6 @@ msgstr "Загрузка необходимых файлов...: размер ф
 #~ msgstr ""
 #~ "Название ресурса OBS, которое должно автоматически скрываться через 4.5 "
 #~ "секунды после появления."
-
-#~ msgid "Sources:"
-#~ msgstr "Ресурсы:"
 
 #~ msgid "Automatic hide sources"
 #~ msgstr "Автоматически скрывать ресурсы"
