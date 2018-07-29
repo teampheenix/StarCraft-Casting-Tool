@@ -141,6 +141,9 @@ def setDefaultConfigAll():
     setDefaultConfig("SCT", "language", "en_US")
     setDefaultConfig("SCT", "transparent_match_banner", "False")
 
+    setDefaultConfig("SCT", "blacklist_on", "False")
+    setDefaultConfig("SCT", "blacklist", "")
+
     tesseract = "C:\\Program Files (x86)\\Tesseract-OCR\\tesseract.exe"
     setDefaultConfig("SCT", "tesseract", tesseract, findTesserAct)
 
@@ -256,6 +259,12 @@ def getMyTeams():
     """Enpack my teams."""
     return list(map(str.strip,
                     str(this.parser.get("SCT", "myteams")).split(',')))
+
+
+def getBlacklist():
+    """Enpack my teams."""
+    return list(map(str.strip,
+                    str(this.parser.get("SCT", "blacklist")).split(',')))
 
 
 def getMyPlayers(append=False):

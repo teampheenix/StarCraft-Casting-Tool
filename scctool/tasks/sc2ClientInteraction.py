@@ -183,6 +183,13 @@ class SC2ApiThread(QThread):
     def tryToggle(self, data):
         """Wait until SC2 is in foreground and toggle"""
         """production tab and score."""
+        if (scctool.settings.config.parser.getboolean(
+            "SCT", "blacklist_on") and
+                not data.replay):
+            blacklist = scctool.settings.config.getBlacklist()
+            if data.player1 in blacklist or data.player2 in blacklist:
+                module_logger.info("Do not toogle due to blacklist.")
+                return
         try:
             while self.exiting is False\
                 and (self.activeTask['toggleScore'] or
@@ -324,6 +331,7 @@ class SC2MatchData:
             self.race1 = self.translateRace(GAMEresponse["players"][0]["race"])
             self.race2 = self.translateRace(GAMEresponse["players"][1]["race"])
             self.time = GAMEresponse["displayTime"]
+            self.replay = GAMEresponse["isReplay"]
             self.ingame = UIresponse["activeScreens"] == []
             if(GAMEresponse["players"][0]["result"] == "Victory"):
                 self.result = -1
@@ -341,6 +349,7 @@ class SC2MatchData:
             self.result = 0
             self.time = 0
             self.ingame = False
+            self.replay = False
 
     def compare_returnScore(self, player1, player2, weak=False,
                             translator=None):

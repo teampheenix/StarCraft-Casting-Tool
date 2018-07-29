@@ -170,6 +170,34 @@ class SubwindowMisc(QWidget):
         container.addWidget(QLabel(_(' time(s)')))
         layout.addLayout(container)
 
+        self.cb_blacklist = QCheckBox(
+            " " + _('Activate Blacklist for'
+                    ' Ingame Score'))
+        self.cb_blacklist.setChecked(
+            scctool.settings.config.parser.getboolean("SCT", "blacklist_on"))
+        self.cb_blacklist.stateChanged.connect(self.changed)
+        layout.addWidget(self.cb_blacklist)
+
+        box.setLayout(layout)
+
+        mainLayout.addWidget(box)
+
+        box = QGroupBox(_("Blacklist for Ingame Score"))
+        layout = QVBoxLayout()
+
+        blacklistDesc = _("Enter your SC2 client usernames to deactivate"
+                          " automatically setting the ingame score and when"
+                          " you are playing yourself. Replays are exempt.")
+        label = QLabel(blacklistDesc)
+        label.setAlignment(Qt.AlignJustify)
+        label.setWordWrap(True)
+        layout.addWidget(label)
+
+        self.list_blacklist = ListTable(
+            4, scctool.settings.config.getBlacklist())
+        self.list_blacklist.dataModified.connect(self.changed)
+        self.list_blacklist.setFixedHeight(50)
+        layout.addWidget(self.list_blacklist)
         box.setLayout(layout)
 
         mainLayout.addWidget(box)
@@ -392,7 +420,6 @@ class SubwindowMisc(QWidget):
 
         self.maplist = QListWidget()
         self.maplist.setSortingEnabled(True)
-        print(scctool.settings.maps)
         for map in scctool.settings.maps:
             self.maplist.addItem(QListWidgetItem(map))
         self.maplist.setCurrentItem(self.maplist.item(0))
@@ -684,6 +711,10 @@ class SubwindowMisc(QWidget):
                 "SCT", "CtrlX", str(self.cb_ctrlx.isChecked()))
             scctool.settings.config.parser.set(
                 "SCT", "CtrlShiftR", str(self.cb_ctrlshiftr.currentText()))
+            scctool.settings.config.parser.set(
+                "SCT", "blacklist_on", str(self.cb_blacklist.isChecked()))
+            scctool.settings.config.parser.set(
+                "SCT", "blacklist", ", ".join(self.list_blacklist.getData()))
 
             self.__dataChanged = False
 

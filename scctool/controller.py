@@ -530,7 +530,7 @@ class MainController:
             '')
 
     def requestScoreLogoUpdate(self, data, swap=False):
-        print("requestScoreLogoUpdate")
+        module_logger.info("requestScoreLogoUpdate")
         for player_idx in range(2):
             team1 = data.playerInList(
                 player_idx,
