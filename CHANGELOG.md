@@ -1,6 +1,17 @@
 # Changelog
 
 
+## v1.13.0 (2018-07-29)
+
+### New
+
+* Prepared tool for upcoming upgrade to v2.0; This is the last update prior to v2.0. [2press]
+
+### Changes
+
+* Upgrade to Twitch-API v5. [2press]
+
+
 ## v1.12.3 (2018-07-20)
 
 ### Changes
