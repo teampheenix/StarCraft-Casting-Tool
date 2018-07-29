@@ -186,8 +186,9 @@ class SubwindowMisc(QWidget):
         layout = QVBoxLayout()
 
         blacklistDesc = _("Enter your SC2 client usernames to deactivate"
-                          " automatically setting the ingame score and when"
-                          " you are playing yourself. Replays are exempt.")
+                          " automatically setting the ingame score and"
+                          " toogling the production tab when you are playing"
+                          " yourself. Replays are exempt.")
         label = QLabel(blacklistDesc)
         label.setAlignment(Qt.AlignJustify)
         label.setWordWrap(True)
