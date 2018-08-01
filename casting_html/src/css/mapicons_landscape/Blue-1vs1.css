@@ -1,0 +1,261 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+/* latin */
+
+:root {
+  --font: Roboto;
+  --padding: 2px;
+  --border-size: 1px;
+  --border-color: #2d6199;
+  --total-width: 1005px;
+  --total-height: 80px;
+  --border-radius: 8px;
+  --middle-width: 25%;
+  --lower-text-height: 33%;
+  --side-width: calc((100% - var(--middle-width)) / 2);
+}
+
+body {
+  font-family: var(--font);
+}
+
+#container {
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.block {
+  height: var(--total-height);
+  width: var(--total-width);
+  padding: var(--padding);
+}
+
+.text-item {
+  color: white;
+  font-size: 18px;
+  --outline-size: 2.0px;
+  text-shadow: 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black;
+  -webkit-font-smoothing: antialiased;
+}
+
+.winner {
+  --winner-color: #4795e8;
+  --size: 8px;
+  color: white !important;
+  text-shadow: 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color) !important;
+  -webkit-font-smoothing: antialiased;
+}
+
+.loser {
+  filter: brightness(75%);
+  opacity: 0.75;
+}
+
+.race1.loser, .race2.loser {
+  opacity: 0.5 !important;
+  filter: invert(1) drop-shadow(1px 1px 1px #24456c) brightness(75%);
+}
+
+.race1.winner, .race2.winner {
+  filter: invert(1) drop-shadow(0px 0px 1px #4795e8) drop-shadow(0px 0px 1px #4795e8);
+}
+
+div.box {
+  position: relative;
+  width: var(--total-width);
+  height: var(--total-height);
+  overflow: hidden;
+  border: var(--border-size) solid var(--border-color);
+  border-radius: var(--border-radius) var(--border-radius) var(--border-radius) var(--border-radius);
+  box-sizing: border-box;
+  box-shadow: 2px 4px 4px -2px rgba(0, 0, 0, 0.6);
+}
+
+div.box_left {
+  position: absolute;
+  height: 100%;
+  left: 0%;
+  width: calc(var(--side-width) + var(--border-radius));
+  background-color: gray;
+  background-size: 125%;
+  background-position: 15% 15%;
+  overflow: hidden;
+}
+
+div.box_middle {
+  position: absolute;
+  height: 100%;
+  left: var(--side-width);
+  width: var(--middle-width);
+  top: 0px;
+  border-left: 2px solid var(--border-color);
+  border-right: 2px solid var(--border-color);
+  background-image: url("../../img/textures/bg_blur.jpg");
+  background-position: center center;
+  text-align: center;
+  line-height: calc(var(--total-height) - var(--border-size));
+  --winner-color: white;
+  --size: 4px;
+  color: white !important;
+  -webkit-font-smoothing: antialiased;
+  box-sizing: border-box;
+  text-shadow: none;
+}
+
+span.vs {
+  font-size: 40px;
+  font-weight: bold;
+  text-transform: uppercase;
+  filter: drop-shadow(0px 0px 2px #2d6199);
+}
+
+div.box_right {
+  position: absolute;
+  height: 100%;
+  right: 0%;
+  width: calc(var(--side-width) + var(--border-radius));
+  background-color: gray;
+  background-size: 125%;
+  background-position: 80% 80%;
+  box-sizing: border-box;
+  overflow: hidden
+}
+
+div.lower-text {
+  position: relative;
+  bottom: 0px;
+  width: 100%;
+}
+
+div.tbd {
+  background-image: url("../../img/textures/TBD_1.jpg")
+}
+
+div.maplabel {
+  position: absolute;
+  right: var(--border-radius);
+  width: calc(100% - var(--border-radius) - 5px);
+  text-align: center;
+  line-height: var(--total-height);
+  height: var(--total-height);
+}
+
+div.mapname {
+  position: absolute;
+  left: calc(var(--border-radius) + 10px);
+  width: calc(100% - var(--border-radius) - 25px);
+  text-align: center;
+  line-height: var(--total-height);
+  height: var(--total-height);
+}
+
+span.maplabel, span.mapname {
+  --winner-color: #4795e8;
+  --size: 10px;
+  color: white !important;
+  text-shadow: 0px 0px 2px black, 0px 0px 2px black, 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color) !important;
+  -webkit-font-smoothing: antialiased;
+}
+
+div.upper-text-right {
+  position: absolute;
+  top: 2px;
+  height: calc(100% - var(--lower-text-height) - 10px);
+  font-size: 28px;
+  left: var(--border-radius);
+  width: calc(100% - var(--border-radius) - 5px);
+  text-align: center;
+  line-height: 65px;
+}
+
+div.upper-text-left {
+  position: absolute;
+  top: 2px;
+  height: calc(100% - var(--lower-text-height) - 10px);
+  font-size: 28px;
+  right: var(--border-radius);
+  width: calc(100% - var(--border-radius) - 5px);
+  text-align: center;
+  line-height: 65px;
+}
+
+div.race1 {
+  position: absolute;
+  left: 5px;
+  width: 80px;
+  top: 2.5%;
+  height: 95%;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
+  filter: invert(1) drop-shadow(1px 1px 1px #24456c);
+}
+
+div.race2 {
+  position: absolute;
+  right: 5px;
+  width: 80px;
+  top: 2.5%;
+  height: 95%;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
+  filter: invert(1) drop-shadow(1px 1px 1px #24456c);
+}
+
+#protoss {
+  height: calc(100% - 2px);
+  top: 0px !important;
+  background-image: url('../../img/races/protoss-black.png');
+}
+
+#zerg {
+  background-image: url('../../img/races/zerg-black.png');
+  height: calc(100% - 24px);
+  top: 12px !important;
+}
+
+#terran {
+  background-image: url('../../img/races/terran-black.png');
+  height: calc(100% - 24px);
+  top: 12px !important;
+}
+
+#random {
+  background-image: url('../../img/races/random-black.png');
+  top: 5px !important;
+}
+
+div.circle {
+  position: absolute;
+  background: #f00;
+  right: 0px;
+  bottom: 0px;
+  width: 12px;
+  height: var(--total-height);
+  border-radius: 2px 8px 8px 2px;
+  border: 1px solid var(--border-color);
+  box-sizing: border-box;
+  box-shadow: 0px 0px 2px #2d6199;
+  opacity: 0.85;
+}
+
+div.opa {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #000000;
+  color: white;
+  border-radius: 0px var(--border-radius) 0px var(--border-radius);
+  box-sizing: border-box;
+}
+
+span.player1, span.player2 {
+  visibility: hidden;
+}
