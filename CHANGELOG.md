@@ -5,6 +5,8 @@
 
 ### New
 
+* Map Icons are now connected via websocket to the tool and fully animated.
+
 * Added a new Mapstats Browser Source.
 
 * Added a blacklist for the ingame score task to deactivate it when you are playing yourself.
