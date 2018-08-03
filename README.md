@@ -56,7 +56,7 @@ This tool should run on any operating system that supports Python 3, e.g., Windo
 
 ### Executable with Updater
 
-**Only Windows: [Download the latest executable](https://github.com/teampheenix/StarCraft-Casting-Tool/releases/latest)** `StarCraft-Casting-Tool.exe`, place it in a preferable empty folder folder with *sufficient write-privileges* and execute it. After the first start a subfolder structure is generated and all additional data is downloaded - do not move or alter this data structure relative to the executable.
+**Only Windows: [Download the latest executable](https://github.com/teampheenix/StarCraft-Casting-Tool/releases/latest)** `StarCraft-Casting-Tool.exe`, place it in a preferable empty folder folder with *sufficient write-privileges* and execute it. After the first start a subfolder structure is generated and all additional data is downloaded - do not move or alter this data structure relative to the executable. Do not rename the executable.
 
 ### Alternativ: Python Script
 
