@@ -175,10 +175,10 @@ class VersionHandler(TasksThread):
             self.client.add_progress_hook(self.update_progress)
             self.client.refresh()
             self.ASSET_VERSION = getDataVersion()
-            # channel = getChannel(self.APP_VERSION)
+            channel = getChannel(self.APP_VERSION)
             self.app_update = self.client.update_check(self.APP_NAME,
                                                        self.APP_VERSION,
-                                                       channel='stable')
+                                                       channel=channel)
             if self.asset_update is not None:
                 self.newData.emit(self.asset_update.latest)
                 module_logger.info("Asset: " + self.asset_update.latest)
