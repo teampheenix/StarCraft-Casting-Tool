@@ -5,6 +5,8 @@
 
 ### New
 
+* Added a new Mapstats Browser Source.
+
 * Added a blacklist for the ingame score task to deactivate it when you are playing yourself.
 
 * Already played maps can be marked in the mapstats browser source.
