@@ -21,6 +21,8 @@
 
 ### Changes
 
+* Added upcoming ladder maps.
+
 * Updated to Twitch-API v5 and included the option to set game to 'StarCraft 2' and community to 'StarCraft Casting Tool'.
 
 * Changed Koprulu League format to Pro League.
