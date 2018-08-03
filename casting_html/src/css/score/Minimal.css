@@ -57,7 +57,6 @@ div.upper-text-left {
   visibility: hidden;
 }
 
-
 div.box_right {
   position: absolute;
   width: 450px;
@@ -157,6 +156,6 @@ div.logo {
   background-repeat: no-repeat;
 }
 
-.loser{
+.loser {
   filter: brightness(75%);
 }

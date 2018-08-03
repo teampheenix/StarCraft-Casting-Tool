@@ -8,6 +8,7 @@ var padding = "2px";
 var tweens = {};
 var tweenInitial = new TimelineMax();
 var initNeeded = true;
+var controller = new Controller(profile, 'mapicons_landscape', ident);
 
 init();
 
@@ -19,36 +20,20 @@ function init() {
   }, 1000);
 }
 
+function storeData(scope = null) {
+  if (scope == null || scope == "data") controller.storeData('data', data, true);
+  if (scope == null || scope == "font") controller.storeData('font', font);
+}
+
 function loadStoredData() {
   try {
     var storage = window.localStorage;
-    var key = 'scct-' + profile + '-mapicons_landscape_' + ident.toString() + '-';
-    data = JSON.parse(storage.getItem(key + 'data')) || {};
-    font = storage.getItem(key + 'font');
-    cssFile = storage.getItem(key + 'css');
-    try {
-      changeCSS(cssFile);
-    } catch (e) {}
-
+    data = controller.loadData('data', true);
+    font = controller.loadData('font');
     try {
       setFont(font);
     } catch (e) {}
-
-    try {
-      setPadding(storage.getItem(key + 'padding') || '2px');
-    } catch (e) {}
-
-  } catch (e) {}
-}
-
-function storeData(scope = null) {
-  try {
-    var storage = window.localStorage;
-    var key = 'scct-' + profile + '-mapicons_landscape_' + ident.toString() + '-';
-    if (scope == null || scope == "data") storage.setItem(key + 'data', JSON.stringify(data));
-    if (scope == null || scope == "font") storage.setItem(key + 'font', font);
-    if (scope == null || scope == "padding") storage.setItem(key + 'padding', padding);
-    if (scope == null || scope == "css") storage.setItem(key + 'css', cssFile);
+    setPadding(loadData('padding') || '2px');
   } catch (e) {}
 }
 
@@ -67,7 +52,7 @@ function connectWebsocket() {
     var jsonObject = JSON.parse(message.data);
     console.log("Message received");
     if (jsonObject.event == 'CHANGE_STYLE') {
-      changeCSS(jsonObject.data.file);
+      controller.setStyle(jsonObject.data.file);
     } else if (jsonObject.event == 'CHANGE_SCORE') {
       changeScore(jsonObject.data.winner, jsonObject.data.setid, jsonObject.data.score_color, jsonObject.data.opacity, jsonObject.data.hide);
     } else if (jsonObject.event == 'CHANGE_TEXT') {
@@ -120,7 +105,7 @@ function processData(myData) {
 
 function changeScore(winner, set, color, opacity, hide) {
   var mapicon = $("#mapicon" + (set).toString());
-  if(!mapicon.length) return;
+  if (!mapicon.length) return;
   $(mapicon).find("div.circle").css("background-color", color);
   $(mapicon).find("div.opa").css('opacity', opacity);
   if (hide) {
@@ -170,7 +155,7 @@ function changeScore(winner, set, color, opacity, hide) {
 
 function changeText(iconID, label, new_value) {
   var icon = $('#mapicon' + iconID.toString());
-  if(!icon.length) return;
+  if (!icon.length) return;
   var id = iconID.toString() + label;
   var object = icon.find("span." + label);
   data[iconID][label] = new_value;
@@ -197,7 +182,7 @@ function changeText(iconID, label, new_value) {
 
 function changeRace(iconID, team, race) {
   var icon = $('#mapicon' + iconID.toString());
-  if(!icon.length) return;
+  if (!icon.length) return;
   var id = iconID.toString() + "race" + team.toString();
   var object = icon.find("div.race" + team.toString());
   data[iconID]["race" + team.toString()] = race;
@@ -223,7 +208,7 @@ function changeRace(iconID, team, race) {
 
 function changeMap(iconID, map, map_img) {
   var icon = $('#mapicon' + iconID.toString());
-  if(!icon.length) return;
+  if (!icon.length) return;
   var box = icon.find("div.box");
   var image = icon.find("div.mapimg");
   var name = icon.find("span.mapname")
@@ -247,28 +232,16 @@ function changeMap(iconID, map, map_img) {
 
   function _changeMap(parent, image, name, map, map_img) {
     name.text(map);
-    if(map == "TBD"){
+    if (map == "TBD" || map_img == 'TBD') {
       image.addClass('tbd');
       image.css("background-image", '');
-    }else{
+    } else {
       image.removeClass('tbd');
       image.css("background-image", 'url("src/img/maps/' + map_img + '")');
     }
 
     $(document).ready(function() {
       parent.find(".text-fill").textfill();
-    });
-  }
-}
-
-function changeCSS(newCssFile) {
-  if (newCssFile && newCssFile != "null") {
-    cssFile = newCssFile;
-    console.log('CSS file changed to', newCssFile);
-    $('link[rel="stylesheet"]').attr('href', newCssFile);
-    storeData("css");
-    $(document).ready(function() {
-      $('#container').find(".text-fill").textfill();
     });
   }
 }
@@ -285,7 +258,7 @@ function setFont(newFont) {
   font = newFont.trim();
   if (font == 'DEFAULT') {
     document.documentElement.style.removeProperty('--font');
-  }else{
+  } else {
     document.documentElement.style.setProperty('--font', font);
   }
   storeData("font");
@@ -350,10 +323,10 @@ function fillBox(i) {
     $(mapicon).find("div.circle").css('visibility', 'visible');
   }
   var image = $(mapicon).find("div.mapimg");
-  if(mapdata['mapname'] == "TBD"){
+  if (mapdata['mapname'] == "TBD" || mapdata['map_img'] == 'TBD') {
     image.addClass('tbd');
     image.css("background-image", '');
-  }else{
+  } else {
     image.removeClass('tbd');
     image.css("background-image", 'url("src/img/maps/' + mapdata['map_img'] + '")');
   }

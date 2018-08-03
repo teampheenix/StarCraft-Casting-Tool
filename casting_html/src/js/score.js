@@ -9,6 +9,7 @@ var cssFile = "";
 var initNeeded = true;
 var tweenInitial = new TimelineMax();
 var tweens = {};
+var controller = new Controller(profile, 'score');
 
 init();
 
@@ -37,7 +38,7 @@ function connectWebsocket() {
     var jsonObject = JSON.parse(message.data);
     console.log("Message received");
     if (jsonObject.event == 'CHANGE_STYLE') {
-      changeCSS(jsonObject.data.file);
+      controller.setStyle(jsonObject.data.file);
     } else if (jsonObject.event == 'CHANGE_FONT') {
       setFont(jsonObject.data.font);
     } else if (jsonObject.event == 'ALL_DATA') {
@@ -78,29 +79,18 @@ function dataChanged(newData) {
 }
 
 function storeData(scope = null) {
-  try {
-    var storage = window.localStorage;
-    if (scope == null || scope == "data") storage.setItem('scct-' + profile + '-score-data', JSON.stringify(data));
-    if (scope == null || scope == "font") storage.setItem('scct-' + profile + '-score-font', font);
-    if (scope == null || scope == "css") storage.setItem('scct-' + profile + '-score-css', cssFile);
-  } catch (e) {}
+  if (scope == null || scope == "data") controller.storeData('data', data, true);
+  if (scope == null || scope == "font") controller.storeData('font', font);
 }
 
 function loadStoredData() {
   try {
     var storage = window.localStorage;
-    data = JSON.parse(storage.getItem('scct-' + profile + '-score-data'));
-    font = storage.getItem('scct-' + profile + '-score-font');
-    cssFile = storage.getItem('scct-' + profile + '-score-css');
-    if (data == null) data = {};
-    try {
-      changeCSS(cssFile);
-    } catch (e) {}
-
+    data = controller.loadData('data', true);
+    font = controller.loadData('font');
     try {
       setFont(font);
     } catch (e) {}
-
   } catch (e) {}
 }
 
@@ -172,18 +162,6 @@ function insertIcons() {
       }
     }
   } catch (e) {}
-}
-
-function changeCSS(newCssFile) {
-  if (newCssFile && newCssFile != "null") {
-    cssFile = newCssFile;
-    console.log('CSS file changed to', newCssFile);
-    $('link[rel="stylesheet"]').attr('href', newCssFile);
-    storeData("css");
-    $(document).ready(function() {
-      $('#content').find(".text-fill").textfill();
-    });
-  }
 }
 
 function initHide() {

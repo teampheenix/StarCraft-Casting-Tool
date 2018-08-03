@@ -230,6 +230,6 @@ div.mapscore-left {
   -webkit-font-smoothing: antialiased;
 }
 
-.loser{
+.loser {
   filter: brightness(75%);
 }

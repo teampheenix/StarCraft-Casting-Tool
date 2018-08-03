@@ -12,6 +12,7 @@ var myAudio2 = new Audio("src/sound/bass.wav");
 myAudio2.volume = volume;
 var myAudio3 = new Audio("src/sound/fanfare.wav");
 myAudio3.volume = volume;
+var controller = new Controller(profile, 'intro');
 
 init();
 
@@ -155,7 +156,7 @@ function Connect() {
       }
 
     } else if (jsonObject.event == 'CHANGE_STYLE') {
-      changeCSS(jsonObject.data.file);
+      controller.setStyle(jsonObject.data.file);
     } else if (jsonObject.event == 'DEBUG_MODE') {
       if (!debug) {
         tween.kill()
@@ -188,14 +189,6 @@ function fillText() {
     maxFontPixels: 60
   });
 }
-
-function changeCSS(newCssFile) {
-  if (newCssFile && newCssFile != "null") {
-    $('link[rel="stylesheet"]').attr('href', newCssFile);
-    fillText();
-  }
-}
-
 
 function init() {
   var intro = document.getElementById("intro");

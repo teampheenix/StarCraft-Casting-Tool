@@ -26,7 +26,6 @@ body {
   font-family: var(--font);
 }
 
-
 #container {
   top: 0px;
   left: 0px;
@@ -62,17 +61,17 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-.loser{
+.loser {
   filter: brightness(75%);
   opacity: 0.85;
 }
 
-.race1.loser, .race2.loser{
+.race1.loser, .race2.loser {
   opacity: 0.85;
   filter: drop-shadow(0px 0px 1px #6BC2F9) brightness(75%);
 }
 
-.race1.winner, .race2.winner{
+.race1.winner, .race2.winner {
   --winner-color: #f29b00;
   filter: drop-shadow(0px 0px 1px #6BC2F9) drop-shadow(0px 0px 4px var(--winner-color));
 }

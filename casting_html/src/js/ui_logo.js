@@ -2,7 +2,7 @@ var socket = null;
 var isopen = false;
 var reconnectIntervalMs = 5000;
 var data = {};
-
+var controller = new Controller(profile, 'ui_logo', ident);
 init();
 
 function init() {
@@ -11,19 +11,11 @@ function init() {
 }
 
 function loadStoredData() {
-  try {
-    var storage = window.localStorage;
-    var key = 'scct-' + profile + '-ui_logo_' + ident.toString() + '-';
-    data = JSON.parse(storage.getItem(key + 'data')) || {};
-  } catch (e) {}
+  data = controller.loadData('data', true);
 }
 
 function storeData(scope = null) {
-  try {
-    var storage = window.localStorage;
-    var key = 'scct-' + profile + '-ui_logo_' + ident.toString() + '-';
-    if (scope == null || scope == "data") storage.setItem(key + 'data', JSON.stringify(data));
-  } catch (e) {}
+  if (scope == null || scope == "data") controller.storeData('data', data, true);
 }
 
 function connectWebsocket() {

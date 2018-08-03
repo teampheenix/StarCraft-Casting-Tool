@@ -14,8 +14,8 @@ var mapData = {};
 var colors = {};
 var font = "DEFAULT";
 var currentMap = "";
-var cssFile = "";
 
+var controller = new Controller(profile, 'mapstats');
 init();
 
 function init() {
@@ -41,32 +41,24 @@ function getCurrentMap() {
 }
 
 function storeData(scope = null) {
-  try {
-    var storage = window.localStorage;
-    if (scope == null || scope == "mapdata") storage.setItem('scct-' + profile + '-mapstats-mapdata', JSON.stringify(mapData));
-    if (scope == null || scope == "colors") storage.setItem('scct-' + profile + '-mapstats-colors', JSON.stringify(colors));
-    if (scope == null || scope == "font") storage.setItem('scct-' + profile + '-mapstats-font', font);
-    if (scope == null || scope == "currentmap") storage.setItem('scct-' + profile + '-mapstats-currentmap', currentMap);
-    if (scope == null || scope == "css") storage.setItem('scct-' + profile + '-mapstats-css', cssFile);
-  } catch (e) {}
+  if (scope == null || scope == "mapdata") controller.storeData('data', mapData, true);
+  if (scope == null || scope == "colors") controller.storeData('colors', colors, true);
+  if (scope == null || scope == "font") controller.storeData('font', font);
+  if (scope == null || scope == "currentmap") controller.storeData('currentmap', currentMap);
 }
 
 function loadStoredData() {
   try {
     var storage = window.localStorage;
-    mapData = JSON.parse(storage.getItem('scct-' + profile + '-mapstats-mapdata'));
-    colors = JSON.parse(storage.getItem('scct-' + profile + '-mapstats-colors'));
-    font = storage.getItem('scct-' + profile + '-mapstats-font');
-    currentMap = storage.getItem('scct-' + profile + '-mapstats-currentmap');
-    cssFile = storage.getItem('scct-' + profile + '-mapstats-css');
+    mapData = controller.loadData('mapdata', true);
+    colors = controller.loadData('colors', true);
+    font = controller.loadData('font');
+    currentMap = controller.loadData('currentmap');
     if (currentMap == null) currentMap = "";
     if (colors == null) colors = {};
     if (mapData == null) mapData = {};
     try {
       setColors(colors['color1'], colors['color2']);
-    } catch (e) {}
-    try {
-      changeCSS(cssFile, 0);
     } catch (e) {}
     try {
       setFont(font);
@@ -75,6 +67,7 @@ function loadStoredData() {
     addMaps();
   } catch (e) {}
 }
+
 
 function connectWebsocket() {
   console.time('connectWebsocket');
@@ -91,7 +84,7 @@ function connectWebsocket() {
     var jsonObject = JSON.parse(message.data);
     console.log("Message received");
     if (jsonObject.event == 'CHANGE_STYLE') {
-      changeCSS(jsonObject.data.file, 0);
+      controller.setStyle(jsonObject.data.file);
     } else if (jsonObject.event == 'CHANGE_COLORS') {
       setColors(jsonObject.data.color1, jsonObject.data.color2);
     } else if (jsonObject.event == 'CHANGE_FONT') {
@@ -414,15 +407,6 @@ function setFont(newFont) {
   font = newFont.trim();
   document.documentElement.style.setProperty('--font', font);
   storeData("font");
-}
-
-function changeCSS(newCssFile) {
-  if (newCssFile && newCssFile != "null") {
-    cssFile = newCssFile;
-    console.log('CSS file changed to', newCssFile);
-    $('link[rel="stylesheet"]').attr('href', newCssFile);
-    storeData("css");
-  }
 }
 
 // Warn if overriding existing method
