@@ -10,7 +10,7 @@
 
 **StarCraft Casting Tool** (SCC Tool) is a free to use open source program that makes casting StarCraft 2 simple while increasing the production value substantially by providing a match grabber, predefined custom formats, and various sets of animated icons and browser sources to be presented to the viewer.
 
-![streaming-tool](https://user-images.githubusercontent.com/26044736/38167067-7b78fd10-352f-11e8-8676-50a7b0bf9e98.png)
+![scct-v2](https://user-images.githubusercontent.com/26044736/43646667-c915c8e2-9735-11e8-883c-4e9d6b94061b.jpg)
 
 ## Download
 
