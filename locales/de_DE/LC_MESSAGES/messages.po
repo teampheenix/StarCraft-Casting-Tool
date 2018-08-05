@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: StarCraft Casting Tool\n"
-"POT-Creation-Date: 2018-08-05 15:17+0200\n"
+"POT-Creation-Date: 2018-08-05 15:20+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -133,7 +133,7 @@ msgstr "Kommando '{}' gelöscht"
 
 #: tasks/nightbot.py:95
 msgid "Updated Nightbot command '{}' to '{}'"
-msgstr "Nightbot Kommand '{}' auf '{}' aktualisiert"
+msgstr "Nightbot Kommando '{}' auf '{}' aktualisiert"
 
 #: tasks/twitch.py:38
 msgid "Updated Twitch title of {} to: \"{}\""
@@ -193,7 +193,7 @@ msgstr "Info && Links"
 
 #: view/main.py:172
 msgid "About"
-msgstr "Ãœber"
+msgstr "Über"
 
 #: view/main.py:177 view/main.py:429
 msgid "Readme"
@@ -205,11 +205,11 @@ msgstr "Auf eine neue Version prüfen"
 
 #: view/main.py:187 view/main.py:438
 msgid "Changelog"
-msgstr "Ã„nderungsprotokoll"
+msgstr "Änderungsprotokoll"
 
 #: view/main.py:192
 msgid "Open log folder"
-msgstr "Log-Dateien Ordner Ã¶ffnen"
+msgstr "Log-Dateien Ordner Öffnen"
 
 #: view/main.py:236
 msgid "Become a Patron"
@@ -266,7 +266,7 @@ msgstr "Matchbanner (AlphaTL)"
 
 #: view/main.py:327
 msgid "Open Folder"
-msgstr "Ã–ffne Ordner"
+msgstr "Öffne Ordner"
 
 #: view/main.py:342 view/main.py:365 view/main.py:484
 msgid "Open in Browser"
@@ -381,7 +381,7 @@ msgstr "Spieler {} von Team {}"
 
 #: view/main.py:899
 msgid "Set the score"
-msgstr "Ã„nder das Ergebnis"
+msgstr "Setze den Spielstand"
 
 #: view/main.py:906 view/widgets.py:1405 view/widgets.py:1413
 #: view/widgets.py:1452
@@ -671,7 +671,7 @@ msgstr "Abbrechen"
 #: view/subBrowserSources.py:509 view/subConnections.py:255 view/subMisc.py:676
 #: view/subStyles.py:81
 msgid "&Save && Close"
-msgstr "&Speichern && SchlieÃŸen"
+msgstr "&Speichern && Schließen"
 
 #: view/subBrowserSources.py:510 view/subConnections.py:256 view/subMisc.py:677
 #: view/subStyles.py:82
@@ -791,7 +791,7 @@ msgstr "Ergebnisse für '{}': {}"
 
 #: view/subLiquipediaSearch.py:177
 msgid "Open on Liquipedia"
-msgstr "Auf Liquipedia Ã¶ffnen"
+msgstr "Auf Liquipedia Öffnen"
 
 #: view/subLiquipediaSearch.py:179
 msgid "Use as Team Logo"
@@ -1058,7 +1058,7 @@ msgstr "Nur für Windows verfügbar."
 
 #: view/subMisc.py:407
 msgid "Select Tesseract-OCR Executable"
-msgstr "Tesseract-OCR Programmdatei auswÃ¤hlen"
+msgstr "Tesseract-OCR Programmdatei auswählen"
 
 #: view/subMisc.py:409
 msgid "Executable"
@@ -1082,7 +1082,7 @@ msgstr "Umbennen"
 
 #: view/subMisc.py:447
 msgid "Change Image"
-msgstr "Ã„ndere Bild"
+msgstr "Ändere Bild"
 
 #: view/subMisc.py:481 view/subMisc.py:530 view/subMisc.py:566
 msgid "Map Name"
@@ -1311,7 +1311,7 @@ msgstr "Neu"
 
 #: view/widgets.py:1136
 msgid "Duplicate"
-msgstr "Doppelter Eintrag"
+msgstr "Duplikat"
 
 #: view/widgets.py:1148
 msgid "Import as New"
