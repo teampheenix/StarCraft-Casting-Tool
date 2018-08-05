@@ -857,7 +857,7 @@ class InitialUpdater(QProgressDialog):
         # TODO: What is the data structure in case of a patch?
         module_logger.info("Progress {}".format(data))
         try:
-            text = _('Downloading required files...:'
+            text = _('Downloading required files:'
                      ' Total file size {}, Time remaining {}.')
             text = text.format(humanize.naturalsize(
                 data['total']), data['time'])
@@ -1125,7 +1125,7 @@ class ProfileMenu(QMenu):
         self._menu = parrent_widget.menuBar().addMenu(_('Profile'))
 
         action = self._menu.addAction(QIcon(scctool.settings.getResFile(
-            'folder.png')), _('Open current folder'))
+            'folder.png')), _('Open current Profile Folder'))
         action.triggered.connect(self.openFolder)
 
         action = self._menu.addAction(QIcon(scctool.settings.getResFile(

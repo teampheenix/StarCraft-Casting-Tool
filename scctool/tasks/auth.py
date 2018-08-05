@@ -25,6 +25,36 @@ except Exception as e:
     raise
 
 
+success_html = """<html>
+<head>
+<title>StarCraft Casting Tool</title>
+<style>
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+div.main{
+font-family: Roboto;
+width: 100%;
+height: 400px;
+position: relative;
+text-align: center;
+padding-top: 50px;
+color: #0d468c;
+}
+</style>
+</head>
+
+<body>
+<div class='main'>
+<h1>StarCraft Casting Tool</h1>
+<img src="https://c10.patreonusercontent.com/3/eyJ3IjoyMDB9/patreon-media/p/user/11453319/e637dfeeace8494abaf0bbda66573df1/1?token-time=2145916800&token-hash=uYiFi_nu_OxXF2JjfbQyKg_dobUmRAZdbWY4OMTLs_0%3D" height="120" width="120">
+<h4 style='color: black;'>
+#CONTENT#
+</h4>
+</div>
+</body>
+</html>"""
+
+
 class myHandler(http.server.SimpleHTTPRequestHandler):
 
     # Handler for the GET requests
@@ -44,13 +74,15 @@ class myHandler(http.server.SimpleHTTPRequestHandler):
             self.send_content(js_response.format(self.path))
         elif self.path.split('?')[0] in ['/nightbot_callback_token',
                                          '/twitch_callback_token']:
-            content = _("StarCraft Casting Tool: Succesfully recived access"
+            content = _("Succesfully recived access"
                         " to {} - you can close this tab now.")
             if self.path.split('?')[0] == '/twitch_callback_token':
                 scope = 'twitch'
             else:
                 scope = 'nightbot'
-            self.send_content(content.format(scope.capitalize()))
+            content = content.format(scope.capitalize())
+            content = success_html.replace('#CONTENT#', content)
+            self.send_content(content)
             par = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)
             self.server.emit_token(scope, par.get('access_token', [''])[0])
         else:

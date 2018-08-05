@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: StarCraft Casting Tool\n"
-"POT-Creation-Date: 2018-07-29 23:14+0200\n"
-"PO-Revision-Date: 2018-07-29 23:14+0200\n"
+"POT-Creation-Date: 2018-08-05 15:18+0200\n"
+"PO-Revision-Date: 2018-08-05 15:18+0200\n"
 "Last-Translator: \n"
 "Language-Team: Mayhem, TanTall\n"
 "Language: ru\n"
@@ -69,6 +69,43 @@ msgstr "Не показывать при запуске."
 msgid "A new version {} is available on GitHub!"
 msgstr "Новая версия {} доступна на GitHub!"
 
+# Google Translate
+#: scctool/matchdata.py:39
+msgid "All Maps"
+msgstr "Все карты"
+
+#: scctool/matchdata.py:40
+msgid "None Ace Maps"
+msgstr "Нет Ace Maps"
+
+# Google Translate
+#: scctool/matchdata.py:41
+msgid "Ace Maps"
+msgstr "Карты Туза"
+
+# Google Translate
+#: scctool/matchdata.py:42
+msgid "Decided Maps"
+msgstr "Решенные картыДобавить карту"
+
+#: scctool/matchdata.py:43
+msgid "Decided Maps + 1"
+msgstr "Решенные карты + 1"
+
+# Google Translate
+#: scctool/matchdata.py:44
+msgid "Current Map"
+msgstr "Текущая карта"
+
+# Google Translate
+#: scctool/matchdata.py:45
+msgid "Current and Previous Map"
+msgstr "Текущая и предыдущая карта"
+
+#: scctool/matchdata.py:46
+msgid "Undecided Maps"
+msgstr "Неопределенные карты"
+
 #: scctool/settings/profileManager.py:102
 #: scctool/settings/profileManager.py:139
 msgid "You cannot use empty names."
@@ -83,13 +120,9 @@ msgstr "Имя уже используется."
 msgid "Initial profile is not valid."
 msgstr "Исходный профиль недействителен."
 
-#: scctool/tasks/auth.py:47
-msgid ""
-"StarCraft Casting Tool: Succesfully recived access to {} - you can close "
-"this tab now."
-msgstr ""
-"StarCraft Casting Tool: Успешно получен доступ к Twitch - теперь вы можете "
-"закрыть эту вкладку."
+#: scctool/tasks/auth.py:77
+msgid "Succesfully recived access to {} - you can close this tab now."
+msgstr "Успешно получен доступ к {} - теперь вы можете закрыть эту вкладку."
 
 #: scctool/tasks/nightbot.py:40 scctool/tasks/nightbot.py:104
 #: scctool/tasks/twitch.py:55
@@ -224,8 +257,6 @@ msgid "Score"
 msgstr "Счет"
 
 #: scctool/view/main.py:291
-#, fuzzy
-#| msgid "Box Map Icons"
 msgid "Map Icons Box"
 msgstr "Пиктограммы карт"
 
@@ -961,11 +992,10 @@ msgstr " время"
 msgid "Activate Blacklist for Ingame Score"
 msgstr "Активировать черный список для оценки Ingame"
 
+# Google Translate
 #: scctool/view/subMisc.py:185
-#, fuzzy
-#| msgid "Set Ingame Score"
 msgid "Blacklist for Ingame Score"
-msgstr "Задать счет"
+msgstr "Черный список для турнира Ingame"
 
 # Google Translate
 #: scctool/view/subMisc.py:188
@@ -1313,16 +1343,17 @@ msgid "Done."
 msgstr "Готово."
 
 #: scctool/view/widgets.py:860
-msgid "Downloading required files...: Total file size {}, Time remaining {}."
-msgstr "Загрузка необходимых файлов...: размер файла {}, осталось времени {}."
+msgid "Downloading required files: Total file size {}, Time remaining {}."
+msgstr "Загрузка необходимых файлов: размер файла {}, осталось времени {}."
 
 #: scctool/view/widgets.py:1125
 msgid "Profile"
 msgstr "профили"
 
+# Google Translate
 #: scctool/view/widgets.py:1128
-msgid "Open current folder"
-msgstr "Открыть текущую папку"
+msgid "Open current Profile Folder"
+msgstr "Открыть текущую папку профилей"
 
 #: scctool/view/widgets.py:1132
 msgid "New"
@@ -1421,6 +1452,13 @@ msgstr "от"
 msgid "to"
 msgstr "в"
 
+#~ msgid ""
+#~ "StarCraft Casting Tool: Succesfully recived access to {} - you can close "
+#~ "this tab now."
+#~ msgstr ""
+#~ "StarCraft Casting Tool: Успешно получен доступ к Twitch - теперь вы "
+#~ "можете закрыть эту вкладку."
+
 # Google Translate
 #~ msgid ""
 #~ "A new <b>major upgrade</b> to version {} is available. <b>Warning: "
@@ -1478,13 +1516,6 @@ msgstr "в"
 #~ "cache of your browser sources."
 #~ msgstr ""
 #~ "Чтобы изменения были видны в OBS вы должны обновить кэш вашего браузера."
-
-#~ msgid ""
-#~ "scctool: Succesfully recived access to Nightbot - you can close this tab "
-#~ "now."
-#~ msgstr ""
-#~ "scctool: Успешно получен доступ к Nightbot - теперь вы можете закрыть эту "
-#~ "вкладку."
 
 #~ msgid "Add"
 #~ msgstr "Добавить"
