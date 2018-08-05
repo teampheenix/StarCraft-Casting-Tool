@@ -20,14 +20,7 @@ class matchData(QObject):
     """Matchdata."""
     dataChanged = pyqtSignal(str, object)
     metaChangedSignal = pyqtSignal()
-    scopes = {'all': _('All Maps'),
-              'not-ace': _('None Ace Maps'),
-              'ace': _('Ace Maps'),
-              'decided': _('Decided Maps'),
-              'decided+1': _('Decided Maps + 1'),
-              'current': _('Current Map'),
-              'current+1': _('Current and Previous Map'),
-              'undecided': _('Undecided Maps')}
+    scopes = {}
 
     def __init__(self, controller):
         """Init and define custom providers."""
@@ -35,11 +28,22 @@ class matchData(QObject):
         self.__rawData = None
         self.__controller = controller
         self.__initProviderList()
+        self.__initScopes()
         self.__initData()
         self.__initMatchGrabber()
         self.__initCustomFormats()
 
         self.emitLock = EmitLock()
+
+    def __initScopes(self):
+        self.scopes = {'all': _('All Maps'),
+                       'not-ace': _('None Ace Maps'),
+                       'ace': _('Ace Maps'),
+                       'decided': _('Decided Maps'),
+                       'decided+1': _('Decided Maps + 1'),
+                       'current': _('Current Map'),
+                       'current+1': _('Current and Previous Map'),
+                       'undecided': _('Undecided Maps')}
 
     def __initProviderList(self):
         self.__VALID_PROVIDERS = dict()
