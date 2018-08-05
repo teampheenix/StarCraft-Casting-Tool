@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: StarCraft Casting Tool\n"
-"POT-Creation-Date: 2018-08-05 11:21+0200\n"
-"PO-Revision-Date: 2018-08-05 11:21+0200\n"
+"POT-Creation-Date: 2018-08-05 15:18+0200\n"
+"PO-Revision-Date: 2018-08-05 15:18+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -64,35 +64,35 @@ msgstr ""
 msgid "A new version {} is available on GitHub!"
 msgstr ""
 
-#: matchdata.py:23
+#: matchdata.py:39
 msgid "All Maps"
 msgstr ""
 
-#: matchdata.py:24
+#: matchdata.py:40
 msgid "None Ace Maps"
 msgstr ""
 
-#: matchdata.py:25
+#: matchdata.py:41
 msgid "Ace Maps"
 msgstr ""
 
-#: matchdata.py:26
+#: matchdata.py:42
 msgid "Decided Maps"
 msgstr ""
 
-#: matchdata.py:27
+#: matchdata.py:43
 msgid "Decided Maps + 1"
 msgstr ""
 
-#: matchdata.py:28
+#: matchdata.py:44
 msgid "Current Map"
 msgstr ""
 
-#: matchdata.py:29
+#: matchdata.py:45
 msgid "Current and Previous Map"
 msgstr ""
 
-#: matchdata.py:30
+#: matchdata.py:46
 msgid "Undecided Maps"
 msgstr ""
 
@@ -108,10 +108,8 @@ msgstr ""
 msgid "Initial profile is not valid."
 msgstr ""
 
-#: tasks/auth.py:47
-msgid ""
-"StarCraft Casting Tool: Succesfully recived access to {} - you can close "
-"this tab now."
+#: tasks/auth.py:77
+msgid "Succesfully recived access to {} - you can close this tab now."
 msgstr ""
 
 #: tasks/nightbot.py:40 tasks/nightbot.py:104 tasks/twitch.py:55
