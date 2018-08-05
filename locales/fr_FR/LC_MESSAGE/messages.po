@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: StarCraft Casting Tool\n"
-"POT-Creation-Date: 2018-07-29 23:14+0200\n"
-"PO-Revision-Date: 2018-07-29 23:14+0200\n"
+"POT-Creation-Date: 2018-08-05 11:21+0200\n"
+"PO-Revision-Date: 2018-08-05 11:21+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -62,6 +62,38 @@ msgstr ""
 
 #: controller.py:982
 msgid "A new version {} is available on GitHub!"
+msgstr ""
+
+#: matchdata.py:23
+msgid "All Maps"
+msgstr ""
+
+#: matchdata.py:24
+msgid "None Ace Maps"
+msgstr ""
+
+#: matchdata.py:25
+msgid "Ace Maps"
+msgstr ""
+
+#: matchdata.py:26
+msgid "Decided Maps"
+msgstr ""
+
+#: matchdata.py:27
+msgid "Decided Maps + 1"
+msgstr ""
+
+#: matchdata.py:28
+msgid "Current Map"
+msgstr ""
+
+#: matchdata.py:29
+msgid "Current and Previous Map"
+msgstr ""
+
+#: matchdata.py:30
+msgid "Undecided Maps"
 msgstr ""
 
 #: settings/profileManager.py:102 settings/profileManager.py:139
@@ -1231,7 +1263,7 @@ msgid "Done."
 msgstr ""
 
 #: view/widgets.py:860
-msgid "Downloading required files...: Total file size {}, Time remaining {}."
+msgid "Downloading required files: Total file size {}, Time remaining {}."
 msgstr ""
 
 #: view/widgets.py:1125
@@ -1239,7 +1271,7 @@ msgid "Profile"
 msgstr ""
 
 #: view/widgets.py:1128
-msgid "Open current folder"
+msgid "Open current Profile Folder"
 msgstr ""
 
 #: view/widgets.py:1132

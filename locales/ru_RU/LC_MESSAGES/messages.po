@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: StarCraft Casting Tool\n"
-"POT-Creation-Date: 2018-07-29 23:14+0200\n"
-"PO-Revision-Date: 2018-07-29 23:14+0200\n"
+"POT-Creation-Date: 2018-08-05 11:21+0200\n"
+"PO-Revision-Date: 2018-08-05 11:21+0200\n"
 "Last-Translator: \n"
 "Language-Team: Mayhem, TanTall\n"
 "Language: ru\n"
@@ -68,6 +68,43 @@ msgstr "Не показывать при запуске."
 #: scctool/controller.py:982
 msgid "A new version {} is available on GitHub!"
 msgstr "Новая версия {} доступна на GitHub!"
+
+# Google Translate
+#: scctool/matchdata.py:23
+msgid "All Maps"
+msgstr "Все карты"
+
+#: scctool/matchdata.py:24
+msgid "None Ace Maps"
+msgstr "Нет Ace Maps"
+
+# Google Translate
+#: scctool/matchdata.py:25
+msgid "Ace Maps"
+msgstr "Карты Туза"
+
+# Google Translate
+#: scctool/matchdata.py:26
+msgid "Decided Maps"
+msgstr "Решенные картыДобавить карту"
+
+#: scctool/matchdata.py:27
+msgid "Decided Maps + 1"
+msgstr "Решенные карты + 1"
+
+# Google Translate
+#: scctool/matchdata.py:28
+msgid "Current Map"
+msgstr "Текущая карта"
+
+# Google Translate
+#: scctool/matchdata.py:29
+msgid "Current and Previous Map"
+msgstr "Текущая и предыдущая карта"
+
+#: scctool/matchdata.py:30
+msgid "Undecided Maps"
+msgstr "Неопределенные карты"
 
 #: scctool/settings/profileManager.py:102
 #: scctool/settings/profileManager.py:139
@@ -224,8 +261,6 @@ msgid "Score"
 msgstr "Счет"
 
 #: scctool/view/main.py:291
-#, fuzzy
-#| msgid "Box Map Icons"
 msgid "Map Icons Box"
 msgstr "Пиктограммы карт"
 
@@ -961,11 +996,10 @@ msgstr " время"
 msgid "Activate Blacklist for Ingame Score"
 msgstr "Активировать черный список для оценки Ingame"
 
+# Google Translate
 #: scctool/view/subMisc.py:185
-#, fuzzy
-#| msgid "Set Ingame Score"
 msgid "Blacklist for Ingame Score"
-msgstr "Задать счет"
+msgstr "Черный список для турнира Ingame"
 
 # Google Translate
 #: scctool/view/subMisc.py:188
@@ -1313,16 +1347,17 @@ msgid "Done."
 msgstr "Готово."
 
 #: scctool/view/widgets.py:860
-msgid "Downloading required files...: Total file size {}, Time remaining {}."
-msgstr "Загрузка необходимых файлов...: размер файла {}, осталось времени {}."
+msgid "Downloading required files: Total file size {}, Time remaining {}."
+msgstr "Загрузка необходимых файлов: размер файла {}, осталось времени {}."
 
 #: scctool/view/widgets.py:1125
 msgid "Profile"
 msgstr "профили"
 
+# Google Translate
 #: scctool/view/widgets.py:1128
-msgid "Open current folder"
-msgstr "Открыть текущую папку"
+msgid "Open current Profile Folder"
+msgstr "Открыть текущую папку профилей"
 
 #: scctool/view/widgets.py:1132
 msgid "New"

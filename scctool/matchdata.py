@@ -20,14 +20,14 @@ class matchData(QObject):
     """Matchdata."""
     dataChanged = pyqtSignal(str, object)
     metaChangedSignal = pyqtSignal()
-    scopes = {'all': 'All Maps',
-              'not-ace': 'None Ace Maps',
-              'ace': 'Ace Maps',
-              'decided': 'Decided Maps',
-              'decided+1': 'Decided Maps + 1',
-              'current': 'Current Map',
-              'current+1': 'Current and Previous Map',
-              'undecided': 'Undecided Maps'}
+    scopes = {'all': _('All Maps'),
+              'not-ace': _('None Ace Maps'),
+              'ace': _('Ace Maps'),
+              'decided': _('Decided Maps'),
+              'decided+1': _('Decided Maps + 1'),
+              'current': _('Current Map'),
+              'current+1': _('Current and Previous Map'),
+              'undecided': _('Undecided Maps')}
 
     def __init__(self, controller):
         """Init and define custom providers."""
@@ -1239,6 +1239,7 @@ class matchData(QObject):
                 elif idx < self.getNoSets():
                     yield idx + 1
             return
+
         m = re.match(r'^(\d+)-(\d+)$', scope)
         if m and int(m.group(1)) <= int(m.group(2)):
             for idx in range(max(int(m.group(1)) - 1, 0),

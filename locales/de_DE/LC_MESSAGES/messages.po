@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: StarCraft Casting Tool\n"
-"POT-Creation-Date: 2018-07-29 23:15+0200\n"
+"POT-Creation-Date: 2018-08-05 11:21+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -61,6 +61,38 @@ msgstr "Nicht mehr beim Programm-Start zeigen."
 #: controller.py:982
 msgid "A new version {} is available on GitHub!"
 msgstr "Die neue Version {} ist bei GitHub verfügbar!"
+
+#: matchdata.py:23
+msgid "All Maps"
+msgstr "Alle Karten"
+
+#: matchdata.py:24
+msgid "None Ace Maps"
+msgstr "Nicht Ace-Karten"
+
+#: matchdata.py:25
+msgid "Ace Maps"
+msgstr "Ace-Karte"
+
+#: matchdata.py:26
+msgid "Decided Maps"
+msgstr "Entschiedene Karten"
+
+#: matchdata.py:27
+msgid "Decided Maps + 1"
+msgstr "Entschiedene Karten + 1"
+
+#: matchdata.py:28
+msgid "Current Map"
+msgstr "Aktueller Karte"
+
+#: matchdata.py:29
+msgid "Current and Previous Map"
+msgstr "Aktuelle und nächste Karte"
+
+#: matchdata.py:30
+msgid "Undecided Maps"
+msgstr "Unentschiedene Karten"
 
 #: settings/profileManager.py:102 settings/profileManager.py:139
 msgid "You cannot use empty names."
@@ -332,7 +364,7 @@ msgstr "Daten der Partie"
 
 #: view/main.py:809
 msgid "Choose your team"
-msgstr "WÃ¤hle dein Team"
+msgstr "Wähle dein Team"
 
 #: view/main.py:828
 msgid "Swap teams and logos."
@@ -361,7 +393,7 @@ msgstr "Karte {}"
 
 #: view/main.py:917
 msgid "Select map on Mapstats Browser Source."
-msgstr "WÃ¤hle Karte  in der Karten Statistiken Browser Quelle aus."
+msgstr "Wähle Karte in der Karten Statistiken Browser Quelle aus."
 
 #: view/main.py:955
 msgid "Tasks"
@@ -738,7 +770,7 @@ msgstr "Nachricht, z.B."
 
 #: view/subConnections.py:369
 msgid "Delete"
-msgstr "LÃ¶schen"
+msgstr "Löschen"
 
 #: view/subLiquipediaSearch.py:55
 msgid "Search"
@@ -791,7 +823,7 @@ msgstr "Zu Favoriten hinzufügen"
 #: view/subLogos.py:59 view/subLogos.py:107 view/subMisc.py:449
 #: view/widgets.py:1144
 msgid "Remove"
-msgstr "LÃ¶schen"
+msgstr "Entfernen"
 
 #: view/subLogos.py:87
 msgid "Logo Team 2"
@@ -827,7 +859,7 @@ msgstr "Von Favoriten entfernen"
 
 #: view/subLogos.py:308
 msgid "Select Team Logo"
-msgstr "WÃ¤hle das Team Logo aus"
+msgstr "Wähle das Team Logo aus"
 
 #: view/subLogos.py:309 view/subMisc.py:511 view/subMisc.py:524
 msgid "Supported Images"
@@ -927,10 +959,8 @@ msgid "Activate Blacklist for Ingame Score"
 msgstr "Aktiviere schwarze List für den Ingame Spielstand"
 
 #: view/subMisc.py:185
-#, fuzzy
-#| msgid "Set Ingame Score"
 msgid "Blacklist for Ingame Score"
-msgstr "Setzte Spielstand im Spiel"
+msgstr "Schwarze Liste zum Setzen des Spielstands"
 
 #: view/subMisc.py:188
 msgid ""
@@ -1075,7 +1105,7 @@ msgstr "Karte ist bereits in der Liste! Überschreiben?"
 
 #: view/subMisc.py:510 view/subMisc.py:523
 msgid "Select Map Image (> 500x500px recommended)"
-msgstr "WÃ¤he Karten-Bild aus (> 500x500px empfohlen)"
+msgstr "Wähle Karten-Bild aus (> 500x500px empfohlen)"
 
 #: view/subMisc.py:582
 msgid "Map not found"
@@ -1208,7 +1238,7 @@ msgstr "Setze Kürrzel"
 
 #: view/widgets.py:233
 msgid "Clear"
-msgstr "LÃ¶schen"
+msgstr "Löschen"
 
 #: view/widgets.py:278
 msgid "Recording Hotkey"
@@ -1236,7 +1266,7 @@ msgstr "Lade eine neue Version herunter: {} Gesamtgröße, {} Zeit verbleibend."
 
 #: view/widgets.py:463
 msgid "Select"
-msgstr "AuswÃ¤hlen"
+msgstr "Auswählen"
 
 #: view/widgets.py:466
 msgid "Default"
@@ -1252,7 +1282,7 @@ msgstr "Alias löschen"
 
 #: view/widgets.py:666
 msgid "Remove Alias"
-msgstr "LÃ¶sche Alias"
+msgstr "Lösche Alias"
 
 #: view/widgets.py:804
 msgid "Collecting data..."
@@ -1267,17 +1297,16 @@ msgid "Done."
 msgstr "Fertig."
 
 #: view/widgets.py:860
-msgid "Downloading required files...: Total file size {}, Time remaining {}."
-msgstr ""
-"Lade benötige Dateien herunter...: {} Gesamtgröße, {} Zeit verbleibend."
+msgid "Downloading required files: Total file size {}, Time remaining {}."
+msgstr "Lade benötige Dateien herunter: {} Gesamtgröße, {} Zeit verbleibend."
 
 #: view/widgets.py:1125
 msgid "Profile"
 msgstr "Profil"
 
 #: view/widgets.py:1128
-msgid "Open current folder"
-msgstr "Aktuellen Ordner Öffnen"
+msgid "Open current Profile Folder"
+msgstr "Öffne aktuellen Profil-Ordner"
 
 #: view/widgets.py:1132
 msgid "New"
@@ -1301,7 +1330,7 @@ msgstr "Exportieren"
 
 #: view/widgets.py:1177 view/widgets.py:1189
 msgid "Remove Profile"
-msgstr "LÃ¶sche Profil"
+msgstr "Lösche Profil"
 
 #: view/widgets.py:1178
 msgid "Are you sure you wish to remove profile '{}'?"
