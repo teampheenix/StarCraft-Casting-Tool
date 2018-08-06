@@ -20,6 +20,7 @@ from scctool.view.subConnections import SubwindowConnections
 from scctool.view.subLogos import SubwindowLogos
 from scctool.view.subMarkdown import SubwindowMarkdown
 from scctool.view.subMisc import SubwindowMisc
+from scctool.view.subOverlay import SubwindowOverlay
 from scctool.view.subStyles import SubwindowStyles
 from scctool.view.widgets import (IconPushButton, LedIndicator, MapLineEdit,
                                   MonitoredLineEdit, ProfileMenu)
@@ -439,6 +440,18 @@ class MainWindow(QMainWindow):
             scctool.settings.getResFile("changelog.png"),
             scctool.settings.getResFile("../CHANGELOG.md"))
         self.mysubwindows['changelog'].show()
+
+    def showOverlay(self):
+        """Opens a subwindow that is used as an ingame overlay."""
+        self.mysubwindows['overlay'] = SubwindowOverlay()
+        self.mysubwindows['overlay'].setAttribute(
+            Qt.WA_TranslucentBackground, True)
+        self.mysubwindows['overlay'].setWindowFlags(
+            Qt.Tool | Qt.FramelessWindowHint)
+        self.mysubwindows['overlay'].setWindowFlags(
+            w.windowFlags() | Qt.WindowStaysOnTopHint)
+        self.mysubwindows['overlay'].createWindow(self)
+        self.mysubwindows['overlay'].showMaximized()
 
     def changeLanguage(self, language):
         """Change the language."""
@@ -1020,6 +1033,11 @@ class MainWindow(QMainWindow):
             self.cb_autoNightbot.stateChanged.connect(
                 self.autoNightbot_change)
 
+            self.cb_showOverlay = QCheckBox(
+                _("Show Overlay"))
+            self.cb_showOverlay.setChecked(False)
+            self.cb_showOverlay.stateChanged.connect(self.showOverlay)
+
             if(not scctool.settings.windows):
                 self.cb_autoToggleScore.setEnabled(False)
                 self.cb_autoToggleScore.setAttribute(
@@ -1034,6 +1052,7 @@ class MainWindow(QMainWindow):
 
             layout.addWidget(self.cb_autoTwitch, 0, 0)
             layout.addWidget(self.cb_autoNightbot, 0, 1)
+            layout.addWidget(self.cb_showOverlay, 0, 2)
 
             layout.addWidget(self.cb_autoUpdate, 1, 0)
             layout.addWidget(self.cb_autoToggleScore, 1, 1)
