@@ -1,7 +1,7 @@
 # Changelog
 
 
-## v2.0.1 (2018-08-03)
+## v2.0.1 (2018-08-07)
 
 ### New
 
@@ -38,6 +38,10 @@
 * One can now use a single combined hotkey for both player intros. This option is the new default.
 
 ### Fix
+
+* Fixed a bug where the hotkeys for intros would not be reactivated.
+
+* Fixed various typos in the localization.
 
 * Fixed a bug in the AlphaTL match grabber that occured if a team has no logo.
 
