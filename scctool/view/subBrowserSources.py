@@ -2,7 +2,6 @@
 import logging
 
 import gtts
-import keyboard
 from PyQt5.QtCore import QPoint, QSize, Qt
 from PyQt5.QtGui import QIcon, QKeySequence
 from PyQt5.QtWidgets import (QCheckBox, QComboBox, QDoubleSpinBox, QFormLayout,
@@ -366,10 +365,7 @@ class SubwindowBrowserSources(QWidget):
 
         self.hotkeyBox = QGroupBox(_("Hotkeys"))
         layout = QVBoxLayout()
-        try:
-            keyboard.unhook_all()
-        except AttributeError:
-            pass
+        self.controller.websocketThread.unregister_hotkeys(force=True)
 
         self.cb_single_hotkey = QCheckBox(
             _("Use a single hotkey for both players"))
@@ -604,6 +600,7 @@ class SubwindowBrowserSources(QWidget):
         """Handle close event."""
         try:
             if(not self.__dataChanged):
+                self.controller.updateHotkeys()
                 event.accept()
                 return
             if(not self.passEvent):
