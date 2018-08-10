@@ -9,6 +9,8 @@ from uuid import uuid4
 
 from PyQt5 import QtCore
 
+from scctool.settings import getResFile
+
 module_logger = logging.getLogger('scctool.tasks.auth')
 
 try:
@@ -23,36 +25,6 @@ try:
 except Exception as e:
     module_logger.exception("message")
     raise
-
-
-success_html = """<html>
-<head>
-<title>StarCraft Casting Tool</title>
-<style>
-@import url('https://fonts.googleapis.com/css?family=Roboto');
-
-div.main{
-font-family: Roboto;
-width: 100%;
-height: 400px;
-position: relative;
-text-align: center;
-padding-top: 50px;
-color: #0d468c;
-}
-</style>
-</head>
-
-<body>
-<div class='main'>
-<h1>StarCraft Casting Tool</h1>
-<img src="https://c10.patreonusercontent.com/3/eyJ3IjoyMDB9/patreon-media/p/user/11453319/e637dfeeace8494abaf0bbda66573df1/1?token-time=2145916800&token-hash=uYiFi_nu_OxXF2JjfbQyKg_dobUmRAZdbWY4OMTLs_0%3D" height="120" width="120">
-<h4 style='color: black;'>
-#CONTENT#
-</h4>
-</div>
-</body>
-</html>"""
 
 
 class myHandler(http.server.SimpleHTTPRequestHandler):
@@ -81,6 +53,10 @@ class myHandler(http.server.SimpleHTTPRequestHandler):
             else:
                 scope = 'nightbot'
             content = content.format(scope.capitalize())
+
+            with open(getResFile("auth.html"), 'r') as html_file:
+                success_html = html_file.read()
+
             content = success_html.replace('#CONTENT#', content)
             self.send_content(content)
             par = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)
