@@ -4,7 +4,6 @@ import logging
 import requests
 
 import scctool.settings
-from scctool.tasks.auth import TWITCH_CLIENT_ID
 
 # create logger
 module_logger = logging.getLogger('scctool.tasks.twitch')
@@ -21,7 +20,7 @@ def updateTitle(newTitle):
             "Twitch", "Channel").strip()
         userID = getUserID(twitchChannel)
 
-        clientID = TWITCH_CLIENT_ID
+        clientID = scctool.settings.safe.get('twitch-client-id')
         oauth = scctool.settings.config.parser.get("Twitch", "oauth")
 
         headers = {'Accept': 'application/vnd.twitchtv.v5+json',
@@ -71,7 +70,7 @@ def updateTitle(newTitle):
 
 def getUserID(user):
 
-    clientID = TWITCH_CLIENT_ID
+    clientID = scctool.settings.safe.get('twitch-client-id')
     headers = {'Accept': 'application/vnd.twitchtv.v5+json',
                'Client-ID': clientID}
     params = {'login': user}
@@ -85,7 +84,7 @@ def getUserID(user):
 
 def addCommunity(channelID):
     scctCommunity = 'a021033c-a1d3-4be4-866b-56b9a5f9980c'
-    clientID = TWITCH_CLIENT_ID
+    clientID = scctool.settings.safe.get('twitch-client-id')
     oauth = scctool.settings.config.parser.get("Twitch", "oauth")
     headers = {'Accept': 'application/vnd.twitchtv.v5+json',
                'Authorization': 'OAuth ' + oauth,

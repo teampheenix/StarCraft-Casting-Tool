@@ -1,5 +1,4 @@
 """Request auth tokens from twitch and nightbot."""
-import base64
 import http.server
 import logging
 import threading
@@ -9,17 +8,13 @@ from uuid import uuid4
 
 from PyQt5 import QtCore
 
-from scctool.settings import getResFile
+from scctool.settings import getResFile, safe
 
 module_logger = logging.getLogger('scctool.tasks.auth')
 
 try:
-    NIGHTBOT_CLIENT_ID = base64.b64decode(
-        b'YzEyMGE5YWQ0MjM3MGNmNTViYzFhNjA5ZjFjYTM0Y2E=').decode("utf8")
     NIGHTBOT_REDIRECT_URI = "http://localhost:65010/nightbot_callback"
 
-    TWITCH_CLIENT_ID = base64.b64decode(
-        b'ZHVhbTRneDlhcnlkNDZ1YjZxY2RqcmN4b2doeWFr').decode("utf8")
     TWITCH_REDIRECT_URI = "http://localhost:65010/twitch_callback"
 
 except Exception as e:
@@ -78,7 +73,7 @@ class myHandler(http.server.SimpleHTTPRequestHandler):
         """Generate auth url for nightbot."""
         # Generate a random string for the state parameter
         # Save it for use later to prevent xsrf attacks
-        params = {"client_id": NIGHTBOT_CLIENT_ID,
+        params = {"client_id": safe.get('nightbot-client-id'),
                   "response_type": "token",
                   "state": state,
                   "redirect_uri": NIGHTBOT_REDIRECT_URI,
@@ -91,7 +86,7 @@ class myHandler(http.server.SimpleHTTPRequestHandler):
         """Generate auth url for twitch."""
         # Generate a random string for the state parameter
         # Save it for use later to prevent xsrf attacks
-        params = {"client_id": TWITCH_CLIENT_ID,
+        params = {"client_id": safe.get('twitch-client-id'),
                   "response_type": "token",
                   "state": state,
                   "redirect_uri": TWITCH_REDIRECT_URI,

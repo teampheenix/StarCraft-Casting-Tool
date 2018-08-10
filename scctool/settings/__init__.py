@@ -11,6 +11,7 @@ import appdirs
 from scctool.settings.client_config import ClientConfig
 from scctool.settings.config import init as initConfig
 from scctool.settings.profileManager import ProfileManager
+from scctool.settings.safeGuard import SafeGuard
 
 module_logger = logging.getLogger('scctool.settings')
 
@@ -34,6 +35,7 @@ races = ("Random", "Terran", "Protoss", "Zerg")
 this.profileManager = ProfileManager()
 this.maps = []
 this.nightbot_commands = dict()
+this.safe = SafeGuard()
 
 
 def loadSettings():
