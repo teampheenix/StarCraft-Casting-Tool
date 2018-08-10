@@ -1,7 +1,6 @@
 """Show connections settings sub window."""
 import logging
 
-import gtts
 from PyQt5.QtCore import QPoint, QSize, Qt
 from PyQt5.QtGui import QIcon, QKeySequence
 from PyQt5.QtWidgets import (QCheckBox, QComboBox, QDoubleSpinBox, QFormLayout,
@@ -440,21 +439,22 @@ class SubwindowBrowserSources(QWidget):
         label.setMinimumWidth(120)
         layout.addRow(label, self.cb_tts_active)
 
-        self.cb_tts_lang = QComboBox()
+        self.cb_tts_voice = QComboBox()
 
         currentIdx = 0
         idx = 0
-        tts_langs = gtts.lang.tts_langs()
-        tts_lang = scctool.settings.config.parser.get("Intros", "tts_lang")
-        for key, name in tts_langs.items():
-            self.cb_tts_lang.addItem(name, key)
-            if(key == tts_lang):
+        tts_voices = self.controller.tts.getVoices()
+        tts_voice = scctool.settings.config.parser.get("Intros", "tts_voice")
+        print(tts_voice)
+        for voice in tts_voices:
+            self.cb_tts_voice.addItem(voice['name'], voice['name'])
+            if(voice['name'] == tts_voice):
                 currentIdx = idx
             idx += 1
-        self.cb_tts_lang.setCurrentIndex(currentIdx)
-        self.cb_tts_lang.currentIndexChanged.connect(self.changed)
+        self.cb_tts_voice.setCurrentIndex(currentIdx)
+        self.cb_tts_voice.currentIndexChanged.connect(self.changed)
         layout.addRow(QLabel(
-            _("Language:") + " "), self.cb_tts_lang)
+            _("Voice:") + " "), self.cb_tts_voice)
         self.ttsBox.setStyleSheet("QComboBox { combobox-popup: 0; }")
         self.ttsBox.setLayout(layout)
         mainLayout.addWidget(self.ttsBox)
@@ -567,7 +567,7 @@ class SubwindowBrowserSources(QWidget):
         scctool.settings.config.parser.set(
             "Intros", "animation", self.cb_animation.currentData().strip())
         scctool.settings.config.parser.set(
-            "Intros", "tts_lang", self.cb_tts_lang.currentData().strip())
+            "Intros", "tts_voice", self.cb_tts_voice.currentData().strip())
         scctool.settings.config.parser.set(
             "Intros", "tts_scope", self.cb_tts_scope.currentData().strip())
         scctool.settings.config.parser.set(
