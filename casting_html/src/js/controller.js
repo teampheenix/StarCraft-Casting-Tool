@@ -36,7 +36,9 @@ class Controller {
     fileref.setAttribute("href", file);
     document.getElementsByTagName("head")[0].appendChild(fileref)
     $(document).ready(function() {
-      $(document).find(".text-fill").textfill();
+      try {
+        $(document).find(".text-fill").textfill();
+      } catch (e) {}
     });
   }
 
