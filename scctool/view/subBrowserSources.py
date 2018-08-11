@@ -439,15 +439,20 @@ class SubwindowBrowserSources(QWidget):
         label.setMinimumWidth(120)
         layout.addRow(label, self.cb_tts_active)
 
+        self.icons = {}
+        self.icons['MALE'] = QIcon(scctool.settings.getResFile('male.png'))
+        self.icons['FEMALE'] = QIcon(scctool.settings.getResFile('female.png'))
         self.cb_tts_voice = QComboBox()
 
         currentIdx = 0
         idx = 0
         tts_voices = self.controller.tts.getVoices()
         tts_voice = scctool.settings.config.parser.get("Intros", "tts_voice")
-        print(tts_voice)
         for voice in tts_voices:
-            self.cb_tts_voice.addItem(voice['name'], voice['name'])
+            self.cb_tts_voice.addItem(
+                self.icons[voice['ssmlGender']],
+                '   ' + voice['name'],
+                voice['name'])
             if(voice['name'] == tts_voice):
                 currentIdx = idx
             idx += 1
@@ -459,22 +464,29 @@ class SubwindowBrowserSources(QWidget):
         self.ttsBox.setLayout(layout)
         mainLayout.addWidget(self.ttsBox)
 
+        self.sb_tts_pitch = QDoubleSpinBox()
+        self.sb_tts_pitch.setRange(-20, 20)
+        self.sb_tts_pitch.setDecimals(2)
+        self.sb_tts_pitch.setValue(
+            scctool.settings.config.parser.getfloat("Intros", "tts_pitch"))
+        self.sb_tts_pitch.valueChanged.connect(self.changed)
+        layout.addRow(QLabel(
+            _("Pitch:") + " "), self.sb_tts_pitch)
+
         self.cb_tts_scope = QComboBox()
         scope = scctool.settings.config.parser.get("Intros", "tts_scope")
         currentIdx = 0
         idx = 0
-        options = dict()
-        options['team_player'] = _("Team & Player")
-        options['player'] = _("Player")
+        options = self.controller.tts.getOptions()
         for key, item in options.items():
-            self.cb_tts_scope.addItem(item, key)
+            self.cb_tts_scope.addItem(item['desc'], key)
             if(key == scope):
                 currentIdx = idx
             idx += 1
         self.cb_tts_scope.setCurrentIndex(currentIdx)
         self.cb_tts_scope.currentIndexChanged.connect(self.changed)
         layout.addRow(QLabel(
-            _("Scope:") + " "), self.cb_tts_scope)
+            _("Line:") + " "), self.cb_tts_scope)
 
         self.sl_tts_sound = QSlider(Qt.Horizontal)
         self.sl_tts_sound.setMinimum(0)
@@ -486,6 +498,25 @@ class SubwindowBrowserSources(QWidget):
         self.sl_tts_sound.valueChanged.connect(self.changed)
         layout.addRow(QLabel(
             _("Sound Volume:") + " "), self.sl_tts_sound)
+
+        text = _(
+            "Text-to-Speech provided by Google-Cloud is paid for "
+            "by StarCraft Casting Tool Patrons. To keep this service up "
+            "consider becoming a <a href='{patreon}'>Patron</a> yourself. "
+            "You can test all voices at {tts}.")
+
+        patreon = 'https://www.patreon.com/StarCraftCastingTool'
+
+        url = 'https://cloud.google.com/text-to-speech/'
+        tts = "<a href='{}'>cloud.google.com/text-to-speech</a>"
+        tts = tts.format(url)
+
+        label = QLabel(text.format(patreon=patreon, tts=tts))
+        label.setAlignment(Qt.AlignJustify)
+        label.setOpenExternalLinks(True)
+        label.setWordWrap(True)
+        label.setMargin(5)
+        layout.addRow(label)
 
         mainLayout.addItem(QSpacerItem(
             0, 0, QSizePolicy.Minimum, QSizePolicy.Expanding))
@@ -574,6 +605,8 @@ class SubwindowBrowserSources(QWidget):
             "Intros", "tts_active", str(self.cb_tts_active.isChecked()))
         scctool.settings.config.parser.set(
             "Intros", "tts_volume", str(self.sl_tts_sound.value()))
+        scctool.settings.config.parser.set(
+            "Intros", "tts_pitch", str(self.sb_tts_pitch.value()))
 
     def openHTML(self, file):
         """Open file in browser."""

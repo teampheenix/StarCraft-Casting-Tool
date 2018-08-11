@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: StarCraft Casting Tool\n"
-"POT-Creation-Date: 2018-08-05 15:18+0200\n"
-"PO-Revision-Date: 2018-08-05 15:18+0200\n"
+"POT-Creation-Date: 2018-08-11 13:30+0200\n"
+"PO-Revision-Date: 2018-08-11 13:30+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -15,24 +15,24 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: controller.py:85
+#: controller.py:86
 msgid "This version is up to date."
 msgstr ""
 
-#: controller.py:508 controller.py:516
+#: controller.py:509 controller.py:517
 msgid "Specify your Twitch Settings to use this feature"
 msgstr ""
 
-#: controller.py:511
+#: controller.py:512
 msgid ""
 "Automatically update the title of your twitch channel in the background."
 msgstr ""
 
-#: controller.py:522 controller.py:529
+#: controller.py:523 controller.py:530
 msgid "Specify your Nightbot Settings to use this feature"
 msgstr ""
 
-#: controller.py:523
+#: controller.py:524
 msgid "Automatically update the commands of your nightbot in the background."
 msgstr ""
 
@@ -108,19 +108,19 @@ msgstr ""
 msgid "Initial profile is not valid."
 msgstr ""
 
-#: tasks/auth.py:77
+#: tasks/auth.py:44
 msgid "Succesfully recived access to {} - you can close this tab now."
 msgstr ""
 
-#: tasks/nightbot.py:40 tasks/nightbot.py:104 tasks/twitch.py:55
+#: tasks/nightbot.py:40 tasks/nightbot.py:104 tasks/twitch.py:54
 msgid "Forbidden - Do you have permission?"
 msgstr ""
 
-#: tasks/nightbot.py:42 tasks/nightbot.py:106 tasks/twitch.py:57
+#: tasks/nightbot.py:42 tasks/nightbot.py:106 tasks/twitch.py:56
 msgid "Unauthorized - Refresh your token!"
 msgstr ""
 
-#: tasks/nightbot.py:44 tasks/nightbot.py:108 tasks/twitch.py:59
+#: tasks/nightbot.py:44 tasks/nightbot.py:108 tasks/twitch.py:58
 msgid "Too Many Requests."
 msgstr ""
 
@@ -136,11 +136,11 @@ msgstr ""
 msgid "Updated Nightbot command '{}' to '{}'"
 msgstr ""
 
-#: tasks/twitch.py:38
+#: tasks/twitch.py:37
 msgid "Updated Twitch title of {} to: \"{}\""
 msgstr ""
 
-#: tasks/twitch.py:51
+#: tasks/twitch.py:50
 msgid "Not Found - Channel '{}' not found."
 msgstr ""
 
@@ -164,7 +164,7 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: view/main.py:140 view/main.py:278 view/subBrowserSources.py:57
+#: view/main.py:140 view/main.py:278 view/subBrowserSources.py:55
 msgid "Browser Sources"
 msgstr ""
 
@@ -228,7 +228,7 @@ msgstr ""
 msgid "Intro"
 msgstr ""
 
-#: view/main.py:285 view/subBrowserSources.py:73
+#: view/main.py:285 view/subBrowserSources.py:71
 msgid "Mapstats"
 msgstr ""
 
@@ -474,206 +474,210 @@ msgstr ""
 msgid "Updating Score..."
 msgstr ""
 
-#: view/subBrowserSources.py:72
+#: view/subBrowserSources.py:70
 msgid "Intros"
 msgstr ""
 
-#: view/subBrowserSources.py:75
+#: view/subBrowserSources.py:73
 msgid "Box Map Icons"
 msgstr ""
 
-#: view/subBrowserSources.py:76
+#: view/subBrowserSources.py:74
 msgid "Landscape Map Icons"
 msgstr ""
 
-#: view/subBrowserSources.py:135 view/subBrowserSources.py:252
-#: view/subBrowserSources.py:301
+#: view/subBrowserSources.py:133 view/subBrowserSources.py:250
+#: view/subBrowserSources.py:299
 msgid "General"
 msgstr ""
 
-#: view/subBrowserSources.py:143 view/subBrowserSources.py:260
-#: view/subBrowserSources.py:309
+#: view/subBrowserSources.py:141 view/subBrowserSources.py:258
+#: view/subBrowserSources.py:307
 msgid "Style:"
 msgstr ""
 
-#: view/subBrowserSources.py:145 view/subBrowserSources.py:262
-#: view/subBrowserSources.py:311 view/subBrowserSources.py:359
+#: view/subBrowserSources.py:143 view/subBrowserSources.py:260
+#: view/subBrowserSources.py:309 view/subBrowserSources.py:357
 #: view/subStyles.py:106 view/subStyles.py:123 view/subStyles.py:140
 #: view/subStyles.py:155 view/subStyles.py:170
 msgid "Show in Browser"
 msgstr ""
 
-#: view/subBrowserSources.py:153
+#: view/subBrowserSources.py:151
 msgid "Current Ladder Map Pool"
 msgstr ""
 
-#: view/subBrowserSources.py:154
+#: view/subBrowserSources.py:152
 msgid "Custom Map Pool (defined below)"
 msgstr ""
 
-#: view/subBrowserSources.py:155
+#: view/subBrowserSources.py:153
 msgid "Currently entered Maps only"
 msgstr ""
 
-#: view/subBrowserSources.py:159
+#: view/subBrowserSources.py:157
 msgid "Map Pool:"
 msgstr ""
 
-#: view/subBrowserSources.py:161
+#: view/subBrowserSources.py:159
 msgid "Select the next map automatically"
 msgstr ""
 
-#: view/subBrowserSources.py:166
+#: view/subBrowserSources.py:164
 msgid "Next Map:"
 msgstr ""
 
-#: view/subBrowserSources.py:170
+#: view/subBrowserSources.py:168
 msgid "Mark already played maps"
 msgstr ""
 
-#: view/subBrowserSources.py:175
+#: view/subBrowserSources.py:173
 msgid "Mark:"
 msgstr ""
 
-#: view/subBrowserSources.py:182
+#: view/subBrowserSources.py:180
 msgid "Custom Map Pool"
 msgstr ""
 
-#: view/subBrowserSources.py:228
+#: view/subBrowserSources.py:226
 msgid "Add Map"
 msgstr ""
 
-#: view/subBrowserSources.py:229
+#: view/subBrowserSources.py:227
 msgid "Please select a map"
 msgstr ""
 
-#: view/subBrowserSources.py:240
+#: view/subBrowserSources.py:238
 msgid "No maps available"
 msgstr ""
 
-#: view/subBrowserSources.py:241
+#: view/subBrowserSources.py:239
 msgid "All available maps have already been added."
 msgstr ""
 
-#: view/subBrowserSources.py:274 view/subBrowserSources.py:324
+#: view/subBrowserSources.py:272 view/subBrowserSources.py:322
 msgid "Pixel"
 msgstr ""
 
-#: view/subBrowserSources.py:278 view/subBrowserSources.py:328
+#: view/subBrowserSources.py:276 view/subBrowserSources.py:326
 msgid "Icon Padding:"
 msgstr ""
 
-#: view/subBrowserSources.py:286 view/subBrowserSources.py:336
+#: view/subBrowserSources.py:284 view/subBrowserSources.py:334
 msgid "Icon Set {} Scope"
 msgstr ""
 
-#: view/subBrowserSources.py:353
+#: view/subBrowserSources.py:351
 msgid "Style"
 msgstr ""
 
-#: view/subBrowserSources.py:367
+#: view/subBrowserSources.py:365
 msgid "Hotkeys"
 msgstr ""
 
-#: view/subBrowserSources.py:375
+#: view/subBrowserSources.py:370
 msgid "Use a single hotkey for both players"
 msgstr ""
 
-#: view/subBrowserSources.py:380
+#: view/subBrowserSources.py:375
 msgid "Player 1"
 msgstr ""
 
-#: view/subBrowserSources.py:381
+#: view/subBrowserSources.py:376
 msgid "Player 2"
 msgstr ""
 
-#: view/subBrowserSources.py:382
+#: view/subBrowserSources.py:377
 msgid "Debug"
 msgstr ""
 
-#: view/subBrowserSources.py:388
+#: view/subBrowserSources.py:383
 msgid ""
 "Player 1 is always the player your observer camera is centered on at start "
 "of a game."
 msgstr ""
 
-#: view/subBrowserSources.py:394
+#: view/subBrowserSources.py:389
 msgid "Animation"
 msgstr ""
 
-#: view/subBrowserSources.py:401
+#: view/subBrowserSources.py:396
 msgid "Fly-In"
 msgstr ""
 
-#: view/subBrowserSources.py:402
+#: view/subBrowserSources.py:397
 msgid "Slide"
 msgstr ""
 
-#: view/subBrowserSources.py:403
+#: view/subBrowserSources.py:398
 msgid "Fanfare"
 msgstr ""
 
-#: view/subBrowserSources.py:411
+#: view/subBrowserSources.py:406
 msgid "Animation:"
 msgstr ""
 
-#: view/subBrowserSources.py:419
+#: view/subBrowserSources.py:414
 msgid "Seconds"
 msgstr ""
 
-#: view/subBrowserSources.py:422
+#: view/subBrowserSources.py:417
 msgid "Display Duration:"
 msgstr ""
 
-#: view/subBrowserSources.py:432 view/subBrowserSources.py:492
+#: view/subBrowserSources.py:427 view/subBrowserSources.py:500
 msgid "Sound Volume:"
 msgstr ""
 
-#: view/subBrowserSources.py:436
+#: view/subBrowserSources.py:431
 msgid "Text-to-Speech"
 msgstr ""
 
-#: view/subBrowserSources.py:443
+#: view/subBrowserSources.py:438
 msgid "Activate Text-to-Speech:"
 msgstr ""
 
-#: view/subBrowserSources.py:461
-msgid "Language:"
+#: view/subBrowserSources.py:462
+msgid "Voice:"
 msgstr ""
 
-#: view/subBrowserSources.py:471
-msgid "Team & Player"
+#: view/subBrowserSources.py:474
+msgid "Pitch:"
 msgstr ""
 
-#: view/subBrowserSources.py:472
-msgid "Player"
+#: view/subBrowserSources.py:489
+msgid "Line:"
 msgstr ""
 
-#: view/subBrowserSources.py:481
-msgid "Scope:"
+#: view/subBrowserSources.py:503
+#, python-brace-format
+msgid ""
+"Text-to-Speech provided by Google-Cloud is paid for by StarCraft Casting "
+"Tool Patrons. To keep this service up consider becoming a <a "
+"href='{patreon}'>Patron</a> yourself. You can test all voices at {tts}."
 msgstr ""
 
-#: view/subBrowserSources.py:505 view/subConnections.py:251
+#: view/subBrowserSources.py:532 view/subConnections.py:251
 #: view/subLiquipediaSearch.py:82 view/subMisc.py:672 view/subStyles.py:77
 msgid "Cancel"
 msgstr ""
 
-#: view/subBrowserSources.py:509 view/subConnections.py:255 view/subMisc.py:676
+#: view/subBrowserSources.py:536 view/subConnections.py:255 view/subMisc.py:676
 #: view/subStyles.py:81
 msgid "&Save && Close"
 msgstr ""
 
-#: view/subBrowserSources.py:510 view/subConnections.py:256 view/subMisc.py:677
+#: view/subBrowserSources.py:537 view/subConnections.py:256 view/subMisc.py:677
 #: view/subStyles.py:82
 msgid "Shortcut: {}"
 msgstr ""
 
-#: view/subBrowserSources.py:613 view/subConnections.py:318 view/subMisc.py:744
+#: view/subBrowserSources.py:643 view/subConnections.py:318 view/subMisc.py:744
 #: view/subStyles.py:361
 msgid "Save data?"
 msgstr ""
 
-#: view/subBrowserSources.py:613 view/subConnections.py:318
+#: view/subBrowserSources.py:643 view/subConnections.py:318
 msgid "Do you want to save the data?"
 msgstr ""
 

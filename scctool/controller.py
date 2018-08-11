@@ -680,6 +680,8 @@ class MainController:
             "Intros", "tts_voice")
         tts_scope = scctool.settings.config.parser.get(
             "Intros", "tts_scope")
+        tts_pitch = scctool.settings.config.parser.getfloat(
+            "Intros", "tts_pitch")
 
         for player_idx in range(2):
             team1 = newData.playerInList(
@@ -705,27 +707,24 @@ class MainController:
 
             name = self.aliasManager.translatePlayer(
                 newData.getPlayer(player_idx))
+            race = newData.getRace(player_idx)
             self.__playerIntroData[player_idx]['name'] = name
             self.__playerIntroData[player_idx]['team'] = team
-            self.__playerIntroData[player_idx]['race'] = newData.getRace(
-                player_idx).lower()
+            self.__playerIntroData[player_idx]['race'] = race.lower()
             self.__playerIntroData[player_idx]['logo'] = logo
             self.__playerIntroData[player_idx]['display'] = display
             self.__playerIntroIdx = 0
 
             try:
                 if tts_active:
-                    if team and tts_scope == 'team_player':
-                        text = "{}'s {}".format(team, name)
-                    else:
-                        text = name
+                    text = self.tts.getLine(tts_scope, name, race, team)
 
                     tts_file = 'src/sound/player{}.wav'.format(player_idx + 1)
                     wav_file = os.path.normpath(os.path.join(
                         scctool.settings.getAbsPath(
                             scctool.settings.casting_html_dir),
                         tts_file))
-                    self.tts.synthesize(text, wav_file, tts_voice)
+                    self.tts.synthesize(text, wav_file, tts_voice, tts_pitch)
                 else:
                     tts_file = None
                 self.__playerIntroData[player_idx]['tts'] = tts_file
