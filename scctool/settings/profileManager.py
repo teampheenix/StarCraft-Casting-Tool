@@ -12,8 +12,6 @@ from scctool.settings.client_config import ClientConfig
 module_logger = logging.getLogger(
     'scctool.settings.profileManager')  # create logger
 
-# TODO: Tell browser sources what profile is used.
-
 
 class ProfileManager:
 

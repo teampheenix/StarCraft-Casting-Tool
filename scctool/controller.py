@@ -397,6 +397,7 @@ class MainController:
         self.historyManager.dumpJson()
         self.aliasManager.dumpJson()
         self.mapstatsManager.dumpJson()
+        self.tts.dumpJson()
 
     def saveConfig(self):
         """Save the settings to the config file."""
@@ -682,6 +683,8 @@ class MainController:
             "Intros", "tts_scope")
         tts_pitch = scctool.settings.config.parser.getfloat(
             "Intros", "tts_pitch")
+        tts_rate = scctool.settings.config.parser.getfloat(
+            "Intros", "tts_rate")
 
         for player_idx in range(2):
             team1 = newData.playerInList(
@@ -718,13 +721,9 @@ class MainController:
             try:
                 if tts_active:
                     text = self.tts.getLine(tts_scope, name, race, team)
-
-                    tts_file = 'src/sound/player{}.wav'.format(player_idx + 1)
-                    wav_file = os.path.normpath(os.path.join(
-                        scctool.settings.getAbsPath(
-                            scctool.settings.casting_html_dir),
-                        tts_file))
-                    self.tts.synthesize(text, wav_file, tts_voice, tts_pitch)
+                    tts_file = os.path.join("..", self.tts.synthesize(
+                        text, tts_voice,
+                        tts_pitch, tts_rate)).replace('\\', '/')
                 else:
                     tts_file = None
                 self.__playerIntroData[player_idx]['tts'] = tts_file

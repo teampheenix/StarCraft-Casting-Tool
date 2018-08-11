@@ -473,6 +473,16 @@ class SubwindowBrowserSources(QWidget):
         layout.addRow(QLabel(
             _("Pitch:") + " "), self.sb_tts_pitch)
 
+        self.sb_tts_rate = QDoubleSpinBox()
+        self.sb_tts_rate.setRange(0.25, 4.00)
+        self.sb_tts_rate.setSingleStep(0.1)
+        self.sb_tts_rate.setDecimals(2)
+        self.sb_tts_rate.setValue(
+            scctool.settings.config.parser.getfloat("Intros", "tts_rate"))
+        self.sb_tts_rate.valueChanged.connect(self.changed)
+        layout.addRow(QLabel(
+            _("Rate:") + " "), self.sb_tts_rate)
+
         self.cb_tts_scope = QComboBox()
         scope = scctool.settings.config.parser.get("Intros", "tts_scope")
         currentIdx = 0
@@ -607,6 +617,8 @@ class SubwindowBrowserSources(QWidget):
             "Intros", "tts_volume", str(self.sl_tts_sound.value()))
         scctool.settings.config.parser.set(
             "Intros", "tts_pitch", str(self.sb_tts_pitch.value()))
+        scctool.settings.config.parser.set(
+            "Intros", "tts_rate", str(self.sb_tts_rate.value()))
 
     def openHTML(self, file):
         """Open file in browser."""

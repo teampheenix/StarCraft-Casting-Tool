@@ -188,6 +188,7 @@ def setDefaultConfigAll():
     setDefaultConfig("Intros", 'tts_scope', "team_player")
     setDefaultConfig("Intros", "tts_volume", "5")
     setDefaultConfig("Intros", "tts_pitch", "0.0")
+    setDefaultConfig("Intros", "tts_rate", "1.0")
 
     setDefaultConfig("Mapstats", "color1", "#6495ed")
     setDefaultConfig("Mapstats", "color2", "#000000")
