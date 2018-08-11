@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: StarCraft Casting Tool\n"
-"POT-Creation-Date: 2018-08-11 13:30+0200\n"
-"PO-Revision-Date: 2018-08-11 13:30+0200\n"
+"POT-Creation-Date: 2018-08-11 18:32+0200\n"
+"PO-Revision-Date: 2018-08-11 18:32+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -19,48 +19,48 @@ msgstr ""
 msgid "This version is up to date."
 msgstr ""
 
-#: controller.py:509 controller.py:517
+#: controller.py:510 controller.py:518
 msgid "Specify your Twitch Settings to use this feature"
 msgstr ""
 
-#: controller.py:512
+#: controller.py:513
 msgid ""
 "Automatically update the title of your twitch channel in the background."
 msgstr ""
 
-#: controller.py:523 controller.py:530
+#: controller.py:524 controller.py:531
 msgid "Specify your Nightbot Settings to use this feature"
 msgstr ""
 
-#: controller.py:524
+#: controller.py:525
 msgid "Automatically update the commands of your nightbot in the background."
 msgstr ""
 
-#: controller.py:747
+#: controller.py:746
 msgid "Warning: Map '{}' not found!"
 msgstr ""
 
-#: controller.py:800
+#: controller.py:799
 msgid "{} {} Browser Source(s) connected."
 msgstr ""
 
-#: controller.py:961
+#: controller.py:960
 msgid "A new version {} is available."
 msgstr ""
 
-#: controller.py:963
+#: controller.py:962
 msgid "Update to new version?"
 msgstr ""
 
-#: controller.py:964
+#: controller.py:963
 msgid "New SCC-Tool Version"
 msgstr ""
 
-#: controller.py:973
+#: controller.py:972
 msgid "Don't show on startup."
 msgstr ""
 
-#: controller.py:982
+#: controller.py:981
 msgid "A new version {} is available on GitHub!"
 msgstr ""
 
@@ -96,15 +96,15 @@ msgstr ""
 msgid "Undecided Maps"
 msgstr ""
 
-#: settings/profileManager.py:102 settings/profileManager.py:139
+#: settings/profileManager.py:100 settings/profileManager.py:137
 msgid "You cannot use empty names."
 msgstr ""
 
-#: settings/profileManager.py:106 settings/profileManager.py:143
+#: settings/profileManager.py:104 settings/profileManager.py:141
 msgid "The name is already in use."
 msgstr ""
 
-#: settings/profileManager.py:146
+#: settings/profileManager.py:144
 msgid "Initial profile is not valid."
 msgstr ""
 
@@ -625,7 +625,7 @@ msgstr ""
 msgid "Display Duration:"
 msgstr ""
 
-#: view/subBrowserSources.py:427 view/subBrowserSources.py:500
+#: view/subBrowserSources.py:427 view/subBrowserSources.py:510
 msgid "Sound Volume:"
 msgstr ""
 
@@ -645,11 +645,15 @@ msgstr ""
 msgid "Pitch:"
 msgstr ""
 
-#: view/subBrowserSources.py:489
+#: view/subBrowserSources.py:484
+msgid "Rate:"
+msgstr ""
+
+#: view/subBrowserSources.py:499
 msgid "Line:"
 msgstr ""
 
-#: view/subBrowserSources.py:503
+#: view/subBrowserSources.py:513
 #, python-brace-format
 msgid ""
 "Text-to-Speech provided by Google-Cloud is paid for by StarCraft Casting "
@@ -657,27 +661,27 @@ msgid ""
 "href='{patreon}'>Patron</a> yourself. You can test all voices at {tts}."
 msgstr ""
 
-#: view/subBrowserSources.py:532 view/subConnections.py:251
+#: view/subBrowserSources.py:542 view/subConnections.py:251
 #: view/subLiquipediaSearch.py:82 view/subMisc.py:672 view/subStyles.py:77
 msgid "Cancel"
 msgstr ""
 
-#: view/subBrowserSources.py:536 view/subConnections.py:255 view/subMisc.py:676
+#: view/subBrowserSources.py:546 view/subConnections.py:255 view/subMisc.py:676
 #: view/subStyles.py:81
 msgid "&Save && Close"
 msgstr ""
 
-#: view/subBrowserSources.py:537 view/subConnections.py:256 view/subMisc.py:677
+#: view/subBrowserSources.py:547 view/subConnections.py:256 view/subMisc.py:677
 #: view/subStyles.py:82
 msgid "Shortcut: {}"
 msgstr ""
 
-#: view/subBrowserSources.py:643 view/subConnections.py:318 view/subMisc.py:744
+#: view/subBrowserSources.py:655 view/subConnections.py:318 view/subMisc.py:744
 #: view/subStyles.py:361
 msgid "Save data?"
 msgstr ""
 
-#: view/subBrowserSources.py:643 view/subConnections.py:318
+#: view/subBrowserSources.py:655 view/subConnections.py:318
 msgid "Do you want to save the data?"
 msgstr ""
 

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: StarCraft Casting Tool\n"
-"POT-Creation-Date: 2018-08-11 13:30+0200\n"
-"PO-Revision-Date: 2018-08-11 13:32+0200\n"
+"POT-Creation-Date: 2018-08-11 18:32+0200\n"
+"PO-Revision-Date: 2018-08-11 18:33+0200\n"
 "Last-Translator: \n"
 "Language-Team: Mayhem, TanTall\n"
 "Language: ru\n"
@@ -22,50 +22,50 @@ msgstr ""
 msgid "This version is up to date."
 msgstr "Вы используете новейшую версию."
 
-#: scctool/controller.py:509 scctool/controller.py:517
+#: scctool/controller.py:510 scctool/controller.py:518
 msgid "Specify your Twitch Settings to use this feature"
 msgstr "Укажите настройки Twitch для использования этой возможности"
 
-#: scctool/controller.py:512
+#: scctool/controller.py:513
 msgid ""
 "Automatically update the title of your twitch channel in the background."
 msgstr ""
 "Автоматическое обновление заголовка вашего Twitch-канала в фоновом режиме."
 
-#: scctool/controller.py:523 scctool/controller.py:530
+#: scctool/controller.py:524 scctool/controller.py:531
 msgid "Specify your Nightbot Settings to use this feature"
 msgstr "Укажите настройки Nightbot для использования этой возможности"
 
-#: scctool/controller.py:524
+#: scctool/controller.py:525
 msgid "Automatically update the commands of your nightbot in the background."
 msgstr "Автоматическое обновление команд nightbot в фоновом режиме."
 
-#: scctool/controller.py:747
+#: scctool/controller.py:746
 msgid "Warning: Map '{}' not found!"
 msgstr "Внимание: Карта '{}' Не найдена!"
 
 # Google Translate
-#: scctool/controller.py:800
+#: scctool/controller.py:799
 msgid "{} {} Browser Source(s) connected."
 msgstr "{} {} Источник (ы) браузера подключен."
 
-#: scctool/controller.py:961
+#: scctool/controller.py:960
 msgid "A new version {} is available."
 msgstr "Доступна новая версия {}."
 
-#: scctool/controller.py:963
+#: scctool/controller.py:962
 msgid "Update to new version?"
 msgstr "Загрузить новую версию?"
 
-#: scctool/controller.py:964
+#: scctool/controller.py:963
 msgid "New SCC-Tool Version"
 msgstr "Новая версия SCC-Tool"
 
-#: scctool/controller.py:973
+#: scctool/controller.py:972
 msgid "Don't show on startup."
 msgstr "Не показывать при запуске."
 
-#: scctool/controller.py:982
+#: scctool/controller.py:981
 msgid "A new version {} is available on GitHub!"
 msgstr "Новая версия {} доступна на GitHub!"
 
@@ -106,17 +106,17 @@ msgstr "Текущая и предыдущая карта"
 msgid "Undecided Maps"
 msgstr "Неопределенные карты"
 
-#: scctool/settings/profileManager.py:102
-#: scctool/settings/profileManager.py:139
+#: scctool/settings/profileManager.py:100
+#: scctool/settings/profileManager.py:137
 msgid "You cannot use empty names."
 msgstr "Вы не можете использовать пустые имена."
 
-#: scctool/settings/profileManager.py:106
-#: scctool/settings/profileManager.py:143
+#: scctool/settings/profileManager.py:104
+#: scctool/settings/profileManager.py:141
 msgid "The name is already in use."
 msgstr "Имя уже используется."
 
-#: scctool/settings/profileManager.py:146
+#: scctool/settings/profileManager.py:144
 msgid "Initial profile is not valid."
 msgstr "Исходный профиль недействителен."
 
@@ -663,7 +663,7 @@ msgstr "Секунд"
 msgid "Display Duration:"
 msgstr "Длительность показа:"
 
-#: scctool/view/subBrowserSources.py:427 scctool/view/subBrowserSources.py:500
+#: scctool/view/subBrowserSources.py:427 scctool/view/subBrowserSources.py:510
 msgid "Sound Volume:"
 msgstr "Громкость:"
 
@@ -687,12 +687,17 @@ msgid "Pitch:"
 msgstr "Подача:"
 
 # Google Translate
-#: scctool/view/subBrowserSources.py:489
+#: scctool/view/subBrowserSources.py:484
+msgid "Rate:"
+msgstr "Говорящий курс:"
+
+# Google Translate
+#: scctool/view/subBrowserSources.py:499
 msgid "Line:"
 msgstr "Строка:"
 
 # Google Translate
-#: scctool/view/subBrowserSources.py:503
+#: scctool/view/subBrowserSources.py:513
 #, python-brace-format
 msgid ""
 "Text-to-Speech provided by Google-Cloud is paid for by StarCraft Casting "
@@ -703,28 +708,28 @@ msgstr ""
 "Tool Patrons. Чтобы сохранить это обслуживание, подумайте о себе как о <a "
 "href='{patreon}'> Патроне </a>. Вы можете проверить все голоса на {tts}."
 
-#: scctool/view/subBrowserSources.py:532 scctool/view/subConnections.py:251
+#: scctool/view/subBrowserSources.py:542 scctool/view/subConnections.py:251
 #: scctool/view/subLiquipediaSearch.py:82 scctool/view/subMisc.py:672
 #: scctool/view/subStyles.py:77
 msgid "Cancel"
 msgstr "Отмена"
 
-#: scctool/view/subBrowserSources.py:536 scctool/view/subConnections.py:255
+#: scctool/view/subBrowserSources.py:546 scctool/view/subConnections.py:255
 #: scctool/view/subMisc.py:676 scctool/view/subStyles.py:81
 msgid "&Save && Close"
 msgstr "Сохранить и закрыть"
 
-#: scctool/view/subBrowserSources.py:537 scctool/view/subConnections.py:256
+#: scctool/view/subBrowserSources.py:547 scctool/view/subConnections.py:256
 #: scctool/view/subMisc.py:677 scctool/view/subStyles.py:82
 msgid "Shortcut: {}"
 msgstr "Горячая клавиша: {}"
 
-#: scctool/view/subBrowserSources.py:643 scctool/view/subConnections.py:318
+#: scctool/view/subBrowserSources.py:655 scctool/view/subConnections.py:318
 #: scctool/view/subMisc.py:744 scctool/view/subStyles.py:361
 msgid "Save data?"
 msgstr "Сохранить данные?"
 
-#: scctool/view/subBrowserSources.py:643 scctool/view/subConnections.py:318
+#: scctool/view/subBrowserSources.py:655 scctool/view/subConnections.py:318
 msgid "Do you want to save the data?"
 msgstr "Вы хотите сохранить данные?"
 
