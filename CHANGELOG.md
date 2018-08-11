@@ -1,6 +1,13 @@
 # Changelog
 
 
+## v2.1.0 (2018-08-11)
+
+### New
+
+* Implemented Google-Cloud Text-to-Speech Voices for the Intros.
+
+
 ## v2.0.1 (2018-08-07)
 
 ### New
