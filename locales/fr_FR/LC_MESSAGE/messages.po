@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: StarCraft Casting Tool\n"
-"POT-Creation-Date: 2018-08-11 18:32+0200\n"
-"PO-Revision-Date: 2018-08-11 18:32+0200\n"
+"POT-Creation-Date: 2018-08-12 18:47+0200\n"
+"PO-Revision-Date: 2018-08-12 18:47+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -379,8 +379,8 @@ msgstr ""
 msgid "Set the score"
 msgstr ""
 
-#: view/main.py:906 view/widgets.py:1405 view/widgets.py:1413
-#: view/widgets.py:1452
+#: view/main.py:906 view/widgets.py:1406 view/widgets.py:1414
+#: view/widgets.py:1453
 msgid "Map {}"
 msgstr ""
 
@@ -778,18 +778,18 @@ msgid "Use Selected Logo"
 msgstr ""
 
 #: view/subLiquipediaSearch.py:91
-msgid "Liqupedia Image Search"
+msgid "Liquipedia Image Search"
 msgstr ""
 
 #: view/subLiquipediaSearch.py:132
 msgid "Results for '{}': {}"
 msgstr ""
 
-#: view/subLiquipediaSearch.py:177
+#: view/subLiquipediaSearch.py:179
 msgid "Open on Liquipedia"
 msgstr ""
 
-#: view/subLiquipediaSearch.py:179
+#: view/subLiquipediaSearch.py:181
 msgid "Use as Team Logo"
 msgstr ""
 
@@ -814,7 +814,7 @@ msgid "Add to Favorites"
 msgstr ""
 
 #: view/subLogos.py:59 view/subLogos.py:107 view/subMisc.py:449
-#: view/widgets.py:1144
+#: view/widgets.py:1145
 msgid "Remove"
 msgstr ""
 
@@ -981,7 +981,7 @@ msgstr ""
 msgid "Player Aliases"
 msgstr ""
 
-#: view/subMisc.py:272 view/subMisc.py:285 view/widgets.py:656
+#: view/subMisc.py:272 view/subMisc.py:285 view/widgets.py:657
 msgid "Add Alias"
 msgstr ""
 
@@ -1002,7 +1002,7 @@ msgid "Alias of {}"
 msgstr ""
 
 #: view/subMisc.py:325 view/subMisc.py:490 view/subMisc.py:536
-#: view/subMisc.py:573 view/subMisc.py:621 view/widgets.py:1265
+#: view/subMisc.py:573 view/subMisc.py:621 view/widgets.py:1266
 msgid "Error"
 msgstr ""
 
@@ -1054,7 +1054,7 @@ msgstr ""
 msgid "Add from File"
 msgstr ""
 
-#: view/subMisc.py:445 view/widgets.py:1140
+#: view/subMisc.py:445 view/widgets.py:1141
 msgid "Rename"
 msgstr ""
 
@@ -1224,151 +1224,151 @@ msgstr ""
 msgid "Logo Downloader"
 msgstr ""
 
-#: view/widgets.py:388
+#: view/widgets.py:389
 msgid "Updater"
 msgstr ""
 
-#: view/widgets.py:390
+#: view/widgets.py:391
 msgid "Updating to a new version..."
 msgstr ""
 
-#: view/widgets.py:417
+#: view/widgets.py:418
 msgid "Downloading a new version: Total file size {}, Time remaining {}."
 msgstr ""
 
-#: view/widgets.py:463
+#: view/widgets.py:464
 msgid "Select"
 msgstr ""
 
-#: view/widgets.py:466
+#: view/widgets.py:467
 msgid "Default"
 msgstr ""
 
-#: view/widgets.py:641 view/widgets.py:659
+#: view/widgets.py:642 view/widgets.py:660
 msgid "Name"
 msgstr ""
 
-#: view/widgets.py:661
+#: view/widgets.py:662
 msgid "Remove with Aliases"
 msgstr ""
 
-#: view/widgets.py:666
+#: view/widgets.py:667
 msgid "Remove Alias"
 msgstr ""
 
-#: view/widgets.py:804
+#: view/widgets.py:805
 msgid "Collecting data..."
 msgstr ""
 
-#: view/widgets.py:843
+#: view/widgets.py:844
 msgid "Extracting data..."
 msgstr ""
 
-#: view/widgets.py:845
+#: view/widgets.py:846
 msgid "Done."
 msgstr ""
 
-#: view/widgets.py:860
+#: view/widgets.py:861
 msgid "Downloading required files: Total file size {}, Time remaining {}."
 msgstr ""
 
-#: view/widgets.py:1125
+#: view/widgets.py:1126
 msgid "Profile"
 msgstr ""
 
-#: view/widgets.py:1128
+#: view/widgets.py:1129
 msgid "Open current Profile Folder"
 msgstr ""
 
-#: view/widgets.py:1132
+#: view/widgets.py:1133
 msgid "New"
 msgstr ""
 
-#: view/widgets.py:1136
+#: view/widgets.py:1137
 msgid "Duplicate"
 msgstr ""
 
-#: view/widgets.py:1148
+#: view/widgets.py:1149
 msgid "Import as New"
 msgstr ""
 
-#: view/widgets.py:1152
+#: view/widgets.py:1153
 msgid "Import && Overwrite"
 msgstr ""
 
-#: view/widgets.py:1156
+#: view/widgets.py:1157
 msgid "Export"
 msgstr ""
 
-#: view/widgets.py:1177 view/widgets.py:1189
+#: view/widgets.py:1178 view/widgets.py:1190
 msgid "Remove Profile"
 msgstr ""
 
-#: view/widgets.py:1178
+#: view/widgets.py:1179
 msgid "Are you sure you wish to remove profile '{}'?"
 msgstr ""
 
-#: view/widgets.py:1200
+#: view/widgets.py:1201
 msgid "Add Profile"
 msgstr ""
 
-#: view/widgets.py:1201 view/widgets.py:1353
+#: view/widgets.py:1202 view/widgets.py:1354
 msgid "Please enter the name of the profile"
 msgstr ""
 
-#: view/widgets.py:1213 view/widgets.py:1239 view/widgets.py:1296
-#: view/widgets.py:1364
+#: view/widgets.py:1214 view/widgets.py:1240 view/widgets.py:1297
+#: view/widgets.py:1365
 msgid "Please enter a valid name"
 msgstr ""
 
-#: view/widgets.py:1225
+#: view/widgets.py:1226
 msgid "Duplicate Profile"
 msgstr ""
 
-#: view/widgets.py:1226
+#: view/widgets.py:1227
 msgid "Please enter the name of the new profile"
 msgstr ""
 
-#: view/widgets.py:1255 view/widgets.py:1275 view/widgets.py:1308
+#: view/widgets.py:1256 view/widgets.py:1276 view/widgets.py:1309
 msgid "ZIP archive"
 msgstr ""
 
-#: view/widgets.py:1282
+#: view/widgets.py:1283
 msgid "Import Profile"
 msgstr ""
 
-#: view/widgets.py:1283
+#: view/widgets.py:1284
 msgid "Please enter the name of the imported profile"
 msgstr ""
 
-#: view/widgets.py:1315
+#: view/widgets.py:1316
 msgid "Overwrite Profile"
 msgstr ""
 
-#: view/widgets.py:1316
+#: view/widgets.py:1317
 msgid "Are you sure you wish to overwrite the current profile '{}'?"
 msgstr ""
 
-#: view/widgets.py:1333
+#: view/widgets.py:1334
 msgid "Import && Overwrite Profile"
 msgstr ""
 
-#: view/widgets.py:1352
+#: view/widgets.py:1353
 msgid "Rename Profile"
 msgstr ""
 
-#: view/widgets.py:1381
+#: view/widgets.py:1382
 msgid "Dynamic:"
 msgstr ""
 
-#: view/widgets.py:1396
+#: view/widgets.py:1397
 msgid "Static:"
 msgstr ""
 
-#: view/widgets.py:1401
+#: view/widgets.py:1402
 msgid "From"
 msgstr ""
 
-#: view/widgets.py:1408
+#: view/widgets.py:1409
 msgid "to"
 msgstr ""

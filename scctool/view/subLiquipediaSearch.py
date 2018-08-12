@@ -88,7 +88,7 @@ class SubwindowLiquipediaSearch(QWidget):
         mainLayout.addWidget(selectButton, 2, 2)
         self.setLayout(mainLayout)
 
-        self.setWindowTitle(_("Liqupedia Image Search"))
+        self.setWindowTitle(_("Liquipedia Image Search"))
 
         self.resize(QSize(mainWindow.size().width() * 0.9,
                           self.sizeHint().height()))
@@ -143,6 +143,7 @@ class SubwindowLiquipediaSearch(QWidget):
         self.results[idx].setIcon(QIcon(map))
 
     def applyLogo(self, skip=False):
+        QApplication.setOverrideCursor(Qt.WaitCursor)
         item = self.result_list.currentItem()
         if item is not None and (skip or item.isSelected()):
             for idx, iteritem in self.results.items():
@@ -155,10 +156,11 @@ class SubwindowLiquipediaSearch(QWidget):
 
                     self.downloadLogo(base_url + image)
                     break
-
+        QApplication.restoreOverrideCursor()
         self.close()
 
     def doubleClicked(self, item):
+        QApplication.setOverrideCursor(Qt.WaitCursor)
         for idx, iteritem in self.results.items():
             if item is iteritem:
                 images = self.liquipediaGrabber.get_images(self.data[idx])
@@ -169,7 +171,7 @@ class SubwindowLiquipediaSearch(QWidget):
 
                 self.downloadLogo(base_url + image)
                 break
-
+        QApplication.restoreOverrideCursor()
         self.close()
 
     def listItemRightClicked(self, QPos):

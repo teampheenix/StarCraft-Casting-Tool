@@ -348,8 +348,9 @@ class LogoDownloader(QProgressDialog):
 
     def download(self):
         self.show()
-
+        self.setProgress(1)
         with open(self.file_name, "wb") as f:
+            self.setProgress(5)
             module_logger.info("Downloading {}".format(self.file_name))
             response = requests.get(self.url, stream=True)
             total_length = response.headers.get('content-length')

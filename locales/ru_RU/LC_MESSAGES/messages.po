@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: StarCraft Casting Tool\n"
-"POT-Creation-Date: 2018-08-11 18:32+0200\n"
-"PO-Revision-Date: 2018-08-11 18:33+0200\n"
+"POT-Creation-Date: 2018-08-12 18:48+0200\n"
+"PO-Revision-Date: 2018-08-12 18:48+0200\n"
 "Last-Translator: \n"
 "Language-Team: Mayhem, TanTall\n"
 "Language: ru\n"
@@ -402,8 +402,8 @@ msgstr "Игрок {} из команды {}"
 msgid "Set the score"
 msgstr "Установить счет"
 
-#: scctool/view/main.py:906 scctool/view/widgets.py:1405
-#: scctool/view/widgets.py:1413 scctool/view/widgets.py:1452
+#: scctool/view/main.py:906 scctool/view/widgets.py:1406
+#: scctool/view/widgets.py:1414 scctool/view/widgets.py:1453
 msgid "Map {}"
 msgstr "Карта {}"
 
@@ -829,18 +829,18 @@ msgid "Use Selected Logo"
 msgstr "Использовать выбранный логотип"
 
 #: scctool/view/subLiquipediaSearch.py:91
-msgid "Liqupedia Image Search"
+msgid "Liquipedia Image Search"
 msgstr "Поиск изображения Liquipedia"
 
 #: scctool/view/subLiquipediaSearch.py:132
 msgid "Results for '{}': {}"
 msgstr "Результаты для '{}': {}"
 
-#: scctool/view/subLiquipediaSearch.py:177
+#: scctool/view/subLiquipediaSearch.py:179
 msgid "Open on Liquipedia"
 msgstr "Открыть на Liquipedia"
 
-#: scctool/view/subLiquipediaSearch.py:179
+#: scctool/view/subLiquipediaSearch.py:181
 msgid "Use as Team Logo"
 msgstr "Использовать как логотип команды"
 
@@ -866,7 +866,7 @@ msgid "Add to Favorites"
 msgstr "Добавить в избранное"
 
 #: scctool/view/subLogos.py:59 scctool/view/subLogos.py:107
-#: scctool/view/subMisc.py:449 scctool/view/widgets.py:1144
+#: scctool/view/subMisc.py:449 scctool/view/widgets.py:1145
 msgid "Remove"
 msgstr "Удалить"
 
@@ -1053,7 +1053,7 @@ msgid "Player Aliases"
 msgstr "Псевдонимы игроков"
 
 #: scctool/view/subMisc.py:272 scctool/view/subMisc.py:285
-#: scctool/view/widgets.py:656
+#: scctool/view/widgets.py:657
 msgid "Add Alias"
 msgstr "Добавить псевдоним"
 
@@ -1075,7 +1075,7 @@ msgstr "Псевдоним {}"
 
 #: scctool/view/subMisc.py:325 scctool/view/subMisc.py:490
 #: scctool/view/subMisc.py:536 scctool/view/subMisc.py:573
-#: scctool/view/subMisc.py:621 scctool/view/widgets.py:1265
+#: scctool/view/subMisc.py:621 scctool/view/widgets.py:1266
 msgid "Error"
 msgstr "Ошибка"
 
@@ -1134,7 +1134,7 @@ msgstr "Добавить из Liquipedia"
 msgid "Add from File"
 msgstr "Добавить из файла"
 
-#: scctool/view/subMisc.py:445 scctool/view/widgets.py:1140
+#: scctool/view/subMisc.py:445 scctool/view/widgets.py:1141
 msgid "Rename"
 msgstr "Переименовать"
 
@@ -1313,157 +1313,157 @@ msgstr "Нажмите горячую клавишу для {}"
 msgid "Logo Downloader"
 msgstr "Загрузчик логотипов"
 
-#: scctool/view/widgets.py:388
+#: scctool/view/widgets.py:389
 msgid "Updater"
 msgstr "Обновления"
 
-#: scctool/view/widgets.py:390
+#: scctool/view/widgets.py:391
 msgid "Updating to a new version..."
 msgstr "Обновление на новую версию..."
 
-#: scctool/view/widgets.py:417
+#: scctool/view/widgets.py:418
 msgid "Downloading a new version: Total file size {}, Time remaining {}."
 msgstr "Загрузка новой версии: размер файла {}, осталось времени {}."
 
-#: scctool/view/widgets.py:463
+#: scctool/view/widgets.py:464
 msgid "Select"
 msgstr "Выбрать"
 
-#: scctool/view/widgets.py:466
+#: scctool/view/widgets.py:467
 msgid "Default"
 msgstr "По умолчанию"
 
-#: scctool/view/widgets.py:641 scctool/view/widgets.py:659
+#: scctool/view/widgets.py:642 scctool/view/widgets.py:660
 msgid "Name"
 msgstr "Имя"
 
-#: scctool/view/widgets.py:661
+#: scctool/view/widgets.py:662
 msgid "Remove with Aliases"
 msgstr "Удалить с помощью псевдонимов"
 
-#: scctool/view/widgets.py:666
+#: scctool/view/widgets.py:667
 msgid "Remove Alias"
 msgstr "Удалить псевдоним"
 
-#: scctool/view/widgets.py:804
+#: scctool/view/widgets.py:805
 msgid "Collecting data..."
 msgstr "Сбор данных..."
 
-#: scctool/view/widgets.py:843
+#: scctool/view/widgets.py:844
 msgid "Extracting data..."
 msgstr "Получение данных..."
 
-#: scctool/view/widgets.py:845
+#: scctool/view/widgets.py:846
 msgid "Done."
 msgstr "Готово."
 
-#: scctool/view/widgets.py:860
+#: scctool/view/widgets.py:861
 msgid "Downloading required files: Total file size {}, Time remaining {}."
 msgstr "Загрузка необходимых файлов: размер файла {}, осталось времени {}."
 
-#: scctool/view/widgets.py:1125
+#: scctool/view/widgets.py:1126
 msgid "Profile"
 msgstr "профили"
 
 # Google Translate
-#: scctool/view/widgets.py:1128
+#: scctool/view/widgets.py:1129
 msgid "Open current Profile Folder"
 msgstr "Открыть текущую папку профилей"
 
-#: scctool/view/widgets.py:1132
+#: scctool/view/widgets.py:1133
 msgid "New"
 msgstr "новый"
 
 # Google Translate
-#: scctool/view/widgets.py:1136
+#: scctool/view/widgets.py:1137
 msgid "Duplicate"
 msgstr "дублировать"
 
-#: scctool/view/widgets.py:1148
+#: scctool/view/widgets.py:1149
 msgid "Import as New"
 msgstr "мпорт как новый"
 
-#: scctool/view/widgets.py:1152
+#: scctool/view/widgets.py:1153
 msgid "Import && Overwrite"
 msgstr "Импорт и перезапись"
 
-#: scctool/view/widgets.py:1156
+#: scctool/view/widgets.py:1157
 msgid "Export"
 msgstr "экспорт"
 
-#: scctool/view/widgets.py:1177 scctool/view/widgets.py:1189
+#: scctool/view/widgets.py:1178 scctool/view/widgets.py:1190
 msgid "Remove Profile"
 msgstr "Удалить профиль"
 
-#: scctool/view/widgets.py:1178
+#: scctool/view/widgets.py:1179
 msgid "Are you sure you wish to remove profile '{}'?"
 msgstr "Вы действительно хотите удалить профиль '{}'?"
 
 # Google Translate
-#: scctool/view/widgets.py:1200
+#: scctool/view/widgets.py:1201
 msgid "Add Profile"
 msgstr "Добавить профиль"
 
-#: scctool/view/widgets.py:1201 scctool/view/widgets.py:1353
+#: scctool/view/widgets.py:1202 scctool/view/widgets.py:1354
 msgid "Please enter the name of the profile"
 msgstr "Введите имя профиля"
 
-#: scctool/view/widgets.py:1213 scctool/view/widgets.py:1239
-#: scctool/view/widgets.py:1296 scctool/view/widgets.py:1364
+#: scctool/view/widgets.py:1214 scctool/view/widgets.py:1240
+#: scctool/view/widgets.py:1297 scctool/view/widgets.py:1365
 msgid "Please enter a valid name"
 msgstr "Пожалуйста, введите верное имя"
 
 # Google Translate
-#: scctool/view/widgets.py:1225
+#: scctool/view/widgets.py:1226
 msgid "Duplicate Profile"
 msgstr "Дублированный профиль"
 
-#: scctool/view/widgets.py:1226
+#: scctool/view/widgets.py:1227
 msgid "Please enter the name of the new profile"
 msgstr "Введите имя нового профиля"
 
-#: scctool/view/widgets.py:1255 scctool/view/widgets.py:1275
-#: scctool/view/widgets.py:1308
+#: scctool/view/widgets.py:1256 scctool/view/widgets.py:1276
+#: scctool/view/widgets.py:1309
 msgid "ZIP archive"
 msgstr "ZIP-архив"
 
-#: scctool/view/widgets.py:1282
+#: scctool/view/widgets.py:1283
 msgid "Import Profile"
 msgstr "Импорт профилей"
 
-#: scctool/view/widgets.py:1283
+#: scctool/view/widgets.py:1284
 msgid "Please enter the name of the imported profile"
 msgstr "Введите имя импортируемого профиля"
 
-#: scctool/view/widgets.py:1315
+#: scctool/view/widgets.py:1316
 msgid "Overwrite Profile"
 msgstr "Перезаписать профили"
 
-#: scctool/view/widgets.py:1316
+#: scctool/view/widgets.py:1317
 msgid "Are you sure you wish to overwrite the current profile '{}'?"
 msgstr "Вы действительно хотите перезаписать текущий профиль '{}'?"
 
-#: scctool/view/widgets.py:1333
+#: scctool/view/widgets.py:1334
 msgid "Import && Overwrite Profile"
 msgstr "Импорт и перезапись профилей"
 
-#: scctool/view/widgets.py:1352
+#: scctool/view/widgets.py:1353
 msgid "Rename Profile"
 msgstr "Переименовать профиль"
 
-#: scctool/view/widgets.py:1381
+#: scctool/view/widgets.py:1382
 msgid "Dynamic:"
 msgstr "Динамический:"
 
-#: scctool/view/widgets.py:1396
+#: scctool/view/widgets.py:1397
 msgid "Static:"
 msgstr "Статическая:"
 
-#: scctool/view/widgets.py:1401
+#: scctool/view/widgets.py:1402
 msgid "From"
 msgstr "от"
 
-#: scctool/view/widgets.py:1408
+#: scctool/view/widgets.py:1409
 msgid "to"
 msgstr "в"
 
