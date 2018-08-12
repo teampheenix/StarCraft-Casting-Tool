@@ -961,7 +961,7 @@ class DragImageLabel(QLabel):
             if self._team == 1:
                 self._logomanager.setTeam1Logo(logo)
             elif self._team == 2:
-                self._logomanager.setTeam1Logo(logo)
+                self._logomanager.setTeam2Logo(logo)
             self.setPixmap(map)
             self._ident = ident
             self._parent.refreshLastUsed()
@@ -972,7 +972,7 @@ class DragImageLabel(QLabel):
             if self._team == 1:
                 self._logomanager.setTeam1Logo(logo)
             elif self._team == 2:
-                self._logomanager.setTeam1Logo(logo)
+                self._logomanager.setTeam2Logo(logo)
             self._ident = ident
             self.setPixmap(map)
             self._parent.refreshLastUsed()
