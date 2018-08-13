@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: StarCraft Casting Tool\n"
-"POT-Creation-Date: 2018-08-05 15:18+0200\n"
-"PO-Revision-Date: 2018-08-05 15:18+0200\n"
+"POT-Creation-Date: 2018-08-12 18:48+0200\n"
+"PO-Revision-Date: 2018-08-12 18:48+0200\n"
 "Last-Translator: \n"
 "Language-Team: Mayhem, TanTall\n"
 "Language: ru\n"
@@ -18,54 +18,54 @@ msgstr ""
 "X-Poedit-SearchPath-1: StarCraftCastingTool.py\n"
 "X-Poedit-SearchPath-2: StarCraftCastingTool.pyw\n"
 
-#: scctool/controller.py:85
+#: scctool/controller.py:86
 msgid "This version is up to date."
 msgstr "Вы используете новейшую версию."
 
-#: scctool/controller.py:508 scctool/controller.py:516
+#: scctool/controller.py:510 scctool/controller.py:518
 msgid "Specify your Twitch Settings to use this feature"
 msgstr "Укажите настройки Twitch для использования этой возможности"
 
-#: scctool/controller.py:511
+#: scctool/controller.py:513
 msgid ""
 "Automatically update the title of your twitch channel in the background."
 msgstr ""
 "Автоматическое обновление заголовка вашего Twitch-канала в фоновом режиме."
 
-#: scctool/controller.py:522 scctool/controller.py:529
+#: scctool/controller.py:524 scctool/controller.py:531
 msgid "Specify your Nightbot Settings to use this feature"
 msgstr "Укажите настройки Nightbot для использования этой возможности"
 
-#: scctool/controller.py:523
+#: scctool/controller.py:525
 msgid "Automatically update the commands of your nightbot in the background."
 msgstr "Автоматическое обновление команд nightbot в фоновом режиме."
 
-#: scctool/controller.py:747
+#: scctool/controller.py:746
 msgid "Warning: Map '{}' not found!"
 msgstr "Внимание: Карта '{}' Не найдена!"
 
 # Google Translate
-#: scctool/controller.py:800
+#: scctool/controller.py:799
 msgid "{} {} Browser Source(s) connected."
 msgstr "{} {} Источник (ы) браузера подключен."
 
-#: scctool/controller.py:961
+#: scctool/controller.py:960
 msgid "A new version {} is available."
 msgstr "Доступна новая версия {}."
 
-#: scctool/controller.py:963
+#: scctool/controller.py:962
 msgid "Update to new version?"
 msgstr "Загрузить новую версию?"
 
-#: scctool/controller.py:964
+#: scctool/controller.py:963
 msgid "New SCC-Tool Version"
 msgstr "Новая версия SCC-Tool"
 
-#: scctool/controller.py:973
+#: scctool/controller.py:972
 msgid "Don't show on startup."
 msgstr "Не показывать при запуске."
 
-#: scctool/controller.py:982
+#: scctool/controller.py:981
 msgid "A new version {} is available on GitHub!"
 msgstr "Новая версия {} доступна на GitHub!"
 
@@ -106,36 +106,36 @@ msgstr "Текущая и предыдущая карта"
 msgid "Undecided Maps"
 msgstr "Неопределенные карты"
 
-#: scctool/settings/profileManager.py:102
-#: scctool/settings/profileManager.py:139
+#: scctool/settings/profileManager.py:100
+#: scctool/settings/profileManager.py:137
 msgid "You cannot use empty names."
 msgstr "Вы не можете использовать пустые имена."
 
-#: scctool/settings/profileManager.py:106
-#: scctool/settings/profileManager.py:143
+#: scctool/settings/profileManager.py:104
+#: scctool/settings/profileManager.py:141
 msgid "The name is already in use."
 msgstr "Имя уже используется."
 
-#: scctool/settings/profileManager.py:146
+#: scctool/settings/profileManager.py:144
 msgid "Initial profile is not valid."
 msgstr "Исходный профиль недействителен."
 
-#: scctool/tasks/auth.py:77
+#: scctool/tasks/auth.py:44
 msgid "Succesfully recived access to {} - you can close this tab now."
 msgstr "Успешно получен доступ к {} - теперь вы можете закрыть эту вкладку."
 
 #: scctool/tasks/nightbot.py:40 scctool/tasks/nightbot.py:104
-#: scctool/tasks/twitch.py:55
+#: scctool/tasks/twitch.py:54
 msgid "Forbidden - Do you have permission?"
 msgstr "Запрещено! У вас есть разрешение?"
 
 #: scctool/tasks/nightbot.py:42 scctool/tasks/nightbot.py:106
-#: scctool/tasks/twitch.py:57
+#: scctool/tasks/twitch.py:56
 msgid "Unauthorized - Refresh your token!"
 msgstr "Неавторизован - обновите ваш токен!"
 
 #: scctool/tasks/nightbot.py:44 scctool/tasks/nightbot.py:108
-#: scctool/tasks/twitch.py:59
+#: scctool/tasks/twitch.py:58
 msgid "Too Many Requests."
 msgstr "Слишком много запросов."
 
@@ -151,11 +151,11 @@ msgstr "Удалить команду '{}'"
 msgid "Updated Nightbot command '{}' to '{}'"
 msgstr "Обновить команду Nightbot '{}' на '{}'"
 
-#: scctool/tasks/twitch.py:38
+#: scctool/tasks/twitch.py:37
 msgid "Updated Twitch title of {} to: \"{}\""
 msgstr "Изменить заголовок Twitch из {} на: \"{}\""
 
-#: scctool/tasks/twitch.py:51
+#: scctool/tasks/twitch.py:50
 msgid "Not Found - Channel '{}' not found."
 msgstr "Не найдено - канал '{}' не найден."
 
@@ -181,7 +181,7 @@ msgid "Settings"
 msgstr "Настройки"
 
 #: scctool/view/main.py:140 scctool/view/main.py:278
-#: scctool/view/subBrowserSources.py:57
+#: scctool/view/subBrowserSources.py:55
 msgid "Browser Sources"
 msgstr "Ресурсы"
 
@@ -248,7 +248,7 @@ msgid "Intro"
 msgstr "Заставк"
 
 # Google Translate
-#: scctool/view/main.py:285 scctool/view/subBrowserSources.py:73
+#: scctool/view/main.py:285 scctool/view/subBrowserSources.py:71
 msgid "Mapstats"
 msgstr "Статистика карт"
 
@@ -402,8 +402,8 @@ msgstr "Игрок {} из команды {}"
 msgid "Set the score"
 msgstr "Установить счет"
 
-#: scctool/view/main.py:906 scctool/view/widgets.py:1405
-#: scctool/view/widgets.py:1413 scctool/view/widgets.py:1452
+#: scctool/view/main.py:906 scctool/view/widgets.py:1406
+#: scctool/view/widgets.py:1414 scctool/view/widgets.py:1453
 msgid "Map {}"
 msgstr "Карта {}"
 
@@ -500,30 +500,30 @@ msgstr "Сброс счета..."
 msgid "Updating Score..."
 msgstr "Обновление счета..."
 
-#: scctool/view/subBrowserSources.py:72
+#: scctool/view/subBrowserSources.py:70
 msgid "Intros"
 msgstr "Заставки"
 
-#: scctool/view/subBrowserSources.py:75
+#: scctool/view/subBrowserSources.py:73
 msgid "Box Map Icons"
 msgstr "Пиктограммы карт"
 
-#: scctool/view/subBrowserSources.py:76
+#: scctool/view/subBrowserSources.py:74
 msgid "Landscape Map Icons"
 msgstr "Ландшафт карт"
 
-#: scctool/view/subBrowserSources.py:135 scctool/view/subBrowserSources.py:252
-#: scctool/view/subBrowserSources.py:301
+#: scctool/view/subBrowserSources.py:133 scctool/view/subBrowserSources.py:250
+#: scctool/view/subBrowserSources.py:299
 msgid "General"
 msgstr "Генеральная"
 
-#: scctool/view/subBrowserSources.py:143 scctool/view/subBrowserSources.py:260
-#: scctool/view/subBrowserSources.py:309
+#: scctool/view/subBrowserSources.py:141 scctool/view/subBrowserSources.py:258
+#: scctool/view/subBrowserSources.py:307
 msgid "Style:"
 msgstr "Стиль:"
 
-#: scctool/view/subBrowserSources.py:145 scctool/view/subBrowserSources.py:262
-#: scctool/view/subBrowserSources.py:311 scctool/view/subBrowserSources.py:359
+#: scctool/view/subBrowserSources.py:143 scctool/view/subBrowserSources.py:260
+#: scctool/view/subBrowserSources.py:309 scctool/view/subBrowserSources.py:357
 #: scctool/view/subStyles.py:106 scctool/view/subStyles.py:123
 #: scctool/view/subStyles.py:140 scctool/view/subStyles.py:155
 #: scctool/view/subStyles.py:170
@@ -531,103 +531,103 @@ msgid "Show in Browser"
 msgstr "Показать в браузере"
 
 # Google Translate
-#: scctool/view/subBrowserSources.py:153
+#: scctool/view/subBrowserSources.py:151
 msgid "Current Ladder Map Pool"
 msgstr "Текущая карта лестничной карты"
 
 # Google Translate
-#: scctool/view/subBrowserSources.py:154
+#: scctool/view/subBrowserSources.py:152
 msgid "Custom Map Pool (defined below)"
 msgstr "Пользовательский пул карт (определенный ниже)"
 
 # Google Translate
-#: scctool/view/subBrowserSources.py:155
+#: scctool/view/subBrowserSources.py:153
 msgid "Currently entered Maps only"
 msgstr "В настоящее время введены только Карты"
 
 # Google Translate
-#: scctool/view/subBrowserSources.py:159
+#: scctool/view/subBrowserSources.py:157
 msgid "Map Pool:"
 msgstr "Пользовательский пул карт:"
 
-#: scctool/view/subBrowserSources.py:161
+#: scctool/view/subBrowserSources.py:159
 msgid "Select the next map automatically"
 msgstr "Выберите следующую карту автоматически"
 
-#: scctool/view/subBrowserSources.py:166
+#: scctool/view/subBrowserSources.py:164
 msgid "Next Map:"
 msgstr "Следующая карта:"
 
-#: scctool/view/subBrowserSources.py:170
+#: scctool/view/subBrowserSources.py:168
 msgid "Mark already played maps"
 msgstr "Марк уже сыграл карты"
 
-#: scctool/view/subBrowserSources.py:175
+#: scctool/view/subBrowserSources.py:173
 msgid "Mark:"
 msgstr "Марк:"
 
 # Google Translate
-#: scctool/view/subBrowserSources.py:182
+#: scctool/view/subBrowserSources.py:180
 msgid "Custom Map Pool"
 msgstr "Пользовательский пул карт"
 
 # Google Translate
-#: scctool/view/subBrowserSources.py:228
+#: scctool/view/subBrowserSources.py:226
 msgid "Add Map"
 msgstr "Добавить карту"
 
 # Google Translate
-#: scctool/view/subBrowserSources.py:229
+#: scctool/view/subBrowserSources.py:227
 msgid "Please select a map"
 msgstr "Выберите карту"
 
 # Google Translate
-#: scctool/view/subBrowserSources.py:240
+#: scctool/view/subBrowserSources.py:238
 msgid "No maps available"
 msgstr "Нет доступных карт"
 
 # Google Translate
-#: scctool/view/subBrowserSources.py:241
+#: scctool/view/subBrowserSources.py:239
 msgid "All available maps have already been added."
 msgstr "Все доступные карты уже добавлены."
 
-#: scctool/view/subBrowserSources.py:274 scctool/view/subBrowserSources.py:324
+#: scctool/view/subBrowserSources.py:272 scctool/view/subBrowserSources.py:322
 msgid "Pixel"
 msgstr "пиксель"
 
-#: scctool/view/subBrowserSources.py:278 scctool/view/subBrowserSources.py:328
+#: scctool/view/subBrowserSources.py:276 scctool/view/subBrowserSources.py:326
 msgid "Icon Padding:"
 msgstr "Icon Padding:"
 
-#: scctool/view/subBrowserSources.py:286 scctool/view/subBrowserSources.py:336
+#: scctool/view/subBrowserSources.py:284 scctool/view/subBrowserSources.py:334
 msgid "Icon Set {} Scope"
 msgstr "Набор значков {} Область"
 
-#: scctool/view/subBrowserSources.py:353
+#: scctool/view/subBrowserSources.py:351
 msgid "Style"
 msgstr "Стиль"
 
-#: scctool/view/subBrowserSources.py:367
+#: scctool/view/subBrowserSources.py:365
 msgid "Hotkeys"
 msgstr "Клавиатурный"
 
-#: scctool/view/subBrowserSources.py:375
+#: scctool/view/subBrowserSources.py:370
 msgid "Use a single hotkey for both players"
 msgstr "Используйте одну горячую клавишу для обоих игроков"
 
-#: scctool/view/subBrowserSources.py:380
+#: scctool/view/subBrowserSources.py:375
 msgid "Player 1"
 msgstr "Игрок 1"
 
-#: scctool/view/subBrowserSources.py:381
+#: scctool/view/subBrowserSources.py:376
 msgid "Player 2"
 msgstr "Игрок 2"
 
-#: scctool/view/subBrowserSources.py:382
+#: scctool/view/subBrowserSources.py:377
 msgid "Debug"
 msgstr "Отладка"
 
-#: scctool/view/subBrowserSources.py:388
+#: scctool/view/subBrowserSources.py:383
 msgid ""
 "Player 1 is always the player your observer camera is centered on at start "
 "of a game."
@@ -635,86 +635,101 @@ msgstr ""
 "Игрок 1 всегда является игроком, на котором ваша камера наблюдателя "
 "сосредоточена в начале игры."
 
-#: scctool/view/subBrowserSources.py:394
+#: scctool/view/subBrowserSources.py:389
 msgid "Animation"
 msgstr "Анимация"
 
-#: scctool/view/subBrowserSources.py:401
+#: scctool/view/subBrowserSources.py:396
 msgid "Fly-In"
 msgstr "Полет в"
 
-#: scctool/view/subBrowserSources.py:402
+#: scctool/view/subBrowserSources.py:397
 msgid "Slide"
 msgstr "слайд"
 
-#: scctool/view/subBrowserSources.py:403
+#: scctool/view/subBrowserSources.py:398
 msgid "Fanfare"
 msgstr "фанфара"
 
-#: scctool/view/subBrowserSources.py:411
+#: scctool/view/subBrowserSources.py:406
 msgid "Animation:"
 msgstr "Анимация:"
 
-#: scctool/view/subBrowserSources.py:419
+#: scctool/view/subBrowserSources.py:414
 msgid "Seconds"
 msgstr "Секунд"
 
-#: scctool/view/subBrowserSources.py:422
+#: scctool/view/subBrowserSources.py:417
 msgid "Display Duration:"
 msgstr "Длительность показа:"
 
-#: scctool/view/subBrowserSources.py:432 scctool/view/subBrowserSources.py:492
+#: scctool/view/subBrowserSources.py:427 scctool/view/subBrowserSources.py:510
 msgid "Sound Volume:"
 msgstr "Громкость:"
 
 # Google Translate
-#: scctool/view/subBrowserSources.py:436
+#: scctool/view/subBrowserSources.py:431
 msgid "Text-to-Speech"
 msgstr "Текст в речь"
 
 # Google Translate
-#: scctool/view/subBrowserSources.py:443
+#: scctool/view/subBrowserSources.py:438
 msgid "Activate Text-to-Speech:"
 msgstr "Активация текста в речь:"
 
-#: scctool/view/subBrowserSources.py:461
-msgid "Language:"
-msgstr "Язык:"
+# Google Translate
+#: scctool/view/subBrowserSources.py:462
+msgid "Voice:"
+msgstr "Голос:"
 
-#: scctool/view/subBrowserSources.py:471
-msgid "Team & Player"
-msgstr "Команда и игрок"
+#: scctool/view/subBrowserSources.py:474
+msgid "Pitch:"
+msgstr "Подача:"
 
-#: scctool/view/subBrowserSources.py:472
-msgid "Player"
-msgstr "Игрок"
+# Google Translate
+#: scctool/view/subBrowserSources.py:484
+msgid "Rate:"
+msgstr "Говорящий курс:"
 
-#: scctool/view/subBrowserSources.py:481
-msgid "Scope:"
-msgstr "Область применения:"
+# Google Translate
+#: scctool/view/subBrowserSources.py:499
+msgid "Line:"
+msgstr "Строка:"
 
-#: scctool/view/subBrowserSources.py:505 scctool/view/subConnections.py:251
+# Google Translate
+#: scctool/view/subBrowserSources.py:513
+#, python-brace-format
+msgid ""
+"Text-to-Speech provided by Google-Cloud is paid for by StarCraft Casting "
+"Tool Patrons. To keep this service up consider becoming a <a "
+"href='{patreon}'>Patron</a> yourself. You can test all voices at {tts}."
+msgstr ""
+"Text-to-Speech, предоставляемый Google-Cloud, оплачивается StarCraft Casting "
+"Tool Patrons. Чтобы сохранить это обслуживание, подумайте о себе как о <a "
+"href='{patreon}'> Патроне </a>. Вы можете проверить все голоса на {tts}."
+
+#: scctool/view/subBrowserSources.py:542 scctool/view/subConnections.py:251
 #: scctool/view/subLiquipediaSearch.py:82 scctool/view/subMisc.py:672
 #: scctool/view/subStyles.py:77
 msgid "Cancel"
 msgstr "Отмена"
 
-#: scctool/view/subBrowserSources.py:509 scctool/view/subConnections.py:255
+#: scctool/view/subBrowserSources.py:546 scctool/view/subConnections.py:255
 #: scctool/view/subMisc.py:676 scctool/view/subStyles.py:81
 msgid "&Save && Close"
 msgstr "Сохранить и закрыть"
 
-#: scctool/view/subBrowserSources.py:510 scctool/view/subConnections.py:256
+#: scctool/view/subBrowserSources.py:547 scctool/view/subConnections.py:256
 #: scctool/view/subMisc.py:677 scctool/view/subStyles.py:82
 msgid "Shortcut: {}"
 msgstr "Горячая клавиша: {}"
 
-#: scctool/view/subBrowserSources.py:613 scctool/view/subConnections.py:318
+#: scctool/view/subBrowserSources.py:655 scctool/view/subConnections.py:318
 #: scctool/view/subMisc.py:744 scctool/view/subStyles.py:361
 msgid "Save data?"
 msgstr "Сохранить данные?"
 
-#: scctool/view/subBrowserSources.py:613 scctool/view/subConnections.py:318
+#: scctool/view/subBrowserSources.py:655 scctool/view/subConnections.py:318
 msgid "Do you want to save the data?"
 msgstr "Вы хотите сохранить данные?"
 
@@ -814,18 +829,18 @@ msgid "Use Selected Logo"
 msgstr "Использовать выбранный логотип"
 
 #: scctool/view/subLiquipediaSearch.py:91
-msgid "Liqupedia Image Search"
+msgid "Liquipedia Image Search"
 msgstr "Поиск изображения Liquipedia"
 
 #: scctool/view/subLiquipediaSearch.py:132
 msgid "Results for '{}': {}"
 msgstr "Результаты для '{}': {}"
 
-#: scctool/view/subLiquipediaSearch.py:177
+#: scctool/view/subLiquipediaSearch.py:179
 msgid "Open on Liquipedia"
 msgstr "Открыть на Liquipedia"
 
-#: scctool/view/subLiquipediaSearch.py:179
+#: scctool/view/subLiquipediaSearch.py:181
 msgid "Use as Team Logo"
 msgstr "Использовать как логотип команды"
 
@@ -851,7 +866,7 @@ msgid "Add to Favorites"
 msgstr "Добавить в избранное"
 
 #: scctool/view/subLogos.py:59 scctool/view/subLogos.py:107
-#: scctool/view/subMisc.py:449 scctool/view/widgets.py:1144
+#: scctool/view/subMisc.py:449 scctool/view/widgets.py:1145
 msgid "Remove"
 msgstr "Удалить"
 
@@ -1038,7 +1053,7 @@ msgid "Player Aliases"
 msgstr "Псевдонимы игроков"
 
 #: scctool/view/subMisc.py:272 scctool/view/subMisc.py:285
-#: scctool/view/widgets.py:656
+#: scctool/view/widgets.py:657
 msgid "Add Alias"
 msgstr "Добавить псевдоним"
 
@@ -1060,7 +1075,7 @@ msgstr "Псевдоним {}"
 
 #: scctool/view/subMisc.py:325 scctool/view/subMisc.py:490
 #: scctool/view/subMisc.py:536 scctool/view/subMisc.py:573
-#: scctool/view/subMisc.py:621 scctool/view/widgets.py:1265
+#: scctool/view/subMisc.py:621 scctool/view/widgets.py:1266
 msgid "Error"
 msgstr "Ошибка"
 
@@ -1119,7 +1134,7 @@ msgstr "Добавить из Liquipedia"
 msgid "Add from File"
 msgstr "Добавить из файла"
 
-#: scctool/view/subMisc.py:445 scctool/view/widgets.py:1140
+#: scctool/view/subMisc.py:445 scctool/view/widgets.py:1141
 msgid "Rename"
 msgstr "Переименовать"
 
@@ -1298,159 +1313,171 @@ msgstr "Нажмите горячую клавишу для {}"
 msgid "Logo Downloader"
 msgstr "Загрузчик логотипов"
 
-#: scctool/view/widgets.py:388
+#: scctool/view/widgets.py:389
 msgid "Updater"
 msgstr "Обновления"
 
-#: scctool/view/widgets.py:390
+#: scctool/view/widgets.py:391
 msgid "Updating to a new version..."
 msgstr "Обновление на новую версию..."
 
-#: scctool/view/widgets.py:417
+#: scctool/view/widgets.py:418
 msgid "Downloading a new version: Total file size {}, Time remaining {}."
 msgstr "Загрузка новой версии: размер файла {}, осталось времени {}."
 
-#: scctool/view/widgets.py:463
+#: scctool/view/widgets.py:464
 msgid "Select"
 msgstr "Выбрать"
 
-#: scctool/view/widgets.py:466
+#: scctool/view/widgets.py:467
 msgid "Default"
 msgstr "По умолчанию"
 
-#: scctool/view/widgets.py:641 scctool/view/widgets.py:659
+#: scctool/view/widgets.py:642 scctool/view/widgets.py:660
 msgid "Name"
 msgstr "Имя"
 
-#: scctool/view/widgets.py:661
+#: scctool/view/widgets.py:662
 msgid "Remove with Aliases"
 msgstr "Удалить с помощью псевдонимов"
 
-#: scctool/view/widgets.py:666
+#: scctool/view/widgets.py:667
 msgid "Remove Alias"
 msgstr "Удалить псевдоним"
 
-#: scctool/view/widgets.py:804
+#: scctool/view/widgets.py:805
 msgid "Collecting data..."
 msgstr "Сбор данных..."
 
-#: scctool/view/widgets.py:843
+#: scctool/view/widgets.py:844
 msgid "Extracting data..."
 msgstr "Получение данных..."
 
-#: scctool/view/widgets.py:845
+#: scctool/view/widgets.py:846
 msgid "Done."
 msgstr "Готово."
 
-#: scctool/view/widgets.py:860
+#: scctool/view/widgets.py:861
 msgid "Downloading required files: Total file size {}, Time remaining {}."
 msgstr "Загрузка необходимых файлов: размер файла {}, осталось времени {}."
 
-#: scctool/view/widgets.py:1125
+#: scctool/view/widgets.py:1126
 msgid "Profile"
 msgstr "профили"
 
 # Google Translate
-#: scctool/view/widgets.py:1128
+#: scctool/view/widgets.py:1129
 msgid "Open current Profile Folder"
 msgstr "Открыть текущую папку профилей"
 
-#: scctool/view/widgets.py:1132
+#: scctool/view/widgets.py:1133
 msgid "New"
 msgstr "новый"
 
 # Google Translate
-#: scctool/view/widgets.py:1136
+#: scctool/view/widgets.py:1137
 msgid "Duplicate"
 msgstr "дублировать"
 
-#: scctool/view/widgets.py:1148
+#: scctool/view/widgets.py:1149
 msgid "Import as New"
 msgstr "мпорт как новый"
 
-#: scctool/view/widgets.py:1152
+#: scctool/view/widgets.py:1153
 msgid "Import && Overwrite"
 msgstr "Импорт и перезапись"
 
-#: scctool/view/widgets.py:1156
+#: scctool/view/widgets.py:1157
 msgid "Export"
 msgstr "экспорт"
 
-#: scctool/view/widgets.py:1177 scctool/view/widgets.py:1189
+#: scctool/view/widgets.py:1178 scctool/view/widgets.py:1190
 msgid "Remove Profile"
 msgstr "Удалить профиль"
 
-#: scctool/view/widgets.py:1178
+#: scctool/view/widgets.py:1179
 msgid "Are you sure you wish to remove profile '{}'?"
 msgstr "Вы действительно хотите удалить профиль '{}'?"
 
 # Google Translate
-#: scctool/view/widgets.py:1200
+#: scctool/view/widgets.py:1201
 msgid "Add Profile"
 msgstr "Добавить профиль"
 
-#: scctool/view/widgets.py:1201 scctool/view/widgets.py:1353
+#: scctool/view/widgets.py:1202 scctool/view/widgets.py:1354
 msgid "Please enter the name of the profile"
 msgstr "Введите имя профиля"
 
-#: scctool/view/widgets.py:1213 scctool/view/widgets.py:1239
-#: scctool/view/widgets.py:1296 scctool/view/widgets.py:1364
+#: scctool/view/widgets.py:1214 scctool/view/widgets.py:1240
+#: scctool/view/widgets.py:1297 scctool/view/widgets.py:1365
 msgid "Please enter a valid name"
 msgstr "Пожалуйста, введите верное имя"
 
 # Google Translate
-#: scctool/view/widgets.py:1225
+#: scctool/view/widgets.py:1226
 msgid "Duplicate Profile"
 msgstr "Дублированный профиль"
 
-#: scctool/view/widgets.py:1226
+#: scctool/view/widgets.py:1227
 msgid "Please enter the name of the new profile"
 msgstr "Введите имя нового профиля"
 
-#: scctool/view/widgets.py:1255 scctool/view/widgets.py:1275
-#: scctool/view/widgets.py:1308
+#: scctool/view/widgets.py:1256 scctool/view/widgets.py:1276
+#: scctool/view/widgets.py:1309
 msgid "ZIP archive"
 msgstr "ZIP-архив"
 
-#: scctool/view/widgets.py:1282
+#: scctool/view/widgets.py:1283
 msgid "Import Profile"
 msgstr "Импорт профилей"
 
-#: scctool/view/widgets.py:1283
+#: scctool/view/widgets.py:1284
 msgid "Please enter the name of the imported profile"
 msgstr "Введите имя импортируемого профиля"
 
-#: scctool/view/widgets.py:1315
+#: scctool/view/widgets.py:1316
 msgid "Overwrite Profile"
 msgstr "Перезаписать профили"
 
-#: scctool/view/widgets.py:1316
+#: scctool/view/widgets.py:1317
 msgid "Are you sure you wish to overwrite the current profile '{}'?"
 msgstr "Вы действительно хотите перезаписать текущий профиль '{}'?"
 
-#: scctool/view/widgets.py:1333
+#: scctool/view/widgets.py:1334
 msgid "Import && Overwrite Profile"
 msgstr "Импорт и перезапись профилей"
 
-#: scctool/view/widgets.py:1352
+#: scctool/view/widgets.py:1353
 msgid "Rename Profile"
 msgstr "Переименовать профиль"
 
-#: scctool/view/widgets.py:1381
+#: scctool/view/widgets.py:1382
 msgid "Dynamic:"
 msgstr "Динамический:"
 
-#: scctool/view/widgets.py:1396
+#: scctool/view/widgets.py:1397
 msgid "Static:"
 msgstr "Статическая:"
 
-#: scctool/view/widgets.py:1401
+#: scctool/view/widgets.py:1402
 msgid "From"
 msgstr "от"
 
-#: scctool/view/widgets.py:1408
+#: scctool/view/widgets.py:1409
 msgid "to"
 msgstr "в"
+
+#~ msgid "Language:"
+#~ msgstr "Язык:"
+
+#~ msgid "Team & Player"
+#~ msgstr "Команда и игрок"
+
+#~ msgid "Player"
+#~ msgstr "Игрок"
+
+#~ msgid "Scope:"
+#~ msgstr "Область применения:"
 
 #~ msgid ""
 #~ "StarCraft Casting Tool: Succesfully recived access to {} - you can close "

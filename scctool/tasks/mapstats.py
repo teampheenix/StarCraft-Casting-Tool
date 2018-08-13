@@ -1,7 +1,9 @@
 """Manager and thread to save map stats and keep them up-to-date."""
 import json
 import logging
+import os
 import time
+from shutil import copyfile
 
 from PyQt5.QtCore import pyqtSignal
 
@@ -28,6 +30,9 @@ class MapStatsManager:
 
     def loadJson(self):
         """Read json data from file."""
+        file = scctool.settings.getJsonFile('mapstats')
+        if not os.path.exists(file):
+            copyfile(scctool.settings.getResFile('mapstats.json'), file)
         try:
             with open(scctool.settings.getJsonFile('mapstats'),
                       'r',

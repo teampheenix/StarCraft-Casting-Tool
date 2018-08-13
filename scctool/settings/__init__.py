@@ -11,6 +11,7 @@ import appdirs
 from scctool.settings.client_config import ClientConfig
 from scctool.settings.config import init as initConfig
 from scctool.settings.profileManager import ProfileManager
+from scctool.settings.safeGuard import SafeGuard
 
 module_logger = logging.getLogger('scctool.settings')
 
@@ -26,6 +27,7 @@ casting_html_dir = "casting_html"
 
 dataDir = "data"
 logosDir = os.path.join(dataDir, "logos")
+ttsDir = os.path.join(dataDir, "tts")
 
 windows = (platform.system().lower() == "windows")
 max_no_sets = 15
@@ -34,6 +36,7 @@ races = ("Random", "Terran", "Protoss", "Zerg")
 this.profileManager = ProfileManager()
 this.maps = []
 this.nightbot_commands = dict()
+this.safe = SafeGuard()
 
 
 def loadSettings():
@@ -50,6 +53,9 @@ def loadSettings():
     # Creating directories if not exisiting
     if not os.path.exists(getAbsPath(logosDir)):
         os.makedirs(getAbsPath(logosDir))
+    # Creating directories if not exisiting
+    if not os.path.exists(getAbsPath(ttsDir)):
+        os.makedirs(getAbsPath(ttsDir))
 
     # Create a symnolic link to the profiles directory
     # Not working on Windows 10 - admin rights needed

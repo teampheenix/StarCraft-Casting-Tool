@@ -5,7 +5,6 @@ import shutil
 import sys
 import webbrowser
 
-import gtts
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QCheckBox, QMessageBox
@@ -24,6 +23,7 @@ from scctool.tasks.mapstats import MapStatsManager
 from scctool.tasks.sc2ClientInteraction import (SC2ApiThread, SwapPlayerNames,
                                                 ToggleScore)
 from scctool.tasks.textfiles import TextFilesThread
+from scctool.tasks.texttospeech import TextToSpeech
 from scctool.tasks.updater import VersionHandler
 from scctool.tasks.websocket import WebsocketThread
 from scctool.view.widgets import ToolUpdater
@@ -61,6 +61,7 @@ class MainController:
             self.aliasManager = AliasManager()
             self.historyManager = HistoryManager()
             self.mapstatsManager = MapStatsManager(self)
+            self.tts = TextToSpeech()
             self.initPlayerIntroData()
 
         except Exception as e:
@@ -396,6 +397,7 @@ class MainController:
         self.historyManager.dumpJson()
         self.aliasManager.dumpJson()
         self.mapstatsManager.dumpJson()
+        self.tts.dumpJson()
 
     def saveConfig(self):
         """Save the settings to the config file."""
@@ -675,10 +677,14 @@ class MainController:
 
         tts_active = scctool.settings.config.parser.getboolean(
             "Intros", "tts_active")
-        tts_lang = scctool.settings.config.parser.get(
-            "Intros", "tts_lang")
+        tts_voice = scctool.settings.config.parser.get(
+            "Intros", "tts_voice")
         tts_scope = scctool.settings.config.parser.get(
             "Intros", "tts_scope")
+        tts_pitch = scctool.settings.config.parser.getfloat(
+            "Intros", "tts_pitch")
+        tts_rate = scctool.settings.config.parser.getfloat(
+            "Intros", "tts_rate")
 
         for player_idx in range(2):
             team1 = newData.playerInList(
@@ -704,27 +710,20 @@ class MainController:
 
             name = self.aliasManager.translatePlayer(
                 newData.getPlayer(player_idx))
+            race = newData.getRace(player_idx)
             self.__playerIntroData[player_idx]['name'] = name
             self.__playerIntroData[player_idx]['team'] = team
-            self.__playerIntroData[player_idx]['race'] = newData.getRace(
-                player_idx).lower()
+            self.__playerIntroData[player_idx]['race'] = race.lower()
             self.__playerIntroData[player_idx]['logo'] = logo
             self.__playerIntroData[player_idx]['display'] = display
             self.__playerIntroIdx = 0
 
             try:
                 if tts_active:
-                    if team and tts_scope == 'team_player':
-                        text = "{}'s {}".format(team, name)
-                    else:
-                        text = name
-                    tts = gtts.gTTS(text=text, lang=tts_lang)
-                    tts_file = 'src/sound/player{}.mp3'.format(player_idx + 1)
-                    file = os.path.normpath(os.path.join(
-                        scctool.settings.getAbsPath(
-                            scctool.settings.casting_html_dir),
-                        tts_file))
-                    tts.save(file)
+                    text = self.tts.getLine(tts_scope, name, race, team)
+                    tts_file = os.path.join("..", self.tts.synthesize(
+                        text, tts_voice,
+                        tts_pitch, tts_rate)).replace('\\', '/')
                 else:
                     tts_file = None
                 self.__playerIntroData[player_idx]['tts'] = tts_file

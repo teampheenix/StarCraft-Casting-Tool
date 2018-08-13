@@ -136,7 +136,7 @@ class VersionHandler(TasksThread):
     updated_data = pyqtSignal(str)
 
     # Constants
-    APP_NAME = 'StarCraft-Casting-Tool'
+    APP_NAME = ClientConfig.APP_NAME
     APP_VERSION = scctool.__version__
 
     ASSET_NAME = 'SCCT-data'

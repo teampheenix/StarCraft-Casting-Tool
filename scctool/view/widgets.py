@@ -348,8 +348,9 @@ class LogoDownloader(QProgressDialog):
 
     def download(self):
         self.show()
-
+        self.setProgress(1)
         with open(self.file_name, "wb") as f:
+            self.setProgress(5)
             module_logger.info("Downloading {}".format(self.file_name))
             response = requests.get(self.url, stream=True)
             total_length = response.headers.get('content-length')
@@ -961,7 +962,7 @@ class DragImageLabel(QLabel):
             if self._team == 1:
                 self._logomanager.setTeam1Logo(logo)
             elif self._team == 2:
-                self._logomanager.setTeam1Logo(logo)
+                self._logomanager.setTeam2Logo(logo)
             self.setPixmap(map)
             self._ident = ident
             self._parent.refreshLastUsed()
@@ -972,7 +973,7 @@ class DragImageLabel(QLabel):
             if self._team == 1:
                 self._logomanager.setTeam1Logo(logo)
             elif self._team == 2:
-                self._logomanager.setTeam1Logo(logo)
+                self._logomanager.setTeam2Logo(logo)
             self._ident = ident
             self.setPixmap(map)
             self._parent.refreshLastUsed()

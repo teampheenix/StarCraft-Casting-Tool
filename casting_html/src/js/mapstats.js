@@ -229,18 +229,20 @@ function removeMaps() {
 }
 
 function selectMap(name, alreadyplayed = false) {
-  var maps = document.getElementById('map-list').getElementsByTagName("li");
-  for (var i = 0; i < maps.length; i++) {
-    mapElement = maps[i];
-    if (mapElement.getElementsByTagName('div')[0].innerHTML.toLowerCase() == name.toLowerCase()) {
-      if (alreadyplayed) {
-        mapElement.getElementsByTagName('div')[0].classList.add("played");
+  if (!tweenShowMap.isActive()) {
+    var maps = document.getElementById('map-list').getElementsByTagName("li");
+    for (var i = 0; i < maps.length; i++) {
+      mapElement = maps[i];
+      if (mapElement.getElementsByTagName('div')[0].innerHTML.toLowerCase() == name.toLowerCase()) {
+        if (alreadyplayed) {
+          mapElement.getElementsByTagName('div')[0].classList.add("played");
+        }
+        animateInOut(mapElement, name);
+        currentMap = name;
+        storeData('currentmap');
+      } else {
+        maps[i].classList.remove('selected');
       }
-      animateInOut(mapElement, name);
-      currentMap = name;
-      storeData('currentmap');
-    } else {
-      maps[i].classList.remove('selected');
     }
   }
 }
@@ -364,7 +366,10 @@ function animateInOut(mapElement, name) {
         })
         .staggerFrom([mapname, liquipedia].concat(element1s, element2s), 0.3, {
           x: '-=110%'
-        }, 0.05, '-=0.2');
+        }, 0.05, '-=0.2')
+        .set(map, {
+          clearProps: "all"
+        });
       selectMapAnimation(name, mapElement, 0.2);
     }
   }

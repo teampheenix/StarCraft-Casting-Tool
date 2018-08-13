@@ -1,5 +1,4 @@
 """Request auth tokens from twitch and nightbot."""
-import base64
 import http.server
 import logging
 import threading
@@ -9,50 +8,18 @@ from uuid import uuid4
 
 from PyQt5 import QtCore
 
+from scctool.settings import getResFile, safe
+
 module_logger = logging.getLogger('scctool.tasks.auth')
 
 try:
-    NIGHTBOT_CLIENT_ID = base64.b64decode(
-        b'YzEyMGE5YWQ0MjM3MGNmNTViYzFhNjA5ZjFjYTM0Y2E=').decode("utf8")
     NIGHTBOT_REDIRECT_URI = "http://localhost:65010/nightbot_callback"
 
-    TWITCH_CLIENT_ID = base64.b64decode(
-        b'ZHVhbTRneDlhcnlkNDZ1YjZxY2RqcmN4b2doeWFr').decode("utf8")
     TWITCH_REDIRECT_URI = "http://localhost:65010/twitch_callback"
 
 except Exception as e:
     module_logger.exception("message")
     raise
-
-
-success_html = """<html>
-<head>
-<title>StarCraft Casting Tool</title>
-<style>
-@import url('https://fonts.googleapis.com/css?family=Roboto');
-
-div.main{
-font-family: Roboto;
-width: 100%;
-height: 400px;
-position: relative;
-text-align: center;
-padding-top: 50px;
-color: #0d468c;
-}
-</style>
-</head>
-
-<body>
-<div class='main'>
-<h1>StarCraft Casting Tool</h1>
-<img src="https://c10.patreonusercontent.com/3/eyJ3IjoyMDB9/patreon-media/p/user/11453319/e637dfeeace8494abaf0bbda66573df1/1?token-time=2145916800&token-hash=uYiFi_nu_OxXF2JjfbQyKg_dobUmRAZdbWY4OMTLs_0%3D" height="120" width="120">
-<h4 style='color: black;'>
-#CONTENT#
-</h4>
-</div>
-</body>
-</html>"""
 
 
 class myHandler(http.server.SimpleHTTPRequestHandler):
@@ -81,6 +48,10 @@ class myHandler(http.server.SimpleHTTPRequestHandler):
             else:
                 scope = 'nightbot'
             content = content.format(scope.capitalize())
+
+            with open(getResFile("auth.html"), 'r') as html_file:
+                success_html = html_file.read()
+
             content = success_html.replace('#CONTENT#', content)
             self.send_content(content)
             par = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)
@@ -102,7 +73,7 @@ class myHandler(http.server.SimpleHTTPRequestHandler):
         """Generate auth url for nightbot."""
         # Generate a random string for the state parameter
         # Save it for use later to prevent xsrf attacks
-        params = {"client_id": NIGHTBOT_CLIENT_ID,
+        params = {"client_id": safe.get('nightbot-client-id'),
                   "response_type": "token",
                   "state": state,
                   "redirect_uri": NIGHTBOT_REDIRECT_URI,
@@ -115,7 +86,7 @@ class myHandler(http.server.SimpleHTTPRequestHandler):
         """Generate auth url for twitch."""
         # Generate a random string for the state parameter
         # Save it for use later to prevent xsrf attacks
-        params = {"client_id": TWITCH_CLIENT_ID,
+        params = {"client_id": safe.get('twitch-client-id'),
                   "response_type": "token",
                   "state": state,
                   "redirect_uri": TWITCH_REDIRECT_URI,
