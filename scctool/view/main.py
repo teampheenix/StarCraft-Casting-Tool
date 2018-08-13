@@ -178,6 +178,14 @@ class MainWindow(QMainWindow):
             myAct.triggered.connect(self.openReadme)
             infoMenu.addAction(myAct)
 
+            websiteAct = QAction(
+                QIcon(
+                    scctool.settings.getResFile('youtube.png')),
+                _('Video Tutorial'), self)
+            websiteAct.triggered.connect(lambda: self.controller.openURL(
+                "https://youtu.be/j5iWa4JB8bM"))
+            infoMenu.addAction(websiteAct)
+
             myAct = QAction(QIcon(scctool.settings.getResFile(
                 'update.png')), _('Check for new version'), self)
             myAct.triggered.connect(lambda: self.controller.checkVersion(True))
