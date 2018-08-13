@@ -7,7 +7,6 @@ humanize>=0.5.0
 markdown2>=2.0.0
 PyUpdater>2.5.3
 beautifulsoup4>=4.5.0
-gTTS>=2.0.0
 pypiwin32>=220
 pytesseract>=0.2.4
 Pillow>=5.0.0
