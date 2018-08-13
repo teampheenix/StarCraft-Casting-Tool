@@ -42,7 +42,7 @@ Join the [StarCraft Casting Tool Twitch Community](https://www.twitch.tv/communi
 
 ## Links
 
-[Changelog](https://github.com/teampheenix/StarCraft-Casting-Tool/blob/master/CHANGELOG.md) | [Discord Server](https://discord.gg/G9hFEfh)
+[Video Tutorial](https://youtu.be/j5iWa4JB8bM) | [Changelog](https://github.com/teampheenix/StarCraft-Casting-Tool/blob/master/CHANGELOG.md) | [Discord Server](https://discord.gg/G9hFEfh)
 
 
 ## General Information
