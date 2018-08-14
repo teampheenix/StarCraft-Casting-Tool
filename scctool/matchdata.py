@@ -106,6 +106,8 @@ class matchData(QObject):
         except Exception as e:
             # module_logger.exception("message")
             self.setCustom(5, False, False)
+        finally:
+            self.__emitSignal('meta')
 
     def writeJsonFile(self):
         """Write json data to file."""
@@ -831,115 +833,6 @@ class matchData(QObject):
     def downloadLogos(self):
         """Grab the team logos via a provider."""
         self.__matchGrabber.downloadLogos(self.__controller.logoManager)
-
-    def createStreamingTextFiles(self):
-        """Create OBS txt files."""
-        try:
-
-            if(self.hasAnySetChanged()):
-                f = open(scctool.settings.getAbsPath(
-                    scctool.settings.casting_data_dir +
-                    "/lineup.txt"),
-                    mode='w', encoding='utf-8-sig')
-                f2 = open(scctool.settings.getAbsPath(
-                    scctool.settings.casting_data_dir +
-                    "/maps.txt"),
-                    mode='w', encoding='utf-8-sig')
-                for idx in range(self.getNoSets()):
-                    map = self.getMap(idx)
-                    f.write(map + "\n")
-                    f2.write(map + "\n")
-                    try:
-                        string = self.getPlayer(
-                            0, idx) + ' vs ' + self.getPlayer(1, idx)
-                        f.write(string + "\n\n")
-                    except IndexError:
-                        f.write("\n\n")
-                        pass
-                f.close()
-                f2.close()
-
-                try:
-                    score = self.getScore()
-                    score_str = str(score[0]) + " - " + str(score[1])
-                except Exception:
-                    score_str = "0 - 0"
-
-                f = open(scctool.settings.getAbsPath(
-                    scctool.settings.casting_data_dir +
-                    "/score.txt"), mode='w',
-                    encoding='utf-8-sig')
-                f.write(score_str)
-                f.close()
-
-                f = open(scctool.settings.getAbsPath(
-                    scctool.settings.casting_data_dir +
-                    "/nextplayer1.txt"), mode='w',
-                    encoding='utf-8-sig')
-                f.write(self.getNextPlayer(0))
-                f.close()
-
-                f = open(scctool.settings.getAbsPath(
-                    scctool.settings.casting_data_dir +
-                    "/nextplayer2.txt"), mode='w',
-                    encoding='utf-8-sig')
-                f.write(self.getNextPlayer(1))
-                f.close()
-
-                f = open(scctool.settings.getAbsPath(
-                    scctool.settings.casting_data_dir +
-                    "/nextrace1.txt"), mode='w',
-                    encoding='utf-8-sig')
-                f.write(self.getNextRace(0))
-                f.close()
-
-                f = open(scctool.settings.getAbsPath(
-                    scctool.settings.casting_data_dir +
-                    "/nextrace2.txt"), mode='w',
-                    encoding='utf-8-sig')
-                f.write(self.getNextRace(1))
-                f.close()
-
-            if(self.hasMetaChanged()):
-
-                f = open(scctool.settings.getAbsPath(
-                    scctool.settings.casting_data_dir +
-                    "/teams_vs_long.txt"),
-                    mode='w', encoding='utf-8-sig')
-                f.write(self.getTeam(0) + ' vs ' + self.getTeam(1) + "\n")
-                f.close()
-
-                f = open(scctool.settings.getAbsPath(
-                    scctool.settings.casting_data_dir +
-                    "/teams_vs_short.txt"),
-                    mode='w', encoding='utf-8-sig')
-                f.write(self.getTeamTag(0) + ' vs ' +
-                        self.getTeamTag(1) + "\n")
-                f.close()
-
-                f = open(scctool.settings.getAbsPath(
-                    scctool.settings.casting_data_dir +
-                    "/team1.txt"),
-                    mode='w', encoding='utf-8-sig')
-                f.write(self.getTeam(0))
-                f.close()
-
-                f = open(scctool.settings.getAbsPath(
-                    scctool.settings.casting_data_dir +
-                    "/team2.txt"),
-                    mode='w', encoding='utf-8-sig')
-                f.write(self.getTeam(1))
-                f.close()
-
-                f = open(scctool.settings.getAbsPath(
-                    scctool.settings.casting_data_dir +
-                    "/tournament.txt"),
-                    mode='w', encoding='utf-8-sig')
-                f.write(self.getLeague())
-                f.close()
-
-        except Exception as e:
-            module_logger.exception("message")
 
     def getScoreData(self):
         data = dict()

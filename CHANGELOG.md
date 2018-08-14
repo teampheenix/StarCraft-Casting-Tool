@@ -1,6 +1,19 @@
 # Changelog
 
 
+## v2.1.2 (2018-08-14)
+
+### New
+
+* Added link to Tutorial Video.
+
+### Fix
+
+* Fixed a bug where "0 - 0" would always be written into score.txt.
+
+* Fixed a bug where dragging and dropping a logo onto team 2 would not work.
+
+
 ## v2.1.0 (2018-08-11)
 
 ### New

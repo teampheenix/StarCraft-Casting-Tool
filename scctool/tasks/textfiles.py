@@ -72,11 +72,11 @@ class TextFilesThread(TasksThread):
     def __writeScore(self):
         file = scctool.settings.getAbsPath(
             scctool.settings.casting_data_dir + "/score.txt")
-        try:
-            score = self.getScore()
-            score_str = str(score[0]) + " - " + str(score[1])
-        except Exception:
-            score_str = "0 - 0"
+
+        score = self._matchData.getScore()
+        print(file, score)
+        score_str = str(score[0]) + " - " + str(score[1])
+
         with open(file, mode='w', encoding='utf-8') as f:
             f.write(score_str)
 
