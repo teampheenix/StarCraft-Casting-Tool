@@ -38,7 +38,7 @@ If you need support, have questions, want to be up-to-date on, or like to contri
 
 ## Twitch Community
 
-Join the [StarCraft Casting Tool Twitch Community](https://www.twitch.tv/communities/starcraftcastingtool) to find other streams that are using the StarCraft Casting Tool and promote your own stream when using it.
+Join the [StarCraft Casting Tool Twitch Community](https://www.twitch.tv/communities/starcraftcastingtool) to find other streams that are using the StarCraft Casting Tool and promote your own stream when using it. If your stream is added to the StarCraft Casting Tool Twitch Community and streaming StarCraft II, it will be automatically announced on our [Discord Server](https://discord.gg/G9hFEfh).
 
 ## Links
 
