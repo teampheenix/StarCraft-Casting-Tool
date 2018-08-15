@@ -19,16 +19,16 @@
 
 ## Feature List
 
-* **Match Grabber** for [AlphaTL](https://alpha.tl/) and [RSTL](http://hdgame.net/en/tournaments/list/tournament/rstl-12/)
-* **Custom Match Format**: Bo1-Bo9, All-Kill format, 1vs1 - including predefined formats for Chobo, Koprulu, WardiTV, and PSISTOM Gaming Team League.
+* **Match Grabber** for [Alpha Team League](https://alpha.tl/) and [Russian Team League](http://hdgame.net/en/tournaments/list/tournament/rstl-13/)
+* **Custom Match Format**: Bo1-Bo15, All-Kill format, 1vs1 - including predefined formats for Chobo, Koprulu, WardiTV, and PSISTORM Gaming Team League.
 * Two sets of **Map Icons**: Box and Landscape in `casting_html`
 * **Scoreboard** including team icons in `casting_html`
-* **Animated Player Intros** in `casting_html` including playername & race via SC2-Client, team with logo via SCC Tool
+* **Animated Player Intros** in `casting_html` including Text-to-Speech, playername & race via SC2-Client, team with logo via SCC Tool
 * **Map Preview with Statistics** from Liquipedia in `casting_html`
 * **TXT-files** with match infos in `casting_data`
 * **Twitch & Nightbot Integration**: Update your stream title or bot commands via a single click or automatically
 * **Automatic Score Detection** via SC2-Client
-* **Interaction with SC2-Observer-UI**: Automatically toggle Production Tab and set Score at the start of a Map
+* **Interaction with SC2-Observer-UI**: Automatically toggle Production Tab and set Score at the start of a Game
 * Nearly **unlimited Customization** via Skins and CSS
 * German and Russian language support.
 
@@ -60,9 +60,14 @@ This tool should run on any operating system that supports Python 3, e.g., Windo
 
 ### Alternativ: Python Script
 
-**Windows, MacOS, Linux: [Download the Source Code as Archive](https://github.com/teampheenix/StarCraft-Casting-Tool/archive/master.zip)** and exctract StarCraft Casting Tool, download the latest version of Python 3 at [https://www.python.org/downloads](https://www.python.org/downloads). This tool requires the additional Python Packages *PyQt5*, *requests*, *configparser*, *humanize*, *markdown2*, *pyupdater*, *keyboard*, *websockets*, *beautifulsoup4*, *appdirs*, *gTTS* and on Windows additionally *pypiwin32*, *Pillow*, *pytesseract*. To install these packages execute `pip install -r requirements.txt`.
+**Windows, MacOS, Linux: [Download the Source Code as Archive](https://github.com/teampheenix/StarCraft-Casting-Tool/archive/master.zip)** and exctract StarCraft Casting Tool, download the latest version of Python 3.6 at [https://www.python.org/downloads](https://www.python.org/downloads). This tool requires the additional Python Packages, to install these packages execute `pip install -r requirements.txt`.
 
 ## Instructions for Use
+
+### Video Tutorial
+[![Video Tutorial](https://img.youtube.com/vi/j5iWa4JB8bM/mqdefault.jpg)](https://youtu.be/j5iWa4JB8bM)
+
+### Basics
 
 Run StarCraft Casting Tool via `StarCraft-Casting-Tool.exe` (or `StarCraftCastingTool.pyw`). Enter the Match-URL of an AlphaTL or RSTL match in the *Match Grabber* tab, e.g., "https://alpha.tl/match/3000", and press *Load Data from URL*. Alternatively one can create a match in the *Custom Match* tab.  Edit the data if necessary. The sliders control the score of each map. The top slider is to select *your* team. Once selected the border of the Map Icons turn (by default) green or red depending on the result. To select your team automatically you can add it to *Favorite Teams* list under *Settings: Misc*. Similarly you can enter your players' nicknames into *Favorite Players* for auto completion.
 
@@ -91,9 +96,11 @@ Frequently the order of players given by the SC2-Client-API differs from the ord
 
 Include the Player Intro `casting_html/intro.html` as browser sources (using the full height and width of your display). The data will be updated when a game or replay is started in the StarCraft 2 client. You have to assign hotkeys to trigger the intros in *Settings: Browser Sources: Intros*. The first player is always corresponding to the player your observer camera is centered on at start of a game. The sound volume of the intros as well as the duration of the intros can be adjusted in *Settings: Browser Sources: Intros*. Additionally you can activate Text-to-Speech to include an automatic annoucements of the player's team and name. There are currently three different animations with an unique sound, e.g., *Fanfare* - see https://youtu.be/kEcxS4K9vJ4?t=25m45s for an review of *Fanfare*.
 
+You have the option to have the player announced with Google-Cloud Text-to-Speech featuring high quality voices that you can test at https://cloud.google.com/text-to-speech/
+
 ## Customization
 
-Some basic options for customization can be found under *Settings: Styles*, for example, alternative styles/skins for the Map Icons, Score Icon, Intro and option to specify colors. For additional **nearly unlimited customization** of the Icons you can make your own custom skins via [CSS](https://www.w3schools.com/css/) by creating new alternative *css*-files and placing them into `casting_html/src/css/mapicons_box`, `casting_html/src/css/mapicons_landscape`, `casting_html/src/css/score`, `casting_html/src/css/intro`, or `casting_html/src/css/mapstats` respectively. If you do so, please share your custom skins with this project. If you want help implementing your own icon skin with CSS or just want to share an idea for a skin join the [Discord Server](https://discord.gg/G9hFEfh).
+Some basic options for customization can be found under *Settings: Styles*, for example, alternative styles/skins for the Map Icons, Score Icon, Intro and option to specify colors. For additional **nearly unlimited customization** of the Icons you can make your own custom skins via [CSS](https://www.w3schools.com/css/) by creating new alternative *CSS*-files and placing them into `casting_html/src/css/{browser-source}`. If you do so, please share your custom skins with this project. If you want help implementing your own icon skin with CSS or just want to share an idea for a skin join the [Discord Server](https://discord.gg/G9hFEfh).
 
 ## Help, Bug-Report, Suggestions & Contribution
 
