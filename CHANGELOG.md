@@ -1,6 +1,13 @@
 # Changelog
 
 
+## v2.1.3 (2018-08-19)
+
+### Fix
+
+* Fixed a bug where the new AlphaTL Match Banner would not be downloaded.
+
+
 ## v2.1.2 (2018-08-14)
 
 ### New
