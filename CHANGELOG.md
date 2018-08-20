@@ -1,6 +1,13 @@
 # Changelog
 
 
+## v2.1.4 (2018-08-20)
+
+### Fix
+
+* Fixed a crash that would occure when adding a map to the mapstats custom map pool.
+
+
 ## v2.1.3 (2018-08-19)
 
 ### Fix
