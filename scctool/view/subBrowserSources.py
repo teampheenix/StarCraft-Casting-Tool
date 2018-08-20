@@ -215,7 +215,6 @@ class SubwindowBrowserSources(QWidget):
 
     def addMap(self):
         maplist = list(scctool.settings.maps)
-        maplist.remove('TBD')
         for i in range(self.maplist.count()):
             map = str(self.maplist.item(i).text())
             if map in maplist:
