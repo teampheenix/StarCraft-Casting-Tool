@@ -66,7 +66,7 @@ def main_window(app, showChangelog=False):
         app.setWindowIcon(icon)
         cntlr = MainController()
         MainWindow(cntlr, app, showChangelog)
-        logger.info("Starting...")
+        logger.info("Starting... v{}".format(__version__))
         return cntlr
 
     except Exception as e:
