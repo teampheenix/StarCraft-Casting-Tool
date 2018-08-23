@@ -8,9 +8,9 @@ from PyQt5.QtGui import QIcon, QPalette
 from PyQt5.QtWidgets import (QAction, QApplication, QCheckBox, QComboBox,
                              QCompleter, QFormLayout, QGridLayout, QGroupBox,
                              QHBoxLayout, QLabel, QLineEdit, QMainWindow,
-                             QMenu, QMessageBox, QPushButton, QSizePolicy,
-                             QSlider, QSpacerItem, QTabWidget, QToolButton,
-                             QVBoxLayout, QWidget)
+                             QMenu, QMessageBox, QPushButton, QRadioButton,
+                             QSizePolicy, QSlider, QSpacerItem, QTabBar,
+                             QTabWidget, QToolButton, QVBoxLayout, QWidget)
 
 import scctool.settings
 import scctool.settings.config
@@ -45,6 +45,7 @@ class MainWindow(QMainWindow):
             with self.tlock:
                 self.createFormMatchDataBox()
             self.createTabs()
+            self.createMatchDataTabs()
             self.createHorizontalGroupBox()
             self.createBackgroundTasksBox()
 
@@ -52,7 +53,8 @@ class MainWindow(QMainWindow):
 
             mainLayout = QVBoxLayout()
             mainLayout.addWidget(self.tabs, 0)
-            mainLayout.addWidget(self.fromMatchDataBox, 1)
+            mainLayout.addWidget(self.matchDataTabWidget, 1)
+            # mainLayout.addWidget(self.fromMatchDataBox, 1)
             mainLayout.addWidget(self.backgroundTasksBox, 0)
             mainLayout.addWidget(self.horizontalGroupBox, 0)
 
@@ -453,6 +455,35 @@ class MainWindow(QMainWindow):
         scctool.settings.config.parser.set("SCT", "language", language)
         self.restart()
 
+    def createMatchDataTabs(self):
+        self.matchDataTabWidget = QTabWidget()
+        self.matchDataTabWidget.setMovable(True)
+        self.matchDataTabWidget.setTabsClosable(True)
+        self.matchDataTabWidget.setUsesScrollButtons(True)
+        self.matchDataTabs = list()
+        self.matchDataTabs.append(self.fromMatchDataBox)
+        self.matchDataTabs.append(QWidget())
+        self.matchDataTabs.append(QWidget())
+        self.matchDataTabs.append(QWidget())
+        self.matchDataTabs.append(QWidget())
+        self.matchDataTabs.append(QWidget())
+        self.matchDataTabs.append(QWidget())
+
+        for idx, tab in enumerate(self.matchDataTabs):
+            self.matchDataTabWidget.addTab(
+                tab, 'Match Data {}'.format(idx + 1))
+        button = QPushButton()
+        pixmap = QIcon(scctool.settings.getResFile('add.png'))
+        button.setIcon(pixmap)
+        button.setFlat(True)
+        self.matchDataTabWidget.setCornerWidget(button)
+
+        tabBar = self.matchDataTabWidget.tabBar()
+        tabBar.setExpanding(True)
+        for idx in range(tabBar.count()):
+            tabBar.setTabButton(
+                idx, QTabBar.ButtonPosition.LeftSide, QRadioButton())
+
     def createTabs(self):
         """Create tabs in main window."""
         try:
@@ -747,7 +778,7 @@ class MainWindow(QMainWindow):
             self.labelWidth = 25
             self.mimumLineEditWidth = 130
 
-            self.fromMatchDataBox = QGroupBox(_("Match Data"))
+            self.fromMatchDataBox = QWidget()
             layout2 = QVBoxLayout()
 
             self.le_league = MonitoredLineEdit()
