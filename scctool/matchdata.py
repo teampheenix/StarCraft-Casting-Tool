@@ -1,10 +1,8 @@
 """Matchdata."""
 import difflib
-import json
 import logging
 import re
 import shutil
-from collections import OrderedDict
 
 from PyQt5.QtCore import QObject, pyqtSignal
 
@@ -20,63 +18,16 @@ class matchData(QObject):
     """Matchdata."""
     dataChanged = pyqtSignal(str, object)
     metaChangedSignal = pyqtSignal()
-    scopes = {}
 
-    def __init__(self, controller):
+    def __init__(self, matchControl, controller, data=dict()):
         """Init and define custom providers."""
         super().__init__()
         self.__rawData = None
+        self.__matchControl = matchControl
         self.__controller = controller
-        self.__initProviderList()
-        self.__initScopes()
         self.__initData()
-        self.__initMatchGrabber()
-        self.__initCustomFormats()
-
+        self.readData(data)
         self.emitLock = EmitLock()
-
-    def __initScopes(self):
-        self.scopes = {'all': _('All Maps'),
-                       'not-ace': _('None Ace Maps'),
-                       'ace': _('Ace Maps'),
-                       'decided': _('Decided Maps'),
-                       'decided+1': _('Decided Maps + 1'),
-                       'current': _('Current Map'),
-                       'current+1': _('Current and Previous Map'),
-                       'undecided': _('Undecided Maps')}
-
-    def __initProviderList(self):
-        self.__VALID_PROVIDERS = dict()
-        self.__VALID_PROVIDERS[MatchGrabber._provider] = MatchGrabber
-        for cls in MatchGrabber.__subclasses__():
-            self.__VALID_PROVIDERS[cls._provider] = cls
-
-    def __initMatchGrabber(self):
-        provider = self.getProvider()
-        (*args,) = (self, self.__controller)
-
-        if provider in self.__VALID_PROVIDERS:
-            self.__matchGrabber = self.__VALID_PROVIDERS[provider](*args)
-        else:
-            self.__matchGrabber = MatchGrabber(*args)
-
-    def __initCustomFormats(self):
-        formats = dict()
-        for cls in MatchFormat.__subclasses__():
-            formats[cls._name] = cls
-        self.__CUSTOM_FORMATS = OrderedDict(sorted(formats.items()))
-
-    def getCustomFormats(self):
-        for custom_format in self.__CUSTOM_FORMATS.keys():
-            yield custom_format, self.__CUSTOM_FORMATS[custom_format]._icon
-
-    def applyCustomFormat(self, name):
-        if name in self.__CUSTOM_FORMATS:
-            customFormat = self.__CUSTOM_FORMATS[name](self)
-            with self.emitLock(True, self.metaChangedSignal):
-                customFormat.applyFormat()
-        else:
-            raise ValueError("Unknown Custom Match Format.")
 
     def __emitSignal(self, scope, name='', data=None):
         if not self.emitLock.locked():
@@ -97,26 +48,24 @@ class matchData(QObject):
                                 'hide': colorData["hide"],
                                 'opacity': colorData["opacity"]})
 
-    def readJsonFile(self):
-        """Read json data from file."""
-        try:
-            with open(scctool.settings.getJsonFile('matchdata'),
-                      'r', encoding='utf-8-sig') as json_file:
-                self.__data = json.load(json_file)
-        except Exception as e:
-            # module_logger.exception("message")
+    def readData(self, data):
+        if len(data) > 0:
+            self.__data = data
+        else:
             self.setCustom(5, False, False)
-        finally:
-            self.__emitSignal('meta')
 
-    def writeJsonFile(self):
-        """Write json data to file."""
-        try:
-            with open(scctool.settings.getJsonFile('matchdata'),
-                      'w', encoding='utf-8-sig') as outfile:
-                json.dump(self.__data, outfile)
-        except Exception as e:
-            module_logger.exception("message")
+    def getData(self):
+        return self.__data
+
+    def __initMatchGrabber(self):
+        provider = self.getProvider()
+        (*args,) = (self, self.__controller)
+
+        if provider in self.__matchControl.VALID_PROVIDERS:
+            self.__matchGrabber = \
+                self.__matchControl.VALID_PROVIDERS[provider](*args)
+        else:
+            self.__matchGrabber = MatchGrabber(*args)
 
     def __str__(self):
         """Return match data as string."""
@@ -802,7 +751,7 @@ class matchData(QObject):
         provider_changed = False
         if(provider):
             matches = difflib.get_close_matches(
-                provider, self.__VALID_PROVIDERS.keys(), 1)
+                provider, self.__matchControl.VALID_PROVIDERS.keys(), 1)
             if(len(matches) == 0):
                 new = MatchGrabber._provider
             else:

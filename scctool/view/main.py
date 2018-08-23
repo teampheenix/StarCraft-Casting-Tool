@@ -639,7 +639,8 @@ class MainWindow(QMainWindow):
             action.triggered.connect(self.applycustom_click)
             self.pb_applycustom.setDefaultAction(action)
             self.custom_menu = QMenu(self.pb_applycustom)
-            for format, icon in self.controller.matchData.getCustomFormats():
+            for format, icon in \
+                    self.controller.matchControl.getCustomFormats():
                 if icon:
                     action = self.custom_menu.addAction(
                         QIcon(scctool.settings.getResFile(icon)), format)
