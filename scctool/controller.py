@@ -256,7 +256,8 @@ class MainController:
             self.matchData.writeJsonFile()
             try:
                 self.matchData.downloadBanner()
-            except Exception:
+            except Exception as e:
+                module_logger.exception("message")
                 pass
             self.updateLogos(True)
             self.updateForms()

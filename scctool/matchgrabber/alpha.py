@@ -145,12 +145,13 @@ class MatchGrabber(MatchGrabberParent):
 
         localFile = scctool.settings.getAbsPath(fname)
         needs_download = True
+        size = 1024 * 400
         try:
             with open(localFile, "rb") as in_file:
-                local_byte = in_file.read(512)
+                local_byte = in_file.read(size)
 
             file = urlopen(url)
-            data = file.read(512)
+            data = file.read(size)
 
             if(data == local_byte):
                 needs_download = False
@@ -165,3 +166,5 @@ class MatchGrabber(MatchGrabberParent):
 
             except Exception as e:
                 module_logger.exception("message")
+        else:
+            module_logger.info('No need to redownload match banner')

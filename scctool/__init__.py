@@ -12,7 +12,7 @@ import scctool.settings.config
 
 logger = logging.getLogger('scctool')
 
-__version__ = "2.1.2"
+__version__ = "2.1.5"
 __latest_version__ = __version__
 __new_version__ = False
 
@@ -66,7 +66,7 @@ def main_window(app, showChangelog=False):
         app.setWindowIcon(icon)
         cntlr = MainController()
         MainWindow(cntlr, app, showChangelog)
-        logger.info("Starting...")
+        logger.info("Starting... v{}".format(__version__))
         return cntlr
 
     except Exception as e:

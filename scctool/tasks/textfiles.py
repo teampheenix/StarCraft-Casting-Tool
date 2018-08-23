@@ -74,7 +74,6 @@ class TextFilesThread(TasksThread):
             scctool.settings.casting_data_dir + "/score.txt")
 
         score = self._matchData.getScore()
-        print(file, score)
         score_str = str(score[0]) + " - " + str(score[1])
 
         with open(file, mode='w', encoding='utf-8') as f:
