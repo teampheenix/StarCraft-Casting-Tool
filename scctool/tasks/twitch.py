@@ -99,7 +99,6 @@ def addCommunity(channelID):
     communities = list()
     for community in data.get('communities', list()):
         communities.append(community['_id'])
-    print(communities)
     if scctCommunity not in communities:
         if len(communities) >= 3:
             communities.pop()

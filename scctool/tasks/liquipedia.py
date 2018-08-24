@@ -78,7 +78,8 @@ class LiquipediaGrabber:
         return images
 
     def get_images_new(self, image):
-        print(image)
+        pass
+        # print(image)
 
     def get_map(self, map_name):
         params = dict()

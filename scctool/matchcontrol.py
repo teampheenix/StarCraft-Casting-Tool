@@ -135,7 +135,6 @@ class MatchControl(QObject):
         if id in self.__matches.keys() and self.__activeMatch != id:
             old_id = self.__activeMatch
             self.__activeMatch = id
-            print(id, old_id)
             if old_id is not None and old_id in self.__matches.keys():
                 try:
                     self.__matches[old_id].metaChanged.disconnect()
