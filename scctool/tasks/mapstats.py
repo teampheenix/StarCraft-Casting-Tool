@@ -79,7 +79,7 @@ class MapStatsManager:
             self.__current_map = map
             if scctool.settings.config.parser.getboolean(
                     "Mapstats", "mark_played",):
-                played = self.__controller.matchData.wasMapPlayed(map)
+                played = self.__controller.matchControl.activeMatch().wasMapPlayed(map)
             else:
                 played = False
             self.__controller.websocketThread.selectMap(map, played)
@@ -113,7 +113,7 @@ class MapStatsManager:
             for map in self.getCustomMapPool():
                 yield map
         else:
-            for map in self.__controller.matchData.yieldMaps():
+            for map in self.__controller.matchControl.activeMatch().yieldMaps():
                 if map and map != "TBD":
                     yield map
 
@@ -192,7 +192,7 @@ class MapStatsManager:
             if scctool.settings.config.parser.getboolean(
                     "Mapstats", "mark_played",):
                 out_data['maps'][map]['played'] = \
-                    self.__controller.matchData.wasMapPlayed(map)
+                    self.__controller.matchControl.activeMatch().wasMapPlayed(map)
             else:
                 out_data['maps'][map]['played'] = False
             for key, item in data.items():

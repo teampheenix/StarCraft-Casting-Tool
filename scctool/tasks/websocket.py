@@ -206,18 +206,22 @@ class WebsocketThread(QThread):
             data = self.__controller.mapstatsManager.getData()
             self.sendData2WS(websocket, "MAPSTATS", data)
         elif primary_scope == 'score':
-            data = self.__controller.matchData.getScoreData()
+            data = self.__controller.matchControl.\
+                activeMatch().getScoreData()
             self.sendData2WS(websocket, "ALL_DATA", data)
         elif primary_scope in ['mapicons_box', 'mapicons_landscape']:
             self.changePadding(primary_scope, websocket=websocket)
             scope = path.replace('mapicons', 'scope')
             scope = scctool.settings.config.parser.get("MapIcons", scope)
-            if not self.__controller.matchData.isValidScope(scope):
+            if not self.__controller.matchControl.\
+                    activeMatch().isValidScope(scope):
                 scope = 'all'
-            data = self.__controller.matchData.getMapIconsData()
+            data = self.__controller.matchControl.\
+                activeMatch().getMapIconsData()
             processedData = dict()
             self.mapicon_sets[path] = set()
-            for idx in self.__controller.matchData.parseScope(scope):
+            for idx in self.__controller.matchControl.\
+                    activeMatch().parseScope(scope):
                 processedData[idx + 1] = data[idx + 1]
                 self.mapicon_sets[path].add(idx + 1)
             self.sendData2WS(websocket, 'DATA', processedData)
@@ -402,11 +406,13 @@ class WebsocketThread(QThread):
 
         scope = path.replace('mapicons', 'scope')
         scope = scctool.settings.config.parser.get("MapIcons", scope)
-        if not self.__controller.matchData.isValidScope(scope):
+        if not self.__controller.matchControl.\
+                activeMatch().isValidScope(scope):
             scope = 'all'
         old_set = self.mapicon_sets.get(path, set())
         new_set = set()
-        for idx in self.__controller.matchData.parseScope(scope):
+        for idx in self.__controller.matchControl.\
+                activeMatch().parseScope(scope):
             new_set.add(idx + 1)
 
         # This can later be used to animate single items in and out:

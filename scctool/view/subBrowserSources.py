@@ -276,7 +276,7 @@ class SubwindowBrowserSources(QWidget):
         box.setLayout(layout)
         mainLayout.addWidget(box)
 
-        options = self.controller.matchData.scopes
+        options = self.controller.matchControl.scopes
         self.scope_box = dict()
         for idx in range(0, 3):
             self.scope_box[idx] = ScopeGroupBox(
@@ -326,7 +326,7 @@ class SubwindowBrowserSources(QWidget):
         box.setLayout(layout)
         mainLayout.addWidget(box)
 
-        options = self.controller.matchData.scopes
+        options = self.controller.matchControl.scopes
         self.scope_landscape = dict()
         for idx in range(0, 3):
             self.scope_landscape[idx] = ScopeGroupBox(

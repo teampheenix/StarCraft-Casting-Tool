@@ -37,7 +37,7 @@ class MatchGrabber(MatchGrabberParent):
                      self.getURL().strip())
 
         with self._matchData.emitLock(overwrite,
-                                      self._matchData.metaChangedSignal):
+                                      self._matchData.metaChanged):
             if overwrite:
                 self._matchData.resetSwap()
 

@@ -118,93 +118,46 @@ class MainController:
         try:
             # self.matchControl.activeMatch().readJsonFile()
             with self.view.tlock:
-                self.updateForms()
+                self.updateMatchFormat()
             self.setCBs()
             self.view.resizeWindow()
         except Exception as e:
             module_logger.exception("message")
 
-    def updateForms(self):
-        """Update data in forms."""
+    def updateMatchFormat(self):
+        """Update match format in forms."""
         try:
-            if(self.matchControl.activeMatch().getProvider() == "Custom"):
+            if(self.matchControl.selectedMatch().getProvider() == "Custom"):
                 self.view.tabs.setCurrentIndex(1)
             else:
                 self.view.tabs.setCurrentIndex(0)
 
             self.view.cb_allkill.setChecked(
-                self.matchControl.activeMatch().getAllKill())
+                self.matchControl.selectedMatch().getAllKill())
 
             self.view.cb_solo.setChecked(
-                self.matchControl.activeMatch().getSolo())
+                self.matchControl.selectedMatch().getSolo())
 
             index = self.view.cb_bestof.findText(
-                str(self.matchControl.activeMatch().getBestOfRaw()),
+                str(self.matchControl.selectedMatch().getBestOfRaw()),
                 Qt.MatchFixedString)
             if index >= 0:
                 self.view.cb_bestof.setCurrentIndex(index)
 
             index = self.view.cb_minSets.findText(
-                str(self.matchControl.activeMatch().getMinSets()),
+                str(self.matchControl.selectedMatch().getMinSets()),
                 Qt.MatchFixedString)
             if index >= 0:
                 self.view.cb_minSets.setCurrentIndex(index)
 
-            self.view.le_url.setText(self.matchControl.activeMatch().getURL())
+            self.view.le_url.setText(
+                self.matchControl.selectedMatch().getURL())
             self.view.le_url_custom.setText(
-                self.matchControl.activeMatch().getURL())
-            self.view.le_league.setText(
-                self.matchControl.activeMatch().getLeague())
-            self.view.sl_team.setValue(
-                self.matchControl.activeMatch().getMyTeam())
-            for i in range(2):
-                team = self.matchControl.activeMatch().getTeam(i)
-                self.view.le_team[i].setText(team)
-                logo = self.logoManager.getTeam(i + 1).getIdent()
-                self.historyManager.insertTeam(team, logo)
+                self.matchControl.selectedMatch().getURL())
 
-            for j in range(2):
-                for i in range(1, self.matchControl.activeMatch().getNoSets()):
-                    self.view.le_player[j][i].setReadOnly(
-                        self.matchControl.activeMatch().getSolo())
-
-            for i in range(min(self.view.max_no_sets,
-                               self.matchControl.activeMatch().getNoSets())):
-                for j in range(2):
-                    player = self.matchControl.activeMatch().getPlayer(j, i)
-                    race = self.matchControl.activeMatch().getRace(j, i)
-                    self.view.le_player[j][i].setText(player)
-                    self.view.cb_race[j][i].setCurrentIndex(
-                        scctool.settings.race2idx(race))
-                    self.historyManager.insertPlayer(player, race)
-
-                self.view.le_map[i].setText(
-                    self.matchControl.activeMatch().getMap(i))
-
-                self.view.sl_score[i].setValue(
-                    self.matchControl.activeMatch().getMapScore(i))
-
-            for i in range(self.matchControl.activeMatch().getNoSets(),
-                           self.view.max_no_sets):
-                for j in range(2):
-                    self.view.le_player[j][i].hide()
-                    self.view.cb_race[j][i].hide()
-                self.view.le_map[i].hide()
-                self.view.sl_score[i].hide()
-                self.view.label_set[i].hide()
-
-            for i in range(min(self.view.max_no_sets,
-                               self.matchControl.activeMatch().getNoSets())):
-                for j in range(2):
-                    self.view.le_player[j][i].show()
-                    self.view.cb_race[j][i].show()
-                self.view.le_map[i].show()
-                self.view.sl_score[i].show()
-                self.view.label_set[i].show()
-
-            self.view.updatePlayerCompleters()
-            self.view.updateTeamCompleters()
-            self.updateMapButtons()
+            # self.view.updatePlayerCompleters()
+            # self.view.updateTeamCompleters()
+            # self.updateMapButtons()
             self.autoSetNextMap()
 
         except Exception as e:
@@ -213,35 +166,40 @@ class MainController:
 
     def updateLogos(self, force=False):
         """Updata team logos in  view."""
-
-        logo = self.logoManager.getTeam1()
-        self.view.qb_logo1.setIcon(QIcon(logo.provideQPixmap()))
-
-        logo = self.logoManager.getTeam2()
-        self.view.qb_logo2.setIcon(QIcon(logo.provideQPixmap()))
-
-        for idx in range(2):
-            team = self.matchControl.activeMatch().getTeam(idx)
-            logo = self.logoManager.getTeam(idx + 1).getIdent()
-            self.historyManager.insertTeam(team, logo)
-
-        self.updateLogosHTML(force)
+        # TODO: fix this
+        pass
+        # logo = self.logoManager.getTeam1()
+        # self.view.qb_logo1.setIcon(QIcon(logo.provideQPixmap()))
+        #
+        # logo = self.logoManager.getTeam2()
+        # self.view.qb_logo2.setIcon(QIcon(logo.provideQPixmap()))
+        #
+        # for idx in range(2):
+        #     team = self.matchControl.activeMatch().getTeam(idx)
+        #     logo = self.logoManager.getTeam(idx + 1).getIdent()
+        #     self.historyManager.insertTeam(team, logo)
+        #
+        # self.updateLogosHTML(force)
 
     def applyCustom(self, bestof, allkill, solo, minSets, url):
         """Apply a custom match format."""
         msg = ''
         try:
-            with self.matchControl.activeMatch().emitLock(
+            match = self.matchControl.selectedMatch()
+            idx = self.matchControl.selectedMatchIdx()
+            with match.emitLock(
                     True,
-                    self.matchControl.activeMatch().metaChangedSignal):
-                self.matchControl.activeMatch().setCustom(
-                    bestof, allkill, solo)
-                self.matchControl.activeMatch().setMinSets(minSets)
-                self.matchControl.activeMatch().setURL(url)
+                    match.metaChanged):
+                match.setCustom(bestof, allkill, solo)
+                match.setMinSets(minSets)
+                match.setURL(url)
                 self.matchControl.writeJsonFile()
-                self.updateForms()
+                self.updateMatchFormat()
+                matchWidget = self.view.matchDataTabWidget.widget(idx)
+                matchWidget.updateForms()
                 self.view.resizeWindow()
-                self.matchControl.activeMatch().updateLeagueIcon()
+                # TODO: fix this
+                # self.matchControl.selectedMatch().updateLeagueIcon()
 
         except Exception as e:
             msg = str(e)
@@ -255,10 +213,12 @@ class MainController:
         try:
             self.logoManager.resetTeam1Logo()
             self.logoManager.resetTeam2Logo()
-            self.matchControl.activeMatch().resetData(False)
+            self.matchControl.selectedMatch().resetData(False)
             self.matchControl.writeJsonFile()
             self.updateLogos(True)
-            self.updateForms()
+            idx = self.matchControl.selectedMatchIdx()
+            matchWidget = self.view.matchDataTabWidget.widget(idx)
+            matchWidget.updateForms()
 
         except Exception as e:
             msg = str(e)
@@ -270,17 +230,20 @@ class MainController:
         """Load data from match grabber."""
         msg = ''
         try:
-            newProvider = self.matchControl.activeMatch().parseURL(url)
-            self.matchControl.activeMatch().grabData(newProvider,
-                                                     self.logoManager)
+            match = self.matchControl.selectedMatch()
+            newProvider = match.parseURL(url)
+            match.grabData(newProvider, self.logoManager)
             self.matchControl.writeJsonFile()
             try:
-                self.matchControl.activeMatch().downloadBanner()
+                # TODO: Need to have multiple banners
+                match.downloadBanner()
             except Exception as e:
                 module_logger.exception("message")
                 pass
             self.updateLogos(True)
-            self.updateForms()
+            idx = self.matchControl.selectedMatchIdx()
+            matchWidget = self.view.matchDataTabWidget.widget(idx)
+            matchWidget.updateForms()
             self.view.resizeWindow()
             self.matchControl.activeMatch().updateLeagueIcon()
 
@@ -790,8 +753,10 @@ class MainController:
     def swapTeams(self):
         with self.view.tlock:
             self.logoManager.swapTeamLogos()
-            self.matchControl.activeMatch().swapTeams()
-            self.updateForms()
+            self.matchControl.selectedMatch().swapTeams()
+            idx = self.matchControl.selectedMatchIdx()
+            matchWidget = self.view.matchDataTabWidget.widget(idx)
+            matchWidget.updateForms()
             self.updateLogos(False)
 
     def displayWarning(self, msg="Warning: Something went wrong..."):
@@ -834,17 +799,6 @@ class MainController:
                 "Mapstats", "autoset_next_map"):
             self.mapstatsManager.selectMap(
                 self.matchControl.activeMatch().getNextMap(idx))
-
-    def updateMapButtons(self):
-        mappool = list(self.mapstatsManager.getMapPool())
-        for i in range(self.view.max_no_sets):
-            map = self.matchControl.activeMatch().getMap(i)
-            if map in mappool:
-                self.view.label_set[i].setEnabled(True)
-            else:
-                self.view.label_set[i].setEnabled(False)
-        if self.mapstatsManager.getMapPoolType() == 2:
-            self.mapstatsManager.sendMapPool()
 
     def matchMetaDataChanged(self):
         data = self.matchControl.activeMatch().getScoreData()

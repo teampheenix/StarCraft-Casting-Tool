@@ -14,17 +14,18 @@ from scctool.matchgrabber import *
 module_logger = logging.getLogger('scctool.matchdata')
 
 
-class matchData(QObject):
+class MatchData(QObject):
     """Matchdata."""
     dataChanged = pyqtSignal(str, object)
-    metaChangedSignal = pyqtSignal()
+    metaChanged = pyqtSignal()
 
-    def __init__(self, matchControl, controller, data=dict()):
+    def __init__(self, matchControl, controller, id, data=dict()):
         """Init and define custom providers."""
         super().__init__()
         self.__rawData = None
         self.__matchControl = matchControl
         self.__controller = controller
+        self.__id = id
         self.__initData()
         self.readData(data)
         self.emitLock = EmitLock()
@@ -34,7 +35,7 @@ class matchData(QObject):
             if scope == 'data':
                 self.dataChanged.emit(name, data)
             elif scope == 'meta':
-                self.metaChangedSignal.emit()
+                self.metaChanged.emit()
             elif scope == 'outcome':
                 self.dataChanged.emit('outcome', self.getWinner())
                 for idx in range(self.getNoSets()):
@@ -48,11 +49,17 @@ class matchData(QObject):
                                 'hide': colorData["hide"],
                                 'opacity': colorData["opacity"]})
 
+    def getControlID(self):
+        return self.__id
+
     def readData(self, data):
         if len(data) > 0:
             self.__data = data
         else:
             self.setCustom(5, False, False)
+
+    def writeJsonFile(self):
+        self.__matchControl.writeJsonFile()
 
     def getData(self):
         return self.__data
@@ -66,6 +73,14 @@ class matchData(QObject):
                 self.__matchControl.VALID_PROVIDERS[provider](*args)
         else:
             self.__matchGrabber = MatchGrabber(*args)
+
+    def applyCustomFormat(self, name):
+        if name in self.__matchControl.CUSTOM_FORMATS:
+            customFormat = self.__matchControl.CUSTOM_FORMATS[name](self)
+            with self.emitLock(True, self.metaChanged):
+                customFormat.applyFormat()
+        else:
+            raise ValueError("Unknown Custom Match Format.")
 
     def __str__(self):
         """Return match data as string."""
@@ -1098,7 +1113,7 @@ class matchData(QObject):
             return
 
     def isValidScope(self, scope):
-        if scope in self.scopes.keys():
+        if scope in self.__matchControl.scopes.keys():
             return True
         else:
             m = re.match(r'^(\d+)-(\d+)$', scope)

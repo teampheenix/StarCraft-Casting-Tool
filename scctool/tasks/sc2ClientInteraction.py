@@ -224,7 +224,7 @@ class SC2ApiThread(QThread):
                 return False
 
             # Don't use OCR if the score is tied.
-            score = self.controller.matchData.getScore()
+            score = self.controller.matchControl.activeMatch().getScore()
             if(score[0] == score[1] and
                (not scctool.settings.config.parser.getboolean(
                    "SCT", "CtrlX")) and

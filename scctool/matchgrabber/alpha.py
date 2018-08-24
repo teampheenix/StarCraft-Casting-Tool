@@ -34,7 +34,7 @@ class MatchGrabber(MatchGrabberParent):
                          self._matchData.getURL().strip() !=
                          self.getURL().strip())
             with self._matchData.emitLock(overwrite,
-                                          self._matchData.metaChangedSignal):
+                                          self._matchData.metaChanged):
                 self._matchData.setNoSets(5, resetPlayers=overwrite)
                 self._matchData.setMinSets(3)
                 self._matchData.setSolo(False)
