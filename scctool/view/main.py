@@ -461,7 +461,8 @@ class MainWindow(QMainWindow):
     def createMatchDataTabs(self):
         self.matchDataTabWidget = QTabWidget()
         self.matchDataTabWidget.setMovable(True)
-        self.matchDataTabWidget.setTabsClosable(True)
+        self.matchDataTabWidget.setTabsClosable(
+            self.controller.matchControl.countMatches() > 1)
         self.matchDataTabWidget.setUsesScrollButtons(True)
         for match in self.controller.matchControl.getMatches():
             MatchDataWidget(self,
