@@ -468,12 +468,28 @@ class MainWindow(QMainWindow):
                             self.matchDataTabWidget,
                             match)
 
+        container = QWidget()
+        buttonLayout = QHBoxLayout()
+        buttonLayout.setContentsMargins(2, 1, 1, 2)
+        buttonLayout.setSpacing(1)
         button = QPushButton()
         pixmap = QIcon(scctool.settings.getResFile('add.png'))
         button.setIcon(pixmap)
-        button.setFlat(True)
+        button.setFixedSize(28, 28)
+        # button.setFlat(True)
+        button.setToolTip(_('Add Match Tab'))
         button.clicked.connect(self.addMatchTab)
-        self.matchDataTabWidget.setCornerWidget(button)
+        buttonLayout.addWidget(button)
+        button = QPushButton()
+        button.setFixedSize(28, 28)
+        pixmap = QIcon(scctool.settings.getResFile('copy.png'))
+        button.setIcon(pixmap)
+        # button.setFlat(True)
+        button.setToolTip(_('Copy Match Tab'))
+        button.clicked.connect(self.copyMatchTab)
+        buttonLayout.addWidget(button)
+        container.setLayout(buttonLayout)
+        self.matchDataTabWidget.setCornerWidget(container)
 
         tabBar = self.matchDataTabWidget.tabBar()
         tabBar.setExpanding(True)
@@ -484,6 +500,17 @@ class MainWindow(QMainWindow):
 
     def addMatchTab(self):
         match = self.controller.matchControl.newMatchData()
+        MatchDataWidget(self,
+                        self.matchDataTabWidget,
+                        match)
+        count = self.matchDataTabWidget.count()
+        self.matchDataTabWidget.setCurrentIndex(count - 1)
+        if count > 1:
+            self.matchDataTabWidget.setTabsClosable(True)
+
+    def copyMatchTab(self):
+        data = self.controller.matchControl.selectedMatch().getData()
+        match = self.controller.matchControl.newMatchData(data)
         MatchDataWidget(self,
                         self.matchDataTabWidget,
                         match)
@@ -1011,12 +1038,14 @@ class MainWindow(QMainWindow):
 
     def setScore(self, idx, score, allkill=True):
         """Handle change of the score."""
+        # TODO: fix this
         try:
             if(self.sl_score[idx].value() == 0):
                 self.statusBar().showMessage(_('Updating Score...'))
                 with self.tlock:
                     self.sl_score[idx].setValue(score)
-                    self.controller.matchControl.activeMatch().setMapScore(idx, score, True)
+                    self.controller.matchControl.\
+                        activeMatch().setMapScore(idx, score, True)
                     if allkill:
                         self.controller.allkillUpdate()
                     self.controller.autoSetNextMap()

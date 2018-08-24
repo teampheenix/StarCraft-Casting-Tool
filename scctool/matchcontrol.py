@@ -174,6 +174,9 @@ class MatchControl(QObject):
     def _uniqid(self):
         return hex(int(time() * 10000000))[10:]
 
+    def countMatches(self):
+        return len(self.__matches)
+
     def updateOrder(self, toIdx, fromIdx):
         self.__order[toIdx], self.__order[fromIdx] =\
             self.__order[fromIdx], self.__order[toIdx]

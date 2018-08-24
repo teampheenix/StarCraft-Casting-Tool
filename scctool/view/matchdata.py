@@ -38,16 +38,18 @@ class MatchDataWidget(QWidget):
             self._createView()
             self.updateForms()
         self._radioButton = QRadioButton()
+        self._radioButton.setContentsMargins(0, 0, 10, 0)
+        self._radioButton.setStyleSheet("color: darkBlue")
         self._radioButton.setToolTip(_('Activate Match'))
         ctrlID = self.matchData.getControlID()
-        if self.controller.matchControl.activeMatchId() == ctrlID:
-            self._radioButton.setChecked(True)
         if self.controller.matchControl.selectedMatchId() == ctrlID:
             self._tabWidget.setCurrentIndex(self._tabIdx)
         self._tabWidget.tabBar().setTabButton(
             self._tabIdx, QTabBar.ButtonPosition.LeftSide, self._radioButton)
         self.setName()
         self._radioButton.toggled.connect(self.activate)
+        if self.controller.matchControl.activeMatchId() == ctrlID:
+            self.checkButton()
 
     def checkButton(self):
         self._radioButton.setChecked(True)
@@ -56,6 +58,8 @@ class MatchDataWidget(QWidget):
         if checked:
             self.controller.matchControl.activateMatch(
                 self.matchData.getControlID())
+        elif self.controller.matchControl.countMatches() == 1:
+            self._radioButton.setChecked(True)
 
     def setName(self):
         team1 = self.matchData.getTeamOrPlayer(0)
