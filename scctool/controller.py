@@ -6,7 +6,6 @@ import sys
 import webbrowser
 
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QCheckBox, QMessageBox
 
 import scctool.settings
@@ -44,7 +43,6 @@ class MainController:
             self.authThread = AuthThread()
             self.authThread.tokenRecived.connect(self.tokenRecived)
             self.textFilesThread = TextFilesThread(self.matchControl)
-            # TODO: Rename handleMatchDataChange and matchMetaDataChanged
             self.matchControl.dataChanged.connect(self.handleMatchDataChange)
             self.matchControl.metaChanged.connect(self.matchMetaDataChanged)
             self.SC2ApiThread = SC2ApiThread(self)
@@ -166,20 +164,9 @@ class MainController:
 
     def updateLogos(self, force=False):
         """Updata team logos in  view."""
-        # TODO: fix this
-        pass
-        # logo = self.logoManager.getTeam1()
-        # self.view.qb_logo1.setIcon(QIcon(logo.provideQPixmap()))
-        #
-        # logo = self.logoManager.getTeam2()
-        # self.view.qb_logo2.setIcon(QIcon(logo.provideQPixmap()))
-        #
-        # for idx in range(2):
-        #     team = self.matchControl.activeMatch().getTeam(idx)
-        #     logo = self.logoManager.getTeam(idx + 1).getIdent()
-        #     self.historyManager.insertTeam(team, logo)
-        #
-        # self.updateLogosHTML(force)
+        idx = self.matchControl.selectedMatchIdx()
+        matchWidget = self.view.matchDataTabWidget.widget(idx)
+        matchWidget.updateLogos(force)
 
     def applyCustom(self, bestof, allkill, solo, minSets, url):
         """Apply a custom match format."""
@@ -198,8 +185,8 @@ class MainController:
                 matchWidget = self.view.matchDataTabWidget.widget(idx)
                 matchWidget.updateForms()
                 self.view.resizeWindow()
-                # TODO: fix this
-                # self.matchControl.selectedMatch().updateLeagueIcon()
+                if idx == self.matchControl.activeMatchIdx():
+                    self.matchControl.selectedMatch().updateLeagueIcon()
 
         except Exception as e:
             msg = str(e)
@@ -290,7 +277,7 @@ class MainController:
     def allkillUpdate(self):
         """In case of allkill move the winner to the next set."""
         if(self.matchControl.activeMatch().allkillUpdate()):
-            self.updateForms()
+            self.matchControl.activeMatch().updateForms()
 
     def tokenRecived(self, scope, token):
         """Call to return of token."""
@@ -752,12 +739,12 @@ class MainController:
 
     def swapTeams(self):
         with self.view.tlock:
-            self.logoManager.swapTeamLogos()
+            self.logoManager.swapTeamLogos(self.matchControl.selectedMatchId())
             self.matchControl.selectedMatch().swapTeams()
             idx = self.matchControl.selectedMatchIdx()
             matchWidget = self.view.matchDataTabWidget.widget(idx)
             matchWidget.updateForms()
-            self.updateLogos(False)
+            matchWidget.updateLogos(False)
 
     def displayWarning(self, msg="Warning: Something went wrong..."):
         """Display a warning in status bar."""

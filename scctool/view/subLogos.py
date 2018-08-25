@@ -21,10 +21,11 @@ module_logger = logging.getLogger('scctool.view.subLogos')
 class SubwindowLogos(QWidget):
     """Show readme sub window."""
 
-    def createWindow(self, mainWindow, controller, team):
+    def createWindow(self, mainWindow, controller, team, matchDataWidget):
         """Create readme sub window."""
         super().__init__(None)
         self.controller = controller
+        self.matchDataWidget = matchDataWidget
         self.team = team
         self.mutex = QMutex()
         # self.setWindowIcon(
@@ -37,7 +38,8 @@ class SubwindowLogos(QWidget):
         self.iconsize = scctool.settings.logoManager.Logo._iconsize
 
         box = QGroupBox(
-            _("Logo Team 1") + " - {}".format(mainWindow.le_team[0].text()))
+            _("Logo Team 1") + " - {}".format(
+                self.matchDataWidget.le_team[0].text()))
         layout = QGridLayout()
         self.team1_icon = DragImageLabel(
             self,
@@ -51,7 +53,7 @@ class SubwindowLogos(QWidget):
         layout.addWidget(button, 1, 1)
         button = QPushButton(_("Search Liquipedia"))
         button.clicked.connect(lambda: self.liqupediaSearchDialog(
-            1, mainWindow.le_team[0].text()))
+            1, self.matchDataWidget.le_team[0].text()))
         layout.addWidget(button, 2, 1)
         button = QPushButton(_("Add to Favorites"))
         button.clicked.connect(lambda: self.addFavorite(1))
@@ -84,7 +86,8 @@ class SubwindowLogos(QWidget):
         #     QSizePolicy.Minimum), 0, 1)
 
         box = QGroupBox(
-            _("Logo Team 2") + " - {}".format(mainWindow.le_team[1].text()))
+            _("Logo Team 2") + " - {}".format(
+                self.matchDataWidget.le_team[1].text()))
         box.setAlignment(Qt.AlignRight)
         layout = QGridLayout()
         self.team2_icon = DragImageLabel(
@@ -99,7 +102,7 @@ class SubwindowLogos(QWidget):
         layout.addWidget(button, 1, 0)
         button = QPushButton(_("Search Liquipedia"))
         button.clicked.connect(lambda: self.liqupediaSearchDialog(
-            2, mainWindow.le_team[1].text()))
+            2, self.matchDataWidget.le_team[1].text()))
         layout.addWidget(button, 2, 0)
         button = QPushButton(_("Add to Favorites"))
         button.clicked.connect(lambda: self.addFavorite(2))
@@ -379,7 +382,7 @@ class SubwindowLogos(QWidget):
     def closeEvent(self, event):
         """Handle close event."""
         try:
-            self.controller.updateLogos(True)
+            self.matchDataWidget.updateLogos(True)
             event.accept()
         except Exception as e:
             module_logger.exception("message")

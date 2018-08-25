@@ -12,7 +12,7 @@ import scctool.settings
 import scctool.settings.config
 from scctool.view.widgets import IconPushButton, MapLineEdit, MonitoredLineEdit
 
-module_logger = logging.getLogger('scctool.view.matchdata')
+module_logger = logging.getLogger('scctool.view.matchdataview')
 
 
 class MatchDataWidget(QWidget):
@@ -30,6 +30,7 @@ class MatchDataWidget(QWidget):
 
         self._tabWidget = tabWidget
         self.matchData = matchData
+        self._ctrlID = self.matchData.getControlID()
         self.parent = parent
         self.controller = parent.controller
         self.tlock = TriggerLock()
@@ -41,14 +42,13 @@ class MatchDataWidget(QWidget):
         self._radioButton.setContentsMargins(0, 0, 10, 0)
         self._radioButton.setStyleSheet("color: green")
         self._radioButton.setToolTip(_('Activate Match'))
-        ctrlID = self.matchData.getControlID()
-        if self.controller.matchControl.selectedMatchId() == ctrlID:
+        if self.controller.matchControl.selectedMatchId() == self._ctrlID:
             self._tabWidget.setCurrentIndex(self._tabIdx)
         self._tabWidget.tabBar().setTabButton(
             self._tabIdx, QTabBar.ButtonPosition.LeftSide, self._radioButton)
         self.setName()
         self._radioButton.toggled.connect(self.activate)
-        if self.controller.matchControl.activeMatchId() == ctrlID:
+        if self.controller.matchControl.activeMatchId() == self._ctrlID:
             self.checkButton()
 
     def checkButton(self):
@@ -118,14 +118,14 @@ class MatchDataWidget(QWidget):
 
         self.qb_logo1 = IconPushButton()
         self.qb_logo1.setFixedWidth(self.raceWidth)
-        self.qb_logo1.clicked.connect(lambda: self.logoDialog(1))
-        logo = self.controller.logoManager.getTeam1()
+        self.qb_logo1.clicked.connect(lambda: self.parent.logoDialog(1, self))
+        logo = self.controller.logoManager.getTeam1(self._ctrlID)
         self.qb_logo1.setIcon(QIcon(logo.provideQPixmap()))
 
         self.qb_logo2 = IconPushButton()
         self.qb_logo2.setFixedWidth(self.raceWidth)
-        self.qb_logo2.clicked.connect(lambda: self.logoDialog(2))
-        logo = self.controller.logoManager.getTeam2()
+        self.qb_logo2.clicked.connect(lambda: self.parent.logoDialog(2, self))
+        logo = self.controller.logoManager.getTeam2(self._ctrlID)
         self.qb_logo2.setIcon(QIcon(logo.provideQPixmap()))
 
         self.sl_team = QSlider(Qt.Horizontal)
@@ -290,7 +290,7 @@ class MatchDataWidget(QWidget):
                     self.matchData.setMyTeam(value)
                 else:
                     self.matchData.setMapScore(set_idx, value, True)
-                    self.controller.allkillUpdate()
+                    self.allkillUpdate()
                     self.controller.autoSetNextMap()
         except Exception as e:
             module_logger.exception("message")
@@ -487,6 +487,28 @@ class MatchDataWidget(QWidget):
                 self.label_set[i].setEnabled(False)
         if self.controller.mapstatsManager.getMapPoolType() == 2:
             self.controller.mapstatsManager.sendMapPool()
+
+    def updateLogos(self, force=False):
+        """Updata team logos in  view."""
+        logo = self.controller.logoManager.getTeam1(self._ctrlID)
+        self.qb_logo1.setIcon(QIcon(logo.provideQPixmap()))
+
+        logo = self.controller.logoManager.getTeam2(self._ctrlID)
+        self.qb_logo2.setIcon(QIcon(logo.provideQPixmap()))
+
+        for idx in range(2):
+            team = self.matchData.getTeam(idx)
+            logo = self.controller.logoManager.getTeam(
+                idx + 1, self._ctrlID).getIdent()
+            self.controller.historyManager.insertTeam(team, logo)
+
+        if self.controller.matchControl.activeMatchId() == self._ctrlID:
+            self.controller.updateLogosHTML(force)
+
+    def allkillUpdate(self):
+        """In case of allkill move the winner to the next set."""
+        if(self.matchData.allkillUpdate()):
+            self.updateForms()
 
 
 class TriggerLock():

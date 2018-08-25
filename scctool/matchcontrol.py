@@ -171,6 +171,9 @@ class MatchControl(QObject):
         for id in self.__order:
             yield self.__matches[id]
 
+    def getMatchIDs(self):
+        return self.__order
+
     def _uniqid(self):
         return hex(int(time() * 10000000))[10:]
 
@@ -192,6 +195,7 @@ class MatchControl(QObject):
             self.__matches[ident].dataChanged.disconnect()
         except TypeError as e:
             pass
+        self.__controller.logoManager.deleteMatch(ident)
         del self.__matches[ident]
         if ident == self.activeMatchId():
             new_index = index - 1 if index > 0 else 0

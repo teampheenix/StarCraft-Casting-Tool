@@ -14,7 +14,7 @@ from PyQt5.QtWidgets import (QAction, QApplication, QCheckBox, QComboBox,
 import scctool.settings
 import scctool.settings.config
 from scctool.settings.client_config import ClientConfig
-from scctool.view.matchdata import MatchDataWidget
+from scctool.view.matchdataview import MatchDataWidget
 from scctool.view.subBrowserSources import SubwindowBrowserSources
 from scctool.view.subConnections import SubwindowConnections
 from scctool.view.subLogos import SubwindowLogos
@@ -510,8 +510,10 @@ class MainWindow(QMainWindow):
             self.matchDataTabWidget.setTabsClosable(True)
 
     def copyMatchTab(self):
+        matchId = self.controller.matchControl.selectedMatchId()
         data = self.controller.matchControl.selectedMatch().getData()
         match = self.controller.matchControl.newMatchData(data)
+        self.controller.logoManager.copyMatch(match.getControlID(), matchId)
         MatchDataWidget(self,
                         self.matchDataTabWidget,
                         match)
@@ -1039,7 +1041,6 @@ class MainWindow(QMainWindow):
 
     def setScore(self, idx, score, allkill=True):
         """Handle change of the score."""
-        # TODO: fix this
         try:
             if(self.sl_score[idx].value() == 0):
                 self.statusBar().showMessage(_('Updating Score...'))
@@ -1080,11 +1081,12 @@ class MainWindow(QMainWindow):
         self.applycustom_is_highlighted = highlight
         return highlight
 
-    def logoDialog(self, team):
+    def logoDialog(self, team, matchDataWidget):
         """Open dialog for team logo."""
         self.controller.logoManager.resetLogoChanged()
         self.mysubwindows['icons'] = SubwindowLogos()
-        self.mysubwindows['icons'].createWindow(self, self.controller, team)
+        self.mysubwindows['icons'].createWindow(
+            self, self.controller, team, matchDataWidget)
         self.mysubwindows['icons'].show()
 
     def resizeWindow(self):
