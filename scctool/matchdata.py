@@ -808,8 +808,10 @@ class MatchData(QObject):
             data['team1'] = self.getTeam(0)
             data['team2'] = self.getTeam(1)
 
-        data['logo1'] = self.__controller.logoManager.getTeam1().getFile(True)
-        data['logo2'] = self.__controller.logoManager.getTeam2().getFile(True)
+        data['logo1'] = self.__controller.logoManager.getTeam1(
+            self.__id).getFile(True)
+        data['logo2'] = self.__controller.logoManager.getTeam2(
+            self.__id).getFile(True)
 
         score = [0, 0]
         winner = [False, False]

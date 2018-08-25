@@ -462,6 +462,10 @@ class MainWindow(QMainWindow):
         for idx in range(self.matchDataTabWidget.count()):
             self.matchDataTabWidget.widget(idx).updateMapCompleters()
 
+    def updateAllPlayerCompleters(self):
+        for idx in range(self.matchDataTabWidget.count()):
+            self.matchDataTabWidget.widget(idx).updatePlayerCompleters()
+
     def createMatchDataTabs(self):
         self.matchDataTabWidget = QTabWidget()
         self.matchDataTabWidget.setMovable(True)
@@ -1040,26 +1044,6 @@ class MainWindow(QMainWindow):
                 if not self.controller.resetWarning():
                     self.statusBar().showMessage('')
 
-        except Exception as e:
-            module_logger.exception("message")
-
-    def setScore(self, idx, score, allkill=True):
-        """Handle change of the score."""
-        try:
-            if(self.sl_score[idx].value() == 0):
-                self.statusBar().showMessage(_('Updating Score...'))
-                with self.tlock:
-                    self.sl_score[idx].setValue(score)
-                    self.controller.matchControl.\
-                        activeMatch().setMapScore(idx, score, True)
-                    if allkill:
-                        self.controller.allkillUpdate()
-                    self.controller.autoSetNextMap()
-                    if not self.controller.resetWarning():
-                        self.statusBar().showMessage('')
-                return True
-            else:
-                return False
         except Exception as e:
             module_logger.exception("message")
 

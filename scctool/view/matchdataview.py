@@ -508,6 +508,25 @@ class MatchDataWidget(QWidget):
         if(self.matchData.allkillUpdate()):
             self.updateForms()
 
+    def setScore(self, idx, score, allkill=True):
+        """Handle change of the score."""
+        try:
+            if(self.sl_score[idx].value() == 0):
+                self.parent.statusBar().showMessage(_('Updating Score...'))
+                with self.tlock:
+                    self.sl_score[idx].setValue(score)
+                    self.matchData.setMapScore(idx, score, True)
+                    if allkill:
+                        self.allkillUpdate()
+                    self.controller.autoSetNextMap()
+                    if not self.controller.resetWarning():
+                        self.parent.statusBar().showMessage('')
+                return True
+            else:
+                return False
+        except Exception as e:
+            module_logger.exception("message")
+
 
 class TriggerLock():
     def __init__(self):

@@ -162,6 +162,9 @@ class MatchControl(QObject):
     def activeMatchId(self):
         return self.__activeMatch
 
+    def activeMatchIdx(self):
+        return self.__order.index(self.__activeMatch)
+
     def selectedMatchId(self):
         return self.__selectedMatch
 

@@ -152,9 +152,6 @@ class MainController:
             self.view.le_url_custom.setText(
                 self.matchControl.selectedMatch().getURL())
 
-            # self.view.updatePlayerCompleters()
-            # self.view.updateTeamCompleters()
-            # self.updateMapButtons()
             self.autoSetNextMap()
 
         except Exception as e:
@@ -393,9 +390,12 @@ class MainController:
     def setRace(self, team_idx, set_idx, race):
         if self.matchControl.activeMatch().setRace(team_idx, set_idx, race):
             race_idx = scctool.settings.race2idx(race)
-            if race_idx != self.view.cb_race[team_idx][set_idx].currentIndex():
-                with self.view.tlock:
-                    self.view.cb_race[team_idx][set_idx].setCurrentIndex(
+            matchWidget = self.view.matchDataTabWidget.widget(
+                self.matchControl.activeMatchIdx())
+            if race_idx != matchWidget.cb_race[team_idx][set_idx].\
+                    currentIndex():
+                with matchWidget.tlock:
+                    matchWidget.cb_race[team_idx][set_idx].setCurrentIndex(
                         race_idx)
 
     def requestScoreUpdate(self, newSC2MatchData):
@@ -403,11 +403,14 @@ class MainController:
         try:
             alias = self.aliasManager.translatePlayer
             newscore = 0
+            matchWidget = self.view.matchDataTabWidget.widget(
+                self.matchControl.activeMatchIdx())
+
             for j in range(2):
                 self.historyManager.insertPlayer(
                     alias(newSC2MatchData.getPlayer(j)),
                     newSC2MatchData.getRace(j))
-            self.view.updatePlayerCompleters()
+            self.view.updateAllPlayerCompleters()
             if newSC2MatchData.result == 0:
                 return
             for i in range(self.matchControl.activeMatch().getNoSets()):
@@ -419,7 +422,7 @@ class MainController:
                         player2,
                         translator=alias)
                 if found:
-                    if(self.view.setScore(i, newscore)):
+                    if(matchWidget.setScore(i, newscore)):
                         race1 = newSC2MatchData.getRace(0)
                         race2 = newSC2MatchData.getRace(1)
                         if not in_order:
@@ -439,7 +442,7 @@ class MainController:
                         = newSC2MatchData.compare_returnScore(
                             player1, player2, weak=True, translator=alias)
                     if(found and notset_idx in range(2)):
-                        if(self.view.setScore(i, newscore, allkill=False)):
+                        if(matchWidget.setScore(i, newscore, allkill=False)):
                             race1 = newSC2MatchData.getRace(0)
                             race2 = newSC2MatchData.getRace(1)
                             if not in_order:
@@ -452,8 +455,8 @@ class MainController:
                             self.setRace(1, i, race2)
                             self.matchControl.activeMatch().setPlayer(
                                 notset_idx, i, player)
-                            with self.view.tlock:
-                                self.view.le_player[notset_idx][i].setText(
+                            with matchWidget.tlock:
+                                matchWidget.le_player[notset_idx][i].setText(
                                     player)
                             self.allkillUpdate()
                             break
@@ -504,6 +507,7 @@ class MainController:
 
     def requestScoreLogoUpdate(self, data, swap=False):
         module_logger.info("requestScoreLogoUpdate")
+        match_ident = self.matchControl.activeMatchId()
         for player_idx in range(2):
             team1 = data.playerInList(
                 player_idx,
@@ -522,10 +526,12 @@ class MainController:
                 logo = ""
                 display = "none"
             elif(team1):
-                logo = "../" + self.logoManager.getTeam1().getFile(True)
+                logo = "../" + \
+                    self.logoManager.getTeam1(match_ident).getFile(True)
                 display = "block"
             elif(team2):
-                logo = "../" + self.logoManager.getTeam2().getFile(True)
+                logo = "../" + \
+                    self.logoManager.getTeam2(match_ident).getFile(True)
                 display = "block"
 
             self.websocketThread.sendData2Path(
@@ -585,8 +591,9 @@ class MainController:
 
     def updateLogosHTML(self, force=False):
         """Update html files with team logos."""
+        match_ident = self.matchControl.activeMatchId()
         for idx in range(2):
-            logo = getattr(self.logoManager, 'getTeam{}'.format(idx + 1))()
+            logo = self.logoManager.getTeam(idx + 1, match_ident)
             filename = scctool.settings.casting_html_dir + \
                 "/data/logo" + str(idx + 1) + "-data.html"
             template = scctool.settings.casting_html_dir + \
@@ -655,6 +662,8 @@ class MainController:
         tts_rate = scctool.settings.config.parser.getfloat(
             "Intros", "tts_rate")
 
+        matchID = self.matchControl.activeMatchId()
+
         for player_idx in range(2):
             team1 = newData.playerInList(
                 player_idx,
@@ -670,11 +679,11 @@ class MainController:
                 display = "none"
             elif(team1):
                 team = self.matchControl.activeMatch().getTeam(0)
-                logo = "../" + self.logoManager.getTeam1().getFile(True)
+                logo = "../" + self.logoManager.getTeam1(matchID).getFile(True)
                 display = "block"
             elif(team2):
                 team = self.matchControl.activeMatch().getTeam(1)
-                logo = "../" + self.logoManager.getTeam2().getFile(True)
+                logo = "../" + self.logoManager.getTeam2(matchID).getFile(True)
                 display = "block"
 
             name = self.aliasManager.translatePlayer(
