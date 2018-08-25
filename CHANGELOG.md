@@ -1,6 +1,23 @@
 # Changelog
 
 
+## v2.2.0 (2018-08-25)
+
+### New
+
+* Added Match Tabs that allow you to manage multiple matches at the same time and jump between them.
+
+* Added a generic Proleague Format to Custom Formats.
+
+### Changes
+
+* Koprulu custom format changed back to Bo7 All-Kill.
+
+### Fix
+
+* Fixed a crash that would occur when adding a map to the mapstats custom map pool.
+
+
 ## v2.1.4 (2018-08-20)
 
 ### Fix
