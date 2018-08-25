@@ -72,7 +72,7 @@ This tool should run on any operating system that supports Python 3, e.g., Windo
 Run StarCraft Casting Tool via `StarCraft-Casting-Tool.exe` (or `StarCraftCastingTool.pyw`). Enter the Match-URL of an AlphaTL or RSTL match in the *Match Grabber* tab, e.g., "https://alpha.tl/match/3000", and press *Load Data from URL*. Alternatively one can create a match in the *Custom Match* tab.  Edit the data if necessary. The sliders control the score of each map. The top slider is to select *your* team. Once selected the border of the Map Icons turn (by default) green or red depending on the result. To select your team automatically you can add it to *Favorite Teams* list under *Settings: Misc*. Similarly you can enter your players' nicknames into *Favorite Players* for auto completion.
 
 ### Data for Streaming
-All data (placed in `casting_data` or `casting_html`) can be found in the respective *profile folder* that can be accessed conveniently by via SCCT's menu *Profile: Open current folder*.
+All data (placed in `casting_data` or `casting_html`) can be found in the respective *profile folder* at `C:\Users\<User>\AppData\Local\team pheeniX\StarCraft-Casting-Tool\profiles\<Profile>\` that can be accessed conveniently by via SCCT's menu *Profile: Open current folder*.
 
 Raw data for streaming can be found in the directory `casting_data` and be included into OBS (or any similar streaming tool) via *Text read from local file*. If you want to include the team logos and the match banner (of AlphaTL), it is recommended to include them as *browser source from local file* via the HTML files given in the directory `casting_html` *(Score Icon size: 1280x100px, Logo sizes: 300x300px, Intro size: Your screen resolution, Map Stats: 1700x800px)*. The Map Icons can be found in the directory `casting_html` and have to be included via *browser source from local file* as well. There are two type of icons: box icons in `casting_html/mapicons_box_x.html` and landscape icons in `casting_html/mapicons_landscape_x.html`. A single icons has the following dimensions - *box size: 275x275px, landscape size: 1005x105px*, but *the chosen dimension of the browser source determines the arrangement of the icons*. Note that you can scale the browser source(s) down/up if you want to make the icons smaller/larger. All browser sources refresh automatically - you should have to refresh the cache of this browser sources only if a new update has been applied.
 
@@ -106,6 +106,6 @@ Some basic options for customization can be found under *Settings: Styles*, for 
 
 If you need help, have bugs to report, have suggestions to make, or want to contribute to this project in any way join the Discord Server of this project via https://discord.gg/G9hFEfh and/or message me (*pres.sure#5247*) on [Discord](https://discordapp.com/).
 
-In the case of a bug report please provide the log-file that can be found in the directory `C:\Users\username\AppData\Local\team pheeniX\StarCraft-Casting-Tool\Log`.
+In the case of a bug report please provide the log-file that can be found in the directory `C:\Users\<User>\AppData\Local\team pheeniX\StarCraft-Casting-Tool\Log`.
 
 You can support StarCraft Casting Tool via [Patreon](https://www.patreon.com/StarCraftCastingTool) or [Paypal](https://www.paypal.me/StarCraftCastingTool).
