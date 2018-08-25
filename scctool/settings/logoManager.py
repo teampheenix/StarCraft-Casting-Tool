@@ -87,6 +87,13 @@ class LogoManager:
             if logo.isFile():
                 self._favorites.append(logo)
 
+        if 'team1' in data and 'team2' in data:
+            key = self.checkMatchIdent('')
+            self._matches[key] = dict()
+            self._matches[key]['logo_changed'] = False
+            self._matches[key]['team1'] = Logo(self, data.get('team1', None))
+            self._matches[key]['team2'] = Logo(self, data.get('team2', None))
+
         for key, item in data.get('matches', dict()).items():
             self._matches[key] = dict()
             self._matches[key]['logo_changed'] = False

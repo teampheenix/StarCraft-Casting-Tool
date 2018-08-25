@@ -146,6 +146,7 @@ class MatchControl(QObject):
                     module_logger.exception("message")
             self.__matches[id].metaChanged.connect(self.__handleMetaSignal)
             self.__matches[id].dataChanged.connect(self.__handleDataSignal)
+            self.__controller.placeholderSetup()
             self.metaChanged.emit()
             module_logger.info('Activated match {}'.format(id))
 

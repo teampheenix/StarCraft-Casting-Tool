@@ -743,7 +743,7 @@ class SubwindowMisc(QWidget):
     def closeEvent(self, event):
         """Handle close event."""
         try:
-            self.mainWindow.updateMapCompleters()
+            self.mainWindow.updateAllMapCompleters()
             if(not self.__dataChanged):
                 event.accept()
                 return

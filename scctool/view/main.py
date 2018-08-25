@@ -458,6 +458,10 @@ class MainWindow(QMainWindow):
         scctool.settings.config.parser.set("SCT", "language", language)
         self.restart()
 
+    def updateAllMapCompleters(self):
+        for idx in range(self.matchDataTabWidget.count()):
+            self.matchDataTabWidget.widget(idx).updateMapCompleters()
+
     def createMatchDataTabs(self):
         self.matchDataTabWidget = QTabWidget()
         self.matchDataTabWidget.setMovable(True)

@@ -55,7 +55,6 @@ class MainController:
             self.websocketThread.introShown.connect(self.updatePlayerIntroIdx)
             self.runWebsocketThread()
             self.autoRequestsThread = AutoRequestsThread(self)
-            self.placeholders = self.placeholderSetup()
             self._warning = False
             self.checkVersion()
             self.logoManager = LogoManager(self)
@@ -108,7 +107,7 @@ class MainController:
         placeholders.addConnection(
             "Score", self.matchControl.activeMatch().getScoreString)
 
-        return placeholders
+        self.placeholders = placeholders
 
     def setView(self, view):
         """Connect view."""
