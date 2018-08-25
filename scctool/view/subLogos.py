@@ -279,7 +279,8 @@ class SubwindowLogos(QWidget):
 
     def refreshLastUsed(self):
         self.lastused_list.clear()
-        for logo in self.controller.logoManager.getLastUsed():
+        for logo in self.controller.logoManager.getLastUsed(
+                self.matchDataWidget.matchData.getControlID()):
             map = logo.provideQPixmap()
             item = QListWidgetItem(
                 QIcon(map), logo.getDesc())

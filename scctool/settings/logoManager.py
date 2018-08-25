@@ -281,14 +281,18 @@ class LogoManager:
     def getLastUsed(self, match_ident=''):
         lastused = list(self._last_used)
 
-        # TODO: Add other logos
         if match_ident:
-            for key, logos in self._matches.item():
+            for key, logos in self._matches.items():
                 if key != match_ident:
                     logo1 = logos.get('team1')
                     logo2 = logos.get('team2')
-                    lastused.append(logo2)
-                    lastused.append(logo1)
+                    for item in lastused:
+                        if item.equals(logo1) or item.equals(logo2):
+                            lastused.remove(item)
+                    if logo2.isLogo():
+                        lastused.append(logo2)
+                    if logo1.isLogo() and not logo1.equals(logo2):
+                        lastused.append(logo1)
 
         lastused.reverse()
         return lastused
