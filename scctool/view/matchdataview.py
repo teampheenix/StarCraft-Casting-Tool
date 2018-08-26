@@ -57,12 +57,9 @@ class MatchDataWidget(QWidget):
                 self.controller.matchControl.activeMatchId() != self._ctrlID):
             self.controller.matchControl.activateMatch(
                 self.matchData.getControlID())
-            if self.controller.mapstatsManager.getMapPoolType() == 2:
-                self.autoSetNextMap(send=False)
-                self.controller.mapstatsManager.sendMapPool()
-                self.parent.updateAllMapButtons()
-            else:
-                self.autoSetNextMap(send=True)
+            self.autoSetNextMap(send=False)
+            self.controller.mapstatsManager.sendMapPool()
+            self.parent.updateAllMapButtons()
         elif self.controller.matchControl.countMatches() == 1:
             self._radioButton.toggled.disconnect()
             self._radioButton.setChecked(True)
