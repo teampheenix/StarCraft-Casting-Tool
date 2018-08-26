@@ -530,6 +530,7 @@ class MatchData(QObject):
         return -1
 
     def getNextMap(self, next_idx=-1):
+        """Returns the next map (if the set index matches.)"""
         set_idx = self.getNextSet()
         if set_idx != -1 and (next_idx == -1 or set_idx == next_idx):
             return self.getMap(set_idx)

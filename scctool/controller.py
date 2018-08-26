@@ -789,11 +789,11 @@ class MainController:
             else:
                 self.stopSC2ApiThread("playerLogos")
 
-    def autoSetNextMap(self, idx=-1):
+    def autoSetNextMap(self, idx=-1, send=True):
         if scctool.settings.config.parser.getboolean(
                 "Mapstats", "autoset_next_map"):
             self.mapstatsManager.selectMap(
-                self.matchControl.activeMatch().getNextMap(idx))
+                self.matchControl.activeMatch().getNextMap(idx), send)
 
     def matchMetaDataChanged(self):
         data = self.matchControl.activeMatch().getScoreData()

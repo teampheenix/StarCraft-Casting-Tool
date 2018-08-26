@@ -53,9 +53,14 @@ class MatchDataWidget(QWidget):
         self._radioButton.setChecked(True)
 
     def activate(self, checked):
-        if checked:
+        if (checked and
+                self.controller.matchControl.activeMatchId() != self._ctrlID):
             self.controller.matchControl.activateMatch(
                 self.matchData.getControlID())
+            self.autoSetNextMap(send=False)
+            if self.controller.mapstatsManager.getMapPoolType() == 2:
+                self.controller.mapstatsManager.sendMapPool()
+                self.parent.updateAllMapButtons()
         elif self.controller.matchControl.countMatches() == 1:
             self._radioButton.toggled.disconnect()
             self._radioButton.setChecked(True)
@@ -248,7 +253,7 @@ class MatchDataWidget(QWidget):
             self.label_set[player_idx].clicked.connect(
                 lambda x,
                 player_idx=player_idx:
-                self.controller.showMap(player_idx))
+                self.showMap(player_idx))
             self.label_set[player_idx].setFixedWidth(self.labelWidth)
             self.setContainer[player_idx].addWidget(
                 self.label_set[player_idx], 0)
@@ -289,7 +294,7 @@ class MatchDataWidget(QWidget):
                 else:
                     self.matchData.setMapScore(set_idx, value, True)
                     self.allkillUpdate()
-                    self.controller.autoSetNextMap()
+                    self.autoSetNextMap()
         except Exception as e:
             module_logger.exception("message")
 
@@ -364,7 +369,12 @@ class MatchDataWidget(QWidget):
             return
         self.matchData.setMap(set_idx, self.le_map[set_idx].text())
         self.updateMapButtons()
-        self.controller.autoSetNextMap(set_idx)
+        self.controller.matchControl.activeMatch()
+        self.autoSetNextMap(set_idx)
+
+    def autoSetNextMap(self, idx=-1, send=True):
+        if self.controller.matchControl.activeMatchId() == self._ctrlID:
+            self.controller.autoSetNextMap(idx, send)
 
     def updateMapCompleters(self):
         """Update the auto completers for maps."""
@@ -483,7 +493,8 @@ class MatchDataWidget(QWidget):
                 self.label_set[i].setEnabled(True)
             else:
                 self.label_set[i].setEnabled(False)
-        if self.controller.mapstatsManager.getMapPoolType() == 2:
+        if (self.controller.mapstatsManager.getMapPoolType() == 2 and
+                self.controller.matchControl.activeMatchId() == self._ctrlID):
             self.controller.mapstatsManager.sendMapPool()
 
     def updateLogos(self, force=False):
@@ -518,7 +529,7 @@ class MatchDataWidget(QWidget):
                     self.matchData.setMapScore(idx, score, True)
                     if allkill:
                         self.allkillUpdate()
-                    self.controller.autoSetNextMap()
+                    self.autoSetNextMap()
                     if not self.controller.resetWarning():
                         self.parent.statusBar().showMessage('')
                 return True
@@ -526,6 +537,10 @@ class MatchDataWidget(QWidget):
                 return False
         except Exception as e:
             module_logger.exception("message")
+
+    def showMap(self, player_idx):
+        self.controller.mapstatsManager.selectMap(
+            self.matchData.getMap(player_idx))
 
 
 class TriggerLock():

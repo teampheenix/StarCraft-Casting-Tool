@@ -582,7 +582,7 @@ class SubwindowBrowserSources(QWidget):
                 str(self.cb_mark_played.isChecked()))
 
             self.controller.mapstatsManager.sendMapPool()
-            self.controller.updateMapButtons()
+            self.mainWindow.updateMapButtons()
 
             for idx in range(0, 3):
                 scctool.settings.config.parser.set(

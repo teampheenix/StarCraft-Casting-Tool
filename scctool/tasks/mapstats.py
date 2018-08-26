@@ -74,7 +74,7 @@ class MapStatsManager:
         except Exception as e:
             module_logger.exception("message")
 
-    def selectMap(self, map):
+    def selectMap(self, map, send=True):
         if map in self.__maps.keys():
             self.__current_map = map
             if scctool.settings.config.parser.getboolean(
@@ -83,7 +83,8 @@ class MapStatsManager:
                     activeMatch().wasMapPlayed(map)
             else:
                 played = False
-            self.__controller.websocketThread.selectMap(map, played)
+            if send:
+                self.__controller.websocketThread.selectMap(map, played)
 
     def setMapPoolType(self, id):
         self.__mappool = int(id)
@@ -184,13 +185,18 @@ class MapStatsManager:
 
     def getData(self):
         out_data = dict()
-        out_data['map'] = self.__current_map
+        if self.__current_map in self.getMapPool():
+            out_data['map'] = self.__current_map
+        else:
+            out_data['map'] = None
         out_data['maps'] = dict()
         for map, data in self.__maps.items():
             if map not in self.getMapPool():
                 continue
             out_data['maps'][map] = dict()
             out_data['maps'][map]['map-name'] = map
+            if out_data['map'] is None:
+                out_data['map'] = map
             if scctool.settings.config.parser.getboolean(
                     "Mapstats", "mark_played",):
                 out_data['maps'][map]['played'] = \
