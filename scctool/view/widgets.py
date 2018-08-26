@@ -843,7 +843,7 @@ class InitialUpdater(QProgressDialog):
                 self.version,
                 channel=channel)
             if lib_update is not None:
-                lib_update.download(async=False)
+                lib_update.download(False)
                 self.setValue(500)
                 self.setLabelText(_("Extracting data..."))
                 extractData(lib_update, self.setCopyProgress)

@@ -219,7 +219,7 @@ class VersionHandler(TasksThread):
                 return
             if hasattr(sys, "frozen"):
                 module_logger.info("Start to update app!")
-                self.app_update.download(async=False)
+                self.app_update.download(False)
                 if self.app_update.is_downloaded():
                     module_logger.info("Download sucessfull.")
                     self.__controller.cleanUp()
