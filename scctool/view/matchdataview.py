@@ -18,7 +18,7 @@ module_logger = logging.getLogger('scctool.view.matchdataview')
 class MatchDataWidget(QWidget):
     """Widget to display matchd data."""
 
-    def __init__(self, parent, tabWidget, matchData):
+    def __init__(self, parent, tabWidget, matchData, closeable=True):
         """Init widget"""
         super().__init__(parent)
 
@@ -49,6 +49,31 @@ class MatchDataWidget(QWidget):
         if self.controller.matchControl.activeMatchId() == self._ctrlID:
             self.checkButton()
 
+        self._closeButton = QPushButton()
+        pixmap = QIcon(scctool.settings.getResFile('close.png'))
+        self._closeButton.setIcon(pixmap)
+        self._closeButton.setFlat(True)
+        self._closeButton.clicked.connect(self.closeTab)
+        self._closeButton.setToolTip(_('Close Match'))
+        self._tabWidget.tabBar().setTabButton(
+            self._tabIdx, QTabBar.ButtonPosition.RightSide, self._closeButton)
+        self.setClosable(closeable)
+
+    def setClosable(self, closeable):
+        self._closeButton.setHidden(not closeable)
+
+    def closeTab(self):
+        if self._tabWidget.count() > 1:
+            idx = self._tabWidget.indexOf(self)
+            ident = self.matchData.getControlID()
+            self._tabWidget.removeTab(idx)
+            new_index = self.controller.matchControl.removeMatch(ident)
+            if new_index is not None:
+                self._tabWidget.widget(new_index).checkButton()
+        count = self._tabWidget.count()
+        if count == 1:
+            self._tabWidget.widget(0).setClosable(False)
+
     def checkButton(self):
         self._radioButton.setChecked(True)
 
@@ -68,7 +93,7 @@ class MatchDataWidget(QWidget):
     def setName(self):
         team1 = self.matchData.getTeamOrPlayer(0)
         team2 = self.matchData.getTeamOrPlayer(1)
-        name = "{} vs {}".format(team1, team2)
+        name = " {} vs {}".format(team1, team2)
         self._tabWidget.tabBar().setTabText(self._tabIdx, name)
 
     def _createView(self):

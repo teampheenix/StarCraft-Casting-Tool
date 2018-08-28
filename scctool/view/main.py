@@ -473,13 +473,12 @@ class MainWindow(QMainWindow):
     def createMatchDataTabs(self):
         self.matchDataTabWidget = QTabWidget()
         self.matchDataTabWidget.setMovable(True)
-        self.matchDataTabWidget.setTabsClosable(
-            self.controller.matchControl.countMatches() > 1)
+        closeable = self.controller.matchControl.countMatches() > 1
         self.matchDataTabWidget.setUsesScrollButtons(True)
         for match in self.controller.matchControl.getMatches():
             MatchDataWidget(self,
                             self.matchDataTabWidget,
-                            match)
+                            match, closeable)
 
         container = QWidget()
         buttonLayout = QHBoxLayout()
@@ -506,7 +505,6 @@ class MainWindow(QMainWindow):
 
         tabBar = self.matchDataTabWidget.tabBar()
         tabBar.setExpanding(True)
-        self.matchDataTabWidget.tabCloseRequested.connect(self.closeMatchTab)
         self.matchDataTabWidget.currentChanged.connect(
             self.currentMatchTabChanged)
         tabBar.tabMoved.connect(self.tabMoved)
@@ -519,7 +517,8 @@ class MainWindow(QMainWindow):
         count = self.matchDataTabWidget.count()
         self.matchDataTabWidget.setCurrentIndex(count - 1)
         if count > 1:
-            self.matchDataTabWidget.setTabsClosable(True)
+            for idx in range(count):
+                self.matchDataTabWidget.widget(idx).setClosable(True)
 
     def copyMatchTab(self):
         matchId = self.controller.matchControl.selectedMatchId()
@@ -532,18 +531,8 @@ class MainWindow(QMainWindow):
         count = self.matchDataTabWidget.count()
         self.matchDataTabWidget.setCurrentIndex(count - 1)
         if count > 1:
-            self.matchDataTabWidget.setTabsClosable(True)
-
-    def closeMatchTab(self, idx):
-        if self.matchDataTabWidget.count() > 1:
-            dataWidget = self.matchDataTabWidget.widget(idx)
-            ident = dataWidget.matchData.getControlID()
-            self.matchDataTabWidget.removeTab(idx)
-            new_index = self.controller.matchControl.removeMatch(ident)
-            if new_index is not None:
-                self.matchDataTabWidget.widget(new_index).checkButton()
-        if self.matchDataTabWidget.count() <= 1:
-            self.matchDataTabWidget.setTabsClosable(False)
+            for idx in range(count):
+                self.matchDataTabWidget.widget(idx).setClosable(True)
 
     def currentMatchTabChanged(self, idx):
         dataWidget = self.matchDataTabWidget.widget(idx)
