@@ -64,6 +64,7 @@ def needInitialUpdate(version):
     else:
         return False
 
+
 def readJsonFile():
     if len(this.data) > 0:
         return
@@ -71,16 +72,19 @@ def readJsonFile():
               encoding='utf-8-sig') as f:
         this.data = json.load(f)
 
+
 def dumpJsonFile():
     readJsonFile()
     with open(scctool.settings.getJsonFile('versiondata'), 'w',
               encoding='utf-8-sig') as o:
         json.dump(this.data, o)
 
+
 def getDataVersion():
     """Read data version from json file."""
     readJsonFile()
     return this.data.get('data_version', '0.0.0')
+
 
 def setDataVersion(version):
     """Write data version to json file."""
@@ -88,10 +92,12 @@ def setDataVersion(version):
     this.data['data_version'] = version
     dumpJsonFile()
 
+
 def getLastVersion():
     """Read data version from json file."""
     readJsonFile()
     return this.data.get('last_version', '0.0.0')
+
 
 def setLastVersion(version):
     """Write data version to json file."""
@@ -99,14 +105,17 @@ def setLastVersion(version):
     this.data['last_version'] = version
     dumpJsonFile()
 
+
 def getRestartFlag():
     readJsonFile()
     return this.data.get('restart_flag', False)
+
 
 def setRestartFlag(flag=True):
     readJsonFile()
     this.data['restart_flag'] = bool(flag)
     dumpJsonFile()
+
 
 def extractData(asset_update, handler=lambda x: None):
     """Extract data."""
