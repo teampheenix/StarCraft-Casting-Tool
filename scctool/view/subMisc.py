@@ -17,7 +17,7 @@ from scctool.view.widgets import (AliasTreeView, ListTable, MapDownloader,
                                   MonitoredLineEdit)
 
 # create logger
-module_logger = logging.getLogger('scctool.view.subMisc')
+module_logger = logging.getLogger(__name__)
 
 
 class SubwindowMisc(QWidget):

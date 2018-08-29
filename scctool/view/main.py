@@ -24,7 +24,7 @@ from scctool.view.subStyles import SubwindowStyles
 from scctool.view.widgets import LedIndicator, MonitoredLineEdit, ProfileMenu
 
 # create logger
-module_logger = logging.getLogger('scctool.view.main')
+module_logger = logging.getLogger(__name__)
 
 
 class MainWindow(QMainWindow):

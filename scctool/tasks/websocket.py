@@ -12,7 +12,7 @@ from PyQt5.QtCore import QThread, pyqtSignal
 import scctool.settings
 
 # create logger
-module_logger = logging.getLogger('scctool.tasks.websocket')
+module_logger = logging.getLogger(__name__)
 
 
 class WebsocketThread(QThread):
@@ -152,7 +152,7 @@ class WebsocketThread(QThread):
             if force:
                 try:
                     keyboard.unhook_all()
-                except AttributeError:
+                except Exception:
                     pass
             self.keyboard_state = dict()
         else:

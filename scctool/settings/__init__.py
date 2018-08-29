@@ -13,7 +13,7 @@ from scctool.settings.config import init as initConfig
 from scctool.settings.profileManager import ProfileManager
 from scctool.settings.safeGuard import SafeGuard
 
-module_logger = logging.getLogger('scctool.settings')
+module_logger = logging.getLogger(__name__)
 
 this = sys.modules[__name__]
 

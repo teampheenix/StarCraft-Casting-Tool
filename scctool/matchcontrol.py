@@ -12,7 +12,7 @@ from scctool.matchformat import *
 from scctool.matchgrabber import *
 
 # create logger
-module_logger = logging.getLogger('scctool.matchcontrol')
+module_logger = logging.getLogger(__name__)
 
 
 class MatchControl(QObject):

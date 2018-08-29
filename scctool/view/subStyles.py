@@ -12,7 +12,7 @@ import scctool.settings
 from scctool.view.widgets import ColorLayout, StyleComboBox, TextPreviewer
 
 # create logger
-module_logger = logging.getLogger('scctool.view.subStyles')
+module_logger = logging.getLogger(__name__)
 
 
 class SubwindowStyles(QWidget):

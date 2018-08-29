@@ -6,7 +6,7 @@ import requests
 import scctool.settings
 
 # create logger
-module_logger = logging.getLogger('scctool.tasks.nightbot')
+module_logger = logging.getLogger(__name__)
 
 
 def base_headers():

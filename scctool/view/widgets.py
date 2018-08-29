@@ -29,8 +29,7 @@ from scctool.settings.client_config import ClientConfig
 from scctool.tasks.tasksthread import TasksThread
 
 # create logger
-module_logger = logging.getLogger('scctool.view.widgets')
-
+module_logger = logging.getLogger(__name__)
 
 class MapLineEdit(QLineEdit):
     """Define line edit for maps."""
@@ -835,6 +834,7 @@ class InitialUpdater(QProgressDialog):
             from pyupdater.client import Client
             client = Client(ClientConfig())
             client.refresh()
+            client.platform = 'win'
             client.add_progress_hook(self.setProgress)
 
             channel = scctool.tasks.updater.getChannel()

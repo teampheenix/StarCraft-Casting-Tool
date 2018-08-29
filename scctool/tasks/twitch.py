@@ -6,7 +6,7 @@ import requests
 import scctool.settings
 
 # create logger
-module_logger = logging.getLogger('scctool.tasks.twitch')
+module_logger = logging.getLogger(__name__)
 
 previousTitle = None
 

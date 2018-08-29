@@ -9,7 +9,7 @@ from scctool.tasks.tasksthread import TasksThread
 
 
 # create logger
-module_logger = logging.getLogger('scctool.tasks.textfiles')
+module_logger = logging.getLogger(__name__)
 
 
 class TextFilesThread(TasksThread):

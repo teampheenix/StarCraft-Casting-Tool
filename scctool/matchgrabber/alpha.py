@@ -7,7 +7,7 @@ import scctool.settings
 from scctool.matchgrabber.custom import MatchGrabber as MatchGrabberParent
 
 # create logger
-module_logger = logging.getLogger('scctool.matchgrabber.alpha')
+module_logger = logging.getLogger(__name__)
 
 
 class MatchGrabber(MatchGrabberParent):

@@ -12,7 +12,7 @@ from PyQt5.QtCore import QThread, pyqtSignal
 import scctool.settings
 
 # create logger
-module_logger = logging.getLogger('scctool.tasks.sc2ClientInteraction')
+module_logger = logging.getLogger(__name__)
 
 if(scctool.settings.windows):
     from PIL import ImageGrab  # pip install Pillow

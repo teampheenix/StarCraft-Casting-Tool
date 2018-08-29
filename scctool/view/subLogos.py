@@ -15,7 +15,7 @@ from scctool.view.widgets import (DragDropLogoList, DragImageLabel,
                                   LogoDownloader)
 
 # create logger
-module_logger = logging.getLogger('scctool.view.subLogos')
+module_logger = logging.getLogger(__name__)
 
 
 class SubwindowLogos(QWidget):

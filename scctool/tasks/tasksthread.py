@@ -5,7 +5,7 @@ import time
 from PyQt5.QtCore import QThread
 
 # create logger
-module_logger = logging.getLogger('scctool.tasks.tasksthread')
+module_logger = logging.getLogger(__name__)
 
 
 class TasksThread(QThread):

@@ -11,7 +11,7 @@ import scctool.settings
 from scctool.tasks.liquipedia import LiquipediaGrabber, MapNotFound
 from scctool.tasks.tasksthread import TasksThread
 
-module_logger = logging.getLogger('scctool.tasks.mapstats')
+module_logger = logging.getLogger(__name__)
 
 
 class MapStatsManager:

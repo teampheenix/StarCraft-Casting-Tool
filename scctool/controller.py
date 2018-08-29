@@ -28,7 +28,7 @@ from scctool.tasks.websocket import WebsocketThread
 from scctool.view.widgets import ToolUpdater
 
 # create logger
-module_logger = logging.getLogger('scctool.controller')
+module_logger = logging.getLogger(__name__)
 
 
 class MainController:

@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup
 from scctool import __version__ as scct_version
 
 # create logger
-module_logger = logging.getLogger('scctool.tasks.liquipedia')
+module_logger = logging.getLogger(__name__)
 
 
 class LiquipediaGrabber:

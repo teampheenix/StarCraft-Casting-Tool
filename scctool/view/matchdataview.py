@@ -12,7 +12,7 @@ import scctool.settings
 import scctool.settings.config
 from scctool.view.widgets import IconPushButton, MapLineEdit, MonitoredLineEdit
 
-module_logger = logging.getLogger('scctool.view.matchdataview')
+module_logger = logging.getLogger(__name__)
 
 
 class MatchDataWidget(QWidget):
