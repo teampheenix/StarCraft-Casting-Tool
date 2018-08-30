@@ -10,9 +10,9 @@ from PyQt5.QtWidgets import QApplication, QStyleFactory
 import scctool.settings
 import scctool.settings.config
 
-logger = logging.getLogger('scctool')
+logger = logging.getLogger(__name__)
 
-__version__ = "2.1.2"
+__version__ = "2.2.0beta2"
 __latest_version__ = __version__
 __new_version__ = False
 
@@ -66,7 +66,7 @@ def main_window(app, showChangelog=False):
         app.setWindowIcon(icon)
         cntlr = MainController()
         MainWindow(cntlr, app, showChangelog)
-        logger.info("Starting...")
+        logger.info("Starting... v{}".format(__version__))
         return cntlr
 
     except Exception as e:
@@ -78,7 +78,6 @@ def initial_download():
     """Download the required data at an inital startup."""
     import scctool.tasks.updater
     from scctool.view.widgets import InitialUpdater
-
     version = scctool.tasks.updater.getDataVersion()
     restart_flag = scctool.tasks.updater.getRestartFlag()
     updater = False

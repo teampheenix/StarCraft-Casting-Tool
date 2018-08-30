@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup
 from scctool import __version__ as scct_version
 
 # create logger
-module_logger = logging.getLogger('scctool.tasks.liquipedia')
+module_logger = logging.getLogger(__name__)
 
 
 class LiquipediaGrabber:
@@ -18,6 +18,8 @@ class LiquipediaGrabber:
 
     def __init__(self):
         scct_url = "https://teampheenix.github.io/StarCraft-Casting-Tool/"
+        self._session = requests.Session()
+        self._session.trust_env = False
         self._headers = dict()
         self._headers["User-Agent"] = "StarCraftCastingTool v{} ({})".format(
             scct_version, scct_url)
@@ -30,7 +32,7 @@ class LiquipediaGrabber:
             self._base_url, urllib.parse.urlencode(params))
 
         urllib.parse.urlencode(params)
-        r = requests.get(source)
+        r = self._session.get(source)
 
         soup = BeautifulSoup(r.content, 'html.parser')
         r = re.compile(
@@ -55,7 +57,7 @@ class LiquipediaGrabber:
             pass
 
     def get_images(self, image):
-        r = requests.get(self._base_url + image)
+        r = self._session.get(self._base_url + image)
         regex = re.compile(r'(\d+,?\d*)\s+×\s+(\d+,?\d*)')
         soup = BeautifulSoup(r.content, 'html.parser')
         images = dict()
@@ -78,7 +80,8 @@ class LiquipediaGrabber:
         return images
 
     def get_images_new(self, image):
-        print(image)
+        pass
+        # print(image)
 
     def get_map(self, map_name):
         params = dict()
@@ -88,7 +91,8 @@ class LiquipediaGrabber:
         params['namespace'] = 0
 
         url = '{}/starcraft2/api.php'.format(self._base_url)
-        data = requests.get(url, headers=self._headers, params=params).json()
+        data = self._session.get(
+            url, headers=self._headers, params=params).json()
         map = data[1][0]
         if map:
             params = dict()
@@ -98,8 +102,8 @@ class LiquipediaGrabber:
 
             url = '{}/starcraft2/api.php'.format(self._base_url)
 
-            data = requests.get(url, headers=self._headers,
-                                params=params).json()
+            data = self._session.get(url, headers=self._headers,
+                                     params=params).json()
             content = data['parse']['text']['*']
             soup = BeautifulSoup(content, 'html.parser')
             map = LiquipediaMap(soup)

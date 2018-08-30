@@ -12,7 +12,7 @@ from PyQt5.QtCore import QThread, pyqtSignal
 import scctool.settings
 
 # create logger
-module_logger = logging.getLogger('scctool.tasks.sc2ClientInteraction')
+module_logger = logging.getLogger(__name__)
 
 if(scctool.settings.windows):
     from PIL import ImageGrab  # pip install Pillow
@@ -224,7 +224,7 @@ class SC2ApiThread(QThread):
                 return False
 
             # Don't use OCR if the score is tied.
-            score = self.controller.matchData.getScore()
+            score = self.controller.matchControl.activeMatch().getScore()
             if(score[0] == score[1] and
                (not scctool.settings.config.parser.getboolean(
                    "SCT", "CtrlX")) and

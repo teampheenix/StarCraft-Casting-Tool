@@ -7,7 +7,7 @@ import scctool.settings
 from scctool.matchgrabber.custom import MatchGrabber as MatchGrabberParent
 
 # create logger
-module_logger = logging.getLogger('scctool.matchgrabber.alpha')
+module_logger = logging.getLogger(__name__)
 
 
 class MatchGrabber(MatchGrabberParent):
@@ -34,7 +34,7 @@ class MatchGrabber(MatchGrabberParent):
                          self._matchData.getURL().strip() !=
                          self.getURL().strip())
             with self._matchData.emitLock(overwrite,
-                                          self._matchData.metaChangedSignal):
+                                          self._matchData.metaChanged):
                 self._matchData.setNoSets(5, resetPlayers=overwrite)
                 self._matchData.setMinSets(3)
                 self._matchData.setSolo(False)
@@ -145,12 +145,13 @@ class MatchGrabber(MatchGrabberParent):
 
         localFile = scctool.settings.getAbsPath(fname)
         needs_download = True
+        size = 1024 * 400
         try:
             with open(localFile, "rb") as in_file:
-                local_byte = in_file.read(512)
+                local_byte = in_file.read(size)
 
             file = urlopen(url)
-            data = file.read(512)
+            data = file.read(size)
 
             if(data == local_byte):
                 needs_download = False
@@ -165,3 +166,5 @@ class MatchGrabber(MatchGrabberParent):
 
             except Exception as e:
                 module_logger.exception("message")
+        else:
+            module_logger.info('No need to redownload match banner')

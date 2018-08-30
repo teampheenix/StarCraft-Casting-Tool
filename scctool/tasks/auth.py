@@ -10,7 +10,7 @@ from PyQt5 import QtCore
 
 from scctool.settings import getResFile, safe
 
-module_logger = logging.getLogger('scctool.tasks.auth')
+module_logger = logging.getLogger(__name__)
 
 try:
     NIGHTBOT_REDIRECT_URI = "http://localhost:65010/nightbot_callback"

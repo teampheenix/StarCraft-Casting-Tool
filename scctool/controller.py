@@ -6,17 +6,17 @@ import sys
 import webbrowser
 
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QCheckBox, QMessageBox
 
 import scctool.settings
 import scctool.tasks.nightbot
 import scctool.tasks.twitch
-from scctool.matchdata import matchData
+from scctool.matchcontrol import MatchControl
 from scctool.settings.alias import AliasManager
 from scctool.settings.history import HistoryManager
 from scctool.settings.logoManager import LogoManager
 from scctool.settings.placeholders import PlaceholderList
+from scctool.tasks.housekeeper import HouseKeeperThread
 from scctool.tasks.auth import AuthThread
 from scctool.tasks.autorequests import AutoRequestsThread
 from scctool.tasks.mapstats import MapStatsManager
@@ -29,7 +29,7 @@ from scctool.tasks.websocket import WebsocketThread
 from scctool.view.widgets import ToolUpdater
 
 # create logger
-module_logger = logging.getLogger('scctool.controller')
+module_logger = logging.getLogger(__name__)
 
 
 class MainController:
@@ -38,12 +38,14 @@ class MainController:
     def __init__(self):
         """Init controller and connect them with other modules."""
         try:
-            self.matchData = matchData(self)
+            self.matchControl = MatchControl(self)
+            self.matchControl.readJsonFile()
+            # self.matchControl.activeMatch() = matchData(self)
             self.authThread = AuthThread()
             self.authThread.tokenRecived.connect(self.tokenRecived)
-            self.textFilesThread = TextFilesThread(self.matchData)
-            self.matchData.dataChanged.connect(self.handleMatchDataChange)
-            self.matchData.metaChangedSignal.connect(self.matchMetaDataChanged)
+            self.textFilesThread = TextFilesThread(self.matchControl)
+            self.matchControl.dataChanged.connect(self.handleMatchDataChange)
+            self.matchControl.metaChanged.connect(self.matchMetaDataChanged)
             self.SC2ApiThread = SC2ApiThread(self)
             self.SC2ApiThread.requestScoreUpdate.connect(
                 self.requestScoreUpdate)
@@ -54,7 +56,6 @@ class MainController:
             self.websocketThread.introShown.connect(self.updatePlayerIntroIdx)
             self.runWebsocketThread()
             self.autoRequestsThread = AutoRequestsThread(self)
-            self.placeholders = self.placeholderSetup()
             self._warning = False
             self.checkVersion()
             self.logoManager = LogoManager(self)
@@ -62,6 +63,7 @@ class MainController:
             self.historyManager = HistoryManager()
             self.mapstatsManager = MapStatsManager(self)
             self.tts = TextToSpeech()
+            self.housekeeper = HouseKeeperThread(self)
             self.initPlayerIntroData()
 
         except Exception as e:
@@ -91,103 +93,68 @@ class MainController:
         """Define and connect placeholders."""
         placeholders = PlaceholderList()
 
-        placeholders.addConnection("Team1", lambda:
-                                   self.matchData.getTeamOrPlayer(0))
-        placeholders.addConnection("Team2", lambda:
-                                   self.matchData.getTeamOrPlayer(1))
-        placeholders.addConnection("URL", self.matchData.getURL)
         placeholders.addConnection(
-            "BestOf", lambda: str(self.matchData.getBestOfRaw()))
-        placeholders.addConnection("League", self.matchData.getLeague)
-        placeholders.addConnection("Score", self.matchData.getScoreString)
+            "Team1", lambda:
+            self.matchControl.activeMatch().getTeamOrPlayer(0))
+        placeholders.addConnection(
+            "Team2", lambda:
+            self.matchControl.activeMatch().getTeamOrPlayer(1))
+        placeholders.addConnection(
+            "URL", self.matchControl.activeMatch().getURL)
+        placeholders.addConnection(
+            "BestOf",
+            lambda: str(self.matchControl.activeMatch().getBestOfRaw()))
+        placeholders.addConnection(
+            "League", self.matchControl.activeMatch().getLeague)
+        placeholders.addConnection(
+            "Score", self.matchControl.activeMatch().getScoreString)
 
-        return placeholders
+        self.placeholders = placeholders
 
     def setView(self, view):
         """Connect view."""
         self.view = view
         try:
-            self.matchData.readJsonFile()
+            # self.matchControl.activeMatch().readJsonFile()
             with self.view.tlock:
-                self.updateForms()
+                self.updateMatchFormat()
             self.setCBs()
             self.view.resizeWindow()
+            self.housekeeper.activateTask('save')
         except Exception as e:
             module_logger.exception("message")
 
-    def updateForms(self):
-        """Update data in forms."""
+    def updateMatchFormat(self):
+        """Update match format in forms."""
         try:
-            if(self.matchData.getProvider() == "Custom"):
+            if(self.matchControl.selectedMatch().getProvider() == "Custom"):
                 self.view.tabs.setCurrentIndex(1)
             else:
                 self.view.tabs.setCurrentIndex(0)
 
-            self.view.cb_allkill.setChecked(self.matchData.getAllKill())
+            self.view.cb_allkill.setChecked(
+                self.matchControl.selectedMatch().getAllKill())
 
-            self.view.cb_solo.setChecked(self.matchData.getSolo())
+            self.view.cb_solo.setChecked(
+                self.matchControl.selectedMatch().getSolo())
 
             index = self.view.cb_bestof.findText(
-                str(self.matchData.getBestOfRaw()),
+                str(self.matchControl.selectedMatch().getBestOfRaw()),
                 Qt.MatchFixedString)
             if index >= 0:
                 self.view.cb_bestof.setCurrentIndex(index)
 
             index = self.view.cb_minSets.findText(
-                str(self.matchData.getMinSets()),
+                str(self.matchControl.selectedMatch().getMinSets()),
                 Qt.MatchFixedString)
             if index >= 0:
                 self.view.cb_minSets.setCurrentIndex(index)
 
-            self.view.le_url.setText(self.matchData.getURL())
-            self.view.le_url_custom.setText(self.matchData.getURL())
-            self.view.le_league.setText(self.matchData.getLeague())
-            self.view.sl_team.setValue(self.matchData.getMyTeam())
-            for i in range(2):
-                team = self.matchData.getTeam(i)
-                self.view.le_team[i].setText(team)
-                logo = self.logoManager.getTeam(i + 1).getIdent()
-                self.historyManager.insertTeam(team, logo)
+            self.view.le_url.setText(
+                self.matchControl.selectedMatch().getURL())
+            self.view.le_url_custom.setText(
+                self.matchControl.selectedMatch().getURL())
 
-            for j in range(2):
-                for i in range(1, self.matchData.getNoSets()):
-                    self.view.le_player[j][i].setReadOnly(
-                        self.matchData.getSolo())
-
-            for i in range(min(self.view.max_no_sets,
-                               self.matchData.getNoSets())):
-                for j in range(2):
-                    player = self.matchData.getPlayer(j, i)
-                    race = self.matchData.getRace(j, i)
-                    self.view.le_player[j][i].setText(player)
-                    self.view.cb_race[j][i].setCurrentIndex(
-                        scctool.settings.race2idx(race))
-                    self.historyManager.insertPlayer(player, race)
-
-                self.view.le_map[i].setText(self.matchData.getMap(i))
-
-                self.view.sl_score[i].setValue(self.matchData.getMapScore(i))
-
-            for i in range(self.matchData.getNoSets(), self.view.max_no_sets):
-                for j in range(2):
-                    self.view.le_player[j][i].hide()
-                    self.view.cb_race[j][i].hide()
-                self.view.le_map[i].hide()
-                self.view.sl_score[i].hide()
-                self.view.label_set[i].hide()
-
-            for i in range(min(self.view.max_no_sets,
-                               self.matchData.getNoSets())):
-                for j in range(2):
-                    self.view.le_player[j][i].show()
-                    self.view.cb_race[j][i].show()
-                self.view.le_map[i].show()
-                self.view.sl_score[i].show()
-                self.view.label_set[i].show()
-
-            self.view.updatePlayerCompleters()
-            self.view.updateTeamCompleters()
-            self.updateMapButtons()
             self.autoSetNextMap()
 
         except Exception as e:
@@ -196,33 +163,29 @@ class MainController:
 
     def updateLogos(self, force=False):
         """Updata team logos in  view."""
-
-        logo = self.logoManager.getTeam1()
-        self.view.qb_logo1.setIcon(QIcon(logo.provideQPixmap()))
-
-        logo = self.logoManager.getTeam2()
-        self.view.qb_logo2.setIcon(QIcon(logo.provideQPixmap()))
-
-        for idx in range(2):
-            team = self.matchData.getTeam(idx)
-            logo = self.logoManager.getTeam(idx + 1).getIdent()
-            self.historyManager.insertTeam(team, logo)
-
-        self.updateLogosHTML(force)
+        idx = self.matchControl.selectedMatchIdx()
+        matchWidget = self.view.matchDataTabWidget.widget(idx)
+        matchWidget.updateLogos(force)
 
     def applyCustom(self, bestof, allkill, solo, minSets, url):
         """Apply a custom match format."""
         msg = ''
         try:
-            with self.matchData.emitLock(True,
-                                         self.matchData.metaChangedSignal):
-                self.matchData.setCustom(bestof, allkill, solo)
-                self.matchData.setMinSets(minSets)
-                self.matchData.setURL(url)
-                self.matchData.writeJsonFile()
-                self.updateForms()
+            match = self.matchControl.selectedMatch()
+            idx = self.matchControl.selectedMatchIdx()
+            with match.emitLock(
+                    True,
+                    match.metaChanged):
+                match.setCustom(bestof, allkill, solo)
+                match.setMinSets(minSets)
+                match.setURL(url)
+                self.matchControl.writeJsonFile()
+                self.updateMatchFormat()
+                matchWidget = self.view.matchDataTabWidget.widget(idx)
+                matchWidget.updateForms()
                 self.view.resizeWindow()
-                self.matchData.updateLeagueIcon()
+                if idx == self.matchControl.activeMatchIdx():
+                    self.matchControl.selectedMatch().updateLeagueIcon()
 
         except Exception as e:
             msg = str(e)
@@ -236,10 +199,12 @@ class MainController:
         try:
             self.logoManager.resetTeam1Logo()
             self.logoManager.resetTeam2Logo()
-            self.matchData.resetData(False)
-            self.matchData.writeJsonFile()
+            self.matchControl.selectedMatch().resetData(False)
+            self.matchControl.writeJsonFile()
             self.updateLogos(True)
-            self.updateForms()
+            idx = self.matchControl.selectedMatchIdx()
+            matchWidget = self.view.matchDataTabWidget.widget(idx)
+            matchWidget.updateForms()
 
         except Exception as e:
             msg = str(e)
@@ -251,17 +216,22 @@ class MainController:
         """Load data from match grabber."""
         msg = ''
         try:
-            newProvider = self.matchData.parseURL(url)
-            self.matchData.grabData(newProvider, self.logoManager)
-            self.matchData.writeJsonFile()
+            match = self.matchControl.selectedMatch()
+            newProvider = match.parseURL(url)
+            match.grabData(newProvider, self.logoManager)
+            self.matchControl.writeJsonFile()
             try:
-                self.matchData.downloadBanner()
-            except Exception:
+                # TODO: Need to have multiple banners
+                match.downloadBanner()
+            except Exception as e:
+                module_logger.exception("message")
                 pass
             self.updateLogos(True)
-            self.updateForms()
+            idx = self.matchControl.selectedMatchIdx()
+            matchWidget = self.view.matchDataTabWidget.widget(idx)
+            matchWidget.updateForms()
             self.view.resizeWindow()
-            self.matchData.updateLeagueIcon()
+            self.matchControl.activeMatch().updateLeagueIcon()
 
         except Exception as e:
             msg = str(e)
@@ -305,8 +275,8 @@ class MainController:
 
     def allkillUpdate(self):
         """In case of allkill move the winner to the next set."""
-        if(self.matchData.allkillUpdate()):
-            self.updateForms()
+        if(self.matchControl.activeMatch().allkillUpdate()):
+            self.matchControl.activeMatch().updateForms()
 
     def tokenRecived(self, scope, token):
         """Call to return of token."""
@@ -384,6 +354,7 @@ class MainController:
             self.textFilesThread.terminate()
             self.autoRequestsThread.terminate()
             self.mapstatsManager.close(False)
+            self.housekeeper.terminate()
             if save:
                 self.saveAll()
         except Exception as e:
@@ -391,7 +362,7 @@ class MainController:
 
     def saveAll(self):
         self.saveConfig()
-        self.matchData.writeJsonFile()
+        self.matchControl.writeJsonFile()
         scctool.settings.saveNightbotCommands()
         self.logoManager.dumpJson()
         self.historyManager.dumpJson()
@@ -421,11 +392,14 @@ class MainController:
             module_logger.exception("message")
 
     def setRace(self, team_idx, set_idx, race):
-        if self.matchData.setRace(team_idx, set_idx, race):
+        if self.matchControl.activeMatch().setRace(team_idx, set_idx, race):
             race_idx = scctool.settings.race2idx(race)
-            if race_idx != self.view.cb_race[team_idx][set_idx].currentIndex():
-                with self.view.tlock:
-                    self.view.cb_race[team_idx][set_idx].setCurrentIndex(
+            matchWidget = self.view.matchDataTabWidget.widget(
+                self.matchControl.activeMatchIdx())
+            if race_idx != matchWidget.cb_race[team_idx][set_idx].\
+                    currentIndex():
+                with matchWidget.tlock:
+                    matchWidget.cb_race[team_idx][set_idx].setCurrentIndex(
                         race_idx)
 
     def requestScoreUpdate(self, newSC2MatchData):
@@ -433,23 +407,26 @@ class MainController:
         try:
             alias = self.aliasManager.translatePlayer
             newscore = 0
+            matchWidget = self.view.matchDataTabWidget.widget(
+                self.matchControl.activeMatchIdx())
+
             for j in range(2):
                 self.historyManager.insertPlayer(
                     alias(newSC2MatchData.getPlayer(j)),
                     newSC2MatchData.getRace(j))
-            self.view.updatePlayerCompleters()
+            self.view.updateAllPlayerCompleters()
             if newSC2MatchData.result == 0:
                 return
-            for i in range(self.matchData.getNoSets()):
-                player1 = self.matchData.getPlayer(0, i)
-                player2 = self.matchData.getPlayer(1, i)
+            for i in range(self.matchControl.activeMatch().getNoSets()):
+                player1 = self.matchControl.activeMatch().getPlayer(0, i)
+                player2 = self.matchControl.activeMatch().getPlayer(1, i)
                 found, in_order, newscore, _ = \
                     newSC2MatchData.compare_returnScore(
                         player1,
                         player2,
                         translator=alias)
                 if found:
-                    if(self.view.setScore(i, newscore)):
+                    if(matchWidget.setScore(i, newscore)):
                         race1 = newSC2MatchData.getRace(0)
                         race2 = newSC2MatchData.getRace(1)
                         if not in_order:
@@ -462,14 +439,14 @@ class MainController:
             # If not found try again with weak search
             # and set missing playernames
             if not found:
-                for i in range(self.matchData.getNoSets()):
-                    player1 = self.matchData.getPlayer(0, i)
-                    player2 = self.matchData.getPlayer(1, i)
+                for i in range(self.matchControl.activeMatch().getNoSets()):
+                    player1 = self.matchControl.activeMatch().getPlayer(0, i)
+                    player2 = self.matchControl.activeMatch().getPlayer(1, i)
                     found, in_order, newscore, notset_idx \
                         = newSC2MatchData.compare_returnScore(
                             player1, player2, weak=True, translator=alias)
                     if(found and notset_idx in range(2)):
-                        if(self.view.setScore(i, newscore, allkill=False)):
+                        if(matchWidget.setScore(i, newscore, allkill=False)):
                             race1 = newSC2MatchData.getRace(0)
                             race2 = newSC2MatchData.getRace(1)
                             if not in_order:
@@ -480,9 +457,10 @@ class MainController:
                                 player = newSC2MatchData.getRace(notset_idx)
                             self.setRace(0, i, race1)
                             self.setRace(1, i, race2)
-                            self.matchData.setPlayer(notset_idx, i, player)
-                            with self.view.tlock:
-                                self.view.le_player[notset_idx][i].setText(
+                            self.matchControl.activeMatch().setPlayer(
+                                notset_idx, i, player)
+                            with matchWidget.tlock:
+                                matchWidget.le_player[notset_idx][i].setText(
                                     player)
                             self.allkillUpdate()
                             break
@@ -533,13 +511,14 @@ class MainController:
 
     def requestScoreLogoUpdate(self, data, swap=False):
         module_logger.info("requestScoreLogoUpdate")
+        match_ident = self.matchControl.activeMatchId()
         for player_idx in range(2):
             team1 = data.playerInList(
                 player_idx,
-                self.matchData.getPlayerList(0),
+                self.matchControl.activeMatch().getPlayerList(0),
                 self.aliasManager.translatePlayer)
             team2 = data.playerInList(
-                player_idx, self.matchData.getPlayerList(1),
+                player_idx, self.matchControl.activeMatch().getPlayerList(1),
                 self.aliasManager.translatePlayer)
 
             if swap:
@@ -551,10 +530,12 @@ class MainController:
                 logo = ""
                 display = "none"
             elif(team1):
-                logo = "../" + self.logoManager.getTeam1().getFile(True)
+                logo = "../" + \
+                    self.logoManager.getTeam1(match_ident).getFile(True)
                 display = "block"
             elif(team2):
-                logo = "../" + self.logoManager.getTeam2().getFile(True)
+                logo = "../" + \
+                    self.logoManager.getTeam2(match_ident).getFile(True)
                 display = "block"
 
             self.websocketThread.sendData2Path(
@@ -567,42 +548,40 @@ class MainController:
         try:
             alias = self.aliasManager.translatePlayer
 
-            for i in range(self.matchData.getNoSets()):
+            for i in range(self.matchControl.activeMatch().getNoSets()):
                 found, inorder = newSC2MatchData.compare_returnOrder(
-                    self.matchData.getPlayer(0, i),
-                    self.matchData.getPlayer(1, i),
+                    self.matchControl.activeMatch().getPlayer(0, i),
+                    self.matchControl.activeMatch().getPlayer(1, i),
                     translator=alias)
                 if found:
                     break
             if not found:
-                for i in range(self.matchData.getNoSets()):
+                for i in range(self.matchControl.activeMatch().getNoSets()):
                     found, inorder = newSC2MatchData.compare_returnOrder(
-                        self.matchData.getPlayer(0, i),
-                        self.matchData.getPlayer(1, i),
+                        self.matchControl.activeMatch().getPlayer(0, i),
+                        self.matchControl.activeMatch().getPlayer(1, i),
                         weak=True,
                         translator=alias)
                     if found:
                         break
             if found:
-                score = self.matchData.getScore()
+                score = self.matchControl.activeMatch().getScore()
+                bo = self.matchControl.activeMatch().getBestOf()
                 if swap:
                     inorder = not inorder
 
                 if inorder:
-                    ToggleScore(score[0], score[1],
-                                self.matchData.getBestOf())
+                    ToggleScore(score[0], score[1], bo)
                 else:
                     if scctool.settings.config.parser.getboolean(
                             "SCT", "CtrlX"):
                         SwapPlayerNames()
-                        ToggleScore(score[0], score[1],
-                                    self.matchData.getBestOf())
+                        ToggleScore(score[0], score[1], bo)
                     else:
-                        ToggleScore(score[1], score[0],
-                                    self.matchData.getBestOf())
+                        ToggleScore(score[1], score[0], bo)
 
             else:
-                ToggleScore(0, 0, self.matchData.getBestOf())
+                ToggleScore(0, 0, bo)
 
         except Exception as e:
             module_logger.exception("message")
@@ -616,13 +595,14 @@ class MainController:
 
     def updateLogosHTML(self, force=False):
         """Update html files with team logos."""
+        match_ident = self.matchControl.activeMatchId()
         for idx in range(2):
-            logo = getattr(self.logoManager, 'getTeam{}'.format(idx + 1))()
+            logo = self.logoManager.getTeam(idx + 1, match_ident)
             filename = scctool.settings.casting_html_dir + \
                 "/data/logo" + str(idx + 1) + "-data.html"
             template = scctool.settings.casting_html_dir + \
                 "/data/logo-template.html"
-            self.matchData._useTemplate(
+            self.matchControl.activeMatch()._useTemplate(
                 template, filename, {'logo': logo.getFile(True)})
             if force:
                 self.websocketThread.sendData2Path(
@@ -686,13 +666,15 @@ class MainController:
         tts_rate = scctool.settings.config.parser.getfloat(
             "Intros", "tts_rate")
 
+        matchID = self.matchControl.activeMatchId()
+
         for player_idx in range(2):
             team1 = newData.playerInList(
                 player_idx,
-                self.matchData.getPlayerList(0),
+                self.matchControl.activeMatch().getPlayerList(0),
                 self.aliasManager.translatePlayer)
             team2 = newData.playerInList(
-                player_idx, self.matchData.getPlayerList(1),
+                player_idx, self.matchControl.activeMatch().getPlayerList(1),
                 self.aliasManager.translatePlayer)
 
             if(not team1 and not team2):
@@ -700,12 +682,12 @@ class MainController:
                 logo = ""
                 display = "none"
             elif(team1):
-                team = self.matchData.getTeam(0)
-                logo = "../" + self.logoManager.getTeam1().getFile(True)
+                team = self.matchControl.activeMatch().getTeam(0)
+                logo = "../" + self.logoManager.getTeam1(matchID).getFile(True)
                 display = "block"
             elif(team2):
-                team = self.matchData.getTeam(1)
-                logo = "../" + self.logoManager.getTeam2().getFile(True)
+                team = self.matchControl.activeMatch().getTeam(1)
+                logo = "../" + self.logoManager.getTeam2(matchID).getFile(True)
                 display = "block"
 
             name = self.aliasManager.translatePlayer(
@@ -769,10 +751,12 @@ class MainController:
 
     def swapTeams(self):
         with self.view.tlock:
-            self.logoManager.swapTeamLogos()
-            self.matchData.swapTeams()
-            self.updateForms()
-            self.updateLogos(False)
+            self.logoManager.swapTeamLogos(self.matchControl.selectedMatchId())
+            self.matchControl.selectedMatch().swapTeams()
+            idx = self.matchControl.selectedMatchIdx()
+            matchWidget = self.view.matchDataTabWidget.widget(idx)
+            matchWidget.updateForms()
+            matchWidget.updateLogos(False)
 
     def displayWarning(self, msg="Warning: Something went wrong..."):
         """Display a warning in status bar."""
@@ -787,7 +771,8 @@ class MainController:
         return warning
 
     def showMap(self, player_idx):
-        self.mapstatsManager.selectMap(self.matchData.getMap(player_idx))
+        self.mapstatsManager.selectMap(
+            self.matchControl.activeMatch().getMap(player_idx))
 
     def toogleLEDs(self, num, path, view=None):
         """Indicate when browser sources are connected."""
@@ -808,38 +793,27 @@ class MainController:
             else:
                 self.stopSC2ApiThread("playerLogos")
 
-    def autoSetNextMap(self, idx=-1):
+    def autoSetNextMap(self, idx=-1, send=True):
         if scctool.settings.config.parser.getboolean(
                 "Mapstats", "autoset_next_map"):
             self.mapstatsManager.selectMap(
-                self.matchData.getNextMap(idx))
-
-    def updateMapButtons(self):
-        mappool = list(self.mapstatsManager.getMapPool())
-        for i in range(self.view.max_no_sets):
-            map = self.matchData.getMap(i)
-            if map in mappool:
-                self.view.label_set[i].setEnabled(True)
-            else:
-                self.view.label_set[i].setEnabled(False)
-        if self.mapstatsManager.getMapPoolType() == 2:
-            self.mapstatsManager.sendMapPool()
+                self.matchControl.activeMatch().getNextMap(idx), send)
 
     def matchMetaDataChanged(self):
-        data = self.matchData.getScoreData()
+        data = self.matchControl.activeMatch().getScoreData()
         self.websocketThread.sendData2Path("score", "ALL_DATA", data)
-        data = self.matchData.getMapIconsData()
+        data = self.matchControl.activeMatch().getMapIconsData()
 
         for type in ['box', 'landscape']:
             for idx in range(0, 3):
                 path = 'mapicons_{}_{}'.format(type, idx + 1)
                 scope = 'scope_{}_{}'.format(type, idx + 1)
                 scope = scctool.settings.config.parser.get("MapIcons", scope)
-                if not self.matchData.isValidScope(scope):
+                if not self.matchControl.activeMatch().isValidScope(scope):
                     scope = 'all'
                 processedData = dict()
                 self.websocketThread.mapicon_sets[path] = set()
-                for idx in self.matchData.parseScope(scope):
+                for idx in self.matchControl.activeMatch().parseScope(scope):
                     processedData[idx + 1] = data[idx + 1]
                     self.websocketThread.mapicon_sets[path].add(idx + 1)
                 self.websocketThread.sendData2Path(path,
@@ -848,26 +822,27 @@ class MainController:
 
     def handleMatchDataChange(self, label, object):
         if label == 'team':
-            if not self.matchData.getSolo():
+            if not self.matchControl.activeMatch().getSolo():
                 self.websocketThread.sendData2Path(
                     'score', 'CHANGE_TEXT',
                     {'id': 'team{}'.format(object['idx'] + 1),
                      'text': object['value']})
         elif label == 'score':
-            score = self.matchData.getScore()
+            score = self.matchControl.activeMatch().getScore()
             for idx in range(0, 2):
                 self.websocketThread.sendData2Path(
                     'score', 'CHANGE_TEXT', {
                         'id': 'score{}'.format(idx + 1),
                         'text': str(score[idx])})
-                color = self.matchData.getScoreIconColor(
+                color = self.matchControl.activeMatch().getScoreIconColor(
                     idx, object['set_idx'])
                 self.websocketThread.sendData2Path(
                     'score', 'CHANGE_SCORE', {
                         'teamid': idx + 1,
                         'setid': object['set_idx'] + 1,
                         'color': color})
-            colorData = self.matchData.getColorData(object['set_idx'])
+            colorData = self.matchControl.activeMatch(
+            ).getColorData(object['set_idx'])
             self.websocketThread.sendData2Path(
                 ['mapicons_box', 'mapicons_landscape'],
                 'CHANGE_SCORE', {
@@ -879,7 +854,7 @@ class MainController:
                     'opacity': colorData['opacity']})
             if scctool.settings.config.parser.getboolean(
                     "Mapstats", "mark_played",):
-                map = self.matchData.getMap(object['set_idx'])
+                map = self.matchControl.activeMatch().getMap(object['set_idx'])
                 played = object['value'] != 0
                 self.websocketThread.sendData2Path(
                     'mapstats', 'MARK_PLAYED', {'map': map, 'played': played})
@@ -917,7 +892,8 @@ class MainController:
                     'icon': object['set_idx'] + 1,
                     'label': 'player{}'.format(object['team_idx'] + 1),
                     'text': object['value']})
-            if object['set_idx'] == 0 and self.matchData.getSolo():
+            if(object['set_idx'] == 0 and
+                    self.matchControl.activeMatch().getSolo()):
                 self.websocketThread.sendData2Path(
                     'score', 'CHANGE_TEXT',
                     {'id': 'team{}'.format(object['team_idx'] + 1),
@@ -937,7 +913,7 @@ class MainController:
                     'map': object['value'],
                     'map_img': self.getMapImg(object['value'])})
 
-        data = self.matchData.getMapIconsData()
+        data = self.matchControl.activeMatch().getMapIconsData()
         for type in ['box', 'landscape']:
             for idx in range(0, 3):
                 path = 'mapicons_{}_{}'.format(type, idx + 1)

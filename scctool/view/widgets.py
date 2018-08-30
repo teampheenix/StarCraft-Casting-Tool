@@ -29,8 +29,7 @@ from scctool.settings.client_config import ClientConfig
 from scctool.tasks.tasksthread import TasksThread
 
 # create logger
-module_logger = logging.getLogger('scctool.view.widgets')
-
+module_logger = logging.getLogger(__name__)
 
 class MapLineEdit(QLineEdit):
     """Define line edit for maps."""
@@ -153,6 +152,8 @@ class MapDownloader(QProgressDialog):
         self.progress = 0
 
         self.url = url
+        self._session = requests.Session()
+        self._session.trust_env = False
         base, ext = os.path.splitext(url)
         ext = ext.split("?")[0].lower()
         map = map_name.strip().replace(" ", "_") + ext
@@ -183,7 +184,7 @@ class MapDownloader(QProgressDialog):
         with open(self.file_name, "wb") as f:
             module_logger.info("Downloading {} from {}".format(
                 self.file_name, self.url))
-            response = requests.get(self.url, stream=True)
+            response = self._session.get(self.url, stream=True)
             total_length = response.headers.get('content-length')
 
             if total_length is None:  # no content length header
@@ -330,6 +331,8 @@ class LogoDownloader(QProgressDialog):
         self.logo = controller.logoManager.newLogo()
         self.url = url
         self.file_name = self.logo.fromURL(self.url, False)
+        self._session = requests.Session()
+        self._session.trust_env = False
 
         self.setWindowTitle(_("Logo Downloader"))
         self.setLabelText(
@@ -352,7 +355,7 @@ class LogoDownloader(QProgressDialog):
         with open(self.file_name, "wb") as f:
             self.setProgress(5)
             module_logger.info("Downloading {}".format(self.file_name))
-            response = requests.get(self.url, stream=True)
+            response = self._session.get(self.url, stream=True)
             total_length = response.headers.get('content-length')
 
             if total_length is None:  # no content length header
@@ -831,6 +834,7 @@ class InitialUpdater(QProgressDialog):
             from pyupdater.client import Client
             client = Client(ClientConfig())
             client.refresh()
+            client.platform = 'win'
             client.add_progress_hook(self.setProgress)
 
             channel = scctool.tasks.updater.getChannel()
@@ -839,7 +843,7 @@ class InitialUpdater(QProgressDialog):
                 self.version,
                 channel=channel)
             if lib_update is not None:
-                lib_update.download(async=False)
+                lib_update.download(False)
                 self.setValue(500)
                 self.setLabelText(_("Extracting data..."))
                 extractData(lib_update, self.setCopyProgress)

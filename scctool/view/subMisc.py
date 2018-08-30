@@ -5,9 +5,9 @@ import os.path
 import humanize  # pip install humanize
 from PyQt5.QtCore import QPoint, QSize, Qt
 from PyQt5.QtGui import QIcon, QKeySequence, QPixmap
-from PyQt5.QtWidgets import (QCheckBox, QComboBox, QFileDialog, QGridLayout,
-                             QGroupBox, QHBoxLayout, QInputDialog, QLabel,
-                             QListWidget, QListWidgetItem, QMessageBox,
+from PyQt5.QtWidgets import (QApplication, QCheckBox, QComboBox, QFileDialog,
+                             QGridLayout, QGroupBox, QHBoxLayout, QInputDialog,
+                             QLabel, QListWidget, QListWidgetItem, QMessageBox,
                              QPushButton, QShortcut, QSizePolicy, QSpacerItem,
                              QTabWidget, QVBoxLayout, QWidget)
 
@@ -17,7 +17,7 @@ from scctool.view.widgets import (AliasTreeView, ListTable, MapDownloader,
                                   MonitoredLineEdit)
 
 # create logger
-module_logger = logging.getLogger('scctool.view.subMisc')
+module_logger = logging.getLogger(__name__)
 
 
 class SubwindowMisc(QWidget):
@@ -575,6 +575,7 @@ class SubwindowMisc(QWidget):
                             .format(search_str))
                         continue
                     try:
+                        QApplication.setOverrideCursor(Qt.WaitCursor)
                         map = grabber.get_map(search_str)
                     except MapNotFound:
                         QMessageBox.critical(
@@ -583,6 +584,8 @@ class SubwindowMisc(QWidget):
                             _('"{}" was not found on Liquipedia.')
                             .format(search_str))
                         continue
+                    finally:
+                        QApplication.restoreOverrideCursor()
                     map_name = map.get_name()
 
                     if(map_name in scctool.settings.maps):
@@ -597,25 +600,32 @@ class SubwindowMisc(QWidget):
                         else:
                             self.controller.deleteMap(map_name)
 
-                    images = grabber.get_images(map.get_map_images())
-                    image = ""
-                    for size in sorted(images):
-                        if not image or size <= 2500 * 2500:
-                            image = images[size]
-                    url = grabber._base_url + image
+                    try:
+                        QApplication.setOverrideCursor(Qt.WaitCursor)
+                        images = grabber.get_images(map.get_map_images())
+                        image = ""
+                        for size in sorted(images):
+                            if not image or size <= 2500 * 2500:
+                                image = images[size]
+                        url = grabber._base_url + image
 
-                    downloader = MapDownloader(self, map_name, url)
-                    downloader.download()
-                    if map_name not in scctool.settings.maps:
-                        scctool.settings.maps.append(map_name)
-                    items = self.maplist.findItems(map_name, Qt.MatchExactly)
-                    if len(items) == 0:
-                        item = QListWidgetItem(map_name)
-                        self.maplist.addItem(item)
-                        self.maplist.setCurrentItem(item)
-                    else:
-                        self.maplist.setCurrentItem(items[0])
-                    self.changePreview()
+                        downloader = MapDownloader(self, map_name, url)
+                        downloader.download()
+                        if map_name not in scctool.settings.maps:
+                            scctool.settings.maps.append(map_name)
+                        items = self.maplist.findItems(map_name,
+                                                       Qt.MatchExactly)
+                        if len(items) == 0:
+                            item = QListWidgetItem(map_name)
+                            self.maplist.addItem(item)
+                            self.maplist.setCurrentItem(item)
+                        else:
+                            self.maplist.setCurrentItem(items[0])
+                        self.changePreview()
+                    except Exception:
+                        raise
+                    finally:
+                        QApplication.restoreOverrideCursor()
             except Exception as e:
                 module_logger.exception("message")
                 QMessageBox.critical(self, _("Error"), str(e))
@@ -733,7 +743,7 @@ class SubwindowMisc(QWidget):
     def closeEvent(self, event):
         """Handle close event."""
         try:
-            self.mainWindow.updateMapCompleters()
+            self.mainWindow.updateAllMapCompleters()
             if(not self.__dataChanged):
                 event.accept()
                 return

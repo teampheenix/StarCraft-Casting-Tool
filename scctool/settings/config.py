@@ -5,7 +5,7 @@ import os.path
 import platform
 import sys
 
-module_logger = logging.getLogger('scctool.settings.config')  # create logger
+module_logger = logging.getLogger(__name__)  # create logger
 
 this = sys.modules[__name__]
 

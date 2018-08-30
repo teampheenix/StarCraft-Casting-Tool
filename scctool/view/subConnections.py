@@ -13,7 +13,7 @@ import scctool.settings
 from scctool.view.widgets import Completer, MonitoredLineEdit
 
 # create logger
-module_logger = logging.getLogger('scctool.view.subConnections')
+module_logger = logging.getLogger(__name__)
 
 
 class SubwindowConnections(QWidget):

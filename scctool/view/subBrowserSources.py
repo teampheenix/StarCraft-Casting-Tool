@@ -13,7 +13,7 @@ import scctool.settings
 from scctool.view.widgets import HotkeyLayout, ScopeGroupBox, StyleComboBox
 
 # create logger
-module_logger = logging.getLogger('scctool.view.subConnections')
+module_logger = logging.getLogger(__name__)
 
 
 class SubwindowBrowserSources(QWidget):
@@ -215,7 +215,6 @@ class SubwindowBrowserSources(QWidget):
 
     def addMap(self):
         maplist = list(scctool.settings.maps)
-        maplist.remove('TBD')
         for i in range(self.maplist.count()):
             map = str(self.maplist.item(i).text())
             if map in maplist:
@@ -277,7 +276,7 @@ class SubwindowBrowserSources(QWidget):
         box.setLayout(layout)
         mainLayout.addWidget(box)
 
-        options = self.controller.matchData.scopes
+        options = self.controller.matchControl.scopes
         self.scope_box = dict()
         for idx in range(0, 3):
             self.scope_box[idx] = ScopeGroupBox(
@@ -327,7 +326,7 @@ class SubwindowBrowserSources(QWidget):
         box.setLayout(layout)
         mainLayout.addWidget(box)
 
-        options = self.controller.matchData.scopes
+        options = self.controller.matchControl.scopes
         self.scope_landscape = dict()
         for idx in range(0, 3):
             self.scope_landscape[idx] = ScopeGroupBox(
@@ -583,7 +582,7 @@ class SubwindowBrowserSources(QWidget):
                 str(self.cb_mark_played.isChecked()))
 
             self.controller.mapstatsManager.sendMapPool()
-            self.controller.updateMapButtons()
+            self.mainWindow.updateAllMapButtons()
 
             for idx in range(0, 3):
                 scctool.settings.config.parser.set(

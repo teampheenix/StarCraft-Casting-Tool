@@ -1,6 +1,37 @@
 # Changelog
 
 
+## v2.2.0 (2018-08-26)
+
+### New
+
+* Added Match Tabs that allow you to manage multiple matches at the same time and jump between them.
+
+* Added a generic Proleague Format to Custom Formats.
+
+### Changes
+
+* Koprulu custom format changed back to Bo7 All-Kill.
+
+### Fix
+
+* Fixed a crash that would occur when adding a map to the mapstats custom map pool.
+
+
+## v2.1.4 (2018-08-20)
+
+### Fix
+
+* Fixed a crash that would occure when adding a map to the mapstats custom map pool.
+
+
+## v2.1.3 (2018-08-19)
+
+### Fix
+
+* Fixed a bug where the new AlphaTL Match Banner would not be downloaded.
+
+
 ## v2.1.2 (2018-08-14)
 
 ### New
