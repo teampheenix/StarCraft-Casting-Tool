@@ -32,9 +32,6 @@ class LogoManager:
         self._matches = dict()
         try:
             self.loadJson()
-            self.removeDeadMatches()
-            self.removeDuplicates()
-            self.clearFolder()
         except Exception as e:
             module_logger.exception("message")
 

@@ -16,6 +16,7 @@ from scctool.settings.alias import AliasManager
 from scctool.settings.history import HistoryManager
 from scctool.settings.logoManager import LogoManager
 from scctool.settings.placeholders import PlaceholderList
+from scctool.tasks.housekeeper import HouseKeeperThread
 from scctool.tasks.auth import AuthThread
 from scctool.tasks.autorequests import AutoRequestsThread
 from scctool.tasks.mapstats import MapStatsManager
@@ -62,6 +63,7 @@ class MainController:
             self.historyManager = HistoryManager()
             self.mapstatsManager = MapStatsManager(self)
             self.tts = TextToSpeech()
+            self.housekeeper = HouseKeeperThread(self)
             self.initPlayerIntroData()
 
         except Exception as e:
@@ -118,6 +120,7 @@ class MainController:
                 self.updateMatchFormat()
             self.setCBs()
             self.view.resizeWindow()
+            self.housekeeper.activateTask('save')
         except Exception as e:
             module_logger.exception("message")
 
@@ -351,6 +354,7 @@ class MainController:
             self.textFilesThread.terminate()
             self.autoRequestsThread.terminate()
             self.mapstatsManager.close(False)
+            self.housekeeper.terminate()
             if save:
                 self.saveAll()
         except Exception as e:

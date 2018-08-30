@@ -59,7 +59,7 @@ class HistoryManager:
                     race = item.get('race', 'Random')
                 break
         self.__player_history.insert(0, {"player": player, "race": race})
-        self.enforeMaxLength("player")
+        # self.enforeMaxLength("player")
 
     def insertTeam(self, team, logo='0'):
         team = team.strip()
@@ -72,7 +72,7 @@ class HistoryManager:
                     logo = item.get('logo', '0')
                 break
         self.__team_history.insert(0, {"team": team, "logo": logo})
-        self.enforeMaxLength("team")
+        # self.enforeMaxLength("team")
 
     def enforeMaxLength(self, scope=None):
         if not scope or scope == "player":
