@@ -457,13 +457,6 @@ class MainWindow(QMainWindow):
     def showOverlay(self):
         """Opens a subwindow that is used as an ingame overlay."""
         self.mysubwindows['overlay'] = SubwindowOverlay()
-        self.mysubwindows['overlay'].setAttribute(
-            Qt.WA_TranslucentBackground, True)
-        self.mysubwindows['overlay'].setWindowFlags(
-            Qt.Tool | Qt.FramelessWindowHint)
-        self.mysubwindows['overlay'].setWindowFlags(
-            self.mysubwindows['overlay'].windowFlags() |
-            Qt.WindowStaysOnTopHint)
         self.mysubwindows['overlay'].createWindow(self)
         self.mysubwindows['overlay'].showMaximized()
 

@@ -28,13 +28,21 @@ class SubwindowOverlay(QWidget):
             layout = QVBoxLayout(self)
             self.setLayout(layout)
             layout.addWidget(self.view)
-            file_path = scctool.settings.getResFile('overlay/main.html')
-            print(file_path)
+            file_path = os.path.abspath(scctool.settings.getResFile('overlay/main.html'))
             local_url = QUrl.fromLocalFile(file_path)
-
-            self.view.setAttribute(Qt.WA_TransparentForMouseEvents)
-            self.view.setStyleSheet("background:transparent")
             self.view.load(local_url)
+
+            #self.view.setAttribute(Qt.WA_TransparentForMouseEvents)
+            #self.view.setStyleSheet("background:transparent")
+
+            # self.setAttribute(
+            #     Qt.WA_TranslucentBackground, True)
+            # self.setWindowFlags(
+            #     Qt.Tool | Qt.FramelessWindowHint)
+            # self.setWindowFlags(
+            #     self.windowFlags() |
+            #     Qt.WindowStaysOnTopHint)
+
 
         except Exception as e:
             module_logger.exception("message")
