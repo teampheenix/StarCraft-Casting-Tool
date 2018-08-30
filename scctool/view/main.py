@@ -457,7 +457,8 @@ class MainWindow(QMainWindow):
         self.mysubwindows['overlay'].setWindowFlags(
             Qt.Tool | Qt.FramelessWindowHint)
         self.mysubwindows['overlay'].setWindowFlags(
-            w.windowFlags() | Qt.WindowStaysOnTopHint)
+            self.mysubwindows['overlay'].windowFlags() |
+            Qt.WindowStaysOnTopHint)
         self.mysubwindows['overlay'].createWindow(self)
         self.mysubwindows['overlay'].showMaximized()
 

@@ -29,6 +29,7 @@ class SubwindowOverlay(QWidget):
             self.setLayout(layout)
             layout.addWidget(self.view)
             file_path = scctool.settings.getResFile('overlay/main.html')
+            print(file_path)
             local_url = QUrl.fromLocalFile(file_path)
 
             self.view.setAttribute(Qt.WA_TransparentForMouseEvents)
