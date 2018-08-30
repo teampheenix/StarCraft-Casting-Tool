@@ -67,9 +67,12 @@ def needInitialUpdate(version):
 def readJsonFile():
     if len(this.data) > 0:
         return
-    with open(scctool.settings.getJsonFile('versiondata'), 'r',
-              encoding='utf-8-sig') as f:
-        this.data = json.load(f)
+    try:
+        with open(scctool.settings.getJsonFile('versiondata'), 'r',
+                  encoding='utf-8-sig') as f:
+            this.data = json.load(f)
+    except Exception:
+        this.data = dict()
 
 def dumpJsonFile():
     readJsonFile()
