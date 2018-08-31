@@ -1,8 +1,6 @@
 """Write streaming data to txt-files if needed."""
 import logging
-import queue
 
-import scctool.settings
 from scctool.tasks.tasksthread import TasksThread
 
 # from PyQt5.QtCore import pyqtSignal
