@@ -127,7 +127,10 @@ class TextToSpeech:
     def limitCacheSize(self):
         while len(self.__cache) > self.__cache_size:
             item = self.__cache.pop()
-            os.remove(scctool.settings.getAbsPath(item['file']))
+            try:
+                os.remove(scctool.settings.getAbsPath(item['file']))
+            except FileNotFoundError:
+                pass
 
     def searchCache(self, ssml, voice, pitch=0.00, rate=1.00):
         for item in self.__cache:
@@ -139,7 +142,11 @@ class TextToSpeech:
                 continue
             if item['rate'] != rate:
                 continue
-            return item['file']
+            if os.path.isfile(scctool.settings.getAbsPath(item['file'])):
+                return item['file']
+            else:
+                self.__cache.remove(item)
+                return None
         return None
 
     def defineOptions(self):
