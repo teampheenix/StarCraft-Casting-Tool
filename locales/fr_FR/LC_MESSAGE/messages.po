@@ -30,11 +30,11 @@ msgstr "Mettre à jour automatiquement le titre de votre chaine Twitch en arriè
 
 #: controller.py:545 controller.py:552
 msgid "Specify your Nightbot Settings to use this feature"
-msgstr ""
+msgstr "Spécifiez vos réglages Nightbot pour utiliser cette fonctionnalité"
 
 #: controller.py:546
 msgid "Automatically update the commands of your nightbot in the background."
-msgstr ""
+msgstr "Mettre à jour automatiquement les commandes de votre Nightbot en arrière-plan."
 
 #: controller.py:693
 msgid "Warning: Map '{}' not found!"
@@ -66,7 +66,7 @@ msgstr "Refusé - Avez-vous la permission?"
 
 #: tasks/nightbot.py:41 tasks/nightbot.py:103 tasks/twitch.py:46
 msgid "Unauthorized - Refresh your token!"
-msgstr ""
+msgstr "Interdit - Rafraichissez votre jeton!"
 
 #: tasks/nightbot.py:43 tasks/nightbot.py:105 tasks/twitch.py:48
 msgid "Too Many Requests."
@@ -74,7 +74,7 @@ msgstr "Trop de requêtes."
 
 #: tasks/nightbot.py:60
 msgid "Nightbot command '{}' was already set to '{}'"
-msgstr ""
+msgstr "La commande Nightbot '{}' était déjà réglé à '{}'"
 
 #: tasks/nightbot.py:90
 msgid "Deleted command '{}'"
@@ -82,11 +82,11 @@ msgstr "Commande '{}' effacé"
 
 #: tasks/nightbot.py:92
 msgid "Updated Nightbot command '{}' to '{}'"
-msgstr ""
+msgstr "Mis à jour la commande Nightbot '{}' à '{}'"
 
 #: tasks/twitch.py:32
 msgid "Updated Twitch title of {} to: \"{}\""
-msgstr ""
+msgstr "Mis à jour le titre Twitch de {} à : \"{}\""
 
 #: tasks/twitch.py:41
 msgid "Not Found - Channel '{}' not found."
@@ -108,7 +108,7 @@ msgstr "scctool: Accès réussi à Twitch - Vous pouvez fermer cet onglet mainte
 
 #: view/main.py:105
 msgid "StarCraft Casting Tool is up to date."
-msgstr ""
+msgstr "StarCraft Casting Tool est mis à jour."
 
 #: view/main.py:107
 msgid "The new version {} is available!"
@@ -116,7 +116,7 @@ msgstr "La version {} est disponible!"
 
 #: view/main.py:113
 msgid "StarCraft Casting Tool - About"
-msgstr ""
+msgstr "StarCraft Casting Tool - À propos"
 
 #: view/main.py:135
 msgid "Settings"
@@ -140,7 +140,7 @@ msgstr "Divers"
 
 #: view/main.py:153
 msgid "Info && Links"
-msgstr ""
+msgstr "Infos et liens"
 
 #: view/main.py:156
 msgid "About"
@@ -156,7 +156,7 @@ msgstr "Vérifier pour une mise à jour"
 
 #: view/main.py:171 view/main.py:282
 msgid "Changelog"
-msgstr ""
+msgstr "Changelog"
 
 #: view/main.py:214
 msgid "Donate"
@@ -226,7 +226,7 @@ msgstr "1c1"
 
 #: view/main.py:442
 msgid "Select for solo (non-team matches)"
-msgstr "Choisir pour solo (matchs sans équipe"
+msgstr "Choisir pour solo (matchs sans équipe)"
 
 #: view/main.py:453
 msgid "Apply Format"
@@ -234,7 +234,7 @@ msgstr "Appliquer le format"
 
 #: view/main.py:482
 msgid "Optionally specify the Match-URL, e.g., for Nightbot commands"
-msgstr ""
+msgstr "Spécifier le Match-URL (optionnel), par exemple pour les commandes Nightbot"
 
 #: view/main.py:484
 msgid "Specify the Match-URL of your Custom Match"
@@ -266,31 +266,31 @@ msgstr "Carte \\ Équipes:"
 
 #: view/main.py:714
 msgid "Player {} of team {}"
-msgstr ""
+msgstr "Joueur  {} de l'équipe {}"
 
 #: view/main.py:734
 msgid "Set the score"
-msgstr ""
+msgstr "Régler le pointage"
 
 #: view/main.py:741
 msgid "Map {}"
-msgstr ""
+msgstr "Carte {}"
 
 #: view/main.py:783
 msgid "Tasks"
-msgstr ""
+msgstr "Tâches"
 
 #: view/main.py:787
 msgid "Update Twitch Title"
-msgstr ""
+msgstr "Mettre à jour le titre Twitch"
 
 #: view/main.py:791
 msgid "Update Nightbot"
-msgstr ""
+msgstr "Mettre à jour Nightbot"
 
 #: view/main.py:794
 msgid "Reset Score"
-msgstr ""
+msgstr "Réinitialiser le pointage"
 
 #: view/main.py:798
 msgid "Update OB&S Data"
@@ -299,25 +299,26 @@ msgstr ""
 #: view/main.py:800 view/subConnections.py:304 view/subMisc.py:623
 #: view/subStyles.py:82
 msgid "Shortcut: {}"
-msgstr ""
+msgstr "Raccourci : {}"
 
 #: view/main.py:821
 msgid "Background Tasks"
-msgstr ""
+msgstr "Tâches en arrière-plan"
 
 #: view/main.py:824
 msgid "Auto Score Update"
-msgstr ""
+msgstr "Mis à jour du pointage automatique"
 
 #: view/main.py:826
 msgid ""
 "Automatically detects the outcome of SC2 matches that are played/observed in "
 "your SC2-client and updates the score accordingly."
-msgstr ""
+msgstr "Détecte automatiquement le résultat des matchs de SC2 qui sont joués/observés dans "
+"votre client SC2 et mets à jour le pointage en conséquence."
 
 #: view/main.py:832
 msgid "Provide Player Intros"
-msgstr ""
+msgstr "Fournir les intros de joueurs"
 
 #: view/main.py:835
 msgid "Update player intros files via SC2-Client-API"
@@ -325,13 +326,14 @@ msgstr ""
 
 #: view/main.py:839
 msgid "Set Ingame Score"
-msgstr ""
+msgstr "Régler le pointage dans le jeu"
 
 #: view/main.py:841
 msgid ""
 "Automatically sets the score of your ingame UI-interface at the begining of "
 "a game."
-msgstr ""
+msgstr "Règle automatiquement le pointage de votre interface utilisateur au début"
+"du match."
 
 #: view/main.py:848
 msgid "Toggle Production Tab"
@@ -345,115 +347,115 @@ msgstr ""
 
 #: view/main.py:857
 msgid "Auto Twitch Update"
-msgstr ""
+msgstr "Mis à jour automatique de Twitch"
 
 #: view/main.py:862
 msgid "Auto Nightbot Update"
-msgstr ""
+msgstr "Mis à jour automatique de Nightbot"
 
 #: view/main.py:871 view/main.py:875
 msgid "Only Windows"
-msgstr ""
+msgstr "Windows seulement"
 
 #: view/main.py:976
 msgid "Applying Custom Match..."
-msgstr ""
+msgstr "Application du match personnalisé..."
 
 #: view/main.py:1009
 msgid "Reading {}..."
-msgstr ""
+msgstr "Lecture de {}..."
 
 #: view/main.py:1028
 msgid "Updating Nightbot Command..."
-msgstr ""
+msgstr "Mise à jour de la commande Nightbot..."
 
 #: view/main.py:1037
 msgid "Updating Twitch Title..."
-msgstr ""
+msgstr "Mise à jour du titre de Twitch..."
 
 #: view/main.py:1046
 msgid "Updating OBS Data..."
-msgstr ""
+msgstr "Mise à jour des données OBS..."
 
 #: view/main.py:1056
 msgid "Resetting Score..."
-msgstr ""
+msgstr "Réinitialisation du pointage..."
 
 #: view/main.py:1075
 msgid "Updating Score..."
-msgstr ""
+msgstr "Mise à jour du pointage..."
 
 #: view/subConnections.py:71
 msgid "Intros && Hotkeys"
-msgstr ""
+msgstr "Intros et raccourcis clavier"
 
 #: view/subConnections.py:72
 msgid "Twitch"
-msgstr ""
+msgstr "Twitch"
 
 #: view/subConnections.py:73
 msgid "Nightbot"
-msgstr ""
+msgstr "Nightbot"
 
 #: view/subConnections.py:95
 msgid "Intro Hotkeys"
-msgstr ""
+msgstr "Raccourci clavier de l'intro"
 
 #: view/subConnections.py:103
 msgid "Player 1"
-msgstr ""
+msgstr "Joueur 1"
 
 #: view/subConnections.py:104
 msgid "Player 2"
-msgstr ""
+msgstr "Joueur 2"
 
 #: view/subConnections.py:105
 msgid "Debug"
-msgstr ""
+msgstr "Debug"
 
 #: view/subConnections.py:110
 msgid "Intro Settings"
-msgstr ""
+msgstr "Réglage de l'intro"
 
 #: view/subConnections.py:121
 msgid "Sound Volume:"
-msgstr ""
+msgstr "Volume du son:"
 
 #: view/subConnections.py:127
 msgid "Seconds"
-msgstr ""
+msgstr "Secondes"
 
 #: view/subConnections.py:130
 msgid "Display Duration:"
-msgstr ""
+msgstr "Afficher la durée:"
 
 #: view/subConnections.py:142
 msgid "Animation:"
-msgstr ""
+msgstr "Animation:"
 
 #: view/subConnections.py:161
 msgid "Name of the Twitch channel that should be updated"
-msgstr ""
+msgstr "Le nom de la chaine Twitch qui doit être mis à jour"
 
 #: view/subConnections.py:163
 msgid "The connected twitch user needs to have editor rights for this channel."
-msgstr ""
+msgstr "L'utilisateur Twitch a besoin des permission d'éditer cette chaine."
 
 #: view/subConnections.py:175 view/subConnections.py:232
 msgid "Press 'Get' to generate a token"
-msgstr ""
+msgstr "Appuyer 'Obtenir' pour générer un jeton"
 
 #: view/subConnections.py:177
 msgid "Press 'Get' to generate a new token."
-msgstr ""
+msgstr "Appuyer 'Obtenir pour générer un nouveau jeton"
 
 #: view/subConnections.py:180 view/subConnections.py:236
 msgid "Get"
-msgstr ""
+msgstr "Obtenir"
 
 #: view/subConnections.py:185
 msgid "Access-Token:"
-msgstr ""
+msgstr "Jeton d'accès:"
 
 #: view/subConnections.py:196 view/subConnections.py:408
 msgid "Available placeholders:"
@@ -461,7 +463,7 @@ msgstr ""
 
 #: view/subConnections.py:206 view/subConnections.py:416
 msgid "Test"
-msgstr ""
+msgstr "Test"
 
 #: view/subConnections.py:212
 msgid "Title Template:"
