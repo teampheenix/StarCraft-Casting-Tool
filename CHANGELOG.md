@@ -3,6 +3,10 @@
 
 ## (unreleased)
 
+### New
+
+* Added option to specify the SC2 client API address in the misc menu to enable a two pc streaming setup.
+
 ### Fix
 
 * Fixed a bug that impaired tts.
