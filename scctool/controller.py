@@ -246,8 +246,10 @@ class MainController:
             self.view.cb_autoUpdate.setChecked(
                 scctool.settings.config.parser.getboolean("Form",
                                                           "scoreupdate"))
+            network_listener = scctool.settings.config.parser.getboolean(
+                "SCT", "sc2_network_listener_enabled")
 
-            if scctool.settings.windows:
+            if scctool.settings.windows and not network_listener:
                 self.view.cb_autoToggleScore.setChecked(
                     scctool.settings.config.parser.getboolean("Form",
                                                               "togglescore"))
@@ -508,6 +510,25 @@ class MainController:
             scctool.settings.config.nightbotIsValid(),
             _('Specify your Nightbot Settings to use this feature'),
             '')
+
+        if scctool.settings.windows:
+
+            network_listener = scctool.settings.config.parser.getboolean(
+                "SCT", "sc2_network_listener_enabled")
+
+            self.toggleWidget(
+                self.view.cb_autoToggleScore,
+                not network_listener,
+                _('Not available when SC2 is running on a diffrent PC.'),
+                _('Automatically sets the score of your ingame' +
+                  ' UI-interface at the begining of a game.'))
+
+            self.toggleWidget(
+                self.view.cb_autoToggleProduction,
+                not network_listener,
+                _('Not available when SC2 is running on a diffrent PC.'),
+                _('Automatically toggles the production tab of your' +
+                  ' ingame UI-interface at the begining of a game.'))
 
     def requestScoreLogoUpdate(self, data, swap=False):
         module_logger.info("requestScoreLogoUpdate")
