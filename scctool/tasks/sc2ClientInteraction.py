@@ -137,7 +137,6 @@ class SC2ApiThread(QThread):
 
         return url.format(address, "game"), url.format(address, "ui")
 
-
     def run(self):
         """Run the thread."""
         try:

@@ -31,6 +31,7 @@ from scctool.tasks.tasksthread import TasksThread
 # create logger
 module_logger = logging.getLogger(__name__)
 
+
 class MapLineEdit(QLineEdit):
     """Define line edit for maps."""
 
