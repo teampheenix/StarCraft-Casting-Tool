@@ -23,6 +23,7 @@ class LiquipediaGrabber:
         self._headers = dict()
         self._headers["User-Agent"] = "StarCraftCastingTool v{} ({})".format(
             scct_version, scct_url)
+        self._headers["Accept-Encoding"] = "gzip"
 
     def image_search(self, search_str):
         params = {'title': 'Special:Search',
