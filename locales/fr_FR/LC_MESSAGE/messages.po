@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: StarCraft Casting Tool\n"
 "POT-Creation-Date: 2018-09-03 10:28+0200\n"
-"PO-Revision-Date: 2018-09-03 10:29+0200\n"
+"PO-Revision-Date: 2018-09-03 10:35+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -303,7 +303,7 @@ msgstr "Charger les données du URL"
 
 #: view/main.py:553
 msgid "Match Format:"
-msgstr "Format du match: "
+msgstr "Format du match:"
 
 #: view/main.py:557
 msgid "Best of"
@@ -317,7 +317,7 @@ msgstr ""
 
 #: view/main.py:571
 msgid " but at least"
-msgstr "mais au moins"
+msgstr " mais au moins"
 
 #: view/main.py:576
 msgid "Minimum number of maps played (even if the match is decided already)"
@@ -515,7 +515,7 @@ msgstr "Style:"
 #: view/subStyles.py:106 view/subStyles.py:123 view/subStyles.py:140
 #: view/subStyles.py:155 view/subStyles.py:170
 msgid "Show in Browser"
-msgstr ""
+msgstr "Afficher dans le navigateur"
 
 #: view/subBrowserSources.py:151
 msgid "Current Ladder Map Pool"
@@ -571,7 +571,7 @@ msgstr ""
 
 #: view/subBrowserSources.py:271 view/subBrowserSources.py:321
 msgid "Pixel"
-msgstr ""
+msgstr "Pixel"
 
 #: view/subBrowserSources.py:275 view/subBrowserSources.py:325
 msgid "Icon Padding:"
@@ -612,10 +612,8 @@ msgid ""
 msgstr ""
 
 #: view/subBrowserSources.py:388
-#, fuzzy
-#| msgid "Animation:"
 msgid "Animation"
-msgstr "Animation:"
+msgstr "Animation"
 
 #: view/subBrowserSources.py:395
 msgid "Fly-In"
@@ -727,7 +725,7 @@ msgstr "Appuyer 'Obtenir' pour générer un jeton"
 
 #: view/subConnections.py:101
 msgid "Press 'Get' to generate a new token."
-msgstr "Appuyer 'Obtenir pour générer un nouveau jeton"
+msgstr "Appuyer 'Obtenir' pour générer un nouveau Jeton."
 
 #: view/subConnections.py:104 view/subConnections.py:184
 msgid "Get"
@@ -1322,48 +1320,48 @@ msgstr ""
 
 #: view/widgets.py:1179
 msgid "Are you sure you wish to remove profile '{}'?"
-msgstr ""
+msgstr "Êtes-vous sûr de vouloir supprimer le Profil '{}'?"
 
 #: view/widgets.py:1201
 msgid "Add Profile"
-msgstr ""
+msgstr "Ajouter un profil"
 
 #: view/widgets.py:1202 view/widgets.py:1354
 msgid "Please enter the name of the profile"
-msgstr ""
+msgstr "Veuillez entrer le nom du profil"
 
 #: view/widgets.py:1214 view/widgets.py:1240 view/widgets.py:1297
 #: view/widgets.py:1365
 msgid "Please enter a valid name"
-msgstr ""
+msgstr "Veuillez entrer un nom valide"
 
 #: view/widgets.py:1226
 msgid "Duplicate Profile"
-msgstr ""
+msgstr "Dupliquer le profil"
 
 #: view/widgets.py:1227
 msgid "Please enter the name of the new profile"
-msgstr ""
+msgstr "Veuillez entrer le nom du nouveau profil"
 
 #: view/widgets.py:1256 view/widgets.py:1276 view/widgets.py:1309
 msgid "ZIP archive"
-msgstr ""
+msgstr "Archive zip"
 
 #: view/widgets.py:1283
 msgid "Import Profile"
-msgstr ""
+msgstr "Importer le profil"
 
 #: view/widgets.py:1284
 msgid "Please enter the name of the imported profile"
-msgstr ""
+msgstr "Veuillez entrer le nom du profil importé"
 
 #: view/widgets.py:1316
 msgid "Overwrite Profile"
-msgstr ""
+msgstr "Remplacer le profil"
 
 #: view/widgets.py:1317
 msgid "Are you sure you wish to overwrite the current profile '{}'?"
-msgstr ""
+msgstr "Êtes-vous sûr de vouloir remplacer le profil actuel '{}'?"
 
 #: view/widgets.py:1334
 msgid "Import && Overwrite Profile"
@@ -1371,15 +1369,15 @@ msgstr ""
 
 #: view/widgets.py:1353
 msgid "Rename Profile"
-msgstr ""
+msgstr "Renommer le profil"
 
 #: view/widgets.py:1382
 msgid "Dynamic:"
-msgstr ""
+msgstr "Dynamique:"
 
 #: view/widgets.py:1397
 msgid "Static:"
-msgstr ""
+msgstr "Statique:"
 
 #: view/widgets.py:1402
 msgid "From"
