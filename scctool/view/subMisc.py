@@ -1,10 +1,10 @@
 """Show subwindow with miscellaneous settings."""
 import logging
 import os.path
-import requests
 
 import humanize  # pip install humanize
-from PyQt5.QtCore import QPoint, QSize, Qt, QRegExp
+import requests
+from PyQt5.QtCore import QPoint, QRegExp, QSize, Qt
 from PyQt5.QtGui import QIcon, QKeySequence, QPixmap, QRegExpValidator
 from PyQt5.QtWidgets import (QApplication, QCheckBox, QComboBox, QFileDialog,
                              QGridLayout, QGroupBox, QHBoxLayout, QInputDialog,
@@ -79,7 +79,7 @@ class SubwindowMisc(QWidget):
         self.tabs.addTab(self.aliasBox, _("Alias"))
         self.tabs.addTab(self.ocrBox, _("OCR"))
         self.tabs.addTab(self.alphaBox, _("AlphaTL && Ingame Score"))
-        self.tabs.addTab(self.clientapiBox,_("SC2 Client API"))
+        self.tabs.addTab(self.clientapiBox, _("SC2 Client API"))
 
         table = dict()
         table['mapmanager'] = 0
@@ -341,7 +341,7 @@ class SubwindowMisc(QWidget):
 
         self.cb_usesc2listener = QCheckBox(
             " " + _("Listen to SC2 Client API running"
-            " on a different PC in the network."))
+                    " on a different PC in the network."))
         self.cb_usesc2listener.setChecked(
             scctool.settings.config.parser.getboolean(
                 "SCT", "sc2_network_listener_enabled"))
@@ -357,22 +357,25 @@ class SubwindowMisc(QWidget):
         self.listener_address.setPlaceholderText(
             "[Your SC2 PC IP]:6119")
         self.listener_address.setToolTip(
-            _('IP adcress and port of machine running SC2.'))
-        ip_port = r"^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]):[0-9]+$"
+            _('IP address and port of machine running SC2.'))
+        ip_port = (
+            r"^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.)" +
+            r"{3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]):[0-9]+$")
         self.listener_address.setValidator(QRegExpValidator(QRegExp(ip_port)))
 
-        self.test_listener = QPushButton(_("Test Connection to SC2 Client API"))
+        self.test_listener = QPushButton(
+            " " + _("Test SC2 Client API Connection") + " ")
         self.test_listener.clicked.connect(self.testClientAPI)
 
         text = _(
             "Activate this option if you are using a two computer "
-            "setup with StarCraft Casting Tool running on a different "
+            "setup with StarCraft Casting Tool running on a different"
             " PC than your SC2 client. Open the Battle.net launcher "
-            " on the latter PC, click 'Options', 'Game Settings', and under SC2,"
-            " check 'Additional Command Line Arguments', and enter "
-            "'-clientapi 6119'. Finally set as network"
+            "on the latter PC, click 'Options', 'Game Settings', and "
+            "under SC2, check 'Additional Command Line Arguments', and "
+            "enter '-clientapi 6119'. Finally set as network"
             " address below: '[Your SC2 PC IP]:6119'."
-            )
+        )
 
         label = QLabel(text)
         label.setAlignment(Qt.AlignJustify)
@@ -411,14 +414,15 @@ class SubwindowMisc(QWidget):
         title = _("Connection Test")
 
         if successfull:
-            QMessageBox.information(self, title,
+            QMessageBox.information(
+                self, title,
                 _('Connection to SC2 client API established!'))
         else:
-            QMessageBox.warning(self, title,
-                _('Unable to connect to SC2 client API. Please make sure that SC2'
-                  ' is currently running on that machine.'))
-
-
+            QMessageBox.warning(
+                self, title,
+                _('Unable to connect to SC2 client API.'
+                  ' Please make sure that SC2 is currently'
+                  ' running on that machine.'))
 
     def createOcrBox(self):
         """Create forms for OCR."""
@@ -828,7 +832,8 @@ class SubwindowMisc(QWidget):
             scctool.settings.config.parser.set(
                 "SCT", "sc2_network_listener_enabled",
                 str(self.cb_usesc2listener.isChecked()))
-            self.controller.setCBs()
+            self.controller.refreshButtonStatus()
+            # self.controller.setCBS()
             self.__dataChanged = False
 
     def saveCloseWindow(self):

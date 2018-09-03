@@ -16,9 +16,9 @@ from scctool.settings.alias import AliasManager
 from scctool.settings.history import HistoryManager
 from scctool.settings.logoManager import LogoManager
 from scctool.settings.placeholders import PlaceholderList
-from scctool.tasks.housekeeper import HouseKeeperThread
 from scctool.tasks.auth import AuthThread
 from scctool.tasks.autorequests import AutoRequestsThread
+from scctool.tasks.housekeeper import HouseKeeperThread
 from scctool.tasks.mapstats import MapStatsManager
 from scctool.tasks.sc2ClientInteraction import (SC2ApiThread, SwapPlayerNames,
                                                 ToggleScore)
@@ -475,11 +475,12 @@ class MainController:
     def toggleWidget(self, widget, condition, ttFalse='', ttTrue=''):
         """Disable or an enable a widget based on a condition."""
         widget.setAttribute(Qt.WA_AlwaysShowToolTips)
-        if condition:
-            tooltip = ttTrue
-        else:
-            tooltip = ttFalse
-        widget.setToolTip(tooltip)
+        widget.setToolTip(ttTrue if condition else ttFalse)
+        if not condition:
+            try:
+                widget.setChecked(False)
+            except Exception:
+                pass
         widget.setEnabled(condition)
 
     def refreshButtonStatus(self):
@@ -519,14 +520,14 @@ class MainController:
             self.toggleWidget(
                 self.view.cb_autoToggleScore,
                 not network_listener,
-                _('Not available when SC2 is running on a diffrent PC.'),
+                _('Not available when SC2 is running on a different PC.'),
                 _('Automatically sets the score of your ingame' +
                   ' UI-interface at the begining of a game.'))
 
             self.toggleWidget(
                 self.view.cb_autoToggleProduction,
                 not network_listener,
-                _('Not available when SC2 is running on a diffrent PC.'),
+                _('Not available when SC2 is running on a different PC.'),
                 _('Automatically toggles the production tab of your' +
                   ' ingame UI-interface at the begining of a game.'))
 
