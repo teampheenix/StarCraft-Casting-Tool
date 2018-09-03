@@ -50,7 +50,10 @@ class TasksThread(QThread):
     def activateTask(self, task):
         """Activate a task."""
         if not (task in self.__tasks):
-            raise UserWarning("Task {} is not valid.".format(task))
+            raise UserWarning(
+                "Task {} of {} is not valid.".format(
+                    task,
+                    self.__class__.__name__))
 
         self.__tasks[task] = True
 
@@ -65,7 +68,10 @@ class TasksThread(QThread):
     def deactivateTask(self, task):
         """Deactivate a Task."""
         if not (task in self.__tasks):
-            raise UserWarning("Task {} is not valid.".format(task))
+            raise UserWarning(
+                "Task {} of {} is not valid.".format(
+                    task,
+                    self.__class__.__name__))
         self.__tasks[task] = False
 
     def execTask(self, task):
@@ -101,8 +107,9 @@ class TasksThread(QThread):
 
     def run(self):
         """Run the thread."""
-        module_logger.info("A TasksThread is starting.")
-        
+        module_logger.info(
+            "A {} is starting.".format(self.__class__.__name__))
+
         if self.__wait_first:
             self.__wait()
 
@@ -110,4 +117,4 @@ class TasksThread(QThread):
             self.execActiveTasks()
             self.__wait()
 
-        module_logger.info("A TasksThread is done.")
+        module_logger.info("A {} is done.".format(self.__class__.__name__))

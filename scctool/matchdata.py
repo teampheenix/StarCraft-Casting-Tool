@@ -102,7 +102,10 @@ class MatchData(QObject):
         else:
             chg = self.setProvider("Custom")
 
-        self.setID(re.findall('\d+', url)[-1])
+        try:
+            self.setID(re.findall('\d+', url)[-1])
+        except IndexError:
+            pass
 
         return chg
     # except Exception as e:
