@@ -25,3 +25,4 @@ scctool/__init__.pyc
 .gitchangelog.rc
 casting_html/src/js/profile.js
 build_data_old.py
+src/safe.json
