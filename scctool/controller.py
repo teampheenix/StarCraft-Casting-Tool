@@ -3,6 +3,7 @@ import logging
 import os
 import shutil
 import sys
+import subprocess
 import webbrowser
 
 from PyQt5.QtCore import Qt
@@ -313,6 +314,13 @@ class MainController:
             webbrowser.open(url)
         except Exception as e:
             module_logger.exception("message")
+
+    def open_file(self, filename):
+        if sys.platform == "win32":
+            os.startfile(filename)
+        else:
+            opener ="open" if sys.platform == "darwin" else "xdg-open"
+            subprocess.call([opener, filename])
 
     def runSC2ApiThread(self, task):
         """Start task in thread that monitors SC2-Client-API."""
