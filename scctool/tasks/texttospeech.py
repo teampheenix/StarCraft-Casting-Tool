@@ -149,6 +149,24 @@ class TextToSpeech:
                 return None
         return None
 
+    def cleanCache(self):
+        ids = set()
+        for item in self.__cache:
+            if not os.path.isfile(scctool.settings.getAbsPath(item['file'])):
+                self.__cache.remove(item)
+            else:
+                ids.add(item['id'])
+
+        dir = scctool.settings.getAbsPath(scctool.settings.ttsDir)
+        for fname in os.listdir(dir):
+            full_fname = os.path.join(dir, fname)
+            name, ext = os.path.splitext(fname)
+            ext = ext.replace(".", "")
+            if (os.path.isfile(full_fname) and name not in ids):
+                os.remove(full_fname)
+                module_logger.info("Removed tts file {}".format(full_fname))
+
+
     def defineOptions(self):
         self.options = {}
 

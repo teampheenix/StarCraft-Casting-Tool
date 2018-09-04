@@ -32,4 +32,5 @@ class HouseKeeperThread(TasksThread):
         self._controller.logoManager.removeDeadMatches()
         self._controller.logoManager.removeDuplicates()
         self._controller.logoManager.clearFolder()
+        self._controller.tts.cleanCache()
         self.deactivateTask('clean')
