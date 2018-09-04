@@ -28,6 +28,7 @@ from scctool.tasks.texttospeech import TextToSpeech
 from scctool.tasks.updater import VersionHandler
 from scctool.tasks.websocket import WebsocketThread
 from scctool.view.widgets import ToolUpdater
+from scctool.tasks.localhost import LocalhostThread
 
 # create logger
 module_logger = logging.getLogger(__name__)
@@ -64,6 +65,8 @@ class MainController:
             self.historyManager = HistoryManager()
             self.mapstatsManager = MapStatsManager(self)
             self.tts = TextToSpeech()
+            self.localhost = LocalhostThread()
+            self.localhost.start(9)
             self.housekeeper = HouseKeeperThread(self)
             self.initPlayerIntroData()
 
@@ -360,6 +363,7 @@ class MainController:
             module_logger.info("cleanUp called")
             self.SC2ApiThread.requestTermination("ALL")
             self.authThread.terminate()
+            self.localhost.terminate()
             self.stopWebsocketThread()
             self.textFilesThread.terminate()
             self.autoRequestsThread.terminate()
