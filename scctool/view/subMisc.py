@@ -23,6 +23,7 @@ module_logger = logging.getLogger(__name__)
 
 class SubwindowMisc(QWidget):
     """Show subwindow with miscellaneous settings."""
+    current_tab = -1
 
     def createWindow(self, mainWindow, tab=''):
         """Create subwindow with miscellaneous settings."""
@@ -88,7 +89,11 @@ class SubwindowMisc(QWidget):
         table['ocr'] = 3
         table['alphatl'] = 4
         table['sc2clientapi'] = 5
-        self.tabs.setCurrentIndex(table.get(tab, -1))
+        self.tabs.setCurrentIndex(table.get(tab, SubwindowMisc.current_tab))
+        self.tabs.currentChanged.connect(self.tabChanged)
+
+    def tabChanged(self, idx):
+        SubwindowMisc.current_tab = idx
 
     def changed(self):
         """Handle changes."""

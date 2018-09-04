@@ -17,8 +17,9 @@ module_logger = logging.getLogger(__name__)
 
 class SubwindowStyles(QWidget):
     """Show styles settings sub window."""
+    current_tab = -1
 
-    def createWindow(self, mainWindow):
+    def createWindow(self, mainWindow, tab=''):
         """Create styles settings sub window."""
         try:
             parent = None
@@ -42,6 +43,13 @@ class SubwindowStyles(QWidget):
             self.tabs.addTab(self.colorBox, _("Colors"))
             self.tabs.addTab(self.fontBox, _("Font"))
 
+            table = dict()
+            table['styles'] = 0
+            table['colors'] = 1
+            table['font'] = 2
+            self.tabs.setCurrentIndex(table.get(tab, SubwindowStyles.current_tab))
+            self.tabs.currentChanged.connect(self.tabChanged)
+
             mainLayout = QVBoxLayout()
             mainLayout.addWidget(self.tabs)
             mainLayout.addItem(QSpacerItem(
@@ -62,6 +70,9 @@ class SubwindowStyles(QWidget):
 
         except Exception as e:
             module_logger.exception("message")
+
+    def tabChanged(self, idx):
+        SubwindowStyles.current_tab = idx
 
     def changed(self):
         """Handle data change."""
