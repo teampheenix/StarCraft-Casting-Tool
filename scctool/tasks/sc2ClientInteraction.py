@@ -143,10 +143,9 @@ class SC2ApiThread(QThread):
             module_logger.info("Start SC2 Interaction Thread")
             self.exiting = False
 
-            game_url, ui_url = self.getURLs()
-
             while self.exiting is False:
                 # See: https://us.battle.net/forums/en/sc2/topic/20748195420
+                game_url, ui_url = self.getURLs()
                 try:
                     game_response = requests.get(game_url, timeout=30).json()
                     # activate script if 2 players are playing right now
