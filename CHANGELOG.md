@@ -5,7 +5,13 @@
 
 ### New
 
+* Added a basic Aligulac Browser Source that predicts the outcome of a 1vs1 match.
+
 * Added option to specify the SC2 client API address in the misc menu to enable a two pc streaming setup.
+
+### Changes
+
+* Last open tab is now saved and automatically selected in settings dialogs.
 
 ### Fix
 
