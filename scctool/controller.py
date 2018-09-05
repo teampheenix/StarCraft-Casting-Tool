@@ -25,6 +25,7 @@ from scctool.tasks.sc2ClientInteraction import (SC2ApiThread, SwapPlayerNames,
                                                 ToggleScore)
 from scctool.tasks.textfiles import TextFilesThread
 from scctool.tasks.texttospeech import TextToSpeech
+from scctool.tasks.aligulac import AligulacThread
 from scctool.tasks.updater import VersionHandler
 from scctool.tasks.websocket import WebsocketThread
 from scctool.view.widgets import ToolUpdater
@@ -56,6 +57,8 @@ class MainController:
                 self.toogleLEDs)
             self.websocketThread.introShown.connect(self.updatePlayerIntroIdx)
             self.runWebsocketThread()
+            self.aligulacThread = AligulacThread(
+                    self.matchControl, self.websocketThread)
             self.autoRequestsThread = AutoRequestsThread(self)
             self._warning = False
             self.checkVersion()
@@ -319,7 +322,7 @@ class MainController:
         if sys.platform == "win32":
             os.startfile(filename)
         else:
-            opener ="open" if sys.platform == "darwin" else "xdg-open"
+            opener = "open" if sys.platform == "darwin" else "xdg-open"
             subprocess.call([opener, filename])
 
     def runSC2ApiThread(self, task):
@@ -362,6 +365,7 @@ class MainController:
             self.authThread.terminate()
             self.stopWebsocketThread()
             self.textFilesThread.terminate()
+            self.aligulacThread.terminate()
             self.autoRequestsThread.terminate()
             self.mapstatsManager.close(False)
             self.housekeeper.terminate()
@@ -822,6 +826,12 @@ class MainController:
                 self.runSC2ApiThread("playerLogos")
             else:
                 self.stopSC2ApiThread("playerLogos")
+        if path == 'aligulac':
+            if num > 0:
+                self.aligulacThread.activate()
+                self.aligulacThread.receive_data('meta')
+            else:
+                self.aligulacThread.terminate()
 
     def autoSetNextMap(self, idx=-1, send=True):
         if scctool.settings.config.parser.getboolean(

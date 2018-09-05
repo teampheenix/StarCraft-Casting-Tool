@@ -22,7 +22,7 @@ class WebsocketThread(QThread):
     hooked_keys = dict()
     socketConnectionChanged = pyqtSignal(int, str)
     valid_scopes = ['score', 'mapicons_box_[1-3]', 'mapicons_landscape_[1-3]',
-                    'intro', 'mapstats', 'ui_logo_[1-3]']
+                    'intro', 'mapstats', 'ui_logo_[1-3]', 'aligulac']
     mapicon_sets = dict()
     scopes = dict()
     intro_state = ''
@@ -190,12 +190,12 @@ class WebsocketThread(QThread):
     async def handler(self, websocket, path):
         path = self.handle_path(path)
         if not path:
-            module_logger.info("Client with incorrect path.")
+            module_logger.info("Client with incorrect path {}.".format(path))
             return
         self.registerConnection(websocket, path)
-        module_logger.info("Client connected!")
+        module_logger.info("Client connected at path {}!".format(path))
         primary_scope = self.get_primary_scope(path)
-        if primary_scope != 'ui_logo':
+        if primary_scope not in ['ui_logo', 'aligulac']:
             self.changeStyle(path, websocket=websocket)
         try:
             self.changeFont(primary_scope, websocket=websocket)

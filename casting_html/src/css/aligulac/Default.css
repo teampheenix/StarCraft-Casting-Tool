@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css?family=Marcellus+SC');
+
+div.bar{
+    height: 35px;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+    border: 1px solid black;
+    color: black;
+}
+
+div.bar_player1, div.bar_player2{
+    float: left;
+    height: 100%;
+    width: 50%;
+    box-sizing: border-box;
+    transition: width 1.5s;
+    font-family: 'Marcellus SC', Times, serif;
+    letter-spacing: 0.05em;
+    text-align: center;
+    color: white;
+    font-size: 24px;
+    line-height: 35px;
+}
+
+div.bar_player1{
+    background: -moz-linear-gradient(top,rgba(48,25,255,1) 0%, rgba(4,4,180,1) 100%);
+}
+
+div.bar_player2{
+    background: -moz-linear-gradient(top, rgba(255,48,25,1) 0%, rgba(180,4,4,1) 100%);
+}
+
+div.aligulac{
+    width: 100%;
+    box-sizing: border-box;
+    padding: 3px;
+}
+
+span.aligulac{
+    font-family: 'Marcellus SC', Times, serif;
+    letter-spacing: 0.6em;
+    text-align: center;
+    text-transform: uppercase;
+}
