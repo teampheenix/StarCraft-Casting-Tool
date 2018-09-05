@@ -166,7 +166,6 @@ class TextToSpeech:
                 os.remove(full_fname)
                 module_logger.info("Removed tts file {}".format(full_fname))
 
-
     def defineOptions(self):
         self.options = {}
 

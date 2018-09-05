@@ -7,6 +7,7 @@ div.bar{
     overflow: hidden;
     border: 1px solid black;
     color: black;
+    box-shadow: 2px 4px 4px -2px rgba(0, 0, 0, 0.6);
 }
 
 div.bar_player1, div.bar_player2{
@@ -14,13 +15,13 @@ div.bar_player1, div.bar_player2{
     height: 100%;
     width: 50%;
     box-sizing: border-box;
-    transition: width 1.5s;
     font-family: 'Marcellus SC', Times, serif;
     letter-spacing: 0.05em;
     text-align: center;
     color: white;
     font-size: 24px;
     line-height: 35px;
+    font-variant-numeric: tabular-nums;
 }
 
 div.bar_player1{
@@ -39,7 +40,9 @@ div.aligulac{
 
 span.aligulac{
     font-family: 'Marcellus SC', Times, serif;
+    font-size: 20px;
     letter-spacing: 0.6em;
     text-align: center;
     text-transform: uppercase;
+    filter: drop-shadow(0px 0px 2px white);
 }

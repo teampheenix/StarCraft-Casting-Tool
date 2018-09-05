@@ -1,12 +1,15 @@
 import logging
-import requests
 import queue
 from functools import lru_cache
 
+import requests
+
+import scctool.settings
 from scctool.tasks.tasksthread import TasksThread
 
 # create logger
 module_logger = logging.getLogger(__name__)
+
 
 class AligulacInterface:
 
@@ -16,14 +19,14 @@ class AligulacInterface:
         self._api_key = api_key
         self._params = {'apikey': self._api_key, 'format': 'json'}
 
-    @lru_cache(maxsize=None)
+    @lru_cache(maxsize=32)
     def search_player(self, name):
         url = self.base_url + '/search/json/'
         r = requests.get(url, params={'q': name})
         data = r.json().get('players', [])
         return data.pop(0)
 
-    @lru_cache(maxsize=None)
+    @lru_cache(maxsize=32)
     def _player_to_id(self, player):
         if isinstance(player, int):
             return player
@@ -32,7 +35,7 @@ class AligulacInterface:
         if isinstance(player, str):
             return self.search_player(player).get('id')
 
-    @lru_cache(maxsize=None)
+    @lru_cache(maxsize=32)
     def get_player(self, player):
         id = self._player_to_id(player)
         url = self.base_url + '/api/v1/player/{}/'.format(id)
@@ -40,7 +43,7 @@ class AligulacInterface:
         r.raise_for_status()
         return r.json()
 
-    @lru_cache(maxsize=None)
+    @lru_cache(maxsize=32)
     def predict_match(self, player1, player2, bo=1, score1=0, score2=0):
         print('predict_match:', player1, player2, bo, score1, score2)
         id1 = self._player_to_id(player1)
@@ -54,7 +57,7 @@ class AligulacInterface:
         r.raise_for_status()
         return r.json()
 
-    @lru_cache(maxsize=None)
+    @lru_cache(maxsize=32)
     def get_history(self, player1, player2):
         id1 = self._player_to_id(player1)
         id2 = self._player_to_id(player2)
@@ -75,7 +78,8 @@ class AligulacThread(TasksThread):
         super().__init__()
         self._matchControl = matchControl
         self._websocket = websocket
-        self._aligulac = AligulacInterface('bokFdvyJebCv50IQt58P')
+        self._aligulac = AligulacInterface(
+            scctool.settings.safe.get('aligulac-api-key'))
         self._q = queue.Queue()
         self._matchControl.dataChanged.connect(self.receive_data)
         self._matchControl.metaChanged.connect(self.receive_data)
@@ -90,7 +94,7 @@ class AligulacThread(TasksThread):
 
     def __processTask(self):
         try:
-            item = self._q.get(False, 1)
+            self._q.get(False, 1)
             match = self._matchControl.activeMatch()
             if match.getSolo():
                 player = list()
@@ -113,7 +117,3 @@ class AligulacThread(TasksThread):
 
         except queue.Empty:
             pass
-
-# if __name__ == '__main__':
-#     interface = AligulacInterface('bokFdvyJebCv50IQt58P')
-#     print(interface.predict_match('Snute', 'DNS', 3, 1, 0))

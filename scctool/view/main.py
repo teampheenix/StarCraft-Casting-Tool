@@ -328,6 +328,8 @@ class MainWindow(QMainWindow):
                               'file': 'ui_logo_1.html'},
                              {'name': _('UI Logo {}').format(2),
                               'file': 'ui_logo_2.html'},
+                             {'name': _('Aligulac (only 1vs1)'),
+                              'file': 'aligulac.html'},
                              {'name': _('League (ALphaTL && RSTL only)'),
                               'file': 'league.html'},
                              {'name': _('Matchbanner (AlphaTL)'),

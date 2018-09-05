@@ -4,10 +4,32 @@ var reconnectIntervalMs = 5000;
 var data = {};
 var controller = new Controller(profile, 'aligulac');
 init();
-$('#player1').resize(function(){
-    var elem = $(this);
 
+var tlv = new TimelineMax({
+  paused: true,
+  onUpdate: changeIt
 });
+
+tlv.fromTo("#player1", 1, {
+    width: '0%'
+  }, {
+    width: '100%',
+    ease: Linear.easeNone
+  })
+  .fromTo("#player2", 1, {
+    width: '100%'
+  }, {
+    width: '0%',
+    ease: Linear.easeNone
+  }, '-=1');
+tlv.seek(0.5);
+
+function changeIt() {
+  p1 = (this.progress() * 100).toFixed(1);
+  p2 = (100 - p1).toFixed(1);
+  $('#player1').html(p1 + '%');
+  $('#player2').html(p2 + '%');
+}
 
 function init() {
   // loadStoredData();
@@ -22,14 +44,16 @@ function storeData(scope = null) {
   if (scope == null || scope == "data") controller.storeData('data', data, true);
 }
 
-function processData(data){
-    var width1 = (data['prob1']*100).toFixed(2) + '%';
-    var width2 = (data['prob2']*100).toFixed(2) + '%';
-    console.log(width1, width2);
-    $('#player1').css('width', width1);
-    $('#player1').html(width1);
-    $('#player2').css('width', width2);
-    $('#player2').html(width2);
+function processData(data) {
+  if (tlv.isActive()) {
+    tlv.pause()
+  }
+  TweenLite.fromTo(tlv, 3, {
+    progress: tlv.progress()
+  }, {
+    progress: data['prob1'],
+    ease: Linear.easeNone
+  });
 }
 
 function connectWebsocket() {
@@ -46,7 +70,6 @@ function connectWebsocket() {
     var jsonObject = JSON.parse(message.data);
     console.log("Message received");
     if (jsonObject.event == 'DATA') {
-      console.log(jsonObject.data);
       processData(jsonObject.data);
     }
   }
