@@ -195,12 +195,15 @@ class WebsocketThread(QThread):
         self.registerConnection(websocket, path)
         module_logger.info("Client connected at path {}!".format(path))
         primary_scope = self.get_primary_scope(path)
-        if primary_scope not in ['ui_logo', 'aligulac']:
+
+        if primary_scope not in ['ui_logo']:
             self.changeStyle(path, websocket=websocket)
+
         try:
             self.changeFont(primary_scope, websocket=websocket)
         except ValueError:
             pass
+
         if primary_scope == 'mapstats':
             self.changeColors(primary_scope, websocket=websocket)
             data = self.__controller.mapstatsManager.getData()

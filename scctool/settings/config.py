@@ -176,6 +176,7 @@ def setDefaultConfigAll():
     setDefaultConfig("Style", "score", "Default")
     setDefaultConfig("Style", "intro", "Default")
     setDefaultConfig("Style", "mapstats", "Default")
+    setDefaultConfig("Style", "aligulac", "Default")
     setDefaultConfig("Style", "use_custom_font", "False")
     setDefaultConfig("Style", "custom_font", "Verdana")
 
