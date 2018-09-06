@@ -4,27 +4,12 @@ var reconnectIntervalMs = 5000;
 var data = {};
 var controller = new Controller(profile, 'aligulac');
 var texttween = new TimelineMax();
-
-init();
-
 var tlv = new TimelineMax({
     paused: true,
     onUpdate: changeIt
 });
 
-tlv.fromTo("#player1", 1, {
-        width: '0%'
-    }, {
-        width: '100%',
-        ease: Linear.easeNone
-    })
-    .fromTo("#player2", 1, {
-        width: '100%'
-    }, {
-        width: '0%',
-        ease: Linear.easeNone
-    }, '-=1');
-tlv.seek(0.5);
+init();
 
 function changeIt() {
     p1 = (this.progress() * 100).toFixed(1);
@@ -34,14 +19,29 @@ function changeIt() {
 }
 
 function init() {
-    loadStoredData();
+    tlv.fromTo("#player1", 1, {
+            width: '0%'
+        }, {
+            width: '100%',
+            ease: Linear.easeNone
+        })
+        .fromTo("#player2", 1, {
+            width: '100%'
+        }, {
+            width: '0%',
+            ease: Linear.easeNone
+        }, '-=1');
+    tlv.seek(0.5);
     connectWebsocket();
+    loadStoredData();
 }
 
 function loadStoredData() {
     try {
         data = controller.loadData('data', true);
-        if (data) processData();
+        if (data){
+          processData();
+        }
     } catch (e) {}
 }
 
