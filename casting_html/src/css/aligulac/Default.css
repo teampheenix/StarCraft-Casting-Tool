@@ -14,35 +14,54 @@ div.bar_player1, div.bar_player2{
     float: left;
     height: 100%;
     width: 50%;
-    box-sizing: border-box;
     font-family: 'Marcellus SC', Times, serif;
     letter-spacing: 0.05em;
     text-align: center;
     color: white;
-    font-size: 24px;
+    font-size: 20px;
     line-height: 35px;
-    font-variant-numeric: tabular-nums;
+    margin: -1px;
+    border: 1px solid black;
 }
 
 div.bar_player1{
-    background: -moz-linear-gradient(top,rgba(48,25,255,1) 0%, rgba(4,4,180,1) 100%);
+    background: -moz-linear-gradient(top, rgba(48,25,220,1) 0%, rgba(4,4,120,1) 60%, rgba(48,25,180,1) 100%);
 }
 
 div.bar_player2{
-    background: -moz-linear-gradient(top, rgba(255,48,25,1) 0%, rgba(180,4,4,1) 100%);
+    background: -moz-linear-gradient(top, rgba(220,48,25,1) 0%, rgba(120,4,4,1) 60%, rgba(180,48,25,1) 100%);
 }
 
 div.aligulac{
     width: 100%;
     box-sizing: border-box;
     padding: 3px;
+    background-color: black;
+    background: -moz-linear-gradient(top, rgba(90,90,90,1) 0%, rgba(0,0,0,1) 50%, rgba(20,20,20,1) 100%);
+    border-top: 1px solid black;
+    border-right: 1px solid black;
+    border-left: 1px solid black;
+    color: white;
+    box-shadow: 2px 4px 4px -2px rgba(0, 0, 0, 0.6);
 }
 
 span.aligulac{
+    padding-left: 3px;
     font-family: 'Marcellus SC', Times, serif;
     font-size: 20px;
-    letter-spacing: 0.6em;
+    letter-spacing: 0.5em;
     text-align: center;
     text-transform: uppercase;
-    filter: drop-shadow(0px 0px 2px white);
+}
+
+span.prediction, span.score{
+    font-family: 'Marcellus SC', Times, serif;
+    font-size: 20px;
+    letter-spacing: 0.2em;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+span.score{
+    padding-left: 5px;
 }

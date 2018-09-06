@@ -116,7 +116,6 @@ class AligulacThread(TasksThread):
                         player[0], player[1], bestof,
                         score[0], score[1])
                     predicted_score = self._aligulac.predict_score(prediction)
-                    print(predicted_score)
                     score1 = predicted_score.get('sca')
                     score2 = predicted_score.get('scb')
                     prob1 = prediction.get('proba')
