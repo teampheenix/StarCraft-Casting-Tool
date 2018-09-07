@@ -2,8 +2,8 @@
 import logging
 import os
 import shutil
-import sys
 import subprocess
+import sys
 import webbrowser
 
 from PyQt5.QtCore import Qt
@@ -17,6 +17,7 @@ from scctool.settings.alias import AliasManager
 from scctool.settings.history import HistoryManager
 from scctool.settings.logoManager import LogoManager
 from scctool.settings.placeholders import PlaceholderList
+from scctool.tasks.aligulac import AligulacThread
 from scctool.tasks.auth import AuthThread
 from scctool.tasks.autorequests import AutoRequestsThread
 from scctool.tasks.housekeeper import HouseKeeperThread
@@ -25,7 +26,6 @@ from scctool.tasks.sc2ClientInteraction import (SC2ApiThread, SwapPlayerNames,
                                                 ToggleScore)
 from scctool.tasks.textfiles import TextFilesThread
 from scctool.tasks.texttospeech import TextToSpeech
-from scctool.tasks.aligulac import AligulacThread
 from scctool.tasks.updater import VersionHandler
 from scctool.tasks.websocket import WebsocketThread
 from scctool.view.widgets import ToolUpdater
@@ -58,7 +58,7 @@ class MainController:
             self.websocketThread.introShown.connect(self.updatePlayerIntroIdx)
             self.runWebsocketThread()
             self.aligulacThread = AligulacThread(
-                    self.matchControl, self.websocketThread)
+                self.matchControl, self.websocketThread)
             self.autoRequestsThread = AutoRequestsThread(self)
             self._warning = False
             self.checkVersion()
@@ -736,6 +736,8 @@ class MainController:
 
             try:
                 if tts_active:
+                    if team.strip().lower() == 'tbd':
+                        team = ''
                     text = self.tts.getLine(tts_scope, name, race, team)
                     tts_file = os.path.join("..", self.tts.synthesize(
                         text, tts_voice,
