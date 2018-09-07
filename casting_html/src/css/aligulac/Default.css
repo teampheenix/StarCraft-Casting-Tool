@@ -26,11 +26,13 @@ div.bar_player1, div.bar_player2 {
 }
 
 div.bar_player1 {
-  background: -moz-linear-gradient(top, rgba(48, 48, 220, 1) 0%, rgba(4, 4, 120, 1) 60%, rgba(4, 4, 120, 1) 80%, rgba(48, 48, 180, 1) 100%);
+  background-color: blue;
+  background: -webkit-linear-gradient(top, rgba(48, 48, 220, 1) 0%, rgba(4, 4, 120, 1) 60%, rgba(4, 4, 120, 1) 80%, rgba(48, 48, 180, 1) 100%);
 }
 
 div.bar_player2 {
-  background: -moz-linear-gradient(top, rgba(220, 48, 48, 1) 0%, rgba(120, 4, 4, 1) 60%, rgba(120, 4, 4, 1) 80%, rgba(180, 48, 48, 1) 100%);
+  background-color: red;
+  background: -webkit-linear-gradient(top, rgba(220, 48, 48, 1) 0%, rgba(120, 4, 4, 1) 60%, rgba(120, 4, 4, 1) 80%, rgba(180, 48, 48, 1) 100%);
 }
 
 div.aligulac {
@@ -38,7 +40,7 @@ div.aligulac {
   box-sizing: border-box;
   padding: 3px;
   background-color: black;
-  background: -moz-linear-gradient(top, rgba(80, 80, 80, 1) 0px, rgba(0, 0, 0, 1) 15px, rgba(10, 10, 10, 1) 100%);
+  background: -webkit-linear-gradient(top, rgba(80, 80, 80, 1) 0px, rgba(0, 0, 0, 1) 15px, rgba(10, 10, 10, 1) 100%);
   color: white;
   box-shadow: 2px 4px 4px -2px rgba(0, 0, 0, 0.6);
   text-align: center;
