@@ -1,6 +1,15 @@
 # Changelog
 
 
+## v2.2.1 (2018-09-09)
+
+### Fix
+
+* Fixed a bug where placeholders used by Twitch and Nighbot would use the selected match tab instead of the active tab.
+
+* Fixed a bug where copying a match tab would entangle both tabs.
+
+
 ## v2.2.0 (2018-09-09)
 
 ### New
