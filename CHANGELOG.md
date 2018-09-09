@@ -1,7 +1,7 @@
 # Changelog
 
 
-## (unreleased)
+## v2.2.0 (2018-09-09)
 
 ### New
 
@@ -9,28 +9,21 @@
 
 * Added option to specify the SC2 client API address in the misc menu to enable a two pc streaming setup.
 
-### Changes
-
-* Last open tab is now saved and automatically selected in settings dialogs.
-
-### Fix
-
-* Fixed a bug that impaired tts.
-
-
-## v2.2.0 (2018-08-26)
-
-### New
-
 * Added Match Tabs that allow you to manage multiple matches at the same time and jump between them.
 
 * Added a generic Proleague Format to Custom Formats.
 
 ### Changes
 
+* Last open tab is now saved and automatically selected in settings dialogs.
+
 * Koprulu custom format changed back to Bo7 All-Kill.
 
 ### Fix
+
+* Fixed a bug where TTS would announce team 'TBD'.
+
+* Fixed a bug that impaired tts.
 
 * Fixed a crash that would occur when adding a map to the mapstats custom map pool.
 
