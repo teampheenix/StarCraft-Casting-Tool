@@ -3,7 +3,6 @@ import json
 import logging
 import os
 import time
-from shutil import copyfile
 
 from PyQt5.QtCore import pyqtSignal
 
@@ -32,9 +31,9 @@ class MapStatsManager:
         """Read json data from file."""
         file = scctool.settings.getJsonFile('mapstats')
         if not os.path.exists(file):
-            copyfile(scctool.settings.getResFile('mapstats.json'), file)
+            file = scctool.settings.getResFile('mapstats.json')
         try:
-            with open(scctool.settings.getJsonFile('mapstats'),
+            with open(file,
                       'r',
                       encoding='utf-8-sig') as json_file:
                 data = json.load(json_file)
