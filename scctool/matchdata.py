@@ -61,8 +61,11 @@ class MatchData(QObject):
     def writeJsonFile(self):
         self.__matchControl.writeJsonFile()
 
-    def getData(self):
-        return self.__data
+    def getData(self, copy=False):
+        if copy:
+            return self.__data.copy()
+        else:
+            return self.__data
 
     def __initMatchGrabber(self):
         provider = self.getProvider()
