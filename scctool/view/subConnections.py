@@ -13,13 +13,14 @@ import scctool.settings
 from scctool.view.widgets import Completer, MonitoredLineEdit
 
 # create logger
-module_logger = logging.getLogger('scctool.view.subConnections')
+module_logger = logging.getLogger(__name__)
 
 
 class SubwindowConnections(QWidget):
     """Show connections settings sub window."""
+    current_tab = -1
 
-    def createWindow(self, mainWindow):
+    def createWindow(self, mainWindow, tab=''):
         """Create window."""
         try:
             parent = None
@@ -35,7 +36,7 @@ class SubwindowConnections(QWidget):
             self.__dataChanged = False
 
             self.createButtonGroup()
-            self.createTabs()
+            self.createTabs(tab)
 
             mainLayout = QVBoxLayout()
 
@@ -57,7 +58,7 @@ class SubwindowConnections(QWidget):
         except Exception as e:
             module_logger.exception("message")
 
-    def createTabs(self):
+    def createTabs(self, tab=''):
         """Create tabs."""
         self.tabs = QTabWidget()
 
@@ -69,6 +70,15 @@ class SubwindowConnections(QWidget):
             scctool.settings.getResFile('twitch.png')), _("Twitch"))
         self.tabs.addTab(self.formGroupNightbot, QIcon(
             scctool.settings.getResFile('nightbot.ico')), _("Nightbot"))
+
+        table = dict()
+        table['twitch'] = 0
+        table['nightbot'] = 1
+        self.tabs.setCurrentIndex(table.get(tab, SubwindowConnections.current_tab))
+        self.tabs.currentChanged.connect(self.tabChanged)
+
+    def tabChanged(self, idx):
+        SubwindowConnections.current_tab = idx
 
     def createFormGroupTwitch(self):
         """Create forms for twitch."""

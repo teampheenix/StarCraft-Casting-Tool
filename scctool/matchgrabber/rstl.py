@@ -5,7 +5,7 @@ import logging
 from scctool.matchgrabber.custom import MatchGrabber as MatchGrabberParent
 
 # create logger
-module_logger = logging.getLogger('scctool.matchgrabber.rstl')
+module_logger = logging.getLogger(__name__)
 
 
 class MatchGrabber(MatchGrabberParent):
@@ -37,7 +37,7 @@ class MatchGrabber(MatchGrabberParent):
                      self.getURL().strip())
 
         with self._matchData.emitLock(overwrite,
-                                      self._matchData.metaChangedSignal):
+                                      self._matchData.metaChanged):
             if overwrite:
                 self._matchData.resetSwap()
 
@@ -263,15 +263,14 @@ class MatchGrabber(MatchGrabberParent):
                     logo_idx = 3 - idx
                 else:
                     logo_idx = idx
-                oldLogo = getattr(logoManager, 'getTeam{}'.format(logo_idx))()
+                oldLogo = logoManager.getTeam(logo_idx)
                 logo = logoManager.newLogo()
                 new_logo = logo.fromURL(
                     "http://hdgame.net" +
                     self._rawData['member' + str(idx)]['img_m'],
                     localFile=oldLogo.getAbsFile())
                 if new_logo:
-                    getattr(logoManager,
-                            'setTeam{}Logo'.format(logo_idx))(logo)
+                    logoManager.setTeamLogo(logo_idx, logo)
                 else:
                     module_logger.info("Logo download is not needed.")
             except Exception as e:

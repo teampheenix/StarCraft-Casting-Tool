@@ -9,7 +9,7 @@ import scctool.tasks.twitch
 from scctool.tasks.tasksthread import TasksThread
 
 # create logger
-module_logger = logging.getLogger('scctool.tasks.autorequests')
+module_logger = logging.getLogger(__name__)
 
 
 class AutoRequestsThread(TasksThread):

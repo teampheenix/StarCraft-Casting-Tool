@@ -13,11 +13,12 @@ import scctool.settings
 from scctool.view.widgets import HotkeyLayout, ScopeGroupBox, StyleComboBox
 
 # create logger
-module_logger = logging.getLogger('scctool.view.subConnections')
+module_logger = logging.getLogger(__name__)
 
 
 class SubwindowBrowserSources(QWidget):
     """Show connections settings sub window."""
+    current_tab = -1
 
     def createWindow(self, mainWindow, tab=''):
         """Create window."""
@@ -78,7 +79,11 @@ class SubwindowBrowserSources(QWidget):
         table['mapstats'] = 1
         table['mapicons_box'] = 2
         table['mapicons_landscape'] = 3
-        self.tabs.setCurrentIndex(table.get(tab, -1))
+        self.tabs.setCurrentIndex(table.get(tab, SubwindowBrowserSources.current_tab))
+        self.tabs.currentChanged.connect(self.tabChanged)
+
+    def tabChanged(self, idx):
+        SubwindowBrowserSources.current_tab = idx
 
     def addHotkey(self, ident, label):
         element = HotkeyLayout(
@@ -276,7 +281,7 @@ class SubwindowBrowserSources(QWidget):
         box.setLayout(layout)
         mainLayout.addWidget(box)
 
-        options = self.controller.matchData.scopes
+        options = self.controller.matchControl.scopes
         self.scope_box = dict()
         for idx in range(0, 3):
             self.scope_box[idx] = ScopeGroupBox(
@@ -326,7 +331,7 @@ class SubwindowBrowserSources(QWidget):
         box.setLayout(layout)
         mainLayout.addWidget(box)
 
-        options = self.controller.matchData.scopes
+        options = self.controller.matchControl.scopes
         self.scope_landscape = dict()
         for idx in range(0, 3):
             self.scope_landscape[idx] = ScopeGroupBox(
@@ -582,7 +587,7 @@ class SubwindowBrowserSources(QWidget):
                 str(self.cb_mark_played.isChecked()))
 
             self.controller.mapstatsManager.sendMapPool()
-            self.controller.updateMapButtons()
+            self.mainWindow.updateAllMapButtons()
 
             for idx in range(0, 3):
                 scctool.settings.config.parser.set(

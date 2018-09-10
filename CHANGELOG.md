@@ -1,6 +1,42 @@
 # Changelog
 
 
+## v2.2.1 (2018-09-09)
+
+### Fix
+
+* Fixed a bug where placeholders used by Twitch and Nighbot would use the selected match tab instead of the active tab.
+
+* Fixed a bug where copying a match tab would entangle both tabs.
+
+
+## v2.2.0 (2018-09-09)
+
+### New
+
+* Added a basic Aligulac Browser Source that predicts the outcome of a 1vs1 match.
+
+* Added option to specify the SC2 client API address in the misc menu to enable a two pc streaming setup.
+
+* Added Match Tabs that allow you to manage multiple matches at the same time and jump between them.
+
+* Added a generic Proleague Format to Custom Formats.
+
+### Changes
+
+* Last open tab is now saved and automatically selected in settings dialogs.
+
+* Koprulu custom format changed back to Bo7 All-Kill.
+
+### Fix
+
+* Fixed a bug where TTS would announce team 'TBD'.
+
+* Fixed a bug that impaired tts.
+
+* Fixed a crash that would occur when adding a map to the mapstats custom map pool.
+
+
 ## v2.1.4 (2018-08-20)
 
 ### Fix

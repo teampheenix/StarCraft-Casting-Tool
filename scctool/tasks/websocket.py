@@ -12,7 +12,7 @@ from PyQt5.QtCore import QThread, pyqtSignal
 import scctool.settings
 
 # create logger
-module_logger = logging.getLogger('scctool.tasks.websocket')
+module_logger = logging.getLogger(__name__)
 
 
 class WebsocketThread(QThread):
@@ -22,7 +22,7 @@ class WebsocketThread(QThread):
     hooked_keys = dict()
     socketConnectionChanged = pyqtSignal(int, str)
     valid_scopes = ['score', 'mapicons_box_[1-3]', 'mapicons_landscape_[1-3]',
-                    'intro', 'mapstats', 'ui_logo_[1-3]']
+                    'intro', 'mapstats', 'ui_logo_[1-3]', 'aligulac']
     mapicon_sets = dict()
     scopes = dict()
     intro_state = ''
@@ -152,7 +152,7 @@ class WebsocketThread(QThread):
             if force:
                 try:
                     keyboard.unhook_all()
-                except AttributeError:
+                except Exception:
                     pass
             self.keyboard_state = dict()
         else:
@@ -190,34 +190,41 @@ class WebsocketThread(QThread):
     async def handler(self, websocket, path):
         path = self.handle_path(path)
         if not path:
-            module_logger.info("Client with incorrect path.")
+            module_logger.info("Client with incorrect path {}.".format(path))
             return
         self.registerConnection(websocket, path)
-        module_logger.info("Client connected!")
+        module_logger.info("Client connected at path {}!".format(path))
         primary_scope = self.get_primary_scope(path)
-        if primary_scope != 'ui_logo':
+
+        if primary_scope not in ['ui_logo']:
             self.changeStyle(path, websocket=websocket)
+
         try:
             self.changeFont(primary_scope, websocket=websocket)
         except ValueError:
             pass
+
         if primary_scope == 'mapstats':
             self.changeColors(primary_scope, websocket=websocket)
             data = self.__controller.mapstatsManager.getData()
             self.sendData2WS(websocket, "MAPSTATS", data)
         elif primary_scope == 'score':
-            data = self.__controller.matchData.getScoreData()
+            data = self.__controller.matchControl.\
+                activeMatch().getScoreData()
             self.sendData2WS(websocket, "ALL_DATA", data)
         elif primary_scope in ['mapicons_box', 'mapicons_landscape']:
             self.changePadding(primary_scope, websocket=websocket)
             scope = path.replace('mapicons', 'scope')
             scope = scctool.settings.config.parser.get("MapIcons", scope)
-            if not self.__controller.matchData.isValidScope(scope):
+            if not self.__controller.matchControl.\
+                    activeMatch().isValidScope(scope):
                 scope = 'all'
-            data = self.__controller.matchData.getMapIconsData()
+            data = self.__controller.matchControl.\
+                activeMatch().getMapIconsData()
             processedData = dict()
             self.mapicon_sets[path] = set()
-            for idx in self.__controller.matchData.parseScope(scope):
+            for idx in self.__controller.matchControl.\
+                    activeMatch().parseScope(scope):
                 processedData[idx + 1] = data[idx + 1]
                 self.mapicon_sets[path].add(idx + 1)
             self.sendData2WS(websocket, 'DATA', processedData)
@@ -402,11 +409,13 @@ class WebsocketThread(QThread):
 
         scope = path.replace('mapicons', 'scope')
         scope = scctool.settings.config.parser.get("MapIcons", scope)
-        if not self.__controller.matchData.isValidScope(scope):
+        if not self.__controller.matchControl.\
+                activeMatch().isValidScope(scope):
             scope = 'all'
         old_set = self.mapicon_sets.get(path, set())
         new_set = set()
-        for idx in self.__controller.matchData.parseScope(scope):
+        for idx in self.__controller.matchControl.\
+                activeMatch().parseScope(scope):
             new_set.add(idx + 1)
 
         # This can later be used to animate single items in and out:

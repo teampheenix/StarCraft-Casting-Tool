@@ -11,7 +11,7 @@ from PyQt5.QtWidgets import (QGridLayout, QPushButton, QSizePolicy,
 import scctool.settings
 
 # create logger
-module_logger = logging.getLogger('scctool.view.subMarkdown')
+module_logger = logging.getLogger(__name__)
 
 
 class SubwindowMarkdown(QWidget):

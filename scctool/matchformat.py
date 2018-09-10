@@ -3,7 +3,7 @@
 import logging
 
 # create logger
-module_logger = logging.getLogger('scctool.matchformat')
+module_logger = logging.getLogger(__name__)
 
 
 class MatchFormat(object):

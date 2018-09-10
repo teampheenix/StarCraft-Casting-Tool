@@ -14,7 +14,7 @@ from scctool.tasks.liquipedia import LiquipediaGrabber
 from scctool.view.widgets import LogoDownloader
 
 # create logger
-module_logger = logging.getLogger('scctool.view.subLiquipediaSearch')
+module_logger = logging.getLogger(__name__)
 base_url = 'https://liquipedia.net'
 
 

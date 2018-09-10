@@ -12,7 +12,7 @@ from PyQt5.QtCore import QThread, pyqtSignal
 import scctool.settings
 
 # create logger
-module_logger = logging.getLogger('scctool.tasks.sc2ClientInteraction')
+module_logger = logging.getLogger(__name__)
 
 if(scctool.settings.windows):
     from PIL import ImageGrab  # pip install Pillow
@@ -124,24 +124,35 @@ class SC2ApiThread(QThread):
         module_logger.info(
             'Termination request fo task "' + task + '" cancelled')
 
+    def getURLs(self):
+        network = scctool.settings.config.parser.getboolean(
+            "SCT", "sc2_network_listener_enabled")
+        if network:
+            address = scctool.settings.config.parser.get(
+                "SCT", "sc2_network_listener_address")
+        else:
+            address = "localhost:6119"
+
+        url = "http://{}/{}"
+
+        return url.format(address, "game"), url.format(address, "ui")
+
     def run(self):
         """Run the thread."""
         try:
-            module_logger.info("Start Sc2 Interation Thread")
+            module_logger.info("Start SC2 Interaction Thread")
             self.exiting = False
-
-            GAMEurl = "http://localhost:6119/game"
-            UIurl = "http://localhost:6119/ui"
 
             while self.exiting is False:
                 # See: https://us.battle.net/forums/en/sc2/topic/20748195420
+                game_url, ui_url = self.getURLs()
                 try:
-                    GAMEresponse = requests.get(GAMEurl, timeout=30).json()
+                    game_response = requests.get(game_url, timeout=30).json()
                     # activate script if 2 players are playing right now
-                    if(len(GAMEresponse["players"]) == 2):
-                        UIresponse = requests.get(UIurl, timeout=30).json()
+                    if(len(game_response["players"]) == 2):
+                        ui_response = requests.get(ui_url, timeout=30).json()
                         self.parseMatchData(
-                            SC2MatchData(GAMEresponse, UIresponse))
+                            SC2MatchData(game_response, ui_response))
 
                 except requests.exceptions.ConnectionError:
                     time.sleep(10)
@@ -224,7 +235,7 @@ class SC2ApiThread(QThread):
                 return False
 
             # Don't use OCR if the score is tied.
-            score = self.controller.matchData.getScore()
+            score = self.controller.matchControl.activeMatch().getScore()
             if(score[0] == score[1] and
                (not scctool.settings.config.parser.getboolean(
                    "SCT", "CtrlX")) and

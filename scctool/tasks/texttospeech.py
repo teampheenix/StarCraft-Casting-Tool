@@ -127,7 +127,10 @@ class TextToSpeech:
     def limitCacheSize(self):
         while len(self.__cache) > self.__cache_size:
             item = self.__cache.pop()
-            os.remove(scctool.settings.getAbsPath(item['file']))
+            try:
+                os.remove(scctool.settings.getAbsPath(item['file']))
+            except FileNotFoundError:
+                pass
 
     def searchCache(self, ssml, voice, pitch=0.00, rate=1.00):
         for item in self.__cache:
@@ -139,8 +142,29 @@ class TextToSpeech:
                 continue
             if item['rate'] != rate:
                 continue
-            return item['file']
+            if os.path.isfile(scctool.settings.getAbsPath(item['file'])):
+                return item['file']
+            else:
+                self.__cache.remove(item)
+                return None
         return None
+
+    def cleanCache(self):
+        ids = set()
+        for item in self.__cache:
+            if not os.path.isfile(scctool.settings.getAbsPath(item['file'])):
+                self.__cache.remove(item)
+            else:
+                ids.add(item['id'])
+
+        dir = scctool.settings.getAbsPath(scctool.settings.ttsDir)
+        for fname in os.listdir(dir):
+            full_fname = os.path.join(dir, fname)
+            name, ext = os.path.splitext(fname)
+            ext = ext.replace(".", "")
+            if (os.path.isfile(full_fname) and name not in ids):
+                os.remove(full_fname)
+                module_logger.info("Removed tts file {}".format(full_fname))
 
     def defineOptions(self):
         self.options = {}

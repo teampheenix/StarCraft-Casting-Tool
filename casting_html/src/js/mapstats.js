@@ -89,7 +89,6 @@ function connectWebsocket() {
     } else if (jsonObject.event == 'MAPSTATS') {
       var doInit = Object.keys(mapData).length == 0;
       select = jsonObject.data.map;
-      console.log(select);
       change = newMapData(jsonObject.data.maps);
       if (doInit) {
         addMaps();
@@ -100,6 +99,7 @@ function connectWebsocket() {
         }
       } else {
         if (change) {
+          currentMap = select;
           outroAnimation();
         } else {
           markMaps();
@@ -226,6 +226,7 @@ function removeMaps() {
 }
 
 function selectMap(name, alreadyplayed = false) {
+  console.log('selectMap:', name);
   if (!tweenShowMap.isActive()) {
     var maps = document.getElementById('map-list').getElementsByTagName("li");
     for (var i = 0; i < maps.length; i++) {
@@ -323,7 +324,7 @@ function initAnimation(init_map, select = true) {
 function outroAnimation() {
   if (!tweenInitial.isActive() && tweenInitial.progress() == 1) {
     initNeeded = true;
-    setTimeout(selectMap, 100, getCurrentMap());
+    //setTimeout(selectMap, 100, getCurrentMap());
     tweenInitial.eventCallback("onReverseComplete", editMapList);
     tweenInitial.delay(0);
     tweenInitial.reverse(0);
@@ -332,7 +333,7 @@ function outroAnimation() {
 
 function editMapList() {
   addMaps();
-  initAnimation(getCurrentMap(), 0);
+  initAnimation(getCurrentMap());
 }
 
 function animateInOut(mapElement, name) {

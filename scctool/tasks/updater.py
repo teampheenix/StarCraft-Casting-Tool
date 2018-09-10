@@ -14,7 +14,9 @@ import scctool
 from scctool.settings.client_config import ClientConfig
 from scctool.tasks.tasksthread import TasksThread
 
-module_logger = logging.getLogger('scctool.tasks.updater')
+module_logger = logging.getLogger(__name__)
+this = sys.modules[__name__]
+this.data = dict()
 
 
 def compareVersions(v1, v2, maximum=5):
@@ -56,53 +58,66 @@ def needInitialUpdate(version):
     elif not os.path.exists(
             scctool.settings.getAbsPath(scctool.settings.casting_html_dir)):
         return True
+    elif getLastVersion() != scctool.__version__:
+        setLastVersion(scctool.__version__)
+        return True
     else:
         return False
 
 
-def getDataVersion():
-    """Read data version from json file."""
-    version = '0.0.0'
+def readJsonFile():
+    if len(this.data) > 0:
+        return
     try:
         with open(scctool.settings.getJsonFile('versiondata'), 'r',
                   encoding='utf-8-sig') as f:
-            data = json.load(f)
-            version = data.get('data_version', version)
-    finally:
-        return version
+            this.data = json.load(f)
+    except Exception:
+        this.data = dict()
+
+
+def dumpJsonFile():
+    readJsonFile()
+    with open(scctool.settings.getJsonFile('versiondata'), 'w',
+              encoding='utf-8-sig') as o:
+        json.dump(this.data, o)
+
+
+def getDataVersion():
+    """Read data version from json file."""
+    readJsonFile()
+    return this.data.get('data_version', '0.0.0')
 
 
 def setDataVersion(version):
     """Write data version to json file."""
-    data = {}
-    data['data_version'] = version
-    with open(scctool.settings.getJsonFile('versiondata'), 'w',
-              encoding='utf-8-sig') as o:
-        json.dump(data, o)
+    readJsonFile()
+    this.data['data_version'] = version
+    dumpJsonFile()
+
+
+def getLastVersion():
+    """Read data version from json file."""
+    readJsonFile()
+    return this.data.get('last_version', '0.0.0')
+
+
+def setLastVersion(version):
+    """Write data version to json file."""
+    readJsonFile()
+    this.data['last_version'] = version
+    dumpJsonFile()
 
 
 def getRestartFlag():
-    flag = False
-    try:
-        with open(scctool.settings.getJsonFile('versiondata'), 'r',
-                  encoding='utf-8-sig') as f:
-            data = json.load(f)
-            flag = data.get('restart_flag', False)
-    finally:
-        return flag
+    readJsonFile()
+    return this.data.get('restart_flag', False)
 
 
 def setRestartFlag(flag=True):
-    try:
-        with open(scctool.settings.getJsonFile('versiondata'), 'r',
-                  encoding='utf-8-sig') as f:
-            data = json.load(f)
-        data['restart_flag'] = bool(flag)
-        with open(scctool.settings.getJsonFile('versiondata'), 'w',
-                  encoding='utf-8-sig') as o:
-            json.dump(data, o)
-    except Exception as e:
-        pass
+    readJsonFile()
+    this.data['restart_flag'] = bool(flag)
+    dumpJsonFile()
 
 
 def extractData(asset_update, handler=lambda x: None):
@@ -219,7 +234,7 @@ class VersionHandler(TasksThread):
                 return
             if hasattr(sys, "frozen"):
                 module_logger.info("Start to update app!")
-                self.app_update.download(async=False)
+                self.app_update.download(False)
                 if self.app_update.is_downloaded():
                     module_logger.info("Download sucessfull.")
                     self.__controller.cleanUp()

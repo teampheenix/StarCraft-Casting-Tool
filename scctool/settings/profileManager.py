@@ -109,6 +109,7 @@ class ProfileManager:
     def setCurrent(self, profile):
         if profile in self._profiles.keys():
             self._current = profile
+            self._createPortFile(profile)
 
     def current(self):
         id = self._current
