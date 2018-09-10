@@ -524,7 +524,7 @@ class MainWindow(QMainWindow):
 
     def copyMatchTab(self):
         matchId = self.controller.matchControl.selectedMatchId()
-        data = self.controller.matchControl.selectedMatch().getData(copy=True)
+        data = self.controller.matchControl.selectedMatch().getData()
         match = self.controller.matchControl.newMatchData(data)
         self.controller.logoManager.copyMatch(match.getControlID(), matchId)
         MatchDataWidget(self,

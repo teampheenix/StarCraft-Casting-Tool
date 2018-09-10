@@ -1,4 +1,5 @@
 """Matchdata."""
+import copy
 import difflib
 import logging
 import re
@@ -54,18 +55,15 @@ class MatchData(QObject):
 
     def readData(self, data):
         if len(data) > 0:
-            self.__data = data
+            self.__data = copy.deepcopy(data)
         else:
             self.setCustom(5, False, False)
 
     def writeJsonFile(self):
         self.__matchControl.writeJsonFile()
 
-    def getData(self, copy=False):
-        if copy:
-            return self.__data.copy()
-        else:
-            return self.__data
+    def getData(self):
+        return self.__data
 
     def __initMatchGrabber(self):
         provider = self.getProvider()

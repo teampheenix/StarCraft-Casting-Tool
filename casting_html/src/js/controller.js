@@ -15,13 +15,13 @@ class Controller {
     }
   }
 
-  generateKeyURI(){
-      var path = this.name;
-      if (this.ident != 0) {
-        path = path + '_' + this.ident.toString();
-      }
-      var port = parseInt("0x".concat(this.profile), 16);
-      return "ws://127.0.0.1:".concat(port, "/", path);
+  generateKeyURI() {
+    var path = this.name;
+    if (this.ident != 0) {
+      path = path + '_' + this.ident.toString();
+    }
+    var port = parseInt("0x".concat(this.profile), 16);
+    return "ws://127.0.0.1:".concat(port, "/", path);
   }
 
   storeData(key, value, json = false) {

@@ -79,7 +79,8 @@ class SubwindowBrowserSources(QWidget):
         table['mapstats'] = 1
         table['mapicons_box'] = 2
         table['mapicons_landscape'] = 3
-        self.tabs.setCurrentIndex(table.get(tab, SubwindowBrowserSources.current_tab))
+        self.tabs.setCurrentIndex(
+            table.get(tab, SubwindowBrowserSources.current_tab))
         self.tabs.currentChanged.connect(self.tabChanged)
 
     def tabChanged(self, idx):

@@ -42,7 +42,7 @@ function loadStoredData() {
 function connectWebsocket() {
   console.time('connectWebsocket');
   socket = new WebSocket(controller.generateKeyURI());
-  
+
   socket.onopen = function() {
     console.log("Connected!");
     isopen = true;
