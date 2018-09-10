@@ -540,8 +540,8 @@ class MainWindow(QMainWindow):
         dataWidget = self.matchDataTabWidget.widget(idx)
         ident = dataWidget.matchData.getControlID()
         self.controller.matchControl.selectMatch(ident)
-        # with self.tlock:
-        #    self.controller.updateMatchFormat()
+        with self.tlock:
+            self.controller.updateMatchFormat()
 
     def tabMoved(self, toIdx, fromIdx):
         self.controller.matchControl.updateOrder(toIdx, fromIdx)
