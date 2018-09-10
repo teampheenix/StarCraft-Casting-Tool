@@ -1,6 +1,15 @@
 # Changelog
 
 
+## v2.2.2 (2018-09-10)
+
+### Fix
+
+* Fixed a bug where the match format would not update when changing the match tabs.
+
+* Fixed entanglement issue of match tabs.
+
+
 ## v2.2.1 (2018-09-09)
 
 ### Fix
