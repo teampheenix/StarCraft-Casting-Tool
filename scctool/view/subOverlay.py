@@ -1,9 +1,11 @@
 """Shows an overlay for ingame."""
 import logging
+import os
+import sys
 
 from PyQt5.QtCore import Qt, QUrl
 from PyQt5.QtWebEngineWidgets import QWebEngineView
-from PyQt5.QtWidgets import QVBoxLayout, QWidget
+from PyQt5.QtWidgets import QVBoxLayout, QWidget, QApplication
 
 import scctool.settings
 
@@ -31,17 +33,16 @@ class SubwindowOverlay(QWidget):
             file_path = os.path.abspath(scctool.settings.getResFile('overlay/main.html'))
             local_url = QUrl.fromLocalFile(file_path)
             self.view.load(local_url)
+            self.view.setAttribute(Qt.WA_TransparentForMouseEvents)
+            self.view.page().setBackgroundColor(Qt.transparent)
+            self.setAttribute(Qt.WA_TransparentForMouseEvents, True)
+            self.setAttribute(
+                 Qt.WA_TranslucentBackground, True)
+            self.setWindowFlags(
+                 Qt.Tool | Qt.FramelessWindowHint)
+            self.setWindowFlags(self.windowFlags() | Qt.WindowStaysOnTopHint)
 
-            #self.view.setAttribute(Qt.WA_TransparentForMouseEvents)
-            #self.view.setStyleSheet("background:transparent")
-
-            # self.setAttribute(
-            #     Qt.WA_TranslucentBackground, True)
-            # self.setWindowFlags(
-            #     Qt.Tool | Qt.FramelessWindowHint)
-            # self.setWindowFlags(
-            #     self.windowFlags() |
-            #     Qt.WindowStaysOnTopHint)
+            self.resize(QApplication.primaryScreen().size())
 
 
         except Exception as e:

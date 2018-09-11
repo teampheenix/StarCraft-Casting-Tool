@@ -454,11 +454,15 @@ class MainWindow(QMainWindow):
             scctool.settings.getResFile("../CHANGELOG.md"))
         self.mysubwindows['changelog'].show()
 
-    def showOverlay(self):
+    def showOverlay(self, toogle):
         """Opens a subwindow that is used as an ingame overlay."""
-        self.mysubwindows['overlay'] = SubwindowOverlay()
-        self.mysubwindows['overlay'].createWindow(self)
-        self.mysubwindows['overlay'].showMaximized()
+        window = self.mysubwindows.get('overlay', False)
+        if(window and window.isVisible()):
+            window.close()
+        else:
+            self.mysubwindows['overlay'] = SubwindowOverlay()
+            self.mysubwindows['overlay'].createWindow(self)
+            self.mysubwindows['overlay'].showMaximized()
 
     def changeLanguage(self, language):
         """Change the language."""
