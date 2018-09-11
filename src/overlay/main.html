@@ -1,53 +1,18 @@
 <html>
+
 <head>
-<style>
-@import url('https://fonts.googleapis.com/css?family=Roboto');
-
-body{
-  font-family: 'Roboto', sans-serif;
-  color: white;
-  /*-webkit-text-stroke: 1px black;*/
-}
-
-.container{
-  position: absolute;;
-  height: 100%;
-  width: 250px;
-  right: 0px;
-  top: 0px;
-  overflow: hidden;
-  padding: 5px;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-}
-
-.item{
-  width: 100%;
-  background-color: rgba(0,0,0,0.5);
-  margin-bottom: 5px;
-  border-radius: 5px;
-  padding: 10px;
-  box-sizing: border-box;
-}
-
-span.user{
-  font-weight: bold;
-}
-
-span.user::after{
-  content: ': ';
-  font-weight: bold;
-}
-
-</style>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="main.css">
+    <script src="main.js"></script>
+    <script src="https://cdn.tmijs.org/js/latest/1.x/tmi.min.js"></script>
+    <script src="https://twemoji.maxcdn.com/2/twemoji.min.js?11.0"></script>
 </head>
+
 <body>
-  <div class='container'>
-    <div class='item'>
-     <div class='chat'><span class='user'>pressure</span><span class='message'>Das ist ein Test! Laenger und laenger und laenger...</span></div>
-     <div class='chat'><span class='user'>pressure</span><span class='message'>Das ist ein Test!</span></div>
-     <div class='chat'><span class='user'>pressure</span><span class='message'>Das ist ein Test!</span></div>
-  <div>
+    <div id='twitchContainer'>
+        <div id='chat'></div>
+    </div>
+    <script src="twitchchat.js"></script>
 </body>
+
 </html>

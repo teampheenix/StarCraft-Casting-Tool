@@ -1,0 +1,61 @@
+@import url("https://fonts.googleapis.com/css?family=Ropa+Sans");
+body {
+  color: white;
+  font-family: "Ropa Sans", sans-serif;
+  font-size: 18px;
+  overflow: hidden;
+}
+
+#twitchContainer{
+ position: absolute;
+ width: 400px;
+ height: 500px;
+ right: 0px;
+ top: 0px;
+ overflow: hidden;
+ background-color: rgba(0,0,0,0.5);
+}
+
+#chat {
+  position: absolute;
+  bottom: 0px;
+  width: calc(100% - 10 px);
+  padding: 10px;
+}
+
+.chat-line {
+  overflow: hidden;
+  max-height: 0px;
+  transition: opacity 2s, max-height 1s, margin-top 1s;
+}
+.chat-line.visible {
+  margin-top: 10px;
+  max-height: 300px;
+  transition: opacity 2s, max-height 1s, margin-top 300ms;
+}
+.chat-line .chat-line-inner {
+  background-color: rgba(31, 31, 31, 0.6);
+  padding: 10px;
+  overflow-wrap: break-word;
+}
+.chat-line .chat-line-inner .badges img.badge {
+  margin-right: 6px;
+  vertical-align: text-bottom;
+  width: 18px;
+  height: 18px;
+}
+.chat-line .chat-line-inner.admin .message {
+  opacity: 0.4;
+}
+
+.user-name {
+  color: #ff6bb5;
+}
+
+.message img {
+  vertical-align: text-bottom;
+}
+.message img.emoji {
+  width: 18px;
+  max-height: 18px;
+}

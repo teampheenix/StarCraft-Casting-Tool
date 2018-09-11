@@ -10,7 +10,7 @@ from PyQt5.QtWidgets import QVBoxLayout, QWidget, QApplication
 import scctool.settings
 
 # create logger
-module_logger = logging.getLogger('scctool.view.subOverlay')
+module_logger = logging.getLogger(__name__)
 
 
 class SubwindowOverlay(QWidget):
