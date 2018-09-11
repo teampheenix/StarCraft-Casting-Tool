@@ -18,6 +18,7 @@ module_logger = logging.getLogger(__name__)
 
 class SubwindowBrowserSources(QWidget):
     """Show connections settings sub window."""
+    current_tab = -1
 
     def createWindow(self, mainWindow, tab=''):
         """Create window."""
@@ -78,7 +79,12 @@ class SubwindowBrowserSources(QWidget):
         table['mapstats'] = 1
         table['mapicons_box'] = 2
         table['mapicons_landscape'] = 3
-        self.tabs.setCurrentIndex(table.get(tab, -1))
+        self.tabs.setCurrentIndex(
+            table.get(tab, SubwindowBrowserSources.current_tab))
+        self.tabs.currentChanged.connect(self.tabChanged)
+
+    def tabChanged(self, idx):
+        SubwindowBrowserSources.current_tab = idx
 
     def addHotkey(self, ident, label):
         element = HotkeyLayout(

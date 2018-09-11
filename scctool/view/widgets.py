@@ -31,6 +31,7 @@ from scctool.tasks.tasksthread import TasksThread
 # create logger
 module_logger = logging.getLogger(__name__)
 
+
 class MapLineEdit(QLineEdit):
     """Define line edit for maps."""
 
@@ -1196,7 +1197,8 @@ class ProfileMenu(QMenu):
             QApplication.restoreOverrideCursor()
 
     def openFolder(self):
-        os.startfile(scctool.settings.profileManager.profiledir())
+        self._controller.open_file(
+            scctool.settings.profileManager.profiledir())
 
     def newProfile(self):
         name = ''

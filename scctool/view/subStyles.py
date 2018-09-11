@@ -17,8 +17,9 @@ module_logger = logging.getLogger(__name__)
 
 class SubwindowStyles(QWidget):
     """Show styles settings sub window."""
+    current_tab = -1
 
-    def createWindow(self, mainWindow):
+    def createWindow(self, mainWindow, tab=''):
         """Create styles settings sub window."""
         try:
             parent = None
@@ -42,6 +43,14 @@ class SubwindowStyles(QWidget):
             self.tabs.addTab(self.colorBox, _("Colors"))
             self.tabs.addTab(self.fontBox, _("Font"))
 
+            table = dict()
+            table['styles'] = 0
+            table['colors'] = 1
+            table['font'] = 2
+            self.tabs.setCurrentIndex(
+                table.get(tab, SubwindowStyles.current_tab))
+            self.tabs.currentChanged.connect(self.tabChanged)
+
             mainLayout = QVBoxLayout()
             mainLayout.addWidget(self.tabs)
             mainLayout.addItem(QSpacerItem(
@@ -62,6 +71,9 @@ class SubwindowStyles(QWidget):
 
         except Exception as e:
             module_logger.exception("message")
+
+    def tabChanged(self, idx):
+        SubwindowStyles.current_tab = idx
 
     def changed(self):
         """Handle data change."""
@@ -175,6 +187,34 @@ class SubwindowStyles(QWidget):
             layout.addRow(QLabel(_("Map Stats:")), container)
         except Exception as e:
             module_logger.exception("message")
+
+        try:
+            container = QHBoxLayout()
+            self.qb_aligulacStyle = StyleComboBox(
+                scctool.settings.casting_html_dir + "/src/css/aligulac",
+                "aligulac")
+            self.qb_aligulacStyle.connect2WS(self.controller, 'aligulac')
+            button = QPushButton(_("Show in Browser"))
+            button.clicked.connect(lambda: self.openHTML(
+                scctool.settings.casting_html_dir + "/aligulac.html"))
+            container.addWidget(self.qb_aligulacStyle)
+            container.addWidget(button)
+            layout.addRow(QLabel(_("Aligulac:")), container)
+        except Exception as e:
+            module_logger.exception("message")
+
+        layout.addRow(QLabel(''))
+        stylesDisc = _(
+            'StarCraft Casting Tools allows you to make your own skins/styles'
+            ' via CSS by placing an alternative CSS-files into '
+            'casting_html/src/css/{browser-source}. If you do so, please'
+            ' share these skins with this project. In case you need help'
+            ' or just want to share your ideas for new skins'
+            ' join our Discord Server.')
+        label = QLabel(stylesDisc)
+        label.setAlignment(Qt.AlignJustify)
+        label.setWordWrap(True)
+        layout.addRow(label)
 
         self.styleBox.setLayout(layout)
 

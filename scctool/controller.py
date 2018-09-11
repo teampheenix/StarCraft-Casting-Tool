@@ -2,6 +2,7 @@
 import logging
 import os
 import shutil
+import subprocess
 import sys
 import webbrowser
 
@@ -16,9 +17,10 @@ from scctool.settings.alias import AliasManager
 from scctool.settings.history import HistoryManager
 from scctool.settings.logoManager import LogoManager
 from scctool.settings.placeholders import PlaceholderList
-from scctool.tasks.housekeeper import HouseKeeperThread
+from scctool.tasks.aligulac import AligulacThread
 from scctool.tasks.auth import AuthThread
 from scctool.tasks.autorequests import AutoRequestsThread
+from scctool.tasks.housekeeper import HouseKeeperThread
 from scctool.tasks.mapstats import MapStatsManager
 from scctool.tasks.sc2ClientInteraction import (SC2ApiThread, SwapPlayerNames,
                                                 ToggleScore)
@@ -55,6 +57,8 @@ class MainController:
                 self.toogleLEDs)
             self.websocketThread.introShown.connect(self.updatePlayerIntroIdx)
             self.runWebsocketThread()
+            self.aligulacThread = AligulacThread(
+                self.matchControl, self.websocketThread)
             self.autoRequestsThread = AutoRequestsThread(self)
             self._warning = False
             self.checkVersion()
@@ -246,8 +250,10 @@ class MainController:
             self.view.cb_autoUpdate.setChecked(
                 scctool.settings.config.parser.getboolean("Form",
                                                           "scoreupdate"))
+            network_listener = scctool.settings.config.parser.getboolean(
+                "SCT", "sc2_network_listener_enabled")
 
-            if scctool.settings.windows:
+            if scctool.settings.windows and not network_listener:
                 self.view.cb_autoToggleScore.setChecked(
                     scctool.settings.config.parser.getboolean("Form",
                                                               "togglescore"))
@@ -312,6 +318,13 @@ class MainController:
         except Exception as e:
             module_logger.exception("message")
 
+    def open_file(self, filename):
+        if sys.platform == "win32":
+            os.startfile(filename)
+        else:
+            opener = "open" if sys.platform == "darwin" else "xdg-open"
+            subprocess.call([opener, filename])
+
     def runSC2ApiThread(self, task):
         """Start task in thread that monitors SC2-Client-API."""
         try:
@@ -352,6 +365,7 @@ class MainController:
             self.authThread.terminate()
             self.stopWebsocketThread()
             self.textFilesThread.terminate()
+            self.aligulacThread.terminate()
             self.autoRequestsThread.terminate()
             self.mapstatsManager.close(False)
             self.housekeeper.terminate()
@@ -473,11 +487,12 @@ class MainController:
     def toggleWidget(self, widget, condition, ttFalse='', ttTrue=''):
         """Disable or an enable a widget based on a condition."""
         widget.setAttribute(Qt.WA_AlwaysShowToolTips)
-        if condition:
-            tooltip = ttTrue
-        else:
-            tooltip = ttFalse
-        widget.setToolTip(tooltip)
+        widget.setToolTip(ttTrue if condition else ttFalse)
+        if not condition:
+            try:
+                widget.setChecked(False)
+            except Exception:
+                pass
         widget.setEnabled(condition)
 
     def refreshButtonStatus(self):
@@ -508,6 +523,25 @@ class MainController:
             scctool.settings.config.nightbotIsValid(),
             _('Specify your Nightbot Settings to use this feature'),
             '')
+
+        if scctool.settings.windows:
+
+            network_listener = scctool.settings.config.parser.getboolean(
+                "SCT", "sc2_network_listener_enabled")
+
+            self.toggleWidget(
+                self.view.cb_autoToggleScore,
+                not network_listener,
+                _('Not available when SC2 is running on a different PC.'),
+                _('Automatically sets the score of your ingame' +
+                  ' UI-interface at the begining of a game.'))
+
+            self.toggleWidget(
+                self.view.cb_autoToggleProduction,
+                not network_listener,
+                _('Not available when SC2 is running on a different PC.'),
+                _('Automatically toggles the production tab of your' +
+                  ' ingame UI-interface at the begining of a game.'))
 
     def requestScoreLogoUpdate(self, data, swap=False):
         module_logger.info("requestScoreLogoUpdate")
@@ -702,6 +736,8 @@ class MainController:
 
             try:
                 if tts_active:
+                    if team.strip().lower() == 'tbd':
+                        team = ''
                     text = self.tts.getLine(tts_scope, name, race, team)
                     tts_file = os.path.join("..", self.tts.synthesize(
                         text, tts_voice,
@@ -792,6 +828,12 @@ class MainController:
                 self.runSC2ApiThread("playerLogos")
             else:
                 self.stopSC2ApiThread("playerLogos")
+        if path == 'aligulac':
+            if num > 0:
+                self.aligulacThread.activate()
+                self.aligulacThread.receive_data('meta')
+            else:
+                self.aligulacThread.terminate()
 
     def autoSetNextMap(self, idx=-1, send=True):
         if scctool.settings.config.parser.getboolean(

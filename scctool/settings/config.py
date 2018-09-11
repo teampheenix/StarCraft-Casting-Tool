@@ -133,6 +133,8 @@ def setDefaultConfigAll():
     setDefaultConfig("SCT", "fuzzymatch", "True")
     setDefaultConfig("SCT", "new_version_prompt", "True")
     setDefaultConfig("SCT", "use_ocr", "False")
+    setDefaultConfig("SCT", "sc2_network_listener_enabled", "False")
+    setDefaultConfig("SCT", "sc2_network_listener_address", "127.0.0.1:6119")
     setDefaultConfig("SCT", "CtrlShiftS", "False")
     setDefaultConfig("SCT", "CtrlShiftC", "False")
     setDefaultConfig("SCT", "CtrlShiftR", "0")
@@ -174,6 +176,7 @@ def setDefaultConfigAll():
     setDefaultConfig("Style", "score", "Default")
     setDefaultConfig("Style", "intro", "Default")
     setDefaultConfig("Style", "mapstats", "Default")
+    setDefaultConfig("Style", "aligulac", "Default")
     setDefaultConfig("Style", "use_custom_font", "False")
     setDefaultConfig("Style", "custom_font", "Verdana")
 

@@ -30,7 +30,7 @@
 * **Automatic Score Detection** via SC2-Client
 * **Interaction with SC2-Observer-UI**: Automatically toggle Production Tab and set Score at the start of a Game
 * Nearly **unlimited Customization** via Skins and CSS
-* German and Russian language support.
+* German and Russian language support
 
 ## Discord Server
 

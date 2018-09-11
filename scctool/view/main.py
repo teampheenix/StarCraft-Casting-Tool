@@ -204,7 +204,7 @@ class MainWindow(QMainWindow):
 
             myAct = QAction(QIcon(scctool.settings.getResFile(
                 'folder.png')), _('Open log folder'), self)
-            myAct.triggered.connect(lambda: os.startfile(
+            myAct.triggered.connect(lambda: self.controller.open_file(
                 scctool.settings.getAbsPath(scctool.settings.getLogDir())))
             infoMenu.addAction(myAct)
 
@@ -329,6 +329,8 @@ class MainWindow(QMainWindow):
                               'file': 'ui_logo_1.html'},
                              {'name': _('UI Logo {}').format(2),
                               'file': 'ui_logo_2.html'},
+                             {'name': _('Aligulac (only 1vs1)'),
+                              'file': 'aligulac.html'},
                              {'name': _('League (ALphaTL && RSTL only)'),
                               'file': 'league.html'},
                              {'name': _('Matchbanner (AlphaTL)'),
@@ -339,7 +341,7 @@ class MainWindow(QMainWindow):
 
         act = QAction(QIcon(scctool.settings.getResFile(
             'folder.png')), _('Open Folder'), self)
-        act.triggered.connect(lambda: os.startfile(
+        act.triggered.connect(lambda: self.controller.open_file(
             scctool.settings.getAbsPath(scctool.settings.casting_html_dir)))
         main_menu.addAction(act)
         main_menu.addSeparator()
@@ -549,8 +551,8 @@ class MainWindow(QMainWindow):
         dataWidget = self.matchDataTabWidget.widget(idx)
         ident = dataWidget.matchData.getControlID()
         self.controller.matchControl.selectMatch(ident)
-        # with self.tlock:
-        #    self.controller.updateMatchFormat()
+        with self.tlock:
+            self.controller.updateMatchFormat()
 
     def tabMoved(self, toIdx, fromIdx):
         self.controller.matchControl.updateOrder(toIdx, fromIdx)

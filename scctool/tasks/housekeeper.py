@@ -1,8 +1,6 @@
 """Write streaming data to txt-files if needed."""
 import logging
-import queue
 
-import scctool.settings
 from scctool.tasks.tasksthread import TasksThread
 
 # from PyQt5.QtCore import pyqtSignal
@@ -34,4 +32,5 @@ class HouseKeeperThread(TasksThread):
         self._controller.logoManager.removeDeadMatches()
         self._controller.logoManager.removeDuplicates()
         self._controller.logoManager.clearFolder()
+        self._controller.tts.cleanCache()
         self.deactivateTask('clean')

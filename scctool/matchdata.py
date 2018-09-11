@@ -1,4 +1,5 @@
 """Matchdata."""
+import copy
 import difflib
 import logging
 import re
@@ -54,7 +55,7 @@ class MatchData(QObject):
 
     def readData(self, data):
         if len(data) > 0:
-            self.__data = data
+            self.__data = copy.deepcopy(data)
         else:
             self.setCustom(5, False, False)
 
@@ -102,7 +103,10 @@ class MatchData(QObject):
         else:
             chg = self.setProvider("Custom")
 
-        self.setID(re.findall('\d+', url)[-1])
+        try:
+            self.setID(re.findall('\d+', url)[-1])
+        except IndexError:
+            pass
 
         return chg
     # except Exception as e:
