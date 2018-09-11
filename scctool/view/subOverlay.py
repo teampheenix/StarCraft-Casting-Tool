@@ -33,7 +33,7 @@ class SubwindowOverlay(QWidget):
             file_path = os.path.abspath(scctool.settings.getResFile('overlay/main.html'))
             local_url = QUrl.fromLocalFile(file_path)
             self.view.load(local_url)
-            self.view.setAttribute(Qt.WA_TransparentForMouseEvents)
+            self.view.setAttribute(Qt.WA_TransparentForMouseEvents, True)
             self.view.page().setBackgroundColor(Qt.transparent)
             self.setAttribute(Qt.WA_TransparentForMouseEvents, True)
             self.setAttribute(
