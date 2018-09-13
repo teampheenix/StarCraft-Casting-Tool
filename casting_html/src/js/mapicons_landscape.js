@@ -356,9 +356,7 @@ function initAnimation() {
         opacity: "1"
       })
       .from(image, 0.30, {
-        width: "0%",
-        border: "0px",
-        left: "50%",
+        scaleX: 0.0,
         ease: Sine.easeInOut
       })
       .staggerFrom(lowertext, 0.15, {
