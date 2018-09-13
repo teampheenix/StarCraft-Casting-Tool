@@ -1,8 +1,8 @@
 @font-face {
- font-family: "Eurostile Extd";
- font-style: normal;
- font-weight: 700;
- src: url("https://static.starcraft2.com/dist/fonts/eurostileext-med-0050275a9320bb8dc80eb677dce63dbf664afbbe57440453110116416b398de22cdd27899e1f72118d07b1afdcbde0177f541f5414ccb54c6771b8cefe46dd35.woff2") format("woff");
+  font-family: "Eurostile Extd";
+  font-style: normal;
+  font-weight: 700;
+  src: url("https://static.starcraft2.com/dist/fonts/eurostileext-med-0050275a9320bb8dc80eb677dce63dbf664afbbe57440453110116416b398de22cdd27899e1f72118d07b1afdcbde0177f541f5414ccb54c6771b8cefe46dd35.woff2") format("woff");
 }
 
 :root {
@@ -11,71 +11,105 @@
   --middle: 200px;
   --side: calc((var(--width) - var(--middle)) / 2);
   --logo: 105px;
-  --font: Eurostile Extd,Source Sans Pro,sans-serif;
+  --font: Eurostile Extd, Source Sans Pro, sans-serif;
 }
 
-*{
+* {
   box-sizing: border-box;
 }
 
-body{
+div.misc {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: url(../../img/textures/sc2-footer.jpg);
+  background-size: cover;
+  filter: blur(0px);
+}
+
+div.misc:after {
+  -webkit-box-shadow: inset 0 0 20px rgba(0, 102, 204, .6), inset 0 0 80px rgba(0, 102, 204, .4);
+  box-shadow: inset 0 0 20px rgba(0, 102, 204, .6), inset 0 0 80px rgba(0, 102, 204, .4);
+  bottom: 0;
+  content: "";
+  display: block;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+body {
   letter-spacing: .05em;
   font-family: var(--font);
-  text-shadow: 0 2px 4px rgba(0,0,0,.8), 0 8px 16px rgba(0,0,0,.6);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, .8), 0 8px 16px rgba(0, 0, 0, .6);
   color: white;
 }
 
-div.box{
+.winner {
+  --winner-color: #ffcc66;
+  --size: 6px;
+  color: #fff6e6 !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, .8), 0 8px 16px rgba(0, 0, 0, .6), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px 1px #000000;
+  -webkit-font-smoothing: antialiased;
+}
+
+.loser {
+  filter: brightness(75%);
+  opacity: 0.75;
+}
+
+div.box {
   border-style: solid;
   width: var(--width);
   height: var(--height);
   display: inline-block;
   position: relative;
   background-color: transparent;
-  background-image: -webkit-gradient(linear,left top,left bottom,from(rgba(0,0,0,.9)),to(rgba(0,51,102,.9)));
-  background-image: linear-gradient(180deg,rgba(0,0,0,.9),rgba(0,51,102,.9));
+  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, .9)), to(rgba(0, 51, 102, .9)));
+  background-image: linear-gradient(180deg, rgba(0, 0, 0, .9), rgba(0, 51, 102, .9));
   background-origin: border-box;
 }
 
 div.box:after {
-    border-style: solid;
-    border-width: 17px 60px;
-    border-image: url(../../img/textures/border3.png) 17 60 repeat;
-    border-image-outset: 14px;
-    content: "";
-    bottom: 0;
-    display: block;
-    left: 0;
-    pointer-events: none;
-    position: absolute;
-    right: 0;
-    top: 0;
+  border-style: solid;
+  border-width: 17px 60px;
+  border-image: url(../../img/textures/border3.png) 17 60 repeat;
+  border-image-outset: 14px;
+  content: "";
+  bottom: 0;
+  display: block;
+  left: 0;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+  top: 0;
 }
 
-div.box_middle{
+div.box_middle {
   top: 15%;
   left: calc((var(--width) - 160px) / 2);
   height: 70%;
   width: 160px;
   position: absolute;
-  background-image: linear-gradient(180deg,rgba(0,0,0,.9),rgba(102,68,0,.9));
+  background-image: linear-gradient(180deg, rgba(0, 0, 0, .9), rgba(102, 68, 0, .9));
   color: #fd9;
-  font-size: 35px;
+  font-size: 42px;
 }
 
 div.box_middle:after {
-    border-style: solid;
-    border-width: 17px 60px;
-    border-image: url(../../img/textures/border2.png) 17 60 repeat;
-    border-image-outset: 14px;
-    content: "";
-    bottom: 0;
-    display: block;
-    left: 0;
-    pointer-events: none;
-    position: absolute;
-    right: 0;
-    top: 0;
+  border-style: solid;
+  border-width: 17px 60px;
+  border-image: url(../../img/textures/border2.png) 17 60 repeat;
+  border-image-outset: 14px;
+  content: "";
+  bottom: 0;
+  display: block;
+  left: 0;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+  top: 0;
 }
 
 .score_middle {
@@ -85,7 +119,7 @@ div.box_middle:after {
   width: 100%;
   height: 100%;
   text-align: center;
-  line-height: 70px;
+  line-height: 60px;
 }
 
 .score_left {
@@ -95,7 +129,7 @@ div.box_middle:after {
   width: 50px;
   height: 100%;
   text-align: center;
-  line-height: 70px;
+  line-height: 64px;
 }
 
 .score_right {
@@ -105,7 +139,7 @@ div.box_middle:after {
   width: 50px;
   height: 100%;
   text-align: center;
-  line-height: 70px;
+  line-height: 64px;
 }
 
 div.box_right {
