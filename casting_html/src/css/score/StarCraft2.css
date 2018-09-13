@@ -6,9 +6,9 @@
 }
 
 :root {
-  --width: 1200px;
+  --width: 1280px;
   --height: 100px;
-  --middle: 200px;
+  --middle: 175px;
   --side: calc((var(--width) - var(--middle)) / 2);
   --logo: 105px;
   --font: Eurostile Extd, Source Sans Pro, sans-serif;
@@ -88,9 +88,9 @@ div.box:after {
 
 div.box_middle {
   top: 15%;
-  left: calc((var(--width) - 160px) / 2);
+  left: calc((var(--width) - 140px) / 2);
   height: 70%;
-  width: 160px;
+  width: 140px;
   position: absolute;
   background-image: linear-gradient(180deg, rgba(0, 0, 0, .9), rgba(102, 68, 0, .9));
   color: #fd9;
@@ -161,7 +161,7 @@ div.upper-text-right {
   font-size: 40px;
   line-height: 75px;
   height: 100%;
-  padding: 10px;
+  padding: 5px;
   width: calc(var(--side) - var(--logo));
   box-sizing: border-box;
   left: 0px;
@@ -174,7 +174,7 @@ div.upper-text-left {
   font-size: 40px;
   line-height: 75px;
   height: 100%;
-  padding: 10px;
+  padding: 5px;
   width: calc(var(--side) - var(--logo));
   box-sizing: border-box;
   right: 0px;
