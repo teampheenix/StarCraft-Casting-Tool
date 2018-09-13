@@ -209,6 +209,7 @@ class MainController:
             idx = self.matchControl.selectedMatchIdx()
             matchWidget = self.view.matchDataTabWidget.widget(idx)
             matchWidget.updateForms()
+            self.updateMatchFormat()
 
         except Exception as e:
             msg = str(e)
