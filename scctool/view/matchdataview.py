@@ -448,7 +448,8 @@ class MatchDataWidget(QWidget):
             completer.setCompletionMode(
                 QCompleter.InlineCompletion)
             completer.setWrapAround(True)
-            completer.activated.connect(self.le_team[team_idx].completerFinished)
+            completer.activated.connect(
+                self.le_team[team_idx].completerFinished)
             self.le_team[team_idx].setCompleter(completer)
 
     def updateForms(self):

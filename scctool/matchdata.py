@@ -251,6 +251,7 @@ class MatchData(QObject):
                 self.setAce(set_idx, False)
 
             self.setLeague("TBD")
+            self.resetSwap()
             self.setMyTeam(0)
             if reset_options:
                 self.setAllKill(False)
