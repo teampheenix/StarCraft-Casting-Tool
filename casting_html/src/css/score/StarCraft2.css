@@ -20,10 +20,9 @@
 
 body{
   letter-spacing: .05em;
-  font-family: Eurostile Extd,Source Sans Pro,sans-serif;
+  font-family: var(--font);
   text-shadow: 0 2px 4px rgba(0,0,0,.8), 0 8px 16px rgba(0,0,0,.6);
   color: white;
-  background-color: darkgray;
 }
 
 div.box{
@@ -161,4 +160,13 @@ div.box_veryright {
   height: 100%;
   right: 0px;
   width: var(--logo);
+}
+
+div.logo {
+  /* background-color: white; */
+  background-size: contain;
+  background-position: center center;
+  background-repeat: no-repeat;
+  border: inset 5px transparent;
+  box-sizing: border-box;
 }
