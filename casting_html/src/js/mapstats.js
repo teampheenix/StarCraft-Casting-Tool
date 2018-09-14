@@ -278,7 +278,7 @@ function setPoolName(name) {
 
 function initHide() {
   var box = document.getElementById("map-stats");
-  var map = document.getElementById("map-img");
+  var map = document.getElementById("img-container");
   var mapname = document.getElementById("map-name");
   var element1 = document.getElementById("column-content");
   var element2 = document.getElementById("column-bottom");
@@ -347,6 +347,7 @@ function animateInOut(mapElement, name) {
       tweenShowMap.reverse(0);
     } else {
       var map = document.getElementById("map-img");
+      var container = document.getElementById("img-container");
       var mapname = document.getElementById("map-name");
       var element1 = document.getElementById("column-content");
       var element2 = document.getElementById("column-bottom");
@@ -355,11 +356,11 @@ function animateInOut(mapElement, name) {
       var liquipedia = document.getElementById("liquipedia");
       var mappool = document.getElementById("map-pool");
       tweenShowMap.clear();
-      tweenShowMap.staggerTo([map, mapname, element1, element2], 0, {
+      tweenShowMap.staggerTo([container, mapname, element1, element2], 0, {
           opacity: "1"
         }, 0)
-        .from(map, 0.4, {
-          bottom: '-=100%',
+        .from(container, 0.4, {
+          y: '+=100%',
           ease: Power1.easeOut
         })
         .staggerFrom([mapname, liquipedia].concat(element1s, element2s), 0.3, {
