@@ -1,6 +1,21 @@
 # Changelog
 
 
+## v2.3.0 (2018-09-16)
+
+### New
+
+* Added a new 'StarCraft 2' style/skin for all browser sources.
+
+### Fix
+
+* Fixed a bug where the logo would not be swapped when the option to auto swap is active.
+
+* Fixed a bug where the Match Format was not updated when using the Match Grabber.
+
+* Fixed a bug where a incomplete signal was sent to the mapicons when using auto completion for maps.
+
+
 ## v2.2.2 (2018-09-10)
 
 ### Fix
