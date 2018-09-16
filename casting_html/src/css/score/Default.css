@@ -1,12 +1,12 @@
 @import url('https://fonts.googleapis.com/css?family=Orbitron:350,400');
-/* latin */
 
+/* latin */
 @font-face {
   font-family: 'OrbitronAdv';
   font-style: normal;
   font-weight: 400;
-  src: local('OrbitronAdv Regular'), local('OrbitronAdv-Regular'), url(https://fonts.gstatic.com/s/orbitron/v9/yMJRMIlzdpvBhQQL_Qq7dy0.woff2) format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  src: local('OrbitronAdv Regular'), local('OrbitronAdv-Regular'), url(https: //fonts.gstatic.com/s/orbitron/v9/yMJRMIlzdpvBhQQL_Qq7dy0.woff2) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
 :root {
@@ -29,7 +29,7 @@ body {
   color: white;
   font-size: 18px;
   font-weight: bold;
-  --outline-size: 3px;
+  --outline-size: 1.5px;
   text-shadow: 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black;
   -webkit-font-smoothing: antialiased;
 }
@@ -91,9 +91,9 @@ div.box_middle {
   top: calc(0px - var(--border-size));
   border: var(--border-size) solid var(--border-color);
   border-radius: 0px var(--border-radius) 0px var(--border-radius);
-  background-image: url("../texture1.jpg");
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0, 0, 0, 0.4)), color-stop(8%, rgba(0, 0, 0, 0.05)), color-stop(50%, rgba(0, 0, 0, 0.0)), color-stop(92%, rgba(0, 0, 0, 0.40)), color-stop(100%, rgba(0, 0, 0, 0.20))), url("../../img/textures/texture1.jpg");
-  background-size: cover;
+  background-image: url("../../img/textures/background.jpg");
+  background-size: 200%;
+  background-position: 50% 50%;
   overflow: hidden;
 }
 
@@ -218,7 +218,7 @@ div.mapscore-left {
   --winner-color: #f29b00;
   --size: 8px;
   color: white !important;
-  text-shadow: 0px 0px 2.5px black, 0px 0px 2.5px black, 0px 0px 2.5px black, 0px 0px 2.5px black, 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color) !important;
+  text-shadow: 0px 0px 2.5px black, 0px 0px 2.5px black, 0px 0px 2.5px black, 0px 0px 2.5px black, 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color) !important;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -228,8 +228,8 @@ div.mapscore-left {
 
 .score {
   --winner-color: white;
-  --size: 5px;
+  --size: 10px;
   color: white !important;
-  text-shadow: 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color) !important;
+  text-shadow: 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color);
   -webkit-font-smoothing: antialiased;
 }

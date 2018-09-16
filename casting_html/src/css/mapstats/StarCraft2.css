@@ -127,7 +127,7 @@ div.column-header {
   box-sizing: border-box;
   position: relative;
   height: 150px;
-  color: #70d6f6;
+  color: white;
   font-size: 35px;
   text-transform: uppercase;
 }
@@ -211,7 +211,6 @@ div.image2:after {
 }
 
 #liquipedia {
-  font-weight: bold;
   font-size: 18px;
   margin-top: 5px;
   margin-bottom: 35px;
@@ -277,7 +276,7 @@ div.small-stat>span.desc {
 }
 
 div.small-stat>span.desc::after {
-  content: ': ';
+  content: ':';
   display: inline-block;
   width: 12px;
 }
