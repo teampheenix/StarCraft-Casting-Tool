@@ -5,14 +5,14 @@ import logging
 import sys
 
 from PyQt5.QtCore import QLocale, QTranslator
-from PyQt5.QtWidgets import QApplication, QStyleFactory
+from PyQt5.QtWidgets import QApplication, QMessageBox, QStyleFactory
 
 import scctool.settings
 import scctool.settings.config
 
 logger = logging.getLogger(__name__)
 
-__version__ = "2.3.0"
+__version__ = "2.3.1"
 __latest_version__ = __version__
 __new_version__ = False
 
@@ -46,6 +46,15 @@ def main():
             app = None
         except Exception as e:
             logger.exception("message")
+            message = _(
+                'Critical error <i>`{error}`</i>! Please provide the log-file'
+                ' to the developer of StarCraft Casting Tool. '
+                '<a href="{link}">{link}</a>')
+            QMessageBox.critical(
+                None, _('Critical Error'),
+                message.format(
+                    error=e, link='https://discord.gg/G9hFEfh'),
+                QMessageBox.Ok)
             break
 
     sys.exit(currentExitCode)
@@ -65,8 +74,8 @@ def main_window(app, showChangelog=False):
         icon.addFile(scctool.settings.getResFile('scct.png'), QSize(256, 256))
         app.setWindowIcon(icon)
         cntlr = MainController()
-        MainWindow(cntlr, app, showChangelog)
         logger.info("Starting... v{}".format(__version__))
+        MainWindow(cntlr, app, showChangelog)
         return cntlr
 
     except Exception as e:

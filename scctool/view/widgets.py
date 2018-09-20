@@ -95,7 +95,6 @@ class MonitoredLineEdit(QLineEdit):
             self._before = after
             self.textModified.emit()
 
-
     def completerFinished(self, text):
         before, after = self._before, text
         if before != after:
