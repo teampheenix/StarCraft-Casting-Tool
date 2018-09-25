@@ -241,29 +241,34 @@ div.race {
 }
 
 div.race>span {
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: contain;
   display: block;
   position: relative;
+  background-color: var(--color);
   width: 2em;
-  filter: drop-shadow(100px 0px var(--color));
-  margin-left: -100px;
 }
 
 div.Protoss>span {
-  background-image: url('../../img/races/protoss-black.png');
+  -webkit-mask: url('../../img/races/protoss.svg');
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center center;
+  -webkit-mask-size: contain;
   height: 2.5em;
 }
 
 div.Terran>span {
-  background-image: url('../../img/races/terran-black.png');
+  -webkit-mask: url('../../img/races/terran.svg');
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center center;
+  -webkit-mask-size: contain;
   height: 2.0em;
   margin-top: 0.35em;
 }
 
 div.Zerg>span {
-  background-image: url('../../img/races/zerg-black.png');
+  -webkit-mask: url('../../img/races/zerg.svg');
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center center;
+  -webkit-mask-size: contain;
   height: 2.0em;
   margin-top: 0.35em;
 }
