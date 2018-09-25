@@ -241,7 +241,6 @@ div.race {
 }
 
 div.race>span {
-  background-image: url('../../img/races/protoss-black.png');
   background-repeat: no-repeat;
   background-position: center center;
   background-size: contain;

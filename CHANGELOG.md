@@ -1,6 +1,13 @@
 # Changelog
 
 
+## v2.3.1 (2018-09-20)
+
+### Changes
+
+* Added handling of critical errors.
+
+
 ## v2.3.0 (2018-09-16)
 
 ### New
