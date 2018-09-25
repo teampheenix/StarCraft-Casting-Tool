@@ -1,11 +1,15 @@
 # Changelog
 
 
-## v2.3.1 (2018-09-20)
+## v2.3.1 (2018-09-25)
 
 ### Changes
 
 * Added handling of critical errors.
+
+### Fix
+
+* Fixed a bug where race icons in the maps stats browser source would not be displayed in StreamlabsOBS.
 
 
 ## v2.3.0 (2018-09-16)
