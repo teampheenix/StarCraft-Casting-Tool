@@ -6,7 +6,7 @@
 }
 
 :root {
-  --width: 1400px;
+  --width: 1550px;
   --height: 625px;
   --middle: 750px;
   --side: calc((var(--width) - var(--middle)) / 2);
@@ -126,10 +126,11 @@ div.container-right:after, div.container-left:after {
 div.column-header {
   box-sizing: border-box;
   position: relative;
-  height: 150px;
+  height: 125px;
   color: white;
   font-size: 35px;
   text-transform: uppercase;
+  word-wrap: break-word;
 }
 
 div.column-header span {
