@@ -306,6 +306,12 @@ function initAnimation(init_map, select = true) {
     var mappool = document.getElementById("map-pool");
     if (select) setTimeout(selectMap, 500, init_map);
     tweenInitial.delay(0.5)
+      .set(left, {
+        clearProps: "all"
+      })
+      .set(right, {
+        clearProps: "all"
+      })
       .staggerTo([left, right, maplist, mappool], 0, {
         opacity: "1"
       }, 0)
