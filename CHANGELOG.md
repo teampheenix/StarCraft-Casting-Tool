@@ -1,6 +1,15 @@
 # Changelog
 
 
+## v2.3.2 (2018-10-07)
+
+### Fix
+
+* Longer map names such as 'Dreamcatcher' are now completly visible in the mapstats 'StarCraft2' skin.
+
+* Fixed mapstats animation when changing the map pool.
+
+
 ## v2.3.1 (2018-09-25)
 
 ### Changes
