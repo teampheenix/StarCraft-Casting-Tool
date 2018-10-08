@@ -172,7 +172,7 @@ function changeText(iconID, label, new_value) {
   function _changeText(parent, object, new_value) {
     object.text(new_value)
     $(document).ready(function() {
-      parent.find(".text-fill").textfill();
+      parent.find(".text-fill").textfill({maxFontPixels: 80});
     });
   }
 }
@@ -236,7 +236,7 @@ function changeMap(iconID, map, map_img) {
       image.css("background-image", 'url("src/img/maps/' + map_img + '")');
     }
     $(document).ready(function() {
-      parent.find(".text-fill").textfill();
+      parent.find(".text-fill").textfill({maxFontPixels: 80});
     });
   }
 }
@@ -250,7 +250,7 @@ function setFont(newFont) {
   }
   storeData("font");
   $(document).ready(function() {
-    $('#container').find(".text-fill").textfill();
+    $('#container').find(".text-fill").textfill({maxFontPixels: 80});
   });
 }
 
@@ -322,7 +322,7 @@ function fillBox(i) {
   }
   $(mapicon).find("div.opa").css('opacity', mapdata['opacity']);
   $(mapicon).ready(function() {
-    $(mapicon).find(".text-fill").textfill();
+    $(mapicon).find(".text-fill").textfill({maxFontPixels: 80});
     if (i == length) {
       $(mapicon).ready(function() {
         initAnimation();
