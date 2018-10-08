@@ -62,7 +62,6 @@ div.box {
   width: var(--total-width);
   height: var(--total-height);
   overflow: hidden;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 }
 
 div.box_left {
@@ -108,7 +107,6 @@ div.mapname {
   text-align: left;
   height: 110%;
   line-height:var(--lower-text-height);
-  text-shadow: none;
   color:white;
 }
 
@@ -121,6 +119,7 @@ div.player1 {
   text-align: right;
   line-height: calc(var(--total-height) - var(--lower-text-height));
   color: white;
+  text-shadow: 1px 1px 1px var(--team1), 1px -1px 1px var(--team1), -1px 1px 1px var(--team1), -1px -1px 1px var(--team1);
 }
 
 div.player2 {
@@ -132,6 +131,7 @@ div.player2 {
   text-align: left;
   line-height: calc(var(--total-height) - var(--lower-text-height));
   color: white;
+  text-shadow: 1px 1px 1px var(--team2), 1px -1px 1px var(--team2), -1px 1px 1px var(--team2), -1px -1px 1px var(--team2);
 }
 
 div.race1 {
@@ -182,7 +182,7 @@ div.player1.winner {
 }
 
 div.player2.winner {
-  --winner-color: var(--team2); 
+  --winner-color: var(--team2);
   --size: 8px;
   text-shadow: 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color) !important;
 -webkit-font-smoothing: antialiased;
@@ -194,9 +194,13 @@ div.player2.winner {
 
 .loser {
   filter: brightness(70%);
-  text-decoration: line-through;
-  text-shadow: 2px 2px 2px black;  
+  text-shadow: 2px 2px 2px black;
 }
+
+.loser span{
+   text-decoration: line-through;
+ }
+
 
 div.lower-text {
   position: absolute;
