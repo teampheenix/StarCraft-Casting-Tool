@@ -2,10 +2,10 @@
 
 
 :root {
-  --width: 1590px;
+  --width: 100%;
   --height: 120px;
-  --middle: 350px;
-  --side: calc((var(--width) - var(--middle)) / 2);
+  --middle: 200px;
+  --side: 300px;
   --border: 150px;
   --logo: 100px;
   --font: Teko;
@@ -58,7 +58,7 @@ div.misc {
 
 .box_middle {
   position: absolute;
-  left: var(--side);
+  left: calc(50% - var(--middle) / 2);
   width: var(--middle);
   height: 100%;
   box-sizing: border-box;
@@ -76,7 +76,7 @@ div.misc {
 .score_left {
   position: absolute;
   top: 0px;
-  left: calc(var(--middle)/4);
+  left: calc(var(--middle)/5);
   height: 100%;
   filter: drop-shadow(0px 0px 2px black);
 }
@@ -84,7 +84,7 @@ div.misc {
 .score_right {
   position: absolute;
   top: 0px;
-  right: calc(var(--middle)/4);
+  right: calc(var(--middle)/5);
   height: 100%;
   filter: drop-shadow(0px 0px 2px black);
 }
@@ -92,14 +92,14 @@ div.misc {
 div.box_right {
   position: absolute;
   height: 100%;
-  width: var(--side);
+  width: calc(50% - var(--middle) / 2);
   right: 0px;
 }
 
 div.box_left {
   position: absolute;
   height: 100%;
-  width: var(--side);
+  width: calc(50% - var(--middle) / 2);
   left: 0px;
 }
 
@@ -109,9 +109,8 @@ div.upper-text-right {
   line-height: 55px;
   height: 65px;
   top: 15px;
-  width: 100%;
   padding: 10px;
-  width: calc(var(--side) - var(--logo));
+  width: 350px;
   left: 0px;
   text-align: left;
   padding-left: 0px;
@@ -124,9 +123,8 @@ div.upper-text-left {
   line-height: 55px;
   height: 65px;
   top: 15px;
-  width: 100%;
   padding: 10px;
-  width: calc(var(--side) - var(--logo));
+  width: 350px;
   right: 0px;
   text-align: right;
   padding-right: 0px;
@@ -135,21 +133,21 @@ div.upper-text-left {
 
 div.mapscore-right {
   position: absolute;
-  width: calc(var(--side) - var(--logo)- var(--border));
+  width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: left;
 }
 
 div.mapscore-left {
   position: absolute;
-  width: calc(var(--side) - var(--logo)- var(--border));
+  width: 100%;
   right: 0px;
   height: 100%;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: right;
 }
 
 div.circle {
@@ -161,6 +159,7 @@ div.circle {
   opacity: 0.85 !important;
   border-radius: 0px 0px 4px 4px;
   border: 1px solid var(--border-color);
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
   flex-shrink: 1;
 }
 
@@ -184,14 +183,14 @@ div.logo {
 div.box_veryleft {
   position: absolute;
   height: 100%;
-  left:  15px;
+  right: calc(50% + 350px + var(--middle) / 2);
   width: var(--logo);
 }
 
 div.box_veryright {
   position: absolute;
   height: 100%;
-  right: 15px;
+  left: calc(50% + 350px + var(--middle) / 2);
   width: var(--logo);
 }
 
@@ -200,8 +199,15 @@ div.box_veryright {
   -webkit-font-smoothing: antialiased;
 }
 
-.winner {
+#team1.winner {
   --winner-color: var(--team1); /*set winner color*/
+  --size: 8px;
+  text-shadow: 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color) !important;
+  -webkit-font-smoothing: antialiased;
+}
+
+#team2.winner {
+  --winner-color: var(--team2); /*set winner color*/
   --size: 8px;
   text-shadow: 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color) !important;
   -webkit-font-smoothing: antialiased;

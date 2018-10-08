@@ -2,7 +2,7 @@
 /* latin */
 
 :root {
-  --total-width: 1590px;
+  --total-width: 100%;
   --total-height: 105px;
   --middle-width: 350px;
   --race-width:70px;
@@ -50,7 +50,7 @@
 .block {
   height: var(--total-height);
   width: var(--total-width);
-  padding: var(--padding);
+  padding: 0px;
 }
 
 body {
@@ -61,6 +61,9 @@ div.box {
   position: relative;
   width: var(--total-width);
   height: var(--total-height);
+  border-bottom: 1px solid black;
+  border-top: 1px solid black;
+  box-sizing: border-box;
   overflow: hidden;
 }
 
@@ -90,6 +93,7 @@ div.box_right {
 div.maplabel {
   position: absolute;
   width: calc(var(--total-width)/2 - 25px);
+  right: 5px;
   text-align: right;
   height: 110%;
   line-height:var(--lower-text-height);
@@ -106,6 +110,7 @@ div.mapname {
   width: calc(var(--total-width)/2 - 25px);
   text-align: left;
   height: 110%;
+  left: 5px;
   line-height:var(--lower-text-height);
   color:white;
 }
@@ -113,30 +118,30 @@ div.mapname {
 div.player1 {
   position: absolute;
   top: 2px;
-  height: calc(var(--total-height) - var(--lower-text-height));
-  right: calc(var(--middle-width)/2 + var(--race-width)*1.3);
-  width: calc(var(--side-width));
+  height: calc(var(--total-height) - var(--lower-text-height) - 2px);
+  right: calc(var(--middle-width) / 2 + var(--race-width) * 1.3);
+  width: calc(100% - (var(--middle-width) / 2 + var(--race-width) * 1.3));
   text-align: right;
   line-height: calc(var(--total-height) - var(--lower-text-height));
   color: white;
-  text-shadow: 1px 1px 1px var(--team1), 1px -1px 1px var(--team1), -1px 1px 1px var(--team1), -1px -1px 1px var(--team1);
+  text-shadow: 1px 1px 1px black, 1px -1px 1px black, -1px 1px 1px black, -1px -1px 1px black;
 }
 
 div.player2 {
   position: absolute;
   top: 2px;
-  height: calc(var(--total-height) - var(--lower-text-height));
-  left: calc(var(--middle-width)/2 + var(--race-width)*1.3);
-  width: calc(var(--side-width));
+  height: calc(var(--total-height) - var(--lower-text-height) - 2px);
+  left: calc(var(--middle-width) / 2 + var(--race-width) * 1.3);
+  width: calc(100% - (var(--middle-width) / 2 + var(--race-width) * 1.3));
   text-align: left;
   line-height: calc(var(--total-height) - var(--lower-text-height));
   color: white;
-  text-shadow: 1px 1px 1px var(--team2), 1px -1px 1px var(--team2), -1px 1px 1px var(--team2), -1px -1px 1px var(--team2);
+  text-shadow: 1px 1px 1px black, 1px -1px 1px black, -1px 1px 1px black, -1px -1px 1px black;
 }
 
 div.race1 {
   position: absolute;
-  left: calc(var(--total-width)/2 - var(--middle-width)/2 - var(--race-width));
+  left: calc(var(--total-width) / 2 - var(--middle-width) / 2 - var(--race-width));
   width: var(--race-width);
   top: 2.5%;
   height: 75%;
@@ -148,7 +153,7 @@ div.race1 {
 
 div.race2 {
   position: absolute;
-  right: calc(var(--total-width)/2 - var(--middle-width)/2 - var(--race-width));
+  right: calc(var(--total-width) / 2 - var(--middle-width) / 2 - var(--race-width));
   width: var(--race-width);
   top: 2.5%;
   height: 75%;
@@ -238,4 +243,19 @@ span.maplabel, span.mapname {
 #random {
   background-image: url('../../img/races/random-black.png');
   top: 5px !important;
+}
+
+div.opa {
+  position: absolute;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  background-color: #000000;
+  color: white;
+  box-sizing: border-box;
+  z-index: 3;
+}
+
+div.tbd {
+  background-image: url("../../img/textures/background.jpg");
 }
