@@ -1,0 +1,237 @@
+@import url('https://fonts.googleapis.com/css?family=Teko');
+/* latin */
+
+:root {
+  --total-width: 1590px;
+  --total-height: 105px;
+  --middle-width: 350px;
+  --race-width:70px;
+  --side-width: calc((var(--total-width) - var(--middle-width)) / 2);
+  --font: Teko;
+  --padding: 1px;
+  --border-size: 2px;
+  --border-radius: 8px;
+  --lower-text-height: 35px;
+  --border-color: rgba(2, 10, 36, 1);
+  --lower-color: rgba(180, 0, 15, 0.7);
+  --higher-color: rgba(2, 10, 36, 1);
+  --team1: var(--borng); /* SET TEAM 1 HERE */
+  --team2: var(--ur); /* SET TEAM 2 HERE */
+  --fxb: #9659e8; /* formless bearsloths */
+  --borng: #ef4357; /* born gosu */
+  --confed: #b50808; /* the confederation */
+  --ca: #b56a34; /* cyclones anonymous */
+  --xrs: #ffcf06; /* reign supreme */
+  --swarm: #9659e8; /* sc2 swarm */
+  --ttb: #a03231; /* taste the bacon */
+  --vg: #67dfb9; /* validity gaming */
+  --jam: #b0536d; /* jamit gaming */
+  --cx: #cecece; /* corax gaming */
+  --ai: #aa0000; /* all-inspiration */
+  --lit: #2790cd; /* lit esports */
+  --px: #5e69a7; /* psionic aftermath */
+  --gnr: #0af3f0; /* guns and roaches */
+  --dl: #ff39a4; /* daily life */
+  --ur: #2742cd; /* team unrivaled */
+}
+
+#container {
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.block {
+  height: var(--total-height);
+  width: var(--total-width);
+  padding: var(--padding);
+}
+
+body {
+  font-family: var(--font);
+}
+
+div.box {
+  position: relative;
+  width: var(--total-width);
+  height: var(--total-height);
+  overflow: hidden;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+}
+
+div.box_left {
+  position: absolute;
+  height: 100%;
+  left: 0%;
+  width: calc(var(--total-width) /2);
+  background-color: var(--higher-color);
+  background-size: 200%;
+  background-position: 0% 30%;
+  overflow: hidden;
+}
+
+div.box_right {
+  position: absolute;
+  height: 100%;
+  right: 0%;
+  width: calc(var(--total-width) /2);
+  background-color: var(--higher-color);
+  background-size: 200%;
+  background-position: 100% 30%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+div.maplabel {
+  position: absolute;
+  width: calc(var(--total-width)/2 - 25px);
+  text-align: right;
+  height: 110%;
+  line-height:var(--lower-text-height);
+  text-shadow: none;
+  color:white;
+}
+
+.vs {
+  display: none;
+}
+
+div.mapname {
+  position: absolute;
+  width: calc(var(--total-width)/2 - 25px);
+  text-align: left;
+  height: 110%;
+  line-height:var(--lower-text-height);
+  text-shadow: none;
+  color:white;
+}
+
+div.player1 {
+  position: absolute;
+  top: 2px;
+  height: calc(var(--total-height) - var(--lower-text-height));
+  right: calc(var(--middle-width)/2 + var(--race-width)*1.3);
+  width: calc(var(--side-width));
+  text-align: right;
+  line-height: calc(var(--total-height) - var(--lower-text-height));
+  color: white;
+}
+
+div.player2 {
+  position: absolute;
+  top: 2px;
+  height: calc(var(--total-height) - var(--lower-text-height));
+  left: calc(var(--middle-width)/2 + var(--race-width)*1.3);
+  width: calc(var(--side-width));
+  text-align: left;
+  line-height: calc(var(--total-height) - var(--lower-text-height));
+  color: white;
+}
+
+div.race1 {
+  position: absolute;
+  left: calc(var(--total-width)/2 - var(--middle-width)/2 - var(--race-width));
+  width: var(--race-width);
+  top: 2.5%;
+  height: 75%;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
+  filter: invert(1) drop-shadow(0px 0px 2px var(--team1));
+}
+
+div.race2 {
+  position: absolute;
+  right: calc(var(--total-width)/2 - var(--middle-width)/2 - var(--race-width));
+  width: var(--race-width);
+  top: 2.5%;
+  height: 75%;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
+  filter: invert(1) drop-shadow(0px 0px 2px var(--team2));
+}
+
+div.race1.winner{
+  filter: invert(1) drop-shadow(0px 0px 2px var(--team1)) brightness(180%) !important;
+}
+
+div.race1.loser{
+  filter: invert(1) drop-shadow(0px 0px 2px var(--team1)) brightness(70%) !important;
+}
+
+div.race2.winner{
+  filter: invert(1) drop-shadow(0px 0px 2px var(--team2)) brightness(180%) !important;
+}
+
+div.race2.loser{
+  filter: invert(1) drop-shadow(0px 0px 2px var(--team2)) brightness(70%) !important;
+}
+
+div.player1.winner {
+  --winner-color: var(--team1);
+  --size: 8px;
+  text-shadow: 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color) !important;
+  -webkit-font-smoothing: antialiased;
+}
+
+div.player2.winner {
+  --winner-color: var(--team2); 
+  --size: 8px;
+  text-shadow: 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px 2px black, 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color) !important;
+-webkit-font-smoothing: antialiased;
+}
+
+.winner {
+	filter: brightness(150%);
+}
+
+.loser {
+  filter: brightness(70%);
+  text-decoration: line-through;
+  text-shadow: 2px 2px 2px black;  
+}
+
+div.lower-text {
+  position: absolute;
+  bottom: 0px;
+  height: var(--lower-text-height);
+  width: var(--total-width);
+  line-height: var(--lower-text-height);
+  border-top: 2px solid var(--border-color);
+  background: var(--lower-color);
+  box-sizing: border-box;
+}
+
+span.maplabel, span.mapname {
+  text-shadow: 1px 1px 1px black, 1px -1px 1px black, -1px 1px 1px black, -1px -1px 1px black;
+}
+
+#protoss {
+  height: calc(100% - 2px);
+  top: 0px !important;
+  background-image: url('../../img/races/protoss-black.png');
+}
+
+#zerg {
+  background-image: url('../../img/races/zerg-black.png');
+  height: calc(100% - 24px);
+  top: 12px !important;
+}
+
+#terran {
+  background-image: url('../../img/races/terran-black.png');
+  height: calc(100% - 24px);
+  top: 12px !important;
+}
+
+#random {
+  background-image: url('../../img/races/random-black.png');
+  top: 5px !important;
+}
