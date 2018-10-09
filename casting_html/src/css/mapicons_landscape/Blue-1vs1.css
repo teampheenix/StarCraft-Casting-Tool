@@ -142,8 +142,9 @@ div.maplabel {
   right: var(--border-radius);
   width: calc(100% - var(--border-radius) - 5px);
   text-align: center;
-  line-height: var(--total-height);
-  height: var(--total-height);
+  line-height: calc(var(--total-height) * 0.7);
+  top: calc(var(--total-height) * 0.15);
+  height: calc(var(--total-height) * 0.7);
 }
 
 div.mapname {
@@ -151,8 +152,9 @@ div.mapname {
   left: calc(var(--border-radius) + 10px);
   width: calc(100% - var(--border-radius) - 25px);
   text-align: center;
-  line-height: var(--total-height);
-  height: var(--total-height);
+  line-height: calc(var(--total-height) * 0.7);
+  top: calc(var(--total-height) * 0.15);
+  height: calc(var(--total-height) * 0.7);
 }
 
 span.maplabel, span.mapname {

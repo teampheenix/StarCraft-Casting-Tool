@@ -107,7 +107,7 @@ div.box_middle {
   border-radius: 0px var(--border-radius) 0px var(--border-radius);
   background-image: url("../../img/textures/background.jpg");
   background-size: cover;
-  background-position: 50% 50%;
+  background-position: 50% 40%;
   font-size: 40px;
   font-weight: bold;
   text-align: center;
@@ -168,8 +168,8 @@ div.mapname {
 
 div.upper-text-right {
   position: absolute;
-  top: 2px;
-  height: calc(100% - var(--lower-text-height) - 10px);
+  top: 5px;
+  height: calc(100% - var(--lower-text-height) - 20px);
   font-size: 28px;
   font-weight: bold;
   left: var(--border-radius);
@@ -180,8 +180,8 @@ div.upper-text-right {
 
 div.upper-text-left {
   position: absolute;
-  top: 2px;
-  height: calc(100% - var(--lower-text-height) - 10px);
+  top: 5px;
+  height: calc(100% - var(--lower-text-height) - 20px);
   font-size: 28px;
   font-weight: bold;
   right: var(--border-radius);

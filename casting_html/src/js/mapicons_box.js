@@ -350,9 +350,7 @@ function initAnimation() {
         opacity: "1"
       })
       .from(image, 0.35, {
-        width: "0%",
-        border: "0px",
-        left: "50%",
+        scaleX: 0,
         ease: Sine.easeInOut
       })
       .staggerFrom([mapname, maplabel], 0.2, {
@@ -362,6 +360,8 @@ function initAnimation() {
       .staggerTo([vs, [race1, race2]], 0.2, {
         opacity: 1.0,
       }, 0.20, '=-0.2')
+      .set(race1, {clearProps:"opacity"})
+      .set(race2, {clearProps:"opacity"})
       .from(player1, 0.15, {
         x: '-=110%'
       }, '=-0.15')
