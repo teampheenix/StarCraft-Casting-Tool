@@ -15,16 +15,17 @@ from scctool.view.widgets import (DragDropLogoList, DragImageLabel,
                                   LogoDownloader)
 
 # create logger
-module_logger = logging.getLogger('scctool.view.subLogos')
+module_logger = logging.getLogger(__name__)
 
 
 class SubwindowLogos(QWidget):
     """Show readme sub window."""
 
-    def createWindow(self, mainWindow, controller, team):
+    def createWindow(self, mainWindow, controller, team, matchDataWidget):
         """Create readme sub window."""
         super().__init__(None)
         self.controller = controller
+        self.matchDataWidget = matchDataWidget
         self.team = team
         self.mutex = QMutex()
         # self.setWindowIcon(
@@ -37,10 +38,12 @@ class SubwindowLogos(QWidget):
         self.iconsize = scctool.settings.logoManager.Logo._iconsize
 
         box = QGroupBox(
-            _("Logo Team 1") + " - {}".format(mainWindow.le_team[0].text()))
+            _("Logo Team 1") + " - {}".format(
+                self.matchDataWidget.le_team[0].text()))
         layout = QGridLayout()
-        self.team1_icon = DragImageLabel(self,
-                                         self.controller.logoManager.getTeam1(), 1)
+        self.team1_icon = DragImageLabel(
+            self,
+            self.controller.logoManager.getTeam1(), 1)
         layout.addWidget(self.team1_icon, 0, 0, 5, 1)
         button = QPushButton(_("Load from File"))
         button.clicked.connect(lambda: self.logoFromFileDialog(1))
@@ -50,7 +53,7 @@ class SubwindowLogos(QWidget):
         layout.addWidget(button, 1, 1)
         button = QPushButton(_("Search Liquipedia"))
         button.clicked.connect(lambda: self.liqupediaSearchDialog(
-            1, mainWindow.le_team[0].text()))
+            1, self.matchDataWidget.le_team[0].text()))
         layout.addWidget(button, 2, 1)
         button = QPushButton(_("Add to Favorites"))
         button.clicked.connect(lambda: self.addFavorite(1))
@@ -83,11 +86,13 @@ class SubwindowLogos(QWidget):
         #     QSizePolicy.Minimum), 0, 1)
 
         box = QGroupBox(
-            _("Logo Team 2") + " - {}".format(mainWindow.le_team[1].text()))
+            _("Logo Team 2") + " - {}".format(
+                self.matchDataWidget.le_team[1].text()))
         box.setAlignment(Qt.AlignRight)
         layout = QGridLayout()
-        self.team2_icon = DragImageLabel(self,
-                                         self.controller.logoManager.getTeam2(), 2)
+        self.team2_icon = DragImageLabel(
+            self,
+            self.controller.logoManager.getTeam2(), 2)
         layout.addWidget(self.team2_icon, 0, 1, 5, 1)
         button = QPushButton(_("Load from File"))
         button.clicked.connect(lambda: self.logoFromFileDialog(2))
@@ -97,7 +102,7 @@ class SubwindowLogos(QWidget):
         layout.addWidget(button, 1, 0)
         button = QPushButton(_("Search Liquipedia"))
         button.clicked.connect(lambda: self.liqupediaSearchDialog(
-            2, mainWindow.le_team[1].text()))
+            2, self.matchDataWidget.le_team[1].text()))
         layout.addWidget(button, 2, 0)
         button = QPushButton(_("Add to Favorites"))
         button.clicked.connect(lambda: self.addFavorite(2))
@@ -111,7 +116,8 @@ class SubwindowLogos(QWidget):
         box = QGroupBox(_("Favorites"))
         layout = QHBoxLayout()
         self.fav_list = DragDropLogoList(
-            self.controller.logoManager, self.controller.logoManager.addFavorite)
+            self.controller.logoManager,
+            self.controller.logoManager.addFavorite)
         self.fav_list.itemDoubleClicked.connect(self.doubleClicked)
         self.fav_list.setContextMenuPolicy(Qt.CustomContextMenu)
         self.fav_list.customContextMenuRequested.connect(
@@ -233,13 +239,15 @@ class SubwindowLogos(QWidget):
         self.refreshLastUsed()
 
     def doubleClicked(self, item):
+        if self.team == 0:
+            return
         map = item.icon().pixmap(self.iconsize)
         ident = self.controller.logoManager.pixmap2ident(map)
         logo = self.controller.logoManager.findLogo(ident)
         if self.team == 1:
             self.controller.logoManager.setTeam1Logo(logo)
             self.team1_icon.setPixmap(map)
-        else:
+        elif self.team == 2:
             self.controller.logoManager.setTeam2Logo(logo)
             self.team2_icon.setPixmap(map)
         self.refreshLastUsed()
@@ -271,7 +279,8 @@ class SubwindowLogos(QWidget):
 
     def refreshLastUsed(self):
         self.lastused_list.clear()
-        for logo in self.controller.logoManager.getLastUsed():
+        for logo in self.controller.logoManager.getLastUsed(
+                self.matchDataWidget.matchData.getControlID()):
             map = logo.provideQPixmap()
             item = QListWidgetItem(
                 QIcon(map), logo.getDesc())
@@ -301,7 +310,7 @@ class SubwindowLogos(QWidget):
 
         fileName, status = QFileDialog.getOpenFileName(
             self, _("Select Team Logo"), "",
-            (_("Supported Images") + " ({})").format("*.png *.jpg"))
+            (_("Supported Images") + " ({})").format("*.png *.jpg *.gif"))
         if fileName:
             logo = self.controller.logoManager.newLogo()
             logo.fromFile(fileName)
@@ -341,7 +350,8 @@ class SubwindowLogos(QWidget):
 
                 if not regex.match(url):
                     QMessageBox.critical(
-                        self, "Invalid URL", _('{} is not a valid URL.').format(url))
+                        self,
+                        "Invalid URL", _('{} is not a valid URL.').format(url))
                     continue
                 else:
                     logo = LogoDownloader(
@@ -373,8 +383,7 @@ class SubwindowLogos(QWidget):
     def closeEvent(self, event):
         """Handle close event."""
         try:
-            self.controller.updateLogos()
-            self.controller.matchData.metaChanged()
+            self.matchDataWidget.updateLogos(True)
             event.accept()
         except Exception as e:
             module_logger.exception("message")

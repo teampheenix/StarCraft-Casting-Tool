@@ -1,0 +1,274 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+:root {
+  --width: 1700px;
+  --height: 850px;
+  --middle: 800px;
+  --side: calc((100% - var(--middle)) / 2);
+  --color: #6495ed;
+  --color2: black;
+  --font: Roboto;
+}
+
+body {
+  font-family: var(--font);
+}
+
+div.box {
+  position: absolute;
+  width: var(--width);
+  height: var(--height);
+  left: calc((100% - var(--width)) / 2);
+  top: calc((100% - var(--height)) / 2);
+  overflow: hidden;
+}
+
+div.left-column {
+  box-sizing: border-box;
+  position: absolute;
+  height: 100%;
+  width: calc(var(--side) + 31px);
+  padding: 12px;
+  padding-right: 43px;
+  overflow: hidden;
+}
+
+div.right-column {
+  box-sizing: border-box;
+  position: absolute;
+  height: 90%;
+  right: 0%;
+  width: var(--side);
+  padding: 12px;
+  overflow: hidden;
+}
+
+div.middle-column {
+  box-sizing: border-box;
+  position: absolute;
+  height: 90%;
+  left: calc(var(--side));
+  width: calc(var(--middle));
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+}
+
+div.column-header {
+  box-sizing: border-box;
+  position: relative;
+  height: 325px;
+  color: var(--color);
+  font-size: 43px;
+  text-transform: uppercase;
+  letter-spacing: 6px;
+}
+
+div.column-header span {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+
+div.column-header.left {
+  text-align: right;
+}
+
+div.column-header.right {
+  text-align: left;
+}
+
+div.column-header span:after {
+  content: '';
+  width: 85%;
+  height: 3px;
+  background-color: var(--color);
+  display: inline-block;
+}
+
+div.image{
+  position: absolute;
+  box-sizing: content-box;
+  max-width: 720px;
+  max-height: 700px;
+  display: block;
+  bottom: 0%;
+  border: 3px solid var(--color);
+}
+
+#map-img {
+  position: relative;
+  box-sizing: border-box;
+  display: block;
+  max-width: 720px;
+  max-height: 700px;
+}
+
+#map-list {
+  color: var(--color2);
+  letter-spacing: 2px;
+  font-size: 25px;
+  line-height: 31px;
+  text-transform: uppercase;
+  text-align: right;
+  list-style-type: none;
+  position: absolute;
+  right: 0px;
+}
+
+#liquipedia{
+  font-weight: bold;
+  font-size: 20px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  color: var(--color);
+  letter-spacing: 1px;
+  right: calc(var(--side) + var(--middle) * 0.1 + 15px);
+}
+
+ul {
+  margin-top: 0px;
+}
+
+ul li {
+  margin: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+ul li div {
+  display: inline-block;
+  right: 31px;
+  display: inline-block;
+}
+
+ul li::after {
+  content: ' ';
+  width: 31px;
+  display: inline-block;
+  box-sizing: border-box;
+}
+
+ul li.selected::after {
+  content: '⮜';
+  color: var(--color);
+  width: 31px;
+  display: inline-block;
+  box-sizing: border-box;
+}
+
+ul li.selected::before {
+  content: '⮞';
+  color: var(--color);
+  width: 31px;
+  text-align: left;
+  display: inline-block;
+}
+
+ul li::before {
+  content: '';
+  width: 31px;
+  text-align: left;
+  display: inline-block;
+}
+
+div.played{
+  filter: opacity(0.30);
+}
+
+div.stat {
+  margin-bottom: 43px;
+}
+
+div.stat>span {
+  font-size: 31px;
+  color: var(--color2);
+  position: relative;
+  top: 3px;
+  display: inline-block;
+}
+
+div.stat>div {
+  letter-spacing: 0px;
+  color: var(--color);
+  font-size: 25px;
+  font-weight: bold;
+  margin-bottom: 0;
+  margin-right: 18px;
+  display: inline-block;
+}
+
+div.stat>div::after {
+  content: ':';
+}
+
+div.small-stat>span {
+  letter-spacing: 0px;
+  font-size: 20px;
+  color: var(--color2);
+}
+
+div.small-stat>span.desc {
+  color: var(--color);
+  letter-spacing: 1px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+div.small-stat>span.desc::after {
+  content: ':';
+  display: inline-block;
+  width: 12px;
+}
+
+#column-content {
+  position: relative;
+}
+
+#column-bottom {
+  position: absolute;
+  padding-left: 10px;
+  bottom: 0;
+}
+
+div.race {
+  display: inline-block;
+  width: 2em;
+  height: 2.5em;
+  margin-bottom: -0.8em;
+  overflow: hidden;
+}
+
+div.race>span {
+  display: block;
+  position: relative;
+  background-color: var(--color);
+  width: 2em;
+}
+
+div.Protoss>span {
+  -webkit-mask: url('../../img/races/protoss.svg');
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center center;
+  -webkit-mask-size: contain;
+  height: 2.5em;
+}
+
+div.Terran>span {
+  -webkit-mask: url('../../img/races/terran.svg');
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center center;
+  -webkit-mask-size: contain;
+  height: 2.0em;
+  margin-top: 0.35em;
+}
+
+div.Zerg>span {
+  -webkit-mask: url('../../img/races/zerg.svg');
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center center;
+  -webkit-mask-size: contain;
+  height: 2.0em;
+  margin-top: 0.35em;
+}

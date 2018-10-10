@@ -2,23 +2,25 @@
 import configparser
 import logging
 import os.path
+import platform
+import sys
 
-from scctool.settings import configFile, windows
+module_logger = logging.getLogger(__name__)  # create logger
 
-module_logger = logging.getLogger('scctool.settings.config')  # create logger
+this = sys.modules[__name__]
 
-parser = None
+this.parser = None
 
 
-def init():
+def init(file):
     """Init config."""
-    global parser, scoreUpdate
     # Reading the configuration from file
-    parser = configparser.ConfigParser()
+    module_logger.info(file)
+    this.parser = configparser.ConfigParser()
     try:
-        parser.read(configFile, encoding='utf-8-sig')
+        this.parser.read(file, encoding='utf-8-sig')
     except Exception:
-        parser.defaults()
+        this.parser.defaults()
 
     setDefaultConfigAll()
     renameConfigOptions()
@@ -43,66 +45,67 @@ def representsFloat(s):
 # Setting default values for config file
 def setDefaultConfig(sec, opt, value, func=None):
     """Set default value in config."""
-    if(not parser.has_section(sec)):
-        parser.add_section(sec)
+    if(not this.parser.has_section(sec)):
+        this.parser.add_section(sec)
 
-    if(not parser.has_option(sec, opt)):
+    if(not this.parser.has_option(sec, opt)):
         if(func):
             try:
                 value = func()
             except Exception:
                 pass
-        parser.set(sec, opt, value)
+        this.parser.set(sec, opt, value)
     elif(value in ["True", "False"]):
         try:
-            parser.getboolean(sec, opt)
+            this.parser.getboolean(sec, opt)
         except Exception:
             if(func):
                 try:
                     value = func()
                 except Exception:
                     pass
-            parser.set(sec, opt, value)
+            this.parser.set(sec, opt, value)
     elif(representsInt(value)):
         try:
-            parser.getint(sec, opt)
+            this.parser.getint(sec, opt)
         except Exception:
             if(func):
                 try:
                     value = func()
                 except Exception:
                     pass
-            parser.set(sec, opt, value)
+            this.parser.set(sec, opt, value)
     elif(representsFloat(value)):
         try:
-            parser.getfloat(sec, opt)
+            this.parser.getfloat(sec, opt)
         except Exception:
             if(func):
                 try:
                     value = func()
                 except Exception:
                     pass
-            parser.set(sec, opt, value)
+            this.parser.set(sec, opt, value)
 
 
 def findTesserAct(
         default="C:\\Program Files (x86)\\Tesseract-OCR\\tesseract.exe"):
     """Search for Tesseract exceutable via registry."""
-    if(not windows):
-        return default
     try:
-        import winreg
-        key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE,
-                             "SOFTWARE\\WOW6432Node\\Tesseract-OCR")
-        return os.path.normpath(winreg.QueryValueEx(key, "Path")[0] +
-                                '\\tesseract.exe')
+        if(platform.system().lower() != "windows"):
+            return default
+        else:
+            import winreg
+            key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE,
+                                 "SOFTWARE\\WOW6432Node\\Tesseract-OCR")
+            return os.path.normpath(winreg.QueryValueEx(key, "Path")[0] +
+                                    '\\tesseract.exe')
     except Exception:
         return default
 
 
 def getTesserAct():
     """Get Tesseract exceutable via config or registry."""
-    tesseract = parser.get("SCT", "tesseract")
+    tesseract = this.parser.get("SCT", "tesseract")
     if(os.path.isfile(tesseract)):
         return os.path.normpath(tesseract)
     else:
@@ -118,6 +121,7 @@ def setDefaultConfigAll():
     setDefaultConfig("Twitch", "oauth", "")
     setDefaultConfig("Twitch", "title_template",
                      "(League) – (Team1) vs (Team2)")
+    setDefaultConfig("Twitch", "set_game", "True")
 
     setDefaultConfig("Nightbot", "token", "")
 
@@ -128,6 +132,8 @@ def setDefaultConfigAll():
     setDefaultConfig("SCT", "fuzzymatch", "True")
     setDefaultConfig("SCT", "new_version_prompt", "True")
     setDefaultConfig("SCT", "use_ocr", "False")
+    setDefaultConfig("SCT", "sc2_network_listener_enabled", "False")
+    setDefaultConfig("SCT", "sc2_network_listener_address", "127.0.0.1:6119")
     setDefaultConfig("SCT", "CtrlShiftS", "False")
     setDefaultConfig("SCT", "CtrlShiftC", "False")
     setDefaultConfig("SCT", "CtrlShiftR", "0")
@@ -136,13 +142,15 @@ def setDefaultConfigAll():
     setDefaultConfig("SCT", "language", "en_US")
     setDefaultConfig("SCT", "transparent_match_banner", "False")
 
+    setDefaultConfig("SCT", "blacklist_on", "False")
+    setDefaultConfig("SCT", "blacklist", "")
+
     tesseract = "C:\\Program Files (x86)\\Tesseract-OCR\\tesseract.exe"
     setDefaultConfig("SCT", "tesseract", tesseract, findTesserAct)
 
     setDefaultConfig("Form", "scoreupdate", "False")
     setDefaultConfig("Form", "togglescore", "False")
     setDefaultConfig("Form", "toggleprod", "False")
-    setDefaultConfig("Form", "playerintros", "False")
     setDefaultConfig("Form", "autotwitch", "False")
     setDefaultConfig("Form", "autonightbot", "False")
 
@@ -153,11 +161,21 @@ def setDefaultConfigAll():
     setDefaultConfig("MapIcons", "undecided_color", "#aaaaaa")
     setDefaultConfig("MapIcons", "notplayed_color", "#aaaaaa")
     setDefaultConfig("MapIcons", "notplayed_opacity", "0.4")
+    setDefaultConfig("MapIcons", "padding_landscape", "2.0")
+    setDefaultConfig("MapIcons", "padding_box", "2.0")
+    setDefaultConfig("MapIcons", "scope_box_1", "all")
+    setDefaultConfig("MapIcons", "scope_box_2", "not-ace")
+    setDefaultConfig("MapIcons", "scope_box_3", "ace")
+    setDefaultConfig("MapIcons", "scope_landscape_1", "all")
+    setDefaultConfig("MapIcons", "scope_landscape_2", "not-ace")
+    setDefaultConfig("MapIcons", "scope_landscape_3", "ace")
 
-    setDefaultConfig("Style", "mapicon_box", "Default")
-    setDefaultConfig("Style", "mapicon_landscape", "Default")
+    setDefaultConfig("Style", "mapicons_box", "Default")
+    setDefaultConfig("Style", "mapicons_landscape", "Default")
     setDefaultConfig("Style", "score", "Default")
     setDefaultConfig("Style", "intro", "Default")
+    setDefaultConfig("Style", "mapstats", "Default")
+    setDefaultConfig("Style", "aligulac", "Default")
     setDefaultConfig("Style", "use_custom_font", "False")
     setDefaultConfig("Style", "custom_font", "Verdana")
 
@@ -168,64 +186,96 @@ def setDefaultConfigAll():
     setDefaultConfig("Intros", "display_time", "3.0")
     setDefaultConfig("Intros", "animation", "Fly-In")
     setDefaultConfig("Intros", "tts_active", "False")
-    setDefaultConfig("Intros", "tts_lang", "en")
+    setDefaultConfig("Intros", "tts_voice", "en-US-Standard-B")
+    setDefaultConfig("Intros", 'tts_scope', "team_player")
+    setDefaultConfig("Intros", "tts_volume", "5")
+    setDefaultConfig("Intros", "tts_pitch", "0.0")
+    setDefaultConfig("Intros", "tts_rate", "1.0")
+
+    setDefaultConfig("Mapstats", "color1", "#6495ed")
+    setDefaultConfig("Mapstats", "color2", "#000000")
+    setDefaultConfig("Mapstats", "autoset_next_map", "True")
+    setDefaultConfig("Mapstats", "mark_played", "False")
 
 
 def renameConfigOptions():
     """Delete and rename old config options."""
     from scctool.settings import nightbot_commands
+
     try:
-        value = parser.getboolean("SCT", "StrgShiftS")
-        parser.set("SCT", "CtrlShiftS", str(value))
-        parser.remove_option("SCT", "StrgShiftS")
+        value = this.parser.get("Style", "mapicon_landscape")
+        this.parser.set("Style", "mapicons_landscape", str(value))
+        this.parser.remove_option("Style", "mapicon_landscape")
     except Exception:
         pass
 
-    parser.remove_section("OBS")
-    parser.remove_section("FTP")
+    try:
+        value = this.parser.get("Style", "mapicon_box")
+        this.parser.set("Style", "mapicons_box", str(value))
+        this.parser.remove_option("Style", "mapicon_box")
+    except Exception:
+        pass
 
     try:
-        command = parser.get("Nightbot", "command")
-        message = parser.get("Nightbot", "message")
+        value = this.parser.getboolean("SCT", "StrgShiftS")
+        this.parser.set("SCT", "CtrlShiftS", str(value))
+        this.parser.remove_option("SCT", "StrgShiftS")
+    except Exception:
+        pass
+
+    this.parser.remove_section("OBS")
+    this.parser.remove_section("FTP")
+
+    try:
+        command = this.parser.get("Nightbot", "command")
+        message = this.parser.get("Nightbot", "message")
         nightbot_commands[command] = message
     except Exception:
         pass
 
     try:
-        parser.remove_option("Nightbot", "command")
-        parser.remove_option("Nightbot", "message")
+        this.parser.remove_option("Nightbot", "command")
+        this.parser.remove_option("Nightbot", "message")
     except Exception:
         pass
 
-
-def ftpIsValid():
-    """Check if FTP data is valid."""
-    return len(parser.get("FTP", "server")) > 0
+    try:
+        this.parser.remove_option('Form', 'playerintros')
+    except Exception:
+        pass
 
 
 def nightbotIsValid():
     """Check if nightbot data is valid."""
     from scctool.settings import nightbot_commands
-    return (len(parser.get("Nightbot", "token")) > 0 and
+    return (len(this.parser.get("Nightbot", "token")) > 0 and
             len(nightbot_commands) > 0)
 
 
 def twitchIsValid():
     """Check if twitch data is valid."""
-    twitchChannel = parser.get("Twitch", "Channel")
-    oauth = parser.get("Twitch", "oauth")
+    twitchChannel = this.parser.get("Twitch", "Channel")
+    oauth = this.parser.get("Twitch", "oauth")
     return (len(oauth) > 0 and len(twitchChannel) > 0)
 
 
 def getMyTeams():
     """Enpack my teams."""
-    return list(map(str.strip, str(parser.get("SCT", "myteams")).split(',')))
+    return list(map(str.strip,
+                    str(this.parser.get("SCT", "myteams")).split(',')))
+
+
+def getBlacklist():
+    """Enpack my teams."""
+    return list(map(str.strip,
+                    str(this.parser.get("SCT", "blacklist")).split(',')))
 
 
 def getMyPlayers(append=False):
     """Enpack my players."""
     players = list(
-        map(str.strip, str(parser.get("SCT", "commonplayers")).split(',')))
+        map(str.strip,
+            str(this.parser.get("SCT", "commonplayers")).split(',')))
     if(append):
         players.append("TBD")
     return players
@@ -248,6 +298,3 @@ def dumpHotkey(data):
         return "{name}, {scan_code}, {is_keypad}".format(**data)
     except Exception:
         return ""
-
-
-init()

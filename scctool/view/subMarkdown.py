@@ -11,7 +11,7 @@ from PyQt5.QtWidgets import (QGridLayout, QPushButton, QSizePolicy,
 import scctool.settings
 
 # create logger
-module_logger = logging.getLogger('scctool.view.subMarkdown')
+module_logger = logging.getLogger(__name__)
 
 
 class SubwindowMarkdown(QWidget):
@@ -38,8 +38,8 @@ class SubwindowMarkdown(QWidget):
 
         self.setWindowTitle(title)
 
-        self.resize(QSize(mainWindow.size().width()
-                          * 0.9, self.sizeHint().height()))
+        self.resize(QSize(mainWindow.size().width() * 0.9,
+                          self.sizeHint().height()))
         relativeChange = QPoint(mainWindow.size().width() / 2,
                                 mainWindow.size().height() / 3)\
             - QPoint(self.size().width() / 2,

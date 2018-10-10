@@ -8,9 +8,9 @@
 
 # StarCraft Casting Tool
 
-**StarCraft Casting Tool** (SCC Tool) is a free to use open source program that makes casting StarCraft 2 simple while increasing the production value substantially by providing a match grabber, predefined custom formats, and various sets of animated icons and browser sources to be presented to the viewer. 
+**StarCraft Casting Tool** (SCC Tool) is a free to use open source program that makes casting StarCraft 2 simple while increasing the production value substantially by providing a match grabber, predefined custom formats, and various sets of animated icons and browser sources to be presented to the viewer.
 
-![streaming-tool](https://user-images.githubusercontent.com/26044736/38167067-7b78fd10-352f-11e8-8676-50a7b0bf9e98.png)
+![scct-v2](https://user-images.githubusercontent.com/26044736/43646667-c915c8e2-9735-11e8-883c-4e9d6b94061b.jpg)
 
 ## Download
 
@@ -19,54 +19,60 @@
 
 ## Feature List
 
-* **Match Grabber** for [AlphaTL](http://alpha.tl/) and [RSTL](http://hdgame.net/en/tournaments/list/tournament/rstl-12/)
-* **Custom Match Format**: Bo1-Bo9, all-kill format, 1vs1 - including predefined formats for Chobo, Koprulu, WardiTV, and PSISTOM Gaming Team League, ...
-* Two sets of **Map Icons**: Box and Landscape in `OBS_mapicons/icons_box` and `OBS_mapicons/icons_landscape`
-* **Scoreboard** including team icons in `OBS_html`
-* **Animated Player Intros** in `OBS_html` including playername & race via SC2-Client, team with logo via SCC Tool
-* **TXT-files** with match infos in `OBS_data`
+* **Match Grabber** for [Alpha Team League](https://alpha.tl/) and [Russian Team League](http://hdgame.net/en/tournaments/list/tournament/rstl-13/)
+* **Custom Match Format**: Bo1-Bo15, All-Kill format, 1vs1 - including predefined formats for Chobo, Koprulu, WardiTV, and PSISTORM Gaming Team League.
+* Two sets of **Map Icons**: Box and Landscape in `casting_html`
+* **Scoreboard** including team icons in `casting_html`
+* **Animated Player Intros** in `casting_html` including Text-to-Speech, playername & race via SC2-Client, team with logo via SCC Tool
+* **Map Preview with Statistics** from Liquipedia in `casting_html`
+* **Aligulac Browser Source** that predicts the outcome of a 1vs1 match in `casting_html`
+* **TXT-files** with match infos in `casting_data`
 * **Twitch & Nightbot Integration**: Update your stream title or bot commands via a single click or automatically
 * **Automatic Score Detection** via SC2-Client
-* **Interaction with SC2-Observer-UI**: Automatically toggle Production Tab and set Score at the start of a Map
+* **Interaction with SC2-Observer-UI**: Automatically toggle Production Tab and set Score at the start of a Game
 * Nearly **unlimited Customization** via Skins and CSS
-* German and Russian language support.
+* German and Russian language support
 
 ## Discord Server
 
 If you need support, have questions, want to be up-to-date on, or like to contribute to this project, join our [Discord Server](https://discord.gg/G9hFEfh).
 
-## Twitch Community
-
-Join the [StarCraft Casting Tool Twitch Community](https://www.twitch.tv/communities/starcraftcastingtool) to find other streams that are using the StarCraft Casting Tool and promote your own stream when using it.
 
 ## Links
 
-[Changelog](https://github.com/teampheenix/StarCraft-Casting-Tool/blob/master/CHANGELOG.md) | [Icon Preview](https://teampheenix.github.io/SCCT-archive/) | [Discord Server](https://discord.gg/G9hFEfh)
+[Video Tutorial](https://youtu.be/j5iWa4JB8bM) | [Changelog](https://github.com/teampheenix/StarCraft-Casting-Tool/blob/master/CHANGELOG.md) | [Discord Server](https://discord.gg/G9hFEfh)
 
 
 ## General Information
-The tool generates various browser sources (and text-files): Amongst others, two complete sets of corresponding *Map Icons* (including map, players, races, and score), a Score Icon (including the score, team names, and logos) and GSL-like *Intros* (including player, race and team).
+The tool generates various browser sources (and text-files): Amongst others, two complete sets of corresponding *Map Icons* (including map, players, races, and score), a *Score Icon* (including the score, team names, and logos), GSL-like *Intros* (including player, race and team), and *Map Statistics*.
 
 StarCraft Casting Tool can monitor your SC2-Client to detect the score, update it automatically, and provide corresponding player Intros. On Windows, the tool can additionally and automatically set and toggle the score in your SC2-Observer UI and toggle the production tab at the start of a game.
 
-This tool should run on any operating system that supports Python 3, e.g., Windows, MacOS, and Linux (the interaction with the SC2-Observer-UI is currently only supported on Windows).  
+This tool should run on any operating system that supports Python 3, e.g., Windows, MacOS, and Linux, *but the interaction with the SC2-Observer-UI is currently only supported on Windows*.  
 
 ## Installation
 
 ### Executable with Updater
 
-**Only Windows: [Download the latest executable](https://github.com/teampheenix/StarCraft-Casting-Tool/releases/latest)** `StarCraft-Casting-Tool.exe`, place it in a preferable empty folder folder with *sufficient write-privileges* and execute it. After the first start a subfolder structure is generated and all additional data is downloaded - do not move or alter this data structure relative to the executable.
+**Only Windows: [Download the latest executable](https://github.com/teampheenix/StarCraft-Casting-Tool/releases/latest)** `StarCraft-Casting-Tool.exe`, place it in a preferable empty folder folder with *sufficient write-privileges* and execute it. After the first start a subfolder structure is generated and all additional data is downloaded - do not move or alter this data structure relative to the executable. Do not rename the executable.
 
 ### Alternativ: Python Script
 
-**Windows, MacOS, Linux: [Download the Source Code as Archive](https://github.com/teampheenix/StarCraft-Casting-Tool/archive/master.zip)** and exctract StarCraft Casting Tool, download the latest version of Python 3 at [https://www.python.org/downloads](https://www.python.org/downloads). This tool requires the additional Python Packages *PyQt5*, *requests*, *configparser*, *humanize*, *markdown2*, *pyupdater*, *keyboard*, *websockets*, *beautifulsoup4*, *appdirs*, *gTTS* and on Windows additionally *pypiwin32*, *Pillow*, *pytesseract*. To install these packages execute the script `installPackages.py` once or do it manually (e.g., via *pip*). Execute `StarCraftCastingTool.pyw` or execute the command `python3 StarCraftCastingTool.pyw` to start the SCC Tool.
+**Windows, MacOS, Linux: [Download the Source Code as Archive](https://github.com/teampheenix/StarCraft-Casting-Tool/archive/master.zip)** and exctract StarCraft Casting Tool, download the latest version of Python 3.6 at [https://www.python.org/downloads](https://www.python.org/downloads). This tool requires the additional Python Packages, to install these packages execute `pip install -r requirements.txt`.
 
 ## Instructions for Use
 
-Run StarCraft Casting Tool via `StarCraft-Casting-Tool.exe` (or `StarCraftCastingTool.pyw`). Enter the Match-URL of an AlphaTL or RSTL match in the *Match Grabber* tab, e.g., "http://alpha.tl/match/3000", and press *Load Data from URL*. Alternatively one can create a match in the *Custom Match* tab.  Edit the data if necessary. The sliders control the score of each map. Press *Update OBS Data* or alter the score to update the data for streaming. The top slider is to select *your* team. Once selected the border of the Map Icons turn (by default) green or red depending on the result. To select your team automatically you can add it to *Favorite Teams* list under *Settings: Misc*. Similarly you can enter your players' nicknames into *Favorite Players* for auto completion.
+### Video Tutorial
+[![Video Tutorial](https://img.youtube.com/vi/j5iWa4JB8bM/mqdefault.jpg)](https://youtu.be/j5iWa4JB8bM)
+
+### Basics
+
+Run StarCraft Casting Tool via `StarCraft-Casting-Tool.exe` (or `StarCraftCastingTool.pyw`). Enter the Match-URL of an AlphaTL or RSTL match in the *Match Grabber* tab, e.g., "https://alpha.tl/match/3000", and press *Load Data from URL*. Alternatively one can create a match in the *Custom Match* tab.  Edit the data if necessary. The sliders control the score of each map. The top slider is to select *your* team. Once selected the border of the Map Icons turn (by default) green or red depending on the result. To select your team automatically you can add it to *Favorite Teams* list under *Settings: Misc*. Similarly you can enter your players' nicknames into *Favorite Players* for auto completion.
 
 ### Data for Streaming
-can be found in the directory `OBS_data` and be included into OBS (or any similar streaming tool) via *Text read from local file*. If you want to include the team logos and the matchbanner, it is recommended to include them as *browser source from local file* via the HTML files given in the directory `OBS_html` *(Score Icon size: 1280x100px, Logo sizes: 300x300px, Intro size: Your screen resolution)*. The Map Icons can be found in the directory `OBS_mapicons` and have to be included via *browser source from local file* as well. There are two type of icons: box icons in `OBS_mapicons/icons_box` and landscape icons in `OBS_mapicons/icons_landscape`. One can either include each Map Icon separately *(box size: 280x270px, landscape size: 1010x110px)* and arrange them freely or one can include them via the single html file `all_maps.html` *(the chosen dimension of the browser source determines the arrangement of the icons)*. Note that you can scale the browser source(s) down/up if you want to make the icons smaller/larger. All browser sources refresh automatically - you should have to refresh the cache of this browser sources only if you select a different skin/style (not needed for intros) or a new update has been applied.
+All data (placed in `casting_data` or `casting_html`) can be found in the respective *profile folder* at `C:\Users\<User>\AppData\Local\team pheeniX\StarCraft-Casting-Tool\profiles\<Profile>\` that can be accessed conveniently by via SCCT's menu *Profile: Open current folder*.
+
+Raw data for streaming can be found in the directory `casting_data` and be included into OBS (or any similar streaming tool) via *Text read from local file*. If you want to include the team logos and the match banner (of AlphaTL), it is recommended to include them as *browser source from local file* via the HTML files given in the directory `casting_html` *(Score Icon size: 1280x100px, Logo sizes: 300x300px, Intro size: Your screen resolution, Map Stats: 1700x800px)*. The Map Icons can be found in the directory `casting_html` and have to be included via *browser source from local file* as well. There are two type of icons: box icons in `casting_html/mapicons_box_x.html` and landscape icons in `casting_html/mapicons_landscape_x.html`. A single icons has the following dimensions - *box size: 275x275px, landscape size: 1005x105px*, but *the chosen dimension of the browser source determines the arrangement of the icons*. Note that you can scale the browser source(s) down/up if you want to make the icons smaller/larger. All browser sources refresh automatically - you should have to refresh the cache of this browser sources only if a new update has been applied.
 
 If the tool is missing a map, you can add them in the *Map Manager* that can be found in *Settings: Misc*.
 
@@ -86,16 +92,18 @@ Frequently the order of players given by the SC2-Client-API differs from the ord
 #### Player Intros
 [![intro-demo](https://user-images.githubusercontent.com/26044736/30003831-4fe09b14-90c4-11e7-9593-439454d4e324.gif)](https://youtu.be/JNuAr63L0wM)
 
-Include the Player Intro `OBS_html/intro.html` as browser sources (using the full height and width of your display). The intros will only work if the task *Provide Player Intros* is activated in SCC-Tool. The data will be updated when a game or replay is started in the StarCraft 2 client. You have to assign hotkeys to trigger the intros in *Settings: Connections: Intros & Hotkeys*. The first player is always corresponding to the player your observer camera is centered on at start of a game. The sound volume of the intros as well as the duration of the intros can be adjusted in *Settings: Connections: Intros & Hotkeys*. There are currently three different animations with an unique sound, e.g., *Fanfare* - see https://youtu.be/kEcxS4K9vJ4?t=25m38s for an review of *Fanfare*.
+Include the Player Intro `casting_html/intro.html` as browser sources (using the full height and width of your display). The data will be updated when a game or replay is started in the StarCraft 2 client. You have to assign hotkeys to trigger the intros in *Settings: Browser Sources: Intros*. The first player is always corresponding to the player your observer camera is centered on at start of a game. The sound volume of the intros as well as the duration of the intros can be adjusted in *Settings: Browser Sources: Intros*. Additionally you can activate Text-to-Speech to include an automatic annoucements of the player's team and name. There are currently three different animations with an unique sound, e.g., *Fanfare* - see https://youtu.be/kEcxS4K9vJ4?t=25m45s for an review of *Fanfare*.
+
+You have the option to have the player announced with Google-Cloud Text-to-Speech featuring high quality voices that you can test at https://cloud.google.com/text-to-speech/.
 
 ## Customization
 
-Some basic options for customization can be found under *Settings: Styles*, for example, alternative styles/skins for the Map Icons, Score Icon, Intros and option to specify border colors. For additional **nearly unlimited customization** of the Icons you can make your own custom skins via [CSS](https://www.w3schools.com/css/) by creating new alternative *css*-files and placing them into `OBS_mapicons/src/css/box_styles`, `OBS_mapicons/src/css/landscape_styles`, `OBS_html/src/css/score_styles`, or `OBS_html/src/css/intro` respectively. If you do so, please share your custom skins with this project. If you want help implementing your own icon skin with CSS or just want to share an idea for a skin join the [Discord Server](https://discord.gg/G9hFEfh).
+Some basic options for customization can be found under *Settings: Styles*, for example, alternative styles/skins for the Map Icons, Score Icon, Intro and option to specify colors. For additional **nearly unlimited customization** of the Icons you can make your own custom skins via [CSS](https://www.w3schools.com/css/) by creating new alternative *CSS*-files and placing them into `casting_html/src/css/{browser-source}`. If you do so, please share your custom skins with this project. If you want help implementing your own icon skin with CSS or just want to share an idea for a skin join the [Discord Server](https://discord.gg/G9hFEfh).
 
 ## Help, Bug-Report, Suggestions & Contribution
 
 If you need help, have bugs to report, have suggestions to make, or want to contribute to this project in any way join the Discord Server of this project via https://discord.gg/G9hFEfh and/or message me (*pres.sure#5247*) on [Discord](https://discordapp.com/).
 
-In the case of a bug report please provide the log-file that can be found in the directory `C:\Users\username\AppData\Local\team pheeniX\StarCraft-Casting-Tool\Log`.
+In the case of a bug report please provide the log-file that can be found in the directory `C:\Users\<User>\AppData\Local\team pheeniX\StarCraft-Casting-Tool\Log`.
 
 You can support StarCraft Casting Tool via [Patreon](https://www.patreon.com/StarCraftCastingTool) or [Paypal](https://www.paypal.me/StarCraftCastingTool).

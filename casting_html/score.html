@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>StarCraft Casting Tool - Score Icon</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
+  <script src="src/js/jquery.textfill.min.js"></script>
+  <script src="src/js/profile.js"></script>
+  <script src="src/js/controller.js"></script>
+</head>
+
+<body>
+  <div id="content" style="text-align: center; visibility: hidden;">
+    <div class="box" id="box">
+      <div class="misc"></div>
+      <div class="box_left">
+        <div class="lower-text text-item">
+          <div class="mapscore-left" id='score1-box'></div>
+        </div>
+        <div class="upper-text-left text-item text-fill"><span id='team1'></span></div>
+      </div>
+      <div class="box_right">
+        <div class="lower-text text-item">
+          <div class="mapscore-right" id='score2-box'></div>
+        </div>
+        <div class="upper-text-right text-item text-fill"><span id='team2'></span></div>
+      </div>
+      <div class="box_veryleft logo" id="logo1"></div>
+      <div class="box_veryright logo" id="logo2"></div>
+      <div class="box_middle text-item score">
+        <div class="score_left" id="score1"></div>
+        <div class="score_middle" id='score'>-</div>
+        <div class="score_right" id="score2"></div>
+      </div>
+    </div>
+
+  </div>
+  <script src="src/js/score.js"></script>
+</body>
+
+</html>

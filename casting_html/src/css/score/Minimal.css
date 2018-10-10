@@ -1,0 +1,161 @@
+@import url('https://fonts.googleapis.com/css?family=Orbitron:350,400');
+/* latin */
+
+@font-face {
+  font-family: 'OrbitronAdv';
+  font-style: normal;
+  font-weight: 400;
+  src: local('OrbitronAdv Regular'), local('OrbitronAdv-Regular'), url(https://fonts.gstatic.com/s/orbitron/v9/yMJRMIlzdpvBhQQL_Qq7dy0.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+body {
+  font-family: OrbitronAdv, Orbitron, Helvetica, Sans-Serif;
+}
+
+.text-item {
+  color: white;
+  font-size: 150px;
+  font-weight: bold;
+  --outline-size: 3px;
+  text-shadow: 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black;
+  -webkit-font-smoothing: antialiased;
+}
+
+div.box {
+  position: relative;
+  width: 1000px;
+  height: 300px;
+  display: inline-block;
+}
+
+div.box_veryleft {
+  position: absolute;
+  top: 30px;
+  left: 180px;
+  width: 200px;
+  height: 200px;
+}
+
+div.box_veryright {
+  position: absolute;
+  top: 30px;
+  right: 180px;
+  width: 200px;
+  height: 200px;
+}
+
+div.box_left {
+  position: absolute;
+  width: 450px;
+  height: 60px;
+  bottom: 0px;
+  left: 0px;
+}
+
+div.upper-text-left {
+  visibility: hidden;
+}
+
+div.box_right {
+  position: absolute;
+  width: 450px;
+  height: 60px;
+  bottom: 0px;
+  right: 0px;
+}
+
+div.upper-text-right {
+  visibility: hidden;
+}
+
+div.mapscore-left {
+  position: absolute;
+  bottom: -10px;
+  left: 40px;
+  width: 350px;
+  height: 65px;
+  display: flex;
+  align-items: center;
+  align-content: flex-start;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+div.mapscore-right {
+  position: absolute;
+  bottom: -10px;
+  right: 40px;
+  width: 350px;
+  height: 65px;
+  display: flex;
+  align-items: center;
+  align-content: flex-start;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+div.circle {
+  background: #f00;
+  position: relative;
+  width: 28px;
+  height: 20px;
+  border-radius: 0px 10px 0px 10px;
+  box-shadow: 0px 0px 2px white;
+  margin: 4px;
+  flex-shrink: 0;
+  filter: drop-shadow(2px 2px 3px black);
+}
+
+div.box_middle {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  height: 100%;
+  width: 100%;
+  background-image: url("../../img/vs.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
+  filter: drop-shadow(2px 2px 3px black);
+}
+
+div.score_middle {
+  visibility: hidden;
+}
+
+div.score_left {
+  position: absolute;
+  left: 0px;
+  top: 35px;
+  text-align: center;
+  height: 180px;
+  width: 180px;
+}
+
+div.score_right {
+  position: absolute;
+  right: 0px;
+  top: 35px;
+  text-align: center;
+  height: 180px;
+  width: 180px;
+}
+
+.score {
+  --winner-color: white;
+  --size: 5px;
+  color: white !important;
+  text-shadow: 0px 0px 2px black;
+  -webkit-font-smoothing: antialiased;
+}
+
+div.logo {
+  background-size: contain;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+.loser {
+  filter: brightness(75%);
+}

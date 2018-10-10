@@ -1,0 +1,310 @@
+@font-face {
+  font-family: "Eurostile Extd";
+  font-style: normal;
+  font-weight: 700;
+  src: url("https://static.starcraft2.com/dist/fonts/eurostileext-med-0050275a9320bb8dc80eb677dce63dbf664afbbe57440453110116416b398de22cdd27899e1f72118d07b1afdcbde0177f541f5414ccb54c6771b8cefe46dd35.woff2") format("woff");
+}
+
+:root {
+  --font: Eurostile Extd, Source Sans Pro, sans-serif;
+  --padding: 2px;
+  --border-size: 1px;
+  --border-color: #2d6199;
+  --total-width: 1005px;
+  --total-height: 105px;
+  --border-radius: 8px;
+  --middle-width: 22%;
+  --lower-text-height: 30%;
+  --side-width: calc((100% - var(--middle-width)) / 2);
+}
+
+body {
+  letter-spacing: .00em;
+  font-family: var(--font);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, .8), 0 8px 16px rgba(0, 0, 0, .6);
+  color: white;
+}
+
+#container {
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.block {
+  height: var(--total-height);
+  width: calc(var(--total-width) + 34px);
+  padding: var(--padding);
+  margin: 11px;
+}
+
+.text-item {
+  color: white;
+  font-size: 18px;
+}
+
+.winner {
+  --winner-color: #ffcc66;
+  --size: 6px;
+  color: #fff6e6 !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, .8), 0 8px 16px rgba(0, 0, 0, .6), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px var(--size) var(--winner-color), 0px 0px 1px #000000;
+  -webkit-font-smoothing: antialiased;
+}
+
+.loser {
+  filter: brightness(75%);
+  opacity: 0.75;
+}
+
+.race1.loser, .race2.loser {
+  opacity: 0.5 !important;
+  filter: invert(83%) sepia(10%) saturate(1427%) hue-rotate(347deg) brightness(106%) contrast(101%) brightness(75%) drop-shadow(0 2px 4px rgba(0, 0, 0, .8)) drop-shadow(0 8px 16px rgba(0, 0, 0, .6));
+}
+
+.race1.winner, .race2.winner {
+  filter: invert(83%) sepia(10%) saturate(1427%) hue-rotate(347deg) brightness(106%) contrast(101%) drop-shadow(0 2px 4px rgba(0, 0, 0, .8)) drop-shadow(0 8px 16px rgba(0, 0, 0, .6)) drop-shadow(0px 0px 1px #ffcc66) drop-shadow(0px 0px 1px #ffcc66);
+}
+
+div.box {
+  position: relative;
+  width: var(--total-width);
+  height: var(--total-height);
+  box-sizing: border-box;
+}
+
+div.box:after {
+  border-style: solid;
+  border-width: 17px 60px;
+  border-image: url(../../img/textures/border3.png) 17 60 repeat;
+  border-image-outset: 14px;
+  content: "";
+  bottom: 0;
+  display: block;
+  left: 0;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+div.box_left {
+  position: absolute;
+  height: 100%;
+  left: 0%;
+  width: calc(var(--total-width));
+  background-color: gray;
+  background-size: 110%;
+  background-position: 50% 50%;
+  overflow: hidden;
+}
+
+div.box_left:after {
+  -webkit-box-shadow: inset 0 0 10px rgba(0, 102, 204, .6), inset 0 0 40px rgba(0, 102, 204, .4);
+  box-shadow: inset 0 0 10px rgba(0, 102, 204, .6), inset 0 0 40px rgba(0, 102, 204, .4);
+  bottom: 0;
+  content: "";
+  display: block;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+div.box_middle {
+  position: relative;
+  display: inline-block;
+  height: 75%;
+  left: var(--side-width);
+  width: var(--middle-width);
+  top: 12.5%;
+  text-align: center;
+  line-height: 85px;
+  --winner-color: white;
+  --size: 4px;
+  background-color: transparent;
+  background-image: linear-gradient(180deg, rgba(0, 0, 0, .9), rgba(102, 68, 0, .9));
+  color: #fd9;
+  background-origin: border-box;
+  z-index: 2;
+}
+
+div.box_middle:after {
+  border-style: solid;
+  border-width: 17px 60px;
+  border-image: url(../../img/textures/border2.png) 17 60 repeat;
+  border-image-outset: 14px;
+  content: "";
+  bottom: 0;
+  display: block;
+  left: 0;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 2;
+}
+
+span.vs {
+  font-size: 40px;
+  text-transform: uppercase;
+}
+
+div.box_right {
+  position: absolute;
+  height: 100%;
+  right: 0%;
+  width: calc(var(--side-width));
+  background-image: none !important;
+  box-sizing: border-box;
+  overflow: hidden
+}
+
+.box_left div.lower-text {
+  position: absolute;
+  bottom: 0px;
+  height: var(--lower-text-height);
+  width: calc(100% - 1px);
+  text-align: center;
+  line-height: 40px;
+  border-top: 2px solid rgba(153, 204, 255, .3);
+  background-image: linear-gradient(180deg, rgba(0, 0, 0, .4), rgba(0, 51, 102, .4));
+  box-sizing: border-box;
+  z-index: 1;
+}
+
+.box_right div.lower-text {
+  position: absolute;
+  bottom: 0px;
+  height: var(--lower-text-height);
+  width: 100%;
+  text-align: center;
+  line-height: 40px;
+  box-sizing: border-box;
+  z-index: 1;
+}
+
+div.tbd {
+  background-image: url("../../img/textures/TBD_1.jpg")
+}
+
+div.maplabel {
+  position: absolute;
+  left: var(--border-radius);
+  width: calc(var(--side-width) - var(--border-radius) - 5px);
+  text-align: center;
+  line-height: 30px;
+  height: 90%;
+}
+
+div.mapname {
+  position: absolute;
+  left: var(--border-radius);
+  width: calc(100% - var(--border-radius) - 5px);
+  text-align: center;
+  line-height: 32px;
+  height: 90%;
+}
+
+span.maplabel, span.mapname {
+  letter-spacing: -0.05em;
+}
+
+div.upper-text-right {
+  position: absolute;
+  top: 2px;
+  height: calc(100% - var(--lower-text-height) - 5px);
+  font-size: 28px;
+  left: var(--border-radius);
+  width: calc(100% - var(--border-radius) - 5px);
+  text-align: center;
+  line-height: 75px;
+  z-index: 2
+}
+
+div.upper-text-left {
+  position: absolute;
+  top: 2px;
+  height: calc(100% - var(--lower-text-height) - 5px);
+  font-size: 28px;
+  left: var(--border-radius);
+  width: calc(var(--side-width) - var(--border-radius) - 5px);
+  text-align: center;
+  line-height: 75px;
+  z-index: 2;
+}
+
+div.race1, div.race2 {
+  position: absolute;
+  width: 70px;
+  top: 2.5%;
+  height: 95%;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
+  filter: invert(83%) sepia(10%) saturate(1427%) hue-rotate(347deg) brightness(106%) contrast(101%) drop-shadow(0 2px 4px rgba(0, 0, 0, .8)) drop-shadow(0 8px 16px rgba(0, 0, 0, .6));
+}
+
+div.race1 {
+  left: 0px;
+}
+
+div.race2 {
+  right: 0px;
+}
+
+#protoss {
+  height: calc(100% - 4px);
+  top: 2px !important;
+  background-image: url('../../img/races/protoss-black.png');
+}
+
+#zerg {
+  background-image: url('../../img/races/zerg-black.png');
+  height: calc(100% - 22px);
+  top: 10px !important;
+}
+
+#terran {
+  background-image: url('../../img/races/terran-black.png');
+  height: calc(100% - 20px);
+  top: 8px !important;
+}
+
+#random {
+  background-image: url('../../img/races/random-black.png');
+  height: calc(100% - 12px);
+  top: 6px !important;
+}
+
+div.circle {
+  position: absolute;
+  background: #f00;
+  right: 3px;
+  bottom: 3px;
+  width: 32px;
+  height: 24px;
+  border-radius: 2px 2px 2px 2px;
+  border: 1px solid var(--border-color);
+  box-sizing: border-box;
+  box-shadow: 0px 0px 2px #2d6199;
+  opacity: 0.85;
+  z-index: 2;
+}
+
+div.opa {
+  position: absolute;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  background-color: #000000;
+  color: white;
+  border-radius: 0px var(--border-radius) 0px var(--border-radius);
+  box-sizing: border-box;
+  z-index: 3;
+}

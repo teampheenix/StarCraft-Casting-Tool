@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<body>
+  <title>StarCraft Casting Tool - AlphaTL Matchbanner</title>
+  <img id="img" src="../casting_data/matchbanner.png" style="position:absolute;top:0;left:0;border-radius:20px;" />
+</body>
+<script>
+  function refresh(node) {
+    var times = 3000;
+
+    (function startRefresh() {
+      var address;
+      if (node.src.indexOf('?') > -1)
+        address = node.src.split('?')[0];
+      else
+        address = node.src;
+      node.src = address + "?time=" + new Date().getTime();
+
+      setTimeout(startRefresh, times);
+    })();
+
+  }
+
+  window.onload = function() {
+    var node = document.getElementById('img');
+    refresh(node);
+  }
+</script>
+
+</html>

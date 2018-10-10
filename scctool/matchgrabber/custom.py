@@ -5,7 +5,7 @@ import logging
 import requests
 
 # create logger
-module_logger = logging.getLogger('scctool.matchgrabber.custom')
+module_logger = logging.getLogger(__name__)
 
 
 class MatchGrabber(object):
@@ -47,7 +47,7 @@ class MatchGrabber(object):
         """Get name of the provider."""
         return self._provider
 
-    def grabData(self):
+    def grabData(self, metaChange=False, logoManager=None):
         """Grab match data."""
         raise ValueError(
             "Error: Cannot grab data from this provider.")

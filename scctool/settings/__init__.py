@@ -9,19 +9,71 @@ import time
 import appdirs
 
 from scctool.settings.client_config import ClientConfig
+from scctool.settings.config import init as initConfig
+from scctool.settings.profileManager import ProfileManager
+from scctool.settings.safeGuard import SafeGuard
 
-module_logger = logging.getLogger('scctool.settings')
+module_logger = logging.getLogger(__name__)
 
+this = sys.modules[__name__]
 
 if getattr(sys, 'frozen', False):
     basedir = os.path.dirname(sys.executable)
 else:
     basedir = os.path.dirname(sys.modules['__main__'].__file__)
 
+casting_data_dir = "casting_data"
+casting_html_dir = "casting_html"
 
-def getAbsPath(file):
-    """Link to absolute path of a file."""
-    return os.path.normpath(os.path.join(basedir, file))
+dataDir = "data"
+logosDir = os.path.join(dataDir, "logos")
+ttsDir = os.path.join(dataDir, "tts")
+
+windows = (platform.system().lower() == "windows")
+max_no_sets = 15
+races = ("Random", "Terran", "Protoss", "Zerg")
+
+this.profileManager = ProfileManager()
+this.maps = []
+this.nightbot_commands = dict()
+this.safe = SafeGuard()
+
+
+def loadSettings():
+
+    this.profileManager = ProfileManager()
+
+    initConfig(configFile())
+
+    loadNightbotCommands()
+
+    # Creating directories if not exisiting
+    if not os.path.exists(getAbsPath(casting_data_dir)):
+        os.makedirs(getAbsPath(casting_data_dir))
+    # Creating directories if not exisiting
+    if not os.path.exists(getAbsPath(logosDir)):
+        os.makedirs(getAbsPath(logosDir))
+    # Creating directories if not exisiting
+    if not os.path.exists(getAbsPath(ttsDir)):
+        os.makedirs(getAbsPath(ttsDir))
+
+    # Create a symnolic link to the profiles directory
+    # Not working on Windows 10 - admin rights needed
+    # link = os.path.normpath(os.path.join(basedir, 'profiles'))
+    # profiles = this.profileManager.profilesdir()
+    # if not os.path.exists(link):
+    #     module_logger.info('Creating symbolic link.')
+    #     os.symlink(link, profiles)
+    # elif os.path.islink(link) and os.readlink(link) != profiles:
+    #     module_logger.info('Updating symbolic link.')
+    #     os.unlink(link)
+    #     os.symlink(link, profiles)
+    # elif not os.path.islink(link):
+    #     module_logger.info('Deleting file and creating symbolic link.')
+    #     os.remove(link)
+    #     os.symlink(link, profiles)
+
+    loadMapList()
 
 
 def getResFile(file):
@@ -38,9 +90,16 @@ def getLocalesDir():
         return os.path.normpath(os.path.join(basedir, 'locales'))
 
 
+def getJsonFile(scope):
+    return getAbsPath(dataDir + "/{}.json".format(scope))
+
+
+def configFile():
+    return getAbsPath("config.ini")
+
+
 def getLogFile():
-    logdir = appdirs.user_log_dir(
-        ClientConfig.APP_NAME, ClientConfig.COMPANY_NAME)
+    logdir = getLogDir()
     if not os.path.exists(logdir):
         os.makedirs(logdir)
     else:
@@ -50,83 +109,61 @@ def getLogFile():
             if (os.path.isfile(full) and
                     os.stat(full).st_mtime < time.time() - 7 * 86400):
                 os.remove(full)
-    filename = 'scct-{}.log'.format(time.strftime("%Y%m%d-%H%M%S"))
+
+    filename = 'scct-{}-{}.log'.format(time.strftime(
+        "%Y%m%d-%H%M%S"), this.profileManager._current)
     return os.path.normpath(os.path.join(logdir, filename))
 
 
-configFile = getAbsPath("config.ini")
+def getLogDir():
+    return appdirs.user_log_dir(
+        ClientConfig.APP_NAME, ClientConfig.COMPANY_NAME)
 
-OBSdataDir = "OBS_data"
-OBShtmlDir = "OBS_html"
-OBSmapDir = "OBS_mapicons"
 
-dataDir = "data"
-logosDir = os.path.join(dataDir, "logos")
-matchdata_json_file = getAbsPath(dataDir + "/matchdata.json")
-versiondata_json_file = getAbsPath(dataDir + "/versiondata.json")
-nightbot_json_file = getAbsPath(dataDir + "/nightbot.json")
-logos_json_file = getAbsPath(dataDir + "/logos.json")
-history_json_file = getAbsPath(dataDir + "/history.json")
-alias_json_file = getAbsPath(dataDir + "/alias.json")
+def getAbsPath(file):
+    """Link to absolute path of a file."""
 
-windows = (platform.system().lower() == "windows")
-
-max_no_sets = 9
-
-races = ("Random", "Terran", "Protoss", "Zerg")
-
-# Creating directories if not exisiting
-if not os.path.exists(getAbsPath(OBSdataDir)):
-    os.makedirs(getAbsPath(OBSdataDir))
-# Creating directories if not exisiting
-if not os.path.exists(getAbsPath(dataDir)):
-    os.makedirs(getAbsPath(dataDir))
-# Creating directories if not exisiting
-if not os.path.exists(getAbsPath(logosDir)):
-    os.makedirs(getAbsPath(logosDir))
+    return this.profileManager.getFile(file)
 
 
 def loadMapList():
     """Load map list form dir."""
-    maps = []
+    data = []
     try:
-        dir = os.path.normpath(os.path.join(getAbsPath(OBSmapDir), "src/maps"))
+        dir = os.path.normpath(os.path.join(
+            getAbsPath(casting_html_dir), "src/img/maps"))
 
         for fname in os.listdir(dir):
             full_fname = os.path.join(dir, fname)
             name, ext = os.path.splitext(fname)
             if os.path.isfile(full_fname) and ext in ['.jpg', '.png']:
                 mapName = name.replace('_', " ")
-                if mapName not in maps:
-                    maps.append(mapName)
+                if mapName not in data:
+                    data.append(mapName)
     finally:
-        return maps
-
-
-maps = []
-
-nightbot_commands = []
+        this.maps = data
+        return data
 
 
 def loadNightbotCommands():
     """Read json data from file."""
-    global nightbot_commands
     try:
-        with open(nightbot_json_file, 'r', encoding='utf-8-sig') as json_file:
+        with open(getJsonFile('nightbot'), 'r',
+                  encoding='utf-8-sig') as json_file:
             data = json.load(json_file)
     except Exception as e:
         data = dict()
 
-    nightbot_commands = data
+    this.nightbot_commands = data
     return data
 
 
 def saveNightbotCommands():
     """Write json data to file."""
-    global nightbot_commands
     try:
-        with open(nightbot_json_file, 'w', encoding='utf-8-sig') as outfile:
-            json.dump(nightbot_commands, outfile)
+        with open(getJsonFile('nightbot'), 'w',
+                  encoding='utf-8-sig') as outfile:
+            json.dump(this.nightbot_commands, outfile)
     except Exception as e:
         module_logger.exception("message")
 
@@ -145,6 +182,3 @@ def idx2race(idx):
         return races[idx]
     except Exception:
         return races[0]
-
-
-loadNightbotCommands()

@@ -1,8 +1,8 @@
 """Provide history manager for SCCTool."""
-import logging
 import json
+import logging
 
-from scctool.settings import history_json_file, race2idx, idx2race
+from scctool.settings import getJsonFile, idx2race, race2idx
 
 module_logger = logging.getLogger(
     'scctool.settings.history')  # create logger
@@ -14,11 +14,13 @@ class HistoryManager:
 
     def __init__(self):
         self.loadJson()
+        self.updateDataStructure()
 
     def loadJson(self):
         """Read json data from file."""
         try:
-            with open(history_json_file, 'r', encoding='utf-8-sig') as json_file:
+            with open(getJsonFile('history'), 'r',
+                      encoding='utf-8-sig') as json_file:
                 data = json.load(json_file)
         except Exception as e:
             data = dict()
@@ -32,10 +34,16 @@ class HistoryManager:
         data['player'] = self.__player_history
         data['team'] = self.__team_history
         try:
-            with open(history_json_file, 'w', encoding='utf-8-sig') as outfile:
+            with open(getJsonFile('history'), 'w',
+                      encoding='utf-8-sig') as outfile:
                 json.dump(data, outfile)
         except Exception as e:
             module_logger.exception("message")
+
+    def updateDataStructure(self):
+        for idx, item in enumerate(self.__team_history):
+            if isinstance(item, str):
+                self.__team_history[idx] = {'team': item, 'logo': '0'}
 
     def insertPlayer(self, player, race):
         player = player.strip()
@@ -51,17 +59,20 @@ class HistoryManager:
                     race = item.get('race', 'Random')
                 break
         self.__player_history.insert(0, {"player": player, "race": race})
-        self.enforeMaxLength("player")
+        # self.enforeMaxLength("player")
 
-    def insertTeam(self, team):
+    def insertTeam(self, team, logo='0'):
         team = team.strip()
         if not team or team.lower() == "tbd":
             return
         for item in self.__team_history:
-            if item.lower() == team.lower():
+            if item.get('team', '').lower() == team.lower():
                 self.__team_history.remove(item)
-        self.__team_history.insert(0, team)
-        self.enforeMaxLength("team")
+                if logo == '0':
+                    logo = item.get('logo', '0')
+                break
+        self.__team_history.insert(0, {"team": team, "logo": logo})
+        # self.enforeMaxLength("team")
 
     def enforeMaxLength(self, scope=None):
         if not scope or scope == "player":
@@ -81,7 +92,8 @@ class HistoryManager:
 
     def getTeamList(self):
         teamList = list()
-        for team in self.__team_history:
+        for item in self.__team_history:
+            team = item.get('team')
             if team not in teamList:
                 teamList.append(team)
         return teamList
@@ -94,3 +106,12 @@ class HistoryManager:
                 race = item.get('race', 'Random')
                 break
         return race
+
+    def getLogo(self, team):
+        team = team.lower().strip()
+        logo = '0'
+        for item in self.__team_history:
+            if item.get('team', '').lower() == team:
+                logo = item.get('logo', '0')
+                break
+        return logo

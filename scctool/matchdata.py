@@ -1,84 +1,87 @@
 """Matchdata."""
+import copy
 import difflib
-import json
 import logging
 import re
 import shutil
-import time
-from collections import OrderedDict
+
+from PyQt5.QtCore import QObject, pyqtSignal
 
 import scctool.settings
 from scctool.matchformat import *
 from scctool.matchgrabber import *
 
 # create logger
-module_logger = logging.getLogger('scctool.matchdata')
+module_logger = logging.getLogger(__name__)
 
 
-class matchData:
+class MatchData(QObject):
     """Matchdata."""
+    dataChanged = pyqtSignal(str, object)
+    metaChanged = pyqtSignal()
 
-    def __init__(self, controller):
+    def __init__(self, matchControl, controller, id, data=dict()):
         """Init and define custom providers."""
+        super().__init__()
         self.__rawData = None
+        self.__matchControl = matchControl
         self.__controller = controller
-        self.__initProviderList()
+        self.__id = id
         self.__initData()
-        self.__initMatchGrabber()
-        self.__initCustomFormats()
+        self.readData(data)
+        self.emitLock = EmitLock()
 
-    def __initProviderList(self):
-        self.__VALID_PROVIDERS = dict()
-        self.__VALID_PROVIDERS[MatchGrabber._provider] = MatchGrabber
-        for cls in MatchGrabber.__subclasses__():
-            self.__VALID_PROVIDERS[cls._provider] = cls
+    def __emitSignal(self, scope, name='', data=None):
+        if not self.emitLock.locked():
+            if scope == 'data':
+                self.dataChanged.emit(name, data)
+            elif scope == 'meta':
+                self.metaChanged.emit()
+            elif scope == 'outcome':
+                self.dataChanged.emit('outcome', self.getWinner())
+                for idx in range(self.getNoSets()):
+                    if self.getMapScore(idx) == 0:
+                        colorData = self.getColorData(idx)
+                        self.__emitSignal(
+                            'data', 'color', {
+                                'set_idx': idx,
+                                'score_color': colorData["score_color"],
+                                'border_color': colorData["border_color"],
+                                'hide': colorData["hide"],
+                                'opacity': colorData["opacity"]})
+
+    def getControlID(self):
+        return self.__id
+
+    def readData(self, data):
+        if len(data) > 0:
+            self.__data = copy.deepcopy(data)
+        else:
+            self.setCustom(5, False, False)
+
+    def writeJsonFile(self):
+        self.__matchControl.writeJsonFile()
+
+    def getData(self):
+        return self.__data
 
     def __initMatchGrabber(self):
         provider = self.getProvider()
         (*args,) = (self, self.__controller)
 
-        if provider in self.__VALID_PROVIDERS:
-            self.__matchGrabber = self.__VALID_PROVIDERS[provider](*args)
+        if provider in self.__matchControl.VALID_PROVIDERS:
+            self.__matchGrabber = \
+                self.__matchControl.VALID_PROVIDERS[provider](*args)
         else:
             self.__matchGrabber = MatchGrabber(*args)
 
-    def __initCustomFormats(self):
-        formats = dict()
-        for cls in MatchFormat.__subclasses__():
-            formats[cls._name] = cls
-        self.__CUSTOM_FORMATS = OrderedDict(sorted(formats.items()))
-
-    def getCustomFormats(self):
-        for format in self.__CUSTOM_FORMATS.keys():
-            yield format
-
     def applyCustomFormat(self, name):
-        if name in self.__CUSTOM_FORMATS:
-            customFormat = self.__CUSTOM_FORMATS[name](self)
-            customFormat.applyFormat()
+        if name in self.__matchControl.CUSTOM_FORMATS:
+            customFormat = self.__matchControl.CUSTOM_FORMATS[name](self)
+            with self.emitLock(True, self.metaChanged):
+                customFormat.applyFormat()
         else:
             raise ValueError("Unknown Custom Match Format.")
-
-    def readJsonFile(self):
-        """Read json data from file."""
-        try:
-            with open(scctool.settings.matchdata_json_file,
-                      'r', encoding='utf-8-sig') as json_file:
-                self.__data = json.load(json_file)
-        except Exception as e:
-            # module_logger.exception("message")
-            self.setCustom(5, False, False)
-
-        self.allSetsChanged()
-
-    def writeJsonFile(self):
-        """Write json data to file."""
-        try:
-            with open(scctool.settings.matchdata_json_file,
-                      'w', encoding='utf-8-sig') as outfile:
-                json.dump(self.__data, outfile)
-        except Exception as e:
-            module_logger.exception("message")
 
     def __str__(self):
         """Return match data as string."""
@@ -94,13 +97,18 @@ class matchData:
         url = str(url).lower()
 
         if(url.find('alpha') != -1):
-            self.setProvider("AlphaSC2")
+            chg = self.setProvider("AlphaSC2")
         elif(url.find('hdgame') != -1):
-            self.setProvider("RSTL")
+            chg = self.setProvider("RSTL")
         else:
-            self.setProvider("Custom")
+            chg = self.setProvider("Custom")
 
-        self.setID(re.findall('\d+', url)[-1])
+        try:
+            self.setID(re.findall('\d+', url)[-1])
+        except IndexError:
+            pass
+
+        return chg
     # except Exception as e:
         # self.setProvider("Custom")
         # self.setID(0)
@@ -125,9 +133,6 @@ class matchData:
         self.__data['sets'] = []
         self.__data['players'] = [[], []]
 
-        self.__setsChanged = []
-        self.__metaChanged = False
-
     def swapTeams(self):
         module_logger.info("Swapping teams")
         self.__data['swapped'] = not self.__data.get('swapped', False)
@@ -139,49 +144,19 @@ class matchData:
         for set_idx in range(len(self.__data['sets'])):
             self.__data['sets'][set_idx]['score'] = - \
                 self.__data['sets'][set_idx]['score']
-        self.allChanged()
+        self.__emitSignal('meta')
+
+    def getSwappedIdx(self, idx):
+        if self.isSwapped():
+            return 1 - idx
+        else:
+            return idx
 
     def isSwapped(self):
         return bool(self.__data.get('swapped', False))
 
     def resetSwap(self):
         self.__data['swapped'] = False
-
-    def allChanged(self):
-        """Mark all data changed."""
-        self.allSetsChanged()
-        self.__metaChanged = True
-
-    def allSetsChanged(self):
-        """Mark all sets changed."""
-        self.__setsChanged = [True] * self.getNoSets()
-
-    def resetChanged(self):
-        """Reset the changed status of the data."""
-        self.__setsChanged = [False] * self.getNoSets()
-        self.__metaChanged = False
-
-    def metaChanged(self):
-        """Mark meta data has changed."""
-        self.__metaChanged = True
-
-    def hasMetaChanged(self):
-        """Check if meta data has changed."""
-        return bool(self.__metaChanged)
-
-    def hasAnySetChanged(self):
-        """Check if any set data has changed."""
-        for i in range(self.getNoSets()):
-            if(self.hasSetChanged(i)):
-                return True
-        return False
-
-    def hasSetChanged(self, set_idx):
-        """Check if data of a set has changed."""
-        try:
-            return bool(self.__setsChanged[set_idx])
-        except Exception:
-            return False
 
     def setMinSets(self, minSets):
         """Set minium number of sets that are played."""
@@ -238,7 +213,8 @@ class matchData:
                 player = self.getPlayer(team_idx, set_idx).strip().lower()
                 if(player != "tbd" and player != ""):
                     continue
-                self.setPlayer(team_idx, set_idx, self.getPlayer(team_idx, set_idx - 1),
+                self.setPlayer(team_idx, set_idx, self.getPlayer(team_idx,
+                                                                 set_idx - 1),
                                self.getRace(team_idx, set_idx - 1))
                 return True
 
@@ -263,20 +239,24 @@ class matchData:
 
     def resetData(self, reset_options=True):
         """Reset all data to default values."""
-        for team_idx in range(2):
+        with self.emitLock():
+            for team_idx in range(2):
+                for set_idx in range(self.getNoSets()):
+                    self.setPlayer(team_idx, set_idx, "TBD", "Random")
+                self.setTeam(team_idx, "TBD", "TBD")
+
             for set_idx in range(self.getNoSets()):
-                self.setPlayer(team_idx, set_idx, "TBD", "Random")
-            self.setTeam(team_idx, "TBD", "TBD")
+                self.setMapScore(set_idx, 0, overwrite=True)
+                self.setMap(set_idx)
+                self.setAce(set_idx, False)
 
-        for set_idx in range(self.getNoSets()):
-            self.setMapScore(set_idx, 0, overwrite=True)
-            self.setMap(set_idx)
-
-        self.setLeague("TBD")
-        self.setMyTeam(0)
-        if reset_options:
-            self.setAllKill(False)
-            self.setSolo(False)
+            self.setLeague("TBD")
+            self.resetSwap()
+            self.setMyTeam(0)
+            if reset_options:
+                self.setAllKill(False)
+                self.setSolo(False)
+        self.__emitSignal('meta')
 
     def resetLabels(self):
         """Reset the map labels."""
@@ -294,9 +274,11 @@ class matchData:
 
         for set_idx in range(no_sets):
             self.setLabel(set_idx, "Map " + str(set_idx + 1))
+            self.setAce(set_idx, False)
 
         if ace:
             for set_idx in range(ace_start, no_sets):
+                self.setAce(set_idx, True)
                 if(skip_one):
                     self.setLabel(set_idx, "Ace Map")
                 else:
@@ -319,7 +301,6 @@ class matchData:
                 self.__data['best_of'] = int(bestof)
 
             sets = []
-            changed = []
             players = [[], []]
 
             for i in range(no_sets):
@@ -335,6 +316,10 @@ class matchData:
                     label = self.__data['sets'][i]['label']
                 except Exception:
                     label = 'Map ' + str(i + 1)
+                try:
+                    ace = bool(self.__data['sets'][i].get('ace', False))
+                except Exception:
+                    ace = False
                 for j in range(2):
                     if(not resetPlayers):
                         try:
@@ -353,14 +338,13 @@ class matchData:
                     players[j].append(
                         {'name': player_name, 'race': player_race})
 
-                sets.append({'label': label, 'map': map, 'score': score})
-                changed.append(True)
+                sets.append({'label': label, 'map': map,
+                             'score': score, 'ace': ace})
 
             self.__data['no_sets'] = no_sets
             self.__data['min_sets'] = 0
             self.__data['sets'] = sets
             self.__data['players'] = players
-            self.__setsChanged = changed
 
         except Exception as e:
             module_logger.exception("message")
@@ -377,7 +361,17 @@ class matchData:
         if(new != self.__data['my_team']):
             self.__data['my_team'] = new
             for i in range(self.getNoSets()):
-                self.__setsChanged[i] = True
+                score = self.getMapScore(i)
+                colorData = self.getColorData(i)
+                self.__emitSignal(
+                    'data',
+                    'color-data', {
+                        'set_idx': i,
+                        'score': score,
+                        'score_color': colorData['score_color'],
+                        'border_color': colorData['border_color'],
+                        'hide': colorData['hide'],
+                        'opacity': colorData['opacity']})
 
         if swap and int(self.__data['my_team']) > 0:
             self.swapTeams()
@@ -416,7 +410,8 @@ class matchData:
             map, _ = autoCorrectMap(map)
             if(self.__data['sets'][set_idx]['map'] != map):
                 self.__data['sets'][set_idx]['map'] = map
-                self.__setsChanged[set_idx] = True
+                self.__emitSignal(
+                    'data', 'map', {'set_idx': set_idx, 'value': map})
 
             return True
         except Exception:
@@ -431,6 +426,14 @@ class matchData:
             return str(self.__data['sets'][set_idx]['map'])
         except Exception:
             return False
+
+    def yieldMaps(self):
+        yielded = set()
+        for idx in range(self.getNoSets()):
+            map = self.getMap(idx)
+            if map and map.lower() != "TBD" and map not in yielded:
+                yield map
+                yielded.add(map)
 
     def getScoreString(self, middleStr=':'):
         """Get the score as a string."""
@@ -482,18 +485,33 @@ class matchData:
         """Check if match is decided."""
         return max(self.getScore()) > int(self.getBestOf() / 2)
 
-    def setMapScore(self, set_idx, score, overwrite=False):
+    def getWinner(self):
+        score = self.getScore()
+        if not self.isDecided() or score[0] == score[1]:
+            return 0
+        elif score[0] > score[1]:
+            return -1
+        else:
+            return 1
+
+    def setMapScore(self, set_idx, score, overwrite=False, applySwap=False):
         """Set the score of a set."""
         try:
             if(not (set_idx >= 0 and set_idx < self.__data['no_sets'])):
                 return False
             if(score in [-1, 0, 1]):
+                if applySwap and self.isSwapped():
+                    score = -score
                 if(overwrite or self.__data['sets'][set_idx]['score'] == 0):
                     if(self.__data['sets'][set_idx]['score'] != score):
-                        if(self.isDecided()):
-                            self.__metaChanged = True
+                        was_decided = self.isDecided()
                         self.__data['sets'][set_idx]['score'] = score
-                        self.__setsChanged[set_idx] = True
+                        outcome_changed = self.isDecided() != was_decided
+                        if outcome_changed:
+                            self.__emitSignal('outcome')
+                        self.__emitSignal('data', 'score',
+                                          {'set_idx': set_idx,
+                                           'value': score})
                 return True
             else:
                 return False
@@ -509,6 +527,27 @@ class matchData:
             return int(self.__data['sets'][set_idx]['score'])
         except Exception:
             return False
+
+    def getNextSet(self):
+        for set_idx in range(self.getNoSets()):
+            if self.getMapScore(set_idx) == 0:
+                return set_idx
+        return -1
+
+    def getNextMap(self, next_idx=-1):
+        """Returns the next map (if the set index matches.)"""
+        set_idx = self.getNextSet()
+        if set_idx != -1 and (next_idx == -1 or set_idx == next_idx):
+            return self.getMap(set_idx)
+        else:
+            return "TBD"
+
+    def wasMapPlayed(self, map):
+        for set_idx in range(self.getNoSets()):
+            if (map.lower() == self.getMap(set_idx).lower() and
+                    self.getMapScore(set_idx) != 0):
+                return True
+        return False
 
     def getNextPlayer(self, team_idx):
         """Get the player of the next undecided set."""
@@ -539,7 +578,10 @@ class matchData:
 
             if(self.__data['players'][team_idx][set_idx]['name'] != name):
                 self.__data['players'][team_idx][set_idx]['name'] = name
-                self.__setsChanged[set_idx] = True
+                self.__emitSignal('data', 'player', {
+                                  'team_idx': team_idx,
+                                  'set_idx': set_idx,
+                                  'value': name})
 
             if(race):
                 self.setRace(team_idx, set_idx, race)
@@ -581,7 +623,10 @@ class matchData:
 
             if(self.__data['players'][team_idx][set_idx]['race'] != race):
                 self.__data['players'][team_idx][set_idx]['race'] = race
-                self.__setsChanged[set_idx] = True
+                self.__emitSignal(
+                    'data', 'race', {'team_idx': team_idx,
+                                     'set_idx': set_idx,
+                                     'value': race})
             return True
         except Exception:
             return False
@@ -598,6 +643,25 @@ class matchData:
         except Exception:
             return False
 
+    def setAce(self, set_idx, ace):
+        """Label set as ace."""
+        ace = bool(ace)
+        try:
+            if(not (set_idx >= 0 and set_idx < self.__data['no_sets'])):
+                return False
+            if(self.__data['sets'][set_idx]['ace'] != ace):
+                self.__data['sets'][set_idx]['ace'] = ace
+            return True
+        except Exception:
+            return False
+
+    def isAce(self, set_idx):
+        """Return if set is labeld as ace."""
+        try:
+            return bool(self.__data['sets'][set_idx].get('ace', False))
+        except Exception:
+            return False
+
     def setLabel(self, set_idx, label):
         """Set a map label."""
         try:
@@ -605,7 +669,8 @@ class matchData:
                 return False
             if(self.__data['sets'][set_idx]['label'] != label):
                 self.__data['sets'][set_idx]['label'] = label
-                self.__setsChanged[set_idx] = True
+                self.__emitSignal('data', 'map_label', {
+                                  'set_idx': set_idx, 'value': label})
             return True
         except Exception:
             return False
@@ -628,7 +693,7 @@ class matchData:
 
         if(self.__data['teams'][team_idx]['name'] != new):
             self.__data['teams'][team_idx]['name'] = new
-            self.__metaChanged = True
+            self.__emitSignal('data', 'team', {'idx': team_idx, 'value': new})
 
         if(tag):
             self.setTeamTag(team_idx, tag)
@@ -658,7 +723,6 @@ class matchData:
 
         if(self.__data['teams'][team_idx]['tag'] != new):
             self.__data['teams'][team_idx]['tag'] = new
-            self.__metaChanged = True
 
         return True
 
@@ -687,7 +751,7 @@ class matchData:
         league = str(league)
         if(self.__data['league'] != league):
             self.__data['league'] = league
-            self.__metaChanged = True
+            self.__emitSignal('data', 'league', league)
         return True
 
     def getLeague(self):
@@ -705,9 +769,10 @@ class matchData:
 
     def setProvider(self, provider):
         """Set the provider."""
+        provider_changed = False
         if(provider):
             matches = difflib.get_close_matches(
-                provider, self.__VALID_PROVIDERS.keys(), 1)
+                provider, self.__matchControl.VALID_PROVIDERS.keys(), 1)
             if(len(matches) == 0):
                 new = MatchGrabber._provider
             else:
@@ -715,20 +780,20 @@ class matchData:
 
             if(self.__data['provider'] != new):
                 self.__data['provider'] = new
-                self.__metaChanged = True
+                provider_changed = True
         else:
             self.__data['provider'] = MatchGrabber._provider
 
         self.__initMatchGrabber()
-        return True
+        return provider_changed
 
     def getProvider(self):
         """Get the provider."""
         return str(self.__data['provider'])
 
-    def grabData(self):
+    def grabData(self, metaChange=False, logoManager=None):
         """Grab the match data via a provider."""
-        self.__matchGrabber.grabData()
+        self.__matchGrabber.grabData(metaChange, logoManager)
         self.setURL(self.__matchGrabber.getURL())
 
     def downloadBanner(self):
@@ -739,206 +804,140 @@ class matchData:
         """Grab the team logos via a provider."""
         self.__matchGrabber.downloadLogos(self.__controller.logoManager)
 
-    def createOBStxtFiles(self):
-        """Create OBS txt files."""
-        try:
-
-            if(self.hasAnySetChanged()):
-                f = open(scctool.settings.getAbsPath(scctool.settings.OBSdataDir +
-                                                     "/lineup.txt"),
-                         mode='w', encoding='utf-8-sig')
-                f2 = open(scctool.settings.getAbsPath(scctool.settings.OBSdataDir +
-                                                      "/maps.txt"),
-                          mode='w', encoding='utf-8-sig')
-                for idx in range(self.getNoSets()):
-                    map = self.getMap(idx)
-                    f.write(map + "\n")
-                    f2.write(map + "\n")
-                    try:
-                        string = self.getPlayer(
-                            0, idx) + ' vs ' + self.getPlayer(1, idx)
-                        f.write(string + "\n\n")
-                    except IndexError:
-                        f.write("\n\n")
-                        pass
-                f.close()
-                f2.close()
-
-                try:
-                    score = self.getScore()
-                    score_str = str(score[0]) + " - " + str(score[1])
-                except Exception:
-                    score_str = "0 - 0"
-
-                f = open(scctool.settings.getAbsPath(scctool.settings.OBSdataDir +
-                                                     "/score.txt"), mode='w',
-                         encoding='utf-8-sig')
-                f.write(score_str)
-                f.close()
-
-                f = open(scctool.settings.getAbsPath(scctool.settings.OBSdataDir +
-                                                     "/nextplayer1.txt"), mode='w',
-                         encoding='utf-8-sig')
-                f.write(self.getNextPlayer(0))
-                f.close()
-
-                f = open(scctool.settings.getAbsPath(scctool.settings.OBSdataDir +
-                                                     "/nextplayer2.txt"), mode='w',
-                         encoding='utf-8-sig')
-                f.write(self.getNextPlayer(1))
-                f.close()
-
-                f = open(scctool.settings.getAbsPath(scctool.settings.OBSdataDir +
-                                                     "/nextrace1.txt"), mode='w',
-                         encoding='utf-8-sig')
-                f.write(self.getNextRace(0))
-                f.close()
-
-                f = open(scctool.settings.getAbsPath(scctool.settings.OBSdataDir +
-                                                     "/nextrace2.txt"), mode='w',
-                         encoding='utf-8-sig')
-                f.write(self.getNextRace(1))
-                f.close()
-
-            if(self.hasMetaChanged()):
-
-                f = open(scctool.settings.getAbsPath(scctool.settings.OBSdataDir +
-                                                     "/teams_vs_long.txt"),
-                         mode='w', encoding='utf-8-sig')
-                f.write(self.getTeam(0) + ' vs ' + self.getTeam(1) + "\n")
-                f.close()
-
-                f = open(scctool.settings.getAbsPath(scctool.settings.OBSdataDir +
-                                                     "/teams_vs_short.txt"),
-                         mode='w', encoding='utf-8-sig')
-                f.write(self.getTeamTag(0) + ' vs ' +
-                        self.getTeamTag(1) + "\n")
-                f.close()
-
-                f = open(scctool.settings.getAbsPath(scctool.settings.OBSdataDir +
-                                                     "/team1.txt"),
-                         mode='w', encoding='utf-8-sig')
-                f.write(self.getTeam(0))
-                f.close()
-
-                f = open(scctool.settings.getAbsPath(scctool.settings.OBSdataDir +
-                                                     "/team2.txt"),
-                         mode='w', encoding='utf-8-sig')
-                f.write(self.getTeam(1))
-                f.close()
-
-                f = open(scctool.settings.getAbsPath(scctool.settings.OBSdataDir +
-                                                     "/tournament.txt"),
-                         mode='w', encoding='utf-8-sig')
-                f.write(self.getLeague())
-                f.close()
-
-        except Exception as e:
-            module_logger.exception("message")
-
-    def updateScoreIcon(self):
-        """Update scor icons."""
-        if(not(self.hasMetaChanged() or self.hasAnySetChanged())):
-            return
-
-        score = [0, 0]
-        display = []
-        winner = ["", ""]
-        border_color = [[], []]
-        threshold = int(self.getBestOf() / 2)
-
-        for i in range(self.getNoSets()):
-            display.append("inline-block")
-
-            if(max(score) > threshold and i >= self.getMinSets()):
-                border_color[0].append(scctool.settings.config.parser.get(
-                    "MapIcons", "notplayed_color"))
-                border_color[1].append(scctool.settings.config.parser.get(
-                    "MapIcons", "notplayed_color"))
-            elif(self.getMapScore(i) == -1):
-                border_color[0].append(
-                    scctool.settings.config.parser.get("MapIcons", "win_color"))
-                border_color[1].append(
-                    scctool.settings.config.parser.get("MapIcons", "lose_color"))
-                score[0] += 1
-            elif(self.getMapScore(i) == 1):
-                border_color[0].append(
-                    scctool.settings.config.parser.get("MapIcons", "lose_color"))
-                border_color[1].append(
-                    scctool.settings.config.parser.get("MapIcons", "win_color"))
-                score[1] += 1
-            else:
-                border_color[0].append(scctool.settings.config.parser.get(
-                    "MapIcons", "undecided_color"))
-                border_color[1].append(scctool.settings.config.parser.get(
-                    "MapIcons", "undecided_color"))
-
-        for i in range(self.getNoSets(), scctool.settings.max_no_sets):
-            display.append("none")
-            border_color[0].append(scctool.settings.config.parser.get(
-                "MapIcons", "notplayed_color"))
-            border_color[1].append(scctool.settings.config.parser.get(
-                "MapIcons", "notplayed_color"))
-
-        if(score[0] > threshold):
-            winner[0] = "winner"
-        elif(score[1] > threshold):
-            winner[1] = "winner"
-
-        dataFile = scctool.settings.OBShtmlDir + "/data/score-data.html"
-        templateFile = scctool.settings.OBShtmlDir + "/data/score-template.html"
-
+    def getScoreData(self):
         data = dict()
+
         if self.getSolo():
             data['team1'] = self.getPlayer(0, 0)
             data['team2'] = self.getPlayer(1, 0)
         else:
             data['team1'] = self.getTeam(0)
             data['team2'] = self.getTeam(1)
-        data['logo1'] = self.__controller.logoManager.getTeam1().getFile(True)
-        data['logo2'] = self.__controller.logoManager.getTeam2().getFile(True)
-        data['winner1'] = winner[0]
-        data['winner2'] = winner[1]
-        data['vars'] = "--winner-color: {};".format(
-            scctool.settings.config.parser.get("MapIcons", "winner_highlight_color"))
-        data['score-t1'] = score[0]
-        data['score-t2'] = score[1]
-        data['score'] = "{} - {}".format(score[0], score[1])
-        data['timestamp'] = time.time()
-        if scctool.settings.config.parser.getboolean("Style", "use_custom_font"):
-            data['font'] = "font-family: {};".format(scctool.settings.config.parser.get(
-                "Style", "custom_font"))
 
-        for s_idx in range(scctool.settings.max_no_sets):
-            data['display-m{}'.format(s_idx + 1)] = display[s_idx]
-            for t_idx in range(2):
-                key = 'score-m{}-t{}'.format(s_idx + 1, t_idx + 1)
-                data[key] = border_color[t_idx][s_idx]
+        data['logo1'] = self.__controller.logoManager.getTeam1(
+            self.__id).getFile(True)
+        data['logo2'] = self.__controller.logoManager.getTeam2(
+            self.__id).getFile(True)
 
-        self._useTemplate(templateFile, dataFile, data)
+        score = [0, 0]
+        winner = [False, False]
+        sets = []
+        threshold = int(self.getBestOf() / 2)
 
-    def updateMapIcons(self):
+        for i in range(self.getNoSets()):
+            sets.insert(i, ["", ""])
+            if(max(score) > threshold and i >= self.getMinSets()):
+                sets[i][0] = scctool.settings.config.parser.get(
+                    "MapIcons", "notplayed_color")
+                sets[i][1] = scctool.settings.config.parser.get(
+                    "MapIcons", "notplayed_color")
+            elif(self.getMapScore(i) == -1):
+                sets[i][0] = scctool.settings.config.parser.get(
+                    "MapIcons", "win_color")
+                sets[i][1] = scctool.settings.config.parser.get(
+                    "MapIcons", "lose_color")
+                score[0] += 1
+            elif(self.getMapScore(i) == 1):
+                sets[i][0] = scctool.settings.config.parser.get(
+                    "MapIcons", "lose_color")
+                sets[i][1] = scctool.settings.config.parser.get(
+                    "MapIcons", "win_color")
+                score[1] += 1
+            else:
+                sets[i][0] = scctool.settings.config.parser.get(
+                    "MapIcons", "undecided_color")
+                sets[i][1] = scctool.settings.config.parser.get(
+                    "MapIcons", "undecided_color")
+
+        winner[0] = score[0] > threshold
+        winner[1] = score[1] > threshold
+
+        data['sets'] = sets
+        data['winner'] = winner
+        data['score1'] = score[0]
+        data['score2'] = score[1]
+
+        return data
+
+    def getScoreIconColor(self, team_idx, set_idx):
+        score = self.getMapScore(set_idx)
+        team = 2 * team_idx - 1
+        if score == 0:
+            if (set_idx >= self.getMinSets() and
+                    max(self.getScore()) > int(self.getBestOf() / 2)):
+                return scctool.settings.config.parser.get(
+                    "MapIcons",
+                    "notplayed_color")
+            else:
+                return scctool.settings.config.parser.get(
+                    "MapIcons",
+                    "undecided_color")
+        elif score == team:
+            return scctool.settings.config.parser.get(
+                "MapIcons",
+                "win_color")
+        else:
+            return scctool.settings.config.parser.get(
+                "MapIcons",
+                "lose_color")
+
+    def getColorData(self, set_idx):
+        score = self.getMapScore(set_idx)
+        team = self.getMyTeam()
+        won = score * team
+        hide = team == 0
+        opacity = scctool.settings.config.parser.get(
+            "MapIcons",
+            "notplayed_opacity")
+        if won == 1:
+            border_color = scctool.settings.config.parser.get(
+                "MapIcons",
+                "win_color")
+            score_color = border_color
+            opacity = 0.0
+        elif won == -1:
+            border_color = scctool.settings.config.parser.get(
+                "MapIcons",
+                "lose_color")
+            score_color = border_color
+            opacity = 0.0
+        else:
+            if (score == 0 and
+                set_idx >= self.getMinSets() and
+                    max(self.getScore()) > int(self.getBestOf() / 2)):
+                border_color = scctool.settings.config.parser.get(
+                    "MapIcons",
+                    "notplayed_color")
+                score_color = border_color
+            else:
+                border_color = scctool.settings.config.parser.get(
+                    "MapIcons",
+                    "default_border_color")
+                score_color = scctool.settings.config.parser.get(
+                    "MapIcons",
+                    "undecided_color")
+                opacity = 0.0
+
+        return {'score_color': score_color,
+                'border_color': border_color,
+                'opacity': opacity,
+                'hide': hide}
+
+    def getMapIconsData(self):
         """Update map icons."""
+        websocket_data = dict()
         try:
             team = self.getMyTeam()
             score = [0, 0]
-            skip = [False] * self.getNoSets()
-            meta_changed = self.hasMetaChanged()
 
-            if(team == 0):
-                landscape_score_hide = ";display: none"
-            else:
-                landscape_score_hide = ""
+            hide_scoreicon = team == 0
 
             for i in range(self.getNoSets()):
-
                 winner = self.getMapScore(i)
                 won = winner * team
-                opacity = "0.0"
+                opacity = 0.0
 
                 threshold = int(self.getBestOf() / 2)
-                if(not self.hasSetChanged(i) and not meta_changed):
-                    skip[i] = True
 
                 if(max(score) > threshold and i >= self.getMinSets()):
                     border_color = scctool.settings.config.parser.get(
@@ -948,7 +947,6 @@ class matchData:
                     opacity = scctool.settings.config.parser.get(
                         "MapIcons", "notplayed_opacity")
                     winner = 0
-                    skip[i] = False
                 elif(won == 1):
                     border_color = scctool.settings.config.parser.get(
                         "MapIcons", "win_color")
@@ -977,70 +975,35 @@ class matchData:
                     player1status = ''
                     player2status = ''
 
-                if(skip[i]):
-                    continue
-
                 data = dict()
                 data['player1'] = self.getPlayer(0, i)
                 data['player2'] = self.getPlayer(1, i)
                 data['race1'] = self.getRace(0, i).lower()
                 data['race2'] = self.getRace(1, i).lower()
                 data['map_img'] = self.__controller.getMapImg(self.getMap(i))
-                data['map_name'] = self.getMap(i)
-                data['map_id'] = self.getLabel(i)
-                data['score_color'] = score_color + landscape_score_hide
+                data['mapname'] = self.getMap(i)
+                data['maplabel'] = self.getLabel(i)
+                data['score_color'] = score_color
                 data['border_color'] = border_color
+                data['hide_scoreicon'] = hide_scoreicon
                 data['opacity'] = opacity
                 data['status1'] = player1status
                 data['status2'] = player2status
-                data['vars'] = "--winner-color: {};".format(
-                    scctool.settings.config.parser.get("MapIcons", "winner_highlight_color"))
-                if scctool.settings.config.parser.getboolean("Style", "use_custom_font"):
-                    data['font'] = "font-family: {};".format(
-                        scctool.settings.config.parser.get("Style", "custom_font"))
 
-                dataFile = scctool.settings.OBSmapDir + \
-                    "/icons_box/data/" + str(i + 1) + ".html"
-                templateFile = scctool.settings.OBSmapDir + "/icons_box/data/template.html"
-
-                self._useTemplate(templateFile, dataFile, data)
-
-                dataFile = scctool.settings.OBSmapDir + \
-                    "/icons_landscape/data/" + str(i + 1) + ".html"
-                templateFile = scctool.settings.OBSmapDir + \
-                    "/icons_landscape/data/template.html"
-
-                self._useTemplate(templateFile, dataFile, data)
-
-            for i in range(self.getNoSets(), scctool.settings.max_no_sets):
-                data = dict()
-                data['hidden'] = 'visibility: hidden;'
-                if scctool.settings.config.parser.getboolean("Style", "use_custom_font"):
-                    data['font'] = "font-family: {};".format(
-                        scctool.settings.config.parser.get("Style", "custom_font"))
-                dataFile = scctool.settings.OBSmapDir + \
-                    "/icons_box/data/" + str(i + 1) + ".html"
-                templateFile = scctool.settings.OBSmapDir + "/icons_box/data/template.html"
-                self._useTemplate(templateFile, dataFile, data)
-
-                dataFile = scctool.settings.OBSmapDir + \
-                    "/icons_landscape/data/" + str(i + 1) + ".html"
-                templateFile = scctool.settings.OBSmapDir + \
-                    "/icons_landscape/data/template.html"
-                self._useTemplate(templateFile, dataFile, data)
+                websocket_data[i + 1] = data
 
         except Exception as e:
             module_logger.exception("message")
 
+        return websocket_data
+
     def updateLeagueIcon(self):
         """Update league icon."""
-        if(not self.hasMetaChanged()):
-            return
-
         try:
-            filename_old = scctool.settings.OBShtmlDir + "/data/" + self.getProvider() + \
-                ".html"
-            filename_new = scctool.settings.OBShtmlDir + "/data/league-data.html"
+            filename_old = scctool.settings.casting_html_dir + "/data/" + \
+                self.getProvider() + ".html"
+            filename_new = scctool.settings.casting_html_dir + \
+                "/data/league-data.html"
             shutil.copy(scctool.settings.getAbsPath(filename_old),
                         scctool.settings.getAbsPath(filename_new))
 
@@ -1049,7 +1012,6 @@ class matchData:
 
     def autoSetMyTeam(self, swap=False):
         """Try to set team via fav teams."""
-        print(swap)
         try:
             team_matches = []
             for team_idx in range(2):
@@ -1087,9 +1049,92 @@ class matchData:
                     line = regex.sub("", line)
                     fout.write(line)
 
+    def parseScope(self, scope='all'):
+        if scope == 'all':
+            for idx in range(0, self.getNoSets()):
+                yield idx
+            return
+        if scope == 'not-ace':
+            for idx in range(0, self.getNoSets()):
+                if not self.isAce(idx):
+                    yield idx
+            return
+        if scope == 'ace':
+            for idx in range(0, self.getNoSets()):
+                if self.isAce(idx):
+                    yield idx
+            return
+        if scope == 'decided':
+            for idx in range(0, self.getNoSets()):
+                if self.getMapScore(idx) != 0:
+                    yield idx
+            return
+        if scope == 'decided+1':
+            stop = False
+            for idx in range(0, self.getNoSets()):
+                if self.getMapScore(idx) != 0:
+                    stop = False
+                    yield idx
+                elif not stop:
+                    stop = True
+                    yield idx
+                else:
+                    return
+            return
+        if scope == 'undecided':
+            for idx in range(0, self.getNoSets()):
+                if self.getMapScore(idx) == 0:
+                    yield idx
+            return
+        if scope == 'current':
+            idx = self.getNextSet()
+            if idx == -1:
+                if self.getNoSets() > 0:
+                    yield self.getNoSets() - 1
+            else:
+                yield idx
+            return
+        if scope == 'current+1':
+            idx = self.getNextSet()
+            if idx == -1:
+                if self.getNoSets() > 0:
+                    yield self.getNoSets() - 1
+                if self.getNoSets() - 1 > 0:
+                    yield self.getNoSets() - 2
+            else:
+                yield idx
+                if idx > 0:
+                    yield idx - 1
+                elif idx < self.getNoSets():
+                    yield idx + 1
+            return
+
+        m = re.match(r'^(\d+)-(\d+)$', scope)
+        if m and int(m.group(1)) <= int(m.group(2)):
+            for idx in range(max(int(m.group(1)) - 1, 0),
+                             min(int(m.group(2)), self.getNoSets())):
+                yield idx
+            return
+        else:
+            for idx in range(0, self.getNoSets()):
+                yield idx
+            return
+
+    def isValidScope(self, scope):
+        if scope in self.__matchControl.scopes.keys():
+            return True
+        else:
+            m = re.match(r'^(\d+)-(\d+)$', scope)
+            if m and int(m.group(1)) <= int(m.group(2)):
+                return int(m.group(1)) > 0
+            else:
+                return False
+
 
 def autoCorrectMap(map):
     """Corrects map using list in config."""
+    if not isinstance(map, str):
+        map = "TBD"
     try:
         matches = difflib.get_close_matches(
             map.lower(), scctool.settings.maps, 1)
@@ -1112,3 +1157,27 @@ def getRace(str):
         pass
 
     return "Random"
+
+
+class EmitLock():
+    def __init__(self):
+        self.__locked = False
+        self.__useLock = True
+        self.__signal = None
+
+    def __call__(self, useLock=True, signal=None):
+        self.__useLock = bool(useLock)
+        self.__signal = signal
+        return self
+
+    def __enter__(self):
+        self.__locked = self.__useLock
+        return self
+
+    def __exit__(self, type, value, traceback):
+        self.__locked = False
+        if self.__useLock and self.__signal:
+            self.__signal.emit()
+
+    def locked(self):
+        return bool(self.__locked)

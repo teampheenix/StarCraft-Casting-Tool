@@ -14,7 +14,7 @@ from scctool.tasks.liquipedia import LiquipediaGrabber
 from scctool.view.widgets import LogoDownloader
 
 # create logger
-module_logger = logging.getLogger('scctool.view.subLiquipediaSearch')
+module_logger = logging.getLogger(__name__)
 base_url = 'https://liquipedia.net'
 
 
@@ -33,7 +33,7 @@ class SubwindowLiquipediaSearch(QWidget):
         self.team = team
         self.liquipediaGrabber = LiquipediaGrabber()
         self.setWindowIcon(
-            QIcon(scctool.settings.getAbsPath("src/liquipedia.png")))
+            QIcon(scctool.settings.getResFile("liquipedia.png")))
 
         self.setWindowModality(Qt.ApplicationModal)
 
@@ -41,8 +41,10 @@ class SubwindowLiquipediaSearch(QWidget):
         self.qle_search = QLineEdit(placeholder)
         self.qle_search.setAlignment(Qt.AlignCenter)
         self.qle_search.returnPressed.connect(self.search)
-        completer = QCompleter(scctool.settings.config.getMyTeams() +
-                               self.controller.historyManager.getTeamList(), self.qle_search)
+        completer = QCompleter(
+            scctool.settings.config.getMyTeams() +
+            self.controller.historyManager.getTeamList(),
+            self.qle_search)
         completer.setCaseSensitivity(Qt.CaseInsensitive)
         completer.setCompletionMode(
             QCompleter.UnfilteredPopupCompletion)
@@ -86,7 +88,7 @@ class SubwindowLiquipediaSearch(QWidget):
         mainLayout.addWidget(selectButton, 2, 2)
         self.setLayout(mainLayout)
 
-        self.setWindowTitle(_("Liqupedia Image Search"))
+        self.setWindowTitle(_("Liquipedia Image Search"))
 
         self.resize(QSize(mainWindow.size().width() * 0.9,
                           self.sizeHint().height()))
@@ -106,7 +108,7 @@ class SubwindowLiquipediaSearch(QWidget):
             Qt.WaitCursor)
         self.clean()
         loading_map = QPixmap(
-            scctool.settings.getAbsPath("src/loading.png"))
+            scctool.settings.getResFile("loading.png"))
         try:
             self.result_list.clear()
             idx = 0
@@ -141,6 +143,7 @@ class SubwindowLiquipediaSearch(QWidget):
         self.results[idx].setIcon(QIcon(map))
 
     def applyLogo(self, skip=False):
+        QApplication.setOverrideCursor(Qt.WaitCursor)
         item = self.result_list.currentItem()
         if item is not None and (skip or item.isSelected()):
             for idx, iteritem in self.results.items():
@@ -153,10 +156,11 @@ class SubwindowLiquipediaSearch(QWidget):
 
                     self.downloadLogo(base_url + image)
                     break
-
+        QApplication.restoreOverrideCursor()
         self.close()
 
     def doubleClicked(self, item):
+        QApplication.setOverrideCursor(Qt.WaitCursor)
         for idx, iteritem in self.results.items():
             if item is iteritem:
                 images = self.liquipediaGrabber.get_images(self.data[idx])
@@ -167,7 +171,7 @@ class SubwindowLiquipediaSearch(QWidget):
 
                 self.downloadLogo(base_url + image)
                 break
-
+        QApplication.restoreOverrideCursor()
         self.close()
 
     def listItemRightClicked(self, QPos):

@@ -3,13 +3,14 @@
 import logging
 
 # create logger
-module_logger = logging.getLogger('scctool.matchformat')
+module_logger = logging.getLogger(__name__)
 
 
 class MatchFormat(object):
     """Interface definition"""
 
     _name = ""
+    _icon = ""
 
     def __init__(self, matchData):
         """Init match grabber."""
@@ -26,6 +27,7 @@ class MatchFormatKoprulu(MatchFormat):
     """Interface definition"""
 
     _name = "Koprulu Team League"
+    _icon = "koprulu_league.png"
 
     def __init__(self, *args):
         """Init match grabber."""
@@ -33,9 +35,12 @@ class MatchFormatKoprulu(MatchFormat):
         self._url = "http://koprulu-league.fr.nf"
 
     def applyFormat(self):
-        self._matchData.setCustom(5, False, False)
-        self._matchData.setMinSets(3)
-        self._matchData.setLabel(4, "Ace Map")
+        # self._matchData.setCustom(5, False, False)
+        # self._matchData.setLabel(4, "Ace Map")
+        # self._matchData.setAce(4, True)
+        # self._matchData.setMinSets(3)
+        self._matchData.setCustom(7, True, False)
+        self._matchData.setMinSets(4)
         self._matchData.setURL(self._url)
         self._matchData.setLeague(self._name)
         self._matchData.writeJsonFile()
@@ -45,6 +50,7 @@ class MatchFormatWardi(MatchFormat):
     """Interface definition"""
 
     _name = "WardiTV Team League Season 8"
+    _icon = "wardi.ico"
 
     def __init__(self, *args):
         """Init match grabber."""
@@ -63,12 +69,13 @@ class MatchFormatPsi(MatchFormat):
     """Interface definition"""
 
     _name = "PSISTORM Gaming Team League"
+    _icon = "psistorm.jpg"
 
     def __init__(self, *args):
         """Init match grabber."""
         super().__init__(*args)
-        self._url = \
-            "http://liquipedia.net/starcraft2/PSISTORM_Gaming_Team_League"
+        self._url = "http://liquipedia.net/starcraft2" + \
+            "PSISTORM_Gaming_Team_League"
 
     def applyFormat(self):
         self._matchData.setCustom(5, False, False)
@@ -82,6 +89,7 @@ class MatchFormatAllInTheNydus(MatchFormat):
     """Interface definition"""
 
     _name = "All-In TheNydus"
+    _icon = "nydus.ico"
 
     def __init__(self, *args):
         """Init match grabber."""
@@ -96,15 +104,16 @@ class MatchFormatAllInTheNydus(MatchFormat):
         self._matchData.writeJsonFile()
 
 
-class MatchFormatVSL(MatchFormat):
+class MatchFormatVTL(MatchFormat):
     """Interface definition"""
 
-    _name = "Validity Star League"
+    _name = "Validity Team League"
+    _icon = "VTL.png"
 
     def __init__(self, *args):
         """Init match grabber."""
         super().__init__(*args)
-        self._url = "http://liquipedia.net/starcraft2/Validity_Star_League"
+        self._url = "https://liquipedia.net/starcraft2/Validity_Team_League"
 
     def applyFormat(self):
         self._matchData.setCustom(7, True, False)
@@ -118,6 +127,7 @@ class MatchFormatChobo(MatchFormat):
     """Interface definition"""
 
     _name = "Chobo Team League"
+    _icon = "chobo.png"
 
     def __init__(self, *args):
         """Init match grabber."""
@@ -127,6 +137,27 @@ class MatchFormatChobo(MatchFormat):
     def applyFormat(self):
         self._matchData.setCustom(8, False, False)
         self._matchData.setMinSets(8)
+        self._matchData.setURL(self._url)
+        self._matchData.setLeague(self._name)
+        self._matchData.writeJsonFile()
+
+
+class ProleagueFormat(MatchFormat):
+    """Interface definition"""
+
+    _name = "Proleague Format"
+    _icon = "scct.ico"
+
+    def __init__(self, *args):
+        """Init match grabber."""
+        super().__init__(*args)
+        self._url = "https://github.com/teampheenix/StarCraft-Casting-Tool"
+
+    def applyFormat(self):
+        self._matchData.setCustom(5, False, False)
+        self._matchData.setLabel(4, "Ace Map")
+        self._matchData.setAce(4, True)
+        self._matchData.setMinSets(3)
         self._matchData.setURL(self._url)
         self._matchData.setLeague(self._name)
         self._matchData.writeJsonFile()

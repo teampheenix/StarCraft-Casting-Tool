@@ -9,7 +9,7 @@ import scctool.tasks.twitch
 from scctool.tasks.tasksthread import TasksThread
 
 # create logger
-module_logger = logging.getLogger('scctool.tasks.autorequests')
+module_logger = logging.getLogger(__name__)
 
 
 class AutoRequestsThread(TasksThread):
@@ -67,7 +67,8 @@ class AutoRequestsThread(TasksThread):
             elif(scctool.tasks.nightbot.previousMsg[command] != message):
                 data[command] = message
 
-        for cmd, msg, success, deleted in scctool.tasks.nightbot.updateCommand(data):
+        for cmd, msg, success, deleted in \
+                scctool.tasks.nightbot.updateCommand(data):
             self.nightbotSignal.emit(msg)
             if not success:
                 self.disableCB.emit('nightbot')
@@ -81,7 +82,8 @@ class AutoRequestsThread(TasksThread):
             for command, message in scctool.settings.nightbot_commands.items():
                 message = self.__controller.placeholders.replace(message)
                 data[command] = message
-            for cmd, msg, _, deleted in scctool.tasks.nightbot.updateCommand(data):
+            for cmd, msg, _, deleted in \
+                    scctool.tasks.nightbot.updateCommand(data):
                 self.nightbotSignal.emit(msg)
                 if deleted:
                     scctool.settings.nightbot_commands.pop(cmd, None)

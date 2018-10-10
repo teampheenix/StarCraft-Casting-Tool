@@ -2,7 +2,7 @@
 import json
 import logging
 
-from scctool.settings import alias_json_file
+from scctool.settings import getJsonFile
 
 module_logger = logging.getLogger(
     'scctool.settings.alias')  # create logger
@@ -16,7 +16,8 @@ class AliasManager:
     def loadJson(self):
         """Read json data from file."""
         try:
-            with open(alias_json_file, 'r', encoding='utf-8-sig') as json_file:
+            with open(getJsonFile('alias'), 'r',
+                      encoding='utf-8-sig') as json_file:
                 data = json.load(json_file)
         except Exception as e:
             data = dict()
@@ -36,7 +37,8 @@ class AliasManager:
         data['player'] = self.__player_alias
         data['team'] = self.__team_alias
         try:
-            with open(alias_json_file, 'w', encoding='utf-8-sig') as outfile:
+            with open(getJsonFile('alias'), 'w',
+                      encoding='utf-8-sig') as outfile:
                 json.dump(data, outfile)
         except Exception as e:
             module_logger.exception("message")

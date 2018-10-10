@@ -12,7 +12,7 @@ from PyQt5.QtCore import QThread, pyqtSignal
 import scctool.settings
 
 # create logger
-module_logger = logging.getLogger('scctool.tasks.sc2ClientInteraction')
+module_logger = logging.getLogger(__name__)
 
 if(scctool.settings.windows):
     from PIL import ImageGrab  # pip install Pillow
@@ -84,7 +84,9 @@ class SC2ApiThread(QThread):
             self.activeTask['toggleScore'] = False
             self.activeTask['toggleProduction'] = False
             self.activeTask['playerIntros'] = False
+            self.activeTask['playerLogos'] = False
             self.currentData = SC2MatchData()
+            self.introData = SC2MatchData()
             self.controller = controller
             self.currentÍngameStatus = False
         except Exception as e:
@@ -122,71 +124,67 @@ class SC2ApiThread(QThread):
         module_logger.info(
             'Termination request fo task "' + task + '" cancelled')
 
+    def getURLs(self):
+        network = scctool.settings.config.parser.getboolean(
+            "SCT", "sc2_network_listener_enabled")
+        if network:
+            address = scctool.settings.config.parser.get(
+                "SCT", "sc2_network_listener_address")
+        else:
+            address = "localhost:6119"
+
+        url = "http://{}/{}"
+
+        return url.format(address, "game"), url.format(address, "ui")
+
     def run(self):
         """Run the thread."""
         try:
-            module_logger.info("Start  Thread")
+            module_logger.info("Start SC2 Interaction Thread")
             self.exiting = False
-
-            GAMEurl = "http://localhost:6119/game"
-            UIurl = "http://localhost:6119/ui"
 
             while self.exiting is False:
                 # See: https://us.battle.net/forums/en/sc2/topic/20748195420
+                game_url, ui_url = self.getURLs()
                 try:
-                    GAMEresponse = requests.get(GAMEurl, timeout=30).json()
+                    game_response = requests.get(game_url, timeout=30).json()
                     # activate script if 2 players are playing right now
-                    if(len(GAMEresponse["players"]) == 2):
-                        UIresponse = requests.get(UIurl, timeout=30).json()
+                    if(len(game_response["players"]) == 2):
+                        ui_response = requests.get(ui_url, timeout=30).json()
                         self.parseMatchData(
-                            SC2MatchData(GAMEresponse, UIresponse))
+                            SC2MatchData(game_response, ui_response))
 
                 except requests.exceptions.ConnectionError:
-                    # print("StarCraft 2 not running!")
                     time.sleep(10)
                 except ValueError:
-                    # print("StarCraft 2 starting.")
                     time.sleep(10)
 
                 time.sleep(1)
 
-            # print('terminated')
         except Exception as e:
             module_logger.exception("message")
 
     def parseMatchData(self, newData):
         """Parse SC2-Client-API data and run tasks accordingly."""
-        # print("Prasing")
-        # print(newData)
-        # print(self.currentData)
-        # print(newData.time)
-        # print(self.currentData.time)
         try:
-            if(self.exiting is False and
+            if(not self.exiting and self.activeTask['playerIntros'] and
+               self.introData != newData):
+                self.controller.updatePlayerIntros(newData)
+                self.introData = newData
+
+            if(not self.exiting and
                 (newData != self.currentData or
                  newData.time < self.currentData.time or
                  newData.isLive() != self.currentData.isLive())):
 
-                # Skip initial data
-                # if(self.currentData == SC2MatchData()):
-                #    print("Skipping initial")
-                #    self.currentData = newData
-                #    return
-
-                if(self.activeTask['playerIntros']):
-                    # print("Providing player intros...")
-                    self.controller.updatePlayerIntros(newData)
-
                 if(self.activeTask['updateScore'] and
-                   newData.isDecidedGame()and
+                   newData.isDecidedGame() and
                    self.currentData != SC2MatchData()):
-                    # print("Updating Score")
                     self.requestScoreUpdate.emit(newData)
 
-                if(newData.isLive() and
-                   (self.activeTask['toggleScore'] or
-                        self.activeTask['toggleProduction'])):
-                    # print("Toggling")
+                if(newData.isLive() and (self.activeTask['toggleScore'] or
+                                         self.activeTask['toggleProduction'] or
+                                         self.activeTask['playerLogos'])):
                     self.tryToggle(newData)
 
                 self.currentData = newData
@@ -194,39 +192,54 @@ class SC2ApiThread(QThread):
             module_logger.exception("message")
 
     def tryToggle(self, data):
-        """Wait until SC2 is in foreground and toggle production tab"""
-        """and score."""
+        """Wait until SC2 is in foreground and toggle"""
+        """production tab and score."""
+        if (scctool.settings.config.parser.getboolean(
+            "SCT", "blacklist_on") and
+                not data.replay):
+            blacklist = scctool.settings.config.getBlacklist()
+            if data.player1 in blacklist or data.player2 in blacklist:
+                module_logger.info("Do not toogle due to blacklist.")
+                return
         try:
             while self.exiting is False\
                 and (self.activeTask['toggleScore'] or
-                     self.activeTask['toggleProduction']):
+                     self.activeTask['toggleProduction'] or
+                     self.activeTask['playerLogos']):
                 if(isSC2onForeground()):
-                    if(self.activeTask['toggleScore']):
+                    if(self.activeTask['toggleScore'] or
+                       self.activeTask['playerLogos']):
                         TogglePlayerNames()
-                        swapPlayers = self.swapPlayers(data)
-                        self.controller.requestToggleScore(data, swapPlayers)
+                        swapPlayers = self.swapPlayers(
+                            data, self.activeTask['playerLogos'])
+                        if(self.activeTask['playerLogos']):
+                            self.controller.requestScoreLogoUpdate(data,
+                                                                   swapPlayers)
+                        if(self.activeTask['toggleScore']):
+                            self.controller.requestToggleScore(
+                                data, swapPlayers)
                     if(self.activeTask['toggleProduction']):
                         ToggleProduction()
                     break
                 else:
-                    # print("SC2 not on foreground... waiting.")
                     time.sleep(0.1)
         except Exception:
             module_logger.info("Toggle not working on this OS.")
 
-    def swapPlayers(self, data):
-        """Detect if players are swapped relative to SC2-Client-API data"""
-        """via OCR."""
+    def swapPlayers(self, data, force=False):
+        """Detect if players are swapped relative"""
+        """to SC2-Client-API data via ocr."""
         try:
-            if(not scctool.settings.config.parser.getboolean(
-                    "SCT", "use_ocr")):
+            if(not scctool.settings.config.parser.getboolean("SCT",
+                                                             "use_ocr")):
                 return False
 
             # Don't use OCR if the score is tied.
-            score = self.controller.matchData.getScore()
+            score = self.controller.matchControl.activeMatch().getScore()
             if(score[0] == score[1] and
-               not scctool.settings.config.parser.getboolean(
-               "SCT", "CtrlX")):
+               (not scctool.settings.config.parser.getboolean(
+                   "SCT", "CtrlX")) and
+               not force):
                 return False
 
             tesseract = scctool.settings.config.getTesserAct()
@@ -255,6 +268,8 @@ class SC2ApiThread(QThread):
 
             if found:
                 module_logger.info("OCR was successfull.")
+            else:
+                module_logger.info("OCR was not successfull.")
 
             return swap
 
@@ -327,6 +342,7 @@ class SC2MatchData:
             self.race1 = self.translateRace(GAMEresponse["players"][0]["race"])
             self.race2 = self.translateRace(GAMEresponse["players"][1]["race"])
             self.time = GAMEresponse["displayTime"]
+            self.replay = GAMEresponse["isReplay"]
             self.ingame = UIresponse["activeScreens"] == []
             if(GAMEresponse["players"][0]["result"] == "Victory"):
                 self.result = -1
@@ -344,9 +360,10 @@ class SC2MatchData:
             self.result = 0
             self.time = 0
             self.ingame = False
+            self.replay = False
 
-    def compare_returnScore(self, player1, player2,
-                            weak=False, translator=None):
+    def compare_returnScore(self, player1, player2, weak=False,
+                            translator=None):
         """Fuzzy compare playernames and return order and their score."""
         player1, player2 = player1.strip(), player2.strip()
         player1_notset = not player1 or player1.lower() == "tbd"
@@ -364,8 +381,6 @@ class SC2MatchData:
         myplayers2.add(self.player2)
 
         myplayers = [(p1, p2) for p1 in myplayers1 for p2 in myplayers2]
-
-        print(myplayers)
 
         if not (player1_notset or player2_notset):
             for p1, p2 in myplayers:
@@ -391,8 +406,8 @@ class SC2MatchData:
 
         return False, False, 0, -1
 
-    def compare_returnOrder(self, player1, player2,
-                            weak=False, translator=None):
+    def compare_returnOrder(self, player1, player2, weak=False,
+                            translator=None):
         """Fuzzy compare playernames and return the correct order."""
         found, inorder, _, _ = self.compare_returnScore(
             player1, player2, weak=weak, translator=translator)

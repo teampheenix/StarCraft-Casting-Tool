@@ -3,11 +3,12 @@ import logging
 import os.path
 
 import humanize  # pip install humanize
-from PyQt5.QtCore import QPoint, QSize, Qt
-from PyQt5.QtGui import QIcon, QKeySequence, QPixmap
-from PyQt5.QtWidgets import (QCheckBox, QComboBox, QFileDialog, QGridLayout,
-                             QGroupBox, QHBoxLayout, QInputDialog, QLabel,
-                             QListWidget, QListWidgetItem, QMessageBox,
+import requests
+from PyQt5.QtCore import QPoint, QRegExp, QSize, Qt
+from PyQt5.QtGui import QIcon, QKeySequence, QPixmap, QRegExpValidator
+from PyQt5.QtWidgets import (QApplication, QCheckBox, QComboBox, QFileDialog,
+                             QGridLayout, QGroupBox, QHBoxLayout, QInputDialog,
+                             QLabel, QListWidget, QListWidgetItem, QMessageBox,
                              QPushButton, QShortcut, QSizePolicy, QSpacerItem,
                              QTabWidget, QVBoxLayout, QWidget)
 
@@ -17,13 +18,14 @@ from scctool.view.widgets import (AliasTreeView, ListTable, MapDownloader,
                                   MonitoredLineEdit)
 
 # create logger
-module_logger = logging.getLogger('scctool.view.subMisc')
+module_logger = logging.getLogger(__name__)
 
 
 class SubwindowMisc(QWidget):
     """Show subwindow with miscellaneous settings."""
+    current_tab = -1
 
-    def createWindow(self, mainWindow):
+    def createWindow(self, mainWindow, tab=''):
         """Create subwindow with miscellaneous settings."""
         try:
             parent = None
@@ -39,7 +41,7 @@ class SubwindowMisc(QWidget):
             self.__dataChanged = False
 
             self.createButtonGroup()
-            self.createTabs()
+            self.createTabs(tab)
 
             mainLayout = QVBoxLayout()
 
@@ -61,7 +63,7 @@ class SubwindowMisc(QWidget):
         except Exception as e:
             module_logger.exception("message")
 
-    def createTabs(self):
+    def createTabs(self, tab=''):
         """Create tabs."""
         self.tabs = QTabWidget()
 
@@ -70,6 +72,7 @@ class SubwindowMisc(QWidget):
         self.createAliasBox()
         self.createOcrBox()
         self.createAlphaBox()
+        self.createSC2ClientAPIBox()
 
         # Add tabs
         self.tabs.addTab(self.mapsBox, _("Map Manager"))
@@ -77,6 +80,20 @@ class SubwindowMisc(QWidget):
         self.tabs.addTab(self.aliasBox, _("Alias"))
         self.tabs.addTab(self.ocrBox, _("OCR"))
         self.tabs.addTab(self.alphaBox, _("AlphaTL && Ingame Score"))
+        self.tabs.addTab(self.clientapiBox, _("SC2 Client API"))
+
+        table = dict()
+        table['mapmanager'] = 0
+        table['favorites'] = 1
+        table['alias'] = 2
+        table['ocr'] = 3
+        table['alphatl'] = 4
+        table['sc2clientapi'] = 5
+        self.tabs.setCurrentIndex(table.get(tab, SubwindowMisc.current_tab))
+        self.tabs.currentChanged.connect(self.tabChanged)
+
+    def tabChanged(self, idx):
+        SubwindowMisc.current_tab = idx
 
     def changed(self):
         """Handle changes."""
@@ -93,7 +110,8 @@ class SubwindowMisc(QWidget):
         self.cb_trans_banner = QCheckBox(
             " " + _("Download transparent Banner of the Match"))
         self.cb_trans_banner.setChecked(
-            scctool.settings.config.parser.getboolean("SCT", "transparent_match_banner"))
+            scctool.settings.config.parser.getboolean(
+                "SCT", "transparent_match_banner"))
         self.cb_trans_banner.stateChanged.connect(self.changed)
 
         layout.addWidget(self.cb_trans_banner)
@@ -105,7 +123,8 @@ class SubwindowMisc(QWidget):
         layout = QVBoxLayout()
 
         self.cb_ctrlx = QCheckBox(
-            " " + _('Automatically press Ctrl+X to apply the correct player order ingame.'))
+            " " + _('Automatically press Ctrl+X to apply the'
+                    ' correct player order ingame'))
         self.cb_ctrlx.setToolTip(
             _("This will ensure that the player of the first team is always"
               " on the left/top in the ingame Observer UI."))
@@ -115,7 +134,8 @@ class SubwindowMisc(QWidget):
         layout.addWidget(self.cb_ctrlx)
 
         self.cb_ctrln = QCheckBox(
-            " " + _('Automatically press Ctrl+N before OCR to display player names.'))
+            " " + _('Automatically press Ctrl+N before'
+                    ' OCR to display player names'))
         self.cb_ctrln.setToolTip(
             _("This is recommended for Standard and Gawliq Observer UI."))
         self.cb_ctrln.setChecked(
@@ -124,10 +144,11 @@ class SubwindowMisc(QWidget):
         layout.addWidget(self.cb_ctrln)
 
         self.cb_ctrlshifts = QCheckBox(
-            " " + _('Automatically press Ctrl+Shift+S to display the ingame score'))
+            " " + _('Automatically press Ctrl+Shift+S to display'
+                    ' the ingame score'))
         self.cb_ctrlshifts.setToolTip(
-            _("Ctrl+Shift+S is needed for the WCS-Gameheart Oberserver Overlay," +
-              " but disables the sound for other overlays."))
+            _("Ctrl+Shift+S is needed for the WCS-Gameheart Oberserver"
+              " Overlay, but disables the sound for other overlays."))
         self.cb_ctrlshifts.setChecked(
             scctool.settings.config.parser.getboolean("SCT", "CtrlShiftS"))
         self.cb_ctrlshifts.stateChanged.connect(self.changed)
@@ -158,6 +179,35 @@ class SubwindowMisc(QWidget):
         container.addWidget(QLabel(_(' time(s)')))
         layout.addLayout(container)
 
+        self.cb_blacklist = QCheckBox(
+            " " + _('Activate Blacklist for'
+                    ' Ingame Score'))
+        self.cb_blacklist.setChecked(
+            scctool.settings.config.parser.getboolean("SCT", "blacklist_on"))
+        self.cb_blacklist.stateChanged.connect(self.changed)
+        layout.addWidget(self.cb_blacklist)
+
+        box.setLayout(layout)
+
+        mainLayout.addWidget(box)
+
+        box = QGroupBox(_("Blacklist for Ingame Score"))
+        layout = QVBoxLayout()
+
+        blacklistDesc = _("Enter your SC2 client usernames to deactivate"
+                          " automatically setting the ingame score and"
+                          " toogling the production tab when you are playing"
+                          " yourself. Replays are exempt.")
+        label = QLabel(blacklistDesc)
+        label.setAlignment(Qt.AlignJustify)
+        label.setWordWrap(True)
+        layout.addWidget(label)
+
+        self.list_blacklist = ListTable(
+            4, scctool.settings.config.getBlacklist())
+        self.list_blacklist.dataModified.connect(self.changed)
+        self.list_blacklist.setFixedHeight(50)
+        layout.addWidget(self.list_blacklist)
         box.setLayout(layout)
 
         mainLayout.addWidget(box)
@@ -210,11 +260,12 @@ class SubwindowMisc(QWidget):
         self.aliasBox = QWidget()
         mainLayout = QGridLayout()
 
-        aliasDesc = _('Player and team aliases are replaced by the actual name when' +
-                      ' encountered by the match grabber. Additionally, SC2 player' +
-                      ' names listed as aliases are replaced in the intros' +
-                      ' and used to identify players by the automatic' +
-                      ' background tasks "Auto Score Update" and "Set Ingame Score".')
+        aliasDesc = _(
+            'Player and team aliases are replaced by the actual name when' +
+            ' encountered by the match grabber. Additionally, SC2 player' +
+            ' names listed as aliases are replaced in the intros' +
+            ' and used to identify players by the automatic' +
+            ' background tasks "Auto Score Update" and "Set Ingame Score".')
         label = QLabel(aliasDesc)
         label.setAlignment(Qt.AlignJustify)
         label.setWordWrap(True)
@@ -282,6 +333,102 @@ class SubwindowMisc(QWidget):
             module_logger.exception("message")
             QMessageBox.critical(self, _("Error"), str(e))
 
+    def createSC2ClientAPIBox(self):
+        """Create form for SC2 Client API config."""
+        self.clientapiBox = QWidget()
+
+        mainLayout = QVBoxLayout()
+
+        box = QGroupBox(
+            _("SC2 Client API Address"))
+
+        layout = QGridLayout()
+
+        self.cb_usesc2listener = QCheckBox(
+            " " + _("Listen to SC2 Client API running"
+                    " on a different PC in the network."))
+        self.cb_usesc2listener.setChecked(
+            scctool.settings.config.parser.getboolean(
+                "SCT", "sc2_network_listener_enabled"))
+        self.cb_usesc2listener.stateChanged.connect(self.changed)
+
+        self.listener_address = MonitoredLineEdit()
+        self.listener_address.setAlignment(Qt.AlignCenter)
+        self.listener_address.setText(
+            scctool.settings.config.parser.get(
+                "SCT", "sc2_network_listener_address"))
+        self.listener_address.textModified.connect(self.changed)
+        # self.tesseract.setAlignment(Qt.AlignCenter)
+        self.listener_address.setPlaceholderText(
+            "[Your SC2 PC IP]:6119")
+        self.listener_address.setToolTip(
+            _('IP address and port of machine running SC2.'))
+        ip_port = (
+            r"^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.)" +
+            r"{3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]):[0-9]+$")
+        self.listener_address.setValidator(QRegExpValidator(QRegExp(ip_port)))
+
+        self.test_listener = QPushButton(
+            " " + _("Test SC2 Client API Connection") + " ")
+        self.test_listener.clicked.connect(self.testClientAPI)
+
+        text = _(
+            "Activate this option if you are using a two computer "
+            "setup with StarCraft Casting Tool running on a different"
+            " PC than your SC2 client. Open the Battle.net launcher "
+            "on the latter PC, click 'Options', 'Game Settings', and "
+            "under SC2, check 'Additional Command Line Arguments', and "
+            "enter '-clientapi 6119'. Finally set as network"
+            " address below: '[Your SC2 PC IP]:6119'."
+        )
+
+        label = QLabel(text)
+        label.setAlignment(Qt.AlignJustify)
+        label.setOpenExternalLinks(True)
+        label.setWordWrap(True)
+        label.setMargin(5)
+        layout.addWidget(label, 1, 0, 1, 3)
+
+        layout.addWidget(self.cb_usesc2listener, 0, 0, 1, 3)
+        layout.addWidget(QLabel(
+            _("Network Address") + ": "), 3, 0)
+        layout.addWidget(self.listener_address, 3, 1)
+        layout.addWidget(self.test_listener, 3, 2)
+
+        box.setLayout(layout)
+        mainLayout.addWidget(box)
+        mainLayout.addItem(QSpacerItem(
+            0, 0, QSizePolicy.Minimum, QSizePolicy.Expanding))
+        self.clientapiBox.setLayout(mainLayout)
+
+    def testClientAPI(self):
+        """Test for connection to sc2 client api."""
+        QApplication.setOverrideCursor(Qt.WaitCursor)
+        address = self.listener_address.text().strip()
+        url = "http://{}/ui".format(address)
+        try:
+            r = requests.get(url, timeout=10)
+            r.raise_for_status()
+            successfull = True
+        except Exception:
+            successfull = False
+            module_logger.error("message")
+        finally:
+            QApplication.restoreOverrideCursor()
+
+        title = _("Connection Test")
+
+        if successfull:
+            QMessageBox.information(
+                self, title,
+                _('Connection to SC2 client API established!'))
+        else:
+            QMessageBox.warning(
+                self, title,
+                _('Unable to connect to SC2 client API.'
+                  ' Please make sure that SC2 is currently'
+                  ' running on that machine.'))
+
     def createOcrBox(self):
         """Create forms for OCR."""
         self.ocrBox = QWidget()
@@ -289,7 +436,8 @@ class SubwindowMisc(QWidget):
         mainLayout = QVBoxLayout()
 
         box = QGroupBox(
-            _("Optical Character Recognition for Automatic Setting of Ingame Score"))
+            _("Optical Character Recognition for"
+              " Automatic Setting of Ingame Score"))
 
         layout = QGridLayout()
 
@@ -312,12 +460,14 @@ class SubwindowMisc(QWidget):
         self.browse = QPushButton(_("Browse..."))
         self.browse.clicked.connect(self.selectTesseract)
 
-        text = _("Sometimes the order of players given by the SC2-Client-API differs" +
-                 " from the order in the Observer-UI resulting in a swapped match score." +
-                 " To correct this via Optical Character Recognition you have to download" +
-                 " {} and install and select the exectuable below, if it is not detected" +
-                 " automatically.")
-        url = 'https://github.com/UB-Mannheim/tesseract/wiki#tesseract-at-ub-mannheim'
+        text = _(
+            "Sometimes the order of players given by the SC2-Client-API"
+            " differs from the order in the Observer-UI resulting in a"
+            " swapped match score. To correct this via Optical Character"
+            " Recognition you have to download {} and install and select the"
+            " exectuable below, if it is not detected automatically.")
+        url = 'https://github.com/UB-Mannheim/tesseract' + \
+            '/wiki#tesseract-at-ub-mannheim'
         href = "<a href='{}'>" + "Tesseract-OCR" + "</a>"
         href = href.format(url)
 
@@ -403,6 +553,10 @@ class SubwindowMisc(QWidget):
         self.pb_changeMap.clicked.connect(self.changeMap)
         self.pb_removeMap = QPushButton(_("Remove"))
         self.pb_removeMap.clicked.connect(self.deleteMap)
+
+        self.sc_removeMap = QShortcut(QKeySequence("Del"), self)
+        self.sc_removeMap.setAutoRepeat(False)
+        self.sc_removeMap.activated.connect(self.deleteMap)
 
         box = QWidget()
         container = QHBoxLayout()
@@ -522,22 +676,28 @@ class SubwindowMisc(QWidget):
                         QMessageBox.critical(
                             self,
                             _("Error"),
-                            _('"{}" is not a valid map name.').format(search_str))
+                            _('"{}" is not a valid map name.')
+                            .format(search_str))
                         continue
                     try:
+                        QApplication.setOverrideCursor(Qt.WaitCursor)
                         map = grabber.get_map(search_str)
                     except MapNotFound:
                         QMessageBox.critical(
                             self,
                             _("Map not found"),
-                            _('"{}" was not found on Liquipedia.').format(search_str))
+                            _('"{}" was not found on Liquipedia.')
+                            .format(search_str))
                         continue
+                    finally:
+                        QApplication.restoreOverrideCursor()
                     map_name = map.get_name()
 
                     if(map_name in scctool.settings.maps):
                         buttonReply = QMessageBox.warning(
                             self, _("Duplicate Entry"), _(
-                                "Map {} is already in list! Overwrite?".format(map_name)),
+                                "Map {} is already in list! Overwrite?"
+                                .format(map_name)),
                             QMessageBox.Yes | QMessageBox.No,
                             QMessageBox.No)
                         if buttonReply == QMessageBox.No:
@@ -545,25 +705,32 @@ class SubwindowMisc(QWidget):
                         else:
                             self.controller.deleteMap(map_name)
 
-                    images = grabber.get_images(map.get_map_images())
-                    image = ""
-                    for size in sorted(images):
-                        if not image or size <= 2500 * 2500:
-                            image = images[size]
-                    url = grabber._base_url + image
+                    try:
+                        QApplication.setOverrideCursor(Qt.WaitCursor)
+                        images = grabber.get_images(map.get_map_images())
+                        image = ""
+                        for size in sorted(images):
+                            if not image or size <= 2500 * 2500:
+                                image = images[size]
+                        url = grabber._base_url + image
 
-                    downloader = MapDownloader(self, map_name, url)
-                    downloader.download()
-                    if map_name not in scctool.settings.maps:
-                        scctool.settings.maps.append(map_name)
-                    items = self.maplist.findItems(map_name, Qt.MatchExactly)
-                    if len(items) == 0:
-                        item = QListWidgetItem(map_name)
-                        self.maplist.addItem(item)
-                        self.maplist.setCurrentItem(item)
-                    else:
-                        self.maplist.setCurrentItem(items[0])
-                    self.changePreview()
+                        downloader = MapDownloader(self, map_name, url)
+                        downloader.download()
+                        if map_name not in scctool.settings.maps:
+                            scctool.settings.maps.append(map_name)
+                        items = self.maplist.findItems(map_name,
+                                                       Qt.MatchExactly)
+                        if len(items) == 0:
+                            item = QListWidgetItem(map_name)
+                            self.maplist.addItem(item)
+                            self.maplist.setCurrentItem(item)
+                        else:
+                            self.maplist.setCurrentItem(items[0])
+                        self.changePreview()
+                    except Exception:
+                        raise
+                    finally:
+                        QApplication.restoreOverrideCursor()
             except Exception as e:
                 module_logger.exception("message")
                 QMessageBox.critical(self, _("Error"), str(e))
@@ -592,9 +759,11 @@ class SubwindowMisc(QWidget):
         if(map == "TBD"):
             self.pb_renameMap.setEnabled(False)
             self.pb_removeMap.setEnabled(False)
+            self.sc_removeMap.setEnabled(False)
         else:
             self.pb_removeMap.setEnabled(True)
             self.pb_renameMap.setEnabled(True)
+            self.sc_removeMap.setEnabled(True)
 
         file = self.controller.getMapImg(map, True)
         map = QPixmap(file)
@@ -637,13 +806,15 @@ class SubwindowMisc(QWidget):
             scctool.settings.config.parser.set(
                 "SCT", "myteams", ", ".join(self.list_favTeams.getData()))
             scctool.settings.config.parser.set(
-                "SCT", "commonplayers", ", ".join(self.list_favPlayers.getData()))
+                "SCT", "commonplayers",
+                ", ".join(self.list_favPlayers.getData()))
             scctool.settings.config.parser.set(
                 "SCT", "tesseract", self.tesseract.text().strip())
             scctool.settings.config.parser.set(
                 "SCT", "use_ocr", str(self.cb_useocr.isChecked()))
             scctool.settings.config.parser.set(
-                "SCT", "transparent_match_banner", str(self.cb_trans_banner.isChecked()))
+                "SCT", "transparent_match_banner",
+                str(self.cb_trans_banner.isChecked()))
             scctool.settings.config.parser.set(
                 "SCT", "CtrlShiftS", str(self.cb_ctrlshifts.isChecked()))
             scctool.settings.config.parser.set(
@@ -656,6 +827,19 @@ class SubwindowMisc(QWidget):
                 "SCT", "CtrlX", str(self.cb_ctrlx.isChecked()))
             scctool.settings.config.parser.set(
                 "SCT", "CtrlShiftR", str(self.cb_ctrlshiftr.currentText()))
+            scctool.settings.config.parser.set(
+                "SCT", "blacklist_on", str(self.cb_blacklist.isChecked()))
+            scctool.settings.config.parser.set(
+                "SCT", "blacklist", ", ".join(self.list_blacklist.getData()))
+            scctool.settings.config.parser.set(
+                "SCT", "sc2_network_listener_address",
+                self.listener_address.text().strip())
+            scctool.settings.config.parser.set(
+                "SCT", "sc2_network_listener_enabled",
+                str(self.cb_usesc2listener.isChecked()))
+            self.controller.refreshButtonStatus()
+            # self.controller.setCBS()
+            self.__dataChanged = False
 
     def saveCloseWindow(self):
         """Save and close window."""
@@ -671,7 +855,7 @@ class SubwindowMisc(QWidget):
     def closeEvent(self, event):
         """Handle close event."""
         try:
-            self.mainWindow.updateMapCompleters()
+            self.mainWindow.updateAllMapCompleters()
             if(not self.__dataChanged):
                 event.accept()
                 return

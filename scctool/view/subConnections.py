@@ -2,27 +2,25 @@
 import logging
 import weakref
 
-import gtts
-import keyboard
 from PyQt5.QtCore import QPoint, QSize, Qt
 from PyQt5.QtGui import QIcon, QKeySequence
-from PyQt5.QtWidgets import (QBoxLayout, QCheckBox, QComboBox, QDoubleSpinBox,
-                             QFormLayout, QGroupBox, QHBoxLayout, QLabel,
-                             QLineEdit, QMessageBox, QPushButton, QScrollArea,
-                             QShortcut, QSizePolicy, QSlider, QSpacerItem,
-                             QTabWidget, QVBoxLayout, QWidget)
+from PyQt5.QtWidgets import (QBoxLayout, QCheckBox, QFormLayout, QGroupBox,
+                             QHBoxLayout, QLabel, QLineEdit, QMessageBox,
+                             QPushButton, QScrollArea, QShortcut, QSizePolicy,
+                             QSpacerItem, QTabWidget, QVBoxLayout, QWidget)
 
 import scctool.settings
-from scctool.view.widgets import Completer, HotkeyLayout, MonitoredLineEdit
+from scctool.view.widgets import Completer, MonitoredLineEdit
 
 # create logger
-module_logger = logging.getLogger('scctool.view.subConnections')
+module_logger = logging.getLogger(__name__)
 
 
 class SubwindowConnections(QWidget):
     """Show connections settings sub window."""
+    current_tab = -1
 
-    def createWindow(self, mainWindow):
+    def createWindow(self, mainWindow, tab=''):
         """Create window."""
         try:
             parent = None
@@ -30,7 +28,7 @@ class SubwindowConnections(QWidget):
             # self.setWindowFlags(Qt.WindowStaysOnTopHint)
 
             self.setWindowIcon(
-                QIcon(scctool.settings.getResFile('connection.png')))
+                QIcon(scctool.settings.getResFile('twitch.png')))
             self.setWindowModality(Qt.ApplicationModal)
             self.mainWindow = mainWindow
             self.passEvent = False
@@ -38,7 +36,7 @@ class SubwindowConnections(QWidget):
             self.__dataChanged = False
 
             self.createButtonGroup()
-            self.createTabs()
+            self.createTabs(tab)
 
             mainLayout = QVBoxLayout()
 
@@ -55,128 +53,33 @@ class SubwindowConnections(QWidget):
                        self.size().height() / 3)
             self.move(mainWindow.pos() + relativeChange)
 
-            self.setWindowTitle(_("Connections"))
+            self.setWindowTitle(_("Twitch & Nightbot Connections"))
 
         except Exception as e:
             module_logger.exception("message")
 
-    def createTabs(self):
+    def createTabs(self, tab=''):
         """Create tabs."""
         self.tabs = QTabWidget()
 
-        self.createFormGroupWebsocket()
         self.createFormGroupTwitch()
         self.createFormGroupNightbot()
 
         # Add tabs
-        self.tabs.addTab(self.formGroupIntro, _("Intros && Hotkeys"))
-        self.tabs.addTab(self.formGroupTwitch, _("Twitch"))
-        self.tabs.addTab(self.formGroupNightbot, _("Nightbot"))
+        self.tabs.addTab(self.formGroupTwitch, QIcon(
+            scctool.settings.getResFile('twitch.png')), _("Twitch"))
+        self.tabs.addTab(self.formGroupNightbot, QIcon(
+            scctool.settings.getResFile('nightbot.ico')), _("Nightbot"))
 
-    def addHotkey(self, ident, label):
-        element = HotkeyLayout(
-            self, label,
-            scctool.settings.config.parser.get("Intros", ident))
-        self.hotkeys[ident] = element
-        return element
+        table = dict()
+        table['twitch'] = 0
+        table['nightbot'] = 1
+        self.tabs.setCurrentIndex(
+            table.get(tab, SubwindowConnections.current_tab))
+        self.tabs.currentChanged.connect(self.tabChanged)
 
-    def connectHotkeys(self):
-        for ident, key in self.hotkeys.items():
-            for ident2, key2 in self.hotkeys.items():
-                if ident == ident2:
-                    continue
-                key.modified.connect(key2.check_dublicate)
-            key.modified.connect(self.changed)
-
-    def createFormGroupWebsocket(self):
-        """Create forms for websocket connection to intro."""
-        self.formGroupIntro = QWidget()
-        mainLayout = QVBoxLayout()
-
-        self.hotkeyBox = QGroupBox(_("Intro Hotkeys"))
-        layout = QVBoxLayout()
-
-        try:
-            keyboard.unhook_all()
-        except AttributeError:
-            pass
-        self.hotkeys = dict()
-        layout.addLayout(self.addHotkey("hotkey_player1", _("Player 1")))
-        layout.addLayout(self.addHotkey("hotkey_player2", _("Player 2")))
-        layout.addLayout(self.addHotkey("hotkey_debug", _("Debug")))
-        self.connectHotkeys()
-        self.hotkeyBox.setLayout(layout)
-        mainLayout.addWidget(self.hotkeyBox)
-
-        self.introBox = QGroupBox(_("Intro Settings"))
-        layout = QFormLayout()
-        self.sl_sound = QSlider(Qt.Horizontal)
-        self.sl_sound.setMinimum(0)
-        self.sl_sound.setMaximum(10)
-        self.sl_sound.setValue(
-            scctool.settings.config.parser.getint("Intros", "sound_volume"))
-        self.sl_sound.setTickPosition(QSlider.TicksBothSides)
-        self.sl_sound.setTickInterval(1)
-        self.sl_sound.valueChanged.connect(self.changed)
-        layout.addRow(QLabel(
-            _("Sound Volume:") + " "), self.sl_sound)
-        self.sb_displaytime = QDoubleSpinBox()
-        self.sb_displaytime.setRange(0, 10)
-        self.sb_displaytime.setDecimals(1)
-        self.sb_displaytime.setValue(
-            scctool.settings.config.parser.getfloat("Intros", "display_time"))
-        self.sb_displaytime.setSuffix(" " + _("Seconds"))
-        self.sb_displaytime.valueChanged.connect(self.changed)
-        layout.addRow(QLabel(
-            _("Display Duration:") + " "), self.sb_displaytime)
-        self.cb_animation = QComboBox()
-        animation = scctool.settings.config.parser.get("Intros", "animation")
-        currentIdx = 0
-        idx = 0
-        for item in ["Fly-In", "Slide", "Fanfare"]:
-            self.cb_animation.addItem(item)
-            if(item == animation):
-                currentIdx = idx
-            idx += 1
-        self.cb_animation.setCurrentIndex(currentIdx)
-        self.cb_animation.currentIndexChanged.connect(self.changed)
-        layout.addRow(QLabel(
-            _("Animation:") + " "), self.cb_animation)
-        self.introBox.setLayout(layout)
-        mainLayout.addWidget(self.introBox)
-
-        self.ttsBox = QGroupBox(_("Text-to-Speech Settings"))
-        layout = QFormLayout()
-
-        self.cb_tts_active = QCheckBox()
-        self.cb_tts_active.setChecked(
-            scctool.settings.config.parser.getboolean("Intros", "tts_active"))
-        self.cb_tts_active.stateChanged.connect(self.changed)
-        layout.addRow(QLabel(
-            _("Activate Text-to-Speech:") + " "), self.cb_tts_active)
-
-        self.cb_tts_lang = QComboBox()
-
-        currentIdx = 0
-        idx = 0
-        tts_langs = gtts.lang.tts_langs()
-        tts_lang = scctool.settings.config.parser.get("Intros", "tts_lang")
-        for key, name in tts_langs.items():
-            self.cb_tts_lang.addItem(name, key)
-            if(key == tts_lang):
-                currentIdx = idx
-            idx += 1
-        self.cb_tts_lang.setCurrentIndex(currentIdx)
-        self.cb_tts_lang.currentIndexChanged.connect(self.changed)
-        layout.addRow(QLabel(
-            _("Language:") + " "), self.cb_tts_lang)
-        self.ttsBox.setStyleSheet("QComboBox { combobox-popup: 0; }")
-        self.ttsBox.setLayout(layout)
-        mainLayout.addWidget(self.ttsBox)
-
-        mainLayout.addItem(QSpacerItem(
-            0, 0, QSizePolicy.Minimum, QSizePolicy.Expanding))
-        self.formGroupIntro.setLayout(mainLayout)
+    def tabChanged(self, idx):
+        SubwindowConnections.current_tab = idx
 
     def createFormGroupTwitch(self):
         """Create forms for twitch."""
@@ -191,8 +94,8 @@ class SubwindowConnections(QWidget):
         self.twitchChannel.setPlaceholderText(
             _("Name of the Twitch channel that should be updated"))
         self.twitchChannel.setToolTip(
-            _('The connected twitch user needs to have'
-              ' editor rights for this channel.'))
+            _('The connected twitch user needs to have editor'
+              ' rights for this channel.'))
         layout.addRow(QLabel(
             "Twitch-Channel:"), self.twitchChannel)
 
@@ -245,6 +148,21 @@ class SubwindowConnections(QWidget):
         label = QLabel(_("Title Template:"))
         label.setFixedWidth(100)
         layout.addRow(label, container)
+
+        container = QVBoxLayout()
+
+        self.cb_set_game = QCheckBox(_("Set Game to 'StarCraft II'"))
+        self.cb_set_game.setChecked(
+            scctool.settings.config.parser.getboolean("Twitch", "set_game"))
+        self.cb_set_game.stateChanged.connect(self.changed)
+        container.addWidget(self.cb_set_game)
+
+        label = QLabel(_("Options:") + " ")
+        label.setMinimumWidth(120)
+        layout.addRow(label, container)
+
+        layout.addItem(QSpacerItem(
+            0, 0, QSizePolicy.Minimum, QSizePolicy.Expanding))
 
         self.formGroupTwitch.setLayout(layout)
 
@@ -313,6 +231,9 @@ class SubwindowConnections(QWidget):
             for cmd, msg in data.items():
                 self.addCommand(cmd, msg)
 
+        mainLayout.addItem(QSpacerItem(
+            0, 0, QSizePolicy.Minimum, QSizePolicy.Expanding))
+
         self.formGroupNightbot.setLayout(mainLayout)
 
     def addCommand(self, cmd="", msg=""):
@@ -352,35 +273,25 @@ class SubwindowConnections(QWidget):
 
     def saveData(self):
         """Save the data to config."""
+        if(self.__dataChanged):
+            scctool.settings.config.parser.set(
+                "Twitch", "channel", self.twitchChannel.text().strip())
+            scctool.settings.config.parser.set(
+                "Twitch", "oauth", self.twitchToken.text().strip())
+            scctool.settings.config.parser.set(
+                "Twitch", "title_template", self.twitchTemplate.text().strip())
+            scctool.settings.config.parser.set(
+                "Twitch",
+                "set_game",
+                str(self.cb_set_game.isChecked()))
 
-        scctool.settings.config.parser.set(
-            "Twitch", "channel", self.twitchChannel.text().strip())
-        scctool.settings.config.parser.set(
-            "Twitch", "oauth", self.twitchToken.text().strip())
-        scctool.settings.config.parser.set(
-            "Twitch", "title_template", self.twitchTemplate.text().strip())
+            scctool.settings.config.parser.set(
+                "Nightbot", "token", self.nightbotToken.text().strip())
+
+            self.__dataChanged = False
+            self.controller.refreshButtonStatus()
 
         scctool.settings.nightbot_commands = CommandDropBox.getData()
-
-        self.saveWebsocketdata()
-
-        self.controller.refreshButtonStatus()
-
-    def saveWebsocketdata(self):
-        """Save Websocket data."""
-        for ident, key in self.hotkeys.items():
-            string = scctool.settings.config.dumpHotkey(key.getKey())
-            scctool.settings.config.parser.set("Intros", ident, string)
-        scctool.settings.config.parser.set(
-            "Intros", "display_time", str(self.sb_displaytime.value()))
-        scctool.settings.config.parser.set(
-            "Intros", "sound_volume", str(self.sl_sound.value()))
-        scctool.settings.config.parser.set(
-            "Intros", "animation", self.cb_animation.currentText().strip())
-        scctool.settings.config.parser.set(
-            "Intros", "tts_lang", self.cb_tts_lang.currentData().strip())
-        scctool.settings.config.parser.set(
-            "Intros", "tts_active", str(self.cb_tts_active.isChecked()))
 
     def saveCloseWindow(self):
         """Save and close window."""
@@ -396,7 +307,6 @@ class SubwindowConnections(QWidget):
         """Handle close event."""
         try:
             if(not self.__dataChanged):
-                self.controller.updateHotkeys()
                 CommandDropBox.clean()
                 event.accept()
                 return
@@ -409,7 +319,6 @@ class SubwindowConnections(QWidget):
                     QMessageBox.No)
                 if buttonReply == QMessageBox.Yes:
                     self.saveData()
-            self.controller.updateHotkeys()
             CommandDropBox.clean()
             event.accept()
         except Exception as e:
