@@ -5,8 +5,6 @@
   --width: 100%;
   --height: 120px;
   --middle: 200px;
-  --side: 300px;
-  --border: 150px;
   --logo: 100px;
   --font: Teko;
   --border-color: rgba(2, 10, 36, 1);
@@ -52,7 +50,8 @@ div.misc {
   width: 100%;
   height: 100%;
   background-image: url(../../img/textures/background.jpg);
-  background-size: cover;
+  background-size: 100%;
+  background-position: 0% 20%;
   filter: opacity(0.5) blur(1px) sepia(1.0) hue-rotate(320deg) brightness(1.0) saturate(3.0);
 }
 
