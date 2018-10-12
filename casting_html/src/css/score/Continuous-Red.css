@@ -5,8 +5,7 @@
   --width: 100%;
   --height: 120px;
   --middle: 200px;
-  --side: 300px;
-  --border: 150px;
+  --side: 350px;
   --logo: 100px;
   --font: Teko;
   --border-color: rgba(2, 10, 36, 1);
@@ -52,7 +51,8 @@ div.misc {
   width: 100%;
   height: 100%;
   background-image: url(../../img/textures/background.jpg);
-  background-size: cover;
+  background-size: 100%;
+  background-position: 0% 20%;
   filter: opacity(0.5) blur(1px) sepia(1.0) hue-rotate(320deg) brightness(1.0) saturate(3.0);
 }
 
@@ -110,7 +110,7 @@ div.upper-text-right {
   height: 65px;
   top: 15px;
   padding: 10px;
-  width: 350px;
+  width: var(--side);
   left: 0px;
   text-align: left;
   padding-left: 0px;
@@ -124,7 +124,7 @@ div.upper-text-left {
   height: 65px;
   top: 15px;
   padding: 10px;
-  width: 350px;
+  width: var(--side);
   right: 0px;
   text-align: right;
   padding-right: 0px;
@@ -183,14 +183,14 @@ div.logo {
 div.box_veryleft {
   position: absolute;
   height: 100%;
-  right: calc(50% + 350px + var(--middle) / 2);
+  right: calc(50% + var(--side) + var(--middle) / 2);
   width: var(--logo);
 }
 
 div.box_veryright {
   position: absolute;
   height: 100%;
-  left: calc(50% + 350px + var(--middle) / 2);
+  left: calc(50% + var(--side) + var(--middle) / 2);
   width: var(--logo);
 }
 
