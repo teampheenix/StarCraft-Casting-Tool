@@ -36,10 +36,11 @@ body {
 }
 
 .box {
-  position: relative;
+  position: absolute;
+  left: 0px;
+  top: 0px;
   width: var(--width);
   height: var(--height);
-  display: inline-block;
   background-position: center 55%;
   overflow: hidden;
   background-color: var(--bcolor);
