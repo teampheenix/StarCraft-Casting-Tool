@@ -148,7 +148,7 @@ div.race1 {
   background-repeat: no-repeat;
   background-position: center center;
   background-size: contain;
-  filter: invert(1) drop-shadow(0px 0px 2px var(--team1));
+  filter: invert(1) drop-shadow(0px 0px 2px black);
 }
 
 div.race2 {
@@ -160,7 +160,7 @@ div.race2 {
   background-repeat: no-repeat;
   background-position: center center;
   background-size: contain;
-  filter: invert(1) drop-shadow(0px 0px 2px var(--team2));
+  filter: invert(1) drop-shadow(0px 0px 2px black);
 }
 
 div.race1.winner{
@@ -168,7 +168,7 @@ div.race1.winner{
 }
 
 div.race1.loser{
-  filter: invert(1) drop-shadow(0px 0px 2px var(--team1)) brightness(70%) !important;
+  filter: invert(1) drop-shadow(0px 0px 2px black) brightness(70%) !important;
 }
 
 div.race2.winner{
@@ -176,7 +176,7 @@ div.race2.winner{
 }
 
 div.race2.loser{
-  filter: invert(1) drop-shadow(0px 0px 2px var(--team2)) brightness(70%) !important;
+  filter: invert(1) drop-shadow(0px 0px 2px black) brightness(70%) !important;
 }
 
 div.player1.winner {
