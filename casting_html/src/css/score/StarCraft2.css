@@ -159,8 +159,9 @@ div.box_left {
 div.upper-text-right {
   position: absolute;
   font-size: 40px;
-  line-height: 75px;
-  height: 100%;
+  line-height: 100%;
+  top: 20%;
+  height: 55%;
   padding: 5px;
   width: calc(var(--side) - var(--logo));
   box-sizing: border-box;
@@ -172,8 +173,9 @@ div.upper-text-right {
 div.upper-text-left {
   position: absolute;
   font-size: 40px;
-  line-height: 75px;
-  height: 100%;
+  line-height: 100%;
+  top: 20%;
+  height: 55%;
   padding: 5px;
   width: calc(var(--side) - var(--logo));
   box-sizing: border-box;

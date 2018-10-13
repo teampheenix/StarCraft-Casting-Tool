@@ -146,30 +146,29 @@ div.box_right {
   overflow: hidden;
 }
 
+
 div.upper-text-right {
   position: absolute;
-  top: 0%;
-  height: calc(100% - var(--lower-text-height));
+  top: 5px;
+  height: calc(100% - var(--lower-text-height) - 20px);
   right: calc(0% + var(--logo-width) + var(--border-radius) + 5px);
   width: calc(100% - 2 * var(--border-radius) - var(--logo-width) - 10px);
   font-size: 36px;
   font-weight: bold;
   text-align: center;
-  line-height: 60px;
-  overflow: hidden;
+  line-height: 50px;
 }
 
 div.upper-text-left {
   position: absolute;
-  top: 0%;
-  height: calc(100% - var(--lower-text-height));
+  top: 5px;
+  height: calc(100% - var(--lower-text-height) - 20px);
   left: calc(0% + var(--logo-width) + var(--border-radius) + 5px);
   width: calc(100% - 2 * var(--border-radius) - var(--logo-width) - 10px);
   font-size: 36px;
   font-weight: bold;
   text-align: center;
-  line-height: 60px;
-  overflow: hidden;
+  line-height: 50px;
 }
 
 div.lower-text {

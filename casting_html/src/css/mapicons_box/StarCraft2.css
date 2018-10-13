@@ -62,6 +62,13 @@ div.image {
   word-wrap: break-word;
 }
 
+div.misc{
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
 div.image:after {
   border-style: solid;
   border-width: 17px 60px;
@@ -179,7 +186,7 @@ div.data {
 }
 
 .race1.loser, .race2.loser {
-  opacity: 0.7 !important;
+  opacity: 0.7;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, .8)) drop-shadow(0 8px 16px rgba(0, 0, 0, .6));
 }
 
