@@ -154,7 +154,7 @@ class MainController:
             if index >= 0:
                 self.view.cb_minSets.setCurrentIndex(index)
 
-            self.view.le_url.setText(
+            self.view.le_url.setURL(
                 self.matchControl.selectedMatch().getURL())
             self.view.le_url_custom.setText(
                 self.matchControl.selectedMatch().getURL())
@@ -235,6 +235,7 @@ class MainController:
             idx = self.matchControl.selectedMatchIdx()
             matchWidget = self.view.matchDataTabWidget.widget(idx)
             matchWidget.updateForms()
+            self.updateMatchFormat()
             self.view.resizeWindow()
             self.matchControl.activeMatch().updateLeagueIcon()
 
