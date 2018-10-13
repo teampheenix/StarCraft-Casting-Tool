@@ -48,8 +48,9 @@ div.middle-column {
   height: 90%;
   left: calc(var(--side));
   width: calc(var(--middle));
-  display: inline-block;
   overflow: hidden;
+  display: flex;
+  justify-content: center;
 }
 
 div.column-header {
@@ -85,16 +86,22 @@ div.column-header span:after {
   display: inline-block;
 }
 
-#map-img {
+div.image{
   position: absolute;
-  box-sizing: border-box;
-  max-width: 90%;
-  max-height: 90%;
+  box-sizing: content-box;
+  max-width: 720px;
+  max-height: 700px;
   display: block;
   bottom: 0%;
-  left: 50%;
-  transform: translate(-50%, 0%);
   border: 3px solid var(--color);
+}
+
+#map-img {
+  position: relative;
+  box-sizing: border-box;
+  display: block;
+  max-width: 720px;
+  max-height: 700px;
 }
 
 #map-list {
@@ -210,7 +217,9 @@ div.small-stat>span.desc {
 }
 
 div.small-stat>span.desc::after {
-  content: ': '
+  content: ':';
+  display: inline-block;
+  width: 12px;
 }
 
 #column-content {
@@ -232,30 +241,34 @@ div.race {
 }
 
 div.race>span {
-  background-image: url('../../img/races/protoss-black.png');
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: contain;
   display: block;
   position: relative;
+  background-color: var(--color);
   width: 2em;
-  filter: drop-shadow(100px 0px var(--color));
-  margin-left: -100px;
 }
 
 div.Protoss>span {
-  background-image: url('../../img/races/protoss-black.png');
+  -webkit-mask: url('../../img/races/protoss.svg');
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center center;
+  -webkit-mask-size: contain;
   height: 2.5em;
 }
 
 div.Terran>span {
-  background-image: url('../../img/races/terran-black.png');
+  -webkit-mask: url('../../img/races/terran.svg');
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center center;
+  -webkit-mask-size: contain;
   height: 2.0em;
   margin-top: 0.35em;
 }
 
 div.Zerg>span {
-  background-image: url('../../img/races/zerg-black.png');
+  -webkit-mask: url('../../img/races/zerg.svg');
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center center;
+  -webkit-mask-size: contain;
   height: 2.0em;
   margin-top: 0.35em;
 }

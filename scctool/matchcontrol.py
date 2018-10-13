@@ -144,9 +144,9 @@ class MatchControl(QObject):
                     self.__matches[old_id].dataChanged.disconnect()
                 except TypeError as e:
                     module_logger.exception("message")
+            self.__controller.placeholderSetup()
             self.__matches[id].metaChanged.connect(self.__handleMetaSignal)
             self.__matches[id].dataChanged.connect(self.__handleDataSignal)
-            self.__controller.placeholderSetup()
             self.metaChanged.emit()
             module_logger.info('Activated match {}'.format(id))
 

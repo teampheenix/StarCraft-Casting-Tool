@@ -25,9 +25,7 @@ function init() {
 
 function connectWebsocket() {
   console.time('connectWebsocket');
-  path = "score"
-  port = parseInt("0x".concat(profile), 16);
-  socket = new WebSocket("ws://127.0.0.1:".concat(port, "/", path));
+  socket = new WebSocket(controller.generateKeyURI());
 
   socket.onopen = function() {
     console.log("Connected!");
@@ -120,7 +118,7 @@ function insertData() {
   }
   insertIcons();
   $(document).ready(function() {
-    $('#content').find(".text-fill").textfill();
+    $('#content').find(".text-fill").textfill({maxFontPixels: 80});
   });
 }
 
@@ -260,7 +258,7 @@ function changeText(id, new_value) {
   function _changeText(object, new_value) {
     object.text(new_value)
     $(document).ready(function() {
-      $('#content').find(".text-fill").textfill();
+      $('#content').find(".text-fill").textfill({maxFontPixels: 80});
     });
   }
 }

@@ -1,0 +1,184 @@
+@font-face {
+  font-family: "Eurostile Extd";
+  font-style: normal;
+  font-weight: 700;
+  src: url("https://static.starcraft2.com/dist/fonts/eurostileext-med-0050275a9320bb8dc80eb677dce63dbf664afbbe57440453110116416b398de22cdd27899e1f72118d07b1afdcbde0177f541f5414ccb54c6771b8cefe46dd35.woff2") format("woff");
+}
+
+:root {
+  --width: 750px;
+  --height: 130px;
+  --border-size: 2px;
+  --border-color: #2d6199;
+  --border-radius: 30px;
+  --font: Eurostile Extd;
+}
+
+body {
+  letter-spacing: .00em;
+  font-family: var(--font);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, .8), 0 8px 16px rgba(0, 0, 0, .6);
+  color: white;
+  overflow: hidden;
+}
+
+div.box {
+  width: var(--width);
+  height: var(--height);
+  position: absolute;
+  text-align: center;
+  left: calc((100% - var(--width)) / 2);
+  top: calc((100% - var(--height)) / 2);
+}
+
+div.box:after {
+  border-style: solid;
+  border-width: 17px 60px;
+  border-image: url(../../img/textures/border3.png) 17 60 repeat;
+  border-image-outset: 14px;
+  content: "";
+  bottom: 0;
+  display: block;
+  left: 0;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+div.misc {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: url(../../img/textures/sc2-footer.jpg);
+  background-size: cover;
+  background-position: 50%;
+}
+
+div.misc:after {
+  -webkit-box-shadow: inset 0 0 20px rgba(0, 102, 204, .6), inset 0 0 80px rgba(0, 102, 204, .4);
+  box-shadow: inset 0 0 20px rgba(0, 102, 204, .6), inset 0 0 80px rgba(0, 102, 204, .4);
+  bottom: 0;
+  content: "";
+  display: block;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+div.race {
+  position: absolute;
+  width: 125px;
+  height: 100%;
+  background-size: contain;
+  background-position: center center;
+  background-repeat: no-repeat;
+  border: inset 5px transparent;
+  box-sizing: border-box;
+  filter: drop-shadow(0 2px 4px rgba(255, 255, 255, .4)) drop-shadow(0 8px 16px rgba(255, 255, 255, .1));
+}
+
+#random {
+  background-image: url("../../img/races/random.png");
+}
+
+#protoss {
+  background-image: url("../../img/races/protoss.png");
+  border: inset 0px transparent;
+}
+
+#zerg {
+  background-image: url("../../img/races/zerg.png");
+}
+
+#terran {
+  background-image: url("../../img/races/terran.png");
+}
+
+div.logo {
+  position: absolute;
+  background-size: contain;
+  background-position: center center;
+  background-repeat: no-repeat;
+  height: 100%;
+  width: 130px;
+  right: 0px;
+  overflow: hidden;
+  filter: drop-shadow(0 2px 4px rgba(255, 255, 255, .4)) drop-shadow(0 8px 16px rgba(255, 255, 255, .1));
+  background-size: contain;
+  background-position: center center;
+  background-repeat: no-repeat;
+  border: inset 5px transparent;
+  box-sizing: border-box;
+}
+
+div.label {
+  position: absolute;
+  top: calc(40% - 5px);
+  height: 65px;
+  left: 125px;
+  width: calc(100% - 125px - 130px);
+  box-sizing: border-box;
+  border-top: 2px solid rgba(153, 204, 255, .3);
+  border-bottom: 2px solid rgba(153, 204, 255, .3);
+  background-image: linear-gradient(180deg, rgba(0, 0, 0, .4), rgba(0, 51, 102, .4));
+}
+
+div.label2 {
+  position: absolute;
+  height: 100%;
+  width: 125px;
+  background: rgba(36, 69, 108, 0.8);
+  border-right: 2px solid rgba(153, 204, 255, .3);
+  box-sizing: border-box;
+  background-color: transparent;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, .2)), to(rgba(0, 51, 102, .2)));
+  background-image: linear-gradient(180deg, rgba(0, 0, 0, .2), rgba(0, 51, 102, .2));
+  background-origin: border-box;
+}
+
+div.label3 {
+  position: absolute;
+  height: 100%;
+  width: 130px;
+  right: 0px;
+  background-color: rgba(36, 69, 108, 0.8);
+  border-left: 2px solid rgba(153, 204, 255, .3);
+  box-sizing: border-box;
+  background-color: transparent;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, .2)), to(rgba(0, 51, 102, .2)));
+  background-image: linear-gradient(180deg, rgba(0, 0, 0, .2), rgba(0, 51, 102, .2));
+  background-origin: border-box;
+}
+
+div.name {
+  position: absolute;
+  top: calc(40% - 8px);
+  left: 140px;
+  width: calc(100% - 140px - 150px);
+  height: 62px;
+  /*line-height: 55px;
+    */
+  text-align: center;
+}
+
+div.name.name {
+  text-shadow: 0 2px 4px rgba(255, 255, 255, .4), 0 8px 116px rgba(255, 255, 255, .1);
+}
+
+div.team {
+  position: absolute;
+  top: 5px;
+  left: 140px;
+  height: calc(30%);
+  width: calc(100% - 140px - 180px);
+  text-align: center;
+  font-size: 30px !important;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, .4), 0 4px 8px rgba(255, 255, 255, .1);
+}
+
+.text-item {
+  color: white;
+  font-size: 44px !important;
+}

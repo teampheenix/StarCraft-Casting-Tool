@@ -2,8 +2,8 @@
 import logging
 import os
 import shutil
-import sys
 import subprocess
+import sys
 import webbrowser
 
 from PyQt5.QtCore import Qt
@@ -17,6 +17,7 @@ from scctool.settings.alias import AliasManager
 from scctool.settings.history import HistoryManager
 from scctool.settings.logoManager import LogoManager
 from scctool.settings.placeholders import PlaceholderList
+from scctool.tasks.aligulac import AligulacThread
 from scctool.tasks.auth import AuthThread
 from scctool.tasks.autorequests import AutoRequestsThread
 from scctool.tasks.housekeeper import HouseKeeperThread
@@ -57,6 +58,8 @@ class MainController:
                 self.toogleLEDs)
             self.websocketThread.introShown.connect(self.updatePlayerIntroIdx)
             self.runWebsocketThread()
+            self.aligulacThread = AligulacThread(
+                self.matchControl, self.websocketThread)
             self.autoRequestsThread = AutoRequestsThread(self)
             self._warning = False
             self.checkVersion()
@@ -209,6 +212,7 @@ class MainController:
             idx = self.matchControl.selectedMatchIdx()
             matchWidget = self.view.matchDataTabWidget.widget(idx)
             matchWidget.updateForms()
+            self.updateMatchFormat()
 
         except Exception as e:
             msg = str(e)
@@ -322,7 +326,7 @@ class MainController:
         if sys.platform == "win32":
             os.startfile(filename)
         else:
-            opener ="open" if sys.platform == "darwin" else "xdg-open"
+            opener = "open" if sys.platform == "darwin" else "xdg-open"
             subprocess.call([opener, filename])
 
     def runSC2ApiThread(self, task):
@@ -366,6 +370,7 @@ class MainController:
             self.localhost.terminate()
             self.stopWebsocketThread()
             self.textFilesThread.terminate()
+            self.aligulacThread.terminate()
             self.autoRequestsThread.terminate()
             self.mapstatsManager.close(False)
             self.housekeeper.terminate()
@@ -736,6 +741,8 @@ class MainController:
 
             try:
                 if tts_active:
+                    if team.strip().lower() == 'tbd':
+                        team = ''
                     text = self.tts.getLine(tts_scope, name, race, team)
                     tts_file = os.path.join("..", self.tts.synthesize(
                         text, tts_voice,
@@ -826,6 +833,12 @@ class MainController:
                 self.runSC2ApiThread("playerLogos")
             else:
                 self.stopSC2ApiThread("playerLogos")
+        if path == 'aligulac':
+            if num > 0:
+                self.aligulacThread.activate()
+                self.aligulacThread.receive_data('meta')
+            else:
+                self.aligulacThread.terminate()
 
     def autoSetNextMap(self, idx=-1, send=True):
         if scctool.settings.config.parser.getboolean(

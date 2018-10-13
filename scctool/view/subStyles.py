@@ -47,7 +47,8 @@ class SubwindowStyles(QWidget):
             table['styles'] = 0
             table['colors'] = 1
             table['font'] = 2
-            self.tabs.setCurrentIndex(table.get(tab, SubwindowStyles.current_tab))
+            self.tabs.setCurrentIndex(
+                table.get(tab, SubwindowStyles.current_tab))
             self.tabs.currentChanged.connect(self.tabChanged)
 
             mainLayout = QVBoxLayout()
@@ -186,6 +187,34 @@ class SubwindowStyles(QWidget):
             layout.addRow(QLabel(_("Map Stats:")), container)
         except Exception as e:
             module_logger.exception("message")
+
+        try:
+            container = QHBoxLayout()
+            self.qb_aligulacStyle = StyleComboBox(
+                scctool.settings.casting_html_dir + "/src/css/aligulac",
+                "aligulac")
+            self.qb_aligulacStyle.connect2WS(self.controller, 'aligulac')
+            button = QPushButton(_("Show in Browser"))
+            button.clicked.connect(lambda: self.openHTML(
+                scctool.settings.casting_html_dir + "/aligulac.html"))
+            container.addWidget(self.qb_aligulacStyle)
+            container.addWidget(button)
+            layout.addRow(QLabel(_("Aligulac:")), container)
+        except Exception as e:
+            module_logger.exception("message")
+
+        layout.addRow(QLabel(''))
+        stylesDisc = _(
+            'StarCraft Casting Tools allows you to make your own skins/styles'
+            ' via CSS by placing an alternative CSS-files into '
+            'casting_html/src/css/{browser-source}. If you do so, please'
+            ' share these skins with this project. In case you need help'
+            ' or just want to share your ideas for new skins'
+            ' join our Discord Server.')
+        label = QLabel(stylesDisc)
+        label.setAlignment(Qt.AlignJustify)
+        label.setWordWrap(True)
+        layout.addRow(label)
 
         self.styleBox.setLayout(layout)
 

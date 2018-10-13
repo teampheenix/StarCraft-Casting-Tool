@@ -41,9 +41,7 @@ function loadStoredData() {
 
 function connectWebsocket() {
   console.time('connectWebsocket');
-  var path = "mapicons_box_" + ident.toString();
-  var port = parseInt("0x".concat(profile), 16);
-  socket = new WebSocket("ws://127.0.0.1:".concat(port, "/", path));
+  socket = new WebSocket(controller.generateKeyURI());
 
   socket.onopen = function() {
     console.log("Connected!");
@@ -174,7 +172,7 @@ function changeText(iconID, label, new_value) {
   function _changeText(parent, object, new_value) {
     object.text(new_value)
     $(document).ready(function() {
-      parent.find(".text-fill").textfill();
+      parent.find(".text-fill").textfill({maxFontPixels: 80});
     });
   }
 }
@@ -238,7 +236,7 @@ function changeMap(iconID, map, map_img) {
       image.css("background-image", 'url("src/img/maps/' + map_img + '")');
     }
     $(document).ready(function() {
-      parent.find(".text-fill").textfill();
+      parent.find(".text-fill").textfill({maxFontPixels: 80});
     });
   }
 }
@@ -252,7 +250,7 @@ function setFont(newFont) {
   }
   storeData("font");
   $(document).ready(function() {
-    $('#container').find(".text-fill").textfill();
+    $('#container').find(".text-fill").textfill({maxFontPixels: 80});
   });
 }
 
@@ -324,7 +322,7 @@ function fillBox(i) {
   }
   $(mapicon).find("div.opa").css('opacity', mapdata['opacity']);
   $(mapicon).ready(function() {
-    $(mapicon).find(".text-fill").textfill();
+    $(mapicon).find(".text-fill").textfill({maxFontPixels: 80});
     if (i == length) {
       $(mapicon).ready(function() {
         initAnimation();
@@ -352,9 +350,7 @@ function initAnimation() {
         opacity: "1"
       })
       .from(image, 0.35, {
-        width: "0%",
-        border: "0px",
-        left: "50%",
+        scaleX: 0,
         ease: Sine.easeInOut
       })
       .staggerFrom([mapname, maplabel], 0.2, {
@@ -364,6 +360,8 @@ function initAnimation() {
       .staggerTo([vs, [race1, race2]], 0.2, {
         opacity: 1.0,
       }, 0.20, '=-0.2')
+      .set(race1, {clearProps:"opacity"})
+      .set(race2, {clearProps:"opacity"})
       .from(player1, 0.15, {
         x: '-=110%'
       }, '=-0.15')

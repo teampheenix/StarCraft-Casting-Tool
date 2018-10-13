@@ -122,7 +122,6 @@ def setDefaultConfigAll():
     setDefaultConfig("Twitch", "title_template",
                      "(League) – (Team1) vs (Team2)")
     setDefaultConfig("Twitch", "set_game", "True")
-    setDefaultConfig("Twitch", "set_community", "True")
 
     setDefaultConfig("Nightbot", "token", "")
 
@@ -176,6 +175,7 @@ def setDefaultConfigAll():
     setDefaultConfig("Style", "score", "Default")
     setDefaultConfig("Style", "intro", "Default")
     setDefaultConfig("Style", "mapstats", "Default")
+    setDefaultConfig("Style", "aligulac", "Default")
     setDefaultConfig("Style", "use_custom_font", "False")
     setDefaultConfig("Style", "custom_font", "Verdana")
 

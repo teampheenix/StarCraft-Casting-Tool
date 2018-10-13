@@ -71,10 +71,7 @@ function loadStoredData() {
 
 function connectWebsocket() {
   console.time('connectWebsocket');
-  path = "mapstats"
-  port = parseInt("0x".concat(profile), 16);
-  socket = new WebSocket("ws://127.0.0.1:".concat(port, "/", path));
-
+  socket = new WebSocket(controller.generateKeyURI());
   socket.onopen = function() {
     console.log("Connected!");
     isopen = true;
@@ -281,14 +278,16 @@ function setPoolName(name) {
 
 function initHide() {
   var box = document.getElementById("map-stats");
-  var map = document.getElementById("map-img");
+  var map = document.getElementById("img-container");
+  var left = document.getElementById('left-column');
+  var right = document.getElementById('right-column');
   var mapname = document.getElementById("map-name");
   var element1 = document.getElementById("column-content");
   var element2 = document.getElementById("column-bottom");
   var mappool = document.getElementById("map-pool");
   var maplist = document.getElementById('map-list');
   var maps = document.getElementById('map-list').getElementsByTagName("li");
-  tweenInitial.staggerTo([map, mapname, element1, element2, mappool, maplist], 0, {
+  tweenInitial.staggerTo([left, right, map, mapname, element1, element2, mappool, maplist], 0, {
     opacity: "0"
   }, 0);
   box.style.setProperty('visibility', 'visible');
@@ -301,11 +300,19 @@ function initAnimation(init_map, select = true) {
     console.log("init");
     tweenInitial = new TimelineMax();
     var maplist = document.getElementById('map-list');
+    var left = document.getElementById('left-column');
+    var right = document.getElementById('right-column');
     var maps = document.getElementById('map-list').getElementsByTagName("li");
     var mappool = document.getElementById("map-pool");
     if (select) setTimeout(selectMap, 500, init_map);
     tweenInitial.delay(0.5)
-      .staggerTo([maplist, mappool], 0, {
+      .set(left, {
+        clearProps: "all"
+      })
+      .set(right, {
+        clearProps: "all"
+      })
+      .staggerTo([left, right, maplist, mappool], 0, {
         opacity: "1"
       }, 0)
       .to(mappool, 0, {
@@ -314,6 +321,9 @@ function initAnimation(init_map, select = true) {
       .staggerTo(maps, 0, {
         x: '+=110%'
       }, 0)
+      .staggerFrom([left, right], 0.3, {
+        scaleX: 0.0
+      }, 0.0)
       .to(mappool, 0.3, {
         x: '-=110%'
       })
@@ -350,6 +360,7 @@ function animateInOut(mapElement, name) {
       tweenShowMap.reverse(0);
     } else {
       var map = document.getElementById("map-img");
+      var container = document.getElementById("img-container");
       var mapname = document.getElementById("map-name");
       var element1 = document.getElementById("column-content");
       var element2 = document.getElementById("column-bottom");
@@ -358,11 +369,11 @@ function animateInOut(mapElement, name) {
       var liquipedia = document.getElementById("liquipedia");
       var mappool = document.getElementById("map-pool");
       tweenShowMap.clear();
-      tweenShowMap.staggerTo([map, mapname, element1, element2], 0, {
+      tweenShowMap.staggerTo([container, mapname, element1, element2], 0, {
           opacity: "1"
         }, 0)
-        .from(map, 0.4, {
-          bottom: '-=100%',
+        .from(container, 0.4, {
+          y: '+=120%',
           ease: Power1.easeOut
         })
         .staggerFrom([mapname, liquipedia].concat(element1s, element2s), 0.3, {

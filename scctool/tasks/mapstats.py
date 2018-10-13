@@ -3,7 +3,6 @@ import json
 import logging
 import os
 import time
-from shutil import copyfile
 
 from PyQt5.QtCore import pyqtSignal
 
@@ -32,9 +31,9 @@ class MapStatsManager:
         """Read json data from file."""
         file = scctool.settings.getJsonFile('mapstats')
         if not os.path.exists(file):
-            copyfile(scctool.settings.getResFile('mapstats.json'), file)
+            file = scctool.settings.getResFile('mapstats.json')
         try:
-            with open(scctool.settings.getJsonFile('mapstats'),
+            with open(file,
                       'r',
                       encoding='utf-8-sig') as json_file:
                 data = json.load(json_file)
@@ -194,7 +193,8 @@ class MapStatsManager:
             if map not in self.getMapPool():
                 continue
             out_data['maps'][map] = dict()
-            out_data['maps'][map]['map-name'] = map
+            out_data['maps'][map]['map-name'] = map.replace(
+                'Dreamcatcher', 'Dream<wbr>catcher')
             if out_data['map'] is None:
                 out_data['map'] = map
             if scctool.settings.config.parser.getboolean(

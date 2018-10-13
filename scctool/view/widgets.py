@@ -49,9 +49,17 @@ class MapLineEdit(QLineEdit):
             self._before = text
 
     def __handleEditingFinished(self):
-        before, after = self._before, self.text()
+        text = self.text()
+        before, after = self._before, text
         if before != after:
             after, known = scctool.matchdata.autoCorrectMap(after)
+            self.setText(after)
+            self._before = after
+            self.textModified.emit()
+
+    def completerFinished(self, text):
+        before, after = self._before, text
+        if before != after:
             self.setText(after)
             self._before = after
             self.textModified.emit()
@@ -82,6 +90,13 @@ class MonitoredLineEdit(QLineEdit):
 
     def __handleEditingFinished(self):
         before, after = self._before, self.text()
+        if before != after:
+            self.setText(after)
+            self._before = after
+            self.textModified.emit()
+
+    def completerFinished(self, text):
+        before, after = self._before, text
         if before != after:
             self.setText(after)
             self._before = after
@@ -1197,7 +1212,8 @@ class ProfileMenu(QMenu):
             QApplication.restoreOverrideCursor()
 
     def openFolder(self):
-        self._controller.open_file(scctool.settings.profileManager.profiledir())
+        self._controller.open_file(
+            scctool.settings.profileManager.profiledir())
 
     def newProfile(self):
         name = ''

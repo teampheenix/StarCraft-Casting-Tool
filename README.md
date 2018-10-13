@@ -25,20 +25,18 @@
 * **Scoreboard** including team icons in `casting_html`
 * **Animated Player Intros** in `casting_html` including Text-to-Speech, playername & race via SC2-Client, team with logo via SCC Tool
 * **Map Preview with Statistics** from Liquipedia in `casting_html`
+* **Aligulac Browser Source** that predicts the outcome of a 1vs1 match in `casting_html`
 * **TXT-files** with match infos in `casting_data`
 * **Twitch & Nightbot Integration**: Update your stream title or bot commands via a single click or automatically
 * **Automatic Score Detection** via SC2-Client
 * **Interaction with SC2-Observer-UI**: Automatically toggle Production Tab and set Score at the start of a Game
 * Nearly **unlimited Customization** via Skins and CSS
-* German and Russian language support.
+* German and Russian language support
 
 ## Discord Server
 
 If you need support, have questions, want to be up-to-date on, or like to contribute to this project, join our [Discord Server](https://discord.gg/G9hFEfh).
 
-## Twitch Community
-
-Join the [StarCraft Casting Tool Twitch Community](https://www.twitch.tv/communities/starcraftcastingtool) to find other streams that are using the StarCraft Casting Tool and promote your own stream when using it. If your stream is added to the StarCraft Casting Tool Twitch Community and streaming StarCraft II, it will be automatically announced on our [Discord Server](https://discord.gg/G9hFEfh).
 
 ## Links
 
@@ -96,7 +94,7 @@ Frequently the order of players given by the SC2-Client-API differs from the ord
 
 Include the Player Intro `casting_html/intro.html` as browser sources (using the full height and width of your display). The data will be updated when a game or replay is started in the StarCraft 2 client. You have to assign hotkeys to trigger the intros in *Settings: Browser Sources: Intros*. The first player is always corresponding to the player your observer camera is centered on at start of a game. The sound volume of the intros as well as the duration of the intros can be adjusted in *Settings: Browser Sources: Intros*. Additionally you can activate Text-to-Speech to include an automatic annoucements of the player's team and name. There are currently three different animations with an unique sound, e.g., *Fanfare* - see https://youtu.be/kEcxS4K9vJ4?t=25m45s for an review of *Fanfare*.
 
-You have the option to have the player announced with Google-Cloud Text-to-Speech featuring high quality voices that you can test at https://cloud.google.com/text-to-speech/
+You have the option to have the player announced with Google-Cloud Text-to-Speech featuring high quality voices that you can test at https://cloud.google.com/text-to-speech/.
 
 ## Customization
 

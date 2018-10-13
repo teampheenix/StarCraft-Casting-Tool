@@ -416,6 +416,7 @@ class MatchDataWidget(QWidget):
             completer.setCompletionMode(
                 QCompleter.UnfilteredPopupCompletion)
             completer.setWrapAround(True)
+            completer.activated.connect(self.le_map[i].completerFinished)
             self.le_map[i].setCompleter(completer)
 
     def updatePlayerCompleters(self):
@@ -431,6 +432,8 @@ class MatchDataWidget(QWidget):
                 completer.setCompletionMode(
                     QCompleter.InlineCompletion)
                 completer.setWrapAround(True)
+                completer.activated.connect(
+                    self.le_player[team_idx][player_idx].completerFinished)
                 self.le_player[team_idx][player_idx].setCompleter(
                     completer)
 
@@ -445,6 +448,8 @@ class MatchDataWidget(QWidget):
             completer.setCompletionMode(
                 QCompleter.InlineCompletion)
             completer.setWrapAround(True)
+            completer.activated.connect(
+                self.le_team[team_idx].completerFinished)
             self.le_team[team_idx].setCompleter(completer)
 
     def updateForms(self):

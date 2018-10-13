@@ -169,8 +169,8 @@ span.maplabel, span.mapname {
 
 div.upper-text-right {
   position: absolute;
-  top: 2px;
-  height: calc(100% - var(--lower-text-height) - 10px);
+  top: 5px;
+  height: calc(100% - var(--lower-text-height) - 20px);
   font-size: 28px;
   left: var(--border-radius);
   width: calc(100% - var(--border-radius) - 5px);
@@ -180,8 +180,8 @@ div.upper-text-right {
 
 div.upper-text-left {
   position: absolute;
-  top: 2px;
-  height: calc(100% - var(--lower-text-height) - 10px);
+  top: 5px;
+  height: calc(100% - var(--lower-text-height) - 20px);
   font-size: 28px;
   right: var(--border-radius);
   width: calc(100% - var(--border-radius) - 5px);

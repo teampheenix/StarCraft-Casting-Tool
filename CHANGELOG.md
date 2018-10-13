@@ -1,20 +1,66 @@
 # Changelog
 
 
-## (unreleased)
-
-### New
-
-* Added option to specify the SC2 client API address in the misc menu to enable a two pc streaming setup.
+## v2.3.2 (2018-10-07)
 
 ### Fix
 
-* Fixed a bug that impaired tts.
+* Longer map names such as 'Dreamcatcher' are now completly visible in the mapstats 'StarCraft2' skin.
+
+* Fixed mapstats animation when changing the map pool.
 
 
-## v2.2.0 (2018-08-26)
+## v2.3.1 (2018-09-25)
+
+### Changes
+
+* Added handling of critical errors.
+
+### Fix
+
+* Fixed a bug where race icons in the maps stats browser source would not be displayed in StreamlabsOBS.
+
+
+## v2.3.0 (2018-09-16)
 
 ### New
+
+* Added a new 'StarCraft 2' style/skin for all browser sources.
+
+### Fix
+
+* Fixed a bug where the logo would not be swapped when the option to auto swap is active.
+
+* Fixed a bug where the Match Format was not updated when using the Match Grabber.
+
+* Fixed a bug where a incomplete signal was sent to the mapicons when using auto completion for maps.
+
+
+## v2.2.2 (2018-09-10)
+
+### Fix
+
+* Fixed a bug where the match format would not update when changing the match tabs.
+
+* Fixed entanglement issue of match tabs.
+
+
+## v2.2.1 (2018-09-09)
+
+### Fix
+
+* Fixed a bug where placeholders used by Twitch and Nighbot would use the selected match tab instead of the active tab.
+
+* Fixed a bug where copying a match tab would entangle both tabs.
+
+
+## v2.2.0 (2018-09-09)
+
+### New
+
+* Added a basic Aligulac Browser Source that predicts the outcome of a 1vs1 match.
+
+* Added option to specify the SC2 client API address in the misc menu to enable a two pc streaming setup.
 
 * Added Match Tabs that allow you to manage multiple matches at the same time and jump between them.
 
@@ -22,9 +68,15 @@
 
 ### Changes
 
+* Last open tab is now saved and automatically selected in settings dialogs.
+
 * Koprulu custom format changed back to Bo7 All-Kill.
 
 ### Fix
+
+* Fixed a bug where TTS would announce team 'TBD'.
+
+* Fixed a bug that impaired tts.
 
 * Fixed a crash that would occur when adding a map to the mapstats custom map pool.
 

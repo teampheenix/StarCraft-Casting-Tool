@@ -39,9 +39,7 @@ function loadStoredData() {
 
 function connectWebsocket() {
   console.time('connectWebsocket');
-  var path = "mapicons_landscape_" + ident.toString();
-  var port = parseInt("0x".concat(profile), 16);
-  socket = new WebSocket("ws://127.0.0.1:".concat(port, "/", path));
+  socket = new WebSocket(controller.generateKeyURI());
 
   socket.onopen = function() {
     console.log("Connected!");
@@ -175,7 +173,7 @@ function changeText(iconID, label, new_value) {
   function _changeText(parent, object, new_value) {
     object.text(new_value)
     $(document).ready(function() {
-      parent.find(".text-fill").textfill();
+      parent.find(".text-fill").textfill({maxFontPixels: 80});
     });
   }
 }
@@ -241,7 +239,7 @@ function changeMap(iconID, map, map_img) {
     }
 
     $(document).ready(function() {
-      parent.find(".text-fill").textfill();
+      parent.find(".text-fill").textfill({maxFontPixels: 80});
     });
   }
 }
@@ -263,7 +261,7 @@ function setFont(newFont) {
   }
   storeData("font");
   $(document).ready(function() {
-    $('#container').find(".text-fill").textfill();
+    $('#container').find(".text-fill").textfill({maxFontPixels: 80});
   });
 }
 
@@ -332,7 +330,7 @@ function fillBox(i) {
   }
   $(mapicon).find("div.opa").css('opacity', mapdata['opacity']);
   $(mapicon).ready(function() {
-    $(mapicon).find(".text-fill").textfill();
+    $(mapicon).find(".text-fill").textfill({maxFontPixels: 80});
     if (i == length) {
       $(mapicon).ready(function() {
         initAnimation();
@@ -358,9 +356,7 @@ function initAnimation() {
         opacity: "1"
       })
       .from(image, 0.30, {
-        width: "0%",
-        border: "0px",
-        left: "50%",
+        scaleX: 0.0,
         ease: Sine.easeInOut
       })
       .staggerFrom(lowertext, 0.15, {

@@ -79,7 +79,8 @@ class SubwindowBrowserSources(QWidget):
         table['mapstats'] = 1
         table['mapicons_box'] = 2
         table['mapicons_landscape'] = 3
-        self.tabs.setCurrentIndex(table.get(tab, SubwindowBrowserSources.current_tab))
+        self.tabs.setCurrentIndex(
+            table.get(tab, SubwindowBrowserSources.current_tab))
         self.tabs.currentChanged.connect(self.tabChanged)
 
     def tabChanged(self, idx):
@@ -269,7 +270,7 @@ class SubwindowBrowserSources(QWidget):
         layout.addRow(label, container)
 
         self.sb_padding_box = QDoubleSpinBox()
-        self.sb_padding_box.setRange(0, 30)
+        self.sb_padding_box.setRange(0, 50)
         self.sb_padding_box.setDecimals(1)
         self.sb_padding_box.setValue(
             scctool.settings.config.parser.getfloat("MapIcons", "padding_box"))
@@ -318,7 +319,7 @@ class SubwindowBrowserSources(QWidget):
         layout.addRow(label, container)
 
         self.sb_padding_landscape = QDoubleSpinBox()
-        self.sb_padding_landscape.setRange(0, 30)
+        self.sb_padding_landscape.setRange(0, 50)
         self.sb_padding_landscape.setDecimals(1)
         self.sb_padding_landscape.setValue(
             scctool.settings.config.parser.getfloat(

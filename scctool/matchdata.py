@@ -1,4 +1,5 @@
 """Matchdata."""
+import copy
 import difflib
 import logging
 import re
@@ -54,7 +55,7 @@ class MatchData(QObject):
 
     def readData(self, data):
         if len(data) > 0:
-            self.__data = data
+            self.__data = copy.deepcopy(data)
         else:
             self.setCustom(5, False, False)
 
@@ -250,6 +251,7 @@ class MatchData(QObject):
                 self.setAce(set_idx, False)
 
             self.setLeague("TBD")
+            self.resetSwap()
             self.setMyTeam(0)
             if reset_options:
                 self.setAllKill(False)
