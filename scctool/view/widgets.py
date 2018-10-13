@@ -1391,6 +1391,79 @@ class ProfileMenu(QMenu):
             return
 
 
+class MatchComboBox(QComboBox):
+    """Define QComboBox for the match url."""
+
+    returnPressed = pyqtSignal()
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setEditable(True)
+        self.lineEdit().setAlignment(Qt.AlignCenter)
+        self.lineEdit().setPlaceholderText("https://alpha.tl/match/3000")
+        self._alpha_icon = QIcon(scctool.settings.getResFile('alpha.png'))
+        self._rstl_icon = QIcon(scctool.settings.getResFile('rstl.png'))
+        self._loadItems()
+        self.lineEdit().returnPressed.connect(self.returnPressed.emit)
+        self.activated.connect(self._handleActivated)
+
+    def setText(self, text):
+        self.setURL(text)
+
+    def _handleActivated(self, idx):
+        data = self.itemData(idx)
+        if not data:
+            data = self.itemText(idx)
+        self.setURL(data)
+
+    def _handleCompleterActivated(self, text):
+        if text in self._matches:
+            data = self._matches[text]
+        else:
+            data = text
+        self.setURL(data)
+
+    def _loadItems(self):
+        self.addItem(self._alpha_icon, 'https://alpha.tl/match/3000')
+        self.setItemData(0, Qt.AlignCenter, Qt.TextAlignmentRole)
+        self.insertSeparator(1)
+        self._matches = dict()
+        self._matches['Alpha Twelve Euro Pro: Infinity Gaming vs Iron Chain - October 13, 18:00 (CEST)'] \
+            = 'https://alpha.tl/match/3779'
+        self._matches['Alpha Twelve Euro Pro: Wolfs Lair vs I0C Team B - October 13, 19:00 (CEST)'] \
+            = 'https://alpha.tl/match/3778'
+        self._matches['Alpha Twelve Euro Pro: Iron Chain vs ePunks - October 13, 22:00 (CEST)'] \
+            = 'https://alpha.tl/match/3777'
+
+        completer = QCompleter(
+            self._matches.keys(),
+            self.lineEdit())
+        completer.setFilterMode(Qt.MatchContains)
+        completer.setCaseSensitivity(Qt.CaseInsensitive)
+        completer.setCompletionMode(
+            QCompleter.PopupCompletion)
+        completer.setWrapAround(True)
+        completer.activated.connect(self._handleCompleterActivated)
+        self.setCompleter(completer)
+
+        for text, url in self._matches.items():
+            self.addItem(self._alpha_icon, text, url)
+
+    def setURL(self, url):
+        lower_url = str(url).lower()
+        if(lower_url.find('alpha') != -1):
+            self.setItemIcon(0, self._alpha_icon)
+        elif(lower_url.find('hdgame') != -1):
+            self.setItemIcon(0, self._rstl_icon)
+        else:
+            self.setItemIcon(0, QIcon())
+        self.setItemText(0, url)
+        self.setCurrentIndex(0)
+
+    def text(self):
+        return self.lineEdit().text()
+
+
 class ScopeGroupBox(QGroupBox):
     """Define QGroupBox for icon scope."""
 
