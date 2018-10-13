@@ -171,9 +171,7 @@ function changeText(iconID, label, new_value) {
 
   function _changeText(parent, object, new_value) {
     object.text(new_value)
-    $(document).ready(function() {
-      parent.find(".text-fill").textfill({maxFontPixels: 80});
-    });
+    parent.find(".text-fill").textfill({maxFontPixels: 80});
   }
 }
 
@@ -235,9 +233,7 @@ function changeMap(iconID, map, map_img) {
       image.removeClass('tbd');
       image.css("background-image", 'url("src/img/maps/' + map_img + '")');
     }
-    $(document).ready(function() {
-      parent.find(".text-fill").textfill({maxFontPixels: 80});
-    });
+    parent.find(".text-fill").textfill({maxFontPixels: 80});
   }
 }
 
@@ -249,9 +245,7 @@ function setFont(newFont) {
     document.documentElement.style.setProperty('--font', font);
   }
   storeData("font");
-  $(document).ready(function() {
-    $('#container').find(".text-fill").textfill({maxFontPixels: 80});
-  });
+  $('#container').find(".text-fill").textfill({maxFontPixels: 80});
 }
 
 function setPadding(newPadding) {

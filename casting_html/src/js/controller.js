@@ -43,12 +43,7 @@ class Controller {
     fileref.setAttribute("rel", "stylesheet");
     fileref.setAttribute("type", "text/css");
     fileref.setAttribute("href", file);
-    document.getElementsByTagName("head")[0].appendChild(fileref)
-    $(document).ready(function() {
-      try {
-        $(document).find(".text-fill").textfill({maxFontPixels: 80});
-      } catch (e) {}
-    });
+    document.getElementsByTagName("head")[0].appendChild(fileref);
   }
 
   setStyle(file = null) {
