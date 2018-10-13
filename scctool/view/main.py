@@ -975,7 +975,7 @@ class MainWindow(QMainWindow):
         QApplication.setOverrideCursor(
             Qt.WaitCursor)
         try:
-            url = self.le_url.text()
+            url = self.le_url.lineEdit().text()
             with self.tlock:
                 self.statusBar().showMessage(_('Reading {}...').format(url))
                 msg = self.controller.refreshData(url)
