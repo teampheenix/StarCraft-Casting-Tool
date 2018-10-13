@@ -193,7 +193,8 @@ class MapStatsManager:
             if map not in self.getMapPool():
                 continue
             out_data['maps'][map] = dict()
-            out_data['maps'][map]['map-name'] = map
+            out_data['maps'][map]['map-name'] = map.replace(
+                'Dreamcatcher', 'Dream<wbr>catcher')
             if out_data['map'] is None:
                 out_data['map'] = map
             if scctool.settings.config.parser.getboolean(

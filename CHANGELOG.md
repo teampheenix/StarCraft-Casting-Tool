@@ -1,6 +1,41 @@
 # Changelog
 
 
+## v2.3.2 (2018-10-07)
+
+### Fix
+
+* Longer map names such as 'Dreamcatcher' are now completly visible in the mapstats 'StarCraft2' skin.
+
+* Fixed mapstats animation when changing the map pool.
+
+
+## v2.3.1 (2018-09-25)
+
+### Changes
+
+* Added handling of critical errors.
+
+### Fix
+
+* Fixed a bug where race icons in the maps stats browser source would not be displayed in StreamlabsOBS.
+
+
+## v2.3.0 (2018-09-16)
+
+### New
+
+* Added a new 'StarCraft 2' style/skin for all browser sources.
+
+### Fix
+
+* Fixed a bug where the logo would not be swapped when the option to auto swap is active.
+
+* Fixed a bug where the Match Format was not updated when using the Match Grabber.
+
+* Fixed a bug where a incomplete signal was sent to the mapicons when using auto completion for maps.
+
+
 ## v2.2.2 (2018-09-10)
 
 ### Fix

@@ -74,7 +74,8 @@ class SubwindowConnections(QWidget):
         table = dict()
         table['twitch'] = 0
         table['nightbot'] = 1
-        self.tabs.setCurrentIndex(table.get(tab, SubwindowConnections.current_tab))
+        self.tabs.setCurrentIndex(
+            table.get(tab, SubwindowConnections.current_tab))
         self.tabs.currentChanged.connect(self.tabChanged)
 
     def tabChanged(self, idx):
@@ -155,14 +156,6 @@ class SubwindowConnections(QWidget):
             scctool.settings.config.parser.getboolean("Twitch", "set_game"))
         self.cb_set_game.stateChanged.connect(self.changed)
         container.addWidget(self.cb_set_game)
-
-        self.cb_set_community = QCheckBox(
-            _("Add to Community 'StarCraft Casting Tool'"))
-        self.cb_set_community.setChecked(
-            scctool.settings.config.parser.getboolean(
-                "Twitch", "set_community"))
-        self.cb_set_community.stateChanged.connect(self.changed)
-        container.addWidget(self.cb_set_community)
 
         label = QLabel(_("Options:") + " ")
         label.setMinimumWidth(120)
@@ -291,10 +284,6 @@ class SubwindowConnections(QWidget):
                 "Twitch",
                 "set_game",
                 str(self.cb_set_game.isChecked()))
-            scctool.settings.config.parser.set(
-                "Twitch",
-                "set_community",
-                str(self.cb_set_community.isChecked()))
 
             scctool.settings.config.parser.set(
                 "Nightbot", "token", self.nightbotToken.text().strip())

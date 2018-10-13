@@ -46,7 +46,7 @@ class Controller {
     document.getElementsByTagName("head")[0].appendChild(fileref)
     $(document).ready(function() {
       try {
-        $(document).find(".text-fill").textfill();
+        $(document).find(".text-fill").textfill({maxFontPixels: 80});
       } catch (e) {}
     });
   }

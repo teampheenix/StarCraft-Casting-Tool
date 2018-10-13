@@ -270,7 +270,7 @@ class SubwindowBrowserSources(QWidget):
         layout.addRow(label, container)
 
         self.sb_padding_box = QDoubleSpinBox()
-        self.sb_padding_box.setRange(0, 30)
+        self.sb_padding_box.setRange(0, 50)
         self.sb_padding_box.setDecimals(1)
         self.sb_padding_box.setValue(
             scctool.settings.config.parser.getfloat("MapIcons", "padding_box"))
@@ -319,7 +319,7 @@ class SubwindowBrowserSources(QWidget):
         layout.addRow(label, container)
 
         self.sb_padding_landscape = QDoubleSpinBox()
-        self.sb_padding_landscape.setRange(0, 30)
+        self.sb_padding_landscape.setRange(0, 50)
         self.sb_padding_landscape.setDecimals(1)
         self.sb_padding_landscape.setValue(
             scctool.settings.config.parser.getfloat(
