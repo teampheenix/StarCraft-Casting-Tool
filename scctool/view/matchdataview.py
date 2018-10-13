@@ -413,6 +413,7 @@ class MatchDataWidget(QWidget):
                 list.append("TBD")
             completer = QCompleter(list, self.le_map[i])
             completer.setCaseSensitivity(Qt.CaseInsensitive)
+            completer.setFilterMode(Qt.MatchContains)
             completer.setCompletionMode(
                 QCompleter.UnfilteredPopupCompletion)
             completer.setWrapAround(True)
@@ -431,6 +432,7 @@ class MatchDataWidget(QWidget):
                     Qt.CaseInsensitive)
                 completer.setCompletionMode(
                     QCompleter.InlineCompletion)
+                completer.setFilterMode(Qt.MatchContains)
                 completer.setWrapAround(True)
                 completer.activated.connect(
                     self.le_player[team_idx][player_idx].completerFinished)
@@ -447,6 +449,7 @@ class MatchDataWidget(QWidget):
             completer.setCaseSensitivity(Qt.CaseInsensitive)
             completer.setCompletionMode(
                 QCompleter.InlineCompletion)
+            completer.setFilterMode(Qt.MatchContains)
             completer.setWrapAround(True)
             completer.activated.connect(
                 self.le_team[team_idx].completerFinished)

@@ -782,7 +782,8 @@ class Completer(QCompleter):
         super().__init__(list, parent)
 
         self.setCaseSensitivity(Qt.CaseInsensitive)
-        self.setCompletionMode(QCompleter.PopupCompletion)
+        self.setCompletionMode(QCompleter.UnfilteredPopupCompletion)
+        self.setFilterMode(Qt.MatchContains)
         self.setWrapAround(False)
 
     def pathFromIndex(self, index):
