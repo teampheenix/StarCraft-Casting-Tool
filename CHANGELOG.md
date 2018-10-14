@@ -1,6 +1,19 @@
 # Changelog
 
 
+## v2.4.0 (2018-10-14)
+
+### New
+
+* MatchGrabber is now suggesting upcoming AlphaTL matches.
+
+* Added score and landscape mapicon style 'Continuous Red' created by Seireitei.
+
+### Changes
+
+* Removed 'Twitch Communites' as they are deprecated.
+
+
 ## v2.3.2 (2018-10-07)
 
 ### Fix
