@@ -1404,9 +1404,17 @@ class MatchComboBox(QComboBox):
         self.lineEdit().setPlaceholderText("https://alpha.tl/match/3000")
         self._alpha_icon = QIcon(scctool.settings.getResFile('alpha.png'))
         self._rstl_icon = QIcon(scctool.settings.getResFile('rstl.png'))
-        self._loadItems()
+        self.addItem(self._alpha_icon, 'https://alpha.tl/match/3000')
+        self.setItemData(0, Qt.AlignCenter, Qt.TextAlignmentRole)
+        self.insertSeparator(1)
         self.lineEdit().returnPressed.connect(self.returnPressed.emit)
         self.activated.connect(self._handleActivated)
+
+        self.updateItems({'Match 1': 'https://alpha.tl/match/3010',
+                          'Match 2': 'https://alpha.tl/match/3020'})
+
+        self.updateItems({'Match 3': 'https://alpha.tl/match/3030',
+                          'Match 4': 'https://alpha.tl/match/3040'})
 
     def setText(self, text):
         self.setURL(text)
@@ -1424,18 +1432,13 @@ class MatchComboBox(QComboBox):
             data = text
         self.setURL(data)
 
-    def _loadItems(self):
-        self.addItem(self._alpha_icon, 'https://alpha.tl/match/3000')
-        self.setItemData(0, Qt.AlignCenter, Qt.TextAlignmentRole)
-        self.insertSeparator(1)
-        self._matches = dict()
-        self._matches['Alpha Twelve Euro Pro: Infinity Gaming vs Iron Chain - October 13, 18:00 (CEST)'] \
-            = 'https://alpha.tl/match/3779'
-        self._matches['Alpha Twelve Euro Pro: Wolfs Lair vs I0C Team B - October 13, 19:00 (CEST)'] \
-            = 'https://alpha.tl/match/3778'
-        self._matches['Alpha Twelve Euro Pro: Iron Chain vs ePunks - October 13, 22:00 (CEST)'] \
-            = 'https://alpha.tl/match/3777'
-
+    def updateItems(self, matches):
+        # completer = QCompleter(
+        #         ["https://alpha.tl/match/",
+        #          "http://hdgame.net/en/tournaments/list/tournament/rstl-13/"],
+        # self.le_url)
+        self.removeItems()
+        self._matches = matches
         completer = QCompleter(
             self._matches.keys(),
             self.lineEdit())
@@ -1449,6 +1452,10 @@ class MatchComboBox(QComboBox):
 
         for text, url in self._matches.items():
             self.addItem(self._alpha_icon, text, url)
+
+    def removeItems(self):
+        for idx in range(2, self.count()):
+            self.removeItem(2)
 
     def setURL(self, url):
         lower_url = str(url).lower()

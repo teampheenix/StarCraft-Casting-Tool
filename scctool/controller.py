@@ -125,6 +125,8 @@ class MainController:
             self.setCBs()
             self.view.resizeWindow()
             self.housekeeper.activateTask('save')
+            self.housekeeper.alphaMatches.connect(self.view.le_url.updateItems)
+            self.housekeeper.activateTask('alphatl')
         except Exception as e:
             module_logger.exception("message")
 
