@@ -1410,12 +1410,6 @@ class MatchComboBox(QComboBox):
         self.lineEdit().returnPressed.connect(self.returnPressed.emit)
         self.activated.connect(self._handleActivated)
 
-        self.updateItems({'Match 1': 'https://alpha.tl/match/3010',
-                          'Match 2': 'https://alpha.tl/match/3020'})
-
-        self.updateItems({'Match 3': 'https://alpha.tl/match/3030',
-                          'Match 4': 'https://alpha.tl/match/3040'})
-
     def setText(self, text):
         self.setURL(text)
 
