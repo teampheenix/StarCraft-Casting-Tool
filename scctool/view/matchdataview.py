@@ -91,8 +91,8 @@ class MatchDataWidget(QWidget):
             self._radioButton.toggled.connect(self.activate)
 
     def setName(self):
-        team1 = self.matchData.getTeamOrPlayer(0)
-        team2 = self.matchData.getTeamOrPlayer(1)
+        team1 = self.matchData.getTeamOrPlayer(0).replace('&', '&&')
+        team2 = self.matchData.getTeamOrPlayer(1).replace('&', '&&')
         name = " {} vs {}".format(team1, team2)
         self._tabWidget.tabBar().setTabText(self._tabIdx, name)
 
