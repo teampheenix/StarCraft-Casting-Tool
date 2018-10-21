@@ -7,9 +7,9 @@ from PyQt5.QtCore import QSettings, Qt
 from PyQt5.QtGui import QIcon, QPalette
 from PyQt5.QtWidgets import (QAction, QApplication, QCheckBox, QComboBox,
                              QCompleter, QFormLayout, QGridLayout, QGroupBox,
-                             QHBoxLayout, QLabel, QLineEdit, QMainWindow,
-                             QMenu, QMessageBox, QPushButton, QTabWidget,
-                             QToolButton, QVBoxLayout, QWidget)
+                             QHBoxLayout, QLabel, QMainWindow, QMenu,
+                             QMessageBox, QPushButton, QTabWidget, QToolButton,
+                             QVBoxLayout, QWidget)
 
 import scctool.settings
 import scctool.settings.config
@@ -21,7 +21,8 @@ from scctool.view.subLogos import SubwindowLogos
 from scctool.view.subMarkdown import SubwindowMarkdown
 from scctool.view.subMisc import SubwindowMisc
 from scctool.view.subStyles import SubwindowStyles
-from scctool.view.widgets import LedIndicator, MonitoredLineEdit, ProfileMenu
+from scctool.view.widgets import (LedIndicator, MatchComboBox,
+                                  MonitoredLineEdit, ProfileMenu)
 
 # create logger
 module_logger = logging.getLogger(__name__)
@@ -562,21 +563,9 @@ class MainWindow(QMainWindow):
             # Create first tab
             self.tab1.layout = QVBoxLayout()
 
-            self.le_url = QLineEdit()
-            self.le_url.setAlignment(Qt.AlignCenter)
-
-            self.le_url.setPlaceholderText("https://alpha.tl/match/3000")
+            self.le_url = MatchComboBox(self)
             self.le_url.returnPressed.connect(self.refresh_click)
 
-            completer = QCompleter(
-                ["https://alpha.tl/match/",
-                 "http://hdgame.net/en/tournaments/list/tournament/rstl-13/"],
-                self.le_url)
-            completer.setCaseSensitivity(Qt.CaseInsensitive)
-            completer.setCompletionMode(
-                QCompleter.UnfilteredPopupCompletion)
-            completer.setWrapAround(True)
-            self.le_url.setCompleter(completer)
             minWidth = self.scoreWidth + 2 * self.raceWidth + \
                 2 * self.mimumLineEditWidth + 4 * 6
             self.le_url.setMinimumWidth(minWidth)
@@ -986,7 +975,7 @@ class MainWindow(QMainWindow):
         QApplication.setOverrideCursor(
             Qt.WaitCursor)
         try:
-            url = self.le_url.text()
+            url = self.le_url.lineEdit().text()
             with self.tlock:
                 self.statusBar().showMessage(_('Reading {}...').format(url))
                 msg = self.controller.refreshData(url)

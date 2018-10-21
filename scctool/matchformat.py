@@ -161,3 +161,23 @@ class ProleagueFormat(MatchFormat):
         self._matchData.setURL(self._url)
         self._matchData.setLeague(self._name)
         self._matchData.writeJsonFile()
+
+
+class MatchFormatESL(MatchFormat):
+    """Interface definition"""
+
+    _name = "ESL SC2 Open Team League Autumn 2018"
+    _icon = "esl.ico"
+
+    def __init__(self, *args):
+        """Init match grabber."""
+        super().__init__(*args)
+        self._url = ("https://play.eslgaming.com/starcraft/global/sc2/open/"
+                     "league/all-kill-autumn-2018/")
+
+    def applyFormat(self):
+        self._matchData.setCustom(7, True, False)
+        self._matchData.setMinSets(4)
+        self._matchData.setURL(self._url)
+        self._matchData.setLeague(self._name)
+        self._matchData.writeJsonFile()
