@@ -63,7 +63,7 @@ class AligulacInterface:
     def predict_score(self, prediction):
         outcomes = prediction.get('outcomes')
         outcomes = sorted(outcomes,
-                          key = lambda i: i['prob'])
+                          key=lambda i: i['prob'])
         return outcomes.pop()
 
     @lru_cache(maxsize=32)
@@ -135,8 +135,8 @@ class AligulacThread(TasksThread):
 
                 self._websocket.sendData2Path(
                     'aligulac', "DATA",
-                    {'player1': player[0],
-                     'player2': player[1],
+                    {'player1': player1,
+                     'player2': player2,
                      'bestof': bestof,
                      'prob1': prob1,
                      'prob2': prob2,
