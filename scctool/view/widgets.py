@@ -782,7 +782,8 @@ class Completer(QCompleter):
         super().__init__(list, parent)
 
         self.setCaseSensitivity(Qt.CaseInsensitive)
-        self.setCompletionMode(QCompleter.PopupCompletion)
+        self.setCompletionMode(QCompleter.UnfilteredPopupCompletion)
+        self.setFilterMode(Qt.MatchContains)
         self.setWrapAround(False)
 
     def pathFromIndex(self, index):
@@ -1389,6 +1390,80 @@ class ProfileMenu(QMenu):
             finally:
                 QApplication.restoreOverrideCursor()
             return
+
+
+class MatchComboBox(QComboBox):
+    """Define QComboBox for the match url."""
+
+    returnPressed = pyqtSignal()
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setEditable(True)
+        self.lineEdit().setAlignment(Qt.AlignCenter)
+        self.lineEdit().setPlaceholderText("https://alpha.tl/match/3000")
+        self._alpha_icon = QIcon(scctool.settings.getResFile('alpha.png'))
+        self._rstl_icon = QIcon(scctool.settings.getResFile('rstl.png'))
+        self.addItem(self._alpha_icon, 'https://alpha.tl/match/3000')
+        self.setItemData(0, Qt.AlignCenter, Qt.TextAlignmentRole)
+        self.insertSeparator(1)
+        self.lineEdit().returnPressed.connect(self.returnPressed.emit)
+        self.activated.connect(self._handleActivated)
+
+    def setText(self, text):
+        self.setURL(text)
+
+    def _handleActivated(self, idx):
+        data = self.itemData(idx)
+        if not data:
+            data = self.itemText(idx)
+        self.setURL(data)
+
+    def _handleCompleterActivated(self, text):
+        if text in self._matches:
+            data = self._matches[text]
+        else:
+            data = text
+        self.setURL(data)
+
+    def updateItems(self, matches):
+        # completer = QCompleter(
+        #         ["https://alpha.tl/match/",
+        #          "http://hdgame.net/en/tournaments/list/tournament/rstl-13/"],
+        # self.le_url)
+        self.removeItems()
+        self._matches = matches
+        completer = QCompleter(
+            self._matches.keys(),
+            self.lineEdit())
+        completer.setFilterMode(Qt.MatchContains)
+        completer.setCaseSensitivity(Qt.CaseInsensitive)
+        completer.setCompletionMode(
+            QCompleter.PopupCompletion)
+        completer.setWrapAround(True)
+        completer.activated.connect(self._handleCompleterActivated)
+        self.setCompleter(completer)
+
+        for text, url in self._matches.items():
+            self.addItem(self._alpha_icon, text, url)
+
+    def removeItems(self):
+        for idx in range(2, self.count()):
+            self.removeItem(2)
+
+    def setURL(self, url):
+        lower_url = str(url).lower()
+        if(lower_url.find('alpha') != -1):
+            self.setItemIcon(0, self._alpha_icon)
+        elif(lower_url.find('hdgame') != -1):
+            self.setItemIcon(0, self._rstl_icon)
+        else:
+            self.setItemIcon(0, QIcon())
+        self.setItemText(0, url)
+        self.setCurrentIndex(0)
+
+    def text(self):
+        return self.lineEdit().text()
 
 
 class ScopeGroupBox(QGroupBox):

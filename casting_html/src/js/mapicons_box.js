@@ -321,7 +321,7 @@ function fillBox(i) {
     image.css("background-image", 'url("src/img/maps/' + mapdata['map_img'] + '")');
   }
   $(mapicon).find("div.opa").css('opacity', mapdata['opacity']);
-  $(mapicon).ready(function() {
+  $(document).ready(function() {
     $(mapicon).find(".text-fill").textfill({maxFontPixels: 80});
     if (i == length) {
       $(mapicon).ready(function() {

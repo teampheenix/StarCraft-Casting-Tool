@@ -1,6 +1,26 @@
 # Changelog
 
 
+## v2.4.1 (2018-10-21)
+
+### New
+
+* Added Custom Format for upcoming ESL SC2 Open Team League Autumn 2018, see https://play.eslgaming.com/starcraft/global/sc2/open/league/all-kill-autumn-2018/
+
+
+## v2.4.0 (2018-10-14)
+
+### New
+
+* MatchGrabber is now suggesting upcoming AlphaTL matches.
+
+* Added score and landscape mapicon style 'Continuous Red' created by Seireitei.
+
+### Changes
+
+* Removed 'Twitch Communites' as they are deprecated.
+
+
 ## v2.3.2 (2018-10-07)
 
 ### Fix
