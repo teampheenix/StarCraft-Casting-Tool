@@ -18,6 +18,10 @@
   box-sizing: border-box;
 }
 
+#content {
+  margin-top: 10px;
+}
+
 div.misc {
   position: absolute;
   width: 100%;
@@ -44,6 +48,7 @@ body {
   font-family: var(--font);
   text-shadow: 0 2px 4px rgba(0, 0, 0, .8), 0 8px 16px rgba(0, 0, 0, .6);
   color: white;
+  margin-top: 0px;
 }
 
 .winner {
