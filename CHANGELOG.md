@@ -1,6 +1,13 @@
 # Changelog
 
 
+## v2.4.2 (2018-11-04)
+
+### Fix
+
+* Fixed an issue where the top border of the StarCraft 2 score skin would be could off when using standard Custom CSS settings in OBS.
+
+
 ## v2.4.1 (2018-10-21)
 
 ### New
