@@ -836,8 +836,10 @@ class MainController:
             if num > 0:
                 self.aligulacThread.activate()
                 self.aligulacThread.receive_data('meta')
+                view.toogleAligulacTab(True)
             else:
                 self.aligulacThread.terminate()
+                view.toogleAligulacTab(False)
 
     def autoSetNextMap(self, idx=-1, send=True):
         if scctool.settings.config.parser.getboolean(

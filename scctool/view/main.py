@@ -51,7 +51,7 @@ class MainWindow(QMainWindow):
             self.createTabs()
             self.createMatchDataTabs()
             self.createHorizontalGroupBox()
-            self.createBackgroundTasksBox()
+            self.createLowerTabWidget()
 
             self.createMenuBar()
 
@@ -59,7 +59,7 @@ class MainWindow(QMainWindow):
             mainLayout.addWidget(self.tabs, 0)
             mainLayout.addWidget(self.matchDataTabWidget, 1)
             # mainLayout.addWidget(self.fromMatchDataBox, 1)
-            mainLayout.addWidget(self.backgroundTasksBox, 0)
+            mainLayout.addWidget(self.lowerTabWidget, 0)
             mainLayout.addWidget(self.horizontalGroupBox, 0)
 
             self.setWindowTitle(
@@ -800,11 +800,38 @@ class MainWindow(QMainWindow):
         except Exception as e:
             module_logger.exception("message")
 
-    def createBackgroundTasksBox(self):
+    def createLowerTabWidget(self):
+        """Create the tab widget at the bottom."""
+        try:
+            self.lowerTabWidget = QTabWidget()
+            self.createBackgroundTasksTab()
+            self.createAligulacTab()
+            self.lowerTabWidget.addTab(
+                self.backgroundTasksTab,
+                _("Background Tasks"))
+        except Exception as e:
+            module_logger.exception("message")
+
+    def toogleAligulacTab(self, active=True):
+        index = self.lowerTabWidget.indexOf(self.aligulacTab)
+        if index == -1 and active:
+            self.lowerTabWidget.addTab(
+                self.aligulacTab,
+                _("Aligulac Prediction"))
+        if index != -1 and not active:
+            self.lowerTabWidget.removeTab(index)
+
+    def createAligulacTab(self):
+        """Create widget to control the aligulac browser source."""
+        self.aligulacTab = QWidget()
+        layout = QGridLayout()
+        self.aligulacTab.setLayout(layout)
+
+    def createBackgroundTasksTab(self):
         """Create group box for background tasks."""
         try:
-            self.backgroundTasksBox = QGroupBox(
-                _("Background Tasks"))
+
+            self.backgroundTasksTab = QWidget()
 
             self.cb_autoUpdate = QCheckBox(
                 _("Auto Score Update"))
@@ -864,7 +891,7 @@ class MainWindow(QMainWindow):
             layout.addWidget(self.cb_autoToggleScore, 1, 1)
             layout.addWidget(self.cb_autoToggleProduction, 1, 2)
 
-            self.backgroundTasksBox.setLayout(layout)
+            self.backgroundTasksTab.setLayout(layout)
 
         except Exception as e:
             module_logger.exception("message")
