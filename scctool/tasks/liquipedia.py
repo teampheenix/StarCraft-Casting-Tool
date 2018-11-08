@@ -84,10 +84,13 @@ class LiquipediaGrabber:
         pass
         # print(image)
 
-    def get_map(self, map_name):
+    def get_map(self, map_name, retry=False):
         params = dict()
         params['action'] = "opensearch"
-        params['search'] = str(map_name).strip()
+        if retry:
+            params['search'] = str(map_name).strip() + ' LE'
+        else:
+            params['search'] = str(map_name).strip()
         params['limit'] = 1
         params['namespace'] = 0
 
@@ -108,10 +111,14 @@ class LiquipediaGrabber:
             content = data['parse']['text']['*']
             soup = BeautifulSoup(content, 'html.parser')
             map = LiquipediaMap(soup)
-            if not map.is_map():
-                raise MapNotFound
-            else:
+            if map.is_map():
                 return map
+            elif not retry:
+                return self.get_map(map_name, retry=True)
+            else:
+                raise MapNotFound
+        elif not retry:
+            return self.get_map(map_name, retry=True)
         else:
             raise MapNotFound
 
