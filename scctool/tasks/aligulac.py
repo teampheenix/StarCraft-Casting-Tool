@@ -24,7 +24,7 @@ class AligulacInterface:
     def search_player(self, name, race='R'):
         race = race[:1].upper()
         url = self.base_url + '/search/json/'
-        r = requests.get(url, params={'q': name})
+        r = requests.get(url, params={'q': name, 'search_for': 'players'})
         data = r.json().get('players', [])
         return self.match_player(data, name, race)
 
