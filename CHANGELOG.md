@@ -1,6 +1,17 @@
 # Changelog
 
 
+## v2.4.3 (2018-11-11)
+
+### New
+
+* Playernames can now be assigned to Aligulac IDs in the Misc Settings to improve reliability of the Aligulac Prediction.
+
+### Changes
+
+* Improved automatic player selection of Aligulac Prediction.
+
+
 ## v2.4.2 (2018-11-04)
 
 ### Fix
