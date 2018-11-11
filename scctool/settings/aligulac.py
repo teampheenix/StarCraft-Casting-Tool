@@ -65,6 +65,9 @@ class AligulacManager(QObject):
             del self.__player2id[name]
             self.dataChanged.emit()
 
+    def getList(self):
+        return dict(self.__player2id)
+
     def available(self, name):
         return str(name).strip() in self.__player2id
 
