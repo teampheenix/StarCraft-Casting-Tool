@@ -554,8 +554,9 @@ class SubwindowMisc(QWidget):
         self.pb_removeMap = QPushButton(_("Remove"))
         self.pb_removeMap.clicked.connect(self.deleteMap)
 
-        self.sc_removeMap = QShortcut(QKeySequence("Del"), self)
+        self.sc_removeMap = QShortcut(QKeySequence("Del"), self.maplist)
         self.sc_removeMap.setAutoRepeat(False)
+        self.sc_removeMap.setContext(Qt.WidgetWithChildrenShortcut)
         self.sc_removeMap.activated.connect(self.deleteMap)
 
         box = QWidget()

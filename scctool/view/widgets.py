@@ -565,7 +565,7 @@ class AliasTreeView(QTreeWidget):
 
     def __init__(self, parent):
         """Init table list."""
-        super().__init__()
+        super().__init__(parent)
         self.parent = parent
         self.items = dict()
         self.header().hide()
@@ -575,15 +575,15 @@ class AliasTreeView(QTreeWidget):
         self.setContextMenuPolicy(Qt.CustomContextMenu)
         self.customContextMenuRequested.connect(self.openMenu)
 
-        shortcut = QShortcut(QKeySequence("DEL"), self)
-        shortcut.setAutoRepeat(False)
-        shortcut.setContext(Qt.WidgetWithChildrenShortcut)
-        shortcut.activated.connect(self.delClicked)
+        self.shortcut1 = QShortcut(QKeySequence("DEL"), self)
+        self.shortcut1.setAutoRepeat(False)
+        self.shortcut1.setContext(Qt.WidgetWithChildrenShortcut)
+        self.shortcut1.activated.connect(self.delClicked)
 
-        shortcut = QShortcut(QKeySequence("Enter"), self)
-        shortcut.setAutoRepeat(False)
-        shortcut.setContext(Qt.WidgetWithChildrenShortcut)
-        shortcut.activated.connect(self.enterClicked)
+        self.shortcut2 = QShortcut(QKeySequence("Enter"), self)
+        self.shortcut2.setAutoRepeat(False)
+        self.shortcut2.setContext(Qt.WidgetWithChildrenShortcut)
+        self.shortcut2.activated.connect(self.enterClicked)
 
     def insertAliasList(self, name, aliasList):
         name = str(name).strip()
