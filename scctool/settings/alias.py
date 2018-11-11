@@ -1,4 +1,4 @@
-"""Provide history manager for SCCTool."""
+"""Provide alias manager for SCCTool."""
 import json
 import logging
 

@@ -112,16 +112,18 @@ class AligulacInterface:
 class AligulacThread(TasksThread):
     """Calls Aligulac to predict match if browser sources is connected."""
 
-    def __init__(self, matchControl, websocket):
+    def __init__(self, matchControl, websocket, aligulacManager):
         """Init the thread."""
         super().__init__()
         self._matchControl = matchControl
         self._websocket = websocket
+        self._manager = aligulacManager
         self._aligulac = AligulacInterface(
             scctool.settings.safe.get('aligulac-api-key'))
         self._q = queue.Queue()
         self._matchControl.dataChanged.connect(self.receive_data)
         self._matchControl.metaChanged.connect(self.receive_data)
+        self._manager.dataChanged.connect(self.receive_data)
         self.addTask('process', self.__processTask)
 
     def activate(self):
@@ -149,7 +151,8 @@ class AligulacThread(TasksThread):
                     if 'TBD' in player:
                         raise ValueError('Playername is TBD')
                     prediction = self._aligulac.predict_match(
-                        player[0], player[1],
+                        self._manager.translate(player[0]),
+                        self._manager.translate(player[1]),
                         race[0], race[1],
                         bestof,
                         score[0], score[1])
