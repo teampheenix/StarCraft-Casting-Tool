@@ -590,6 +590,7 @@ class MainController:
         """and toggle score accordingly."""
         try:
             alias = self.aliasManager.translatePlayer
+            bo = self.matchControl.activeMatch().getBestOf()
 
             for i in range(self.matchControl.activeMatch().getNoSets()):
                 found, inorder = newSC2MatchData.compare_returnOrder(
@@ -609,7 +610,6 @@ class MainController:
                         break
             if found:
                 score = self.matchControl.activeMatch().getScore()
-                bo = self.matchControl.activeMatch().getBestOf()
                 if swap:
                     inorder = not inorder
 
