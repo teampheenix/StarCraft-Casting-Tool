@@ -6,10 +6,11 @@ import markdown2
 from PyQt5.QtCore import QSettings, Qt
 from PyQt5.QtGui import QIcon, QPalette
 from PyQt5.QtWidgets import (QAction, QApplication, QCheckBox, QComboBox,
-                             QCompleter, QFormLayout, QGridLayout, QGroupBox,
-                             QHBoxLayout, QLabel, QMainWindow, QMenu,
-                             QMessageBox, QPushButton, QTabWidget, QToolButton,
-                             QVBoxLayout, QWidget)
+                             QCompleter, QDateTimeEdit, QFormLayout,
+                             QGridLayout, QGroupBox, QHBoxLayout, QLabel,
+                             QLineEdit, QMainWindow, QMenu, QMessageBox,
+                             QPushButton, QRadioButton, QTabWidget, QTimeEdit,
+                             QToolButton, QVBoxLayout, QWidget)
 
 import scctool.settings
 import scctool.settings.config
@@ -805,27 +806,41 @@ class MainWindow(QMainWindow):
         try:
             self.lowerTabWidget = QTabWidget()
             self.createBackgroundTasksTab()
-            self.createAligulacTab()
+            self.createCountdownTab()
             self.lowerTabWidget.addTab(
                 self.backgroundTasksTab,
                 _("Background Tasks"))
+            self.lowerTabWidget.addTab(
+                self.CountdownTab,
+                _("Countdown"))
         except Exception as e:
             module_logger.exception("message")
 
-    def toogleAligulacTab(self, active=True):
-        index = self.lowerTabWidget.indexOf(self.aligulacTab)
-        if index == -1 and active:
-            self.lowerTabWidget.addTab(
-                self.aligulacTab,
-                _("Aligulac Prediction"))
-        if index != -1 and not active:
-            self.lowerTabWidget.removeTab(index)
-
-    def createAligulacTab(self):
+    def createCountdownTab(self):
         """Create widget to control the aligulac browser source."""
-        self.aligulacTab = QWidget()
+        self.CountdownTab = QWidget()
         layout = QGridLayout()
-        self.aligulacTab.setLayout(layout)
+        self.rbCountStatic = QRadioButton(
+            _("Static Countdown to date:"), self.CountdownTab)
+        layout.addWidget(self.rbCountStatic, 0, 0)
+        self.rbCountDynamic = QRadioButton(
+            _("Dynamic Countdown duration:"), self.CountdownTab)
+        layout.addWidget(self.rbCountDynamic, 1, 0)
+        layout.addWidget(QDateTimeEdit(), 0, 1)
+        self.teCoundTowards = QTimeEdit()
+        self.teCoundTowards.setDisplayFormat("HH 'h' mm 'm' ss 's'")
+        layout.addWidget(self.teCoundTowards, 1, 1)
+        label = QLabel(_('Event description:'))
+        layout.addWidget(label, 0, 2)
+        layout.addWidget(QLineEdit(), 0, 3, 1, 2)
+        layout.addWidget(QCheckBox(
+            _('Restart counter'
+              ' when source becomes active')), 1, 2, 1, 2)
+        layout.addWidget(QPushButton(
+            _('Start Countdown')), 1, 4)
+        layout.setColumnStretch(2, 1)
+        layout.setColumnStretch(3, 2)
+        self.CountdownTab.setLayout(layout)
 
     def createBackgroundTasksTab(self):
         """Create group box for background tasks."""
