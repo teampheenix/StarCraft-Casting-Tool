@@ -6,15 +6,15 @@ import markdown2
 from PyQt5.QtCore import QSettings, Qt
 from PyQt5.QtGui import QIcon, QPalette
 from PyQt5.QtWidgets import (QAction, QApplication, QCheckBox, QComboBox,
-                             QCompleter, QDateTimeEdit, QFormLayout,
-                             QGridLayout, QGroupBox, QHBoxLayout, QLabel,
-                             QLineEdit, QMainWindow, QMenu, QMessageBox,
-                             QPushButton, QRadioButton, QTabWidget, QTimeEdit,
-                             QToolButton, QVBoxLayout, QWidget)
+                             QCompleter, QFormLayout, QGridLayout, QGroupBox,
+                             QHBoxLayout, QLabel, QMainWindow, QMenu,
+                             QMessageBox, QPushButton, QTabWidget, QToolButton,
+                             QVBoxLayout, QWidget)
 
 import scctool.settings
 import scctool.settings.config
 from scctool.settings.client_config import ClientConfig
+from scctool.view.countdown import CountdownWidget
 from scctool.view.matchdataview import MatchDataWidget
 from scctool.view.subBrowserSources import SubwindowBrowserSources
 from scctool.view.subConnections import SubwindowConnections
@@ -806,41 +806,15 @@ class MainWindow(QMainWindow):
         try:
             self.lowerTabWidget = QTabWidget()
             self.createBackgroundTasksTab()
-            self.createCountdownTab()
+            self.countdownTab = CountdownWidget(self)
             self.lowerTabWidget.addTab(
                 self.backgroundTasksTab,
                 _("Background Tasks"))
             self.lowerTabWidget.addTab(
-                self.CountdownTab,
+                self.countdownTab,
                 _("Countdown"))
         except Exception as e:
             module_logger.exception("message")
-
-    def createCountdownTab(self):
-        """Create widget to control the aligulac browser source."""
-        self.CountdownTab = QWidget()
-        layout = QGridLayout()
-        self.rbCountStatic = QRadioButton(
-            _("Static Countdown to date:"), self.CountdownTab)
-        layout.addWidget(self.rbCountStatic, 0, 0)
-        self.rbCountDynamic = QRadioButton(
-            _("Dynamic Countdown duration:"), self.CountdownTab)
-        layout.addWidget(self.rbCountDynamic, 1, 0)
-        layout.addWidget(QDateTimeEdit(), 0, 1)
-        self.teCoundTowards = QTimeEdit()
-        self.teCoundTowards.setDisplayFormat("HH 'h' mm 'm' ss 's'")
-        layout.addWidget(self.teCoundTowards, 1, 1)
-        label = QLabel(_('Event description:'))
-        layout.addWidget(label, 0, 2)
-        layout.addWidget(QLineEdit(), 0, 3, 1, 2)
-        layout.addWidget(QCheckBox(
-            _('Restart counter'
-              ' when source becomes active')), 1, 2, 1, 2)
-        layout.addWidget(QPushButton(
-            _('Start Countdown')), 1, 4)
-        layout.setColumnStretch(2, 1)
-        layout.setColumnStretch(3, 2)
-        self.CountdownTab.setLayout(layout)
 
     def createBackgroundTasksTab(self):
         """Create group box for background tasks."""

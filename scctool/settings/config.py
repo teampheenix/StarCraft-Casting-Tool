@@ -197,6 +197,12 @@ def setDefaultConfigAll():
     setDefaultConfig("Mapstats", "autoset_next_map", "True")
     setDefaultConfig("Mapstats", "mark_played", "False")
 
+    setDefaultConfig("Countdown", 'restart', 'True')
+    setDefaultConfig("Countdown", 'description', 'Stream will be back in')
+    setDefaultConfig("Countdown", 'duration', '00:05:00')
+    setDefaultConfig("Countdown", 'datetime', '2018-11-18 20:00')
+    setDefaultConfig("Countdown", 'static', 'False')
+
 
 def renameConfigOptions():
     """Delete and rename old config options."""
