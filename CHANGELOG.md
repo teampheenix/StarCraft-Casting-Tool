@@ -1,6 +1,15 @@
 # Changelog
 
 
+## v2.5.0 (2018-11-18)
+
+### New
+
+* Added StarCraft2 skin/style for Countdown.
+
+* New Countdown Browser Source!
+
+
 ## v2.4.3 (2018-11-11)
 
 ### New
