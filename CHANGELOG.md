@@ -1,6 +1,13 @@
 # Changelog
 
 
+## v2.5.1 (2018-11-18)
+
+### Changes
+
+* Countdown will now display 'soon™' or a custom text once the countdown is finished - it can be changed in config.ini.
+
+
 ## v2.5.0 (2018-11-18)
 
 ### New

@@ -241,6 +241,8 @@ class WebsocketThread(QThread):
                 'Countdown', 'datetime')
             data['duration'] = scctool.settings.config.parser.get(
                 'Countdown', 'duration')
+            data['replacement'] = scctool.settings.config.parser.get(
+                'Countdown', 'replacement')
             self.sendData2WS(websocket, "DATA", data)
 
         while True:
