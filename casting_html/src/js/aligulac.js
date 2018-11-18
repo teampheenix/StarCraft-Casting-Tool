@@ -105,6 +105,8 @@ function connectWebsocket() {
       if (dataChanged(jsonObject.data)) processData();
     } else if (jsonObject.event == 'CHANGE_STYLE') {
       controller.setStyle(jsonObject.data.file);
+    } else if (jsonObject.event == 'CHANGE_FONT') {
+      controller.setFont(jsonObject.data.font);
     }
   }
 

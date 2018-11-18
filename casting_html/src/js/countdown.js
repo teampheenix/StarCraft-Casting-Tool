@@ -135,6 +135,8 @@ function connectWebsocket() {
       data.restart = jsonObject.data;
       if(data.restart) startCounter();
       storeData();
+    } else if (jsonObject.event == 'CHANGE_FONT') {
+      controller.setFont(jsonObject.data.font);
     }
   }
 

@@ -340,9 +340,10 @@ class WebsocketThread(QThread):
 
     def changeFont(self, path=None, font=None, websocket=None):
         valid_paths = ['mapstats', 'score',
-                       'mapicons_box', 'mapicons_landscape']
+                       'mapicons_box', 'mapicons_landscape', 'countdown']
         if path is None:
             for path in valid_paths:
+                print(path, font)
                 self.changeFont(path, font)
             return
         if path in valid_paths:
