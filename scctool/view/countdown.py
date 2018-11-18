@@ -13,10 +13,10 @@ module_logger = logging.getLogger(__name__)
 class CountdownWidget(QWidget):
     """Define custom widget as countdown control panel."""
 
-    def __init__(self, parent=None):
+    def __init__(self, ctrl, parent=None):
         """Init completer."""
         super().__init__(parent)
-
+        self.controller = ctrl
         self.createLayout()
         self.loadSettings()
         self.connect()
@@ -29,6 +29,7 @@ class CountdownWidget(QWidget):
         layout.addWidget(self.rb_static, 0, 0)
         self.rb_dynamic = QRadioButton(
             _("Dynamic Countdown duration:"), self)
+        self.rb_dynamic.setChecked(True)
         self.rb_dynamic.toggled.connect(self.toggleRadio)
         layout.addWidget(self.rb_dynamic, 1, 0)
         self.te_datetime = QDateTimeEdit()
@@ -42,7 +43,7 @@ class CountdownWidget(QWidget):
         self.le_desc.setAlignment(Qt.AlignCenter)
         layout.addWidget(self.le_desc, 0, 3, 1, 2)
         self.cb_restart = QCheckBox(
-            _('Restart counter when source becomes active'))
+            _('Restart countdown when source becomes active'))
         layout.addWidget(self.cb_restart, 1, 2, 1, 2)
         self.pb_start = QPushButton(" " + _('Start Countdown') + " ")
         layout.addWidget(self.pb_start, 1, 4)
@@ -89,24 +90,50 @@ class CountdownWidget(QWidget):
         self.te_datetime.dateTimeChanged.connect(self.changed_datetime)
         self.te_duration.timeChanged.connect(self.changed_duration)
         self.rb_static.toggled.connect(self.changed_static)
+        self.pb_start.pressed.connect(self.start_pressed)
 
     def changed_description(self):
         desc = self.le_desc.text().strip()
         scctool.settings.config.parser.set('Countdown', 'description', desc)
+        self.controller.websocketThread.sendData2Path(
+            'countdown', "DESC", desc)
 
     def changed_restart(self):
         restart = self.cb_restart.isChecked()
         scctool.settings.config.parser.set(
             'Countdown', 'restart', str(restart))
+        self.controller.websocketThread.sendData2Path(
+            'countdown', "RESTART", restart)
 
     def changed_datetime(self, time):
         datetime = time.toString('yyyy-MM-dd HH:mm')
         scctool.settings.config.parser.set('Countdown', 'datetime', datetime)
+        self.sendData()
 
     def changed_duration(self, time):
         duration = time.toString('HH:mm:ss')
         scctool.settings.config.parser.set('Countdown', 'duration', duration)
+        self.sendData()
 
     def changed_static(self):
         static = self.rb_static.isChecked()
         scctool.settings.config.parser.set('Countdown', 'static', str(static))
+        self.sendData()
+
+    def start_pressed(self):
+        self.controller.websocketThread.sendData2Path('countdown', 'START')
+
+    def sendData(self):
+        data = {}
+        data['static'] = scctool.settings.config.parser.getboolean(
+            'Countdown', 'static')
+        data['desc'] = scctool.settings.config.parser.get(
+            'Countdown', 'description')
+        data['restart'] = scctool.settings.config.parser.getboolean(
+            'Countdown', 'restart')
+        data['datetime'] = scctool.settings.config.parser.get(
+            'Countdown', 'datetime')
+        data['duration'] = scctool.settings.config.parser.get(
+            'Countdown', 'duration')
+        self.controller.websocketThread.sendData2Path(
+            'countdown', "DATA", data)

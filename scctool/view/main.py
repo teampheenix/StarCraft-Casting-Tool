@@ -332,6 +332,8 @@ class MainWindow(QMainWindow):
                               'file': 'ui_logo_2.html'},
                              {'name': _('Aligulac (only 1vs1)'),
                               'file': 'aligulac.html'},
+                             {'name': _('Countdown'),
+                              'file': 'countdown.html'},
                              {'name': _('League (ALphaTL && RSTL only)'),
                               'file': 'league.html'},
                              {'name': _('Matchbanner (AlphaTL)'),
@@ -806,7 +808,7 @@ class MainWindow(QMainWindow):
         try:
             self.lowerTabWidget = QTabWidget()
             self.createBackgroundTasksTab()
-            self.countdownTab = CountdownWidget(self)
+            self.countdownTab = CountdownWidget(self.controller, self)
             self.lowerTabWidget.addTab(
                 self.backgroundTasksTab,
                 _("Background Tasks"))

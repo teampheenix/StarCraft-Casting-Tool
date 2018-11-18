@@ -22,7 +22,8 @@ class WebsocketThread(QThread):
     hooked_keys = dict()
     socketConnectionChanged = pyqtSignal(int, str)
     valid_scopes = ['score', 'mapicons_box_[1-3]', 'mapicons_landscape_[1-3]',
-                    'intro', 'mapstats', 'ui_logo_[1-3]', 'aligulac']
+                    'intro', 'mapstats', 'ui_logo_[1-3]', 'aligulac',
+                    'countdown']
     mapicon_sets = dict()
     scopes = dict()
     intro_state = ''
@@ -228,6 +229,19 @@ class WebsocketThread(QThread):
                 processedData[idx + 1] = data[idx + 1]
                 self.mapicon_sets[path].add(idx + 1)
             self.sendData2WS(websocket, 'DATA', processedData)
+        elif primary_scope == 'countdown':
+            data = {}
+            data['static'] = scctool.settings.config.parser.getboolean(
+                'Countdown', 'static')
+            data['desc'] = scctool.settings.config.parser.get(
+                'Countdown', 'description')
+            data['restart'] = scctool.settings.config.parser.getboolean(
+                'Countdown', 'restart')
+            data['datetime'] = scctool.settings.config.parser.get(
+                'Countdown', 'datetime')
+            data['duration'] = scctool.settings.config.parser.get(
+                'Countdown', 'duration')
+            self.sendData2WS(websocket, "DATA", data)
 
         while True:
             try:
@@ -356,7 +370,7 @@ class WebsocketThread(QThread):
         self.sendData2Path('mapstats', 'SELECT_MAP', {
                            'map': str(map), 'played': played})
 
-    def sendData2Path(self, path, event, input_data, state=''):
+    def sendData2Path(self, path, event, input_data=None, state=''):
         if not state:
             state = str(uuid4())
 

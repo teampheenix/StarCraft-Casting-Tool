@@ -178,6 +178,7 @@ def setDefaultConfigAll():
     setDefaultConfig("Style", "aligulac", "Default")
     setDefaultConfig("Style", "use_custom_font", "False")
     setDefaultConfig("Style", "custom_font", "Verdana")
+    setDefaultConfig("Style", "countdown", "Minimal")
 
     setDefaultConfig("Intros", "hotkey_player1", "")
     setDefaultConfig("Intros", "hotkey_player2", "")
