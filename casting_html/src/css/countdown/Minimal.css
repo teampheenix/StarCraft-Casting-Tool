@@ -7,3 +7,22 @@
 body {
   font-family: var(--font);
 }
+
+div.container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+span{
+  font-size: 30px;
+  color: white;
+  --outline-size: 1.0px;
+  text-shadow: 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black, 0px 0px var(--outline-size) black;
+  -webkit-font-smoothing: antialiased;
+}
+
+div.countdown, div.description{
+  padding: 5px;
+}
