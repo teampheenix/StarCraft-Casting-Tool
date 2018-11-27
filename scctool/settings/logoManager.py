@@ -15,8 +15,7 @@ from PyQt5.QtGui import QPixmap
 from scctool.settings import (casting_html_dir, getAbsPath, getJsonFile,
                               logosDir)
 
-module_logger = logging.getLogger(
-    'scctool.settings.logoManager')  # create logger
+module_logger = logging.getLogger(__name__)
 
 
 class LogoManager:

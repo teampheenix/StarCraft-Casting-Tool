@@ -203,6 +203,21 @@ class SubwindowStyles(QWidget):
         except Exception as e:
             module_logger.exception("message")
 
+        try:
+            container = QHBoxLayout()
+            self.qb_countdownStyle = StyleComboBox(
+                scctool.settings.casting_html_dir + "/src/css/countdown",
+                "countdown")
+            self.qb_countdownStyle.connect2WS(self.controller, 'countdown')
+            button = QPushButton(_("Show in Browser"))
+            button.clicked.connect(lambda: self.openHTML(
+                scctool.settings.casting_html_dir + "/countdown.html"))
+            container.addWidget(self.qb_countdownStyle)
+            container.addWidget(button)
+            layout.addRow(QLabel(_("Countdown:")), container)
+        except Exception as e:
+            module_logger.exception("message")
+
         layout.addRow(QLabel(''))
         stylesDisc = _(
             'StarCraft Casting Tools allows you to make your own skins/styles'

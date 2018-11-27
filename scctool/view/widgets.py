@@ -559,13 +559,127 @@ class IconPushButton(QPushButton):
         qp.end()
 
 
+class AligulacTreeView(QTreeWidget):
+
+    def __init__(self, parent, manager):
+        super().__init__(parent)
+        self.parent = parent
+        self.manager = manager
+        self.items = dict()
+        self.setAnimated(True)
+        self.headerItem().setText(0, "Playername")
+        self.headerItem().setText(1, "Aligluac ID")
+
+        self.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.customContextMenuRequested.connect(self.openMenu)
+
+        self._insertData(self.manager.getList())
+
+        self.shortcut1 = QShortcut(QKeySequence("DEL"), self)
+        self.shortcut1.setAutoRepeat(False)
+        self.shortcut1.setContext(Qt.WidgetWithChildrenShortcut)
+        self.shortcut1.activated.connect(self.removeSelected)
+
+        self.shortcut2 = QShortcut(QKeySequence("Return"), self)
+        self.shortcut2.setAutoRepeat(False)
+        self.shortcut2.setContext(Qt.WidgetWithChildrenShortcut)
+        self.shortcut2.activated.connect(self.editSelected)
+
+    def _insertData(self, data):
+        for player, id in data.items():
+            self.items[player] = QTreeWidgetItem(
+                self, [player, str(id)])
+
+        self.sortItems(0, Qt.AscendingOrder)
+
+    def insertItem(self, name, id):
+        name = str(name).strip()
+        if name in self.items:
+            self.takeTopLevelItem(self.indexOfTopLevelItem(self.items[name]))
+        self.manager.addID(name, id)
+        self.items[name] = QTreeWidgetItem(
+            self, [name, str(id)])
+
+        self.sortItems(0, Qt.AscendingOrder)
+        self.setCurrentItem(self.items[name])
+        self.setFocus()
+
+    def removeItem(self, name):
+        try:
+            self.takeTopLevelItem(self.indexOfTopLevelItem(self.items[name]))
+            self.manager.removeID(name)
+            del self.items[name]
+        except KeyError:
+            pass
+
+    def removeSelected(self):
+        indexes = self.selectedIndexes()
+
+        if len(indexes) > 0:
+            level = 0
+            index = indexes[0]
+            text = self.itemFromIndex(index).text(0)
+            while index.parent().isValid():
+                index = index.parent()
+                level += 1
+
+            if level == 0:
+                self.removeItem(text)
+
+    def editSelected(self):
+        indexes = self.selectedIndexes()
+        name = ""
+        id = 1
+        if len(indexes) > 0:
+            index = indexes[0]
+            name = self.itemFromIndex(index).text(0)
+            id = int(self.itemFromIndex(index).text(1))
+        self.parent.addAligulacID(name, id)
+
+    def openMenu(self, position):
+        indexes = self.selectedIndexes()
+
+        if len(indexes) > 0:
+            level = 0
+            index = indexes[0]
+            text = self.itemFromIndex(index).text(0)
+            id = int(self.itemFromIndex(index).text(1))
+            while index.parent().isValid():
+                index = index.parent()
+                level += 1
+
+            menu = QMenu()
+            if level == 0:
+                act1 = QAction(_("Add Entry"))
+                act1.triggered.connect(
+                    lambda x:
+                        self.parent.addAligulacID())
+                menu.addAction(act1)
+                act2 = QAction(_("Edit Entry"))
+                act2.triggered.connect(
+                    lambda x, text=text, id=id:
+                        self.parent.addAligulacID(text, id))
+                menu.addAction(act2)
+                act3 = QAction(_("Remove Entry"))
+                act3.triggered.connect(
+                    lambda x, text=text: self.removeItem(text))
+                menu.addAction(act3)
+                act4 = QAction(_("Open on Aligulac.com"))
+                act4.triggered.connect(
+                    lambda x, id=id: self.parent.controller.openURL(
+                        "http://aligulac.com/players/{}".format(id)))
+                menu.addAction(act4)
+
+            menu.exec_(self.viewport().mapToGlobal(position))
+
+
 class AliasTreeView(QTreeWidget):
 
     aliasRemoved = pyqtSignal(str, str)
 
     def __init__(self, parent):
         """Init table list."""
-        super().__init__()
+        super().__init__(parent)
         self.parent = parent
         self.items = dict()
         self.header().hide()
@@ -575,15 +689,15 @@ class AliasTreeView(QTreeWidget):
         self.setContextMenuPolicy(Qt.CustomContextMenu)
         self.customContextMenuRequested.connect(self.openMenu)
 
-        shortcut = QShortcut(QKeySequence("DEL"), self)
-        shortcut.setAutoRepeat(False)
-        shortcut.setContext(Qt.WidgetWithChildrenShortcut)
-        shortcut.activated.connect(self.delClicked)
+        self.shortcut1 = QShortcut(QKeySequence("DEL"), self)
+        self.shortcut1.setAutoRepeat(False)
+        self.shortcut1.setContext(Qt.WidgetWithChildrenShortcut)
+        self.shortcut1.activated.connect(self.delClicked)
 
-        shortcut = QShortcut(QKeySequence("Enter"), self)
-        shortcut.setAutoRepeat(False)
-        shortcut.setContext(Qt.WidgetWithChildrenShortcut)
-        shortcut.activated.connect(self.enterClicked)
+        self.shortcut2 = QShortcut(QKeySequence("Return"), self)
+        self.shortcut2.setAutoRepeat(False)
+        self.shortcut2.setContext(Qt.WidgetWithChildrenShortcut)
+        self.shortcut2.activated.connect(self.enterClicked)
 
     def insertAliasList(self, name, aliasList):
         name = str(name).strip()
@@ -782,7 +896,8 @@ class Completer(QCompleter):
         super().__init__(list, parent)
 
         self.setCaseSensitivity(Qt.CaseInsensitive)
-        self.setCompletionMode(QCompleter.PopupCompletion)
+        self.setCompletionMode(QCompleter.UnfilteredPopupCompletion)
+        self.setFilterMode(Qt.MatchContains)
         self.setWrapAround(False)
 
     def pathFromIndex(self, index):
@@ -1389,6 +1504,80 @@ class ProfileMenu(QMenu):
             finally:
                 QApplication.restoreOverrideCursor()
             return
+
+
+class MatchComboBox(QComboBox):
+    """Define QComboBox for the match url."""
+
+    returnPressed = pyqtSignal()
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setEditable(True)
+        self.lineEdit().setAlignment(Qt.AlignCenter)
+        self.lineEdit().setPlaceholderText("https://alpha.tl/match/3000")
+        self._alpha_icon = QIcon(scctool.settings.getResFile('alpha.png'))
+        self._rstl_icon = QIcon(scctool.settings.getResFile('rstl.png'))
+        self.addItem(self._alpha_icon, 'https://alpha.tl/match/3000')
+        self.setItemData(0, Qt.AlignCenter, Qt.TextAlignmentRole)
+        self.insertSeparator(1)
+        self.lineEdit().returnPressed.connect(self.returnPressed.emit)
+        self.activated.connect(self._handleActivated)
+
+    def setText(self, text):
+        self.setURL(text)
+
+    def _handleActivated(self, idx):
+        data = self.itemData(idx)
+        if not data:
+            data = self.itemText(idx)
+        self.setURL(data)
+
+    def _handleCompleterActivated(self, text):
+        if text in self._matches:
+            data = self._matches[text]
+        else:
+            data = text
+        self.setURL(data)
+
+    def updateItems(self, matches):
+        # completer = QCompleter(
+        #         ["https://alpha.tl/match/",
+        #          "http://hdgame.net/en/tournaments/list/tournament/rstl-13/"],
+        # self.le_url)
+        self.removeItems()
+        self._matches = matches
+        completer = QCompleter(
+            self._matches.keys(),
+            self.lineEdit())
+        completer.setFilterMode(Qt.MatchContains)
+        completer.setCaseSensitivity(Qt.CaseInsensitive)
+        completer.setCompletionMode(
+            QCompleter.PopupCompletion)
+        completer.setWrapAround(True)
+        completer.activated.connect(self._handleCompleterActivated)
+        self.setCompleter(completer)
+
+        for text, url in self._matches.items():
+            self.addItem(self._alpha_icon, text, url)
+
+    def removeItems(self):
+        for idx in range(2, self.count()):
+            self.removeItem(2)
+
+    def setURL(self, url):
+        lower_url = str(url).lower()
+        if(lower_url.find('alpha') != -1):
+            self.setItemIcon(0, self._alpha_icon)
+        elif(lower_url.find('hdgame') != -1):
+            self.setItemIcon(0, self._rstl_icon)
+        else:
+            self.setItemIcon(0, QIcon())
+        self.setItemText(0, url)
+        self.setCurrentIndex(0)
+
+    def text(self):
+        return self.lineEdit().text()
 
 
 class ScopeGroupBox(QGroupBox):

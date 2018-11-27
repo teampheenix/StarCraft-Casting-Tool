@@ -2,8 +2,6 @@ var socket = null;
 var isopen = false;
 var reconnectIntervalMs = 5000;
 var data = {};
-var font = "DEFAULT";
-var cssFile = "";
 var padding = "2px";
 var tweens = {};
 var tweenInitial = new TimelineMax();
@@ -22,18 +20,13 @@ function init() {
 
 function storeData(scope = null) {
   if (scope == null || scope == "data") controller.storeData('data', data, true);
-  if (scope == null || scope == "font") controller.storeData('font', font);
 }
 
 function loadStoredData() {
   try {
     var storage = window.localStorage;
     data = controller.loadData('data', true);
-    font = controller.loadData('font');
-    try {
-      setFont(font);
-    } catch (e) {}
-    setPadding(loadData('padding') || '2px');
+    setPadding(controller.loadData('padding') || '2px');
   } catch (e) {}
 }
 
@@ -60,7 +53,7 @@ function connectWebsocket() {
     } else if (jsonObject.event == 'CHANGE_MAP') {
       changeMap(jsonObject.data.icon, jsonObject.data.map, jsonObject.data.map_img);
     } else if (jsonObject.event == 'CHANGE_FONT') {
-      setFont(jsonObject.data.font);
+      controller.setFont(jsonObject.data.font);
     } else if (jsonObject.event == 'CHANGE_PADDING') {
       setPadding(jsonObject.data.padding);
     } else if (jsonObject.event == 'DATA') {
@@ -247,16 +240,6 @@ function setPadding(newPadding) {
   }
 }
 
-function setFont(newFont) {
-  font = newFont.trim();
-  if (font == 'DEFAULT') {
-    document.documentElement.style.removeProperty('--font');
-  } else {
-    document.documentElement.style.setProperty('--font', font);
-  }
-  storeData("font");
-  $('#container').find(".text-fill").textfill({maxFontPixels: 80});
-}
 
 function handleData(force = true) {
   if (initNeeded) {
@@ -322,7 +305,7 @@ function fillBox(i) {
     image.css("background-image", 'url("src/img/maps/' + mapdata['map_img'] + '")');
   }
   $(mapicon).find("div.opa").css('opacity', mapdata['opacity']);
-  $(mapicon).ready(function() {
+  $(document).ready(function() {
     $(mapicon).find(".text-fill").textfill({maxFontPixels: 80});
     if (i == length) {
       $(mapicon).ready(function() {

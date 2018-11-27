@@ -1,11 +1,10 @@
-"""Provide history manager for SCCTool."""
+"""Provide alias manager for SCCTool."""
 import json
 import logging
 
 from scctool.settings import getJsonFile
 
-module_logger = logging.getLogger(
-    'scctool.settings.alias')  # create logger
+module_logger = logging.getLogger(__name__)
 
 
 class AliasManager:

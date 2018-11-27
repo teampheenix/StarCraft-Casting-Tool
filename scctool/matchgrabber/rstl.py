@@ -2,6 +2,7 @@
 
 import logging
 
+import scctool.settings
 from scctool.matchgrabber.custom import MatchGrabber as MatchGrabberParent
 
 # create logger

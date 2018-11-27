@@ -1,6 +1,60 @@
 # Changelog
 
 
+## v2.5.1 (2018-11-18)
+
+### Changes
+
+* Countdown will now display 'soon™' or a custom text once the countdown is finished - it can be changed in config.ini.
+
+
+## v2.5.0 (2018-11-18)
+
+### New
+
+* Added StarCraft2 skin/style for Countdown.
+
+* New Countdown Browser Source!
+
+
+## v2.4.3 (2018-11-11)
+
+### New
+
+* Playernames can now be assigned to Aligulac IDs in the Misc Settings to improve reliability of the Aligulac Prediction.
+
+### Changes
+
+* Improved automatic player selection of Aligulac Prediction.
+
+
+## v2.4.2 (2018-11-04)
+
+### Fix
+
+* Fixed an issue where the top border of the StarCraft 2 score skin would be could off when using standard Custom CSS settings in OBS.
+
+
+## v2.4.1 (2018-10-21)
+
+### New
+
+* Added Custom Format for upcoming ESL SC2 Open Team League Autumn 2018, see https://play.eslgaming.com/starcraft/global/sc2/open/league/all-kill-autumn-2018/
+
+
+## v2.4.0 (2018-10-14)
+
+### New
+
+* MatchGrabber is now suggesting upcoming AlphaTL matches.
+
+* Added score and landscape mapicon style 'Continuous Red' created by Seireitei.
+
+### Changes
+
+* Removed 'Twitch Communites' as they are deprecated.
+
+
 ## v2.3.2 (2018-10-07)
 
 ### Fix

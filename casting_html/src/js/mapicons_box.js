@@ -1,10 +1,8 @@
 var socket = null;
 var isopen = false;
 var reconnectIntervalMs = 5000;
-var myDefaultFont = null;
 var data = {};
 var padding = "2px";
-var cssFile = "";
 var tweens = {};
 var tweenInitial = new TimelineMax();
 var initNeeded = true;
@@ -31,11 +29,7 @@ function loadStoredData() {
   try {
     var storage = window.localStorage;
     data = controller.loadData('data', true);
-    font = controller.loadData('font');
-    try {
-      setFont(font);
-    } catch (e) {}
-    setPadding(loadData('padding') || '2px');
+    setPadding(controller.loadData('padding') || '2px');
   } catch (e) {}
 }
 
@@ -62,7 +56,7 @@ function connectWebsocket() {
     } else if (jsonObject.event == 'CHANGE_MAP') {
       changeMap(jsonObject.data.icon, jsonObject.data.map, jsonObject.data.map_img);
     } else if (jsonObject.event == 'CHANGE_FONT') {
-      setFont(jsonObject.data.font);
+      controller.setFont(jsonObject.data.font);
     } else if (jsonObject.event == 'CHANGE_PADDING') {
       setPadding(jsonObject.data.padding);
     } else if (jsonObject.event == 'DATA') {
@@ -237,17 +231,6 @@ function changeMap(iconID, map, map_img) {
   }
 }
 
-function setFont(newFont) {
-  font = newFont.trim();
-  if (font == 'DEFAULT') {
-    document.documentElement.style.removeProperty('--font');
-  } else {
-    document.documentElement.style.setProperty('--font', font);
-  }
-  storeData("font");
-  $('#container').find(".text-fill").textfill({maxFontPixels: 80});
-}
-
 function setPadding(newPadding) {
   if (padding != newPadding) {
     padding = newPadding;
@@ -315,7 +298,7 @@ function fillBox(i) {
     image.css("background-image", 'url("src/img/maps/' + mapdata['map_img'] + '")');
   }
   $(mapicon).find("div.opa").css('opacity', mapdata['opacity']);
-  $(mapicon).ready(function() {
+  $(document).ready(function() {
     $(mapicon).find(".text-fill").textfill({maxFontPixels: 80});
     if (i == length) {
       $(mapicon).ready(function() {

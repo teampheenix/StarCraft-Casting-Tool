@@ -9,17 +9,46 @@ var reconnectIntervalMs = 5000;
 var myDefaultFont = null;
 var initNeeded = true;
 var storage = null;
-
 var mapData = {};
 var colors = {};
-var font = "DEFAULT";
 var currentMap = "";
 
 var controller = new Controller(profile, 'mapstats');
+
+// Warn if overriding existing method
+if (Array.prototype.equals)
+  console.warn("Overriding existing Array.prototype.equals. Possible causes: New API defines the method, there's a framework conflict or you've got double inclusions in your code.");
+// attach the .equals method to Array's prototype to call it on any array
+Array.prototype.equals = function(array) {
+  // if the other array is a falsy value, return
+  if (!array)
+    return false;
+
+  // compare lengths - can save a lot of time
+  if (this.length != array.length)
+    return false;
+
+  for (var i = 0, l = this.length; i < l; i++) {
+    // Check if we have nested arrays
+    if (this[i] instanceof Array && array[i] instanceof Array) {
+      // recurse into the nested arrays
+      if (!this[i].equals(array[i]))
+        return false;
+    } else if (this[i] != array[i]) {
+      // Warning - two different object instances will never be equal: {x:20} != {x:20}
+      return false;
+    }
+  }
+  return true;
+}
+// Hide method from for-in loops
+Object.defineProperty(Array.prototype, "equals", {
+  enumerable: false
+});
+
 init();
 
 function init() {
-  myDefaultFont = getComputedStyle(document.body).getPropertyValue('--font');
   loadStoredData();
   initHide();
   connectWebsocket();
@@ -43,7 +72,6 @@ function getCurrentMap() {
 function storeData(scope = null) {
   if (scope == null || scope == "mapdata") controller.storeData('data', mapData, true);
   if (scope == null || scope == "colors") controller.storeData('colors', colors, true);
-  if (scope == null || scope == "font") controller.storeData('font', font);
   if (scope == null || scope == "currentmap") controller.storeData('currentmap', currentMap);
 }
 
@@ -52,16 +80,12 @@ function loadStoredData() {
     var storage = window.localStorage;
     mapData = controller.loadData('mapdata', true);
     colors = controller.loadData('colors', true);
-    font = controller.loadData('font');
     currentMap = controller.loadData('currentmap');
     if (currentMap == null) currentMap = "";
     if (colors == null) colors = {};
     if (mapData == null) mapData = {};
     try {
       setColors(colors['color1'], colors['color2']);
-    } catch (e) {}
-    try {
-      setFont(font);
     } catch (e) {}
     loadImages();
     addMaps();
@@ -85,7 +109,7 @@ function connectWebsocket() {
     } else if (jsonObject.event == 'CHANGE_COLORS') {
       setColors(jsonObject.data.color1, jsonObject.data.color2);
     } else if (jsonObject.event == 'CHANGE_FONT') {
-      setFont(jsonObject.data.font);
+      controller.setFont(jsonObject.data.font);
     } else if (jsonObject.event == 'MAPSTATS') {
       var doInit = Object.keys(mapData).length == 0;
       select = jsonObject.data.map;
@@ -415,44 +439,3 @@ function setColors(color1, color2) {
   }
   storeData("colors");
 }
-
-
-function setFont(newFont) {
-  if (newFont == 'DEFAULT') {
-    newFont = myDefaultFont;
-  }
-  font = newFont.trim();
-  document.documentElement.style.setProperty('--font', font);
-  storeData("font");
-}
-
-// Warn if overriding existing method
-if (Array.prototype.equals)
-  console.warn("Overriding existing Array.prototype.equals. Possible causes: New API defines the method, there's a framework conflict or you've got double inclusions in your code.");
-// attach the .equals method to Array's prototype to call it on any array
-Array.prototype.equals = function(array) {
-  // if the other array is a falsy value, return
-  if (!array)
-    return false;
-
-  // compare lengths - can save a lot of time
-  if (this.length != array.length)
-    return false;
-
-  for (var i = 0, l = this.length; i < l; i++) {
-    // Check if we have nested arrays
-    if (this[i] instanceof Array && array[i] instanceof Array) {
-      // recurse into the nested arrays
-      if (!this[i].equals(array[i]))
-        return false;
-    } else if (this[i] != array[i]) {
-      // Warning - two different object instances will never be equal: {x:20} != {x:20}
-      return false;
-    }
-  }
-  return true;
-}
-// Hide method from for-in loops
-Object.defineProperty(Array.prototype, "equals", {
-  enumerable: false
-});

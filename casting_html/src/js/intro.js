@@ -4,7 +4,6 @@ var reconnectIntervalMs = 5000;
 var volume = 1.0;
 var debug = false;
 var displayTime = 3.0;
-var cssFile = "";
 var tween = new TimelineMax()
 var myAudio1 = new Audio("src/sound/flyin.wav");
 myAudio1.volume = volume;

@@ -7,13 +7,14 @@ from PyQt5.QtCore import QSettings, Qt
 from PyQt5.QtGui import QIcon, QPalette
 from PyQt5.QtWidgets import (QAction, QApplication, QCheckBox, QComboBox,
                              QCompleter, QFormLayout, QGridLayout, QGroupBox,
-                             QHBoxLayout, QLabel, QLineEdit, QMainWindow,
-                             QMenu, QMessageBox, QPushButton, QTabWidget,
-                             QToolButton, QVBoxLayout, QWidget)
+                             QHBoxLayout, QLabel, QMainWindow, QMenu,
+                             QMessageBox, QPushButton, QTabWidget, QToolButton,
+                             QVBoxLayout, QWidget)
 
 import scctool.settings
 import scctool.settings.config
 from scctool.settings.client_config import ClientConfig
+from scctool.view.countdown import CountdownWidget
 from scctool.view.matchdataview import MatchDataWidget
 from scctool.view.subBrowserSources import SubwindowBrowserSources
 from scctool.view.subConnections import SubwindowConnections
@@ -21,7 +22,8 @@ from scctool.view.subLogos import SubwindowLogos
 from scctool.view.subMarkdown import SubwindowMarkdown
 from scctool.view.subMisc import SubwindowMisc
 from scctool.view.subStyles import SubwindowStyles
-from scctool.view.widgets import LedIndicator, MonitoredLineEdit, ProfileMenu
+from scctool.view.widgets import (LedIndicator, MatchComboBox,
+                                  MonitoredLineEdit, ProfileMenu)
 
 # create logger
 module_logger = logging.getLogger(__name__)
@@ -50,7 +52,7 @@ class MainWindow(QMainWindow):
             self.createTabs()
             self.createMatchDataTabs()
             self.createHorizontalGroupBox()
-            self.createBackgroundTasksBox()
+            self.createLowerTabWidget()
 
             self.createMenuBar()
 
@@ -58,7 +60,7 @@ class MainWindow(QMainWindow):
             mainLayout.addWidget(self.tabs, 0)
             mainLayout.addWidget(self.matchDataTabWidget, 1)
             # mainLayout.addWidget(self.fromMatchDataBox, 1)
-            mainLayout.addWidget(self.backgroundTasksBox, 0)
+            mainLayout.addWidget(self.lowerTabWidget, 0)
             mainLayout.addWidget(self.horizontalGroupBox, 0)
 
             self.setWindowTitle(
@@ -330,6 +332,8 @@ class MainWindow(QMainWindow):
                               'file': 'ui_logo_2.html'},
                              {'name': _('Aligulac (only 1vs1)'),
                               'file': 'aligulac.html'},
+                             {'name': _('Countdown'),
+                              'file': 'countdown.html'},
                              {'name': _('League (ALphaTL && RSTL only)'),
                               'file': 'league.html'},
                              {'name': _('Matchbanner (AlphaTL)'),
@@ -562,21 +566,9 @@ class MainWindow(QMainWindow):
             # Create first tab
             self.tab1.layout = QVBoxLayout()
 
-            self.le_url = QLineEdit()
-            self.le_url.setAlignment(Qt.AlignCenter)
-
-            self.le_url.setPlaceholderText("https://alpha.tl/match/3000")
+            self.le_url = MatchComboBox(self)
             self.le_url.returnPressed.connect(self.refresh_click)
 
-            completer = QCompleter(
-                ["https://alpha.tl/match/",
-                 "http://hdgame.net/en/tournaments/list/tournament/rstl-13/"],
-                self.le_url)
-            completer.setCaseSensitivity(Qt.CaseInsensitive)
-            completer.setCompletionMode(
-                QCompleter.UnfilteredPopupCompletion)
-            completer.setWrapAround(True)
-            self.le_url.setCompleter(completer)
             minWidth = self.scoreWidth + 2 * self.raceWidth + \
                 2 * self.mimumLineEditWidth + 4 * 6
             self.le_url.setMinimumWidth(minWidth)
@@ -811,11 +803,26 @@ class MainWindow(QMainWindow):
         except Exception as e:
             module_logger.exception("message")
 
-    def createBackgroundTasksBox(self):
+    def createLowerTabWidget(self):
+        """Create the tab widget at the bottom."""
+        try:
+            self.lowerTabWidget = QTabWidget()
+            self.createBackgroundTasksTab()
+            self.countdownTab = CountdownWidget(self.controller, self)
+            self.lowerTabWidget.addTab(
+                self.backgroundTasksTab,
+                _("Background Tasks"))
+            self.lowerTabWidget.addTab(
+                self.countdownTab,
+                _("Countdown"))
+        except Exception as e:
+            module_logger.exception("message")
+
+    def createBackgroundTasksTab(self):
         """Create group box for background tasks."""
         try:
-            self.backgroundTasksBox = QGroupBox(
-                _("Background Tasks"))
+
+            self.backgroundTasksTab = QWidget()
 
             self.cb_autoUpdate = QCheckBox(
                 _("Auto Score Update"))
@@ -875,7 +882,7 @@ class MainWindow(QMainWindow):
             layout.addWidget(self.cb_autoToggleScore, 1, 1)
             layout.addWidget(self.cb_autoToggleProduction, 1, 2)
 
-            self.backgroundTasksBox.setLayout(layout)
+            self.backgroundTasksTab.setLayout(layout)
 
         except Exception as e:
             module_logger.exception("message")
@@ -986,7 +993,7 @@ class MainWindow(QMainWindow):
         QApplication.setOverrideCursor(
             Qt.WaitCursor)
         try:
-            url = self.le_url.text()
+            url = self.le_url.lineEdit().text()
             with self.tlock:
                 self.statusBar().showMessage(_('Reading {}...').format(url))
                 msg = self.controller.refreshData(url)
