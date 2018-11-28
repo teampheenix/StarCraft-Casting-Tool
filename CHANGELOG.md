@@ -1,6 +1,17 @@
 # Changelog
 
 
+## v2.5.2 (2018-11-28)
+
+### New
+
+* A (partial) translation to French is now available thanks to chemsed alias Seireitei.
+
+### Changes
+
+* Countdown will now display 'soon™' or a custom text once the countdown is finished - it can be changed in config.ini.
+
+
 ## v2.5.1 (2018-11-18)
 
 ### Changes

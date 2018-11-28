@@ -1,4 +1,5 @@
 theme: jekyll-theme-architect
 show_downloads: false
+encoding: UTF-8
 title: "StarCraft Casting Tool"
 description: "Casting StarCraft 2 made simple: Match Grabber, Map Icons, Score Icon, Player Intros, and more."
