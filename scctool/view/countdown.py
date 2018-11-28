@@ -81,7 +81,6 @@ class CountdownWidget(QWidget):
         string = scctool.settings.config.parser.get(
             'Countdown', 'datetime').strip()
         datetime = QDateTime.fromString(string, 'yyyy-MM-dd HH:mm')
-        print(datetime.isValid())
         self.te_datetime.setDateTime(datetime)
 
     def connect(self):
