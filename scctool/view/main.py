@@ -275,7 +275,7 @@ class MainWindow(QMainWindow):
         languages.append({'handle': 'en_US', 'icon': 'en.png',
                           'name': 'English', 'active': True})
         languages.append({'handle': 'fr_FR', 'icon': 'fr.png',
-                          'name': 'Français', 'active': False})
+                          'name': 'Français', 'active': True})
         languages.append({'handle': 'ru_RU', 'icon': 'ru.png',
                           'name': 'Pусский', 'active': True})
 
