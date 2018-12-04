@@ -200,6 +200,7 @@ def setDefaultConfigAll():
 
     setDefaultConfig("Countdown", 'restart', 'True')
     setDefaultConfig("Countdown", 'description', 'Stream will be back in')
+    setDefaultConfig("Countdown", 'replacement', 'soon™')
     setDefaultConfig("Countdown", 'duration', '00:05:00')
     setDefaultConfig("Countdown", 'datetime', '2018-11-18 20:00')
     setDefaultConfig("Countdown", 'static', 'False')

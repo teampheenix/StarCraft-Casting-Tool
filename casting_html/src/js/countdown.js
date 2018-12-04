@@ -44,24 +44,26 @@ function count() {
   }
 }
 
-function startCounter(){
+function startCounter() {
   if (!data.static) {
-    countDownDate = new Date().getTime() + duration;
-    interval = setInterval(count);
+    countDownDate = new Date().getTime() + duration + 500;
+    interval = setInterval(count, 1000);
   }
 }
 
 function printCountDown(days, hours, minutes, seconds) {
   // Output the result in an element with id="demo"
   var countdownStr;
-  if (days > 0) {
+  if (days == 0 && hours == 0 && minutes == 0 && seconds == 0) {
+    console.log('replacement');
+    countdownStr = data.replacement;
+    console.log(countdownStr);
+  } else if (days > 0) {
     countdownStr = days + "d " + hours.pad() + "h " + minutes.pad() + "m " + seconds.pad() + "s";
+  } else if (hours > 0) {
+    countdownStr = hours.pad() + ':' + minutes.pad() + ':' + seconds.pad();
   } else {
-    countdownStr = "";
-    if (hours > 0) {
-      countdownStr = countdownStr + hours.pad() + ':';
-    }
-    countdownStr = countdownStr + minutes.pad() + ':' + seconds.pad();
+    countdownStr = minutes + ':' + seconds.pad();
   }
   $("#countdown").text(countdownStr);
 }
@@ -93,6 +95,7 @@ function processData() {
   clearInterval(interval);
 
   $('#description').text(data.desc);
+  $('#content').find(".text-fill").textfill({maxFontPixels: 80});
   if (data.static) {
     countDownDate = new Date(data.datetime).getTime();
   } else {
@@ -102,7 +105,7 @@ function processData() {
   }
 
   if (data.static || data.restart) {
-    interval = setInterval(count);
+    interval = setInterval(count, 1000);
   } else {
     clearInterval(interval);
     count();
@@ -125,15 +128,16 @@ function connectWebsocket() {
       if (dataChanged(jsonObject.data)) processData();
     } else if (jsonObject.event == 'CHANGE_STYLE') {
       controller.setStyle(jsonObject.data.file);
-    } else if (jsonObject.event == 'START'){
+    } else if (jsonObject.event == 'START') {
       startCounter();
-    } else if (jsonObject.event == 'DESC'){
+    } else if (jsonObject.event == 'DESC') {
       data.desc = jsonObject.data;
       $('#description').text(data.desc);
+      $('#content').find(".text-fill").textfill({maxFontPixels: 80});
       storeData();
-    } else if (jsonObject.event == 'RESTART'){
+    } else if (jsonObject.event == 'RESTART') {
       data.restart = jsonObject.data;
-      if(data.restart) startCounter();
+      if (data.restart) startCounter();
       storeData();
     } else if (jsonObject.event == 'CHANGE_FONT') {
       controller.setFont(jsonObject.data.font);

@@ -84,11 +84,11 @@ div.misc1:after {
 
 div.countdown {
   top: 50%;
-  height: 55px;
+  height: 40px;
+  min-width: 200px;
   position: absolute;
   background-image: linear-gradient(180deg, rgba(0, 0, 0, .9), rgba(102, 68, 0, .9));
   color: #fd9;
-  font-size: 42px;
   text-align: center;
 }
 
@@ -109,11 +109,22 @@ div.countdown:after {
 
 div.description{
   position: absolute;
-  top: 15px;
+  top: 12px;
+  left: 2.5%;
+  width: 95%;
+  text-align: center;
+  height: 39px;
+} 
+
+div.description>span{
+  line-height: 40px;
 }
 
 div.countdown>span{
-  padding: 10px;
+  font-size: 30px;
+  line-height: 39px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 span{

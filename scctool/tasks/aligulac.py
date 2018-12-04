@@ -90,7 +90,6 @@ class AligulacInterface:
         return r.json()
 
     def predict_score(self, prediction):
-        print(prediction)
         outcomes = prediction.get('outcomes')
         outcomes = sorted(outcomes,
                           key=lambda i: i['prob'])
