@@ -19,7 +19,7 @@ body {
 #chat {
   position: absolute;
   bottom: 0px;
-  width: calc(100% - 10 px);
+  width: calc(100% - 10px);
   padding: 10px;
 }
 
