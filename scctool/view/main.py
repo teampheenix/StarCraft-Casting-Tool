@@ -660,7 +660,7 @@ class MainWindow(QMainWindow):
                        ' ace map gets extended to a Bo3 if needed;'
                        ' Best of 2: Bo3 with only two maps played.')
             self.cb_bestof.setToolTip(string)
-            self.cb_bestof.setMaximumWidth(40)
+            self.cb_bestof.setMaximumWidth(45)
             self.cb_bestof.currentIndexChanged.connect(self.changeBestOf)
             container.addWidget(self.cb_bestof, 0)
 
@@ -671,7 +671,7 @@ class MainWindow(QMainWindow):
             self.cb_minSets.setToolTip(
                 _('Minimum number of maps played (even if the match'
                   ' is decided already)'))
-            self.cb_minSets.setMaximumWidth(40)
+            self.cb_minSets.setMaximumWidth(45)
             container.addWidget(self.cb_minSets, 0)
             container.addWidget(
                 QLabel(" " + _("maps") + "  "), 0)
