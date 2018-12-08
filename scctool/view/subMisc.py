@@ -14,8 +14,8 @@ from PyQt5.QtWidgets import (QApplication, QCheckBox, QComboBox, QFileDialog,
 
 import scctool.settings
 from scctool.tasks.liquipedia import LiquipediaGrabber, MapNotFound
-from scctool.view.widgets import (AliasTreeView, ListTable, MapDownloader,
-                                  MonitoredLineEdit)
+from scctool.view.widgets import (AliasTreeView, AligulacTreeView, ListTable,
+                                  MapDownloader, MonitoredLineEdit)
 
 # create logger
 module_logger = logging.getLogger(__name__)
@@ -50,7 +50,7 @@ class SubwindowMisc(QWidget):
 
             self.setLayout(mainLayout)
 
-            self.resize(QSize(mainWindow.size().width() * .80,
+            self.resize(QSize(mainWindow.size().width() * 0.9,
                               self.sizeHint().height()))
             relativeChange = QPoint(mainWindow.size().width() / 2,
                                     mainWindow.size().height() / 3)\
@@ -73,6 +73,7 @@ class SubwindowMisc(QWidget):
         self.createOcrBox()
         self.createAlphaBox()
         self.createSC2ClientAPIBox()
+        self.createAligulacTab()
 
         # Add tabs
         self.tabs.addTab(self.mapsBox, _("Map Manager"))
@@ -81,6 +82,7 @@ class SubwindowMisc(QWidget):
         self.tabs.addTab(self.ocrBox, _("OCR"))
         self.tabs.addTab(self.alphaBox, _("AlphaTL && Ingame Score"))
         self.tabs.addTab(self.clientapiBox, _("SC2 Client API"))
+        self.tabs.addTab(self.aligulacTab, _("Aligulac"))
 
         table = dict()
         table['mapmanager'] = 0
@@ -89,6 +91,7 @@ class SubwindowMisc(QWidget):
         table['ocr'] = 3
         table['alphatl'] = 4
         table['sc2clientapi'] = 5
+        table['aligulac'] = 6
         self.tabs.setCurrentIndex(table.get(tab, SubwindowMisc.current_tab))
         self.tabs.currentChanged.connect(self.tabChanged)
 
@@ -516,6 +519,46 @@ class SubwindowMisc(QWidget):
             self.tesseract.setText(exe)
             self.changed()
 
+    def createAligulacTab(self):
+        self.aligulacTab = QWidget()
+
+        layout = QGridLayout()
+        self.aligulacTreeview = AligulacTreeView(
+            self, self.controller.aligulacManager)
+
+        layout.addWidget(self.aligulacTreeview, 0, 0, 3, 1)
+
+        self.pb_addAligulacID = QPushButton(_("Add Aligluac ID"))
+        self.pb_addAligulacID.clicked.connect(
+            lambda x, self=self: self.addAligulacID())
+        layout.addWidget(self.pb_addAligulacID, 1, 1)
+
+        self.pb_removeAligulacID = QPushButton(_("Remove Aligulac ID"))
+        self.pb_removeAligulacID.clicked.connect(self.removeAligulacID)
+        layout.addWidget(self.pb_removeAligulacID, 2, 1)
+
+        layout.addItem(QSpacerItem(0, 0, QSizePolicy.Minimum,
+                                   QSizePolicy.Minimum),
+                       0, 1)
+
+        self.aligulacTab.setLayout(layout)
+
+    def addAligulacID(self, name='', id=1):
+        text, ok = QInputDialog.getText(
+            self, _('Player Name'), _('Player Name') + ':', text=name)
+        text = text.strip()
+        if not ok or not text:
+            return
+        id, ok = QInputDialog.getInt(
+            self, _('Aligulac ID'), _('Aligulac ID') + ':', value=id, min=1)
+        if not ok:
+            return
+
+        self.aligulacTreeview.insertItem(text, id)
+
+    def removeAligulacID(self):
+        self.aligulacTreeview.removeSelected()
+
     def createMapsBox(self):
         """Create box for map manager."""
         self.mapsize = 300
@@ -554,8 +597,9 @@ class SubwindowMisc(QWidget):
         self.pb_removeMap = QPushButton(_("Remove"))
         self.pb_removeMap.clicked.connect(self.deleteMap)
 
-        self.sc_removeMap = QShortcut(QKeySequence("Del"), self)
+        self.sc_removeMap = QShortcut(QKeySequence("Del"), self.maplist)
         self.sc_removeMap.setAutoRepeat(False)
+        self.sc_removeMap.setContext(Qt.WidgetWithChildrenShortcut)
         self.sc_removeMap.activated.connect(self.deleteMap)
 
         box = QWidget()
@@ -767,8 +811,8 @@ class SubwindowMisc(QWidget):
 
         file = self.controller.getMapImg(map, True)
         map = QPixmap(file)
-        width = map.height()
-        height = map.width()
+        height = map.height()
+        width = map.width()
         ext = os.path.splitext(file)[1].replace(".", "").upper()
         size = humanize.naturalsize(os.path.getsize(file))
         map = QPixmap(file).scaled(

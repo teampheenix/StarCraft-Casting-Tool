@@ -1,10 +1,8 @@
 var socket = null;
 var isopen = false;
 var reconnectIntervalMs = 5000;
-var myDefaultFont = null;
 var data = {};
 var padding = "2px";
-var cssFile = "";
 var tweens = {};
 var tweenInitial = new TimelineMax();
 var initNeeded = true;
@@ -31,11 +29,7 @@ function loadStoredData() {
   try {
     var storage = window.localStorage;
     data = controller.loadData('data', true);
-    font = controller.loadData('font');
-    try {
-      setFont(font);
-    } catch (e) {}
-    setPadding(loadData('padding') || '2px');
+    setPadding(controller.loadData('padding') || '2px');
   } catch (e) {}
 }
 
@@ -62,7 +56,7 @@ function connectWebsocket() {
     } else if (jsonObject.event == 'CHANGE_MAP') {
       changeMap(jsonObject.data.icon, jsonObject.data.map, jsonObject.data.map_img);
     } else if (jsonObject.event == 'CHANGE_FONT') {
-      setFont(jsonObject.data.font);
+      controller.setFont(jsonObject.data.font);
     } else if (jsonObject.event == 'CHANGE_PADDING') {
       setPadding(jsonObject.data.padding);
     } else if (jsonObject.event == 'DATA') {
@@ -239,19 +233,6 @@ function changeMap(iconID, map, map_img) {
       parent.find(".text-fill").textfill({maxFontPixels: 80});
     });
   }
-}
-
-function setFont(newFont) {
-  font = newFont.trim();
-  if (font == 'DEFAULT') {
-    document.documentElement.style.removeProperty('--font');
-  } else {
-    document.documentElement.style.setProperty('--font', font);
-  }
-  storeData("font");
-  $(document).ready(function() {
-    $('#container').find(".text-fill").textfill({maxFontPixels: 80});
-  });
 }
 
 function setPadding(newPadding) {

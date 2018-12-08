@@ -9,8 +9,7 @@ from PyQt5.QtCore import QSettings
 
 from scctool.settings.client_config import ClientConfig
 
-module_logger = logging.getLogger(
-    'scctool.settings.profileManager')  # create logger
+module_logger = logging.getLogger(__name__)
 
 
 class ProfileManager:

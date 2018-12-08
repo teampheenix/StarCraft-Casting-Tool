@@ -3,9 +3,13 @@ class Controller {
     this.profile = profile;
     this.name = name;
     this.ident = ident;
+    this.defaultFont = null;
+    this.newFont = null;
+    this.font = null;
     this.storage = window.localStorage;
     this.generateKey();
     this.loadCssFile(this.loadData('css'));
+    this.setFont(this.loadData('font'));
   }
 
   generateKey() {
@@ -43,12 +47,17 @@ class Controller {
     fileref.setAttribute("rel", "stylesheet");
     fileref.setAttribute("type", "text/css");
     fileref.setAttribute("href", file);
+    fileref.setAttribute("onload", "controller.css_loaded()")
     document.getElementsByTagName("head")[0].appendChild(fileref)
-    $(document).ready(function() {
-      try {
-        $(document).find(".text-fill").textfill({maxFontPixels: 80});
-      } catch (e) {}
-    });
+  }
+
+  css_loaded(){
+    this.defaultFont = getComputedStyle(document.body).getPropertyValue('--font').trim();
+    this.font = this.defaultFont;
+    this.setFont(this.newFont);
+    try {
+      $(document).find(".text-fill").textfill({maxFontPixels: 80});
+    } catch (e) {}
   }
 
   setStyle(file = null) {
@@ -57,5 +66,24 @@ class Controller {
       this.storeData('css', file);
       location.reload();
     }
+  }
+
+  setFont(newFont) {
+    if (!newFont) return;
+    if (!this.defaultFont){
+      this.newFont = newFont;
+      return;
+    }
+    newFont = newFont.trim();
+    if (newFont == 'DEFAULT' || !newFont) {
+      newFont = this.defaultFont;
+    }
+    if (this.font != newFont){
+      console.log("Set font to " + newFont);
+      document.documentElement.style.setProperty('--font', newFont);
+      this.font = newFont;
+    }
+    this.newFont = null;
+    this.storeData("font", this.font);
   }
 }

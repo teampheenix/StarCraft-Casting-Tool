@@ -559,13 +559,127 @@ class IconPushButton(QPushButton):
         qp.end()
 
 
+class AligulacTreeView(QTreeWidget):
+
+    def __init__(self, parent, manager):
+        super().__init__(parent)
+        self.parent = parent
+        self.manager = manager
+        self.items = dict()
+        self.setAnimated(True)
+        self.headerItem().setText(0, "Playername")
+        self.headerItem().setText(1, "Aligluac ID")
+
+        self.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.customContextMenuRequested.connect(self.openMenu)
+
+        self._insertData(self.manager.getList())
+
+        self.shortcut1 = QShortcut(QKeySequence("DEL"), self)
+        self.shortcut1.setAutoRepeat(False)
+        self.shortcut1.setContext(Qt.WidgetWithChildrenShortcut)
+        self.shortcut1.activated.connect(self.removeSelected)
+
+        self.shortcut2 = QShortcut(QKeySequence("Return"), self)
+        self.shortcut2.setAutoRepeat(False)
+        self.shortcut2.setContext(Qt.WidgetWithChildrenShortcut)
+        self.shortcut2.activated.connect(self.editSelected)
+
+    def _insertData(self, data):
+        for player, id in data.items():
+            self.items[player] = QTreeWidgetItem(
+                self, [player, str(id)])
+
+        self.sortItems(0, Qt.AscendingOrder)
+
+    def insertItem(self, name, id):
+        name = str(name).strip()
+        if name in self.items:
+            self.takeTopLevelItem(self.indexOfTopLevelItem(self.items[name]))
+        self.manager.addID(name, id)
+        self.items[name] = QTreeWidgetItem(
+            self, [name, str(id)])
+
+        self.sortItems(0, Qt.AscendingOrder)
+        self.setCurrentItem(self.items[name])
+        self.setFocus()
+
+    def removeItem(self, name):
+        try:
+            self.takeTopLevelItem(self.indexOfTopLevelItem(self.items[name]))
+            self.manager.removeID(name)
+            del self.items[name]
+        except KeyError:
+            pass
+
+    def removeSelected(self):
+        indexes = self.selectedIndexes()
+
+        if len(indexes) > 0:
+            level = 0
+            index = indexes[0]
+            text = self.itemFromIndex(index).text(0)
+            while index.parent().isValid():
+                index = index.parent()
+                level += 1
+
+            if level == 0:
+                self.removeItem(text)
+
+    def editSelected(self):
+        indexes = self.selectedIndexes()
+        name = ""
+        id = 1
+        if len(indexes) > 0:
+            index = indexes[0]
+            name = self.itemFromIndex(index).text(0)
+            id = int(self.itemFromIndex(index).text(1))
+        self.parent.addAligulacID(name, id)
+
+    def openMenu(self, position):
+        indexes = self.selectedIndexes()
+
+        if len(indexes) > 0:
+            level = 0
+            index = indexes[0]
+            text = self.itemFromIndex(index).text(0)
+            id = int(self.itemFromIndex(index).text(1))
+            while index.parent().isValid():
+                index = index.parent()
+                level += 1
+
+            menu = QMenu()
+            if level == 0:
+                act1 = QAction(_("Add Entry"))
+                act1.triggered.connect(
+                    lambda x:
+                        self.parent.addAligulacID())
+                menu.addAction(act1)
+                act2 = QAction(_("Edit Entry"))
+                act2.triggered.connect(
+                    lambda x, text=text, id=id:
+                        self.parent.addAligulacID(text, id))
+                menu.addAction(act2)
+                act3 = QAction(_("Remove Entry"))
+                act3.triggered.connect(
+                    lambda x, text=text: self.removeItem(text))
+                menu.addAction(act3)
+                act4 = QAction(_("Open on Aligulac.com"))
+                act4.triggered.connect(
+                    lambda x, id=id: self.parent.controller.openURL(
+                        "http://aligulac.com/players/{}".format(id)))
+                menu.addAction(act4)
+
+            menu.exec_(self.viewport().mapToGlobal(position))
+
+
 class AliasTreeView(QTreeWidget):
 
     aliasRemoved = pyqtSignal(str, str)
 
     def __init__(self, parent):
         """Init table list."""
-        super().__init__()
+        super().__init__(parent)
         self.parent = parent
         self.items = dict()
         self.header().hide()
@@ -575,15 +689,15 @@ class AliasTreeView(QTreeWidget):
         self.setContextMenuPolicy(Qt.CustomContextMenu)
         self.customContextMenuRequested.connect(self.openMenu)
 
-        shortcut = QShortcut(QKeySequence("DEL"), self)
-        shortcut.setAutoRepeat(False)
-        shortcut.setContext(Qt.WidgetWithChildrenShortcut)
-        shortcut.activated.connect(self.delClicked)
+        self.shortcut1 = QShortcut(QKeySequence("DEL"), self)
+        self.shortcut1.setAutoRepeat(False)
+        self.shortcut1.setContext(Qt.WidgetWithChildrenShortcut)
+        self.shortcut1.activated.connect(self.delClicked)
 
-        shortcut = QShortcut(QKeySequence("Enter"), self)
-        shortcut.setAutoRepeat(False)
-        shortcut.setContext(Qt.WidgetWithChildrenShortcut)
-        shortcut.activated.connect(self.enterClicked)
+        self.shortcut2 = QShortcut(QKeySequence("Return"), self)
+        self.shortcut2.setAutoRepeat(False)
+        self.shortcut2.setContext(Qt.WidgetWithChildrenShortcut)
+        self.shortcut2.activated.connect(self.enterClicked)
 
     def insertAliasList(self, name, aliasList):
         name = str(name).strip()
