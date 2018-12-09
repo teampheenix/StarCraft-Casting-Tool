@@ -5,6 +5,12 @@
 
 ### New
 
+* Added context menu with predefined durations to countdown.
+
+* Added "Add Alias" context menu entry for player names.
+
+* Added "Set Today" context menu and popup calender to countdown date selection.
+
 * A (partial) translation to French is now available thanks to chemsed alias Seireitei.
 
 ### Changes
