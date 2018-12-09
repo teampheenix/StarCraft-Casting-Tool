@@ -1,9 +1,10 @@
 import logging
 
 from PyQt5.QtCore import QDateTime, Qt, QTime
-from PyQt5.QtWidgets import (QCheckBox, QDateTimeEdit, QGridLayout, QLabel,
-                             QLineEdit, QPushButton, QRadioButton, QTimeEdit,
-                             QWidget)
+from PyQt5.QtGui import QCursor
+from PyQt5.QtWidgets import (QAction, QCheckBox, QDateTimeEdit, QGridLayout,
+                             QLabel, QLineEdit, QMenu, QPushButton,
+                             QRadioButton, QTimeEdit, QWidget)
 
 import scctool.settings.config
 
@@ -33,6 +34,9 @@ class CountdownWidget(QWidget):
         self.rb_dynamic.toggled.connect(self.toggleRadio)
         layout.addWidget(self.rb_dynamic, 1, 0)
         self.te_datetime = QDateTimeEdit()
+        self.te_datetime.setCalendarPopup(True)
+        self.te_datetime.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.te_datetime.customContextMenuRequested.connect(self.openMenu)
         layout.addWidget(self.te_datetime, 0, 1)
         self.te_duration = QTimeEdit()
         self.te_duration.setDisplayFormat("HH 'h' mm 'm' ss 's'")
@@ -50,6 +54,18 @@ class CountdownWidget(QWidget):
         layout.setColumnStretch(2, 1)
         layout.setColumnStretch(3, 2)
         self.setLayout(layout)
+
+    def openMenu(self, position):
+        menu = QMenu()
+        act1 = QAction(_("Set Today"))
+        act1.triggered.connect(self.setToday)
+        menu.addAction(act1)
+        menu.exec_(QCursor.pos())
+
+    def setToday(self):
+        today = QDateTime.currentDateTime()
+        today.setTime(self.te_datetime.time())
+        self.te_datetime.setDateTime(today)
 
     def toggleRadio(self):
         static = self.rb_static.isChecked()
