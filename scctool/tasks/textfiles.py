@@ -25,9 +25,12 @@ class TextFilesThread(TasksThread):
         self._matchControl.metaChanged.connect(self.put)
         self.addTask('write', self.__writeTask)
         self.activateTask('write')
+        self.put('meta')
 
     def put(self, item='meta', *args):
-        if item in self._available_items:
+        if item == 'player' and self._matchControl.activeMatch().getSolo():
+            self._q.put('team')
+        elif item in self._available_items:
             self._q.put(item)
 
     def __writeTask(self):

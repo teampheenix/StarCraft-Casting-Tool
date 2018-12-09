@@ -241,6 +241,8 @@ class WebsocketThread(QThread):
                 'Countdown', 'datetime')
             data['duration'] = scctool.settings.config.parser.get(
                 'Countdown', 'duration')
+            data['replacement'] = scctool.settings.config.parser.get(
+                'Countdown', 'replacement')
             self.sendData2WS(websocket, "DATA", data)
 
         while True:
@@ -343,7 +345,6 @@ class WebsocketThread(QThread):
                        'mapicons_box', 'mapicons_landscape', 'countdown']
         if path is None:
             for path in valid_paths:
-                print(path, font)
                 self.changeFont(path, font)
             return
         if path in valid_paths:

@@ -1,6 +1,21 @@
 # Changelog
 
 
+## v2.5.2 (2018-12-09)
+
+### New
+
+* A (partial) translation to French is now available thanks to chemsed alias Seireitei.
+
+### Changes
+
+* Countdown will now display 'soonTM' or a custom text once the countdown is finished - it can be changed in config.ini.
+
+### Fix
+
+* Fixed a bug where the txt-files would not be updated in 1vs1 mode when a player name was changed.
+
+
 ## v2.5.0 (2018-11-18)
 
 ### New
@@ -566,5 +581,3 @@
 ### Changes
 
 * Nighbot commands that are deleted in SCCT get now deleted in Nightbot as well.
-
-
