@@ -1,7 +1,7 @@
 # Changelog
 
 
-## v2.5.2 (2018-11-28)
+## v2.5.2 (2018-12-09)
 
 ### New
 
@@ -9,14 +9,11 @@
 
 ### Changes
 
-* Countdown will now display 'soon™' or a custom text once the countdown is finished - it can be changed in config.ini.
+* Countdown will now display 'soonTM' or a custom text once the countdown is finished - it can be changed in config.ini.
 
+### Fix
 
-## v2.5.1 (2018-11-18)
-
-### Changes
-
-* Countdown will now display 'soon™' or a custom text once the countdown is finished - it can be changed in config.ini.
+* Fixed a bug where the txt-files would not be updated in 1vs1 mode when a player name was changed.
 
 
 ## v2.5.0 (2018-11-18)
@@ -584,5 +581,3 @@
 ### Changes
 
 * Nighbot commands that are deleted in SCCT get now deleted in Nightbot as well.
-
-
