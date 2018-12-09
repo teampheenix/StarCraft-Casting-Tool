@@ -7,16 +7,12 @@
 
 * A (partial) translation to French is now available thanks to chemsed alias Seireitei.
 
-### Changes
-
-* Countdown will now display 'soon™' or a custom text once the countdown is finished - it can be changed in config.ini.
-
 
 ## v2.5.1 (2018-11-18)
 
 ### Changes
 
-* Countdown will now display 'soon™' or a custom text once the countdown is finished - it can be changed in config.ini.
+* Countdown will now display 'soonTM' or a custom text once the countdown is finished - it can be changed in config.ini.
 
 
 ## v2.5.0 (2018-11-18)
@@ -584,5 +580,3 @@
 ### Changes
 
 * Nighbot commands that are deleted in SCCT get now deleted in Nightbot as well.
-
-
