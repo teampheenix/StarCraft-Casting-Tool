@@ -581,3 +581,5 @@
 ### Changes
 
 * Nighbot commands that are deleted in SCCT get now deleted in Nightbot as well.
+
+
