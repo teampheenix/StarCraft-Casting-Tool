@@ -53,7 +53,6 @@ function dataChanged(newData) {
     storeData();
     return true;
   }
-
 }
 
 function storeData(scope = null) {
@@ -92,9 +91,7 @@ function processData() {
 }
 
 function connectWebsocket() {
-  var path = "aligulac";
-  var port = parseInt("0x".concat(profile), 16);
-  socket = new WebSocket("ws://127.0.0.1:".concat(port, "/", path));
+  socket = new WebSocket(controller.generateKeyURI());
 
   socket.onopen = function() {
     console.log("Connected!");
@@ -106,6 +103,10 @@ function connectWebsocket() {
     console.log("Message received");
     if (jsonObject.event == 'DATA') {
       if (dataChanged(jsonObject.data)) processData();
+    } else if (jsonObject.event == 'CHANGE_STYLE') {
+      controller.setStyle(jsonObject.data.file);
+    } else if (jsonObject.event == 'CHANGE_FONT') {
+      controller.setFont(jsonObject.data.font);
     }
   }
 

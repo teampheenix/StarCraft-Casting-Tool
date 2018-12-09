@@ -14,6 +14,7 @@ from PyQt5.QtWidgets import (QAction, QApplication, QCheckBox, QComboBox,
 import scctool.settings
 import scctool.settings.config
 from scctool.settings.client_config import ClientConfig
+from scctool.view.countdown import CountdownWidget
 from scctool.view.matchdataview import MatchDataWidget
 from scctool.view.subBrowserSources import SubwindowBrowserSources
 from scctool.view.subConnections import SubwindowConnections
@@ -51,7 +52,7 @@ class MainWindow(QMainWindow):
             self.createTabs()
             self.createMatchDataTabs()
             self.createHorizontalGroupBox()
-            self.createBackgroundTasksBox()
+            self.createLowerTabWidget()
 
             self.createMenuBar()
 
@@ -59,7 +60,7 @@ class MainWindow(QMainWindow):
             mainLayout.addWidget(self.tabs, 0)
             mainLayout.addWidget(self.matchDataTabWidget, 1)
             # mainLayout.addWidget(self.fromMatchDataBox, 1)
-            mainLayout.addWidget(self.backgroundTasksBox, 0)
+            mainLayout.addWidget(self.lowerTabWidget, 0)
             mainLayout.addWidget(self.horizontalGroupBox, 0)
 
             self.setWindowTitle(
@@ -274,7 +275,7 @@ class MainWindow(QMainWindow):
         languages.append({'handle': 'en_US', 'icon': 'en.png',
                           'name': 'English', 'active': True})
         languages.append({'handle': 'fr_FR', 'icon': 'fr.png',
-                          'name': 'Français', 'active': False})
+                          'name': 'Français', 'active': True})
         languages.append({'handle': 'ru_RU', 'icon': 'ru.png',
                           'name': 'Pусский', 'active': True})
 
@@ -331,6 +332,8 @@ class MainWindow(QMainWindow):
                               'file': 'ui_logo_2.html'},
                              {'name': _('Aligulac (only 1vs1)'),
                               'file': 'aligulac.html'},
+                             {'name': _('Countdown'),
+                              'file': 'countdown.html'},
                              {'name': _('League (ALphaTL && RSTL only)'),
                               'file': 'league.html'},
                              {'name': _('Matchbanner (AlphaTL)'),
@@ -646,7 +649,7 @@ class MainWindow(QMainWindow):
                        ' ace map gets extended to a Bo3 if needed;'
                        ' Best of 2: Bo3 with only two maps played.')
             self.cb_bestof.setToolTip(string)
-            self.cb_bestof.setMaximumWidth(40)
+            self.cb_bestof.setMaximumWidth(45)
             self.cb_bestof.currentIndexChanged.connect(self.changeBestOf)
             container.addWidget(self.cb_bestof, 0)
 
@@ -657,7 +660,7 @@ class MainWindow(QMainWindow):
             self.cb_minSets.setToolTip(
                 _('Minimum number of maps played (even if the match'
                   ' is decided already)'))
-            self.cb_minSets.setMaximumWidth(40)
+            self.cb_minSets.setMaximumWidth(45)
             container.addWidget(self.cb_minSets, 0)
             container.addWidget(
                 QLabel(" " + _("maps") + "  "), 0)
@@ -800,11 +803,26 @@ class MainWindow(QMainWindow):
         except Exception as e:
             module_logger.exception("message")
 
-    def createBackgroundTasksBox(self):
+    def createLowerTabWidget(self):
+        """Create the tab widget at the bottom."""
+        try:
+            self.lowerTabWidget = QTabWidget()
+            self.createBackgroundTasksTab()
+            self.countdownTab = CountdownWidget(self.controller, self)
+            self.lowerTabWidget.addTab(
+                self.backgroundTasksTab,
+                _("Background Tasks"))
+            self.lowerTabWidget.addTab(
+                self.countdownTab,
+                _("Countdown"))
+        except Exception as e:
+            module_logger.exception("message")
+
+    def createBackgroundTasksTab(self):
         """Create group box for background tasks."""
         try:
-            self.backgroundTasksBox = QGroupBox(
-                _("Background Tasks"))
+
+            self.backgroundTasksTab = QWidget()
 
             self.cb_autoUpdate = QCheckBox(
                 _("Auto Score Update"))
@@ -864,7 +882,7 @@ class MainWindow(QMainWindow):
             layout.addWidget(self.cb_autoToggleScore, 1, 1)
             layout.addWidget(self.cb_autoToggleProduction, 1, 2)
 
-            self.backgroundTasksBox.setLayout(layout)
+            self.backgroundTasksTab.setLayout(layout)
 
         except Exception as e:
             module_logger.exception("message")

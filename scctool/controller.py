@@ -14,6 +14,7 @@ import scctool.tasks.nightbot
 import scctool.tasks.twitch
 from scctool.matchcontrol import MatchControl
 from scctool.settings.alias import AliasManager
+from scctool.settings.aligulac import AligulacManager
 from scctool.settings.history import HistoryManager
 from scctool.settings.logoManager import LogoManager
 from scctool.settings.placeholders import PlaceholderList
@@ -58,8 +59,11 @@ class MainController:
                 self.toogleLEDs)
             self.websocketThread.introShown.connect(self.updatePlayerIntroIdx)
             self.runWebsocketThread()
+            self.aligulacManager = AligulacManager()
             self.aligulacThread = AligulacThread(
-                self.matchControl, self.websocketThread)
+                self.matchControl,
+                self.websocketThread,
+                self.aligulacManager)
             self.autoRequestsThread = AutoRequestsThread(self)
             self._warning = False
             self.checkVersion()
@@ -389,6 +393,7 @@ class MainController:
         self.logoManager.dumpJson()
         self.historyManager.dumpJson()
         self.aliasManager.dumpJson()
+        self.aligulacManager.dumpJson()
         self.mapstatsManager.dumpJson()
         self.tts.dumpJson()
 
@@ -589,6 +594,7 @@ class MainController:
         """and toggle score accordingly."""
         try:
             alias = self.aliasManager.translatePlayer
+            bo = self.matchControl.activeMatch().getBestOf()
 
             for i in range(self.matchControl.activeMatch().getNoSets()):
                 found, inorder = newSC2MatchData.compare_returnOrder(
@@ -608,7 +614,6 @@ class MainController:
                         break
             if found:
                 score = self.matchControl.activeMatch().getScore()
-                bo = self.matchControl.activeMatch().getBestOf()
                 if swap:
                     inorder = not inorder
 
@@ -840,8 +845,10 @@ class MainController:
             if num > 0:
                 self.aligulacThread.activate()
                 self.aligulacThread.receive_data('meta')
+                # view.toogleAligulacTab(True)
             else:
                 self.aligulacThread.terminate()
+                # view.toogleAligulacTab(False)
 
     def autoSetNextMap(self, idx=-1, send=True):
         if scctool.settings.config.parser.getboolean(

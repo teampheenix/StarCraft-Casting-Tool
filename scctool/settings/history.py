@@ -4,8 +4,7 @@ import logging
 
 from scctool.settings import getJsonFile, idx2race, race2idx
 
-module_logger = logging.getLogger(
-    'scctool.settings.history')  # create logger
+module_logger = logging.getLogger(__name__)
 
 
 class HistoryManager:

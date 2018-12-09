@@ -12,7 +12,7 @@ import scctool.settings.config
 
 logger = logging.getLogger(__name__)
 
-__version__ = "2.4.1"
+__version__ = "2.5.2"
 __latest_version__ = __version__
 __new_version__ = False
 
@@ -105,14 +105,16 @@ def initial_download():
 
 def choose_language(app, translator):
     language = scctool.settings.config.parser.get("SCT", "language")
+    localesDir = scctool.settings.getLocalesDir()
 
     try:
         lang = gettext.translation(
             'messages',
-            localedir=scctool.settings.getLocalesDir(),
+            localedir=localesDir,
             languages=[language])
     except Exception:
         lang = gettext.NullTranslations()
+        logger.exception("Lang '{}', dir '{}':".format(language, dir))
 
     lang.install()
     app.removeTranslator(translator)

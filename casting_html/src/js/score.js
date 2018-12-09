@@ -4,8 +4,6 @@ var isopen = false;
 var myDefaultFont = null;
 var reconnectIntervalMs = 5000;
 var data = {};
-var font = "DEFAULT";
-var cssFile = "";
 var initNeeded = true;
 var tweenInitial = new TimelineMax();
 var tweens = {};
@@ -14,7 +12,6 @@ var controller = new Controller(profile, 'score');
 init();
 
 function init() {
-  myDefaultFont = getComputedStyle(document.body).getPropertyValue('--font');
   loadStoredData();
   initHide();
   connectWebsocket();
@@ -38,7 +35,7 @@ function connectWebsocket() {
     if (jsonObject.event == 'CHANGE_STYLE') {
       controller.setStyle(jsonObject.data.file);
     } else if (jsonObject.event == 'CHANGE_FONT') {
-      setFont(jsonObject.data.font);
+      controller.setFont(jsonObject.data.font);
     } else if (jsonObject.event == 'ALL_DATA') {
       if (dataChanged(jsonObject.data)) {
         initAnimation();
@@ -78,17 +75,12 @@ function dataChanged(newData) {
 
 function storeData(scope = null) {
   if (scope == null || scope == "data") controller.storeData('data', data, true);
-  if (scope == null || scope == "font") controller.storeData('font', font);
 }
 
 function loadStoredData() {
   try {
     var storage = window.localStorage;
     data = controller.loadData('data', true);
-    font = controller.loadData('font');
-    try {
-      setFont(font);
-    } catch (e) {}
   } catch (e) {}
 }
 
@@ -319,13 +311,4 @@ function changeScoreIcon(team, set, color) {
   function _changeIcon(object, new_value) {
     object.css("background-color", new_value);
   }
-}
-
-function setFont(newFont) {
-  if (newFont == 'DEFAULT') {
-    newFont = myDefaultFont;
-  }
-  font = newFont.trim();
-  document.documentElement.style.setProperty('--font', font);
-  storeData("font");
 }

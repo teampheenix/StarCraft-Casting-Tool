@@ -1,6 +1,48 @@
 # Changelog
 
 
+## v2.5.2 (2018-12-09)
+
+### New
+
+* A (partial) translation to French is now available thanks to chemsed alias Seireitei.
+
+### Changes
+
+* Countdown will now display 'soonTM' or a custom text once the countdown is finished - it can be changed in config.ini.
+
+### Fix
+
+* Fixed a bug where the txt-files would not be updated in 1vs1 mode when a player name was changed.
+
+
+## v2.5.0 (2018-11-18)
+
+### New
+
+* Added StarCraft2 skin/style for Countdown.
+
+* New Countdown Browser Source!
+
+
+## v2.4.3 (2018-11-11)
+
+### New
+
+* Playernames can now be assigned to Aligulac IDs in the Misc Settings to improve reliability of the Aligulac Prediction.
+
+### Changes
+
+* Improved automatic player selection of Aligulac Prediction.
+
+
+## v2.4.2 (2018-11-04)
+
+### Fix
+
+* Fixed an issue where the top border of the StarCraft 2 score skin would be could off when using standard Custom CSS settings in OBS.
+
+
 ## v2.4.1 (2018-10-21)
 
 ### New

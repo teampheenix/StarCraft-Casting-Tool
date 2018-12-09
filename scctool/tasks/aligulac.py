@@ -1,5 +1,6 @@
 import logging
 import queue
+from difflib import SequenceMatcher
 from functools import lru_cache
 
 import requests
@@ -20,21 +21,48 @@ class AligulacInterface:
         self._params = {'apikey': self._api_key, 'format': 'json'}
 
     @lru_cache(maxsize=32)
-    def search_player(self, name):
+    def search_player(self, name, race='R'):
+        race = race[:1].upper()
         url = self.base_url + '/search/json/'
-        r = requests.get(url, params={'q': name})
+        r = requests.get(url, params={'q': name, 'search_for': 'players'})
         data = r.json().get('players', [])
-        return data.pop(0)
+        return self.match_player(data, name, race)
+
+    def match_player(self, data, name, race='R'):
+        best_ratio = 0.0
+        match = None
+        race_found = False
+        for player in data:
+            race_match = race == player.get('race', 'R')
+            if race == 'R' or race_match or not race_found:
+                ratio = SequenceMatcher(
+                    None, name.upper(), player.get('tag', '').upper()).ratio()
+                if not race_found and race_match:
+                    best_ratio = ratio
+                    race_found = True
+                    match = player
+                elif ratio > best_ratio and race_match:
+                    best_ratio = ratio
+                    race_found = True
+                    match = player
+                elif ratio > best_ratio and not race_found:
+                    best_ratio = ratio
+                    race_found = False
+                    match = player
+        if match is None:
+            return data.pop(0)
+        else:
+            return match
 
     @lru_cache(maxsize=32)
-    def _player_to_id(self, player):
+    def _player_to_id(self, player, race='R'):
         if isinstance(player, int):
             return player
         if isinstance(player, dict):
             return player.get('id')
         if isinstance(player, str):
             try:
-                id = self.search_player(player).get('id')
+                id = self.search_player(player, race).get('id')
             except IndexError:
                 id = 0
             return id
@@ -48,9 +76,10 @@ class AligulacInterface:
         return r.json()
 
     @lru_cache(maxsize=32)
-    def predict_match(self, player1, player2, bo=1, score1=0, score2=0):
-        id1 = self._player_to_id(player1)
-        id2 = self._player_to_id(player2)
+    def predict_match(self, player1, player2, race1='R', race2='R',
+                      bo=1, score1=0, score2=0):
+        id1 = self._player_to_id(player1, race1)
+        id2 = self._player_to_id(player2, race2)
         url = self.base_url + '/api/v1/predictmatch/{},{}/'.format(id1, id2)
         params = self._params
         params['bo'] = bo
@@ -82,23 +111,27 @@ class AligulacInterface:
 class AligulacThread(TasksThread):
     """Calls Aligulac to predict match if browser sources is connected."""
 
-    def __init__(self, matchControl, websocket):
+    def __init__(self, matchControl, websocket, aligulacManager):
         """Init the thread."""
         super().__init__()
         self._matchControl = matchControl
         self._websocket = websocket
+        self._manager = aligulacManager
         self._aligulac = AligulacInterface(
             scctool.settings.safe.get('aligulac-api-key'))
         self._q = queue.Queue()
         self._matchControl.dataChanged.connect(self.receive_data)
         self._matchControl.metaChanged.connect(self.receive_data)
+        self._manager.dataChanged.connect(self.receive_data)
         self.addTask('process', self.__processTask)
 
     def activate(self):
         self.activateTask('process')
 
     def receive_data(self, item='meta', *args):
-        if self.hasActiveTask() and item in ['meta', 'score', 'player']:
+        if(self._q.qsize() < 2 and
+                self.hasActiveTask() and
+                item in ['meta', 'score', 'player', 'race']):
             self._q.put({'item': item})
 
     def __processTask(self):
@@ -107,13 +140,20 @@ class AligulacThread(TasksThread):
             match = self._matchControl.activeMatch()
             if match.getSolo():
                 player = list()
+                race = list()
                 for idx in range(2):
                     player.append(match.getPlayer(idx, 0))
+                    race.append(match.getRace(idx, 0))
                 bestof = match.getBestOf()
                 score = match.getScore()
                 try:
+                    if 'TBD' in player:
+                        raise ValueError('Playername is TBD')
                     prediction = self._aligulac.predict_match(
-                        player[0], player[1], bestof,
+                        self._manager.translate(player[0]),
+                        self._manager.translate(player[1]),
+                        race[0], race[1],
+                        bestof,
                         score[0], score[1])
                     predicted_score = self._aligulac.predict_score(prediction)
                     score1 = predicted_score.get('sca')
@@ -122,7 +162,7 @@ class AligulacThread(TasksThread):
                     prob2 = prediction.get('probb')
                     player1 = prediction['pla']['tag']
                     player2 = prediction['plb']['tag']
-                except requests.exceptions.HTTPError:
+                except (requests.exceptions.HTTPError, ValueError):
                     module_logger.info(
                         'Aligulac was unable to predict {} vs {}'.format(
                             player[0], player[1]))
