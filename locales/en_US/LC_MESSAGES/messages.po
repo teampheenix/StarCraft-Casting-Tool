@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: StarCraft Casting Tool\n"
-"POT-Creation-Date: 2018-11-28 09:54+0100\n"
+"POT-Creation-Date: 2018-12-09 13:29+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -180,25 +180,33 @@ msgstr "Not Found - Channel '{}' not found."
 msgid "Updated data files!"
 msgstr "Updated data files!"
 
-#: view/countdown.py:28
+#: view/countdown.py:29
 msgid "Static Countdown to date:"
 msgstr "Static Countdown to date:"
 
-#: view/countdown.py:31
+#: view/countdown.py:32
 msgid "Dynamic Countdown duration:"
 msgstr "Dynamic Countdown duration:"
 
-#: view/countdown.py:40
+#: view/countdown.py:48
 msgid "Event description:"
 msgstr "Event description:"
 
-#: view/countdown.py:46
+#: view/countdown.py:54
 msgid "Restart countdown when source becomes active"
 msgstr "Restart countdown when source becomes active"
 
-#: view/countdown.py:48
+#: view/countdown.py:56
 msgid "Start Countdown"
 msgstr "Start Countdown"
+
+#: view/countdown.py:64
+msgid "Set Today"
+msgstr "Set Today"
+
+#: view/countdown.py:72
+msgid "Set {} min"
+msgstr "Set {} min"
 
 #: view/main.py:114
 msgid "StarCraft Casting Tool is up to date."
@@ -525,20 +533,42 @@ msgstr "Maps \\ Teams:"
 msgid "Player {} of team {}"
 msgstr "Player {} of team {}"
 
-#: view/matchdataview.py:257
+#: view/matchdataview.py:264
 msgid "Set the score"
 msgstr "Set the score"
 
-#: view/matchdataview.py:264 view/widgets.py:1616 view/widgets.py:1624
+#: view/matchdataview.py:271 view/widgets.py:1616 view/widgets.py:1624
 #: view/widgets.py:1663
 msgid "Map {}"
 msgstr "Map {}"
 
-#: view/matchdataview.py:275
+#: view/matchdataview.py:282
 msgid "Select map on Mapstats Browser Source."
 msgstr "Select map on Mapstats Browser Source."
 
-#: view/matchdataview.py:558
+#: view/matchdataview.py:329
+msgid "Player Alias"
+msgstr "Player Alias"
+
+#: view/matchdataview.py:329 view/widgets.py:775 view/widgets.py:793
+msgid "Name"
+msgstr "Name"
+
+#: view/matchdataview.py:335 view/subMisc.py:81 view/subMisc.py:323
+msgid "Alias"
+msgstr "Alias"
+
+#: view/matchdataview.py:335 view/subMisc.py:323
+msgid "Alias of {}"
+msgstr "Alias of {}"
+
+#: view/matchdataview.py:344 view/subMisc.py:337 view/subMisc.py:639
+#: view/subMisc.py:685 view/subMisc.py:722 view/subMisc.py:780
+#: view/widgets.py:1402
+msgid "Error"
+msgstr "Error"
+
+#: view/matchdataview.py:597
 msgid "Updating Score..."
 msgstr "Updating Score..."
 
@@ -949,10 +979,6 @@ msgstr "Miscellaneous Settings"
 msgid "Map Manager"
 msgstr "Map Manager"
 
-#: view/subMisc.py:81 view/subMisc.py:323
-msgid "Alias"
-msgstr "Alias"
-
 #: view/subMisc.py:82
 msgid "OCR"
 msgstr "OCR"
@@ -1086,15 +1112,6 @@ msgstr "Team Aliases"
 #: view/subMisc.py:299
 msgid "Team Name"
 msgstr "Team Name"
-
-#: view/subMisc.py:323
-msgid "Alias of {}"
-msgstr "Alias of {}"
-
-#: view/subMisc.py:337 view/subMisc.py:639 view/subMisc.py:685
-#: view/subMisc.py:722 view/subMisc.py:780 view/widgets.py:1402
-msgid "Error"
-msgstr "Error"
 
 #: view/subMisc.py:346
 msgid "SC2 Client API Address"
@@ -1437,10 +1454,6 @@ msgstr "Remove Entry"
 #: view/widgets.py:667
 msgid "Open on Aligulac.com"
 msgstr "Open on Aligulac.com"
-
-#: view/widgets.py:775 view/widgets.py:793
-msgid "Name"
-msgstr "Name"
 
 #: view/widgets.py:795
 msgid "Remove with Aliases"
