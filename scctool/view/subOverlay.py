@@ -27,21 +27,26 @@ class SubwindowOverlay(QWidget):
             self.view = QWebEngineView(self)
 
             layout = QVBoxLayout(self)
+            layout.setContentsMargins(0, 0, 0, 0)
             self.setLayout(layout)
             layout.addWidget(self.view)
             file_path = os.path.abspath(
-                scctool.settings.getResFile('overlay/gridstack.html'))
+                scctool.settings.getResFile('overlay/main.html'))
             local_url = QUrl.fromLocalFile(file_path)
             self.view.load(local_url)
             self.view.setAttribute(Qt.WA_TransparentForMouseEvents, True)
             self.setAttribute(Qt.WA_TransparentForMouseEvents, True)
+
+            self.view.setAttribute(
+                Qt.WA_TranslucentBackground, True)
+            self.view.setStyleSheet("background:transparent")
             self.view.page().setBackgroundColor(Qt.transparent)
 
             self.setAttribute(
                 Qt.WA_TranslucentBackground, True)
-            self.setWindowFlags(
-                Qt.Tool | Qt.FramelessWindowHint)
-            self.setWindowFlags(self.windowFlags() | Qt.WindowStaysOnTopHint)
+            self.setAutoFillBackground(True)
+            self.setWindowFlags(Qt.Tool | Qt.FramelessWindowHint |
+                                Qt.WindowStaysOnTopHint)
 
             self.resize(QApplication.primaryScreen().size())
 
