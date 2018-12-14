@@ -98,6 +98,8 @@ class MatchData(QObject):
 
         if(url.find('alpha') != -1):
             chg = self.setProvider("AlphaSC2")
+        elif(url.find('rfcs') != -1):
+            chg = self.setProvider("RSL")
         elif(url.find('hdgame') != -1):
             chg = self.setProvider("RSTL")
         else:
@@ -770,17 +772,19 @@ class MatchData(QObject):
     def setProvider(self, provider):
         """Set the provider."""
         provider_changed = False
-        if(provider):
+        if provider:
             matches = difflib.get_close_matches(
                 provider, self.__matchControl.VALID_PROVIDERS.keys(), 1)
-            if(len(matches) == 0):
+            if len(matches) == 0:
                 new = MatchGrabber._provider
             else:
                 new = matches[0]
 
-            if(self.__data['provider'] != new):
+            if self.__data['provider'] != new:
                 self.__data['provider'] = new
                 provider_changed = True
+                module_logger.info(
+                    'Changed MathGrabber Provider to {}'.format(new))
         else:
             self.__data['provider'] = MatchGrabber._provider
 
