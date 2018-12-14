@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: StarCraft Casting Tool\n"
-"POT-Creation-Date: 2018-12-09 13:29+0100\n"
-"PO-Revision-Date: 2018-12-09 13:32+0100\n"
+"POT-Creation-Date: 2018-12-14 19:43+0100\n"
+"PO-Revision-Date: 2018-12-14 19:43+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -335,8 +335,8 @@ msgid "Countdown"
 msgstr ""
 
 #: view/main.py:337
-msgid "League (ALphaTL && RSTL only)"
-msgstr "Ligue (ALphaTL et RSTL seulement)"
+msgid "League (ALphaTL && RSL only)"
+msgstr "Ligue (ALphaTL et RSL seulement)"
 
 #: view/main.py:339
 msgid "Matchbanner (AlphaTL)"
@@ -363,7 +363,7 @@ msgid "Copy Match Tab"
 msgstr "Copier l'onglet Match"
 
 #: view/main.py:563
-msgid "Match Grabber for AlphaTL && RSTL"
+msgid "Match Grabber for AlphaTL && RSL"
 msgstr ""
 
 #: view/main.py:564
@@ -546,8 +546,8 @@ msgstr "Joueur  {} de l'équipe {}"
 msgid "Set the score"
 msgstr "Régler le pointage"
 
-#: view/matchdataview.py:271 view/widgets.py:1616 view/widgets.py:1624
-#: view/widgets.py:1663
+#: view/matchdataview.py:271 view/widgets.py:1619 view/widgets.py:1627
+#: view/widgets.py:1666
 msgid "Map {}"
 msgstr "Carte {}"
 
@@ -1568,19 +1568,19 @@ msgstr ""
 msgid "Rename Profile"
 msgstr "Renommer le profil"
 
-#: view/widgets.py:1592
+#: view/widgets.py:1595
 msgid "Dynamic:"
 msgstr "Dynamique:"
 
-#: view/widgets.py:1607
+#: view/widgets.py:1610
 msgid "Static:"
 msgstr "Statique:"
 
-#: view/widgets.py:1612
+#: view/widgets.py:1615
 msgid "From"
 msgstr ""
 
-#: view/widgets.py:1619
+#: view/widgets.py:1622
 msgid "to"
 msgstr ""
 

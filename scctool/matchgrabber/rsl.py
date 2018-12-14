@@ -1,6 +1,8 @@
-"""Provide match grabber for RSTL."""
+"""Provide match grabber for RSL."""
 
 import logging
+
+import requests
 
 import scctool.settings
 from scctool.matchgrabber.custom import MatchGrabber as MatchGrabberParent
@@ -10,18 +12,23 @@ module_logger = logging.getLogger(__name__)
 
 
 class MatchGrabber(MatchGrabberParent):
-    """Grabs match data from Russian StarCraft 2 Teamleague."""
+    """Grabs match data from Russian StarCraft 2 League."""
 
-    _provider = "RSTL"
+    _provider = "RSL"
 
     def __init__(self, *args):
         """Init match grabber."""
         super().__init__(*args)
         self._urlprefix = \
-            "http://hdgame.net/en/tournaments/matches/match/"
+            "https://rfcs.ru/en/tournaments/matches/?match="
         self._apiprefix = \
-            "http://hdgame.net/index.php?ajax=1&do=tournament&act=api"\
+            "https://rfcs.ru/index.php?ajax=1&do=tournament&act=api"\
             + "&data_type=json&lang=en&service=match&match_id="
+
+    def _getJson(self):
+        """Overwriting this parent method as ssl verfication fails for RSL."""
+        data = requests.get(url=self._getAPI(), verify=False).json()
+        return data
 
     def grabData(self, metaChange=False, logoManager=None):
         """Grab match data."""
@@ -50,8 +57,11 @@ class MatchGrabber(MatchGrabberParent):
                 self._matchData.setLeague(data['tournament']['name'])
 
                 for set_idx in range(7):
-                    self._matchData.setMap(
-                        set_idx, data['start_maps'][str(set_idx)]['name'])
+                    try:
+                        self._matchData.setMap(
+                            set_idx, data['start_maps'][str(set_idx)]['name'])
+                    except KeyError:
+                        pass
 
                 for team_idx in range(2):
                     for set_idx in range(4):
@@ -238,7 +248,7 @@ class MatchGrabber(MatchGrabberParent):
 
                 self._matchData.setAllKill(True)
             else:
-                module_logger.info("RSTL Format Unknown")
+                module_logger.info("RSL Format Unknown")
 
             if logoManager is not None:
                 self.downloadLogos(logoManager)
@@ -267,9 +277,10 @@ class MatchGrabber(MatchGrabberParent):
                 oldLogo = logoManager.getTeam(logo_idx)
                 logo = logoManager.newLogo()
                 new_logo = logo.fromURL(
-                    "http://hdgame.net" +
+                    "https://rfcs.ru" +
                     self._rawData['member' + str(idx)]['img_m'],
-                    localFile=oldLogo.getAbsFile())
+                    localFile=oldLogo.getAbsFile(),
+                    verify=False)
                 if new_logo:
                     logoManager.setTeamLogo(logo_idx, logo)
                 else:

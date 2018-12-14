@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: StarCraft Casting Tool\n"
-"POT-Creation-Date: 2018-12-09 13:32+0100\n"
-"PO-Revision-Date: 2018-12-09 13:33+0100\n"
+"POT-Creation-Date: 2018-12-14 19:44+0100\n"
+"PO-Revision-Date: 2018-12-14 19:44+0100\n"
 "Last-Translator: \n"
 "Language-Team: Mayhem, TanTall\n"
 "Language: ru\n"
@@ -359,8 +359,8 @@ msgid "Countdown"
 msgstr "обратный отсчет"
 
 #: scctool/view/main.py:337
-msgid "League (ALphaTL && RSTL only)"
-msgstr "Лига (только ALphaTL && RSTL)"
+msgid "League (ALphaTL && RSL only)"
+msgstr "Лига (только ALphaTL && RSL)"
 
 #: scctool/view/main.py:339
 msgid "Matchbanner (AlphaTL)"
@@ -390,8 +390,8 @@ msgid "Copy Match Tab"
 msgstr "Скопировать вкладку"
 
 #: scctool/view/main.py:563
-msgid "Match Grabber for AlphaTL && RSTL"
-msgstr "Граббер матчей для AlphaTL и RSTL"
+msgid "Match Grabber for AlphaTL && RSL"
+msgstr "Граббер матчей для AlphaTL и RSL"
 
 #: scctool/view/main.py:564
 msgid "Custom Match"
@@ -570,8 +570,8 @@ msgstr "Игрок {} из команды {}"
 msgid "Set the score"
 msgstr "Установить счет"
 
-#: scctool/view/matchdataview.py:271 scctool/view/widgets.py:1616
-#: scctool/view/widgets.py:1624 scctool/view/widgets.py:1663
+#: scctool/view/matchdataview.py:271 scctool/view/widgets.py:1619
+#: scctool/view/widgets.py:1627 scctool/view/widgets.py:1666
 msgid "Map {}"
 msgstr "Карта {}"
 
@@ -1663,19 +1663,19 @@ msgstr "Импорт и перезапись профилей"
 msgid "Rename Profile"
 msgstr "Переименовать профиль"
 
-#: scctool/view/widgets.py:1592
+#: scctool/view/widgets.py:1595
 msgid "Dynamic:"
 msgstr "Динамический:"
 
-#: scctool/view/widgets.py:1607
+#: scctool/view/widgets.py:1610
 msgid "Static:"
 msgstr "Статическая:"
 
-#: scctool/view/widgets.py:1612
+#: scctool/view/widgets.py:1615
 msgid "From"
 msgstr "от"
 
-#: scctool/view/widgets.py:1619
+#: scctool/view/widgets.py:1622
 msgid "to"
 msgstr "в"
 

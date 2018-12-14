@@ -1,6 +1,13 @@
 # Changelog
 
 
+## v2.5.3 (2018-12-14)
+
+### New
+
+* Added Matchgrabber for RSTL successor RSL (https://rfcs.ru/en/tournaments/list/tournament/rsl-1/).
+
+
 ## v2.5.2 (2018-12-09)
 
 ### New
