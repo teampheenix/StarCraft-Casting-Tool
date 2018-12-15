@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: StarCraft Casting Tool\n"
-"POT-Creation-Date: 2018-11-28 09:56+0100\n"
-"PO-Revision-Date: 2018-11-28 10:00+0100\n"
+"POT-Creation-Date: 2018-12-14 19:44+0100\n"
+"PO-Revision-Date: 2018-12-14 19:44+0100\n"
 "Last-Translator: \n"
 "Language-Team: Mayhem, TanTall\n"
 "Language: ru\n"
@@ -195,29 +195,39 @@ msgid "Updated data files!"
 msgstr "Данные обновлены!"
 
 # Google Translate
-#: scctool/view/countdown.py:28
+#: scctool/view/countdown.py:29
 msgid "Static Countdown to date:"
 msgstr "Статический обратный отсчет до даты:"
 
 # Google Translate
-#: scctool/view/countdown.py:31
+#: scctool/view/countdown.py:32
 msgid "Dynamic Countdown duration:"
 msgstr "Динамическая продолжительность обратного отсчета:"
 
 # Google Translate
-#: scctool/view/countdown.py:40
+#: scctool/view/countdown.py:48
 msgid "Event description:"
 msgstr "Описание события:"
 
 # Google Translate
-#: scctool/view/countdown.py:46
+#: scctool/view/countdown.py:54
 msgid "Restart countdown when source becomes active"
 msgstr "Перезапуск обратного отсчета при активации источника"
 
 # Google Translate
-#: scctool/view/countdown.py:48
+#: scctool/view/countdown.py:56
 msgid "Start Countdown"
 msgstr "Начало обратного отсчета"
+
+# Google Translate
+#: scctool/view/countdown.py:64
+msgid "Set Today"
+msgstr "Выберите сегодня"
+
+# Google Translate
+#: scctool/view/countdown.py:72
+msgid "Set {} min"
+msgstr "Установить {} минут"
 
 #: scctool/view/main.py:114
 msgid "StarCraft Casting Tool is up to date."
@@ -349,8 +359,8 @@ msgid "Countdown"
 msgstr "обратный отсчет"
 
 #: scctool/view/main.py:337
-msgid "League (ALphaTL && RSTL only)"
-msgstr "Лига (только ALphaTL && RSTL)"
+msgid "League (ALphaTL && RSL only)"
+msgstr "Лига (только ALphaTL && RSL)"
 
 #: scctool/view/main.py:339
 msgid "Matchbanner (AlphaTL)"
@@ -380,8 +390,8 @@ msgid "Copy Match Tab"
 msgstr "Скопировать вкладку"
 
 #: scctool/view/main.py:563
-msgid "Match Grabber for AlphaTL && RSTL"
-msgstr "Граббер матчей для AlphaTL и RSTL"
+msgid "Match Grabber for AlphaTL && RSL"
+msgstr "Граббер матчей для AlphaTL и RSL"
 
 #: scctool/view/main.py:564
 msgid "Custom Match"
@@ -556,20 +566,46 @@ msgstr "Карты \\ Команды:"
 msgid "Player {} of team {}"
 msgstr "Игрок {} из команды {}"
 
-#: scctool/view/matchdataview.py:257
+#: scctool/view/matchdataview.py:264
 msgid "Set the score"
 msgstr "Установить счет"
 
-#: scctool/view/matchdataview.py:264 scctool/view/widgets.py:1616
-#: scctool/view/widgets.py:1624 scctool/view/widgets.py:1663
+#: scctool/view/matchdataview.py:271 scctool/view/widgets.py:1619
+#: scctool/view/widgets.py:1627 scctool/view/widgets.py:1666
 msgid "Map {}"
 msgstr "Карта {}"
 
-#: scctool/view/matchdataview.py:275
+#: scctool/view/matchdataview.py:282
 msgid "Select map on Mapstats Browser Source."
 msgstr "Выберите карту в источнике браузера Mapstats."
 
-#: scctool/view/matchdataview.py:558
+# Google Translate
+#: scctool/view/matchdataview.py:329
+msgid "Player Alias"
+msgstr "Псевдоним игрока"
+
+#: scctool/view/matchdataview.py:329 scctool/view/widgets.py:775
+#: scctool/view/widgets.py:793
+msgid "Name"
+msgstr "Имя"
+
+#: scctool/view/matchdataview.py:335 scctool/view/subMisc.py:81
+#: scctool/view/subMisc.py:323
+msgid "Alias"
+msgstr "Псевдоним"
+
+#: scctool/view/matchdataview.py:335 scctool/view/subMisc.py:323
+msgid "Alias of {}"
+msgstr "Псевдоним {}"
+
+#: scctool/view/matchdataview.py:344 scctool/view/subMisc.py:337
+#: scctool/view/subMisc.py:639 scctool/view/subMisc.py:685
+#: scctool/view/subMisc.py:722 scctool/view/subMisc.py:780
+#: scctool/view/widgets.py:1402
+msgid "Error"
+msgstr "Ошибка"
+
+#: scctool/view/matchdataview.py:597
 msgid "Updating Score..."
 msgstr "Обновление счета..."
 
@@ -1000,10 +1036,6 @@ msgstr "Другие настройки"
 msgid "Map Manager"
 msgstr "Менеджер карт"
 
-#: scctool/view/subMisc.py:81 scctool/view/subMisc.py:323
-msgid "Alias"
-msgstr "Псевдоним"
-
 #: scctool/view/subMisc.py:82
 msgid "OCR"
 msgstr "OCR"
@@ -1146,16 +1178,6 @@ msgstr "Псевдонимы команды"
 #: scctool/view/subMisc.py:299
 msgid "Team Name"
 msgstr "Название команды"
-
-#: scctool/view/subMisc.py:323
-msgid "Alias of {}"
-msgstr "Псевдоним {}"
-
-#: scctool/view/subMisc.py:337 scctool/view/subMisc.py:639
-#: scctool/view/subMisc.py:685 scctool/view/subMisc.py:722
-#: scctool/view/subMisc.py:780 scctool/view/widgets.py:1402
-msgid "Error"
-msgstr "Ошибка"
 
 # Google Translate
 #: scctool/view/subMisc.py:346
@@ -1527,10 +1549,6 @@ msgstr "Удалить запись"
 msgid "Open on Aligulac.com"
 msgstr "Открыть на Aligulac.com"
 
-#: scctool/view/widgets.py:775 scctool/view/widgets.py:793
-msgid "Name"
-msgstr "Имя"
-
 #: scctool/view/widgets.py:795
 msgid "Remove with Aliases"
 msgstr "Удалить с помощью псевдонимов"
@@ -1645,19 +1663,19 @@ msgstr "Импорт и перезапись профилей"
 msgid "Rename Profile"
 msgstr "Переименовать профиль"
 
-#: scctool/view/widgets.py:1592
+#: scctool/view/widgets.py:1595
 msgid "Dynamic:"
 msgstr "Динамический:"
 
-#: scctool/view/widgets.py:1607
+#: scctool/view/widgets.py:1610
 msgid "Static:"
 msgstr "Статическая:"
 
-#: scctool/view/widgets.py:1612
+#: scctool/view/widgets.py:1615
 msgid "From"
 msgstr "от"
 
-#: scctool/view/widgets.py:1619
+#: scctool/view/widgets.py:1622
 msgid "to"
 msgstr "в"
 

@@ -239,11 +239,11 @@ class MainWindow(QMainWindow):
                 lambda: self.controller.openURL("https://alpha.tl"))
             infoMenu.addAction(alphaAct)
 
-            rstlAct = QAction(QIcon(scctool.settings.getResFile(
-                'rstl.png')), 'RSTL', self)
-            rstlAct.triggered.connect(
-                lambda: self.controller.openURL("http://hdgame.net/en/"))
-            infoMenu.addAction(rstlAct)
+            rslAct = QAction(QIcon(scctool.settings.getResFile(
+                'rsl.png')), 'RSL', self)
+            rslAct.triggered.connect(
+                lambda: self.controller.openURL("https://rfcs.ru/"))
+            infoMenu.addAction(rslAct)
 
             infoMenu.addSeparator()
 
@@ -334,7 +334,7 @@ class MainWindow(QMainWindow):
                               'file': 'aligulac.html'},
                              {'name': _('Countdown'),
                               'file': 'countdown.html'},
-                             {'name': _('League (ALphaTL && RSTL only)'),
+                             {'name': _('League (ALphaTL && RSL only)'),
                               'file': 'league.html'},
                              {'name': _('Matchbanner (AlphaTL)'),
                               'file': 'matchbanner.html',
@@ -560,7 +560,7 @@ class MainWindow(QMainWindow):
             # self.tabs.resize(300,200)
 
             # Add tabs
-            self.tabs.addTab(self.tab1, _("Match Grabber for AlphaTL && RSTL"))
+            self.tabs.addTab(self.tab1, _("Match Grabber for AlphaTL && RSL"))
             self.tabs.addTab(self.tab2, _("Custom Match"))
 
             # Create first tab
@@ -597,10 +597,10 @@ class MainWindow(QMainWindow):
             container.addWidget(button, 0)
             button = QPushButton()
             pixmap = QIcon(
-                scctool.settings.getResFile('rstl.png'))
+                scctool.settings.getResFile('rsl.png'))
             button.setIcon(pixmap)
             button.clicked.connect(
-                lambda: self.controller.openURL("http://hdgame.net/en/"))
+                lambda: self.controller.openURL("https://rfcs.ru/en/"))
             container.addWidget(button, 0)
 
             self.tab1.layout = QFormLayout()

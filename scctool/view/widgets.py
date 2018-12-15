@@ -1518,6 +1518,7 @@ class MatchComboBox(QComboBox):
         self.lineEdit().setPlaceholderText("https://alpha.tl/match/3000")
         self._alpha_icon = QIcon(scctool.settings.getResFile('alpha.png'))
         self._rstl_icon = QIcon(scctool.settings.getResFile('rstl.png'))
+        self._rsl_icon = QIcon(scctool.settings.getResFile('rsl.png'))
         self.addItem(self._alpha_icon, 'https://alpha.tl/match/3000')
         self.setItemData(0, Qt.AlignCenter, Qt.TextAlignmentRole)
         self.insertSeparator(1)
@@ -1569,6 +1570,8 @@ class MatchComboBox(QComboBox):
         lower_url = str(url).lower()
         if(lower_url.find('alpha') != -1):
             self.setItemIcon(0, self._alpha_icon)
+        elif(lower_url.find('rfcs') != -1):
+            self.setItemIcon(0, self._rsl_icon)
         elif(lower_url.find('hdgame') != -1):
             self.setItemIcon(0, self._rstl_icon)
         else:

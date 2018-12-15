@@ -1,9 +1,29 @@
 # Changelog
 
 
+## v2.5.4 (2018-12-15)
+
+### Fix
+
+* Updated RSL format in match grabber to Proleague format.
+
+
+## v2.5.3 (2018-12-14)
+
+### New
+
+* Added Matchgrabber for RSTL successor RSL (https://rfcs.ru/en/tournaments/list/tournament/rsl-1/).
+
+
 ## v2.5.2 (2018-12-09)
 
 ### New
+
+* Added context menu with predefined durations to countdown.
+
+* Added "Add Alias" context menu entry for player names.
+
+* Added "Set Today" context menu and popup calender to countdown date selection.
 
 * A (partial) translation to French is now available thanks to chemsed alias Seireitei.
 

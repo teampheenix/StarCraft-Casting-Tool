@@ -2,11 +2,11 @@
 import logging
 
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import (QComboBox, QCompleter, QGridLayout, QHBoxLayout,
-                             QLabel, QPushButton, QRadioButton, QSizePolicy,
-                             QSlider, QSpacerItem, QTabBar, QVBoxLayout,
-                             QWidget)
+from PyQt5.QtGui import QCursor, QIcon
+from PyQt5.QtWidgets import (QAction, QComboBox, QCompleter, QGridLayout,
+                             QHBoxLayout, QInputDialog, QLabel, QMessageBox,
+                             QPushButton, QRadioButton, QSizePolicy, QSlider,
+                             QSpacerItem, QTabBar, QVBoxLayout, QWidget)
 
 import scctool.settings
 import scctool.settings.config
@@ -235,6 +235,13 @@ class MatchDataWidget(QWidget):
                                                      team_idx + 1))
                 self.le_player[team_idx][player_idx].setMinimumWidth(
                     self.mimumLineEditWidth)
+                self.le_player[team_idx][player_idx].setContextMenuPolicy(
+                    Qt.CustomContextMenu)
+                self.le_player[team_idx][player_idx].\
+                    customContextMenuRequested.connect(
+                    lambda x, team_idx=team_idx,
+                    player_idx=player_idx:
+                    self.openPlayerContextMenu(team_idx, player_idx))
 
                 for i in range(4):
                     self.cb_race[team_idx][player_idx].addItem(
@@ -303,6 +310,38 @@ class MatchDataWidget(QWidget):
         self.updateMapCompleters()
         self.updatePlayerCompleters()
         self.updateTeamCompleters()
+
+    def openPlayerContextMenu(self, team_idx, player_idx):
+        menu = self.le_player[team_idx][player_idx].\
+            createStandardContextMenu()
+        first_action = menu.actions()[0]
+        add_alias_action = QAction('Add Alias')
+        add_alias_action.triggered.connect(
+            lambda x, team_idx=team_idx,
+            player_idx=player_idx: self.addAlias(team_idx, player_idx))
+        menu.insertAction(first_action, add_alias_action)
+        menu.insertSeparator(first_action)
+        menu.exec_(QCursor.pos())
+
+    def addAlias(self, team_idx, player_idx):
+        name = self.le_player[team_idx][player_idx].text().strip()
+        name, ok = QInputDialog.getText(
+            self, _('Player Alias'), _('Name') + ':', text=name)
+        if not ok:
+            return
+
+        name = name.strip()
+        alias, ok = QInputDialog.getText(
+            self, _('Alias'), _('Alias of {}').format(name) + ':', text="")
+
+        alias = alias.strip()
+        if not ok:
+            return
+        try:
+            self.controller.aliasManager.addPlayerAlias(name, alias)
+        except Exception as e:
+            module_logger.exception("message")
+            QMessageBox.critical(self, _("Error"), str(e))
 
     def league_changed(self):
         if not self.tlock.trigger():

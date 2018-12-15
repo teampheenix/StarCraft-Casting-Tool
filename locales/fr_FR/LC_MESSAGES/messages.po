@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: StarCraft Casting Tool\n"
-"POT-Creation-Date: 2018-11-28 09:49+0100\n"
-"PO-Revision-Date: 2018-11-28 18:10+0100\n"
+"POT-Creation-Date: 2018-12-14 19:43+0100\n"
+"PO-Revision-Date: 2018-12-14 19:43+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -185,24 +185,32 @@ msgstr "Introuvable - Chaine '{}' introuvable."
 msgid "Updated data files!"
 msgstr "Fichiers de données mise à jour!"
 
-#: view/countdown.py:28
+#: view/countdown.py:29
 msgid "Static Countdown to date:"
 msgstr ""
 
-#: view/countdown.py:31
+#: view/countdown.py:32
 msgid "Dynamic Countdown duration:"
 msgstr ""
 
-#: view/countdown.py:40
+#: view/countdown.py:48
 msgid "Event description:"
 msgstr ""
 
-#: view/countdown.py:46
+#: view/countdown.py:54
 msgid "Restart countdown when source becomes active"
 msgstr ""
 
-#: view/countdown.py:48
+#: view/countdown.py:56
 msgid "Start Countdown"
+msgstr ""
+
+#: view/countdown.py:64
+msgid "Set Today"
+msgstr ""
+
+#: view/countdown.py:72
+msgid "Set {} min"
 msgstr ""
 
 #: view/main.py:114
@@ -327,8 +335,8 @@ msgid "Countdown"
 msgstr ""
 
 #: view/main.py:337
-msgid "League (ALphaTL && RSTL only)"
-msgstr "Ligue (ALphaTL et RSTL seulement)"
+msgid "League (ALphaTL && RSL only)"
+msgstr "Ligue (ALphaTL et RSL seulement)"
 
 #: view/main.py:339
 msgid "Matchbanner (AlphaTL)"
@@ -355,7 +363,7 @@ msgid "Copy Match Tab"
 msgstr "Copier l'onglet Match"
 
 #: view/main.py:563
-msgid "Match Grabber for AlphaTL && RSTL"
+msgid "Match Grabber for AlphaTL && RSL"
 msgstr ""
 
 #: view/main.py:564
@@ -534,20 +542,44 @@ msgstr "Carte \\ Équipes:"
 msgid "Player {} of team {}"
 msgstr "Joueur  {} de l'équipe {}"
 
-#: view/matchdataview.py:257
+#: view/matchdataview.py:264
 msgid "Set the score"
 msgstr "Régler le pointage"
 
-#: view/matchdataview.py:264 view/widgets.py:1616 view/widgets.py:1624
-#: view/widgets.py:1663
+#: view/matchdataview.py:271 view/widgets.py:1619 view/widgets.py:1627
+#: view/widgets.py:1666
 msgid "Map {}"
 msgstr "Carte {}"
 
-#: view/matchdataview.py:275
+#: view/matchdataview.py:282
 msgid "Select map on Mapstats Browser Source."
 msgstr ""
 
-#: view/matchdataview.py:558
+#: view/matchdataview.py:329
+#, fuzzy
+#| msgid "Player Aliases"
+msgid "Player Alias"
+msgstr "Alias du joueur"
+
+#: view/matchdataview.py:329 view/widgets.py:775 view/widgets.py:793
+msgid "Name"
+msgstr ""
+
+#: view/matchdataview.py:335 view/subMisc.py:81 view/subMisc.py:323
+msgid "Alias"
+msgstr "Alias"
+
+#: view/matchdataview.py:335 view/subMisc.py:323
+msgid "Alias of {}"
+msgstr "Alias de {}"
+
+#: view/matchdataview.py:344 view/subMisc.py:337 view/subMisc.py:639
+#: view/subMisc.py:685 view/subMisc.py:722 view/subMisc.py:780
+#: view/widgets.py:1402
+msgid "Error"
+msgstr "Erreur"
+
+#: view/matchdataview.py:597
 msgid "Updating Score..."
 msgstr "Mise à jour du pointage..."
 
@@ -956,10 +988,6 @@ msgstr "Réglages divers"
 msgid "Map Manager"
 msgstr "Gestionnaire de maps"
 
-#: view/subMisc.py:81 view/subMisc.py:323
-msgid "Alias"
-msgstr "Alias"
-
 #: view/subMisc.py:82
 msgid "OCR"
 msgstr "OCR"
@@ -1100,15 +1128,6 @@ msgstr "Alias de l'équipe"
 msgid "Team Name"
 msgstr "Nom de l'équipe"
 
-#: view/subMisc.py:323
-msgid "Alias of {}"
-msgstr "Alias de {}"
-
-#: view/subMisc.py:337 view/subMisc.py:639 view/subMisc.py:685
-#: view/subMisc.py:722 view/subMisc.py:780 view/widgets.py:1402
-msgid "Error"
-msgstr "Erreur"
-
 #: view/subMisc.py:346
 msgid "SC2 Client API Address"
 msgstr "Addresse de l'API du Client SC2"
@@ -1218,7 +1237,7 @@ msgstr ""
 
 #: view/subMisc.py:595
 msgid "Change Image"
-msgstr ""
+msgstr "Modifier l’image"
 
 #: view/subMisc.py:630 view/subMisc.py:679 view/subMisc.py:715
 msgid "Map Name"
@@ -1437,10 +1456,6 @@ msgstr "Supprimer l'entrée"
 msgid "Open on Aligulac.com"
 msgstr ""
 
-#: view/widgets.py:775 view/widgets.py:793
-msgid "Name"
-msgstr ""
-
 #: view/widgets.py:795
 msgid "Remove with Aliases"
 msgstr ""
@@ -1553,19 +1568,19 @@ msgstr ""
 msgid "Rename Profile"
 msgstr "Renommer le profil"
 
-#: view/widgets.py:1592
+#: view/widgets.py:1595
 msgid "Dynamic:"
 msgstr "Dynamique:"
 
-#: view/widgets.py:1607
+#: view/widgets.py:1610
 msgid "Static:"
 msgstr "Statique:"
 
-#: view/widgets.py:1612
+#: view/widgets.py:1615
 msgid "From"
 msgstr ""
 
-#: view/widgets.py:1619
+#: view/widgets.py:1622
 msgid "to"
 msgstr ""
 

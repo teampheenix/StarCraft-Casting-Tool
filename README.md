@@ -19,7 +19,7 @@
 
 ## Feature List
 
-* **Match Grabber** for [Alpha Team League](https://alpha.tl/) and [Russian Team League](http://hdgame.net/en/tournaments/list/tournament/rstl-13/)
+* **Match Grabber** for [Alpha Team League](https://alpha.tl/) and [Russian StarCraft 2 League](https://rfcs.ru/en/tournaments/list/tournament/rsl-1/)
 * **Custom Match Format**: Bo1-Bo15, All-Kill format, 1vs1 - including predefined formats for Chobo, Koprulu, WardiTV, and PSISTORM Gaming Team League.
 * Two sets of **Map Icons**: Box and Landscape in `casting_html`
 * **Scoreboard** including team icons in `casting_html`
@@ -32,7 +32,7 @@
 * **Automatic Score Detection** via SC2-Client
 * **Interaction with SC2-Observer-UI**: Automatically toggle Production Tab and set Score at the start of a Game
 * Nearly **unlimited Customization** via Skins and CSS
-* German and Russian language support
+* French, German, and Russian language support
 
 ## Discord Server
 

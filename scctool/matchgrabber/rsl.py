@@ -1,6 +1,8 @@
-"""Provide match grabber for RSTL."""
+"""Provide match grabber for RSL."""
 
 import logging
+
+import requests
 
 import scctool.settings
 from scctool.matchgrabber.custom import MatchGrabber as MatchGrabberParent
@@ -10,18 +12,23 @@ module_logger = logging.getLogger(__name__)
 
 
 class MatchGrabber(MatchGrabberParent):
-    """Grabs match data from Russian StarCraft 2 Teamleague."""
+    """Grabs match data from Russian StarCraft 2 League."""
 
-    _provider = "RSTL"
+    _provider = "RSL"
 
     def __init__(self, *args):
         """Init match grabber."""
         super().__init__(*args)
         self._urlprefix = \
-            "http://hdgame.net/en/tournaments/matches/match/"
+            "https://rfcs.ru/en/tournaments/matches/?match="
         self._apiprefix = \
-            "http://hdgame.net/index.php?ajax=1&do=tournament&act=api"\
+            "https://rfcs.ru/index.php?ajax=1&do=tournament&act=api"\
             + "&data_type=json&lang=en&service=match&match_id="
+
+    def _getJson(self):
+        """Overwriting this parent method as ssl verfication fails for RSL."""
+        data = requests.get(url=self._getAPI(), verify=False).json()
+        return data
 
     def grabData(self, metaChange=False, logoManager=None):
         """Grab match data."""
@@ -42,16 +49,20 @@ class MatchGrabber(MatchGrabberParent):
             if overwrite:
                 self._matchData.resetSwap()
 
+            # In RSL this is apparently ProLeague format
             if(data['game_format'] == "3"):
-                self._matchData.setNoSets(7, 6, resetPlayers=overwrite)
-                self._matchData.setMinSets(4)
+                self._matchData.setNoSets(5, resetPlayers=overwrite)
+                self._matchData.setMinSets(3)
                 self._matchData.resetLabels()
                 self._matchData.setSolo(False)
                 self._matchData.setLeague(data['tournament']['name'])
 
-                for set_idx in range(7):
-                    self._matchData.setMap(
-                        set_idx, data['start_maps'][str(set_idx)]['name'])
+                for set_idx in range(5):
+                    try:
+                        self._matchData.setMap(
+                            set_idx, data['start_maps'][str(set_idx)]['name'])
+                    except KeyError:
+                        pass
 
                 for team_idx in range(2):
                     for set_idx in range(4):
@@ -66,7 +77,7 @@ class MatchGrabber(MatchGrabberParent):
                         except Exception:
                             pass
 
-                    for set_idx in range(4, 7):
+                    for set_idx in range(4, 5):
                         try:
                             player = data['result']['8']['member_name' +
                                                          str(team_idx + 1)]
@@ -111,11 +122,10 @@ class MatchGrabber(MatchGrabberParent):
                         self._matchData.getSwappedIdx(team_idx),
                         self._aliasTeam(team['name']), team['tag'])
 
-                for idx in range(4, 7):
-                    self._matchData.setLabel(idx, "Ace Map {}".format(idx - 3))
-                    self._matchData.setAce(idx, True)
+                self._matchData.setLabel(4, "Ace Map")
+                self._matchData.setAce(4, True)
 
-                for set_idx in range(4):
+                for set_idx in range(5):
                     try:
                         score1 = int(
                             data['result'][str(set_idx * 2)]['score1'])
@@ -132,25 +142,6 @@ class MatchGrabber(MatchGrabberParent):
                     else:
                         score = 0
 
-                    self._matchData.setMapScore(
-                        set_idx, score, overwrite, True)
-
-                for set_idx in range(4, 7):
-                    try:
-                        score1 = int(
-                            data['result'][str(5 + set_idx)]['score1'])
-                        score2 = int(
-                            data['result'][str(5 + set_idx)]['score2'])
-                    except Exception:
-                        score1 = 0
-                        score2 = 0
-
-                    if(score1 > score2):
-                        score = -1
-                    elif(score1 < score2):
-                        score = 1
-                    else:
-                        score = 0
                     self._matchData.setMapScore(
                         set_idx, score, overwrite, True)
 
@@ -238,7 +229,7 @@ class MatchGrabber(MatchGrabberParent):
 
                 self._matchData.setAllKill(True)
             else:
-                module_logger.info("RSTL Format Unknown")
+                module_logger.info("RSL Format Unknown")
 
             if logoManager is not None:
                 self.downloadLogos(logoManager)
@@ -267,9 +258,10 @@ class MatchGrabber(MatchGrabberParent):
                 oldLogo = logoManager.getTeam(logo_idx)
                 logo = logoManager.newLogo()
                 new_logo = logo.fromURL(
-                    "http://hdgame.net" +
+                    "https://rfcs.ru" +
                     self._rawData['member' + str(idx)]['img_m'],
-                    localFile=oldLogo.getAbsFile())
+                    localFile=oldLogo.getAbsFile(),
+                    verify=False)
                 if new_logo:
                     logoManager.setTeamLogo(logo_idx, logo)
                 else:
