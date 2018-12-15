@@ -1,6 +1,13 @@
 # Changelog
 
 
+## v2.5.4 (2018-12-15)
+
+### Fix
+
+* Updated RSL format in match grabber to Proleague format.
+
+
 ## v2.5.3 (2018-12-14)
 
 ### New
