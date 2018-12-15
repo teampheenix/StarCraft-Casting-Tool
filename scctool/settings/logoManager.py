@@ -405,6 +405,9 @@ class Logo:
                 local_chunk = in_file.read(512)
 
             r = requests.get(url, stream=True, verify=verify)
+            if r.headers.get('Content-Type', 'text').find('text') != -1:
+                module_logger.info('Logo is no valid image.')
+                return False
             if r.status_code == 200:
                 with open(fname, 'wb') as f:
                     for chunk in r.iter_content(512):

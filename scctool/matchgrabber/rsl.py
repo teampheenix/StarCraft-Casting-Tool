@@ -49,14 +49,15 @@ class MatchGrabber(MatchGrabberParent):
             if overwrite:
                 self._matchData.resetSwap()
 
+            # In RSL this is apparently ProLeague format
             if(data['game_format'] == "3"):
-                self._matchData.setNoSets(7, 6, resetPlayers=overwrite)
-                self._matchData.setMinSets(4)
+                self._matchData.setNoSets(5, resetPlayers=overwrite)
+                self._matchData.setMinSets(3)
                 self._matchData.resetLabels()
                 self._matchData.setSolo(False)
                 self._matchData.setLeague(data['tournament']['name'])
 
-                for set_idx in range(7):
+                for set_idx in range(5):
                     try:
                         self._matchData.setMap(
                             set_idx, data['start_maps'][str(set_idx)]['name'])
@@ -76,7 +77,7 @@ class MatchGrabber(MatchGrabberParent):
                         except Exception:
                             pass
 
-                    for set_idx in range(4, 7):
+                    for set_idx in range(4, 5):
                         try:
                             player = data['result']['8']['member_name' +
                                                          str(team_idx + 1)]
@@ -121,11 +122,10 @@ class MatchGrabber(MatchGrabberParent):
                         self._matchData.getSwappedIdx(team_idx),
                         self._aliasTeam(team['name']), team['tag'])
 
-                for idx in range(4, 7):
-                    self._matchData.setLabel(idx, "Ace Map {}".format(idx - 3))
-                    self._matchData.setAce(idx, True)
+                self._matchData.setLabel(4, "Ace Map")
+                self._matchData.setAce(4, True)
 
-                for set_idx in range(4):
+                for set_idx in range(5):
                     try:
                         score1 = int(
                             data['result'][str(set_idx * 2)]['score1'])
@@ -142,25 +142,6 @@ class MatchGrabber(MatchGrabberParent):
                     else:
                         score = 0
 
-                    self._matchData.setMapScore(
-                        set_idx, score, overwrite, True)
-
-                for set_idx in range(4, 7):
-                    try:
-                        score1 = int(
-                            data['result'][str(5 + set_idx)]['score1'])
-                        score2 = int(
-                            data['result'][str(5 + set_idx)]['score2'])
-                    except Exception:
-                        score1 = 0
-                        score2 = 0
-
-                    if(score1 > score2):
-                        score = -1
-                    elif(score1 < score2):
-                        score = 1
-                    else:
-                        score = 0
                     self._matchData.setMapScore(
                         set_idx, score, overwrite, True)
 
