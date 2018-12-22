@@ -98,7 +98,7 @@ class LogoManager:
 
     def removeDeadMatches(self):
         validMatches = self.__controller.matchControl.getMatchIDs()
-        for key in self._matches.keys():
+        for key in list(self._matches):
             if key not in validMatches:
                 self.deleteMatch(key)
 
