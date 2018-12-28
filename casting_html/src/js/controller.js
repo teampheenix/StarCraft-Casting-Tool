@@ -1,5 +1,5 @@
 class Controller {
-  constructor(profile, name, ident = 0) {
+  constructor(profile, name, ident = 0, load_style = true) {
     this.profile = profile;
     this.name = name;
     this.ident = ident;
@@ -8,8 +8,10 @@ class Controller {
     this.font = null;
     this.storage = window.localStorage;
     this.generateKey();
-    this.loadCssFile(this.loadData('css'));
-    this.setFont(this.loadData('font'));
+    if(load_style){
+      this.loadCssFile(this.loadData('css'));
+      this.setFont(this.loadData('font'));
+    }
   }
 
   generateKey() {

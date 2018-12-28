@@ -22,8 +22,8 @@ class WebsocketThread(QThread):
     hooked_keys = dict()
     socketConnectionChanged = pyqtSignal(int, str)
     valid_scopes = ['score', 'mapicons_box_[1-3]', 'mapicons_landscape_[1-3]',
-                    'intro', 'mapstats', 'ui_logo_[1-3]', 'aligulac',
-                    'countdown']
+                    'intro', 'mapstats', 'logo_[1-2]', 'ui_logo_[1-2]',
+                    'aligulac', 'countdown']
     mapicon_sets = dict()
     scopes = dict()
     intro_state = ''
@@ -188,16 +188,17 @@ class WebsocketThread(QThread):
                 return self.scope_regex.sub('', scope)
         return ''
 
-    async def handler(self, websocket, path):
-        path = self.handle_path(path)
+    async def handler(self, websocket, input_path):
+        path = self.handle_path(input_path)
         if not path:
-            module_logger.info("Client with incorrect path {}.".format(path))
+            module_logger.info(
+                "Client with incorrect path {}.".format(input_path))
             return
         self.registerConnection(websocket, path)
         module_logger.info("Client connected at path {}!".format(path))
         primary_scope = self.get_primary_scope(path)
 
-        if primary_scope not in ['ui_logo']:
+        if primary_scope not in ['ui_logo', 'logo']:
             self.changeStyle(path, websocket=websocket)
 
         try:
@@ -244,6 +245,18 @@ class WebsocketThread(QThread):
             data['replacement'] = scctool.settings.config.parser.get(
                 'Countdown', 'replacement')
             self.sendData2WS(websocket, "DATA", data)
+        elif path == 'logo_1':
+            logo = self.__controller.logoManager.getTeam(
+                1,
+                self.__controller.matchControl.activeMatchId())
+            self.sendData2WS(websocket, 'DATA',
+                             {'logo': logo.getFile(True)})
+        elif path == 'logo_2':
+            logo = self.__controller.logoManager.getTeam(
+                2,
+                self.__controller.matchControl.activeMatchId())
+            self.sendData2WS(websocket, 'DATA',
+                             {'logo': logo.getFile(True)})
 
         while True:
             try:

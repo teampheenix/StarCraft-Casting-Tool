@@ -172,7 +172,7 @@ class MainController:
             raise
 
     def updateLogos(self, force=False):
-        """Updata team logos in  view."""
+        """Update team logos in  view."""
         idx = self.matchControl.selectedMatchIdx()
         matchWidget = self.view.matchDataTabWidget.widget(idx)
         matchWidget.updateLogos(force)
@@ -636,22 +636,18 @@ class MainController:
                 return file + ext
         return ""
 
-    def updateLogosHTML(self, force=False):
-        """Update html files with team logos."""
+    def updateLogosWebsocket(self):
         match_ident = self.matchControl.activeMatchId()
         for idx in range(2):
             logo = self.logoManager.getTeam(idx + 1, match_ident)
-            filename = scctool.settings.casting_html_dir + \
-                "/data/logo" + str(idx + 1) + "-data.html"
-            template = scctool.settings.casting_html_dir + \
-                "/data/logo-template.html"
-            self.matchControl.activeMatch()._useTemplate(
-                template, filename, {'logo': logo.getFile(True)})
-            if force:
-                self.websocketThread.sendData2Path(
-                    'score', 'CHANGE_IMAGE',
-                    {'id': 'logo{}'.format(idx + 1),
-                     'img': logo.getFile(True)})
+            self.websocketThread.sendData2Path(
+                'logo_{}'.format(idx + 1), 'DATA',
+                {'logo': logo.getFile(True)})
+
+            self.websocketThread.sendData2Path(
+                'score', 'CHANGE_IMAGE',
+                {'id': 'logo{}'.format(idx + 1),
+                 'img': logo.getFile(True)})
 
     def updateHotkeys(self):
         """Refresh hotkeys."""
