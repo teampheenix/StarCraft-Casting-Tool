@@ -1038,6 +1038,7 @@ class MatchData(QObject):
             return False
 
     def _useTemplate(self, filein, fileout, replacements):
+        """ This method is currently no longer needed."""
         filein = scctool.settings.getAbsPath(filein)
         fileout = scctool.settings.getAbsPath(fileout)
         regex = re.compile(r"%[\w_-]+%")
