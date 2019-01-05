@@ -196,6 +196,8 @@ class MapDownloader(QProgressDialog):
 
     def download(self):
         self.show()
+        for i in range(10):
+            QApplication.processEvents()
 
         with open(self.file_name, "wb") as f:
             module_logger.info("Downloading {} from {}".format(
@@ -925,6 +927,46 @@ class QHLine(QFrame):
         super().__init__()
         self.setFrameShape(QFrame.HLine)
         self.setFrameShadow(QFrame.Sunken)
+
+
+class GenericProgressDialog(QProgressDialog):
+    """Define a generic progress dialog used for various tasks."""
+
+    def __init__(self, callback_job=None):
+        super().__init__()
+        self.callback = callback_job
+        self.setWindowModality(Qt.ApplicationModal)
+        self.progress = 0
+        self.setWindowTitle("StarCraft Casting Tool")
+        self.setLabelText(_("Processing..."))
+        self.setCancelButton(None)
+        self.setRange(0, 100)
+        self.setValue(0)
+
+        settings = QSettings(ClientConfig.APP_NAME, ClientConfig.COMPANY_NAME)
+        self.restoreGeometry(settings.value("geometry", self.saveGeometry()))
+        m_width = self.size().width()
+        m_height = self.size().height()
+        self.resize(QSize(max(self.sizeHint().width(), 256),
+                          self.sizeHint().height()))
+        relativeChange = QPoint(m_width / 2, m_height / 2)\
+            - QPoint(self.size().width() / 2,
+                     self.size().height() / 2)
+        self.move(self.pos() + relativeChange)
+
+        self.show()
+        for i in range(10):
+            QApplication.processEvents()
+        self.run()
+
+    def run(self):
+        try:
+            self.callback(self)
+        except Exception as e:
+            module_logger.exception('message')
+
+        self.setValue(100)
+        time.sleep(0.1)
 
 
 class InitialUpdater(QProgressDialog):

@@ -22,8 +22,9 @@ from scctool.view.subLogos import SubwindowLogos
 from scctool.view.subMarkdown import SubwindowMarkdown
 from scctool.view.subMisc import SubwindowMisc
 from scctool.view.subStyles import SubwindowStyles
-from scctool.view.widgets import (LedIndicator, MatchComboBox,
-                                  MonitoredLineEdit, ProfileMenu)
+from scctool.view.widgets import (GenericProgressDialog, LedIndicator,
+                                  MatchComboBox, MonitoredLineEdit,
+                                  ProfileMenu)
 
 # create logger
 module_logger = logging.getLogger(__name__)
@@ -990,10 +991,17 @@ class MainWindow(QMainWindow):
 
     def refresh_click(self):
         """Handle click to refresh/load data from an URL."""
+        GenericProgressDialog(self.refresh_job)
+
+    def refresh_job(self, progress_dialog):
         QApplication.setOverrideCursor(
             Qt.WaitCursor)
         try:
             url = self.le_url.lineEdit().text()
+            progress_dialog.setWindowTitle(_("Match Grabber"))
+            progress_dialog.setLabelText(
+                _("Collecting data from {}".format(url)))
+            progress_dialog.setValue(10)
             with self.tlock:
                 self.statusBar().showMessage(_('Reading {}...').format(url))
                 msg = self.controller.refreshData(url)

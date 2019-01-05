@@ -223,27 +223,31 @@ class MainController:
 
         return msg
 
-    def refreshData(self, url):
+    def refreshData(self, url, update_progress=lambda *args, **kwargs: None):
         """Load data from match grabber."""
         msg = ''
         try:
             match = self.matchControl.selectedMatch()
             newProvider = match.parseURL(url)
+            update_progress(20)
             match.grabData(newProvider, self.logoManager)
+            update_progress(80)
             self.matchControl.writeJsonFile()
             try:
                 # TODO: Need to have multiple banners
                 match.downloadBanner()
             except Exception as e:
                 module_logger.exception("message")
-                pass
+            update_progress(90)
             self.updateLogos(True)
             idx = self.matchControl.selectedMatchIdx()
             matchWidget = self.view.matchDataTabWidget.widget(idx)
             matchWidget.updateForms()
+            update_progress(95)
             self.updateMatchFormat()
             self.view.resizeWindow()
             self.matchControl.activeMatch().updateLeagueIcon()
+            update_progress(99)
 
         except Exception as e:
             msg = str(e)
