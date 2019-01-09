@@ -56,7 +56,7 @@ class TextFilesThread(TasksThread):
         with open(file, mode='w', encoding='utf-8') as f:
             team1 = self._matchControl.activeMatch().getTeamOrPlayer(0)
             team2 = self._matchControl.activeMatch().getTeamOrPlayer(1)
-            f.write('{} vs {}\n'.format(team1, team2))
+            f.write(f'{team1} vs {team2}\n')
 
         file = scctool.settings.getAbsPath(
             scctool.settings.casting_data_dir +
@@ -68,20 +68,25 @@ class TextFilesThread(TasksThread):
         for idx in range(2):
             team = self._matchControl.activeMatch().getTeamOrPlayer(idx)
             file = scctool.settings.getAbsPath(
-                scctool.settings.casting_data_dir +
-                "/team{}.txt".format(idx + 1))
+                f'{scctool.settings.casting_data_dir}/team{idx+1}.txt')
             with open(file, mode='w', encoding='utf-8') as f:
                 f.write(team)
 
     def __writeScore(self):
         file = scctool.settings.getAbsPath(
-            scctool.settings.casting_data_dir + "/score.txt")
+            f"{scctool.settings.casting_data_dir}/score.txt")
 
         score = self._matchControl.activeMatch().getScore()
-        score_str = str(score[0]) + " - " + str(score[1])
+        score_str = f"{score[0]} - {score[1]}"
 
         with open(file, mode='w', encoding='utf-8') as f:
             f.write(score_str)
+
+        for team in range(2):
+            file = scctool.settings.getAbsPath(
+                f"{scctool.settings.casting_data_dir}/score{team+1}.txt")
+            with open(file, mode='w', encoding='utf-8') as f:
+                f.write(score[team])
 
     def __writeLeague(self):
         file = scctool.settings.getAbsPath(
