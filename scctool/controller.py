@@ -175,7 +175,7 @@ class MainController:
             raise
 
     def updateLogos(self, force=False):
-        """Updata team logos in  view."""
+        """Update team logos in  view."""
         idx = self.matchControl.selectedMatchIdx()
         matchWidget = self.view.matchDataTabWidget.widget(idx)
         matchWidget.updateLogos(force)
@@ -226,27 +226,31 @@ class MainController:
 
         return msg
 
-    def refreshData(self, url):
+    def refreshData(self, url, update_progress=lambda *args, **kwargs: None):
         """Load data from match grabber."""
         msg = ''
         try:
             match = self.matchControl.selectedMatch()
             newProvider = match.parseURL(url)
+            update_progress(20)
             match.grabData(newProvider, self.logoManager)
+            update_progress(80)
             self.matchControl.writeJsonFile()
             try:
                 # TODO: Need to have multiple banners
                 match.downloadBanner()
             except Exception as e:
                 module_logger.exception("message")
-                pass
+            update_progress(90)
             self.updateLogos(True)
             idx = self.matchControl.selectedMatchIdx()
             matchWidget = self.view.matchDataTabWidget.widget(idx)
             matchWidget.updateForms()
+            update_progress(95)
             self.updateMatchFormat()
             self.view.resizeWindow()
             self.matchControl.activeMatch().updateLeagueIcon()
+            update_progress(99)
 
         except Exception as e:
             msg = str(e)
@@ -640,22 +644,18 @@ class MainController:
                 return file + ext
         return ""
 
-    def updateLogosHTML(self, force=False):
-        """Update html files with team logos."""
+    def updateLogosWebsocket(self):
         match_ident = self.matchControl.activeMatchId()
         for idx in range(2):
             logo = self.logoManager.getTeam(idx + 1, match_ident)
-            filename = scctool.settings.casting_html_dir + \
-                "/data/logo" + str(idx + 1) + "-data.html"
-            template = scctool.settings.casting_html_dir + \
-                "/data/logo-template.html"
-            self.matchControl.activeMatch()._useTemplate(
-                template, filename, {'logo': logo.getFile(True)})
-            if force:
-                self.websocketThread.sendData2Path(
-                    'score', 'CHANGE_IMAGE',
-                    {'id': 'logo{}'.format(idx + 1),
-                     'img': logo.getFile(True)})
+            self.websocketThread.sendData2Path(
+                'logo_{}'.format(idx + 1), 'DATA',
+                {'logo': logo.getFile(True)})
+
+            self.websocketThread.sendData2Path(
+                'score', 'CHANGE_IMAGE',
+                {'id': 'logo{}'.format(idx + 1),
+                 'img': logo.getFile(True)})
 
     def updateHotkeys(self):
         """Refresh hotkeys."""

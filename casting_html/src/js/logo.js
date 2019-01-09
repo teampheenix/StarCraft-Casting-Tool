@@ -2,20 +2,34 @@ var socket = null;
 var isopen = false;
 var reconnectIntervalMs = 5000;
 var data = {};
-var controller = new Controller(profile, 'ui_logo', ident, false);
+var controller = new Controller(profile, 'logo', ident, false);
 init();
 
 function init() {
-  // loadStoredData();
+  loadStoredData();
   connectWebsocket();
 }
 
 function loadStoredData() {
   data = controller.loadData('data', true);
+  if(data != null){
+    setLogo(data['logo']);
+  }else{
+    data = {};
+    setLogo('casting_html/src/img/SC2.png');
+  }
 }
 
 function storeData(scope = null) {
   if (scope == null || scope == "data") controller.storeData('data', data, true);
+}
+
+function setLogo(logo_url){
+  if(logo_url){
+    $("#img").css("background-image", "url('../" + logo_url + "')");
+    data['logo'] = logo_url;
+    storeData();
+  }
 }
 
 function connectWebsocket() {
@@ -32,8 +46,7 @@ function connectWebsocket() {
     console.log("Message received");
     if (jsonObject.event == 'DATA') {
       console.log(jsonObject.data);
-      $('#img').attr("src", jsonObject.data.logo);
-      $('body').css("display", jsonObject.data.display);
+      setLogo(jsonObject.data.logo);
     }
   }
 

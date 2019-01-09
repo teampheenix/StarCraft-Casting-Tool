@@ -85,6 +85,7 @@ class MatchDataWidget(QWidget):
             self.autoSetNextMap(send=False)
             self.controller.mapstatsManager.sendMapPool()
             self.parent.updateAllMapButtons()
+            self.controller.updateLogosWebsocket()
         elif self.controller.matchControl.countMatches() == 1:
             self._radioButton.toggled.disconnect()
             self._radioButton.setChecked(True)
@@ -569,7 +570,7 @@ class MatchDataWidget(QWidget):
             self.controller.mapstatsManager.sendMapPool()
 
     def updateLogos(self, force=False):
-        """Updata team logos in  view."""
+        """Update team logos in view."""
         logo = self.controller.logoManager.getTeam1(self._ctrlID)
         self.qb_logo1.setIcon(QIcon(logo.provideQPixmap()))
 
@@ -583,7 +584,7 @@ class MatchDataWidget(QWidget):
             self.controller.historyManager.insertTeam(team, logo)
 
         if self.controller.matchControl.activeMatchId() == self._ctrlID:
-            self.controller.updateLogosHTML(force)
+            self.controller.updateLogosWebsocket()
 
     def allkillUpdate(self):
         """In case of allkill move the winner to the next set."""
