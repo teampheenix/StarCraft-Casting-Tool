@@ -86,7 +86,7 @@ class TextFilesThread(TasksThread):
             file = scctool.settings.getAbsPath(
                 f"{scctool.settings.casting_data_dir}/score{team+1}.txt")
             with open(file, mode='w', encoding='utf-8') as f:
-                f.write(score[team])
+                f.write(f'{score[team]}')
 
     def __writeLeague(self):
         file = scctool.settings.getAbsPath(
