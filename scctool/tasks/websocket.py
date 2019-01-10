@@ -1,5 +1,6 @@
 """Interaction with Browser Source via Websocket."""
 import asyncio
+import http
 import json
 import logging
 import re
@@ -66,7 +67,8 @@ class WebsocketThread(QThread):
                                         max_queue=16,
                                         max_size=10240,
                                         read_limit=10240,
-                                        write_limit=10240)
+                                        write_limit=10240,
+                                        process_request=self.http_request)
         self.__server = self.__loop.run_until_complete(start_server)
         self.__loop.run_forever()
 
@@ -459,3 +461,11 @@ class WebsocketThread(QThread):
         if old_set != new_set:
             for item in new_set:
                 yield item
+
+    async def http_request(self, path, request_headers):
+        if len(request_headers.get_all('Sec-WebSocket-Key')) > 0:
+            return None
+        headers = []
+        headers.append('Content-Type: text/html; charset=utf-8')
+
+        return http.HTTPStatus.OK, [], b'OK\n'
