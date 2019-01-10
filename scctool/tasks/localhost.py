@@ -1,14 +1,16 @@
 """Hosts browser sources in the local network."""
 import http.server
 import logging
-import threading
 import os
-import urllib.parse
-from uuid import uuid4
+import threading
 
 from PyQt5 import QtCore
 
 import scctool.settings
+
+# import urllib.parse
+# from uuid import uuid4
+
 
 module_logger = logging.getLogger(__name__)
 
@@ -17,16 +19,18 @@ class myHandler(http.server.SimpleHTTPRequestHandler):
 
     # Handler for the GET requests
     def do_GET(self):
+        html_dir = scctool.settings.casting_html_dir
+        data_dir = scctool.settings.dataDir
         print(self.path)
 
         if not self.path:
             self.path = "score.html"
 
-        self.path = self.path.replace('/' + scctool.settings.casting_html_dir + '/', '/./')
-        self.path = self.path.replace('/' + scctool.settings.casting_data_dir + '/',
-                                      '/../'+scctool.settings.casting_data_dir+'/')
-        self.path = self.path.replace('/' + scctool.settings.dataDir + '/',
-                                      '/../'+scctool.settings.dataDir+'/')
+        self.path = self.path.replace('/' + html_dir + '/', '/./')
+        self.path = self.path.replace('/' + html_dir + '/',
+                                      '/../' + html_dir + '/')
+        self.path = self.path.replace('/' + data_dir + '/',
+                                      '/../' + data_dir + '/')
 
         self.path = self.path[1:]
         print(self.path, self.requestline)
@@ -55,7 +59,7 @@ class myHandler(http.server.SimpleHTTPRequestHandler):
                 mimetype = 'text/css'
                 sendReply = True
 
-            if sendReply == True:
+            if sendReply:
                 # Open the static file requested and send it
                 with open(file, 'rb') as f:
                     self.send_response(200)
