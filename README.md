@@ -1,7 +1,7 @@
 [![Release](https://img.shields.io/github/release/teampheenix/StarCraft-Casting-Tool.svg)](https://github.com/teampheenix/StarCraft-Casting-Tool/releases/latest)
-[![GitHub (Pre-)Release Date](https://img.shields.io/github/release-date-pre/teampheenix/StarCraft-Casting-Tool.svg)](https://github.com/teampheenix/StarCraft-Casting-Tool/releases)
 [![Downloads](https://img.shields.io/github/downloads/teampheenix/StarCraft-Casting-Tool/total.svg)](https://github.com/teampheenix/StarCraft-Casting-Tool/releases/latest)
 [![GitHub license](https://img.shields.io/github/license/teampheenix/StarCraft-Casting-Tool.svg)](https://github.com/teampheenix/StarCraft-Casting-Tool/blob/master/LICENSE)
+[![Requirements Status](https://requires.io/github/teampheenix/StarCraft-Casting-Tool/requirements.svg?branch=master)](https://requires.io/github/teampheenix/StarCraft-Casting-Tool/requirements/?branch=master)
 [![Discord](https://img.shields.io/discord/408901724355559435.svg)](https://discord.gg/G9hFEfh)
 [![Patreon](https://img.shields.io/badge/Become%20a-Patron-orange.svg)](https://www.patreon.com/StarCraftCastingTool)
 [![Paypal](https://img.shields.io/badge/Donate-PayPal-blue.svg)](https://www.paypal.me/StarCraftCastingTool)
@@ -68,7 +68,7 @@ This tool should run on any operating system that supports Python 3, e.g., Windo
 
 ### Basics
 
-Run StarCraft Casting Tool via `StarCraft-Casting-Tool.exe` (or `StarCraftCastingTool.pyw`). Enter the Match-URL of an AlphaTL or RSTL match in the *Match Grabber* tab, e.g., "https://alpha.tl/match/3000", and press *Load Data from URL*. Alternatively one can create a match in the *Custom Match* tab.  Edit the data if necessary. The sliders control the score of each map. The top slider is to select *your* team. Once selected the border of the Map Icons turn (by default) green or red depending on the result. To select your team automatically you can add it to *Favorite Teams* list under *Settings: Misc*. Similarly you can enter your players' nicknames into *Favorite Players* for auto completion.
+Run StarCraft Casting Tool via `StarCraft-Casting-Tool.exe` (or `StarCraftCastingTool.pyw`). Enter the Match-URL of an AlphaTL or RSL match in the *Match Grabber* tab, e.g., "https://alpha.tl/match/3000", and press *Load Data from URL*. Alternatively one can create a match in the *Custom Match* tab.  Edit the data if necessary. The sliders control the score of each map. The top slider is to select *your* team. Once selected the border of the Map Icons turn (by default) green or red depending on the result. To select your team automatically you can add it to *Favorite Teams* list under *Settings: Misc*. Similarly you can enter your players' nicknames into *Favorite Players* for auto completion.
 
 ### Data for Streaming
 All data (placed in `casting_data` or `casting_html`) can be found in the respective *profile folder* at `C:\Users\<User>\AppData\Local\team pheeniX\StarCraft-Casting-Tool\profiles\<Profile>\` that can be accessed conveniently by via SCCT's menu *Profile: Open current folder*.
