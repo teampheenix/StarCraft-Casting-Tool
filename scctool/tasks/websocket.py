@@ -287,7 +287,7 @@ class WebsocketThread(QThread):
         self.scopes[primary_scope].add(path)
         self.connected[path].add(websocket)
         self.socketConnectionChanged.emit(
-            len(self.connected[path]), primary_scope)
+            len(self.scopes[primary_scope]), primary_scope)
         if primary_scope == 'intro':
             self.register_hotkeys('intro')
         if primary_scope == 'ui_logo':
