@@ -26,8 +26,19 @@ class Controller {
     if (this.ident != 0) {
       path = path + '_' + this.ident.toString();
     }
-    var port = parseInt("0x".concat(this.profile), 16);
-    return ("ws://" + window.location.hostname + ":").concat(port, "/", path);
+    if(window.location.hostname){
+      var host = window.location.hostname
+      if(window.location.port){
+        var port = window.location.port
+      }else{
+        var port = 80;
+      }
+    }else{
+      var port = parseInt("0x".concat(this.profile), 16);
+      var host = 'localhost'
+    }
+    console.log('Port:', port)
+    return ("ws://" + host + ":").concat(port, "/", path);
   }
 
   storeData(key, value, json = false) {

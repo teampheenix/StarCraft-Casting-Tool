@@ -3,6 +3,7 @@ import asyncio
 import http
 import json
 import logging
+import os.path
 import re
 from uuid import uuid4
 
@@ -465,7 +466,58 @@ class WebsocketThread(QThread):
     async def http_request(self, path, request_headers):
         if len(request_headers.get_all('Sec-WebSocket-Key')) > 0:
             return None
-        headers = []
-        headers.append('Content-Type: text/html; charset=utf-8')
+        headers = dict()
 
-        return http.HTTPStatus.OK, [], b'OK\n'
+        file = os.path.join(scctool.settings.casting_html_dir, 'score.html')
+
+        html_dir = scctool.settings.casting_html_dir
+        data_dir = scctool.settings.dataDir
+
+        if path in ['/', '']:
+            path = "/score.html"
+
+        if path in ['/score', '/logo1', '/logo2', '/aligulac', '']:
+            path = f'{path}.html'
+
+        path = path.replace(f'/{html_dir}/', '/./')
+        path = path.replace(f'/{html_dir}/', f'/../{html_dir}/')
+        path = path.replace(f'/{data_dir}/logos/', f'/../{data_dir}/logos/')
+
+        path = path[1:]
+        module_logger.info(f'HTTP request for {path}')
+
+        try:
+            if path.endswith(".html"):
+                mimetype = 'text/html'
+            elif path.endswith(".jpg"):
+                mimetype = 'image/jpg'
+            elif path.endswith(".png"):
+                mimetype = 'image/png'
+            elif path.endswith(".gif"):
+                mimetype = 'image/gif'
+            elif path.endswith(".js"):
+                mimetype = 'application/javascript'
+            elif path.endswith(".css"):
+                mimetype = 'text/css'
+            else:
+                path = f'{path}.html'
+                mimetype = 'text/html'
+
+            file = scctool.settings.getAbsPath(
+                os.path.join(html_dir, path))
+            sendReply = os.path.isfile(file)
+
+            if sendReply:
+                # Open the static file requested and send it
+                with open(file, 'rb') as f:
+                    headers['Content-Type'] = f'{mimetype}'
+                    content = f.read()
+                    status = http.HTTPStatus.OK
+            else:
+                status = http.HTTPStatus.INTERNAL_SERVER_ERROR
+                content = b'ERROR'
+        except Exception:
+            status = http.HTTPStatus.NOT_FOUND
+            content = b'ERROR'
+
+        return status, headers, content
