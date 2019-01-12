@@ -51,6 +51,9 @@ class WebsocketThread(QThread):
     def get_primary_scopes(self):
         return list(self.scopes.keys())
 
+    def get_port(self):
+        return int(scctool.settings.profileManager.currentID(), 16)
+
     def run(self):
         """Run thread."""
         module_logger.info("WebSocketThread starting!")
@@ -58,9 +61,8 @@ class WebsocketThread(QThread):
         self.__loop = asyncio.new_event_loop()
         asyncio.set_event_loop(self.__loop)
 
-        port = int(scctool.settings.profileManager.currentID(), 16)
-        module_logger.info(
-            'Starting Websocket Server with port {}.'.format(port))
+        port = self.get_port()
+        module_logger.info(f'Starting Websocket Server with port {port}.')
         # Create the server.
         start_server = websockets.serve(self.handler,
                                         host='localhost',
@@ -471,6 +473,7 @@ class WebsocketThread(QThread):
         file = os.path.join(scctool.settings.casting_html_dir, 'score.html')
 
         html_dir = scctool.settings.casting_html_dir
+        casting_data_dir = scctool.settings.casting_data_dir
         data_dir = scctool.settings.dataDir
 
         if path in ['/', '']:
@@ -481,24 +484,37 @@ class WebsocketThread(QThread):
 
         path = path.replace(f'/{html_dir}/', '/./')
         path = path.replace(f'/{html_dir}/', f'/../{html_dir}/')
+        path = path.replace(f'/{casting_data_dir}/',
+                            f'/../{casting_data_dir}/')
         path = path.replace(f'/{data_dir}/logos/', f'/../{data_dir}/logos/')
+        path = path.split('?')[0]
 
         path = path[1:]
         module_logger.info(f'HTTP request for {path}')
 
         try:
             if path.endswith(".html"):
-                mimetype = 'text/html'
+                mimetype = 'text/html; charset=utf-8'
+            elif path.endswith(".txt"):
+                mimetype = 'text/plain; charset=utf-8'
             elif path.endswith(".jpg"):
                 mimetype = 'image/jpg'
+            elif path.endswith(".jpeg"):
+                mimetype = 'image/jpeg'
+            elif path.endswith(".svg"):
+                mimetype = 'image/svg+xml'
             elif path.endswith(".png"):
                 mimetype = 'image/png'
             elif path.endswith(".gif"):
                 mimetype = 'image/gif'
+            elif path.endswith(".wav"):
+                mimetype = 'audio/x-wav'
+            elif path.endswith(".mp3"):
+                mimetype = 'audio/mpeg'
             elif path.endswith(".js"):
-                mimetype = 'application/javascript'
+                mimetype = 'application/javascript; charset=utf-8'
             elif path.endswith(".css"):
-                mimetype = 'text/css'
+                mimetype = 'text/css; charset=utf-8'
             else:
                 path = f'{path}.html'
                 mimetype = 'text/html'
@@ -506,6 +522,11 @@ class WebsocketThread(QThread):
             file = scctool.settings.getAbsPath(
                 os.path.join(html_dir, path))
             sendReply = os.path.isfile(file)
+
+            if not sendReply:
+                file = scctool.settings.getAbsPath(
+                    os.path.join(casting_data_dir, path))
+                sendReply = os.path.isfile(file)
 
             if sendReply:
                 # Open the static file requested and send it

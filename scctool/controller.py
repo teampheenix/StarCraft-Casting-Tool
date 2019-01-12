@@ -819,14 +819,21 @@ class MainController:
         self.mapstatsManager.selectMap(
             self.matchControl.activeMatch().getMap(player_idx))
 
+    def getBrowserSourceURL(self, file):
+        file = file.replace('\\', '/')
+        file = file.replace('.html', '')
+        return f'http://localhost:{self.websocketThread.get_port()}/{file}'
+
     def toogleLEDs(self, num, path, view=None):
         """Indicate when browser sources are connected."""
         if not view:
             view = self.view
         view.leds[path].setChecked(num > 0)
         name = path.replace('_', ' ').title()
+        port = self.websocketThread.get_port()
         view.leds[path].setToolTip(
-            _("{} {} Browser Source(s) connected.").format(num, name))
+            _("{} {} Browser Source(s) connected on port {}.").format(
+                num, name, port))
         if path == 'intro':
             if num > 0:
                 self.runSC2ApiThread("playerIntros")
@@ -989,7 +996,7 @@ class MainController:
             text = _("A new version {} is available.")
             messagebox.setText(text.format(version))
             messagebox.setInformativeText(_("Update to new version?"))
-            messagebox.setWindowTitle(_("New SCC-Tool Version"))
+            messagebox.setWindowTitle(_("New StarCraft Casting Tool Version"))
             messagebox.setStandardButtons(
                 QMessageBox.Yes | QMessageBox.No)
             messagebox.setDefaultButton(QMessageBox.Yes)

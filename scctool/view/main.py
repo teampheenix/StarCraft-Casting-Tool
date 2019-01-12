@@ -65,7 +65,7 @@ class MainWindow(QMainWindow):
             mainLayout.addWidget(self.horizontalGroupBox, 0)
 
             self.setWindowTitle(
-                "StarCraft Casting Tool v{}".format(scctool.__version__))
+                f"StarCraft Casting Tool v{scctool.__version__}")
 
             self.window = QWidget()
             self.window.setLayout(mainLayout)
@@ -295,49 +295,69 @@ class MainWindow(QMainWindow):
 
         srcs = []
         srcs.append({'name': _('Intro'),
+                     'icon': 'info.png',
                      'file': 'intro.html',
                      'settings': lambda: self.openBrowserSourcesDialog(
                      'intro')})
         srcs.append({'name': _('Mapstats'),
+                     'icon': 'stats.png',
                      'file': 'mapstats.html',
                      'settings': lambda: self.openBrowserSourcesDialog(
                      'mapstats')})
         srcs.append({'name': _('Score'),
+                     'icon': 'score.png',
                      'file': 'score.html'})
         srcs.append({'name': _('Map Icons Box'),
+                     'icon': 'box.png',
                      'settings': lambda: self.openBrowserSourcesDialog(
                      'mapicons_box'),
                      'sub': [{'name': _('Icon Set {}').format(1),
+                              'icon': 'one.png',
                               'file': 'mapicons_box_1.html'},
                              {'name': _('Icon Set {}').format(2),
+                              'icon': 'two.png',
                               'file': 'mapicons_box_2.html'},
                              {'name': _('Icon Set {}').format(3),
+                              'icon': 'three.png',
                               'file': 'mapicons_box_3.html'}]})
         srcs.append({'name': _('Map Icons Landscape'),
+                     'icon': 'landscape.png',
                      'settings': lambda: self.openBrowserSourcesDialog(
                      "mapicons_landscape"),
                      'sub': [{'name': _('Icon Set {}').format(1),
+                              'icon': 'one.png',
                               'file': 'mapicons_landscape_1.html'},
                              {'name': _('Icon Set {}').format(2),
+                              'icon': 'two.png',
                               'file': 'mapicons_landscape_2.html'},
                              {'name': _('Icon Set {}').format(3),
+                              'icon': 'three.png',
                               'file': 'mapicons_landscape_3.html'}]})
         srcs.append({'name': _('Misc'),
+                     'icon': 'misc.png',
                      'sub': [{'name': _('Logo {}').format(1),
+                              'icon': 'one.png',
                               'file': 'logo1.html'},
                              {'name': _('Logo {}').format(2),
+                              'icon': 'two.png',
                               'file': 'logo2.html'},
                              {'name': _('UI Logo {}').format(1),
+                              'icon': 'one.png',
                               'file': 'ui_logo_1.html'},
                              {'name': _('UI Logo {}').format(2),
+                              'icon': 'two.png',
                               'file': 'ui_logo_2.html'},
                              {'name': _('Aligulac (only 1vs1)'),
+                              'icon': 'aligulac.ico',
                               'file': 'aligulac.html'},
                              {'name': _('Countdown'),
+                              'icon': 'countdown.png',
                               'file': 'countdown.html'},
-                             {'name': _('League (ALphaTL && RSL only)'),
+                             {'name': _('League (AlphaTL && RSL only)'),
+                              'icon': 'alpha.png',
                               'file': 'league.html'},
                              {'name': _('Matchbanner (AlphaTL)'),
+                              'icon': 'alpha.png',
                               'file': 'matchbanner.html',
                               'settings': lambda:
                               self.openMiscDialog('alphatl')}
@@ -352,24 +372,37 @@ class MainWindow(QMainWindow):
 
         for src in srcs:
             myMenu = QMenu(src['name'], self)
+            if src.get('icon', None) is not None:
+                myMenu.setIcon(QIcon(scctool.settings.getResFile(src['icon'])))
             sub = src.get('sub', False)
             if sub:
                 for icon in sub:
+                    short_file = icon['file']
                     mySubMenu = QMenu(icon['name'], self)
+                    if icon.get('icon', None) is not None:
+                        mySubMenu.setIcon(
+                            QIcon(scctool.settings.getResFile(icon['icon'])))
                     icon['file'] = os.path.join(
                         scctool.settings.casting_html_dir, icon['file'])
                     act = QAction(QIcon(scctool.settings.getResFile(
-                        'html.png')), _('Open in Browser'), self)
+                        'html.png')), _('Open URL in Browser'), self)
                     act.triggered.connect(
                         lambda x,
-                        file=icon['file']: self.controller.openURL(
-                            scctool.settings.getAbsPath(file)))
+                        file=short_file: self.controller.openURL(
+                            self.controller.getBrowserSourceURL(file)))
                     mySubMenu.addAction(act)
                     act = QAction(QIcon(scctool.settings.getResFile(
                         'copy.png')), _('Copy URL to Clipboard'), self)
                     act.triggered.connect(
-                        lambda x, file=icon['file']:
+                        lambda x, file=short_file:
                         QApplication.clipboard().setText(
+                            self.controller.getBrowserSourceURL(file)))
+                    mySubMenu.addAction(act)
+                    act = QAction(QIcon(scctool.settings.getResFile(
+                        'browser2.png')), _('Open File in Browser'), self)
+                    act.triggered.connect(
+                        lambda x,
+                        file=icon['file']: self.controller.openURL(
                             scctool.settings.getAbsPath(file)))
                     mySubMenu.addAction(act)
                     if icon.get('settings', None) is not None:
@@ -379,20 +412,28 @@ class MainWindow(QMainWindow):
                         mySubMenu.addAction(act)
                     myMenu.addMenu(mySubMenu)
             else:
+                short_file = src['file']
                 src['file'] = os.path.join(
                     scctool.settings.casting_html_dir, src['file'])
                 act = QAction(QIcon(scctool.settings.getResFile(
-                    'html.png')), _('Open in Browser'), self)
+                    'html.png')), _('Open URL in Browser'), self)
                 act.triggered.connect(
                     lambda x,
-                    file=src['file']: self.controller.openURL(
-                        scctool.settings.getAbsPath(file)))
+                    file=short_file: self.controller.openURL(
+                        self.controller.getBrowserSourceURL(file)))
                 myMenu.addAction(act)
                 act = QAction(QIcon(scctool.settings.getResFile(
                     'copy.png')), _('Copy URL to Clipboard'), self)
                 act.triggered.connect(
-                    lambda x, file=src['file']:
+                    lambda x, file=short_file:
                     QApplication.clipboard().setText(
+                        self.controller.getBrowserSourceURL(file)))
+                myMenu.addAction(act)
+                act = QAction(QIcon(scctool.settings.getResFile(
+                    'browser2.png')), _('Open File in Browser'), self)
+                act.triggered.connect(
+                    lambda x,
+                    file=src['file']: self.controller.openURL(
                         scctool.settings.getAbsPath(file)))
                 myMenu.addAction(act)
 
@@ -401,6 +442,7 @@ class MainWindow(QMainWindow):
                     'browser.png')), _('Settings'), self)
                 act.triggered.connect(src['settings'])
                 myMenu.addAction(act)
+
             main_menu.addMenu(myMenu)
 
         main_menu.addSeparator()
