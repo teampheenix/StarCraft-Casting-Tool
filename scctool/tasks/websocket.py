@@ -65,7 +65,6 @@ class WebsocketThread(QThread):
         module_logger.info(f'Starting Websocket Server with port {port}.')
         # Create the server.
         start_server = websockets.serve(self.handler,
-                                        host='localhost',
                                         port=port,
                                         max_queue=16,
                                         max_size=10240,
@@ -194,13 +193,17 @@ class WebsocketThread(QThread):
         return ''
 
     async def handler(self, websocket, input_path):
+        try:
+            ip = websocket.remote_address[0]
+        except Exception:
+            ip = '?'
         path = self.handle_path(input_path)
         if not path:
             module_logger.info(
                 "Client with incorrect path {}.".format(input_path))
             return
         self.registerConnection(websocket, path)
-        module_logger.info("Client connected at path {}!".format(path))
+        module_logger.info(f"Client ({ip}) connected at path {path}!")
         primary_scope = self.get_primary_scope(path)
 
         if primary_scope not in ['ui_logo', 'logo']:
