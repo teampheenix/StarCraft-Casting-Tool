@@ -522,6 +522,8 @@ class WebsocketThread(QThread):
                 path = f'{path}.html'
                 mimetype = 'text/html'
 
+            path = os.path.normpath(path)
+
             file = scctool.settings.getAbsPath(
                 os.path.join(html_dir, path))
             sendReply = os.path.isfile(file)
@@ -530,6 +532,9 @@ class WebsocketThread(QThread):
                 file = scctool.settings.getAbsPath(
                     os.path.join(casting_data_dir, path))
                 sendReply = os.path.isfile(file)
+
+            if path.count('..') > 1:
+                sendReply = False
 
             if sendReply:
                 # Open the static file requested and send it
