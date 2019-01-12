@@ -8,7 +8,7 @@ class Controller {
     this.font = null;
     this.storage = window.localStorage;
     this.generateKey();
-    if(load_style){
+    if (load_style) {
       this.loadCssFile(this.loadData('css'));
       this.setFont(this.loadData('font'));
     }
@@ -26,18 +26,18 @@ class Controller {
     if (this.ident != 0) {
       path = path + '_' + this.ident.toString();
     }
-    if(window.location.hostname){
-      var host = window.location.hostname
-      if(window.location.port){
-        var port = window.location.port
-      }else{
+    if (window.location.hostname && window.location.hostname != 'absolute') {
+      var host = window.location.hostname;
+      if (window.location.port) {
+        var port = window.location.port;
+      } else {
         var port = 80;
       }
-    }else{
+    } else {
       var port = parseInt("0x".concat(this.profile), 16);
-      var host = 'localhost'
+      var host = 'localhost';
     }
-    console.log('Port:', port)
+    console.log(("ws://" + host + ":").concat(port, "/", path));
     return ("ws://" + host + ":").concat(port, "/", path);
   }
 
@@ -60,16 +60,18 @@ class Controller {
     fileref.setAttribute("rel", "stylesheet");
     fileref.setAttribute("type", "text/css");
     fileref.setAttribute("href", file);
-    fileref.setAttribute("onload", "controller.css_loaded()")
-    document.getElementsByTagName("head")[0].appendChild(fileref)
+    fileref.setAttribute("onload", "controller.css_loaded()");
+    document.getElementsByTagName("head")[0].appendChild(fileref);
   }
 
-  css_loaded(){
+  css_loaded() {
     this.defaultFont = getComputedStyle(document.body).getPropertyValue('--font').trim();
     this.font = this.defaultFont;
     this.setFont(this.newFont);
     try {
-      $(document).find(".text-fill").textfill({maxFontPixels: 80});
+      $(document).find(".text-fill").textfill({
+        maxFontPixels: 80
+      });
     } catch (e) {}
   }
 
@@ -83,7 +85,7 @@ class Controller {
 
   setFont(newFont) {
     if (!newFont) return;
-    if (!this.defaultFont){
+    if (!this.defaultFont) {
       this.newFont = newFont;
       return;
     }
@@ -91,7 +93,7 @@ class Controller {
     if (newFont == 'DEFAULT' || !newFont) {
       newFont = this.defaultFont;
     }
-    if (this.font != newFont){
+    if (this.font != newFont) {
       console.log("Set font to " + newFont);
       document.documentElement.style.setProperty('--font', newFont);
       this.font = newFont;
