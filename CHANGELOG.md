@@ -1,6 +1,25 @@
 # Changelog
 
 
+## v2.6.0 (2019-01-12)
+
+### New
+
+* StarCraft Casting Tool now serves all browser sources via http. This allows for easier access and access via local network or internet.
+
+* Added txt-files `score1.txt` and `score2.txt` with individual scores to casting_data.
+
+### Changes
+
+* Executable is now 64-bit based on Python 3.7.2 (32-bit is no longer supported)
+
+### Fix
+
+* Fixed a bug where the number of connected browser sources would not be displayed correctly.
+
+* Fixed an issue where the top border of the StarCraft 2 score icon would be cut off with standard Custom CSS settings in OBS.
+
+
 ## v2.5.4 (2018-12-15)
 
 ### Fix
