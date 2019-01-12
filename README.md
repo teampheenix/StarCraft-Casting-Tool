@@ -82,7 +82,7 @@ Instead of including browser sources *from local file*, one can include them via
 
 The disadvantage is that the browser source that are included via a local network URL are only available when StarCraft Casting Tool is running, whereas the browser sources from local file will display the last data even if the tool is not running.
 
-You can use this to serve browser sources to another PC in the network or to a different person via the internet given that you enable port forwarding on your PC (and router) for the specific port (TCP) that StarCraft Casting Tool is using.
+You can use this to serve browser sources to another PC in the network (`http://{your_local_network_ip}:{port}/{browser_source}`) or to a different person via the internet (`http://{your_internet_ip}:{port}/{browser_source}`) given that you enable port forwarding on your PC (and router) for the specific port (TCP) that StarCraft Casting Tool is using.
 
 ### Twitch & Nightbot
 To update your [Twitch](https://www.twitch.tv/) title (and set your game to *StarCraft 2*) or [Nightbot](https://nightbot.tv/) command via click on *Update Twitch Title* or *Update Nightbot* you have to set your Twitch *Channel* and/or generate an corresponding access token. This can be done via *Settings: Connections*. Note that you can also change the title of Twitch channels that do not belong to the user you have generated the access token with as long as this user is registered as an editor of corresponding channel. The format of your new title can be customized via the *Title Template* with the use of placeholders (hover over the input field to get a list of all available placeholders) and specified under *Settings: Connections*.
