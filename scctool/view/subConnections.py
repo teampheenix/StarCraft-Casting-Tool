@@ -1,4 +1,3 @@
-"""Show connections settings sub window."""
 import logging
 import weakref
 
@@ -10,10 +9,15 @@ from PyQt5.QtWidgets import (QBoxLayout, QCheckBox, QFormLayout, QGroupBox,
                              QSpacerItem, QTabWidget, QVBoxLayout, QWidget)
 
 import scctool.settings
+import scctool.settings.translation
 from scctool.view.widgets import Completer, MonitoredLineEdit
+
+"""Show connections settings sub window."""
+
 
 # create logger
 module_logger = logging.getLogger(__name__)
+_ = scctool.settings.translation.gettext
 
 
 class SubwindowConnections(QWidget):
@@ -129,8 +133,8 @@ class SubwindowConnections(QWidget):
         self.twitchTemplate.setAlignment(Qt.AlignCenter)
         self.twitchTemplate.setPlaceholderText("(League) – (Team1) vs (Team2)")
         self.twitchTemplate.setToolTip(
-            _('Available placeholders:') + " " +
-            ', '.join(self.controller.placeholders.available()))
+            _('Available placeholders:') + " "
+            + ', '.join(self.controller.placeholders.available()))
 
         completer = Completer(
             self.controller.placeholders.available(), self.twitchTemplate)
@@ -352,8 +356,8 @@ class CommandDropBox(QGroupBox):
         self.message.setAlignment(Qt.AlignCenter)
         self.message.setPlaceholderText(_('message, e.g.,') + ' (URL)')
         self.message.setToolTip(
-            _('Available placeholders:') + ' ' +
-            ', '.join(self.controller.placeholders.available()))
+            _('Available placeholders:') + ' '
+            + ', '.join(self.controller.placeholders.available()))
         completer = Completer(
             self.controller.placeholders.available(), self.message)
 

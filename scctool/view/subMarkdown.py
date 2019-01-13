@@ -1,4 +1,3 @@
-"""Show readme sub window."""
 import logging
 import re
 
@@ -9,9 +8,16 @@ from PyQt5.QtWidgets import (QGridLayout, QPushButton, QSizePolicy,
                              QSpacerItem, QTextBrowser, QWidget)
 
 import scctool.settings
+import scctool.settings.translation
+
+"""Show readme sub window."""
+
+
 
 # create logger
 module_logger = logging.getLogger(__name__)
+
+_ = scctool.settings.translation.gettext
 
 
 class SubwindowMarkdown(QWidget):

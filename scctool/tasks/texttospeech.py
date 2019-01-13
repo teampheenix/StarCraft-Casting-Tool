@@ -7,8 +7,10 @@ import random
 import requests
 
 import scctool.settings
+import scctool.settings.translation
 
 module_logger = logging.getLogger(__name__)
+_ = scctool.settings.translation.gettext
 
 
 class TextToSpeech:
@@ -83,7 +85,7 @@ class TextToSpeech:
                 data = json.load(json_file)
                 if not isinstance(data, list):
                     data = []
-        except Exception as e:
+        except Exception:
             data = []
 
         self.__cache = data
@@ -94,7 +96,7 @@ class TextToSpeech:
             with open(scctool.settings.getJsonFile('tts'), 'w',
                       encoding='utf-8-sig') as outfile:
                 json.dump(self.__cache, outfile)
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def _uniqid(self):
@@ -178,8 +180,8 @@ class TextToSpeech:
 
         option = {}
         option['desc'] = '{% player %} playing as {% race %}'
-        option['ssml'] = """<speak><emphasis level="moderate">{player}</emphasis>
-playing as {race}</speak>"""
+        option['ssml'] = ('<speak><emphasis level="moderate">{player}'
+                          '</emphasis>playing as {race}</speak>')
         option['backup'] = ''
         self.options['player_race'] = option
 
@@ -194,30 +196,37 @@ is occupied by the {race} player:
 
         option = {}
         option['desc'] = '{% team %} - {% player %}'
-        option['ssml'] = """<speak><emphasis level="moderate">{team}</emphasis>
-<emphasis level="moderate">{player}</emphasis></speak>"""
+        option['ssml'] = """<speak>
+<emphasis level="moderate">{team}</emphasis>
+<emphasis level="moderate">{player}</emphasis>
+</speak>"""
         option['backup'] = 'player'
         self.options['team_player'] = option
 
         option = {}
         option['desc'] = '{% player %} playing for {% team %}'
-        option['ssml'] = """<speak><emphasis level="moderate">{player}</emphasis>
-playing for <emphasis level="moderate">{team}</emphasis></speak>
+        option['ssml'] = """<speak>
+<emphasis level="moderate">{player}</emphasis>
+playing for <emphasis level="moderate">{team}</emphasis>
+</speak>
 """
         option['backup'] = 'player'
         self.options['team_player_2'] = option
 
         option = {}
         option['desc'] = '{% player %} representing {% team %}'
-        option['ssml'] = """<speak><emphasis level="moderate">{player}</emphasis>
-representing <emphasis level="moderate">{team}</emphasis></speak>
+        option['ssml'] = """<speak>
+<emphasis level="moderate">{player}</emphasis>
+representing <emphasis level="moderate">{team}</emphasis>
+</speak>
 """
         option['backup'] = 'player'
         self.options['team_player_3'] = option
 
         option = {}
         option['desc'] = '{% player %} playing as {% race %} for {% team %}'
-        option['ssml'] = """<speak><emphasis level="moderate">{player}</emphasis>
+        option['ssml'] = """<speak>
+<emphasis level="moderate">{player}</emphasis>
 playing as {race} for
 <emphasis level="moderate">{team}</emphasis></speak>
 """

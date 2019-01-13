@@ -1,4 +1,3 @@
-"""Data grabber for Liquipedia."""
 import logging
 import re
 import urllib.parse
@@ -6,10 +5,15 @@ import urllib.parse
 import requests
 from bs4 import BeautifulSoup
 
+import scctool.settings.translation
 from scctool import __version__ as scct_version
+
+"""Data grabber for Liquipedia."""
+
 
 # create logger
 module_logger = logging.getLogger(__name__)
+_ = scctool.settings.translation.gettext
 
 
 class LiquipediaGrabber:

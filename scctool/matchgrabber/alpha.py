@@ -1,13 +1,17 @@
-"""Provide match grabber for AlphaTL."""
-
 import logging
 from urllib.request import urlopen, urlretrieve
 
 import scctool.settings
+import scctool.settings.translation
 from scctool.matchgrabber.custom import MatchGrabber as MatchGrabberParent
+
+"""Provide match grabber for AlphaTL."""
+
+
 
 # create logger
 module_logger = logging.getLogger(__name__)
+_ = scctool.settings.translation.gettext
 
 
 class MatchGrabber(MatchGrabberParent):
@@ -30,9 +34,9 @@ class MatchGrabber(MatchGrabberParent):
             raise ValueError(msg)
         else:
             self._rawData = data
-            overwrite = (metaChange or
-                         self._matchData.getURL().strip() !=
-                         self.getURL().strip())
+            overwrite = (metaChange
+                         or self._matchData.getURL().strip()
+                         != self.getURL().strip())
             with self._matchData.emitLock(overwrite,
                                           self._matchData.metaChanged):
                 self._matchData.setNoSets(5, resetPlayers=overwrite)
@@ -58,8 +62,8 @@ class MatchGrabber(MatchGrabberParent):
                 self._matchData.setAce(4, True)
 
                 for team_idx in range(2):
-                    for set_idx, player in enumerate(data['lineup' +
-                                                          str(team_idx + 1)]):
+                    for set_idx, player in enumerate(data['lineup'
+                                                          + str(team_idx + 1)]):
                         try:
                             playername = self._aliasPlayer(player['nickname'])
                             if not isinstance(playername, str):

@@ -1,6 +1,4 @@
 """StarCraft Casting Tool."""
-
-import gettext
 import logging
 import sys
 
@@ -9,12 +7,15 @@ from PyQt5.QtWidgets import QApplication, QMessageBox, QStyleFactory
 
 import scctool.settings
 import scctool.settings.config
+import scctool.settings.translation
 
 logger = logging.getLogger(__name__)
 
 __version__ = "2.6.0"
 __latest_version__ = __version__
 __new_version__ = False
+
+_ = scctool.settings.translation.gettext
 
 
 def main():
@@ -78,8 +79,8 @@ def main_window(app, showChangelog=False):
         MainWindow(cntlr, app, showChangelog)
         return cntlr
 
-    except Exception as e:
-        logger.exception("message")
+    except Exception:
+        logger.exception("Exception in main_window")
         raise
 
 
@@ -104,19 +105,10 @@ def initial_download():
 
 
 def choose_language(app, translator):
+
+    scctool.settings.translation.set_language()
+
     language = scctool.settings.config.parser.get("SCT", "language")
-    localesDir = scctool.settings.getLocalesDir()
-
-    try:
-        lang = gettext.translation(
-            'messages',
-            localedir=localesDir,
-            languages=[language])
-    except Exception:
-        lang = gettext.NullTranslations()
-        logger.exception("Lang '{}', dir '{}':".format(language, dir))
-
-    lang.install()
     app.removeTranslator(translator)
     translator = QTranslator(app)
     translator.load(QLocale(language), "qtbase",

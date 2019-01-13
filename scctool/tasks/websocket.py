@@ -1,4 +1,3 @@
-"""Interaction with Browser Source via Websocket."""
 import asyncio
 import http
 import json
@@ -12,9 +11,14 @@ import websockets
 from PyQt5.QtCore import QThread, pyqtSignal
 
 import scctool.settings
+import scctool.settings.translation
+
+"""Interaction with Browser Source via Websocket."""
+
 
 # create logger
 module_logger = logging.getLogger(__name__)
+_ = scctool.settings.translation.gettext
 
 
 class WebsocketThread(QThread):
@@ -89,11 +93,11 @@ class WebsocketThread(QThread):
     def __callback_on_hook(self, scan_code, is_keypad, e, callback):
         if e.is_keypad == is_keypad:
             if e.event_type == keyboard.KEY_DOWN:
-                if((scan_code, is_keypad) not in self.keyboard_state or
-                   self.keyboard_state[(scan_code, is_keypad)]):
+                if((scan_code, is_keypad) not in self.keyboard_state
+                   or self.keyboard_state[(scan_code, is_keypad)]):
                     try:
                         callback()
-                    except Exception as e:
+                    except Exception:
                         module_logger.exception("message")
                 self.keyboard_state[(scan_code, is_keypad)] = False
             if e.event_type == keyboard.KEY_UP:
@@ -122,8 +126,8 @@ class WebsocketThread(QThread):
                 self.register_hotkeys(scope)
             return
         elif scope == 'intro':
-            if (not self.hooked_keys[scope] and
-                    len(self.connected.get('intro', [])) > 0):
+            if (not self.hooked_keys[scope]
+                    and len(self.connected.get('intro', [])) > 0):
                 module_logger.info('Register intro hotkeys.')
                 player1 = scctool.settings.config.loadHotkey(
                     scctool.settings.config.parser.get(
@@ -416,7 +420,7 @@ class WebsocketThread(QThread):
                         "Sending data to '{}': {}".format(path, data))
                     coro = websocket.send(json.dumps(data))
                     asyncio.run_coroutine_threadsafe(coro, self.__loop)
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
         return state
@@ -437,7 +441,7 @@ class WebsocketThread(QThread):
             module_logger.info("Sending data: %s" % data)
             coro = websocket.send(json.dumps(data))
             asyncio.run_coroutine_threadsafe(coro, self.__loop)
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
         return state

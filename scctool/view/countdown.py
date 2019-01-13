@@ -7,7 +7,9 @@ from PyQt5.QtWidgets import (QAction, QCheckBox, QDateTimeEdit, QGridLayout,
                              QRadioButton, QTimeEdit, QWidget)
 
 import scctool.settings.config
+import scctool.settings.translation
 
+_ = scctool.settings.translation.gettext
 module_logger = logging.getLogger(__name__)
 
 

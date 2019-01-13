@@ -1,14 +1,19 @@
-"""Provide match grabber for RSL."""
-
 import logging
 
 import requests
 
 import scctool.settings
+import scctool.settings.translation
 from scctool.matchgrabber.custom import MatchGrabber as MatchGrabberParent
+
+"""Provide match grabber for RSL."""
+
+
+
 
 # create logger
 module_logger = logging.getLogger(__name__)
+_ = scctool.settings.translation.gettext
 
 
 class MatchGrabber(MatchGrabberParent):
@@ -40,9 +45,9 @@ class MatchGrabber(MatchGrabberParent):
         data = data['data']
         self._rawData = data
 
-        overwrite = (metaChange or
-                     self._matchData.getURL().strip() !=
-                     self.getURL().strip())
+        overwrite = (metaChange
+                     or self._matchData.getURL().strip()
+                     != self.getURL().strip())
 
         with self._matchData.emitLock(overwrite,
                                       self._matchData.metaChanged):
@@ -79,10 +84,10 @@ class MatchGrabber(MatchGrabberParent):
 
                     for set_idx in range(4, 5):
                         try:
-                            player = data['result']['8']['member_name' +
-                                                         str(team_idx + 1)]
-                            race = data['result']['8']['r_name' +
-                                                       str(team_idx + 1)]
+                            player = data['result']['8']['member_name'
+                                                         + str(team_idx + 1)]
+                            race = data['result']['8']['r_name'
+                                                       + str(team_idx + 1)]
                         except Exception:
                             pass
 
@@ -92,8 +97,8 @@ class MatchGrabber(MatchGrabberParent):
                             try:
                                 idx = str(5 + set_idx)
                                 temp_race = \
-                                    data['result'][idx]['r_name' +
-                                                        str(team_idx + 1)]
+                                    data['result'][idx]['r_name'
+                                                        + str(team_idx + 1)]
                                 if temp_race is not None:
                                     race = temp_race
                             finally:
@@ -178,13 +183,13 @@ class MatchGrabber(MatchGrabberParent):
                     for set_idx in range(1, bo):
                         try:
                             idx = str(set_idx * 2)
-                            if(not data['result'][idx]['r_name' +
-                                                       str(team_idx + 1)]):
+                            if(not data['result'][idx]['r_name'
+                                                       + str(team_idx + 1)]):
                                 try:
                                     idx = str(set_idx * 2 + 1)
                                     race = \
-                                        data['result'][idx]['r_name' +
-                                                            str(team_idx + 1)]
+                                        data['result'][idx]['r_name'
+                                                            + str(team_idx + 1)]
                                 except Exception:
                                     race = "Random"
                             else:
@@ -258,8 +263,8 @@ class MatchGrabber(MatchGrabberParent):
                 oldLogo = logoManager.getTeam(logo_idx)
                 logo = logoManager.newLogo()
                 new_logo = logo.fromURL(
-                    "https://rfcs.ru" +
-                    self._rawData['member' + str(idx)]['img_m'],
+                    "https://rfcs.ru"
+                    + self._rawData['member' + str(idx)]['img_m'],
                     localFile=oldLogo.getAbsFile(),
                     verify=False)
                 if new_logo:

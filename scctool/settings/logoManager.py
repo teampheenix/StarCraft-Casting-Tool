@@ -1,4 +1,3 @@
-"""Provide logo manager for SCCTool."""
 import filecmp
 import itertools
 import json
@@ -12,10 +11,15 @@ import requests
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
 
+import scctool.settings.translation
 from scctool.settings import (casting_html_dir, getAbsPath, getJsonFile,
                               logosDir)
 
+"""Provide logo manager for SCCTool."""
+
+
 module_logger = logging.getLogger(__name__)
+_ = scctool.settings.translation.gettext
 
 
 class LogoManager:
@@ -31,7 +35,7 @@ class LogoManager:
         self._matches = dict()
         try:
             self.loadJson()
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def newLogo(self):
@@ -57,7 +61,7 @@ class LogoManager:
             with open(getJsonFile('logos'), 'w',
                       encoding='utf-8-sig') as outfile:
                 json.dump(data, outfile)
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def loadJson(self):
@@ -258,8 +262,8 @@ class LogoManager:
             full_fname = os.path.join(dir, fname)
             name, ext = os.path.splitext(fname)
             ext = ext.replace(".", "")
-            if (os.path.isfile(full_fname) and
-                    not (self.isUsed(name) or self.isInLastused(name))):
+            if (os.path.isfile(full_fname)
+                    and not (self.isUsed(name) or self.isInLastused(name))):
                 os.remove(full_fname)
                 module_logger.info("Removed logo {}".format(full_fname))
 
@@ -480,7 +484,7 @@ class Logo:
     def equals(self, logo):
         if self._ident == logo._ident:
             return True
-        if (self._format == logo._format and self._size == logo._size and
-            self._height == logo._height and self._width == logo._width and
-                filecmp.cmp(self.getAbsFile(), logo.getAbsFile())):
+        if (self._format == logo._format and self._size == logo._size
+            and self._height == logo._height and self._width == logo._width
+                and filecmp.cmp(self.getAbsFile(), logo.getAbsFile())):
             return True

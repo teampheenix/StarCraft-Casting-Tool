@@ -1,12 +1,16 @@
-"""Update Nightbot commands."""
 import logging
 
 import requests
 
 import scctool.settings
+import scctool.settings.translation
+
+"""Update Nightbot commands."""
+
 
 # create logger
 module_logger = logging.getLogger(__name__)
+_ = scctool.settings.translation.gettext
 
 
 def base_headers():
@@ -24,9 +28,9 @@ def updateCommand(data):
     # Updates the twitch title specified in the config file
     try:
         headers = base_headers()
-        headers.update({"Authorization": "Bearer " +
-                        scctool.settings.config.parser.get("Nightbot",
-                                                           "token")})
+        headers.update({"Authorization": "Bearer "
+                        + scctool.settings.config.parser.get("Nightbot",
+                                                             "token")})
 
         response = requests.get(
             "https://api.nightbot.tv/1/commands",
@@ -59,8 +63,8 @@ def updateCommand(data):
             deleted = False
             if(skipUpdate):
                 previousMsg[cmd] = message
-                msg = _("Nightbot command '{}' " +
-                        "was already set to '{}'").format(
+                msg = _("Nightbot command '{}' "
+                        + "was already set to '{}'").format(
                     cmd, message)
                 success = True
                 yield cmd, msg, success, False
@@ -127,8 +131,8 @@ def findCommands(response, data):
     for cmd, msg in data.items():
         if cmd in commands_found:
             idx = commands_found[cmd]
-            if (response['commands'][idx]['message'] == msg and
-                    msg != "__DELETE__"):
+            if (response['commands'][idx]['message'] == msg
+                    and msg != "__DELETE__"):
                 yield True, True, response['commands'][idx]['_id'], cmd, msg
             else:
                 yield True, False, response['commands'][idx]['_id'], cmd, msg

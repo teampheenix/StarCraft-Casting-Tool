@@ -1,12 +1,17 @@
-"""Provide aligulac id manager for SCCTool."""
 import json
 import logging
 
 from PyQt5.QtCore import QObject, pyqtSignal
 
+import scctool.settings.translation
 from scctool.settings import getJsonFile
 
+"""Provide aligulac id manager for SCCTool."""
+
+
+
 module_logger = logging.getLogger(__name__)
+_ = scctool.settings.translation.gettext
 
 
 class AligulacManager(QObject):

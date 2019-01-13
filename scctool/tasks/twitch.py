@@ -1,14 +1,18 @@
-"""Update the twitch title to the title specified in the config file."""
 import logging
 
 import requests
 
 import scctool.settings
+import scctool.settings.translation
+
+"""Update the twitch title to the title specified in the config file."""
+
 
 # create logger
 module_logger = logging.getLogger(__name__)
 
 previousTitle = None
+_ = scctool.settings.translation.gettext
 
 
 def updateTitle(newTitle):

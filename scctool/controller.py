@@ -10,6 +10,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QCheckBox, QMessageBox
 
 import scctool.settings
+import scctool.settings.translation
 import scctool.tasks.nightbot
 import scctool.tasks.twitch
 from scctool.matchcontrol import MatchControl
@@ -33,6 +34,8 @@ from scctool.view.widgets import ToolUpdater
 
 # create logger
 module_logger = logging.getLogger(__name__)
+
+_ = scctool.settings.translation.gettext
 
 
 class MainController:
@@ -74,7 +77,7 @@ class MainController:
             self.housekeeper = HouseKeeperThread(self)
             self.initPlayerIntroData()
 
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
             raise
 
@@ -131,7 +134,7 @@ class MainController:
             self.housekeeper.activateTask('save')
             self.housekeeper.alphaMatches.connect(self.view.le_url.updateItems)
             self.housekeeper.activateTask('alphatl')
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def updateMatchFormat(self):
@@ -167,7 +170,7 @@ class MainController:
 
             self.autoSetNextMap()
 
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
             raise
 
@@ -197,8 +200,7 @@ class MainController:
                 if idx == self.matchControl.activeMatchIdx():
                     self.matchControl.selectedMatch().updateLeagueIcon()
 
-        except Exception as e:
-            msg = str(e)
+        except Exception:
             module_logger.exception("message")
 
         return msg
@@ -217,8 +219,7 @@ class MainController:
             matchWidget.updateForms()
             self.updateMatchFormat()
 
-        except Exception as e:
-            msg = str(e)
+        except Exception:
             module_logger.exception("message")
 
         return msg
@@ -236,7 +237,7 @@ class MainController:
             try:
                 # TODO: Need to have multiple banners
                 match.downloadBanner()
-            except Exception as e:
+            except Exception:
                 module_logger.exception("message")
             update_progress(90)
             self.updateLogos(True)
@@ -249,8 +250,7 @@ class MainController:
             self.matchControl.activeMatch().updateLeagueIcon()
             update_progress(99)
 
-        except Exception as e:
-            msg = str(e)
+        except Exception:
             module_logger.exception("message")
 
         return msg
@@ -281,7 +281,7 @@ class MainController:
                 scctool.settings.config.parser.getboolean("Form",
                                                           "autonightbot"))
 
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def uncheckCB(self, cb):
@@ -310,7 +310,7 @@ class MainController:
             subwindow.show()
             subwindow.activateWindow()
 
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def updateNightbotCommand(self):
@@ -327,7 +327,7 @@ class MainController:
             url = "https://teampheenix.github.io/StarCraft-Casting-Tool/"
         try:
             webbrowser.open(url)
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def open_file(self, filename):
@@ -345,14 +345,14 @@ class MainController:
             else:
                 self.SC2ApiThread.cancelTerminationRequest(task)
 
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def stopSC2ApiThread(self, task):
         """Stop task in thread thats monitors SC2-Client-API."""
         try:
             self.SC2ApiThread.requestTermination(task)
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def runWebsocketThread(self):
@@ -366,7 +366,7 @@ class MainController:
         """Stop websocket thread."""
         try:
             self.websocketThread.stop()
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def cleanUp(self, save=True):
@@ -383,7 +383,7 @@ class MainController:
             self.housekeeper.terminate()
             if save:
                 self.saveAll()
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def saveAll(self):
@@ -415,7 +415,7 @@ class MainController:
                               'w', encoding='utf-8-sig')
             scctool.settings.config.parser.write(configFile)
             configFile.close()
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def setRace(self, team_idx, set_idx, race):
@@ -494,7 +494,7 @@ class MainController:
                         else:
                             continue
 
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def toggleWidget(self, widget, condition, ttFalse='', ttTrue=''):
@@ -516,8 +516,8 @@ class MainController:
             _('Specify your Twitch Settings to use this feature'),
             '')
 
-        txt = _('Automatically update the title of your' +
-                ' twitch channel in the background.')
+        txt = _('Automatically update the title of your'
+                + ' twitch channel in the background.')
         self.toggleWidget(
             self.view.cb_autoTwitch,
             scctool.settings.config.twitchIsValid(),
@@ -528,8 +528,8 @@ class MainController:
             self.view.cb_autoNightbot,
             scctool.settings.config.nightbotIsValid(),
             _('Specify your Nightbot Settings to use this feature'),
-            _('Automatically update the commands of your' +
-              ' nightbot in the background.'))
+            _('Automatically update the commands of your'
+              + ' nightbot in the background.'))
 
         self.toggleWidget(
             self.view.pb_nightbotupdate,
@@ -546,14 +546,14 @@ class MainController:
                 self.view.cb_autoToggleScore,
                 not network_listener,
                 _('Not available when SC2 is running on a different PC.'),
-                _('Automatically sets the score of your ingame' +
-                  ' UI-interface at the begining of a game.'))
+                _('Automatically sets the score of your ingame'
+                  + ' UI-interface at the begining of a game.'))
 
             self.toggleWidget(
                 self.view.cb_autoToggleProduction,
                 not network_listener,
                 _('Not available when SC2 is running on a different PC.'),
-                _('Automatically toggles the production tab of your' +
+                _('Automatically toggles the production tab of your'
                   ' ingame UI-interface at the begining of a game.'))
 
     def requestScoreLogoUpdate(self, data, swap=False):
@@ -630,7 +630,7 @@ class MainController:
             else:
                 ToggleScore(0, 0, bo)
 
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def linkFile(self, file):
@@ -755,7 +755,7 @@ class MainController:
                     tts_file = None
                 self.__playerIntroData[player_idx]['tts'] = tts_file
 
-            except Exception as e:
+            except Exception:
                 self.__playerIntroData[player_idx]['tts'] = None
                 module_logger.exception("message")
 
@@ -952,8 +952,8 @@ class MainController:
                     'icon': object['set_idx'] + 1,
                     'label': 'player{}'.format(object['team_idx'] + 1),
                     'text': object['value']})
-            if(object['set_idx'] == 0 and
-                    self.matchControl.activeMatch().getSolo()):
+            if(object['set_idx'] == 0
+                    and self.matchControl.activeMatch().getSolo()):
                 self.websocketThread.sendData2Path(
                     'score', 'CHANGE_TEXT',
                     {'id': 'team{}'.format(object['team_idx'] + 1),

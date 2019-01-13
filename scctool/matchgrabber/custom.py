@@ -1,11 +1,16 @@
-"""Grab match data from websites."""
-
 import logging
 
 import requests
 
+import scctool.settings.translation
+
+"""Grab match data from websites."""
+
+
+
 # create logger
 module_logger = logging.getLogger(__name__)
+_ = scctool.settings.translation.gettext
 
 
 class MatchGrabber(object):

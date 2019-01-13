@@ -1,4 +1,3 @@
-"""Request auth tokens from twitch and nightbot."""
 import http.server
 import logging
 import threading
@@ -8,16 +7,20 @@ from uuid import uuid4
 
 from PyQt5 import QtCore
 
+import scctool.settings.translation
 from scctool.settings import getResFile, safe
 
-module_logger = logging.getLogger(__name__)
+"""Request auth tokens from twitch and nightbot."""
 
+
+module_logger = logging.getLogger(__name__)
+_ = scctool.settings.translation.gettext
 try:
     NIGHTBOT_REDIRECT_URI = "http://localhost:65010/nightbot_callback"
 
     TWITCH_REDIRECT_URI = "http://localhost:65010/twitch_callback"
 
-except Exception as e:
+except Exception:
     module_logger.exception("message")
     raise
 
@@ -131,7 +134,7 @@ class AuthThread(http.server.HTTPServer, QtCore.QThread):
         module_logger.info("AuthThread started")
         try:
             self.serve_forever()
-        except OSError as e:
+        except OSError:
             pass
         finally:
             module_logger.info("AuthThread done")
