@@ -331,6 +331,7 @@ class MainController:
             module_logger.exception("message")
 
     def open_file(self, filename):
+        """Open a local file."""
         if sys.platform == "win32":
             os.startfile(filename)
         else:
@@ -387,6 +388,7 @@ class MainController:
             module_logger.exception("message")
 
     def saveAll(self):
+        """Save everything."""
         self.saveConfig()
         self.matchControl.writeJsonFile()
         scctool.settings.saveNightbotCommands()
@@ -419,6 +421,7 @@ class MainController:
             module_logger.exception("message")
 
     def setRace(self, team_idx, set_idx, race):
+        """Set the race of a player."""
         if self.matchControl.activeMatch().setRace(team_idx, set_idx, race):
             race_idx = scctool.settings.race2idx(race)
             matchWidget = self.view.matchDataTabWidget.widget(
@@ -557,6 +560,7 @@ class MainController:
                   ' ingame UI-interface at the begining of a game.'))
 
     def requestScoreLogoUpdate(self, data, swap=False):
+        """Request a update of the score logos."""
         module_logger.info("requestScoreLogoUpdate")
         match_ident = self.matchControl.activeMatchId()
         for player_idx in range(2):
@@ -590,8 +594,8 @@ class MainController:
                 {'logo': logo, 'display': display})
 
     def requestToggleScore(self, newSC2MatchData, swap=False):
-        """Check if SC2-Client-API players are present"""
-        """and toggle score accordingly."""
+        """Check if SC2-Client-API players are present."""
+        """Toggle score accordingly."""
         try:
             alias = self.aliasManager.translatePlayer
             bo = self.matchControl.activeMatch().getBestOf()
@@ -641,6 +645,7 @@ class MainController:
         return ""
 
     def updateLogosWebsocket(self):
+        """Update logos in browser sources via websocket."""
         match_ident = self.matchControl.activeMatchId()
         for idx in range(2):
             logo = self.logoManager.getTeam(idx + 1, match_ident)
@@ -660,10 +665,11 @@ class MainController:
             self.websocketThread.register_hotkeys()
 
     def updatePlayerIntroIdx(self):
+        """Alternate between player intros."""
         self.__playerIntroIdx = (self.__playerIntroIdx + 1) % 2
 
     def initPlayerIntroData(self):
-        """Initalize player intro data."""
+        """Init player intro data."""
         self.__playerIntroData = dict()
         self.__playerIntroIdx = 0
         for player_idx in range(2):
@@ -795,6 +801,7 @@ class MainController:
         scctool.settings.maps.remove(map)
 
     def swapTeams(self):
+        """Swap teams from left to right."""
         with self.view.tlock:
             self.logoManager.swapTeamLogos(self.matchControl.selectedMatchId())
             self.matchControl.selectedMatch().swapTeams()
@@ -816,10 +823,12 @@ class MainController:
         return warning
 
     def showMap(self, player_idx):
+        """Show a specific map on the mapstats browser source."""
         self.mapstatsManager.selectMap(
             self.matchControl.activeMatch().getMap(player_idx))
 
     def getBrowserSourceURL(self, file):
+        """Return the URL of a browser source."""
         file = file.replace('\\', '/')
         file = file.replace('.html', '')
         return f'http://localhost:{self.websocketThread.get_port()}/{file}'
@@ -854,12 +863,14 @@ class MainController:
                 # view.toogleAligulacTab(False)
 
     def autoSetNextMap(self, idx=-1, send=True):
+        """Select the next map to be shown on the mapstats browser source."""
         if scctool.settings.config.parser.getboolean(
                 "Mapstats", "autoset_next_map"):
             self.mapstatsManager.selectMap(
                 self.matchControl.activeMatch().getNextMap(idx), send)
 
     def matchMetaDataChanged(self):
+        """Send new data to all browser sources triggered by a meta change."""
         data = self.matchControl.activeMatch().getScoreData()
         self.websocketThread.sendData2Path("score", "ALL_DATA", data)
         data = self.matchControl.activeMatch().getMapIconsData()
@@ -881,6 +892,7 @@ class MainController:
                                                    processedData)
 
     def handleMatchDataChange(self, label, object):
+        """Send new data to browser sources due to a change of the map data."""
         if label == 'team':
             if not self.matchControl.activeMatch().getSolo():
                 self.websocketThread.sendData2Path(

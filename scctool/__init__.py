@@ -105,7 +105,7 @@ def initial_download():
 
 
 def choose_language(app, translator):
-
+    """Select a language for gettext and PyQt."""
     scctool.settings.translation.set_language()
 
     language = scctool.settings.config.parser.get("SCT", "language")

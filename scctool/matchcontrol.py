@@ -20,6 +20,7 @@ module_logger = logging.getLogger(__name__)
 
 class MatchControl(QObject):
     """Controler for match data."""
+
     dataChanged = pyqtSignal(str, object)
     metaChanged = pyqtSignal()
     scopes = {}
