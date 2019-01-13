@@ -1,4 +1,3 @@
-"""Provide settings for SCCTool."""
 import json
 import logging
 import os
@@ -13,8 +12,10 @@ from scctool.settings.config import init as initConfig
 from scctool.settings.profileManager import ProfileManager
 from scctool.settings.safeGuard import SafeGuard
 
-module_logger = logging.getLogger(__name__)
+"""Provide settings for SCCTool."""
 
+
+module_logger = logging.getLogger(__name__)
 this = sys.modules[__name__]
 
 if getattr(sys, 'frozen', False):
@@ -106,8 +107,8 @@ def getLogFile():
         # Delete old logfiles
         for f in os.listdir(logdir):
             full = os.path.join(logdir, f)
-            if (os.path.isfile(full) and
-                    os.stat(full).st_mtime < time.time() - 7 * 86400):
+            if (os.path.isfile(full)
+                    and os.stat(full).st_mtime < time.time() - 7 * 86400):
                 os.remove(full)
 
     filename = 'scct-{}-{}.log'.format(time.strftime(
@@ -151,7 +152,7 @@ def loadNightbotCommands():
         with open(getJsonFile('nightbot'), 'r',
                   encoding='utf-8-sig') as json_file:
             data = json.load(json_file)
-    except Exception as e:
+    except Exception:
         data = dict()
 
     this.nightbot_commands = data
@@ -164,7 +165,7 @@ def saveNightbotCommands():
         with open(getJsonFile('nightbot'), 'w',
                   encoding='utf-8-sig') as outfile:
             json.dump(this.nightbot_commands, outfile)
-    except Exception as e:
+    except Exception:
         module_logger.exception("message")
 
 

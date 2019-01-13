@@ -8,9 +8,11 @@ import shutil
 from PyQt5.QtCore import QObject, pyqtSignal
 
 import scctool.settings
+import scctool.settings.translation
 from scctool.matchformat import *
 from scctool.matchgrabber import *
 
+_ = scctool.settings.translation.gettext
 # create logger
 module_logger = logging.getLogger(__name__)
 
@@ -106,12 +108,12 @@ class MatchData(QObject):
             chg = self.setProvider("Custom")
 
         try:
-            self.setID(re.findall('\d+', url)[-1])
+            self.setID(re.findall(r'\d+', url)[-1])
         except IndexError:
             pass
 
         return chg
-    # except Exception as e:
+    # except Exception:
         # self.setProvider("Custom")
         # self.setID(0)
         # module_logger.exception("message")
@@ -284,8 +286,8 @@ class MatchData(QObject):
                 if(skip_one):
                     self.setLabel(set_idx, "Ace Map")
                 else:
-                    self.setLabel(set_idx, "Ace Map " +
-                                  str(set_idx - ace_start + 1))
+                    self.setLabel(set_idx, "Ace Map "
+                                  + str(set_idx - ace_start + 1))
 
     def setNoSets(self, no_sets=5, bestof=False, resetPlayers=False):
         """Set the number of sets/maps."""
@@ -348,7 +350,7 @@ class MatchData(QObject):
             self.__data['sets'] = sets
             self.__data['players'] = players
 
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def setMyTeam(self, myteam, swap=False):
@@ -546,8 +548,8 @@ class MatchData(QObject):
 
     def wasMapPlayed(self, map):
         for set_idx in range(self.getNoSets()):
-            if (map.lower() == self.getMap(set_idx).lower() and
-                    self.getMapScore(set_idx) != 0):
+            if (map.lower() == self.getMap(set_idx).lower()
+                    and self.getMapScore(set_idx) != 0):
                 return True
         return False
 
@@ -574,8 +576,8 @@ class MatchData(QObject):
     def setPlayer(self, team_idx, set_idx, name="TBD", race=False):
         """Set the player of a set."""
         try:
-            if(not (set_idx >= 0 and set_idx < self.__data['no_sets'] and
-                    team_idx in range(2))):
+            if(not (set_idx >= 0 and set_idx < self.__data['no_sets']
+                    and team_idx in range(2))):
                 return False
 
             if(self.__data['players'][team_idx][set_idx]['name'] != name):
@@ -605,8 +607,8 @@ class MatchData(QObject):
     def getPlayer(self, team_idx, set_idx):
         """Get the player (name) of a set."""
         try:
-            if(not (set_idx >= 0 and set_idx < self.__data['no_sets'] and
-                    team_idx in range(2))):
+            if(not (set_idx >= 0 and set_idx < self.__data['no_sets']
+                    and team_idx in range(2))):
                 return False
 
             return self.__data['players'][team_idx][set_idx]['name'].strip()
@@ -617,8 +619,8 @@ class MatchData(QObject):
     def setRace(self, team_idx, set_idx, race="Random"):
         """Set a players race."""
         try:
-            if(not (set_idx >= 0 and set_idx < self.__data['no_sets'] and
-                    team_idx in range(2))):
+            if(not (set_idx >= 0 and set_idx < self.__data['no_sets']
+                    and team_idx in range(2))):
                 return False
 
             race = getRace(race)
@@ -636,8 +638,8 @@ class MatchData(QObject):
     def getRace(self, team_idx, set_idx):
         """Get a players race."""
         try:
-            if(not (set_idx >= 0 and set_idx < self.__data['no_sets'] and
-                    team_idx in range(2))):
+            if(not (set_idx >= 0 and set_idx < self.__data['no_sets']
+                    and team_idx in range(2))):
                 return False
 
             return getRace(self.__data['players'][team_idx][set_idx]['race'])
@@ -867,8 +869,8 @@ class MatchData(QObject):
         score = self.getMapScore(set_idx)
         team = 2 * team_idx - 1
         if score == 0:
-            if (set_idx >= self.getMinSets() and
-                    max(self.getScore()) > int(self.getBestOf() / 2)):
+            if (set_idx >= self.getMinSets()
+                    and max(self.getScore()) > int(self.getBestOf() / 2)):
                 return scctool.settings.config.parser.get(
                     "MapIcons",
                     "notplayed_color")
@@ -906,9 +908,9 @@ class MatchData(QObject):
             score_color = border_color
             opacity = 0.0
         else:
-            if (score == 0 and
-                set_idx >= self.getMinSets() and
-                    max(self.getScore()) > int(self.getBestOf() / 2)):
+            if (score == 0
+                and set_idx >= self.getMinSets()
+                    and max(self.getScore()) > int(self.getBestOf() / 2)):
                 border_color = scctool.settings.config.parser.get(
                     "MapIcons",
                     "notplayed_color")
@@ -996,7 +998,7 @@ class MatchData(QObject):
 
                 websocket_data[i + 1] = data
 
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
         return websocket_data
@@ -1011,7 +1013,7 @@ class MatchData(QObject):
             shutil.copy(scctool.settings.getAbsPath(filename_old),
                         scctool.settings.getAbsPath(filename_new))
 
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def autoSetMyTeam(self, swap=False):
@@ -1033,7 +1035,7 @@ class MatchData(QObject):
                 self.setMyTeam(0)
                 return False
 
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
             return False
 
@@ -1148,7 +1150,7 @@ def autoCorrectMap(map):
         else:
             return matches[0], True
 
-    except Exception as e:
+    except Exception:
         module_logger.exception("message")
 
 

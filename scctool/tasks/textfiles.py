@@ -1,15 +1,19 @@
-"""Write streaming data to txt-files if needed."""
 import logging
 import queue
 
 import scctool.settings
+import scctool.settings.translation
 from scctool.tasks.tasksthread import TasksThread
+
+"""Write streaming data to txt-files if needed."""
+
 
 # from PyQt5.QtCore import pyqtSignal
 
 
 # create logger
 module_logger = logging.getLogger(__name__)
+_ = scctool.settings.translation.gettext
 
 
 class TextFilesThread(TasksThread):
@@ -51,19 +55,19 @@ class TextFilesThread(TasksThread):
 
     def __writeTeam(self):
         file = scctool.settings.getAbsPath(
-            scctool.settings.casting_data_dir +
-            "/teams_vs_long.txt")
+            scctool.settings.casting_data_dir
+            + "/teams_vs_long.txt")
         with open(file, mode='w', encoding='utf-8') as f:
             team1 = self._matchControl.activeMatch().getTeamOrPlayer(0)
             team2 = self._matchControl.activeMatch().getTeamOrPlayer(1)
             f.write(f'{team1} vs {team2}\n')
 
         file = scctool.settings.getAbsPath(
-            scctool.settings.casting_data_dir +
-            "/teams_vs_short.txt")
+            scctool.settings.casting_data_dir
+            + "/teams_vs_short.txt")
         with open(file, mode='w', encoding='utf-8') as f:
-            f.write(self._matchControl.activeMatch().getTeamTag(0) + ' vs ' +
-                    self._matchControl.activeMatch().getTeamTag(1) + "\n")
+            f.write(self._matchControl.activeMatch().getTeamTag(0) + ' vs '
+                    + self._matchControl.activeMatch().getTeamTag(1) + "\n")
 
         for idx in range(2):
             team = self._matchControl.activeMatch().getTeamOrPlayer(idx)

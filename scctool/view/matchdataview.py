@@ -1,4 +1,3 @@
-"""Define the match data widget/view."""
 import logging
 
 from PyQt5.QtCore import Qt
@@ -10,9 +9,15 @@ from PyQt5.QtWidgets import (QAction, QComboBox, QCompleter, QGridLayout,
 
 import scctool.settings
 import scctool.settings.config
+import scctool.settings.translation
 from scctool.view.widgets import IconPushButton, MapLineEdit, MonitoredLineEdit
 
+"""Define the match data widget/view."""
+
+
+
 module_logger = logging.getLogger(__name__)
+_ = scctool.settings.translation.gettext
 
 
 class MatchDataWidget(QWidget):
@@ -78,8 +83,8 @@ class MatchDataWidget(QWidget):
         self._radioButton.setChecked(True)
 
     def activate(self, checked):
-        if (checked and
-                self.controller.matchControl.activeMatchId() != self._ctrlID):
+        if (checked
+                and self.controller.matchControl.activeMatchId() != self._ctrlID):
             self.controller.matchControl.activateMatch(
                 self.matchData.getControlID())
             self.autoSetNextMap(send=False)
@@ -565,8 +570,8 @@ class MatchDataWidget(QWidget):
                 self.label_set[i].setEnabled(True)
             else:
                 self.label_set[i].setEnabled(False)
-        if (self.controller.mapstatsManager.getMapPoolType() == 2 and
-                self.controller.matchControl.activeMatchId() == self._ctrlID):
+        if (self.controller.mapstatsManager.getMapPoolType() == 2
+                and self.controller.matchControl.activeMatchId() == self._ctrlID):
             self.controller.mapstatsManager.sendMapPool()
 
     def updateLogos(self, force=False):

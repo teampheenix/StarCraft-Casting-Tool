@@ -1,4 +1,3 @@
-"""Show styles settings sub window."""
 import logging
 
 from PyQt5.QtCore import QPoint, QSize, Qt
@@ -9,10 +8,16 @@ from PyQt5.QtWidgets import (QCheckBox, QComboBox, QFormLayout, QGridLayout,
                              QTabWidget, QVBoxLayout, QWidget)
 
 import scctool.settings
+import scctool.settings.translation
 from scctool.view.widgets import ColorLayout, StyleComboBox, TextPreviewer
+
+"""Show styles settings sub window."""
+
+
 
 # create logger
 module_logger = logging.getLogger(__name__)
+_ = scctool.settings.translation.gettext
 
 
 class SubwindowStyles(QWidget):
@@ -127,15 +132,15 @@ class SubwindowStyles(QWidget):
         try:
             container = QHBoxLayout()
             self.qb_landscapeStyle = StyleComboBox(
-                scctool.settings.casting_html_dir +
-                "/src/css/mapicons_landscape",
+                scctool.settings.casting_html_dir
+                + "/src/css/mapicons_landscape",
                 "mapicons_landscape")
             self.qb_landscapeStyle.connect2WS(
                 self.controller, 'mapicons_landscape')
             button = QPushButton(_("Show in Browser"))
             button.clicked.connect(lambda: self.openHTML(
-                scctool.settings.casting_html_dir +
-                "/mapicons_landscape_1.html"))
+                scctool.settings.casting_html_dir
+                + "/mapicons_landscape_1.html"))
             container.addWidget(self.qb_landscapeStyle)
             container.addWidget(button)
             layout.addRow(QLabel(

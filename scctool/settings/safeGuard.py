@@ -1,6 +1,7 @@
-"""Provides safe-data for SCCTool."""
 import json
 import logging
+
+"""Provides safe-data for SCCTool."""
 
 module_logger = logging.getLogger(__name__)
 
@@ -19,7 +20,7 @@ class SafeGuard:
             with open(getResFile('safe.json'), 'r',
                       encoding='utf-8-sig') as json_file:
                 self.safe = json.load(json_file)
-        except Exception as e:
+        except Exception:
             self.safe = dict()
 
         self.loaded = True

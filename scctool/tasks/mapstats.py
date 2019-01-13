@@ -1,4 +1,3 @@
-"""Manager and thread to save map stats and keep them up-to-date."""
 import json
 import logging
 import os
@@ -7,10 +6,15 @@ import time
 from PyQt5.QtCore import pyqtSignal
 
 import scctool.settings
+import scctool.settings.translation
 from scctool.tasks.liquipedia import LiquipediaGrabber, MapNotFound
 from scctool.tasks.tasksthread import TasksThread
 
+"""Manager and thread to save map stats and keep them up-to-date."""
+
+
 module_logger = logging.getLogger(__name__)
+_ = scctool.settings.translation.gettext
 
 
 class MapStatsManager:
@@ -37,7 +41,7 @@ class MapStatsManager:
                       'r',
                       encoding='utf-8-sig') as json_file:
                 data = json.load(json_file)
-        except Exception as e:
+        except Exception:
             data = dict()
 
         self.__maps = data.get('maps', dict())
@@ -70,7 +74,7 @@ class MapStatsManager:
                       'w',
                       encoding='utf-8-sig') as outfile:
                 json.dump(data, outfile)
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def selectMap(self, map, send=True):
@@ -120,8 +124,8 @@ class MapStatsManager:
                     yield map
 
     def refreshMapPool(self):
-        if (not self.__mappool_refresh or
-                (time.time() - int(self.__mappool_refresh)) > 24 * 60 * 60):
+        if (not self.__mappool_refresh
+                or (time.time() - int(self.__mappool_refresh)) > 24 * 60 * 60):
             self.__thread.activateTask('refresh_mappool')
 
     def refreshMaps(self):
@@ -150,8 +154,8 @@ class MapStatsManager:
             if is_none:
                 continue
             last_refresh = data.get('refreshed', None)
-            if (not last_refresh or
-                    (time.time() - int(last_refresh)) > 24 * 60 * 60):
+            if (not last_refresh
+                    or (time.time() - int(last_refresh)) > 24 * 60 * 60):
                 maps2refresh.append(map)
 
             # Unelegant way:
@@ -261,7 +265,7 @@ class MapStatsThread(TasksThread):
                 module_logger.info('Map {} not found.'.format(map))
             except ConnectionError:
                 module_logger.info('Connection Error for map {}.'.format(map))
-            except Exception as e:
+            except Exception:
                 module_logger.exception("message")
         except IndexError:
             self.deactivateTask('refresh_data')

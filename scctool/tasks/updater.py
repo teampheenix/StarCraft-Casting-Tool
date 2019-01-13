@@ -1,5 +1,3 @@
-"""Get info about latest version and download it in the background."""
-
 import json
 import logging
 import os
@@ -11,10 +9,15 @@ from PyQt5.QtCore import pyqtSignal
 from pyupdater.client import Client
 
 import scctool
+import scctool.settings.translation
 from scctool.settings.client_config import ClientConfig
 from scctool.tasks.tasksthread import TasksThread
 
+"""Get info about latest version and download it in the background."""
+
+
 module_logger = logging.getLogger(__name__)
+_ = scctool.settings.translation.gettext
 this = sys.modules[__name__]
 this.data = dict()
 
@@ -207,7 +210,7 @@ class VersionHandler(TasksThread):
                 module_logger.info("App: " + self.app_update.latest)
             else:
                 self.noNewVersion.emit()
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
         finally:
             self.deactivateTask('version_check')
@@ -222,7 +225,7 @@ class VersionHandler(TasksThread):
             extractData(self.asset_update)
             module_logger.info("Updated data files!")
             self.updated_data.emit(_("Updated data files!"))
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
         finally:
             self.deactivateTask('update_data')
@@ -241,7 +244,7 @@ class VersionHandler(TasksThread):
                     setRestartFlag()
                     module_logger.info("Restarting...")
                     self.app_update.extract_restart()
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
         finally:
             self.deactivateTask('update_app')

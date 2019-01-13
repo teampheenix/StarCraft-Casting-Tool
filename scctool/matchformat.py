@@ -1,9 +1,14 @@
+import logging
+
+import scctool.settings.translation
+
 """Provide match formats."""
 
-import logging
 
 # create logger
 module_logger = logging.getLogger(__name__)
+
+_ = scctool.settings.translation.gettext
 
 
 class MatchFormat(object):

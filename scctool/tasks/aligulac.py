@@ -6,10 +6,12 @@ from functools import lru_cache
 import requests
 
 import scctool.settings
+import scctool.settings.translation
 from scctool.tasks.tasksthread import TasksThread
 
 # create logger
 module_logger = logging.getLogger(__name__)
+_ = scctool.settings.translation.gettext
 
 
 class AligulacInterface:
@@ -129,9 +131,9 @@ class AligulacThread(TasksThread):
         self.activateTask('process')
 
     def receive_data(self, item='meta', *args):
-        if(self._q.qsize() < 2 and
-                self.hasActiveTask() and
-                item in ['meta', 'score', 'player', 'race']):
+        if(self._q.qsize() < 2
+                and self.hasActiveTask()
+                and item in ['meta', 'score', 'player', 'race']):
             self._q.put({'item': item})
 
     def __processTask(self):

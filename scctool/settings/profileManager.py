@@ -8,8 +8,11 @@ import appdirs
 from PyQt5.QtCore import QSettings
 
 from scctool.settings.client_config import ClientConfig
+from scctool.settings.translation import gettext
 
 module_logger = logging.getLogger(__name__)
+
+_ = gettext
 
 
 class ProfileManager:

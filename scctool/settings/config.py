@@ -1,9 +1,10 @@
-"""Provide config for SCCTool."""
 import configparser
 import logging
 import os.path
 import platform
 import sys
+
+"""Provide config for SCCTool."""
 
 module_logger = logging.getLogger(__name__)  # create logger
 
@@ -97,8 +98,8 @@ def findTesserAct(
             import winreg
             key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE,
                                  "SOFTWARE\\WOW6432Node\\Tesseract-OCR")
-            return os.path.normpath(winreg.QueryValueEx(key, "Path")[0] +
-                                    '\\tesseract.exe')
+            return os.path.normpath(winreg.QueryValueEx(key, "Path")[0]
+                                    + '\\tesseract.exe')
     except Exception:
         return default
 
@@ -256,8 +257,8 @@ def renameConfigOptions():
 def nightbotIsValid():
     """Check if nightbot data is valid."""
     from scctool.settings import nightbot_commands
-    return (len(this.parser.get("Nightbot", "token")) > 0 and
-            len(nightbot_commands) > 0)
+    return (len(this.parser.get("Nightbot", "token")) > 0
+            and len(nightbot_commands) > 0)
 
 
 def twitchIsValid():

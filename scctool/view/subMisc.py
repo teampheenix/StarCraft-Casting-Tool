@@ -1,4 +1,3 @@
-"""Show subwindow with miscellaneous settings."""
 import logging
 import os.path
 
@@ -13,12 +12,18 @@ from PyQt5.QtWidgets import (QApplication, QCheckBox, QComboBox, QFileDialog,
                              QTabWidget, QVBoxLayout, QWidget)
 
 import scctool.settings
+import scctool.settings.translation
 from scctool.tasks.liquipedia import LiquipediaGrabber, MapNotFound
 from scctool.view.widgets import (AliasTreeView, AligulacTreeView, ListTable,
                                   MapDownloader, MonitoredLineEdit)
 
+"""Show subwindow with miscellaneous settings."""
+
+
+
 # create logger
 module_logger = logging.getLogger(__name__)
+_ = scctool.settings.translation.gettext
 
 
 class SubwindowMisc(QWidget):
@@ -264,11 +269,11 @@ class SubwindowMisc(QWidget):
         mainLayout = QGridLayout()
 
         aliasDesc = _(
-            'Player and team aliases are replaced by the actual name when' +
-            ' encountered by the match grabber. Additionally, SC2 player' +
-            ' names listed as aliases are replaced in the intros' +
-            ' and used to identify players by the automatic' +
-            ' background tasks "Auto Score Update" and "Set Ingame Score".')
+            'Player and team aliases are replaced by the actual name when'
+            + ' encountered by the match grabber. Additionally, SC2 player'
+            + ' names listed as aliases are replaced in the intros'
+            + ' and used to identify players by the automatic'
+            + ' background tasks "Auto Score Update" and "Set Ingame Score".')
         label = QLabel(aliasDesc)
         label.setAlignment(Qt.AlignJustify)
         label.setWordWrap(True)
@@ -367,8 +372,8 @@ class SubwindowMisc(QWidget):
         self.listener_address.setToolTip(
             _('IP address and port of machine running SC2.'))
         ip_port = (
-            r"^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.)" +
-            r"{3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]):[0-9]+$")
+            r"^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.)"
+            + r"{3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]):[0-9]+$")
         self.listener_address.setValidator(QRegExpValidator(QRegExp(ip_port)))
 
         self.test_listener = QPushButton(
@@ -513,8 +518,8 @@ class SubwindowMisc(QWidget):
         default = scctool.settings.config.findTesserAct(old_exe)
         exe, ok = QFileDialog.getOpenFileName(
             self, _("Select Tesseract-OCR Executable"), default,
-            _("Tesseract-OCR Executable") + " (tesseract.exe);; " +
-            _("Executable") + " (*.exe);; " + _("All files") + " (*)")
+            _("Tesseract-OCR Executable") + " (tesseract.exe);; "
+            + _("Executable") + " (*.exe);; " + _("All files") + " (*)")
         if(ok and exe != old_exe):
             self.tesseract.setText(exe)
             self.changed()

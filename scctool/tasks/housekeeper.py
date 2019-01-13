@@ -1,14 +1,18 @@
-"""Write streaming data to txt-files if needed."""
 import logging
 from datetime import datetime, timedelta, timezone
 
 import requests
 from PyQt5.QtCore import pyqtSignal
 
+import scctool.settings.translation
 from scctool.tasks.tasksthread import TasksThread
+
+"""Write streaming data to txt-files if needed."""
+
 
 # create logger
 module_logger = logging.getLogger(__name__)
+_ = scctool.settings.translation.gettext
 
 
 class HouseKeeperThread(TasksThread):

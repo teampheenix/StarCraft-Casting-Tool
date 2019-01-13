@@ -1,4 +1,3 @@
-"""Show readme sub window."""
 import logging
 
 from PyQt5.QtCore import QPoint, QSize, Qt, QUrl
@@ -10,12 +9,18 @@ from PyQt5.QtWidgets import (QApplication, QCompleter, QGridLayout, QGroupBox,
                              QSpacerItem, QWidget)
 
 import scctool.settings
+import scctool.settings.translation
 from scctool.tasks.liquipedia import LiquipediaGrabber
 from scctool.view.widgets import LogoDownloader
+
+"""Show readme sub window."""
+
+
 
 # create logger
 module_logger = logging.getLogger(__name__)
 base_url = 'https://liquipedia.net'
+_ = scctool.settings.translation.gettext
 
 
 class SubwindowLiquipediaSearch(QWidget):
@@ -42,8 +47,8 @@ class SubwindowLiquipediaSearch(QWidget):
         self.qle_search.setAlignment(Qt.AlignCenter)
         self.qle_search.returnPressed.connect(self.search)
         completer = QCompleter(
-            scctool.settings.config.getMyTeams() +
-            self.controller.historyManager.getTeamList(),
+            scctool.settings.config.getMyTeams()
+            + self.controller.historyManager.getTeamList(),
             self.qle_search)
         completer.setCaseSensitivity(Qt.CaseInsensitive)
         completer.setCompletionMode(

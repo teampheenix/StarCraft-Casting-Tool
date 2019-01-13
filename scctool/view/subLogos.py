@@ -1,4 +1,3 @@
-"""Show logo manager sub window."""
 import logging
 import re
 
@@ -10,12 +9,19 @@ from PyQt5.QtWidgets import (QErrorMessage, QFileDialog, QGridLayout,
                              QSizePolicy, QSpacerItem, QVBoxLayout, QWidget)
 
 import scctool.settings
+import scctool.settings.translation
 from scctool.view.subLiquipediaSearch import SubwindowLiquipediaSearch
 from scctool.view.widgets import (DragDropLogoList, DragImageLabel,
                                   LogoDownloader)
 
+"""Show logo manager sub window."""
+
+
+
 # create logger
 module_logger = logging.getLogger(__name__)
+
+_ = scctool.settings.translation.gettext
 
 
 class SubwindowLogos(QWidget):

@@ -7,9 +7,12 @@ from time import time
 from PyQt5.QtCore import QObject, pyqtSignal
 
 import scctool.settings
+import scctool.settings.translation
 from scctool.matchdata import MatchData
 from scctool.matchformat import *
 from scctool.matchgrabber import *
+
+_ = scctool.settings.translation.gettext
 
 # create logger
 module_logger = logging.getLogger(__name__)
@@ -41,10 +44,10 @@ class MatchControl(QObject):
                       'r', encoding='utf-8-sig') as json_file:
                 data = json.load(json_file)
                 if isinstance(data, dict):
-                    if ('matches' not in data or
-                            'active' not in data or
-                            'selected' not in data or
-                            'order' not in data):
+                    if ('matches' not in data
+                            or 'active' not in data
+                            or 'selected' not in data
+                            or 'order' not in data):
                         data = {'matches': {new_id: data},
                                 'active': new_id,
                                 'selected': new_id,
@@ -54,7 +57,7 @@ class MatchControl(QObject):
                             'active': new_id,
                             'selected': new_id,
                             'order': [new_id]}
-        except Exception as e:
+        except Exception:
             data = {'matches': {new_id: dict()},
                     'active': new_id,
                     'selected': new_id,
@@ -80,7 +83,7 @@ class MatchControl(QObject):
             with open(scctool.settings.getJsonFile('matchdata'),
                       'w', encoding='utf-8-sig') as outfile:
                 json.dump(data, outfile)
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def __initScopes(self):
@@ -138,11 +141,11 @@ class MatchControl(QObject):
             if old_id is not None and old_id in self.__matches.keys():
                 try:
                     self.__matches[old_id].metaChanged.disconnect()
-                except TypeError as e:
+                except TypeError:
                     module_logger.exception("message")
                 try:
                     self.__matches[old_id].dataChanged.disconnect()
-                except TypeError as e:
+                except TypeError:
                     module_logger.exception("message")
             self.__controller.placeholderSetup()
             self.__matches[id].metaChanged.connect(self.__handleMetaSignal)
@@ -193,11 +196,11 @@ class MatchControl(QObject):
         self.__order.pop(index)
         try:
             self.__matches[ident].metaChanged.disconnect()
-        except TypeError as e:
+        except TypeError:
             pass
         try:
             self.__matches[ident].dataChanged.disconnect()
-        except TypeError as e:
+        except TypeError:
             pass
         self.__controller.logoManager.deleteMatch(ident)
         del self.__matches[ident]

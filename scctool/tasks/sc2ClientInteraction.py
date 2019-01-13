@@ -10,7 +10,9 @@ import requests
 from PyQt5.QtCore import QThread, pyqtSignal
 
 import scctool.settings
+import scctool.settings.translation
 
+_ = scctool.settings.translation.gettext
 # create logger
 module_logger = logging.getLogger(__name__)
 
@@ -89,7 +91,7 @@ class SC2ApiThread(QThread):
             self.introData = SC2MatchData()
             self.controller = controller
             self.currentÍngameStatus = False
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def startTask(self, task):
@@ -97,7 +99,7 @@ class SC2ApiThread(QThread):
         try:
             self.activeTask[task] = True
             self.start()
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def requestTermination(self, task):
@@ -114,7 +116,7 @@ class SC2ApiThread(QThread):
             if(not any(self.activeTask.values())):
                 self.exiting = True
                 module_logger.info('Requesting termination of thread')
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def cancelTerminationRequest(self, task):
@@ -161,54 +163,54 @@ class SC2ApiThread(QThread):
 
                 time.sleep(1)
 
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def parseMatchData(self, newData):
         """Parse SC2-Client-API data and run tasks accordingly."""
         try:
-            if(not self.exiting and self.activeTask['playerIntros'] and
-               self.introData != newData):
+            if(not self.exiting and self.activeTask['playerIntros']
+               and self.introData != newData):
                 self.controller.updatePlayerIntros(newData)
                 self.introData = newData
 
-            if(not self.exiting and
-                (newData != self.currentData or
-                 newData.time < self.currentData.time or
-                 newData.isLive() != self.currentData.isLive())):
+            if(not self.exiting
+                and (newData != self.currentData
+                     or newData.time < self.currentData.time
+                     or newData.isLive() != self.currentData.isLive())):
 
-                if(self.activeTask['updateScore'] and
-                   newData.isDecidedGame() and
-                   self.currentData != SC2MatchData()):
+                if(self.activeTask['updateScore']
+                   and newData.isDecidedGame()
+                   and self.currentData != SC2MatchData()):
                     self.requestScoreUpdate.emit(newData)
 
-                if(newData.isLive() and (self.activeTask['toggleScore'] or
-                                         self.activeTask['toggleProduction'] or
-                                         self.activeTask['playerLogos'])):
+                if(newData.isLive() and (self.activeTask['toggleScore']
+                                         or self.activeTask['toggleProduction']
+                                         or self.activeTask['playerLogos'])):
                     self.tryToggle(newData)
 
                 self.currentData = newData
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def tryToggle(self, data):
         """Wait until SC2 is in foreground and toggle"""
         """production tab and score."""
         if (scctool.settings.config.parser.getboolean(
-            "SCT", "blacklist_on") and
-                not data.replay):
+            "SCT", "blacklist_on")
+                and not data.replay):
             blacklist = scctool.settings.config.getBlacklist()
             if data.player1 in blacklist or data.player2 in blacklist:
                 module_logger.info("Do not toogle due to blacklist.")
                 return
         try:
             while self.exiting is False\
-                and (self.activeTask['toggleScore'] or
-                     self.activeTask['toggleProduction'] or
-                     self.activeTask['playerLogos']):
+                and (self.activeTask['toggleScore']
+                     or self.activeTask['toggleProduction']
+                     or self.activeTask['playerLogos']):
                 if(isSC2onForeground()):
-                    if(self.activeTask['toggleScore'] or
-                       self.activeTask['playerLogos']):
+                    if(self.activeTask['toggleScore']
+                       or self.activeTask['playerLogos']):
                         TogglePlayerNames()
                         swapPlayers = self.swapPlayers(
                             data, self.activeTask['playerLogos'])
@@ -236,10 +238,9 @@ class SC2ApiThread(QThread):
 
             # Don't use OCR if the score is tied.
             score = self.controller.matchControl.activeMatch().getScore()
-            if(score[0] == score[1] and
-               (not scctool.settings.config.parser.getboolean(
-                   "SCT", "CtrlX")) and
-               not force):
+            if(score[0] == score[1]
+               and (not scctool.settings.config.parser.getboolean(
+                   "SCT", "CtrlX")) and not force):
                 return False
 
             tesseract = scctool.settings.config.getTesserAct()
@@ -273,7 +274,7 @@ class SC2ApiThread(QThread):
 
             return swap
 
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
             return False
 
@@ -326,7 +327,7 @@ def isSC2onForeground():
         fg_window_name = GetWindowText(GetForegroundWindow()).lower()
         sc2 = "StarCraft II".lower()
         return fg_window_name == sc2
-    except Exception as e:
+    except Exception:
         module_logger.exception("message")
         return False
 
@@ -397,11 +398,11 @@ class SC2MatchData:
                 raise ValueError
 
             for p1, p2 in myplayers:
-                if((player1_notset and compareStr(p2, player2)) or
-                   (compareStr(p1, player1) and player2_notset)):
+                if((player1_notset and compareStr(p2, player2))
+                   or (compareStr(p1, player1) and player2_notset)):
                     return True, True, self.result, noset_idx
-                elif((player1_notset and compareStr(p1, player1)) or
-                     (compareStr(p2, player1) and player2_notset)):
+                elif((player1_notset and compareStr(p1, player1))
+                     or (compareStr(p2, player1) and player2_notset)):
                     return True, False, -self.result, noset_idx
 
         return False, False, 0, -1
@@ -444,7 +445,7 @@ class SC2MatchData:
             for idx, race in enumerate(scctool.settings.races):
                 if(str[0].upper() == race[0].upper()):
                     return scctool.settings.races[idx]
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
         module_logger.info("Race " + str + " not found")
@@ -468,11 +469,11 @@ class SC2MatchData:
 
     def __eq__(self, other):
         """Compare data."""
-        return (self.player1 == other.player1 and
-                self.player2 == other.player2 and
-                self.race1 == other.race1 and
-                self.race2 == other.race2 and
-                self.result == other.result)
+        return (self.player1 == other.player1
+                and self.player2 == other.player2
+                and self.race1 == other.race1
+                and self.race2 == other.race2
+                and self.result == other.result)
 
     def getPlayerList(self):
         """Get list of players."""
@@ -508,6 +509,6 @@ def compareStr(str1, str2):
             return match >= threshold
         else:
             return str1 == str2
-    except Exception as e:
+    except Exception:
         module_logger.exception("message")
         return False

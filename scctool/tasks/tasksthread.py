@@ -1,11 +1,16 @@
-"""Define generic thread for various tasks."""
 import logging
 import time
 
 from PyQt5.QtCore import QThread
 
+import scctool.settings.translation
+
+"""Define generic thread for various tasks."""
+
+
 # create logger
 module_logger = logging.getLogger(__name__)
+_ = scctool.settings.translation.gettext
 
 
 class TasksThread(QThread):

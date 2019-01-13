@@ -1,4 +1,3 @@
-"""Define PyQt5 widgets."""
 import logging
 import os
 import re
@@ -25,11 +24,15 @@ from PyQt5.QtWidgets import (QAbstractButton, QAction, QApplication,
 import scctool.matchdata
 import scctool.settings.config
 import scctool.tasks.updater
+import scctool.settings.translation
 from scctool.settings.client_config import ClientConfig
 from scctool.tasks.tasksthread import TasksThread
 
+"""Define PyQt5 widgets."""
+
 # create logger
 module_logger = logging.getLogger(__name__)
+_ = scctool.settings.translation.gettext
 
 
 class MapLineEdit(QLineEdit):
@@ -1058,8 +1061,8 @@ class DragDropLogoList(QListWidget):
 
     def dragEnterEvent(self, e):
         data = e.mimeData()
-        if(data.hasFormat("application/x-qabstractitemmodeldatalist") and
-           e.source() != self):
+        if(data.hasFormat("application/x-qabstractitemmodeldatalist")
+           and e.source() != self):
             e.accept()
         elif data.hasFormat("logo/ident"):
             e.accept()
@@ -1068,8 +1071,8 @@ class DragDropLogoList(QListWidget):
 
     def dragMoveEvent(self, e):
         data = e.mimeData()
-        if(data.hasFormat("application/x-qabstractitemmodeldatalist") or
-           data.hasFormat("logo/ident")):
+        if(data.hasFormat("application/x-qabstractitemmodeldatalist")
+           or data.hasFormat("logo/ident")):
             e.setDropAction(Qt.CopyAction)
             e.accept()
         else:
@@ -1077,8 +1080,8 @@ class DragDropLogoList(QListWidget):
 
     def dropEvent(self, e):
         data = e.mimeData()
-        if(data.hasFormat("application/x-qabstractitemmodeldatalist") and
-           e.source() != self):
+        if(data.hasFormat("application/x-qabstractitemmodeldatalist")
+           and e.source() != self):
             item = e.source().currentItem()
             map = item.icon().pixmap(self._iconsize)
             ident = self._logoManager.pixmap2ident(map)

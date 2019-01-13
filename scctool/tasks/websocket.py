@@ -1,7 +1,8 @@
-"""Interaction with Browser Source via Websocket."""
 import asyncio
+import http
 import json
 import logging
+import os.path
 import re
 from uuid import uuid4
 
@@ -10,9 +11,14 @@ import websockets
 from PyQt5.QtCore import QThread, pyqtSignal
 
 import scctool.settings
+import scctool.settings.translation
+
+"""Interaction with Browser Source via Websocket."""
+
 
 # create logger
 module_logger = logging.getLogger(__name__)
+_ = scctool.settings.translation.gettext
 
 
 class WebsocketThread(QThread):
@@ -49,6 +55,9 @@ class WebsocketThread(QThread):
     def get_primary_scopes(self):
         return list(self.scopes.keys())
 
+    def get_port(self):
+        return int(scctool.settings.profileManager.currentID(), 16)
+
     def run(self):
         """Run thread."""
         module_logger.info("WebSocketThread starting!")
@@ -56,17 +65,16 @@ class WebsocketThread(QThread):
         self.__loop = asyncio.new_event_loop()
         asyncio.set_event_loop(self.__loop)
 
-        port = int(scctool.settings.profileManager.currentID(), 16)
-        module_logger.info(
-            'Starting Websocket Server with port {}.'.format(port))
+        port = self.get_port()
+        module_logger.info(f'Starting Websocket Server with port {port}.')
         # Create the server.
         start_server = websockets.serve(self.handler,
-                                        host='localhost',
                                         port=port,
                                         max_queue=16,
                                         max_size=10240,
                                         read_limit=10240,
-                                        write_limit=10240)
+                                        write_limit=10240,
+                                        process_request=self.http_request)
         self.__server = self.__loop.run_until_complete(start_server)
         self.__loop.run_forever()
 
@@ -85,11 +93,11 @@ class WebsocketThread(QThread):
     def __callback_on_hook(self, scan_code, is_keypad, e, callback):
         if e.is_keypad == is_keypad:
             if e.event_type == keyboard.KEY_DOWN:
-                if((scan_code, is_keypad) not in self.keyboard_state or
-                   self.keyboard_state[(scan_code, is_keypad)]):
+                if((scan_code, is_keypad) not in self.keyboard_state
+                   or self.keyboard_state[(scan_code, is_keypad)]):
                     try:
                         callback()
-                    except Exception as e:
+                    except Exception:
                         module_logger.exception("message")
                 self.keyboard_state[(scan_code, is_keypad)] = False
             if e.event_type == keyboard.KEY_UP:
@@ -118,8 +126,8 @@ class WebsocketThread(QThread):
                 self.register_hotkeys(scope)
             return
         elif scope == 'intro':
-            if (not self.hooked_keys[scope] and
-                    len(self.connected.get('intro', [])) > 0):
+            if (not self.hooked_keys[scope]
+                    and len(self.connected.get('intro', [])) > 0):
                 module_logger.info('Register intro hotkeys.')
                 player1 = scctool.settings.config.loadHotkey(
                     scctool.settings.config.parser.get(
@@ -189,13 +197,17 @@ class WebsocketThread(QThread):
         return ''
 
     async def handler(self, websocket, input_path):
+        try:
+            ip = websocket.remote_address[0]
+        except Exception:
+            ip = '?'
         path = self.handle_path(input_path)
         if not path:
             module_logger.info(
                 "Client with incorrect path {}.".format(input_path))
             return
         self.registerConnection(websocket, path)
-        module_logger.info("Client connected at path {}!".format(path))
+        module_logger.info(f"Client ({ip}) connected at path {path}!")
         primary_scope = self.get_primary_scope(path)
 
         if primary_scope not in ['ui_logo', 'logo']:
@@ -408,7 +420,7 @@ class WebsocketThread(QThread):
                         "Sending data to '{}': {}".format(path, data))
                     coro = websocket.send(json.dumps(data))
                     asyncio.run_coroutine_threadsafe(coro, self.__loop)
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
         return state
@@ -429,7 +441,7 @@ class WebsocketThread(QThread):
             module_logger.info("Sending data: %s" % data)
             coro = websocket.send(json.dumps(data))
             asyncio.run_coroutine_threadsafe(coro, self.__loop)
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
         return state
@@ -459,3 +471,86 @@ class WebsocketThread(QThread):
         if old_set != new_set:
             for item in new_set:
                 yield item
+
+    async def http_request(self, path, request_headers):
+        if len(request_headers.get_all('Sec-WebSocket-Key')) > 0:
+            return None
+        headers = dict()
+
+        file = os.path.join(scctool.settings.casting_html_dir, 'score.html')
+
+        html_dir = scctool.settings.casting_html_dir
+        casting_data_dir = scctool.settings.casting_data_dir
+        data_dir = scctool.settings.dataDir
+
+        if path in ['/', '']:
+            path = "/score.html"
+
+        if path in ['/score', '/logo1', '/logo2', '/aligulac', '']:
+            path = f'{path}.html'
+
+        path = path.replace(f'/{html_dir}/', '/./')
+        path = path.replace(f'/{html_dir}/', f'/../{html_dir}/')
+        path = path.replace(f'/{casting_data_dir}/',
+                            f'/../{casting_data_dir}/')
+        path = path.replace(f'/{data_dir}/logos/', f'/../{data_dir}/logos/')
+        path = path.split('?')[0]
+
+        path = path[1:]
+        module_logger.info(f'HTTP request for {path}')
+
+        try:
+            if path.endswith(".html"):
+                mimetype = 'text/html; charset=utf-8'
+            elif path.endswith(".txt"):
+                mimetype = 'text/plain; charset=utf-8'
+            elif path.endswith(".jpg"):
+                mimetype = 'image/jpg'
+            elif path.endswith(".jpeg"):
+                mimetype = 'image/jpeg'
+            elif path.endswith(".svg"):
+                mimetype = 'image/svg+xml'
+            elif path.endswith(".png"):
+                mimetype = 'image/png'
+            elif path.endswith(".gif"):
+                mimetype = 'image/gif'
+            elif path.endswith(".wav"):
+                mimetype = 'audio/x-wav'
+            elif path.endswith(".mp3"):
+                mimetype = 'audio/mpeg'
+            elif path.endswith(".js"):
+                mimetype = 'application/javascript; charset=utf-8'
+            elif path.endswith(".css"):
+                mimetype = 'text/css; charset=utf-8'
+            else:
+                path = f'{path}.html'
+                mimetype = 'text/html'
+
+            path = os.path.normpath(path)
+
+            file = scctool.settings.getAbsPath(
+                os.path.join(html_dir, path))
+            sendReply = os.path.isfile(file)
+
+            if not sendReply:
+                file = scctool.settings.getAbsPath(
+                    os.path.join(casting_data_dir, path))
+                sendReply = os.path.isfile(file)
+
+            if path.count('..') > 1:
+                sendReply = False
+
+            if sendReply:
+                # Open the static file requested and send it
+                with open(file, 'rb') as f:
+                    headers['Content-Type'] = f'{mimetype}'
+                    content = f.read()
+                    status = http.HTTPStatus.OK
+            else:
+                status = http.HTTPStatus.INTERNAL_SERVER_ERROR
+                content = b'ERROR'
+        except Exception:
+            status = http.HTTPStatus.NOT_FOUND
+            content = b'ERROR'
+
+        return status, headers, content
