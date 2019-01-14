@@ -104,7 +104,7 @@ class MainWindow(QMainWindow):
             if showChangelog:
                 self.openChangelog()
 
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def showAbout(self):
@@ -137,7 +137,7 @@ class MainWindow(QMainWindow):
                 self.controller.cleanUp(self._save)
                 QMainWindow.closeEvent(self, event)
                 # event.accept()
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def createMenuBar(self):
@@ -262,10 +262,11 @@ class MainWindow(QMainWindow):
                 "https://paypal.me/StarCraftCastingTool"))
             infoMenu.addAction(myAct)
 
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def createLangMenu(self):
+        """Create menu to select the language."""
         menubar = self.menuBar()
 
         langMenu = menubar.addMenu(_('Language'))
@@ -292,6 +293,7 @@ class MainWindow(QMainWindow):
             langMenu.addAction(myAct)
 
     def createBrowserSrcMenu(self):
+        """Create menu for Browser Sources."""
         menubar = self.menuBar()
         main_menu = menubar.addMenu(_('Browser Sources'))
 
@@ -510,18 +512,22 @@ class MainWindow(QMainWindow):
         self.restart()
 
     def updateAllMapCompleters(self):
+        """Update all completers for map input fields."""
         for idx in range(self.matchDataTabWidget.count()):
             self.matchDataTabWidget.widget(idx).updateMapCompleters()
 
     def updateAllPlayerCompleters(self):
+        """Update all completers for player input fields."""
         for idx in range(self.matchDataTabWidget.count()):
             self.matchDataTabWidget.widget(idx).updatePlayerCompleters()
 
     def updateAllMapButtons(self):
+        """Update all buttons to select a map in mapstats."""
         for idx in range(self.matchDataTabWidget.count()):
             self.matchDataTabWidget.widget(idx).updateMapButtons()
 
     def createMatchDataTabs(self):
+        """Create tabs for match data."""
         self.matchDataTabWidget = QTabWidget()
         self.matchDataTabWidget.setMovable(True)
         closeable = self.controller.matchControl.countMatches() > 1
@@ -561,6 +567,7 @@ class MainWindow(QMainWindow):
         tabBar.tabMoved.connect(self.tabMoved)
 
     def addMatchTab(self):
+        """Add a match tab."""
         match = self.controller.matchControl.newMatchData()
         MatchDataWidget(self,
                         self.matchDataTabWidget,
@@ -572,6 +579,7 @@ class MainWindow(QMainWindow):
                 self.matchDataTabWidget.widget(idx).setClosable(True)
 
     def copyMatchTab(self):
+        """Copy add a copy of the current match tab."""
         matchId = self.controller.matchControl.selectedMatchId()
         data = self.controller.matchControl.selectedMatch().getData()
         match = self.controller.matchControl.newMatchData(data)
@@ -586,6 +594,7 @@ class MainWindow(QMainWindow):
                 self.matchDataTabWidget.widget(idx).setClosable(True)
 
     def currentMatchTabChanged(self, idx):
+        """Perform adjustements if the match tab is changed."""
         dataWidget = self.matchDataTabWidget.widget(idx)
         ident = dataWidget.matchData.getControlID()
         self.controller.matchControl.selectMatch(ident)
@@ -593,6 +602,7 @@ class MainWindow(QMainWindow):
             self.controller.updateMatchFormat()
 
     def tabMoved(self, toIdx, fromIdx):
+        """Update the order in the match controller when a tab is moved."""
         self.controller.matchControl.updateOrder(toIdx, fromIdx)
 
     def createTabs(self):
@@ -800,14 +810,15 @@ class MainWindow(QMainWindow):
 
             self.tab2.setLayout(self.tab2.layout)
 
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def allkill_change(self):
+        """Handle a change of the all-kill format."""
         try:
             self.controller.matchControl.\
                 selectedMatch().setAllKill(self.cb_allkill.isChecked())
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def changeBestOf(self, bestof):
@@ -845,7 +856,7 @@ class MainWindow(QMainWindow):
 
             self.horizontalGroupBox.setLayout(layout)
 
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def createLowerTabWidget(self):
@@ -860,7 +871,7 @@ class MainWindow(QMainWindow):
             self.lowerTabWidget.addTab(
                 self.countdownTab,
                 _("Countdown"))
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def createBackgroundTasksTab(self):
@@ -929,7 +940,7 @@ class MainWindow(QMainWindow):
 
             self.backgroundTasksTab.setLayout(layout)
 
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def autoTwitch_change(self):
@@ -939,7 +950,7 @@ class MainWindow(QMainWindow):
                 self.controller.autoRequestsThread.activateTask('twitch')
             else:
                 self.controller.autoRequestsThread.deactivateTask('twitch')
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def autoNightbot_change(self):
@@ -949,7 +960,7 @@ class MainWindow(QMainWindow):
                 self.controller.autoRequestsThread.activateTask('nightbot')
             else:
                 self.controller.autoRequestsThread.deactivateTask('nightbot')
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def autoUpdate_change(self):
@@ -959,7 +970,7 @@ class MainWindow(QMainWindow):
                 self.controller.runSC2ApiThread("updateScore")
             else:
                 self.controller.stopSC2ApiThread("updateScore")
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def autoToggleScore_change(self):
@@ -969,7 +980,7 @@ class MainWindow(QMainWindow):
                 self.controller.runSC2ApiThread("toggleScore")
             else:
                 self.controller.stopSC2ApiThread("toggleScore")
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def autoToggleProduction_change(self):
@@ -979,7 +990,7 @@ class MainWindow(QMainWindow):
                 self.controller.runSC2ApiThread("toggleProduction")
             else:
                 self.controller.stopSC2ApiThread("toggleProduction")
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def applyCustomFormat(self, format):
@@ -995,7 +1006,7 @@ class MainWindow(QMainWindow):
                 matchWidget.updateForms()
                 self.resizeWindow()
             self.highlightApplyCustom(False)
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
         finally:
             QApplication.restoreOverrideCursor()
@@ -1015,7 +1026,7 @@ class MainWindow(QMainWindow):
                     self.le_url_custom.text().strip())
                 self.statusBar().showMessage(msg)
             self.highlightApplyCustom(False)
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
         finally:
             QApplication.restoreOverrideCursor()
@@ -1028,7 +1039,7 @@ class MainWindow(QMainWindow):
             with self.tlock:
                 msg = self.controller.resetData()
                 self.statusBar().showMessage(msg)
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
         finally:
             QApplication.restoreOverrideCursor()
@@ -1038,6 +1049,7 @@ class MainWindow(QMainWindow):
         GenericProgressDialog(self.refresh_job)
 
     def refresh_job(self, progress_dialog):
+        """Refresh data gathered by the match grabber."""
         QApplication.setOverrideCursor(
             Qt.WaitCursor)
         try:
@@ -1050,7 +1062,7 @@ class MainWindow(QMainWindow):
                 self.statusBar().showMessage(_('Reading {}...').format(url))
                 msg = self.controller.refreshData(url)
                 self.statusBar().showMessage(msg)
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
         finally:
             QApplication.restoreOverrideCursor()
@@ -1060,7 +1072,7 @@ class MainWindow(QMainWindow):
         try:
             url = self.le_url.text()
             self.controller.openURL(url)
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def updatenightbot_click(self):
@@ -1069,7 +1081,7 @@ class MainWindow(QMainWindow):
             self.statusBar().showMessage(_('Updating Nightbot Command...'))
             msg = self.controller.updateNightbotCommand()
             self.statusBar().showMessage(msg)
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def updatetwitch_click(self):
@@ -1078,7 +1090,7 @@ class MainWindow(QMainWindow):
             self.statusBar().showMessage(_('Updating Twitch Title...'))
             msg = self.controller.updateTwitchTitle()
             self.statusBar().showMessage(msg)
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def resetscore_click(self, myteam=False):
@@ -1098,10 +1110,11 @@ class MainWindow(QMainWindow):
                 if not self.controller.resetWarning():
                     self.statusBar().showMessage('')
 
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def highlightApplyCustom(self, highlight=True, force=False):
+        """Highlight the apply custom button."""
         if not force and not self.tlock.trigger():
             return
         try:
@@ -1150,14 +1163,20 @@ class MainWindow(QMainWindow):
 
 
 class TriggerLock():
+    """Lock to deactivate all triggers regarding match data."""
+
     def __init__(self):
+        """Init the lock."""
         self.__trigger = True
 
     def __enter__(self):
+        """Lock the trigger."""
         self.__trigger = False
 
     def __exit__(self, type, value, traceback):
+        """Exit the lock."""
         self.__trigger = True
 
     def trigger(self):
+        """Return if trigger should fire."""
         return bool(self.__trigger)
