@@ -389,18 +389,38 @@ class MainWindow(QMainWindow):
                     icon['file'] = os.path.join(
                         scctool.settings.casting_html_dir, icon['file'])
                     act = QAction(QIcon(scctool.settings.getResFile(
-                        'html.png')), _('Open URL in Browser'), self)
+                        'html.png')), _('Open local URL in Browser'), self)
                     act.triggered.connect(
                         lambda x,
                         file=short_file: self.controller.openURL(
                             self.controller.getBrowserSourceURL(file)))
                     mySubMenu.addAction(act)
                     act = QAction(QIcon(scctool.settings.getResFile(
-                        'copy.png')), _('Copy URL to Clipboard'), self)
+                        'copy.png')), _('Copy local URL to Clipboard'), self)
                     act.triggered.connect(
                         lambda x, file=short_file:
                         QApplication.clipboard().setText(
                             self.controller.getBrowserSourceURL(file)))
+                    mySubMenu.addAction(act)
+                    act = QAction(
+                        QIcon(scctool.settings.getResFile(
+                            'open_internet.png')),
+                        _('Open external URL in Browser'),
+                        self)
+                    act.triggered.connect(
+                        lambda x,
+                        file=short_file: self.controller.openURL(
+                            self.controller.getBrowserSourceURL(file, True)))
+                    mySubMenu.addAction(act)
+                    act = QAction(
+                        QIcon(scctool.settings.getResFile(
+                            'copy_internet.png')),
+                        _('Copy external URL to Clipboard'),
+                        self)
+                    act.triggered.connect(
+                        lambda x, file=short_file:
+                        QApplication.clipboard().setText(
+                            self.controller.getBrowserSourceURL(file, True)))
                     mySubMenu.addAction(act)
                     act = QAction(QIcon(scctool.settings.getResFile(
                         'browser2.png')), _('Open File in Browser'), self)
@@ -420,18 +440,37 @@ class MainWindow(QMainWindow):
                 src['file'] = os.path.join(
                     scctool.settings.casting_html_dir, src['file'])
                 act = QAction(QIcon(scctool.settings.getResFile(
-                    'html.png')), _('Open URL in Browser'), self)
+                    'html.png')), _('Open local URL in Browser'), self)
                 act.triggered.connect(
                     lambda x,
                     file=short_file: self.controller.openURL(
                         self.controller.getBrowserSourceURL(file)))
                 myMenu.addAction(act)
                 act = QAction(QIcon(scctool.settings.getResFile(
-                    'copy.png')), _('Copy URL to Clipboard'), self)
+                    'copy.png')), _('Copy local URL to Clipboard'), self)
                 act.triggered.connect(
                     lambda x, file=short_file:
                     QApplication.clipboard().setText(
                         self.controller.getBrowserSourceURL(file)))
+                myMenu.addAction(act)
+                act = QAction(
+                    QIcon(scctool.settings.getResFile(
+                        'open_internet.png')),
+                    _('Open external URL in Browser'),
+                    self)
+                act.triggered.connect(
+                    lambda x,
+                    file=short_file: self.controller.openURL(
+                        self.controller.getBrowserSourceURL(file, True)))
+                myMenu.addAction(act)
+                act = QAction(
+                    QIcon(scctool.settings.getResFile('copy_internet.png')),
+                    _('Copy external URL to Clipboard'),
+                    self)
+                act.triggered.connect(
+                    lambda x, file=short_file:
+                    QApplication.clipboard().setText(
+                        self.controller.getBrowserSourceURL(file, True)))
                 myMenu.addAction(act)
                 act = QAction(QIcon(scctool.settings.getResFile(
                     'browser2.png')), _('Open File in Browser'), self)

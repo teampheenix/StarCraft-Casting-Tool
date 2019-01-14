@@ -76,6 +76,7 @@ class MainController:
             self.tts = TextToSpeech()
             self.housekeeper = HouseKeeperThread(self)
             self.initPlayerIntroData()
+            self._my_ip = ''
 
         except Exception:
             module_logger.exception("message")
@@ -134,6 +135,8 @@ class MainController:
             self.housekeeper.activateTask('save')
             self.housekeeper.alphaMatches.connect(self.view.le_url.updateItems)
             self.housekeeper.activateTask('alphatl')
+            self.housekeeper.ip_updated.connect(self.update_ip)
+            self.housekeeper.activateTask('check_ip')
         except Exception:
             module_logger.exception("message")
 
@@ -827,11 +830,15 @@ class MainController:
         self.mapstatsManager.selectMap(
             self.matchControl.activeMatch().getMap(player_idx))
 
-    def getBrowserSourceURL(self, file):
+    def getBrowserSourceURL(self, file, external=False):
         """Return the URL of a browser source."""
         file = file.replace('\\', '/')
         file = file.replace('.html', '')
-        return f'http://localhost:{self.websocketThread.get_port()}/{file}'
+        if external and self._my_ip:
+            ip = self._my_ip
+        else:
+            ip = 'localhost'
+        return f'http://{ip}:{self.websocketThread.get_port()}/{file}'
 
     def toogleLEDs(self, num, path, view=None):
         """Indicate when browser sources are connected."""
@@ -998,6 +1005,10 @@ class MainController:
                         self.websocketThread.sendData2Path(path,
                                                            'DATA',
                                                            processedData)
+
+    def update_ip(self, ip):
+        """Save the current external ip."""
+        self._my_ip = ip
 
     def newVersion(self, version, force=False):
         """Display dialog for new version."""
