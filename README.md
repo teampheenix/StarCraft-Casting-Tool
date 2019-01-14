@@ -14,25 +14,25 @@
 
 ## Download
 
-  * **[Latest executable](https://github.com/teampheenix/StarCraft-Casting-Tool/releases/latest)** for Windows
-  * **[Source code](https://github.com/teampheenix/StarCraft-Casting-Tool/archive/master.zip)**
+*  **[Latest executable](https://github.com/teampheenix/StarCraft-Casting-Tool/releases/latest)** for Windows
+*  **[Source code](https://github.com/teampheenix/StarCraft-Casting-Tool/archive/master.zip)**
 
 ## Feature List
 
-  * **Match Grabber** for [Alpha Team League](https://alpha.tl/) and [Russian StarCraft 2 League](https://rfcs.ru/en/tournaments/list/tournament/rsl-1/)
-  * **Custom Match Format**: Bo1-Bo15, All-Kill format, 1vs1 - including predefined formats for Chobo, Koprulu, WardiTV, and PSISTORM Gaming Team League.
-  * Two sets of **Map Icons**: Box and Landscape in `casting_html`
-  * **Scoreboard** including team icons in `casting_html`
-  * **Animated Player Intros** in `casting_html` including Text-to-Speech, playername & race via SC2-Client, team with logo via SCC Tool
-  * **Map Preview with Statistics** from Liquipedia in `casting_html`
-  * **Aligulac Browser Source** that predicts the outcome of a 1vs1 match in `casting_html`
-  * **Countdown Browser Source** in `countdown.html`
-  * **TXT-files** with match infos in `casting_data`
-  * **Twitch & Nightbot Integration**: Update your stream title or bot commands via a single click or automatically
-  * **Automatic Score Detection** via SC2-Client
-  * **Interaction with SC2-Observer-UI**: Automatically toggle Production Tab and set Score at the start of a Game
-  * Nearly **unlimited Customization** via Skins and CSS
-  * French, German, and Russian language support
+*  **Match Grabber** for [Alpha Team League](https://alpha.tl/) and [Russian StarCraft 2 League](https://rfcs.ru/en/tournaments/list/tournament/rsl-1/)
+*  **Custom Match Format**: Bo1-Bo15, All-Kill format, 1vs1 - including predefined formats for Chobo, Koprulu, WardiTV, and PSISTORM Gaming Team League.
+*  Two sets of **Map Icons**: Box and Landscape in `casting_html`
+*  **Scoreboard** including team icons in `casting_html`
+*  **Animated Player Intros** in `casting_html` including Text-to-Speech, playername & race via SC2-Client, team with logo via SCC Tool
+*  **Map Preview with Statistics** from Liquipedia in `casting_html`
+*  **Aligulac Browser Source** that predicts the outcome of a 1vs1 match in `casting_html`
+*  **Countdown Browser Source** in `countdown.html`
+*  **TXT-files** with match infos in `casting_data`
+*  **Twitch & Nightbot Integration**: Update your stream title or bot commands via a single click or automatically
+*  **Automatic Score Detection** via SC2-Client
+*  **Interaction with SC2-Observer-UI**: Automatically toggle Production Tab and set Score at the start of a Game
+*  Nearly **unlimited Customization** via Skins and CSS
+*  French, German, and Russian language support
 
 ## Discord Server
 
