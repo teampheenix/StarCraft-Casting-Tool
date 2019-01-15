@@ -16,7 +16,9 @@ build_app.py
 build_data.py
 sign.py
 *Ducklings.css
+*WCS.css
 casting_html/src/ducklings/
+casting_html/src/wcs/
 casting_html/src/sound/player1.mp3
 casting_html/src/sound/player2.mp3
 OBS_*/
