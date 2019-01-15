@@ -233,7 +233,8 @@ div.race2 {
 
 #random {
   background-image: url('../../img/races/random-black.png');
-  top: 5px !important;
+  height: calc(100% - 16px);
+  top: 8px !important;
 }
 
 div.circle {
