@@ -68,8 +68,8 @@ def needInitialUpdate(version):
         return False
 
 
-def readJsonFile():
-    if len(this.data) > 0:
+def readJsonFile(force=False):
+    if not force and len(this.data) > 0:
         return
     try:
         with open(scctool.settings.getJsonFile('versiondata'), 'r',

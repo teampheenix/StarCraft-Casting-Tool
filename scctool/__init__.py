@@ -88,10 +88,10 @@ def initial_download():
     """Download the required data at an inital startup."""
     import scctool.tasks.updater
     from scctool.view.widgets import InitialUpdater
+    scctool.tasks.updater.readJsonFile(True)
     version = scctool.tasks.updater.getDataVersion()
     restart_flag = scctool.tasks.updater.getRestartFlag()
     updater = False
-
     if scctool.tasks.updater.needInitialUpdate(version):
         InitialUpdater()
         updater = True
