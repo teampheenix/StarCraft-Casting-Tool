@@ -94,13 +94,20 @@ class LiquipediaGrabber:
             params['search'] = str(map_name).strip() + ' LE'
         else:
             params['search'] = str(map_name).strip()
+        module_logger.info(f'Try to find map {params["search"]}')
         params['limit'] = 1
         params['namespace'] = 0
 
         url = '{}/starcraft2/api.php'.format(self._base_url)
         data = self._session.get(
             url, headers=self._headers, params=params).json()
-        map = data[1][0]
+        try:
+            map = data[1][0]
+        except IndexError:
+            if not retry:
+                return self.get_map(map_name, retry=True)
+            else:
+                raise MapNotFound
         if map:
             params = dict()
             params['action'] = "parse"

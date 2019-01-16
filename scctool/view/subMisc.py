@@ -20,7 +20,6 @@ from scctool.view.widgets import (AliasTreeView, AligulacTreeView, ListTable,
 """Show subwindow with miscellaneous settings."""
 
 
-
 # create logger
 module_logger = logging.getLogger(__name__)
 _ = scctool.settings.translation.gettext
