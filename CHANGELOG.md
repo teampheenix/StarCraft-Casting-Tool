@@ -1,6 +1,17 @@
 # Changelog
 
 
+## v2.6.1 (2019-01-15)
+
+### New
+
+* Added the options to open/copy the external URL of a browser source to the menus.
+
+### Fix
+
+* Fixed a bug where a new profile would only work after a restart.
+
+
 ## v2.6.0 (2019-01-12)
 
 ### New
