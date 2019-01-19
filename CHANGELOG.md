@@ -1,6 +1,17 @@
 # Changelog
 
 
+## v2.6.2 (2019-01-19)
+
+### Changes
+
+* Added two misc div containers in score.html to allow for more freedom in designing a score skin/style.
+
+* Added span-tags to race logos in html templates of both mapicons as well as the intro to allow for an easier custom coloring.
+
+* Added upcoming ladder maps (Cyper Forest, King's Cove, New Repugnancy, Year Zero) and removed old maps (16-Bit, Catalyst, Darkness Sanctuary, Redshift). Note: If you want old maps removed from you profile, you have to remove them by yourself using the Map Manager in Misc Settings.
+
+
 ## v2.6.1 (2019-01-15)
 
 ### New
