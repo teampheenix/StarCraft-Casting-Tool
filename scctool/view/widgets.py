@@ -1,3 +1,4 @@
+"""Various custom PyQt5 widgets."""
 import logging
 import os
 import re
@@ -23,8 +24,8 @@ from PyQt5.QtWidgets import (QAbstractButton, QAction, QApplication,
 
 import scctool.matchdata
 import scctool.settings.config
-import scctool.tasks.updater
 import scctool.settings.translation
+import scctool.tasks.updater
 from scctool.settings.client_config import ClientConfig
 from scctool.tasks.tasksthread import TasksThread
 
@@ -61,6 +62,7 @@ class MapLineEdit(QLineEdit):
             self.textModified.emit()
 
     def completerFinished(self, text):
+        """Get called when the completer is finished to emit a signal."""
         before, after = self._before, text
         if before != after:
             self.setText(after)
@@ -99,6 +101,7 @@ class MonitoredLineEdit(QLineEdit):
             self.textModified.emit()
 
     def completerFinished(self, text):
+        """Get called when the completer is finished to emit a signal."""
         before, after = self._before, text
         if before != after:
             self.setText(after)
@@ -122,7 +125,7 @@ class StyleComboBox(QComboBox):
             full_fname = os.path.join(style_dir, fname)
             if os.path.isfile(full_fname):
                 label = re.search(
-                    '^(.+)\.css$', fname).group(1)
+                    r'^(.+)\.css$', fname).group(1)
                 if ' ' in label:
                     os.rename(full_fname, os.path.join(
                         style_dir, label.replace(' ', '-') + '.css'))
@@ -140,25 +143,21 @@ class StyleComboBox(QComboBox):
         self.currentIndexChanged.connect(self.save)
 
     def connect2WS(self, controller, path):
+        """Connect the style box to a websocket."""
         self.currentIndexChanged.connect(
             lambda x, controller=controller, path=path:
             self.applyWS(controller, path))
 
     def applyWS(self, controller, path):
+        """Apply the stlye change to a websocket."""
         controller.websocketThread.changeStyle(
             path, self.currentText().replace(' ', '-'))
 
     def save(self):
+        """Save the style to the config."""
         scctool.settings.config.parser.set(
             "Style", self.__scope,
             self.currentText().replace(' ', '-'))
-
-        # def apply(self, controller, file):
-        #     """Apply the changes to the css files."""
-        #     new_file = os.path.join(self.__style_dir,
-        #                             self.currentText() + ".css")
-        #     new_file = scctool.settings.getAbsPath(new_file)
-        #     shutil.copy(new_file, scctool.settings.getAbsPath(file))
 
 
 class MapDownloader(QProgressDialog):
@@ -198,6 +197,7 @@ class MapDownloader(QProgressDialog):
         self.move(mainWindow.pos() + relativeChange)
 
     def download(self):
+        """Download a map."""
         self.show()
         for i in range(10):
             QApplication.processEvents()
@@ -225,11 +225,12 @@ class MapDownloader(QProgressDialog):
         """Set the progress of the bar."""
         try:
             self.setValue(value)
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
 
 class HotkeyLayout(QHBoxLayout):
+    """Layout to set hotkeys."""
 
     modified = pyqtSignal(str, str)
 
@@ -257,31 +258,37 @@ class HotkeyLayout(QHBoxLayout):
         self.addWidget(self.__pb_clear, 0)
 
     def setDisabled(self, disabled=True):
+        """Disable a hotkey."""
         self.__preview.setDisabled(disabled)
         self.__pb_set.setDisabled(disabled)
         self.__pb_clear.setDisabled(disabled)
         self.__qlabel.setDisabled(disabled)
 
     def setKey(self):
+        """Record a new hotkey."""
         recorder = HotkeyRecorder(self.__parent, self.data, self.__label)
         self.data = recorder.run()
         self.__preview.setText(self.data['name'])
         self.modified.emit(self.data['name'], self.__ident)
 
     def setData(self, data):
+        """Set the data."""
         self.data = data
         self.__preview.setText(self.data['name'])
         self.modified.emit(self.data['name'], self.__ident)
 
     def clear(self):
+        """Clear the hotkey."""
         self.__preview.setText("")
         self.data = {'name': '', 'scan_code': 0, 'is_keypad': False}
         self.modified.emit("", self.__ident)
 
     def getKey(self):
+        """Return the hotkey."""
         return self.data
 
     def check_dublicate(self, key, ident):
+        """Check for a dublicate hotkey."""
         if str(key) and key == self.data['name']:
             self.clear()
 
@@ -312,7 +319,7 @@ class HotkeyRecorder(QProgressDialog):
         self.move(mainWindow.pos() + relativeChange)
 
     def run(self):
-
+        """Run the hotkey recorder."""
         self.show()
         self.thread = TasksThread()
         self.thread.addTask('hotkey', self.__record)
@@ -371,6 +378,7 @@ class LogoDownloader(QProgressDialog):
         self.move(mainWindow.pos() + relativeChange)
 
     def download(self):
+        """Download a logo."""
         self.show()
         self.setProgress(1)
         with open(self.file_name, "wb") as f:
@@ -398,7 +406,7 @@ class LogoDownloader(QProgressDialog):
         """Set the progress of the bar."""
         try:
             self.setValue(value)
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
 
@@ -445,7 +453,7 @@ class ToolUpdater(QProgressDialog):
                 data.get('total', 0)), data.get('time', 0))
             self.setLabelText(text)
             self.setValue(int(float(data['percent_complete']) * 10))
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
 
@@ -935,7 +943,7 @@ class QHLine(QFrame):
 class GenericProgressDialog(QProgressDialog):
     """Define a generic progress dialog used for various tasks."""
 
-    def __init__(self, callback_job=None):
+    def __init__(self, main_window, callback_job=None):
         super().__init__()
         self.callback = callback_job
         self.setWindowModality(Qt.ApplicationModal)
@@ -946,16 +954,13 @@ class GenericProgressDialog(QProgressDialog):
         self.setRange(0, 100)
         self.setValue(0)
 
-        settings = QSettings(ClientConfig.APP_NAME, ClientConfig.COMPANY_NAME)
-        self.restoreGeometry(settings.value("geometry", self.saveGeometry()))
-        m_width = self.size().width()
-        m_height = self.size().height()
-        self.resize(QSize(max(self.sizeHint().width(), 256),
+        self.resize(QSize(main_window.size().width() * 0.66,
                           self.sizeHint().height()))
-        relativeChange = QPoint(m_width / 2, m_height / 2)\
+        relativeChange = QPoint(main_window.size().width() / 2,
+                                main_window.size().height() / 3)\
             - QPoint(self.size().width() / 2,
-                     self.size().height() / 2)
-        self.move(self.pos() + relativeChange)
+                     self.size().height() / 3)
+        self.move(main_window.pos() + relativeChange)
 
         self.show()
         for i in range(10):
@@ -965,7 +970,7 @@ class GenericProgressDialog(QProgressDialog):
     def run(self):
         try:
             self.callback(self)
-        except Exception as e:
+        except Exception:
             module_logger.exception('message')
 
         self.setValue(100)
@@ -1026,7 +1031,7 @@ class InitialUpdater(QProgressDialog):
                 self.setLabelText(_("Done."))
                 time.sleep(1)
                 self.setValue(1010)
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def setCopyProgress(self, int):
@@ -1044,7 +1049,7 @@ class InitialUpdater(QProgressDialog):
                 data['total']), data['time'])
             self.setLabelText(text)
             self.setValue(int(float(data['percent_complete']) * 5))
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
 

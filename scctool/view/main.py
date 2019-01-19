@@ -1085,7 +1085,7 @@ class MainWindow(QMainWindow):
 
     def refresh_click(self):
         """Handle click to refresh/load data from an URL."""
-        GenericProgressDialog(self.refresh_job)
+        GenericProgressDialog(self, self.refresh_job)
 
     def refresh_job(self, progress_dialog):
         """Refresh data gathered by the match grabber."""
