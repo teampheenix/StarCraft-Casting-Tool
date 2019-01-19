@@ -12,7 +12,7 @@
 
 ![scct-v2](https://user-images.githubusercontent.com/26044736/43646667-c915c8e2-9735-11e8-883c-4e9d6b94061b.jpg)
 
-## Download
+## Downloads
 
 *  **[Latest executable](https://github.com/teampheenix/StarCraft-Casting-Tool/releases/latest)** for Windows
 *  **[Source code](https://github.com/teampheenix/StarCraft-Casting-Tool/archive/master.zip)**
@@ -36,7 +36,7 @@
 
 ## Discord Server
 
-If you need support, have questions, want to be up-to-date on, or like to contribute to this project, join our [Discord Server](https://discord.gg/G9hFEfh).
+If you need support, have questions, want to be up-to-date on, or like to contribute to this project in any way, join our [Discord Server](https://discord.gg/G9hFEfh).
 
 
 ## Links
