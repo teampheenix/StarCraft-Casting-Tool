@@ -1,3 +1,4 @@
+"""Subwindow with misc ."""
 import logging
 import os.path
 
@@ -27,6 +28,7 @@ _ = scctool.settings.translation.gettext
 
 class SubwindowMisc(QWidget):
     """Show subwindow with miscellaneous settings."""
+
     current_tab = -1
 
     def createWindow(self, mainWindow, tab=''):
@@ -64,7 +66,7 @@ class SubwindowMisc(QWidget):
 
             self.setWindowTitle(_("Miscellaneous Settings"))
 
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def createTabs(self, tab=''):
@@ -100,6 +102,7 @@ class SubwindowMisc(QWidget):
         self.tabs.currentChanged.connect(self.tabChanged)
 
     def tabChanged(self, idx):
+        """Save the current tab index."""
         SubwindowMisc.current_tab = idx
 
     def changed(self):
@@ -316,7 +319,7 @@ class SubwindowMisc(QWidget):
         self.aliasBox.setLayout(mainLayout)
 
     def addAlias(self, widget, scope, name=""):
-
+        """Add an alias."""
         name, ok = QInputDialog.getText(
             self, scope, scope + ':', text=name)
         if not ok:
@@ -524,6 +527,7 @@ class SubwindowMisc(QWidget):
             self.changed()
 
     def createAligulacTab(self):
+        """Create the aligulac tab."""
         self.aligulacTab = QWidget()
 
         layout = QGridLayout()
@@ -548,6 +552,7 @@ class SubwindowMisc(QWidget):
         self.aligulacTab.setLayout(layout)
 
     def addAligulacID(self, name='', id=1):
+        """Add an aligulac ID."""
         text, ok = QInputDialog.getText(
             self, _('Player Name'), _('Player Name') + ':', text=name)
         text = text.strip()
@@ -561,6 +566,7 @@ class SubwindowMisc(QWidget):
         self.aligulacTreeview.insertItem(text, id)
 
     def removeAligulacID(self):
+        """Remove an selected aligulac ID."""
         self.aligulacTreeview.removeSelected()
 
     def createMapsBox(self):
@@ -712,6 +718,7 @@ class SubwindowMisc(QWidget):
                 self.changePreview()
 
     def addFromLquipedia(self):
+        """Add a map from Liquipedia."""
         grabber = LiquipediaGrabber()
         search_str = ''
         while True:
@@ -845,7 +852,7 @@ class SubwindowMisc(QWidget):
             layout.addWidget(buttonSave)
 
             self.buttonGroup = layout
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def saveData(self):
@@ -917,5 +924,5 @@ class SubwindowMisc(QWidget):
                 if buttonReply == QMessageBox.Yes:
                     self.saveData()
             event.accept()
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
