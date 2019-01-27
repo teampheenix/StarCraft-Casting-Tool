@@ -110,10 +110,12 @@ class MatchControl(QObject):
         self.CUSTOM_FORMATS = OrderedDict(sorted(formats.items()))
 
     def getCustomFormats(self):
+        """Get all available custom formats."""
         for custom_format in self.CUSTOM_FORMATS.keys():
             yield custom_format, self.CUSTOM_FORMATS[custom_format]._icon
 
     def newMatchData(self, data=dict(), id=''):
+        """Insert new match data."""
         if not id:
             while True:
                 id = self._uniqid()
@@ -125,17 +127,21 @@ class MatchControl(QObject):
         return match
 
     def activeMatch(self):
+        """Return the active match."""
         return self.__matches[self.__activeMatch]
 
     def selectedMatch(self):
+        """Return the selected match."""
         return self.__matches[self.__selectedMatch]
 
     def selectMatch(self, id):
+        """Select a match."""
         if id in self.__matches.keys() and self.__selectedMatch != id:
             self.__selectedMatch = id
             module_logger.info('Selected match {}'.format(id))
 
     def activateMatch(self, id):
+        """Activate a match."""
         if id in self.__matches.keys() and self.__activeMatch != id:
             old_id = self.__activeMatch
             self.__activeMatch = id
@@ -161,38 +167,48 @@ class MatchControl(QObject):
         self.metaChanged.emit()
 
     def getMatch(self, id):
+        """Get a match by id."""
         return self.__matches[id]
 
     def activeMatchId(self):
+        """Get id of the active match."""
         return self.__activeMatch
 
     def activeMatchIdx(self):
+        """Get index of the active match."""
         return self.__order.index(self.__activeMatch)
 
     def selectedMatchId(self):
+        """Get id of selected match."""
         return self.__selectedMatch
 
     def selectedMatchIdx(self):
+        """Gett index of selected match."""
         return self.__order.index(self.__selectedMatch)
 
     def getMatches(self):
+        """Yield all matches."""
         for id in self.__order:
             yield self.__matches[id]
 
     def getMatchIDs(self):
+        """Get match IDs."""
         return self.__order
 
     def _uniqid(self):
         return hex(int(time() * 10000000))[10:]
 
     def countMatches(self):
+        """Return the number of matches."""
         return len(self.__matches)
 
     def updateOrder(self, toIdx, fromIdx):
+        """Update the order of the matches."""
         self.__order[toIdx], self.__order[fromIdx] =\
             self.__order[fromIdx], self.__order[toIdx]
 
     def removeMatch(self, ident):
+        """Remove a match."""
         index = self.__order.index(ident)
         self.__order.pop(index)
         try:
