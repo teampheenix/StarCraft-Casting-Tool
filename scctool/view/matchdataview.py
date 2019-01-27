@@ -29,6 +29,7 @@ class MatchDataWidget(QWidget):
         super().__init__(parent)
 
         self.max_no_sets = scctool.settings.max_no_sets
+        self.max_no_vetos = int(scctool.settings.max_no_sets / 2) * 2
         self.scoreWidth = 35
         self.raceWidth = 45
         self.labelWidth = 25
@@ -331,9 +332,46 @@ class MatchDataWidget(QWidget):
         """Create a group box to insert vetos."""
         self.veto_groupbox = QGroupBox(_('Map Vetos'))
         self.veto_groupbox.setVisible(False)
+        box_layout = QGridLayout()
+        rows = int(self.max_no_vetos / 2)
+        self.le_veto_maps = [MapLineEdit() for i in range(self.max_no_vetos)]
+        self.veto_label = [QLabel(f'#{i+1}') for i in range(self.max_no_vetos)]
+        self.sl_veto = [QSlider(Qt.Horizontal)
+                        for i in range(self.max_no_vetos)]
+        self.row_label = [QLabel('') for y in range(rows)]
+        for veto_idx in range(self.max_no_vetos):
+            row = veto_idx / 2
+            col = (veto_idx % 2) * 2
+            veto_layout = QHBoxLayout()
+            self.veto_label[veto_idx].setFixedWidth(self.labelWidth - 5)
+            veto_layout.addWidget(self.veto_label[veto_idx])
+            self.le_veto_maps[veto_idx].setText("TBD")
+            self.le_veto_maps[veto_idx].setAlignment(
+                Qt.AlignCenter)
+            self.le_veto_maps[veto_idx].setPlaceholderText(
+                _("Map Veto {}").format(veto_idx + 1))
+            self.le_veto_maps[veto_idx].setMinimumWidth(
+                self.mimumLineEditWidth)
+            veto_layout.addWidget(self.le_veto_maps[veto_idx])
+            self.sl_veto[veto_idx].setMinimum(0)
+            self.sl_veto[veto_idx].setMaximum(1)
+            self.sl_veto[veto_idx].setValue(veto_idx % 2)
+            self.sl_veto[veto_idx].setTickPosition(
+                QSlider.TicksBothSides)
+            self.sl_veto[veto_idx].setTickInterval(1)
+            self.sl_veto[veto_idx].setTracking(False)
+            self.sl_veto[veto_idx].setToolTip(
+                _('Select which player/team vetos.'))
+            self.sl_veto[veto_idx].setFixedWidth(self.scoreWidth - 5)
+            veto_layout.addWidget(self.sl_veto[veto_idx])
+            box_layout.addLayout(veto_layout, row, col)
+        for idx in range(int(self.max_no_vetos / 2)):
+            self.row_label[idx].setFixedWidth(self.labelWidth / 2 + 5)
+            box_layout.addWidget(self.row_label[idx], idx, 1)
+        self.veto_groupbox.setLayout(box_layout)
 
-    def toogleVetos(self, visible=True):
-        """Toogle the visibility of the veto group box."""
+    def toggleVetos(self, visible=True):
+        """Toggle the visibility of the veto group box."""
         self.veto_groupbox.setVisible(visible)
 
     def openPlayerContextMenu(self, team_idx, player_idx):
@@ -490,6 +528,24 @@ class MatchDataWidget(QWidget):
             completer.activated.connect(self.le_map[i].completerFinished)
             self.le_map[i].setCompleter(completer)
 
+        for i in range(self.max_no_vetos):
+            list = scctool.settings.maps.copy()
+            try:
+                list.remove("TBD")
+            except Exception:
+                pass
+            finally:
+                list.sort()
+                list.append("TBD")
+            completer = QCompleter(list, self.le_veto_maps[i])
+            completer.setCaseSensitivity(Qt.CaseInsensitive)
+            completer.setFilterMode(Qt.MatchContains)
+            completer.setCompletionMode(
+                QCompleter.UnfilteredPopupCompletion)
+            completer.setWrapAround(True)
+            completer.activated.connect(self.le_veto_maps[i].completerFinished)
+            self.le_veto_maps[i].setCompleter(completer)
+
     def updatePlayerCompleters(self):
         """Refresh the completer for the player line edits."""
         list = scctool.settings.config.getMyPlayers(
@@ -576,6 +632,15 @@ class MatchDataWidget(QWidget):
                 self.le_map[i].show()
                 self.sl_score[i].show()
                 self.label_set[i].show()
+
+            no_vetos = self.matchData.getNoVetos()
+            for i in range(self.max_no_vetos):
+                visible = no_vetos > i
+                self.le_veto_maps[i].setVisible(visible)
+                self.veto_label[i].setVisible(visible)
+                self.sl_veto[i].setVisible(visible)
+                if i % 2:
+                    self.row_label[int(i / 2)].setVisible(visible)
 
             self.updatePlayerCompleters()
             self.updateTeamCompleters()

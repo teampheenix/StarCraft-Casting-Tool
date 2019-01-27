@@ -765,8 +765,8 @@ class MainWindow(QMainWindow):
             container.addWidget(QLabel(_("map(s). ")), 0)
 
             self.cb_vetos = QComboBox()
-            for idx in range(0, int(scctool.settings.max_no_sets / 2)):
-                self.cb_vetos.addItem(str(2 * idx))
+            for idx in range(scctool.settings.max_no_vetos + 1):
+                self.cb_vetos.addItem(str(idx))
             self.cb_vetos.setCurrentIndex(0)
             self.cb_vetos.currentIndexChanged.connect(self.change_vetos)
             container.addWidget(self.cb_vetos, 0)
