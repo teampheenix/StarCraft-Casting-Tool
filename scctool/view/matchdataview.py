@@ -4,9 +4,10 @@ import logging
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QCursor, QIcon
 from PyQt5.QtWidgets import (QAction, QComboBox, QCompleter, QGridLayout,
-                             QHBoxLayout, QInputDialog, QLabel, QMessageBox,
-                             QPushButton, QRadioButton, QSizePolicy, QSlider,
-                             QSpacerItem, QTabBar, QVBoxLayout, QWidget)
+                             QGroupBox, QHBoxLayout, QInputDialog, QLabel,
+                             QMessageBox, QPushButton, QRadioButton,
+                             QSizePolicy, QSlider, QSpacerItem, QTabBar,
+                             QVBoxLayout, QWidget)
 
 import scctool.settings
 import scctool.settings.config
@@ -314,6 +315,9 @@ class MatchDataWidget(QWidget):
                 self.cb_race[1][player_idx], 0)
             layout.addLayout(self.setContainer[player_idx])
 
+        self.createVetoGroupBox()
+        layout.addWidget(self.veto_groupbox)
+
         layout.addItem(QSpacerItem(
             0, 0, QSizePolicy.Minimum,
             QSizePolicy.Expanding))
@@ -322,6 +326,15 @@ class MatchDataWidget(QWidget):
         self.updateMapCompleters()
         self.updatePlayerCompleters()
         self.updateTeamCompleters()
+
+    def createVetoGroupBox(self):
+        """Create a group box to insert vetos."""
+        self.veto_groupbox = QGroupBox(_('Map Vetos'))
+        self.veto_groupbox.setVisible(False)
+
+    def toogleVetos(self, visible=True):
+        """Toogle the visibility of the veto group box."""
+        self.veto_groupbox.setVisible(visible)
 
     def openPlayerContextMenu(self, team_idx, player_idx):
         """Open the player context menu."""

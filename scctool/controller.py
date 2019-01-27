@@ -179,11 +179,16 @@ class MainController:
             self.view.le_url_custom.setText(
                 self.matchControl.selectedMatch().getURL())
 
+            vetos = self.matchControl.selectedMatch().getNoVetos()
             index = self.view.cb_vetos.findText(
-                str(self.matchControl.selectedMatch().getNoVetos()),
+                str(vetos),
                 Qt.MatchFixedString)
             if index >= 0:
                 self.view.cb_vetos.setCurrentIndex(index)
+
+            idx = self.matchControl.selectedMatchIdx()
+            matchWidget = self.view.matchDataTabWidget.widget(idx)
+            matchWidget.toogleVetos(vetos > 0)
 
             self.autoSetNextMap()
 
