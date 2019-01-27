@@ -1,3 +1,4 @@
+"""Widget to display match data (in a tab)."""
 import logging
 
 from PyQt5.QtCore import Qt
@@ -15,16 +16,15 @@ from scctool.view.widgets import IconPushButton, MapLineEdit, MonitoredLineEdit
 """Define the match data widget/view."""
 
 
-
 module_logger = logging.getLogger(__name__)
 _ = scctool.settings.translation.gettext
 
 
 class MatchDataWidget(QWidget):
-    """Widget to display matchd data."""
+    """Widget to display match data."""
 
     def __init__(self, parent, tabWidget, matchData, closeable=True):
-        """Init widget"""
+        """Init widget."""
         super().__init__(parent)
 
         self.max_no_sets = scctool.settings.max_no_sets
@@ -65,9 +65,11 @@ class MatchDataWidget(QWidget):
         self.setClosable(closeable)
 
     def setClosable(self, closeable):
+        """Make the tab closable."""
         self._closeButton.setHidden(not closeable)
 
     def closeTab(self):
+        """Close the tab."""
         if self._tabWidget.count() > 1:
             idx = self._tabWidget.indexOf(self)
             ident = self.matchData.getControlID()
@@ -80,11 +82,14 @@ class MatchDataWidget(QWidget):
             self._tabWidget.widget(0).setClosable(False)
 
     def checkButton(self):
+        """Check the button."""
         self._radioButton.setChecked(True)
 
     def activate(self, checked):
+        """Activate match tab."""
         if (checked
-                and self.controller.matchControl.activeMatchId() != self._ctrlID):
+                and self.controller.matchControl.activeMatchId()
+                != self._ctrlID):
             self.controller.matchControl.activateMatch(
                 self.matchData.getControlID())
             self.autoSetNextMap(send=False)
@@ -97,13 +102,14 @@ class MatchDataWidget(QWidget):
             self._radioButton.toggled.connect(self.activate)
 
     def setName(self):
+        """Set the name of the tab."""
         team1 = self.matchData.getTeamOrPlayer(0).replace('&', '&&')
         team2 = self.matchData.getTeamOrPlayer(1).replace('&', '&&')
         name = " {} vs {}".format(team1, team2)
         self._tabWidget.tabBar().setTabText(self._tabIdx, name)
 
     def _createView(self):
-
+        """Create the view."""
         layout = QVBoxLayout()
 
         self.le_league = MonitoredLineEdit()
@@ -202,7 +208,7 @@ class MatchDataWidget(QWidget):
         label.setSizePolicy(policy)
         container.addWidget(label, 0, 1, 1, 1)
 
-        label = QLabel(_("Maps \ Teams:"))
+        label = QLabel(_('Maps \\ Teams:'))
         label.setAlignment(Qt.AlignCenter)
         policy = QSizePolicy()
         policy.setHorizontalStretch(4)
@@ -318,6 +324,7 @@ class MatchDataWidget(QWidget):
         self.updateTeamCompleters()
 
     def openPlayerContextMenu(self, team_idx, player_idx):
+        """Open the player context menu."""
         menu = self.le_player[team_idx][player_idx].\
             createStandardContextMenu()
         first_action = menu.actions()[0]
@@ -330,6 +337,7 @@ class MatchDataWidget(QWidget):
         menu.exec_(QCursor.pos())
 
     def addAlias(self, team_idx, player_idx):
+        """Add a player alias."""
         name = self.le_player[team_idx][player_idx].text().strip()
         name, ok = QInputDialog.getText(
             self, _('Player Alias'), _('Name') + ':', text=name)
@@ -350,6 +358,7 @@ class MatchDataWidget(QWidget):
             QMessageBox.critical(self, _("Error"), str(e))
 
     def league_changed(self):
+        """Handle a change of the league."""
         if not self.tlock.trigger():
             return
         self.matchData.setLeague(self.le_league.text())
@@ -364,7 +373,7 @@ class MatchDataWidget(QWidget):
                     self.matchData.setMapScore(set_idx, value, True)
                     self.allkillUpdate()
                     self.autoSetNextMap()
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def player_changed(self, team_idx, player_idx):
@@ -393,7 +402,7 @@ class MatchDataWidget(QWidget):
                 self.cb_race[team_idx][player_idx].setCurrentIndex(0)
             self.updatePlayerCompleters()
             self.setName()
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def race_changed(self, team_idx, player_idx):
@@ -413,10 +422,11 @@ class MatchDataWidget(QWidget):
                 for player_idx in range(1, self.max_no_sets):
                     self.cb_race[team_idx][player_idx].setCurrentIndex(idx)
 
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def team_changed(self, team_idx):
+        """Handle change of the team."""
         if not self.tlock.trigger():
             return
         team = self.le_team[team_idx].text().strip()
@@ -434,6 +444,7 @@ class MatchDataWidget(QWidget):
         self.setName()
 
     def map_changed(self, set_idx):
+        """Handle a map change."""
         if not self.tlock.trigger():
             return
         self.matchData.setMap(set_idx, self.le_map[set_idx].text())
@@ -442,6 +453,7 @@ class MatchDataWidget(QWidget):
         self.autoSetNextMap(set_idx)
 
     def autoSetNextMap(self, idx=-1, send=True):
+        """Set the next map automatically."""
         if self.controller.matchControl.activeMatchId() == self._ctrlID:
             self.controller.autoSetNextMap(idx, send)
 
@@ -451,7 +463,7 @@ class MatchDataWidget(QWidget):
             list = scctool.settings.maps.copy()
             try:
                 list.remove("TBD")
-            except Exception as e:
+            except Exception:
                 pass
             finally:
                 list.sort()
@@ -558,11 +570,12 @@ class MatchDataWidget(QWidget):
             self.setName()
             # self.autoSetNextMap()
 
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
             raise
 
     def updateMapButtons(self):
+        """Update the map buttons."""
         mappool = list(self.controller.mapstatsManager.getMapPool())
         for i in range(self.max_no_sets):
             map = self.matchData.getMap(i)
@@ -571,7 +584,8 @@ class MatchDataWidget(QWidget):
             else:
                 self.label_set[i].setEnabled(False)
         if (self.controller.mapstatsManager.getMapPoolType() == 2
-                and self.controller.matchControl.activeMatchId() == self._ctrlID):
+                and self.controller.matchControl.activeMatchId()
+                == self._ctrlID):
             self.controller.mapstatsManager.sendMapPool()
 
     def updateLogos(self, force=False):
@@ -612,23 +626,30 @@ class MatchDataWidget(QWidget):
                 return True
             else:
                 return False
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def showMap(self, player_idx):
+        """Show the map in the mapstats browser source."""
         self.controller.mapstatsManager.selectMap(
             self.matchData.getMap(player_idx))
 
 
 class TriggerLock():
+    """Trigger lock."""
+
     def __init__(self):
+        """Init the lock."""
         self.__trigger = True
 
     def __enter__(self):
+        """Enter the lock."""
         self.__trigger = False
 
     def __exit__(self, type, value, traceback):
+        """Exit the lock."""
         self.__trigger = True
 
     def trigger(self):
+        """Return if the logged is triggered."""
         return bool(self.__trigger)

@@ -7,7 +7,6 @@ from scctool.matchgrabber.custom import MatchGrabber as MatchGrabberParent
 """Provide match grabber for RSTL."""
 
 
-
 # create logger
 module_logger = logging.getLogger(__name__)
 _ = scctool.settings.translation.gettext
@@ -47,7 +46,7 @@ class MatchGrabber(MatchGrabberParent):
                 self._matchData.resetSwap()
 
             if(data['game_format'] == "3"):
-                self._matchData.setNoSets(7, 6, resetPlayers=overwrite)
+                self._matchData.setNoSets(5, 3, resetPlayers=overwrite)
                 self._matchData.setMinSets(4)
                 self._matchData.resetLabels()
                 self._matchData.setSolo(False)

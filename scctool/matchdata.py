@@ -19,6 +19,7 @@ module_logger = logging.getLogger(__name__)
 
 class MatchData(QObject):
     """Matchdata."""
+
     dataChanged = pyqtSignal(str, object)
     metaChanged = pyqtSignal()
 
@@ -53,18 +54,22 @@ class MatchData(QObject):
                                 'opacity': colorData["opacity"]})
 
     def getControlID(self):
+        """Get control ID."""
         return self.__id
 
     def readData(self, data):
+        """Read data."""
         if len(data) > 0:
             self.__data = copy.deepcopy(data)
         else:
             self.setCustom(5, False, False)
 
     def writeJsonFile(self):
+        """Write data to json file."""
         self.__matchControl.writeJsonFile()
 
     def getData(self):
+        """Return the raw data."""
         return self.__data
 
     def __initMatchGrabber(self):
@@ -78,6 +83,7 @@ class MatchData(QObject):
             self.__matchGrabber = MatchGrabber(*args)
 
     def applyCustomFormat(self, name):
+        """Apply a custom format."""
         if name in self.__matchControl.CUSTOM_FORMATS:
             customFormat = self.__matchControl.CUSTOM_FORMATS[name](self)
             with self.emitLock(True, self.metaChanged):
@@ -127,6 +133,8 @@ class MatchData(QObject):
         self.__data['no_sets'] = 0
         self.__data['best_of'] = 0
         self.__data['min_sets'] = 0
+        self.__data['no_vetos'] = 0
+        self.__data['ace_sets'] = 0
         self.__data['allkill'] = False
         self.__data['solo'] = False
         self.__data['my_team'] = 0
@@ -134,10 +142,12 @@ class MatchData(QObject):
         self.__data['teams'] = []
         self.__data['teams'].append({'name': 'TBD', 'tag': None})
         self.__data['teams'].append({'name': 'TBD', 'tag': None})
+        self.__data['vetos'] = []
         self.__data['sets'] = []
         self.__data['players'] = [[], []]
 
     def swapTeams(self):
+        """Swap the teams."""
         module_logger.info("Swapping teams")
         self.__data['swapped'] = not self.__data.get('swapped', False)
         self.__data['my_team'] = -self.__data['my_team']
@@ -151,15 +161,18 @@ class MatchData(QObject):
         self.__emitSignal('meta')
 
     def getSwappedIdx(self, idx):
+        """Get the swapped index."""
         if self.isSwapped():
             return 1 - idx
         else:
             return idx
 
     def isSwapped(self):
+        """Return if the teams are swapped."""
         return bool(self.__data.get('swapped', False))
 
     def resetSwap(self):
+        """Reset the swap."""
         self.__data['swapped'] = False
 
     def setMinSets(self, minSets):
@@ -197,6 +210,15 @@ class MatchData(QObject):
         """Set allkill format."""
         self.__data['allkill'] = bool(allkill)
 
+    def extendAce(self, sets):
+        """Extend the ace."""
+        self.__data['ace_sets'] = max(int(sets), 0)
+        # TODO: set each map to be ace
+
+    def getAceSets(self):
+        """Get the number of ace sets."""
+        return int(self.__data['ace_sets'])
+
     def getAllKill(self):
         """Check if format is allkill."""
         return bool(self.__data['allkill'])
@@ -224,18 +246,19 @@ class MatchData(QObject):
 
         return False
 
-    def setCustom(self, bestof, allkill, solo):
-        """Set a custom match format."""
-        bestof = int(bestof)
-        allkill = bool(allkill)
-        if(bestof == 2):
-            no_sets = 2
-        else:
-            no_sets = bestof + 1 - bestof % 2
+    def setNoVetos(self, vetos):
+        self.__data['no_vetos'] = int(vetos)
 
-        self.setNoSets(no_sets, bestof)
+    def getNoVetos(self):
+        return int(self.__data.get('no_vetos', 0))
+
+    def setCustom(self, regular_sets, allkill, solo, ace_sets=0):
+        """Set a custom match format."""
+        regular_sets = int(regular_sets)
+        ace_sets = int(ace_sets)
+        self.setNoSets(regular_sets, ace_sets)
         self.resetLabels()
-        self.setAllKill(allkill)
+        self.setAllKill(bool(allkill))
         self.setProvider("Custom")
         self.setID(0)
         self.setURL("")
@@ -264,50 +287,48 @@ class MatchData(QObject):
 
     def resetLabels(self):
         """Reset the map labels."""
-        best_of = self.__data['best_of']
         no_sets = self.getNoSets()
+        ace_sets = self.getNoAceSets()
 
-        if(best_of == 2):
-            for set_idx in range(no_sets):
-                self.setLabel(set_idx, "Map " + str(set_idx + 1))
-            return
+        ace_start = no_sets - ace_sets
 
-        ace_start = no_sets - 3 + 2 * (best_of % 2)
-        skip_one = (ace_start + 1 == no_sets)
-        ace = (best_of % 2) == 0
-
-        for set_idx in range(no_sets):
+        for set_idx in range(ace_start):
             self.setLabel(set_idx, "Map " + str(set_idx + 1))
             self.setAce(set_idx, False)
 
-        if ace:
-            for set_idx in range(ace_start, no_sets):
-                self.setAce(set_idx, True)
-                if(skip_one):
-                    self.setLabel(set_idx, "Ace Map")
-                else:
-                    self.setLabel(set_idx, "Ace Map "
-                                  + str(set_idx - ace_start + 1))
+        for set_idx in range(ace_start, no_sets):
+            self.setAce(set_idx, True)
+            if(ace_sets == 1):
+                self.setLabel(set_idx, "Ace Map")
+            else:
+                self.setLabel(set_idx, "Ace Map "
+                              + str(set_idx - ace_start + 1))
 
-    def setNoSets(self, no_sets=5, bestof=False, resetPlayers=False):
+    def setNoSets(self, regular_sets=5, ace_sets=0, resetPlayers=False):
         """Set the number of sets/maps."""
         try:
-            no_sets = int(no_sets)
-
-            if(no_sets < 0):
-                no_sets = 0
-            elif(no_sets > scctool.settings.max_no_sets):
-                no_sets = scctool.settings.max_no_sets
-
-            if((not bestof) or bestof <= 0 or bestof > no_sets):
-                self.__data['best_of'] = no_sets
+            regular_sets = int(regular_sets)
+            ace_sets = int(ace_sets)
+            if ace_sets > 0:
+                if regular_sets % 2:
+                    total_sets = regular_sets + ace_sets - 1
+                else:
+                    total_sets = regular_sets + ace_sets
             else:
-                self.__data['best_of'] = int(bestof)
+                total_sets = regular_sets
+
+            if(total_sets < 0):
+                total_sets = 0
+            elif(total_sets > scctool.settings.max_no_sets):
+                total_sets = scctool.settings.max_no_sets
+
+            self.__data['best_of'] = int(regular_sets)
+            self.__data['ace_sets'] = int(ace_sets)
 
             sets = []
             players = [[], []]
 
-            for i in range(no_sets):
+            for i in range(total_sets):
                 try:
                     map = self.__data['sets'][i]['map']
                 except Exception:
@@ -345,7 +366,7 @@ class MatchData(QObject):
                 sets.append({'label': label, 'map': map,
                              'score': score, 'ace': ace})
 
-            self.__data['no_sets'] = no_sets
+            self.__data['no_sets'] = total_sets
             self.__data['min_sets'] = 0
             self.__data['sets'] = sets
             self.__data['players'] = players
@@ -406,6 +427,13 @@ class MatchData(QObject):
         except Exception:
             return 0
 
+    def getNoAceSets(self):
+        """Get number of ace sets."""
+        try:
+            return int(self.__data.get('ace_sets', 0))
+        except Exception:
+            return 0
+
     def setMap(self, set_idx, map="TBD"):
         """Set the map of a set."""
         try:
@@ -432,6 +460,7 @@ class MatchData(QObject):
             return False
 
     def yieldMaps(self):
+        """Yield all maps."""
         yielded = set()
         for idx in range(self.getNoSets()):
             map = self.getMap(idx)
@@ -490,6 +519,7 @@ class MatchData(QObject):
         return max(self.getScore()) > int(self.getBestOf() / 2)
 
     def getWinner(self):
+        """Get the winner."""
         score = self.getScore()
         if not self.isDecided() or score[0] == score[1]:
             return 0
@@ -533,13 +563,14 @@ class MatchData(QObject):
             return False
 
     def getNextSet(self):
+        """Get the next set."""
         for set_idx in range(self.getNoSets()):
             if self.getMapScore(set_idx) == 0:
                 return set_idx
         return -1
 
     def getNextMap(self, next_idx=-1):
-        """Returns the next map (if the set index matches.)"""
+        """Return the next map (if the set index matches)."""
         set_idx = self.getNextSet()
         if set_idx != -1 and (next_idx == -1 or set_idx == next_idx):
             return self.getMap(set_idx)
@@ -547,6 +578,7 @@ class MatchData(QObject):
             return "TBD"
 
     def wasMapPlayed(self, map):
+        """Return if map was already played."""
         for set_idx in range(self.getNoSets()):
             if (map.lower() == self.getMap(set_idx).lower()
                     and self.getMapScore(set_idx) != 0):
@@ -811,6 +843,7 @@ class MatchData(QObject):
         self.__matchGrabber.downloadLogos(self.__controller.logoManager)
 
     def getScoreData(self):
+        """Return the score data."""
         data = dict()
 
         if self.getSolo():
@@ -866,6 +899,7 @@ class MatchData(QObject):
         return data
 
     def getScoreIconColor(self, team_idx, set_idx):
+        """Return the score icon color."""
         score = self.getMapScore(set_idx)
         team = 2 * team_idx - 1
         if score == 0:
@@ -888,6 +922,7 @@ class MatchData(QObject):
                 "lose_color")
 
     def getColorData(self, set_idx):
+        """Return the color data."""
         score = self.getMapScore(set_idx)
         team = self.getMyTeam()
         won = score * team
@@ -1039,24 +1074,8 @@ class MatchData(QObject):
             module_logger.exception("message")
             return False
 
-    def _useTemplate(self, filein, fileout, replacements):
-        """ This method is currently no longer needed."""
-        filein = scctool.settings.getAbsPath(filein)
-        fileout = scctool.settings.getAbsPath(fileout)
-        regex = re.compile(r"%[\w_-]+%")
-        compiled_replacements = dict()
-        for placeholder, value in replacements.items():
-            compiled_replacements['%{}%'.format(
-                placeholder.upper())] = str(value)
-        with open(filein, "rt", encoding='utf-8-sig') as fin:
-            with open(fileout, "wt", encoding='utf-8-sig') as fout:
-                for line in fin:
-                    for placeholder, value in compiled_replacements.items():
-                        line = line.replace(placeholder, value)
-                    line = regex.sub("", line)
-                    fout.write(line)
-
     def parseScope(self, scope='all'):
+        """Parse the scope."""
         if scope == 'all':
             for idx in range(0, self.getNoSets()):
                 yield idx
@@ -1128,6 +1147,7 @@ class MatchData(QObject):
             return
 
     def isValidScope(self, scope):
+        """Check if scope is valid."""
         if scope in self.__matchControl.scopes.keys():
             return True
         else:
@@ -1167,24 +1187,31 @@ def getRace(str):
 
 
 class EmitLock():
+    """Emit lock."""
+
     def __init__(self):
+        """Init lock."""
         self.__locked = False
         self.__useLock = True
         self.__signal = None
 
     def __call__(self, useLock=True, signal=None):
+        """Call the lock."""
         self.__useLock = bool(useLock)
         self.__signal = signal
         return self
 
     def __enter__(self):
+        """Enter the lock."""
         self.__locked = self.__useLock
         return self
 
     def __exit__(self, type, value, traceback):
+        """Exit the lock."""
         self.__locked = False
         if self.__useLock and self.__signal:
             self.__signal.emit()
 
     def locked(self):
+        """Return if the lock is active."""
         return bool(self.__locked)

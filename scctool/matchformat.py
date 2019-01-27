@@ -159,9 +159,7 @@ class ProleagueFormat(MatchFormat):
         self._url = "https://github.com/teampheenix/StarCraft-Casting-Tool"
 
     def applyFormat(self):
-        self._matchData.setCustom(5, False, False)
-        self._matchData.setLabel(4, "Ace Map")
-        self._matchData.setAce(4, True)
+        self._matchData.setCustom(5, False, False, ace_sets=1)
         self._matchData.setMinSets(3)
         self._matchData.setURL(self._url)
         self._matchData.setLeague(self._name)

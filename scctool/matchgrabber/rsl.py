@@ -1,3 +1,4 @@
+"""Provide match grabber for RSL."""
 import logging
 
 import requests
@@ -5,11 +6,6 @@ import requests
 import scctool.settings
 import scctool.settings.translation
 from scctool.matchgrabber.custom import MatchGrabber as MatchGrabberParent
-
-"""Provide match grabber for RSL."""
-
-
-
 
 # create logger
 module_logger = logging.getLogger(__name__)
@@ -31,7 +27,7 @@ class MatchGrabber(MatchGrabberParent):
             + "&data_type=json&lang=en&service=match&match_id="
 
     def _getJson(self):
-        """Overwriting this parent method as ssl verfication fails for RSL."""
+        """Overwrite the parent method as ssl verfication fails for RSL."""
         data = requests.get(url=self._getAPI(), verify=False).json()
         return data
 
@@ -56,7 +52,7 @@ class MatchGrabber(MatchGrabberParent):
 
             # In RSL this is apparently ProLeague format
             if(data['game_format'] == "3"):
-                self._matchData.setNoSets(5, resetPlayers=overwrite)
+                self._matchData.setNoSets(5, 1, resetPlayers=overwrite)
                 self._matchData.setMinSets(3)
                 self._matchData.resetLabels()
                 self._matchData.setSolo(False)
@@ -127,9 +123,6 @@ class MatchGrabber(MatchGrabberParent):
                         self._matchData.getSwappedIdx(team_idx),
                         self._aliasTeam(team['name']), team['tag'])
 
-                self._matchData.setLabel(4, "Ace Map")
-                self._matchData.setAce(4, True)
-
                 for set_idx in range(5):
                     try:
                         score1 = int(
@@ -156,7 +149,7 @@ class MatchGrabber(MatchGrabberParent):
 
                 # self._matchData.resetData()
                 bo = int(data['game_format_bo'])
-                self._matchData.setNoSets(bo, bo, resetPlayers=overwrite)
+                self._matchData.setNoSets(bo, 0, resetPlayers=overwrite)
                 self._matchData.setMinSets(0)
                 self._matchData.setSolo(False)
                 self._matchData.setLeague(data['tournament']['name'])

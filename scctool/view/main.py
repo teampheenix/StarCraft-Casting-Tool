@@ -49,7 +49,7 @@ class MainWindow(QMainWindow):
             self.max_no_sets = scctool.settings.max_no_sets
             self.scoreWidth = 35
             self.raceWidth = 45
-            self.labelWidth = 25
+            self.labelWidth = 10
             self.mimumLineEditWidth = 130
 
             self.createTabs()
@@ -675,11 +675,8 @@ class MainWindow(QMainWindow):
             self.pb_openBrowser.setMinimumWidth(width)
 
             container = QHBoxLayout()
-            label = QLabel()
-            label.setFixedWidth(self.labelWidth)
-            container.addWidget(label, 0)
             label = QLabel(_("Match-URL:"))
-            label.setMinimumWidth(80)
+            label.setMinimumWidth(60)
             container.addWidget(label, 0)
             container.addWidget(self.le_url, 1)
             button = QPushButton()
@@ -705,10 +702,7 @@ class MainWindow(QMainWindow):
             # self.pb_download = QPushButton("Download Images from URL")
             # container.addWidget(self.pb_download)
             label = QLabel()
-            label.setFixedWidth(self.labelWidth)
-            container.addWidget(label, 0)
-            label = QLabel()
-            label.setMinimumWidth(80)
+            label.setMinimumWidth(60)
             container.addWidget(label, 0)
             self.pb_refresh = QPushButton(
                 _("Load Data from URL"))
@@ -725,12 +719,8 @@ class MainWindow(QMainWindow):
 
             container = QHBoxLayout()
 
-            label = QLabel()
-            label.setMinimumWidth(self.labelWidth)
-            container.addWidget(label, 0)
-
-            label = QLabel(_("Match Format:"))
-            label.setMinimumWidth(80)
+            label = QLabel(_("Maps:"))
+            label.setMinimumWidth(35)
             container.addWidget(label, 0)
 
             container.addWidget(QLabel(_("Best of")), 0)
@@ -738,44 +728,49 @@ class MainWindow(QMainWindow):
             self.cb_bestof = QComboBox()
             for idx in range(0, scctool.settings.max_no_sets):
                 self.cb_bestof.addItem(str(idx + 1))
-            self.cb_bestof.setCurrentIndex(3)
-            string = _('"Best of 6/4": First, a Bo5/3 is played and the'
-                       ' ace map gets extended to a Bo3 if needed;'
-                       ' Best of 2: Bo3 with only two maps played.')
+            string = _('"Best of" does not count extended Ace Maps.')
             self.cb_bestof.setToolTip(string)
             self.cb_bestof.setMaximumWidth(45)
+            self.cb_bestof.setMinimumWidth(45)
             self.cb_bestof.currentIndexChanged.connect(self.changeBestOf)
             container.addWidget(self.cb_bestof, 0)
 
             container.addWidget(QLabel(_(" but at least")), 0)
 
             self.cb_minSets = QComboBox()
-
+            self.cb_bestof.setCurrentIndex(2)
             self.cb_minSets.setToolTip(
                 _('Minimum number of maps played (even if the match'
                   ' is decided already)'))
             self.cb_minSets.setMaximumWidth(45)
+            self.cb_minSets.setMinimumWidth(45)
             container.addWidget(self.cb_minSets, 0)
             container.addWidget(
-                QLabel(" " + _("maps") + "  "), 0)
+                QLabel(_("maps") + ". "), 0)
             self.cb_minSets.currentIndexChanged.connect(
                 lambda idx: self.highlightApplyCustom())
 
-            self.cb_allkill = QCheckBox(_("All-Kill Format"))
-            self.cb_allkill.setChecked(False)
-            self.cb_allkill.setToolTip(
-                _('Winner stays and is automatically'
-                  ' placed into the next set'))
-            self.cb_allkill.stateChanged.connect(self.allkill_change)
-            container.addWidget(self.cb_allkill, 0)
+            self.cb_extend_ace = QCheckBox(_("Ace extended to"))
+            self.cb_extend_ace.setChecked(False)
+            self.cb_extend_ace.stateChanged.connect(self.change_extend_ace)
+            container.addWidget(self.cb_extend_ace, 0)
 
-            self.cb_solo = QCheckBox(_("1vs1"))
-            self.cb_solo.setChecked(False)
-            self.cb_solo.setToolTip(
-                _('Select for solo (non-team matches)'))
-            container.addWidget(self.cb_solo, 0)
-            self.cb_solo.stateChanged.connect(
-                lambda idx: self.highlightApplyCustom())
+            self.cb_ace_bo = QComboBox()
+            for idx in range(0, 3):
+                self.cb_ace_bo.addItem(str(2 * idx + 1))
+            self.cb_ace_bo.setCurrentIndex(0)
+            self.cb_ace_bo.setEnabled(False)
+            self.cb_ace_bo.currentIndexChanged.connect(self.change_ace_bo)
+            container.addWidget(self.cb_ace_bo, 0)
+            container.addWidget(QLabel(_("map(s). ")), 0)
+
+            self.cb_vetos = QComboBox()
+            for idx in range(0, int(scctool.settings.max_no_sets / 2)):
+                self.cb_vetos.addItem(str(2 * idx))
+            self.cb_vetos.setCurrentIndex(0)
+            self.cb_vetos.currentIndexChanged.connect(self.change_vetos)
+            container.addWidget(self.cb_vetos, 0)
+            container.addWidget(QLabel(_("Vetos. ")), 0)
 
             label = QLabel("")
             container.addWidget(label, 1)
@@ -808,12 +803,27 @@ class MainWindow(QMainWindow):
 
             container = QHBoxLayout()
 
-            label = QLabel()
-            label.setMinimumWidth(self.labelWidth)
+            label = QLabel(_("Modes:"))
+            label.setMinimumWidth(35)
             container.addWidget(label, 0)
 
+            self.cb_allkill = QCheckBox(_("All-Kill"))
+            self.cb_allkill.setChecked(False)
+            self.cb_allkill.setToolTip(
+                _('Winner stays and is automatically'
+                  ' placed into the next set'))
+            self.cb_allkill.stateChanged.connect(self.allkill_change)
+            container.addWidget(self.cb_allkill, 0)
+
+            self.cb_solo = QCheckBox(_("1vs1"))
+            self.cb_solo.setChecked(False)
+            self.cb_solo.setToolTip(
+                _('Select for solo (non-team matches)'))
+            container.addWidget(self.cb_solo, 0)
+            self.cb_solo.stateChanged.connect(
+                lambda idx: self.highlightApplyCustom())
+
             label = QLabel(_("Match-URL:"))
-            label.setMinimumWidth(80)
             container.addWidget(label, 0)
 
             self.le_url_custom = MonitoredLineEdit()
@@ -867,10 +877,21 @@ class MainWindow(QMainWindow):
         self.highlightApplyCustom()
         for idx in range(0, bestof):
             self.cb_minSets.addItem(str(idx + 1))
-            if bestof == 2:
-                self.cb_minSets.setCurrentIndex(1)
-            else:
-                self.cb_minSets.setCurrentIndex((bestof - 1) / 2)
+
+        self.cb_minSets.setCurrentIndex((bestof - 1) / 2)
+
+    def change_extend_ace(self, extend_ace):
+        """Handle a change of extend ace checkbox."""
+        self.cb_ace_bo.setEnabled(extend_ace)
+        self.highlightApplyCustom()
+
+    def change_ace_bo(self, bestof):
+        """Handle a change of ace bo."""
+        self.highlightApplyCustom()
+
+    def change_vetos(self, vetos):
+        """Handle a change of no vetos."""
+        self.highlightApplyCustom()
 
     def createHorizontalGroupBox(self):
         """Create horizontal group box for tasks."""
@@ -1057,12 +1078,18 @@ class MainWindow(QMainWindow):
         try:
             with self.tlock:
                 self.statusBar().showMessage(_('Applying Custom Match...'))
+                if self.cb_extend_ace.checkState():
+                    ace_bo = int(self.cb_ace_bo.currentText())
+                else:
+                    ace_bo = 0
                 msg = self.controller.applyCustom(
                     int(self.cb_bestof.currentText()),
                     self.cb_allkill.isChecked(),
                     self.cb_solo.isChecked(),
                     int(self.cb_minSets.currentText()),
-                    self.le_url_custom.text().strip())
+                    self.le_url_custom.text().strip(),
+                    int(self.cb_vetos.currentText()),
+                    ace_bo)
                 self.statusBar().showMessage(msg)
             self.highlightApplyCustom(False)
         except Exception:

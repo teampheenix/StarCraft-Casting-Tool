@@ -166,10 +166,24 @@ class MainController:
             if index >= 0:
                 self.view.cb_minSets.setCurrentIndex(index)
 
+            ace_sets = self.matchControl.selectedMatch().getAceSets()
+            index = self.view.cb_ace_bo.findText(
+                str(ace_sets),
+                Qt.MatchFixedString)
+            if index >= 0:
+                self.view.cb_ace_bo.setCurrentIndex(index)
+            self.view.cb_extend_ace.setChecked(ace_sets > 0)
+
             self.view.le_url.setURL(
                 self.matchControl.selectedMatch().getURL())
             self.view.le_url_custom.setText(
                 self.matchControl.selectedMatch().getURL())
+
+            index = self.view.cb_vetos.findText(
+                str(self.matchControl.selectedMatch().getNoVetos()),
+                Qt.MatchFixedString)
+            if index >= 0:
+                self.view.cb_vetos.setCurrentIndex(index)
 
             self.autoSetNextMap()
 
@@ -183,7 +197,8 @@ class MainController:
         matchWidget = self.view.matchDataTabWidget.widget(idx)
         matchWidget.updateLogos(force)
 
-    def applyCustom(self, bestof, allkill, solo, minSets, url):
+    def applyCustom(self, bestof, allkill, solo,
+                    minSets, url, vetos, extend_ace):
         """Apply a custom match format."""
         msg = ''
         try:
@@ -192,8 +207,9 @@ class MainController:
             with match.emitLock(
                     True,
                     match.metaChanged):
-                match.setCustom(bestof, allkill, solo)
+                match.setCustom(bestof, allkill, solo, extend_ace)
                 match.setMinSets(minSets)
+                match.setNoVetos(vetos)
                 match.setURL(url)
                 self.matchControl.writeJsonFile()
                 self.updateMatchFormat()

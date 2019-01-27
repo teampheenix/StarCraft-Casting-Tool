@@ -1565,7 +1565,10 @@ class MatchComboBox(QComboBox):
         super().__init__(parent)
         self.setEditable(True)
         self.lineEdit().setAlignment(Qt.AlignCenter)
-        self.lineEdit().setPlaceholderText("https://alpha.tl/match/3000")
+        tooltip = _('Enter AlphaTL/RSL Match-URL or '
+                    'search for an upcoming AlphaTL Match.')
+        self.lineEdit().setPlaceholderText(tooltip)
+        self.lineEdit().setToolTip(tooltip)
         self._alpha_icon = QIcon(scctool.settings.getResFile('alpha.png'))
         self._rstl_icon = QIcon(scctool.settings.getResFile('rstl.png'))
         self._rsl_icon = QIcon(scctool.settings.getResFile('rsl.png'))
