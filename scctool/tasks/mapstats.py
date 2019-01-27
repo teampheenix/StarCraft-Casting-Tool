@@ -1,3 +1,4 @@
+"""Manager and thread to save map stats and keep them up-to-date."""
 import json
 import logging
 import os
@@ -10,16 +11,15 @@ import scctool.settings.translation
 from scctool.tasks.liquipedia import LiquipediaGrabber, MapNotFound
 from scctool.tasks.tasksthread import TasksThread
 
-"""Manager and thread to save map stats and keep them up-to-date."""
-
-
 module_logger = logging.getLogger(__name__)
 _ = scctool.settings.translation.gettext
 
 
 class MapStatsManager:
+    """MapStats Manager."""
 
     def __init__(self, controller):
+        """Init the mapstats manager."""
         self.__controller = controller
         self.loadJson()
         self.__thread = MapStatsThread(self)
@@ -78,6 +78,7 @@ class MapStatsManager:
             module_logger.exception("message")
 
     def selectMap(self, map, send=True):
+        """Select a map in the mapstats browser source."""
         if map in self.__maps.keys():
             self.__current_map = map
             if scctool.settings.config.parser.getboolean(
@@ -97,12 +98,15 @@ class MapStatsManager:
                     map, played, vetoed)
 
     def setMapPoolType(self, id):
+        """Set the mappool type."""
         self.__mappool = int(id)
 
     def getMapPoolType(self):
+        """Get the map pool type."""
         return int(self.__mappool)
 
     def getCustomMapPool(self):
+        """Get the custom map pool."""
         if len(self.__customMapPool) == 0:
             for map in self.getLadderMapPool():
                 yield map
@@ -111,13 +115,16 @@ class MapStatsManager:
                 yield map
 
     def getLadderMapPool(self):
+        """Get the ladder map pool."""
         for map in self.__ladderMapPool:
             yield map
 
     def setCustomMapPool(self, maps):
+        """Set the custom map pool."""
         self.__customMapPool = list(maps)
 
     def getMapPool(self):
+        """Return the map pool."""
         if self.__mappool == 0:
             for map in self.getLadderMapPool():
                 yield map
@@ -131,11 +138,13 @@ class MapStatsManager:
                     yield map
 
     def refreshMapPool(self):
+        """Refresh the map pool."""
         if (not self.__mappool_refresh
                 or (time.time() - int(self.__mappool_refresh)) > 24 * 60 * 60):
             self.__thread.activateTask('refresh_mappool')
 
     def refreshMaps(self):
+        """Refresh map data from liquipedia."""
         for map in scctool.settings.maps:
             if map != 'TBD' and map not in self.__maps.keys():
                 self.__maps[map] = dict()
@@ -189,11 +198,13 @@ class MapStatsManager:
             self.__mappool_refresh = int(time.time())
 
     def close(self, save=True):
+        """Close the manager."""
         self.__thread.terminate()
         if save:
             self.dumpJson()
 
     def getData(self):
+        """Get data to be send to the browser source."""
         out_data = dict()
         if self.__current_map in self.getMapPool():
             out_data['map'] = self.__current_map
@@ -233,17 +244,20 @@ class MapStatsManager:
         return out_data
 
     def sendMapPool(self):
+        """Send the map pool data to the browser source."""
         data = self.getData()
         self.__controller.websocketThread.sendData2Path(
             'mapstats', "MAPSTATS", data)
 
 
 class MapStatsThread(TasksThread):
+    """Thread to update map stats data."""
 
     newMapData = pyqtSignal(str, object)
     newMapPool = pyqtSignal(object)
 
     def __init__(self, manager):
+        """Init the thread."""
         super().__init__()
         self.__manager = manager
         self.__grabber = LiquipediaGrabber()
@@ -253,6 +267,7 @@ class MapStatsThread(TasksThread):
         self.addTask('refresh_mappool', self.__refresh_mappool)
 
     def setMaps(self, maps, full=False):
+        """Set the maps."""
         if full:
             self.__fullmaps = maps
         else:
