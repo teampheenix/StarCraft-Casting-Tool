@@ -203,6 +203,9 @@ class MapStatsManager:
         if save:
             self.dumpJson()
 
+    def _sortMaps(self):
+        self.__maps = {k: self.__maps[k] for k in sorted(self.__maps)}
+
     def getData(self):
         """Get data to be send to the browser source."""
         out_data = dict()
@@ -211,6 +214,7 @@ class MapStatsManager:
         else:
             out_data['map'] = None
         out_data['maps'] = dict()
+        self._sortMaps()
         for map, data in self.__maps.items():
             if map not in self.getMapPool():
                 continue
