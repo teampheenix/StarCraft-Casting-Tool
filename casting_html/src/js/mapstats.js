@@ -134,10 +134,12 @@ function connectWebsocket() {
       }
     } else if (jsonObject.event == 'SELECT_MAP') {
       if (jsonObject.data.map != getCurrentMap()) {
-        self.selectMap(jsonObject.data.map, jsonObject.data.played);
+        self.selectMap(jsonObject.data.map, jsonObject.data.played, jsonObject.data.vetoed);
       }
     } else if (jsonObject.event == 'MARK_PLAYED') {
       markPlayed(jsonObject.data.map, jsonObject.data.played);
+    } else if (jsonObject.event == 'MARK_VETOED') {
+      markVetoed(jsonObject.data.map, jsonObject.data.vetoed);
     } else if (jsonObject.event == 'DEBUG_MODE') {}
   }
 
@@ -173,19 +175,20 @@ function loadImages() {
 function addMaps() {
   removeMaps();
   for (var name in mapData) {
-    addMap(name, mapData[name]['played']);
+    addMap(name, mapData[name]['played'], mapData[name]['vetoed']);
   }
 }
 
 function markMaps() {
   for (var name in mapData) {
     markPlayed(name, mapData[name]['played']);
+    markVetoed(name, mapData[name]['vetoed']);
   }
 }
 
 function markPlayed(map, played) {
   try {
-    mapData[map][played] = played;
+    mapData[map]['played'] = played;
   } catch (e) {
     console.log(e);
     return;
@@ -206,9 +209,31 @@ function markPlayed(map, played) {
   }
 }
 
+function markVetoed(map, vetoed) {
+  try {
+    mapData[map]['vetoed'] = vetoed;
+  } catch (e) {
+    console.log(e);
+    return;
+  }
+  storeData("mapdata");
+  var ul_maplist = document.getElementById('map-list');
+  var existing_maps = ul_maplist.getElementsByTagName("li");
+  for (var i = 0; i < existing_maps.length; i++) {
+    mapElement = existing_maps[i];
+    if (mapElement.getElementsByTagName('div')[0].innerHTML.toLowerCase() == map.toLowerCase()) {
+      if (vetoed) {
+        mapElement.getElementsByTagName('div')[0].classList.add("vetoed");
+      } else {
+        mapElement.getElementsByTagName('div')[0].classList.remove("vetoed");
+      }
+      return
+    }
+  }
+}
 
 
-function addMap(name, played) {
+function addMap(name, played, vetoed) {
   var ul_maplist = document.getElementById('map-list');
   var existing_maps = ul_maplist.getElementsByTagName("li");
   for (var i = 0; i < existing_maps.length; i++) {
@@ -218,6 +243,11 @@ function addMap(name, played) {
         mapElement.getElementsByTagName('div')[0].classList.add("played");
       } else {
         mapElement.getElementsByTagName('div')[0].classList.remove("played");
+      }
+      if (vetoed) {
+        mapElement.getElementsByTagName('div')[0].classList.add("vetoed");
+      } else {
+        mapElement.getElementsByTagName('div')[0].classList.remove("vetoed");
       }
       return
     }
@@ -231,6 +261,9 @@ function addMap(name, played) {
   div.innerHTML = name;
   if (played) {
     div.classList.add("played");
+  }
+  if (vetoed) {
+    div.classList.add("vetoed");
   }
   li.appendChild(div);
   ul_maplist.appendChild(li);
@@ -249,7 +282,7 @@ function removeMaps() {
   }
 }
 
-function selectMap(name, alreadyplayed = false) {
+function selectMap(name, alreadyplayed = false, vetoed = false) {
   console.log('selectMap:', name);
   if (!tweenShowMap.isActive()) {
     var maps = document.getElementById('map-list').getElementsByTagName("li");
@@ -258,6 +291,9 @@ function selectMap(name, alreadyplayed = false) {
       if (mapElement.getElementsByTagName('div')[0].innerHTML.toLowerCase() == name.toLowerCase()) {
         if (alreadyplayed) {
           mapElement.getElementsByTagName('div')[0].classList.add("played");
+        }
+        if (vetoed) {
+          mapElement.getElementsByTagName('div')[0].classList.add("vetoed");
         }
         animateInOut(mapElement, name);
         currentMap = name;

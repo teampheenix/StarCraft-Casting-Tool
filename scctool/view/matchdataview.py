@@ -343,6 +343,11 @@ class MatchDataWidget(QWidget):
             row = veto_idx / 2
             col = (veto_idx % 2) * 2
             veto_layout = QHBoxLayout()
+            self.le_veto_maps[veto_idx].textModified.connect(
+                lambda veto_idx=veto_idx: self.map_veto_changed(veto_idx))
+            self.sl_veto[veto_idx].valueChanged.connect(
+                lambda value, veto_idx=veto_idx:
+                    self.veto_team_changed(veto_idx, value))
             self.veto_label[veto_idx].setFixedWidth(self.labelWidth - 5)
             veto_layout.addWidget(self.veto_label[veto_idx])
             self.le_veto_maps[veto_idx].setText("TBD")
@@ -500,8 +505,19 @@ class MatchDataWidget(QWidget):
             return
         self.matchData.setMap(set_idx, self.le_map[set_idx].text())
         self.updateMapButtons()
-        self.controller.matchControl.activeMatch()
         self.autoSetNextMap(set_idx)
+
+    def map_veto_changed(self, idx):
+        """Handle a map veto change."""
+        if not self.tlock.trigger():
+            return
+        self.matchData.setVeto(idx, self.le_veto_maps[idx].text())
+
+    def veto_team_changed(self, idx, team):
+        """Handle a map veto change."""
+        if not self.tlock.trigger():
+            return
+        self.matchData.setVeto(idx, self.le_veto_maps[idx].text(), team)
 
     def autoSetNextMap(self, idx=-1, send=True):
         """Set the next map automatically."""
@@ -641,6 +657,10 @@ class MatchDataWidget(QWidget):
                 self.sl_veto[i].setVisible(visible)
                 if i % 2:
                     self.row_label[int(i / 2)].setVisible(visible)
+                if visible:
+                    veto = self.matchData.getVeto(i)
+                    self.le_veto_maps[i].setText(veto.get('map'))
+                    self.sl_veto[i].setValue(veto.get('team'))
 
             self.updatePlayerCompleters()
             self.updateTeamCompleters()

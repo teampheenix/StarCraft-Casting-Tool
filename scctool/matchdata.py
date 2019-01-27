@@ -158,6 +158,9 @@ class MatchData(QObject):
         for set_idx in range(len(self.__data['sets'])):
             self.__data['sets'][set_idx]['score'] = - \
                 self.__data['sets'][set_idx]['score']
+        for veto_idx in range(len(self.__data['vetos'])):
+            self.__data['vetos'][veto_idx]['team'] = \
+                1 - self.__data['vetos'][veto_idx]['team']
         self.__emitSignal('meta')
 
     def getSwappedIdx(self, idx):
@@ -246,18 +249,36 @@ class MatchData(QObject):
 
         return False
 
-    def setNoVetos(self, vetos):
-        self.__data['no_vetos'] = int(vetos)
+    def setNoVetos(self, no_vetos):
+        """Set the number of vetos."""
+        no_vetos = int(no_vetos)
+        self.__data['no_vetos'] = int(no_vetos)
+        vetos = []
+
+        for i in range(no_vetos):
+            try:
+                map = self.__data['vetos'][i]['map']
+            except Exception:
+                map = "TBD"
+            try:
+                team = self.__data['sets'][i]['team']
+            except Exception:
+                team = i % 2
+            vetos.append({'map': map, 'team': team})
+
+        self.__data['vetos'] = vetos
 
     def getNoVetos(self):
+        """Get the number of vetos."""
         return int(self.__data.get('no_vetos', 0))
 
-    def setCustom(self, regular_sets, allkill, solo, ace_sets=0):
+    def setCustom(self, regular_sets, allkill, solo, ace_sets=0, vetos=0):
         """Set a custom match format."""
         regular_sets = int(regular_sets)
         ace_sets = int(ace_sets)
         self.setNoSets(regular_sets, ace_sets)
         self.resetLabels()
+        self.setNoVetos(vetos)
         self.setAllKill(bool(allkill))
         self.setProvider("Custom")
         self.setID(0)
@@ -322,8 +343,8 @@ class MatchData(QObject):
             elif(total_sets > scctool.settings.max_no_sets):
                 total_sets = scctool.settings.max_no_sets
 
-            self.__data['best_of'] = int(regular_sets)
-            self.__data['ace_sets'] = int(ace_sets)
+            self.__data['best_of'] = regular_sets
+            self.__data['ace_sets'] = ace_sets
 
             sets = []
             players = [[], []]
@@ -434,12 +455,42 @@ class MatchData(QObject):
         except Exception:
             return 0
 
+    def setVeto(self, idx, map="TBD", team=None):
+        """Set a map veto."""
+        try:
+            if(not (idx >= 0 and idx < self.__data['no_vetos'])):
+                return False
+            map, __ = autoCorrectMap(map)
+            if team not in [0, 1]:
+                team = self.__data['vetos'][idx]['team']
+            is_new_map = self.__data['vetos'][idx]['map'] != map
+            if(is_new_map or self.__data['vetos'][idx]['team'] != team):
+                old_map = self.__data['vetos'][idx]['map']
+                self.__data['vetos'][idx]['map'] = map
+                self.__emitSignal(
+                    'data', 'map_veto',
+                    {'idx': idx, 'map': map,
+                     'team': team, 'old_map': old_map})
+            return True
+        except Exception:
+            return False
+
+    def getVeto(self, idx):
+        """Get the map of a veto."""
+        try:
+            if(not (idx >= 0 and idx < self.__data['no_vetos'])):
+                return {'idx': idx, 'map': 'TBD', 'team':  idx % 2}
+
+            return self.__data['vetos'][idx]
+        except Exception:
+            return {'idx': idx, 'map': 'TBD', 'team':  idx % 2}
+
     def setMap(self, set_idx, map="TBD"):
         """Set the map of a set."""
         try:
             if(not (set_idx >= 0 and set_idx < self.__data['no_sets'])):
                 return False
-            map, _ = autoCorrectMap(map)
+            map, __ = autoCorrectMap(map)
             if(self.__data['sets'][set_idx]['map'] != map):
                 self.__data['sets'][set_idx]['map'] = map
                 self.__emitSignal(
@@ -582,6 +633,13 @@ class MatchData(QObject):
         for set_idx in range(self.getNoSets()):
             if (map.lower() == self.getMap(set_idx).lower()
                     and self.getMapScore(set_idx) != 0):
+                return True
+        return False
+
+    def isMapVetoed(self, map):
+        """Return if map is vetoed."""
+        for idx in range(self.getNoVetos()):
+            if (map.lower() == self.getVeto(idx).get('map').lower()):
                 return True
         return False
 

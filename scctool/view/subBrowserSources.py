@@ -15,7 +15,6 @@ from scctool.view.widgets import HotkeyLayout, ScopeGroupBox, StyleComboBox
 """Show connections settings sub window."""
 
 
-
 # create logger
 module_logger = logging.getLogger(__name__)
 
@@ -185,6 +184,15 @@ class SubwindowBrowserSources(QWidget):
         label = QLabel(_("Mark:"))
         label.setMinimumWidth(120)
         layout.addRow(label, self.cb_mark_played)
+
+        self.cb_mark_vetoed = QCheckBox(_("Mark vetoed maps"))
+        self.cb_mark_vetoed.setChecked(
+            scctool.settings.config.parser.getboolean(
+                "Mapstats", "mark_vetoed"))
+        self.cb_mark_vetoed.stateChanged.connect(self.changed)
+        label = QLabel(" ")
+        label.setMinimumWidth(120)
+        layout.addRow(label, self.cb_mark_vetoed)
 
         box.setLayout(layout)
         mainLayout.addWidget(box)
@@ -592,6 +600,11 @@ class SubwindowBrowserSources(QWidget):
                 "Mapstats",
                 "mark_played",
                 str(self.cb_mark_played.isChecked()))
+
+            scctool.settings.config.parser.set(
+                "Mapstats",
+                "mark_vetoed",
+                str(self.cb_mark_vetoed.isChecked()))
 
             self.controller.mapstatsManager.sendMapPool()
             self.mainWindow.updateAllMapButtons()

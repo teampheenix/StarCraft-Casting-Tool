@@ -198,6 +198,7 @@ def setDefaultConfigAll():
     setDefaultConfig("Mapstats", "color2", "#000000")
     setDefaultConfig("Mapstats", "autoset_next_map", "True")
     setDefaultConfig("Mapstats", "mark_played", "False")
+    setDefaultConfig("Mapstats", "mark_vetoed", "False")
 
     setDefaultConfig("Countdown", 'restart', 'True')
     setDefaultConfig("Countdown", 'description', 'Stream will be back in')

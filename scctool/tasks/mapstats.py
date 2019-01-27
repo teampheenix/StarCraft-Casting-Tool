@@ -86,8 +86,15 @@ class MapStatsManager:
                     activeMatch().wasMapPlayed(map)
             else:
                 played = False
+            if scctool.settings.config.parser.getboolean(
+                    "Mapstats", "mark_vetoed",):
+                vetoed = self.__controller.matchControl.\
+                    activeMatch().isMapVetoed(map)
+            else:
+                vetoed = False
             if send:
-                self.__controller.websocketThread.selectMap(map, played)
+                self.__controller.websocketThread.selectMap(
+                    map, played, vetoed)
 
     def setMapPoolType(self, id):
         self.__mappool = int(id)
@@ -208,6 +215,13 @@ class MapStatsManager:
                     activeMatch().wasMapPlayed(map)
             else:
                 out_data['maps'][map]['played'] = False
+            if scctool.settings.config.parser.getboolean(
+                    "Mapstats", "mark_vetoed",):
+                out_data['maps'][map]['vetoed'] = \
+                    self.__controller.matchControl.\
+                    activeMatch().isMapVetoed(map)
+            else:
+                out_data['maps'][map]['vetoed'] = False
             for key, item in data.items():
                 if key == 'refreshed':
                     continue

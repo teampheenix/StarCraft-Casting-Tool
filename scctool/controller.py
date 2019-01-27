@@ -958,6 +958,23 @@ class MainController:
                 played = object['value'] != 0
                 self.websocketThread.sendData2Path(
                     'mapstats', 'MARK_PLAYED', {'map': map, 'played': played})
+        elif label == 'map_veto':
+            if scctool.settings.config.parser.getboolean(
+                    "Mapstats", "mark_vetoed",):
+                map = object.get('map')
+                old_map = object.get('old_map')
+                if(old_map != map
+                   and old_map != 'TBD'
+                   and not self.matchControl.activeMatch().isMapVetoed(
+                       old_map)):
+                    self.websocketThread.sendData2Path(
+                        'mapstats', 'MARK_VETOED',
+                        {'map': old_map, 'vetoed': False})
+                if map.lower() != 'tbd':
+                    self.websocketThread.sendData2Path(
+                        'mapstats', 'MARK_VETOED',
+                        {'map': map, 'vetoed': True})
+
         elif label == 'color':
             for idx in range(0, 2):
                 self.websocketThread.sendData2Path(

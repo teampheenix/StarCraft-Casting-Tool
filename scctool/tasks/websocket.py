@@ -393,9 +393,11 @@ class WebsocketThread(QThread):
             "intro", "SHOW_INTRO",
             self.__controller.getPlayerIntroData(idx))
 
-    def selectMap(self, map, played=False):
+    def selectMap(self, map, played=False, vetoed=False):
         self.sendData2Path('mapstats', 'SELECT_MAP', {
-                           'map': str(map), 'played': played})
+                           'map': str(map),
+                           'played': played,
+                           'vetoed': vetoed})
 
     def sendData2Path(self, path, event, input_data=None, state=''):
         if not state:
