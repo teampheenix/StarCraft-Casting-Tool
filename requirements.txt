@@ -4,7 +4,7 @@ humanize>=0.5.1
 keyboard==0.13.2
 markdown2>=2.3.7
 Pillow>=5.4.1
-pypiwin32>=223
+pywin32>=224
 PyQt5>=5.11.3
 pytesseract>=0.2.6
 PyUpdater>=2.5.4
