@@ -115,7 +115,7 @@ class MainController:
             "URL", self.matchControl.activeMatch().getURL)
         placeholders.addConnection(
             "BestOf",
-            lambda: str(self.matchControl.activeMatch().getBestOfRaw()))
+            lambda: str(self.matchControl.activeMatch().getBestOf()))
         placeholders.addConnection(
             "League", self.matchControl.activeMatch().getLeague)
         placeholders.addConnection(
