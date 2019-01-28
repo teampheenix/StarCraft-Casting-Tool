@@ -71,12 +71,12 @@ def updateTitle(newTitle):
 def getUserID(login):
     """Get a user's ID from twitch API."""
     client_id = scctool.settings.safe.get('twitch-client-id')
-    headers = {'Client-ID': client_id}
     url = 'https://api.twitch.tv/helix/users'
-
+    headers = {'Client-ID': client_id}
     params = {'login': login}
 
     r = requests.get(url, headers=headers, params=params)
+    r.raise_for_status()
     return r.json().get('data')[0]['id']
 
 
