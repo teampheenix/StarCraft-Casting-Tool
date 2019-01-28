@@ -97,8 +97,20 @@ div.box_middle {
   overflow: hidden;
 }
 
-.bestof {
-  visibility: hidden;
+.bestof{
+  position: absolute;
+  bottom: 3px;
+  right: 0px;
+  width: 100%;
+  height: 25px;
+  line-height: 25px;
+  text-align: center;
+  filter: drop-shadow(0px 0px 2px black);
+  font-size: 18px;
+}
+
+.bestof>span::before{
+  content: "Bo";
 }
 
 div.score_left {
@@ -110,7 +122,7 @@ div.score_left {
   font-size: 36px;
   font-weight: bold;
   text-align: center;
-  line-height: calc(var(--total-height) - var(--border-size));
+  line-height: calc(75px - var(--border-size));
 }
 
 div.score_right {
@@ -122,7 +134,7 @@ div.score_right {
   font-size: 36px;
   font-weight: bold;
   text-align: center;
-  line-height: calc(var(--total-height) - var(--border-size));
+  line-height: calc(75px - var(--border-size));
 }
 
 div.score_middle {
@@ -134,7 +146,7 @@ div.score_middle {
   font-size: 36px;
   font-weight: bold;
   text-align: center;
-  line-height: calc(var(--total-height) - var(--border-size));
+  line-height: calc(75px - var(--border-size));
 }
 
 div.box_right {

@@ -113,10 +113,10 @@ class MainController:
             self.matchControl.activeMatch().getTeamOrPlayer(1))
         placeholders.addConnection(
             "Race1", lambda:
-            self.matchControl.activeMatch().getNextRace(0))
+            self.matchControl.activeMatch().getNextRace(0)[0])
         placeholders.addConnection(
             "Race2", lambda:
-            self.matchControl.activeMatch().getNextRace(1))
+            self.matchControl.activeMatch().getNextRace(1)[0])
         placeholders.addConnection(
             "URL", self.matchControl.activeMatch().getURL)
         placeholders.addConnection(
@@ -937,7 +937,7 @@ class MainController:
             self.websocketThread.sendData2Path(
                 'score', 'CHANGE_TEXT', {
                     'id': 'bestof',
-                    'text': f"Bo{object['value']}"})
+                    'text': f"{object['value']}"})
         elif label == 'score':
             score = self.matchControl.activeMatch().getScore()
             for idx in range(0, 2):

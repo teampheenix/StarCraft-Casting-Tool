@@ -90,7 +90,7 @@ function insertData() {
   $('#team2').text(data['team2']);
   $('#score1').text(data['score1']);
   $('#score2').text(data['score2']);
-  $('#bestof').text('Bo' + data['bestof']);
+  $('#bestof').text(data['bestof']);
   $('#logo1').css("background-image", "url('../" + data['logo1'] + "')");
   $('#logo2').css("background-image", "url('../" + data['logo2'] + "')");
   if (data['winner'][0]) {

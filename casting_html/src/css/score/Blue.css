@@ -83,6 +83,10 @@ body {
   font-size: 20px;
 }
 
+.bestof>span::before{
+  content: "Bo";
+}
+
 div.box_right {
   position: absolute;
   height: 100%;
