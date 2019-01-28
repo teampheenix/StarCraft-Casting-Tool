@@ -589,10 +589,15 @@ class MatchData(QObject):
                 if(overwrite or self.__data['sets'][set_idx]['score'] == 0):
                     if(self.__data['sets'][set_idx]['score'] != score):
                         was_decided = self.isDecided()
+                        old_bestof = self.getBestOf()
                         self.__data['sets'][set_idx]['score'] = score
                         outcome_changed = self.isDecided() != was_decided
+                        new_bestof = self.getBestOf()
                         if outcome_changed:
                             self.__emitSignal('outcome')
+                        if new_bestof != old_bestof:
+                            self.__emitSignal('data', 'bestof',
+                                              {'value': new_bestof})
                         self.__emitSignal('data', 'score',
                                           {'set_idx': set_idx,
                                            'value': score})
@@ -918,7 +923,8 @@ class MatchData(QObject):
         score = [0, 0]
         winner = [False, False]
         sets = []
-        threshold = int(self.getBestOf() / 2)
+        bestof = self.getBestOf()
+        threshold = int(bestof / 2)
 
         for i in range(self.getNoSets()):
             sets.insert(i, ["", ""])
@@ -949,6 +955,7 @@ class MatchData(QObject):
         winner[1] = score[1] > threshold
 
         data['sets'] = sets
+        data['bestof'] = bestof
         data['winner'] = winner
         data['score1'] = score[0]
         data['score2'] = score[1]

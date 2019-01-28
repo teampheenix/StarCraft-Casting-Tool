@@ -41,16 +41,19 @@ body {
 
 .score {
   font-size: 45px;
-  line-height: 100px;
+  line-height: 75px;
 }
 
 .score_middle {
+  position: absolute;
+  top: 20px;
+  width: 100%;
   filter: drop-shadow(0px 0px 2px black);
 }
 
 .score_left {
   position: absolute;
-  top: 0px;
+  top: 20px;
   left: 0px;
   width: 50px;
   height: 100%;
@@ -60,12 +63,24 @@ body {
 
 .score_right {
   position: absolute;
-  top: 0px;
+  top: 20px;
   right: 0px;
   width: 50px;
   height: 100%;
   text-align: center;
   filter: drop-shadow(0px 0px 2px black);
+}
+
+.bestof{
+  position: absolute;
+  top: 5px;
+  right: 0px;
+  width: 100%;
+  height: 25px;
+  line-height: 25px;
+  text-align: center;
+  filter: drop-shadow(0px 0px 2px black);
+  font-size: 20px;
 }
 
 div.box_right {

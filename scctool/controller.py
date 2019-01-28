@@ -927,6 +927,11 @@ class MainController:
                     'score', 'CHANGE_TEXT',
                     {'id': 'team{}'.format(object['idx'] + 1),
                      'text': object['value']})
+        elif label == 'bestof':
+            self.websocketThread.sendData2Path(
+                'score', 'CHANGE_TEXT', {
+                    'id': 'bestof',
+                    'text': f"Bo{object['value']}"})
         elif label == 'score':
             score = self.matchControl.activeMatch().getScore()
             for idx in range(0, 2):
