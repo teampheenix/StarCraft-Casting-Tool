@@ -117,6 +117,10 @@ div.box_middle:after {
   top: 0;
 }
 
+.bestof {
+  visibility: hidden;
+}
+
 .score_middle {
   position: absolute;
   top: 0px;

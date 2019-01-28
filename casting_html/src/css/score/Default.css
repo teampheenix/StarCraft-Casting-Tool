@@ -97,6 +97,10 @@ div.box_middle {
   overflow: hidden;
 }
 
+.bestof {
+  visibility: hidden;
+}
+
 div.score_left {
   position: absolute;
   top: 0px;
