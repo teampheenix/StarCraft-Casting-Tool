@@ -551,24 +551,18 @@ class MatchData(QObject):
             return False
 
     def getBestOf(self):
-        """Get flitered BestOf number (only odd)."""
+        """Get filtered BestOf number (only odd)."""
         try:
-            best_of = self.__data['best_of']
+            best_of = self.getBestOfRaw()
+            no_sets = self.getNoSets()
+            score = self.getScore()
 
-            if(best_of == 2):
-                return 3
-
-            if(best_of % 2):  # odd, okay
+            if(min(score) < int(best_of / 2)):
                 return best_of
-            else:  # even
-                score = self.getScore()
-                if(min(score) < best_of / 2 - 1):
-                    return best_of - 1
-                else:
-                    return best_of + 1
-            return
+            else:
+                return no_sets
         except Exception:
-            return False
+            return 0
 
     def isDecided(self):
         """Check if match is decided."""
