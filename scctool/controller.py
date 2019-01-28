@@ -112,6 +112,12 @@ class MainController:
             "Team2", lambda:
             self.matchControl.activeMatch().getTeamOrPlayer(1))
         placeholders.addConnection(
+            "Race1", lambda:
+            self.matchControl.activeMatch().getNextRace(0))
+        placeholders.addConnection(
+            "Race2", lambda:
+            self.matchControl.activeMatch().getNextRace(1))
+        placeholders.addConnection(
             "URL", self.matchControl.activeMatch().getURL)
         placeholders.addConnection(
             "BestOf",

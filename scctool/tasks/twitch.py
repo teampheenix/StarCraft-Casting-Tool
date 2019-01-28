@@ -68,18 +68,16 @@ def updateTitle(newTitle):
     return msg, success
 
 
-def getUserID(user):
+def getUserID(login):
+    """Get a user's ID from twitch API."""
+    client_id = scctool.settings.safe.get('twitch-client-id')
+    url = 'https://api.twitch.tv/helix/users'
+    headers = {'Client-ID': client_id}
+    params = {'login': login}
 
-    clientID = scctool.settings.safe.get('twitch-client-id')
-    headers = {'Accept': 'application/vnd.twitchtv.v5+json',
-               'Client-ID': clientID}
-    params = {'login': user}
-
-    response = requests.get('https://api.twitch.tv/kraken/users',
-                            headers=headers, params=params)
-    response.raise_for_status()
-    data = response.json()
-    return data['users'][0]['_id']
+    r = requests.get(url, headers=headers, params=params)
+    r.raise_for_status()
+    return r.json().get('data')[0]['id']
 
 
 # def addCommunity(channelID):
