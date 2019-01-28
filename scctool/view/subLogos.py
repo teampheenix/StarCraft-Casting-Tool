@@ -1,3 +1,4 @@
+"""Show logo manager sub window."""
 import logging
 import re
 
@@ -13,10 +14,6 @@ import scctool.settings.translation
 from scctool.view.subLiquipediaSearch import SubwindowLiquipediaSearch
 from scctool.view.widgets import (DragDropLogoList, DragImageLabel,
                                   LogoDownloader)
-
-"""Show logo manager sub window."""
-
-
 
 # create logger
 module_logger = logging.getLogger(__name__)
@@ -180,6 +177,7 @@ class SubwindowLogos(QWidget):
         self.move(mainWindow.pos() + relativeChange)
 
     def listItemRightClickedFav(self, QPos):
+        """Provide right click menu for favorites."""
         self.listMenu = QMenu()
         menu_item = self.listMenu.addAction(_("Set Team 1 Logo"))
         menu_item.triggered.connect(lambda: self.setTeam1Logo(self.fav_list))
@@ -192,6 +190,7 @@ class SubwindowLogos(QWidget):
         self.listMenu.show()
 
     def listItemRightClickedLastUsed(self, QPos):
+        """Provide right click menu for last used."""
         self.listMenu = QMenu()
         menu_item = self.listMenu.addAction(_("Set Team 1 Logo"))
         menu_item.triggered.connect(
@@ -208,14 +207,16 @@ class SubwindowLogos(QWidget):
         self.listMenu.show()
 
     def deleteFavorite(self):
+        """Delete favorite."""
         item = self.fav_list.takeItem(self.fav_list.currentRow())
         map = item.icon().pixmap(self.iconsize)
         ident = self.controller.logoManager.pixmap2ident(map)
         self.controller.logoManager.removeFavorite(ident)
         item = None
 
-    def setTeam1Logo(self, list):
-        item = list.currentItem()
+    def setTeam1Logo(self, this_list):
+        """Set team 1 logo."""
+        item = this_list.currentItem()
         map = item.icon().pixmap(self.iconsize)
         ident = self.controller.logoManager.pixmap2ident(map)
         logo = self.controller.logoManager.findLogo(ident)
@@ -223,8 +224,9 @@ class SubwindowLogos(QWidget):
         self.team1_icon.setPixmap(map)
         self.refreshLastUsed()
 
-    def setTeam2Logo(self, list):
-        item = list.currentItem()
+    def setTeam2Logo(self, this_list):
+        """Set team 2 logo."""
+        item = this_list.currentItem()
         map = item.icon().pixmap(self.iconsize)
         ident = self.controller.logoManager.pixmap2ident(map)
         logo = self.controller.logoManager.findLogo(ident)
@@ -233,6 +235,7 @@ class SubwindowLogos(QWidget):
         self.refreshLastUsed()
 
     def removeLogo(self, team):
+        """Remove logo."""
         if team == 1:
             self.controller.logoManager.resetTeam1Logo()
             self.team1_icon.setLogo(self.controller.logoManager.getTeam1())
@@ -245,6 +248,7 @@ class SubwindowLogos(QWidget):
         self.refreshLastUsed()
 
     def doubleClicked(self, item):
+        """Provide logo with double click feature."""
         if self.team == 0:
             return
         map = item.icon().pixmap(self.iconsize)
@@ -259,6 +263,7 @@ class SubwindowLogos(QWidget):
         self.refreshLastUsed()
 
     def addFavorite(self, team):
+        """Add to favorite."""
         if team == 1:
             map = self.team1_icon.pixmap()
         elif team == 2:
@@ -275,6 +280,7 @@ class SubwindowLogos(QWidget):
             self.fav_list.addItem(item)
 
     def addFavoriteLastUsed(self):
+        """Add last used item to favorite."""
         item = self.lastused_list.currentItem()
         map = item.icon().pixmap(self.iconsize)
         item = QListWidgetItem(
@@ -284,26 +290,30 @@ class SubwindowLogos(QWidget):
             self.fav_list.addItem(item)
 
     def refreshLastUsed(self):
+        """Refresh the last used list."""
         self.lastused_list.clear()
         for logo in self.controller.logoManager.getLastUsed(
                 self.matchDataWidget.matchData.getControlID()):
-            map = logo.provideQPixmap()
+            pixmap = logo.provideQPixmap()
             item = QListWidgetItem(
-                QIcon(map), logo.getDesc())
+                QIcon(pixmap), logo.getDesc())
             self.lastused_list.addItem(item)
 
     def swapLogos(self):
+        """Swap the logos (team 1 <-> team 2)."""
         self.controller.logoManager.swapTeamLogos()
         self.team1_icon.setLogo(self.controller.logoManager.getTeam1())
         self.team2_icon.setLogo(self.controller.logoManager.getTeam2())
 
     def one2two(self):
+        """Copy logo from team 1 to team 2."""
         self.controller.logoManager.setTeam2Logo(
             self.controller.logoManager.getTeam1())
         self.team2_icon.setLogo(self.controller.logoManager.getTeam2())
         self.refreshLastUsed()
 
     def two2one(self):
+        """Copy logo from team 2 to team 1."""
         self.controller.logoManager.setTeam1Logo(
             self.controller.logoManager.getTeam2())
         self.team1_icon.setLogo(self.controller.logoManager.getTeam1())
@@ -314,26 +324,25 @@ class SubwindowLogos(QWidget):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
 
-        fileName, status = QFileDialog.getOpenFileName(
+        fileName, __ = QFileDialog.getOpenFileName(
             self, _("Select Team Logo"), "",
             (_("Supported Images") + " ({})").format("*.png *.jpg *.gif"))
         if fileName:
             logo = self.controller.logoManager.newLogo()
             logo.fromFile(fileName)
-            map = logo.provideQPixmap()
+            pixmap = logo.provideQPixmap()
 
             if team == 1:
                 self.controller.logoManager.setTeam1Logo(logo)
-                self.team1_icon.setPixmap(map)
+                self.team1_icon.setPixmap(pixmap)
                 self.refreshLastUsed()
             elif team == 2:
                 self.controller.logoManager.setTeam2Logo(logo)
-                self.team2_icon.setPixmap(map)
+                self.team2_icon.setPixmap(pixmap)
                 self.refreshLastUsed()
 
     def logoFromUrlDialog(self, team):
         """Open dialog for team logo."""
-
         url = "http://"
         regex = re.compile(
             r'^(?:http|ftp)s?://'  # http:// or https://
@@ -363,21 +372,22 @@ class SubwindowLogos(QWidget):
                     logo = LogoDownloader(
                         self.controller, self, url).download()
                     logo.refreshData()
-                    map = logo.provideQPixmap()
+                    pixmap = logo.provideQPixmap()
 
                     if team == 1:
                         self.controller.logoManager.setTeam1Logo(logo)
-                        self.team1_icon.setPixmap(map)
+                        self.team1_icon.setPixmap(pixmap)
                         self.refreshLastUsed()
                     elif team == 2:
                         self.controller.logoManager.setTeam2Logo(logo)
-                        self.team2_icon.setPixmap(map)
+                        self.team2_icon.setPixmap(pixmap)
                         self.refreshLastUsed()
                     break
             else:
                 break
 
     def liqupediaSearchDialog(self, team, placeholder):
+        """Open Liquipedia search dialog."""
         self.mysubwindow = SubwindowLiquipediaSearch()
         self.mysubwindow.createWindow(self, placeholder, team)
         self.mysubwindow.show()
@@ -391,5 +401,5 @@ class SubwindowLogos(QWidget):
         try:
             self.matchDataWidget.updateLogos(True)
             event.accept()
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")

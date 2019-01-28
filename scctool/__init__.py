@@ -69,7 +69,6 @@ def main_window(app, showChangelog=False):
     from scctool.view.main import MainWindow
 
     try:
-        """Run the main program."""
         icon = QIcon()
         icon.addFile(scctool.settings.getResFile('scct.ico'), QSize(32, 32))
         icon.addFile(scctool.settings.getResFile('scct.png'), QSize(256, 256))

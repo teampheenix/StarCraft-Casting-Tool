@@ -1,12 +1,10 @@
+"""Provide match grabber for AlphaTL."""
 import logging
 from urllib.request import urlopen, urlretrieve
 
 import scctool.settings
 import scctool.settings.translation
 from scctool.matchgrabber.custom import MatchGrabber as MatchGrabberParent
-
-"""Provide match grabber for AlphaTL."""
-
 
 # create logger
 module_logger = logging.getLogger(__name__)
@@ -120,7 +118,7 @@ class MatchGrabber(MatchGrabberParent):
                     else:
                         module_logger.info("Logo download is not needed.")
 
-            except Exception as e:
+            except Exception:
                 module_logger.exception("message")
 
     def downloadBanner(self):
@@ -154,16 +152,16 @@ class MatchGrabber(MatchGrabberParent):
 
             if(data == local_byte):
                 needs_download = False
-        except FileNotFoundError as e:
-            pass
-        except Exception as e:
+        except FileNotFoundError:
+            module_logger.warning("Match banner not found.")
+        except Exception:
             module_logger.exception("message")
 
         if needs_download:
             try:
                 urlretrieve(url, scctool.settings.getAbsPath(fname))
 
-            except Exception as e:
+            except Exception:
                 module_logger.exception("message")
         else:
             module_logger.info('No need to redownload match banner')

@@ -1,3 +1,4 @@
+"""Get info about latest version and download it in the background."""
 import json
 import logging
 import os
@@ -6,15 +7,12 @@ import tarfile
 import zipfile
 
 from PyQt5.QtCore import pyqtSignal
-from pyupdater.client import Client
 
 import scctool
 import scctool.settings.translation
+from pyupdater.client import Client
 from scctool.settings.client_config import ClientConfig
 from scctool.tasks.tasksthread import TasksThread
-
-"""Get info about latest version and download it in the background."""
-
 
 module_logger = logging.getLogger(__name__)
 _ = scctool.settings.translation.gettext
@@ -46,12 +44,10 @@ def compareVersions(v1, v2, maximum=5):
 
 
 def getChannel(version=None):
+    """Get update channel (beta or stable)."""
     if version is None:
         version = scctool.__version__
-    if 'beta' in version:
-        return 'beta'
-    else:
-        return 'stable'
+    return 'beta' if 'beta' in version else 'stable'
 
 
 def needInitialUpdate(version):
@@ -69,6 +65,7 @@ def needInitialUpdate(version):
 
 
 def readJsonFile(force=False):
+    """Read versiondata.json file."""
     if not force and len(this.data) > 0:
         return
     try:
@@ -80,6 +77,7 @@ def readJsonFile(force=False):
 
 
 def dumpJsonFile():
+    """Save to versiondata.json file."""
     readJsonFile()
     with open(scctool.settings.getJsonFile('versiondata'), 'w',
               encoding='utf-8-sig') as o:
@@ -113,11 +111,13 @@ def setLastVersion(version):
 
 
 def getRestartFlag():
+    """Get the current restart flag."""
     readJsonFile()
     return this.data.get('restart_flag', False)
 
 
 def setRestartFlag(flag=True):
+    """Set a restart flag."""
     readJsonFile()
     this.data['restart_flag'] = bool(flag)
     dumpJsonFile()
@@ -130,8 +130,8 @@ def extractData(asset_update, handler=lambda x: None):
         file = os.path.join(asset_update.update_folder,
                             asset_update.filename)
         targetdir = scctool.settings.profileManager.profiledir()
-        with zipfile.ZipFile(file, "r") as zip:
-            zip.extractall(targetdir)
+        with zipfile.ZipFile(file, "r") as myzip:
+            myzip.extractall(targetdir)
         handler(50)
         file = os.path.join(targetdir,
                             'SCCT-data.tar')

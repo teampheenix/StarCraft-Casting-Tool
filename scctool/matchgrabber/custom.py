@@ -1,12 +1,9 @@
+"""Grab match data from websites."""
 import logging
 
 import requests
 
 import scctool.settings.translation
-
-"""Grab match data from websites."""
-
-
 
 # create logger
 module_logger = logging.getLogger(__name__)
@@ -28,24 +25,24 @@ class MatchGrabber(object):
         self._apiprefix = ""
         self._rawData = None
 
-    def setID(self, id=False):
+    def setID(self, ident=False):
         """Set ID."""
-        if id:
-            self._id = int(id)
+        if ident:
+            self._id = int(ident)
 
     def getID(self):
         """Get ID as int."""
         return int(self._id)
 
-    def _getAPI(self, id=False):
+    def _getAPI(self, ident=False):
         if id:
-            self.setID(id)
+            self.setID(ident)
         return self._apiprefix + str(self.getID())
 
-    def getURL(self, id=False):
+    def getURL(self, ident=False):
         """Get URL."""
-        if id:
-            self.setID(id)
+        if ident:
+            self.setID(ident)
         return self._urlprefix + str(self.getID())
 
     def getProvider(self):

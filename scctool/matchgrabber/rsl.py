@@ -9,7 +9,7 @@ from scctool.matchgrabber.custom import MatchGrabber as MatchGrabberParent
 
 # create logger
 module_logger = logging.getLogger(__name__)
-_ = scctool.settings.translation.gettext
+# _ = scctool.settings.translation.gettext
 
 
 class MatchGrabber(MatchGrabberParent):
@@ -102,8 +102,7 @@ class MatchGrabber(MatchGrabberParent):
                                     race = "Random"
                             try:
                                 temp_player = data['result'][str(
-                                    5 + set_idx)]['member_name' +
-                                                  str(team_idx + 1)]
+                                    5 + set_idx)][f'member_name{team_idx + 1}']
                                 if temp_player is not None:
                                     player = temp_player
                             finally:
@@ -181,8 +180,8 @@ class MatchGrabber(MatchGrabberParent):
                                 try:
                                     idx = str(set_idx * 2 + 1)
                                     race = \
-                                        data['result'][idx]['r_name'
-                                                            + str(team_idx + 1)]
+                                        data['result'][idx][
+                                            f'r_name{team_idx + 1}']
                                 except Exception:
                                     race = "Random"
                             else:
@@ -190,8 +189,7 @@ class MatchGrabber(MatchGrabberParent):
                                     set_idx * 2)]['r_name' + str(team_idx + 1)]
                             player = \
                                 data['result'][str(
-                                    set_idx * 2)]['member_name' +
-                                                  str(team_idx + 1)]
+                                    set_idx * 2)][f'member_name{team_idx + 1}']
                             player = self._aliasPlayer(player)
                             self._matchData.setPlayer(
                                 self._matchData.getSwappedIdx(team_idx),
@@ -238,7 +236,6 @@ class MatchGrabber(MatchGrabberParent):
 
     def downloadLogos(self, logoManager):
         """Download team logos."""
-
         if self._rawData is None:
             raise ValueError(
                 "Error: No raw data.")
@@ -264,5 +261,5 @@ class MatchGrabber(MatchGrabberParent):
                     logoManager.setTeamLogo(logo_idx, logo)
                 else:
                     module_logger.info("Logo download is not needed.")
-            except Exception as e:
+            except Exception:
                 module_logger.exception('message')
