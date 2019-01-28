@@ -71,7 +71,7 @@ class MatchGrabber(MatchGrabberParent):
                                 self._matchData.getSwappedIdx(team_idx),
                                 set_idx, 'TBD', 'Random')
 
-                    team = data['team' + str(team_idx + 1)]
+                    team = data[f'team{team_idx + 1}']
                     name, tag = team['name'], team['tag']
                     if not isinstance(name, str):
                         name = "TBD"
@@ -108,10 +108,10 @@ class MatchGrabber(MatchGrabberParent):
                 logo_idx = self._matchData.getSwappedIdx(idx) + 1
                 oldLogo = logoManager.getTeam(logo_idx)
                 logo = logoManager.newLogo()
-                url = self._rawData['team' + str(idx + 1)]['logo']
+                url = self._rawData[f'team{idx + 1}']['logo']
                 if url:
                     new_logo = logo.fromURL(
-                        self._rawData['team' + str(idx + 1)]['logo'],
+                        self._rawData[f'team{idx + 1}']['logo'],
                         localFile=oldLogo.getAbsFile())
                     if new_logo:
                         logoManager.setTeamLogo(logo_idx, logo)

@@ -9,8 +9,7 @@ from PyQt5.QtCore import QObject, pyqtSignal
 
 import scctool.settings
 import scctool.settings.translation
-from scctool.matchformat import *
-from scctool.matchgrabber import *
+from scctool.matchgrabber import MatchGrabber
 
 _ = scctool.settings.translation.gettext
 # create logger

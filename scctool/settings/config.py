@@ -1,10 +1,9 @@
+"""Provide config for SCCTool."""
 import configparser
 import logging
 import os.path
 import platform
 import sys
-
-"""Provide config for SCCTool."""
 
 module_logger = logging.getLogger(__name__)  # create logger
 
@@ -28,6 +27,7 @@ def init(file):
 
 
 def representsInt(s):
+    """Test if the value can be casted to an integer."""
     try:
         int(s)
         return True
@@ -36,6 +36,7 @@ def representsInt(s):
 
 
 def representsFloat(s):
+    """Test if the value can be casted to a float."""
     try:
         float(s)
         return True
@@ -46,46 +47,25 @@ def representsFloat(s):
 # Setting default values for config file
 def setDefaultConfig(sec, opt, value, func=None):
     """Set default value in config."""
-    if(not this.parser.has_section(sec)):
+    if not this.parser.has_section(sec):
         this.parser.add_section(sec)
 
-    if(not this.parser.has_option(sec, opt)):
-        if(func):
-            try:
-                value = func()
-            except Exception:
-                pass
-        this.parser.set(sec, opt, value)
-    elif(value in ["True", "False"]):
-        try:
+    try:
+        if not this.parser.has_option(sec, opt):
+            pass
+        elif value in ["True", "False"]:
             this.parser.getboolean(sec, opt)
-        except Exception:
-            if(func):
-                try:
-                    value = func()
-                except Exception:
-                    pass
-            this.parser.set(sec, opt, value)
-    elif(representsInt(value)):
-        try:
+            return
+        elif representsInt(value):
             this.parser.getint(sec, opt)
-        except Exception:
-            if(func):
-                try:
-                    value = func()
-                except Exception:
-                    pass
-            this.parser.set(sec, opt, value)
-    elif(representsFloat(value)):
-        try:
+            return
+        elif representsFloat(value):
             this.parser.getfloat(sec, opt)
-        except Exception:
-            if(func):
-                try:
-                    value = func()
-                except Exception:
-                    pass
-            this.parser.set(sec, opt, value)
+            return
+    except ValueError:
+        pass
+
+    this.parser.set(sec, opt, value if not callable(func) else func())
 
 
 def findTesserAct(
@@ -292,6 +272,7 @@ def getMyPlayers(append=False):
 
 
 def loadHotkey(string):
+    """Unpack hotkey from config."""
     try:
         name, scan_code, is_keypad = str(string).split(',')
         data = dict()
@@ -304,6 +285,7 @@ def loadHotkey(string):
 
 
 def dumpHotkey(data):
+    """Pack hotkey to config."""
     try:
         return "{name}, {scan_code}, {is_keypad}".format(**data)
     except Exception:

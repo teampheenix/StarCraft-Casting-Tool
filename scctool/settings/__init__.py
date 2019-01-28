@@ -1,3 +1,4 @@
+"""Provide settings for SCCTool."""
 import json
 import logging
 import os
@@ -11,9 +12,6 @@ from scctool.settings.client_config import ClientConfig
 from scctool.settings.config import init as initConfig
 from scctool.settings.profileManager import ProfileManager
 from scctool.settings.safeGuard import SafeGuard
-
-"""Provide settings for SCCTool."""
-
 
 module_logger = logging.getLogger(__name__)
 this = sys.modules[__name__]
@@ -42,7 +40,7 @@ this.safe = SafeGuard()
 
 
 def loadSettings():
-
+    """Load all settings."""
     this.profileManager = ProfileManager()
 
     initConfig(configFile())
@@ -79,6 +77,7 @@ def loadSettings():
 
 
 def getResFile(file):
+    """Get the norm path of a resource file."""
     if hasattr(sys, '_MEIPASS'):
         return os.path.normpath(os.path.join(sys._MEIPASS, 'src', file))
     else:
@@ -86,6 +85,7 @@ def getResFile(file):
 
 
 def getLocalesDir():
+    """Get the locales dir."""
     if hasattr(sys, '_MEIPASS'):
         return os.path.normpath(os.path.join(sys._MEIPASS, 'locales'))
     else:
@@ -93,14 +93,17 @@ def getLocalesDir():
 
 
 def getJsonFile(scope):
-    return getAbsPath(dataDir + "/{}.json".format(scope))
+    """Get the absolute path of a json file."""
+    return getAbsPath(f"{dataDir}/{scope}.json")
 
 
 def configFile():
+    """Get the absolute path of the config file."""
     return getAbsPath("config.ini")
 
 
 def getLogFile():
+    """Get the absolute path to the logfile."""
     logdir = getLogDir()
     if not os.path.exists(logdir):
         os.makedirs(logdir)
@@ -118,13 +121,13 @@ def getLogFile():
 
 
 def getLogDir():
+    """Get the absolut path to the log dir."""
     return appdirs.user_log_dir(
         ClientConfig.APP_NAME, ClientConfig.COMPANY_NAME)
 
 
 def getAbsPath(file):
     """Link to absolute path of a file."""
-
     return this.profileManager.getFile(file)
 
 

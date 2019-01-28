@@ -1,19 +1,19 @@
+"""Provide alias manager for SCCTool."""
 import json
 import logging
 
 import scctool.settings.translation
 from scctool.settings import getJsonFile
 
-"""Provide alias manager for SCCTool."""
-
-
 module_logger = logging.getLogger(__name__)
 _ = scctool.settings.translation.gettext
 
 
 class AliasManager:
+    """Alias manager for SCCTool."""
 
     def __init__(self):
+        """Init the manager."""
         self.loadJson()
 
     def loadJson(self):
@@ -22,7 +22,7 @@ class AliasManager:
             with open(getJsonFile('alias'), 'r',
                       encoding='utf-8-sig') as json_file:
                 data = json.load(json_file)
-        except Exception as e:
+        except Exception:
             data = dict()
 
         self.__player_alias = data.get('player', dict())
@@ -43,10 +43,11 @@ class AliasManager:
             with open(getJsonFile('alias'), 'w',
                       encoding='utf-8-sig') as outfile:
                 json.dump(data, outfile)
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def addPlayerAlias(self, name, alias):
+        """Add a player alias."""
         name = str(name).strip()
         alias = str(alias).strip()
         if not name or name.lower() == 'tbd':
@@ -62,6 +63,7 @@ class AliasManager:
         self.__player_alias[alias] = name
 
     def addTeamAlias(self, name, alias):
+        """Add a team alias."""
         name = str(name).strip()
         alias = str(alias).strip()
         if not name or name.lower() == 'tbd':
@@ -77,6 +79,7 @@ class AliasManager:
         self.__team_alias[alias] = name
 
     def removePlayerAlias(self, name, alias):
+        """Remove a player alias."""
         name = str(name).strip()
         alias = str(alias).strip()
 
@@ -87,6 +90,7 @@ class AliasManager:
             pass
 
     def removeTeamAlias(self, name, alias):
+        """Remove a team alias."""
         name = str(name).strip()
         alias = str(alias).strip()
 
@@ -97,14 +101,17 @@ class AliasManager:
             pass
 
     def translatePlayer(self, name):
+        """Translate a player name."""
         name = str(name).strip()
         return self.__player_alias.get(name, name)
 
     def translateTeam(self, name):
+        """Translate a team name."""
         name = str(name).strip()
         return self.__team_alias.get(name, name)
 
     def playerAliasList(self):
+        """Get the list of player aliases."""
         list = dict()
         for alias, player in self.__player_alias.items():
             if player not in list.keys():
@@ -113,6 +120,7 @@ class AliasManager:
         return list
 
     def teamAliasList(self):
+        """Get list of team aliases."""
         list = dict()
         for alias, player in self.__team_alias.items():
             if player not in list.keys():

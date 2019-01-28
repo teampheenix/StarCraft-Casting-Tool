@@ -1,9 +1,7 @@
+"""Provide match formats."""
 import logging
 
 import scctool.settings.translation
-
-"""Provide match formats."""
-
 
 # create logger
 module_logger = logging.getLogger(__name__)
