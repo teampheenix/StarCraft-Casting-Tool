@@ -216,7 +216,8 @@ class MatchData(QObject):
     def extendAce(self, sets):
         """Extend the ace."""
         self.__data['ace_sets'] = max(int(sets), 0)
-        # TODO: set each map to be ace
+
+        self.resetLabels()
 
     def getAceSets(self):
         """Get the number of ace sets."""
@@ -296,7 +297,11 @@ class MatchData(QObject):
             for set_idx in range(self.getNoSets()):
                 self.setMapScore(set_idx, 0, overwrite=True)
                 self.setMap(set_idx)
-                self.setAce(set_idx, False)
+
+            self.resetLabels()
+
+            for idx in range(self.getNoVetos()):
+                self.setVeto(idx, 'TBD', idx % 2)
 
             self.setLeague("TBD")
             self.resetSwap()

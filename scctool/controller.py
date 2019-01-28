@@ -230,7 +230,7 @@ class MainController:
         return msg
 
     def resetData(self):
-        """Reset data."""
+        """Reset the match data."""
         msg = ''
         try:
             self.logoManager.resetTeam1Logo()
