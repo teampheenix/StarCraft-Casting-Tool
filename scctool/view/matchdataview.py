@@ -14,8 +14,6 @@ import scctool.settings.config
 import scctool.settings.translation
 from scctool.view.widgets import IconPushButton, MapLineEdit, MonitoredLineEdit
 
-"""Define the match data widget/view."""
-
 
 module_logger = logging.getLogger(__name__)
 _ = scctool.settings.translation.gettext
@@ -194,8 +192,7 @@ class MatchDataWidget(QWidget):
         pixmap = QIcon(
             scctool.settings.getResFile('update.png'))
         button.setIcon(pixmap)
-        button.clicked.connect(
-            lambda: self.controller.swapTeams())
+        button.clicked.connect(self.controller.swapTeams)
         button.setFixedWidth(self.labelWidth)
         button.setToolTip(_("Swap teams and logos."))
         container.addWidget(button, 0, 0, 2, 1)
@@ -527,15 +524,15 @@ class MatchDataWidget(QWidget):
     def updateMapCompleters(self):
         """Update the auto completers for maps."""
         for i in range(self.max_no_sets):
-            list = scctool.settings.maps.copy()
+            map_list = scctool.settings.maps.copy()
             try:
-                list.remove("TBD")
+                map_list.remove("TBD")
             except Exception:
                 pass
             finally:
-                list.sort()
-                list.append("TBD")
-            completer = QCompleter(list, self.le_map[i])
+                map_list.sort()
+                map_list.append("TBD")
+            completer = QCompleter(map_list, self.le_map[i])
             completer.setCaseSensitivity(Qt.CaseInsensitive)
             completer.setFilterMode(Qt.MatchContains)
             completer.setCompletionMode(
@@ -545,15 +542,12 @@ class MatchDataWidget(QWidget):
             self.le_map[i].setCompleter(completer)
 
         for i in range(self.max_no_vetos):
-            list = scctool.settings.maps.copy()
-            try:
-                list.remove("TBD")
-            except Exception:
-                pass
-            finally:
-                list.sort()
-                list.append("TBD")
-            completer = QCompleter(list, self.le_veto_maps[i])
+            map_list = scctool.settings.maps.copy()
+            if 'TBD' in map_list:
+                map_list.remove('TBD')
+            map_list.sort()
+            map_list.append('TBD')
+            completer = QCompleter(map_list, self.le_veto_maps[i])
             completer.setCaseSensitivity(Qt.CaseInsensitive)
             completer.setFilterMode(Qt.MatchContains)
             completer.setCompletionMode(
@@ -564,12 +558,12 @@ class MatchDataWidget(QWidget):
 
     def updatePlayerCompleters(self):
         """Refresh the completer for the player line edits."""
-        list = scctool.settings.config.getMyPlayers(
+        player_list = scctool.settings.config.getMyPlayers(
             True) + ["TBD"] + self.controller.historyManager.getPlayerList()
         for player_idx in range(self.max_no_sets):
             for team_idx in range(2):
                 completer = QCompleter(
-                    list, self.le_player[team_idx][player_idx])
+                    player_list, self.le_player[team_idx][player_idx])
                 completer.setCaseSensitivity(
                     Qt.CaseInsensitive)
                 completer.setCompletionMode(
@@ -583,11 +577,11 @@ class MatchDataWidget(QWidget):
 
     def updateTeamCompleters(self):
         """Refresh the completer for the team line edits."""
-        list = scctool.settings.config.getMyTeams() + \
+        team_list = scctool.settings.config.getMyTeams() + \
             ["TBD"] + self.controller.historyManager.getTeamList()
         for team_idx in range(2):
             completer = QCompleter(
-                list, self.le_team[team_idx])
+                team_list, self.le_team[team_idx])
             completer.setCaseSensitivity(Qt.CaseInsensitive)
             completer.setCompletionMode(
                 QCompleter.InlineCompletion)
@@ -676,11 +670,7 @@ class MatchDataWidget(QWidget):
         """Update the map buttons."""
         mappool = list(self.controller.mapstatsManager.getMapPool())
         for i in range(self.max_no_sets):
-            map = self.matchData.getMap(i)
-            if map in mappool:
-                self.label_set[i].setEnabled(True)
-            else:
-                self.label_set[i].setEnabled(False)
+            self.label_set[i].setEnabled(self.matchData.getMap(i) in mappool)
         if (self.controller.mapstatsManager.getMapPoolType() == 2
                 and self.controller.matchControl.activeMatchId()
                 == self._ctrlID):
