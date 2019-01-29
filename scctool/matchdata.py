@@ -22,14 +22,16 @@ class MatchData(QObject):
     dataChanged = pyqtSignal(str, object)
     metaChanged = pyqtSignal()
 
-    def __init__(self, matchControl, controller, id, data=dict()):
+    def __init__(self, matchControl, controller, match_id, data=None):
         """Init and define custom providers."""
         super().__init__()
         self.__rawData = None
         self.__matchControl = matchControl
         self.__controller = controller
-        self.__id = id
+        self.__id = match_id
         self.__initData()
+        if data is None:
+            data = dict()
         self.readData(data)
         self.emitLock = EmitLock()
 
@@ -257,14 +259,14 @@ class MatchData(QObject):
 
         for i in range(no_vetos):
             try:
-                map = self.__data['vetos'][i]['map']
+                sc2_map = self.__data['vetos'][i]['map']
             except Exception:
-                map = "TBD"
+                sc2_map = "TBD"
             try:
                 team = self.__data['sets'][i]['team']
             except Exception:
                 team = i % 2
-            vetos.append({'map': map, 'team': team})
+            vetos.append({'map': sc2_map, 'team': team})
 
         self.__data['vetos'] = vetos
 
@@ -355,9 +357,9 @@ class MatchData(QObject):
 
             for i in range(total_sets):
                 try:
-                    map = self.__data['sets'][i]['map']
+                    sc2_map = self.__data['sets'][i]['map']
                 except Exception:
-                    map = "TBD"
+                    sc2_map = "TBD"
                 try:
                     score = self.__data['sets'][i]['score']
                 except Exception:
@@ -365,7 +367,7 @@ class MatchData(QObject):
                 try:
                     label = self.__data['sets'][i]['label']
                 except Exception:
-                    label = 'Map ' + str(i + 1)
+                    label = f'Map {i + 1}'
                 try:
                     ace = bool(self.__data['sets'][i].get('ace', False))
                 except Exception:
@@ -388,7 +390,7 @@ class MatchData(QObject):
                     players[j].append(
                         {'name': player_name, 'race': player_race})
 
-                sets.append({'label': label, 'map': map,
+                sets.append({'label': label, 'map': sc2_map,
                              'score': score, 'ace': ace})
 
             self.__data['no_sets'] = total_sets
@@ -459,21 +461,21 @@ class MatchData(QObject):
         except Exception:
             return 0
 
-    def setVeto(self, idx, map="TBD", team=None):
+    def setVeto(self, idx, sc2_map="TBD", team=None):
         """Set a map veto."""
         try:
             if(not (idx >= 0 and idx < self.__data['no_vetos'])):
                 return False
-            map, __ = autoCorrectMap(map)
+            sc2_map, __ = autoCorrectMap(sc2_map)
             if team not in [0, 1]:
                 team = self.__data['vetos'][idx]['team']
-            is_new_map = self.__data['vetos'][idx]['map'] != map
+            is_new_map = self.__data['vetos'][idx]['map'] != sc2_map
             if(is_new_map or self.__data['vetos'][idx]['team'] != team):
                 old_map = self.__data['vetos'][idx]['map']
-                self.__data['vetos'][idx]['map'] = map
+                self.__data['vetos'][idx]['map'] = sc2_map
                 self.__emitSignal(
                     'data', 'map_veto',
-                    {'idx': idx, 'map': map,
+                    {'idx': idx, 'map': sc2_map,
                      'team': team, 'old_map': old_map})
             return True
         except Exception:
@@ -489,16 +491,16 @@ class MatchData(QObject):
         except Exception:
             return {'idx': idx, 'map': 'TBD', 'team':  idx % 2}
 
-    def setMap(self, set_idx, map="TBD"):
+    def setMap(self, set_idx, sc2_map="TBD"):
         """Set the map of a set."""
         try:
             if(not (set_idx >= 0 and set_idx < self.__data['no_sets'])):
                 return False
-            map, __ = autoCorrectMap(map)
-            if(self.__data['sets'][set_idx]['map'] != map):
-                self.__data['sets'][set_idx]['map'] = map
+            sc2_map, __ = autoCorrectMap(sc2_map)
+            if(self.__data['sets'][set_idx]['map'] != sc2_map):
+                self.__data['sets'][set_idx]['map'] = sc2_map
                 self.__emitSignal(
-                    'data', 'map', {'set_idx': set_idx, 'value': map})
+                    'data', 'map', {'set_idx': set_idx, 'value': sc2_map})
 
             return True
         except Exception:
@@ -518,10 +520,10 @@ class MatchData(QObject):
         """Yield all maps."""
         yielded = set()
         for idx in range(self.getNoSets()):
-            map = self.getMap(idx)
-            if map and map.lower() != "TBD" and map not in yielded:
-                yield map
-                yielded.add(map)
+            sc2_map = self.getMap(idx)
+            if sc2_map and map.lower() != "TBD" and sc2_map not in yielded:
+                yield sc2_map
+                yielded.add(sc2_map)
 
     def getScoreString(self, middleStr=':'):
         """Get the score as a string."""
@@ -631,18 +633,18 @@ class MatchData(QObject):
         else:
             return "TBD"
 
-    def wasMapPlayed(self, map):
+    def wasMapPlayed(self, sc2_map):
         """Return if map was already played."""
         for set_idx in range(self.getNoSets()):
-            if (map.lower() == self.getMap(set_idx).lower()
+            if (sc2_map.lower() == self.getMap(set_idx).lower()
                     and self.getMapScore(set_idx) != 0):
                 return True
         return False
 
-    def isMapVetoed(self, map):
+    def isMapVetoed(self, sc2_map):
         """Return if map is vetoed."""
         for idx in range(self.getNoVetos()):
-            if (map.lower() == self.getVeto(idx).get('map').lower()):
+            if (sc2_map.lower() == self.getVeto(idx).get('map').lower()):
                 return True
         return False
 
@@ -689,11 +691,11 @@ class MatchData(QObject):
 
     def getPlayerList(self, team_idx):
         """Get complete player list of a team."""
-        list = []
+        player_list = []
         try:
             for set_idx in range(self.getNoSets()):
                 list.append(self.getPlayer(team_idx, set_idx))
-            return list
+            return player_list
         except Exception:
             return []
 
@@ -833,10 +835,10 @@ class MatchData(QObject):
         else:
             return self.getTeam(team_idx)
 
-    def setID(self, id):
+    def setID(self, match_id):
         """Set match id."""
-        self.__data['id'] = int(id)
-        self.__matchGrabber.setID(id)
+        self.__data['id'] = int(match_id)
+        self.__matchGrabber.setID(match_id)
         return True
 
     def getID(self):
@@ -1221,15 +1223,15 @@ class MatchData(QObject):
                 return False
 
 
-def autoCorrectMap(map):
+def autoCorrectMap(sc2_map):
     """Corrects map using list in config."""
-    if not isinstance(map, str):
-        map = "TBD"
+    if not isinstance(sc2_map, str):
+        sc2_map = "TBD"
     try:
         matches = difflib.get_close_matches(
-            map.lower(), scctool.settings.maps, 1)
+            sc2_map.lower(), scctool.settings.maps, 1)
         if(len(matches) == 0):
-            return map, False
+            return sc2_map, False
         else:
             return matches[0], True
 
@@ -1237,16 +1239,14 @@ def autoCorrectMap(map):
         module_logger.exception("message")
 
 
-def getRace(str):
+def getRace(race_input):
     """Get race by using the first letter."""
     try:
         for idx, race in enumerate(scctool.settings.races):
-            if(str[0].upper() == race[0].upper()):
+            if(race_input[0].upper() == race[0].upper()):
                 return scctool.settings.races[idx]
     except Exception:
-        pass
-
-    return "Random"
+        return "Random"
 
 
 class EmitLock():
