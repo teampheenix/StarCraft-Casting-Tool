@@ -29,7 +29,6 @@ import scctool.tasks.updater
 from scctool.settings.client_config import ClientConfig
 from scctool.tasks.tasksthread import TasksThread
 
-"""Define PyQt5 widgets."""
 
 # create logger
 module_logger = logging.getLogger(__name__)
@@ -56,7 +55,7 @@ class MapLineEdit(QLineEdit):
         text = self.text()
         before, after = self._before, text
         if before != after:
-            after, known = scctool.matchdata.autoCorrectMap(after)
+            after, __ = scctool.matchdata.autoCorrectMap(after)
             self.setText(after)
             self._before = after
             self.textModified.emit()
@@ -172,14 +171,14 @@ class MapDownloader(QProgressDialog):
         self.url = url
         self._session = requests.Session()
         self._session.trust_env = False
-        base, ext = os.path.splitext(url)
+        __, ext = os.path.splitext(url)
         ext = ext.split("?")[0].lower()
-        map = map_name.strip().replace(" ", "_") + ext
+        sc2_map = map_name.strip().replace(" ", "_") + ext
         mapdir = scctool.settings.getAbsPath(scctool.settings.casting_html_dir)
         if ext not in ['.jpg', '.png']:
             raise ValueError('Not supported image format.')
         self.file_name = os.path.normpath(
-            os.path.join(mapdir, "src/img/maps", map))
+            os.path.join(mapdir, "src/img/maps", sc2_map))
 
         self.setWindowTitle(_("Map Downloader"))
         self.setLabelText(
@@ -485,6 +484,7 @@ class ColorLayout(QHBoxLayout):
         super().__init__()
         self.__parent = parent
         self.__defaultColor = default_color
+        self.__currentColor = default_color
         label = QLabel(label)
         label.setMinimumWidth(110)
         self.addWidget(label, 1)
@@ -599,19 +599,19 @@ class AligulacTreeView(QTreeWidget):
         self.shortcut2.activated.connect(self.editSelected)
 
     def _insertData(self, data):
-        for player, id in data.items():
+        for player, ident in data.items():
             self.items[player] = QTreeWidgetItem(
-                self, [player, str(id)])
+                self, [player, str(ident)])
 
         self.sortItems(0, Qt.AscendingOrder)
 
-    def insertItem(self, name, id):
+    def insertItem(self, name, new_id):
         name = str(name).strip()
         if name in self.items:
             self.takeTopLevelItem(self.indexOfTopLevelItem(self.items[name]))
-        self.manager.addID(name, id)
+        self.manager.addID(name, new_id)
         self.items[name] = QTreeWidgetItem(
-            self, [name, str(id)])
+            self, [name, str(new_id)])
 
         self.sortItems(0, Qt.AscendingOrder)
         self.setCurrentItem(self.items[name])
@@ -642,12 +642,12 @@ class AligulacTreeView(QTreeWidget):
     def editSelected(self):
         indexes = self.selectedIndexes()
         name = ""
-        id = 1
+        ident = 1
         if len(indexes) > 0:
             index = indexes[0]
             name = self.itemFromIndex(index).text(0)
-            id = int(self.itemFromIndex(index).text(1))
-        self.parent.addAligulacID(name, id)
+            ident = int(self.itemFromIndex(index).text(1))
+        self.parent.addAligulacID(name, ident)
 
     def openMenu(self, position):
         indexes = self.selectedIndexes()
@@ -656,7 +656,7 @@ class AligulacTreeView(QTreeWidget):
             level = 0
             index = indexes[0]
             text = self.itemFromIndex(index).text(0)
-            id = int(self.itemFromIndex(index).text(1))
+            ident = int(self.itemFromIndex(index).text(1))
             while index.parent().isValid():
                 index = index.parent()
                 level += 1
@@ -670,8 +670,8 @@ class AligulacTreeView(QTreeWidget):
                 menu.addAction(act1)
                 act2 = QAction(_("Edit Entry"))
                 act2.triggered.connect(
-                    lambda x, text=text, id=id:
-                        self.parent.addAligulacID(text, id))
+                    lambda x, text=text, ident=ident:
+                        self.parent.addAligulacID(text, ident))
                 menu.addAction(act2)
                 act3 = QAction(_("Remove Entry"))
                 act3.triggered.connect(
@@ -680,7 +680,7 @@ class AligulacTreeView(QTreeWidget):
                 act4 = QAction(_("Open on Aligulac.com"))
                 act4.triggered.connect(
                     lambda x, id=id: self.parent.controller.openURL(
-                        "http://aligulac.com/players/{}".format(id)))
+                        f"http://aligulac.com/players/{ident}"))
                 menu.addAction(act4)
 
             menu.exec_(self.viewport().mapToGlobal(position))
@@ -823,10 +823,11 @@ class ListTable(QTableWidget):
 
     dataModified = pyqtSignal()
 
-    def __init__(self, noColumns=1, data=[]):
+    def __init__(self, noColumns=1, data=None):
         """Init table list."""
         super().__init__()
-
+        if data is None:
+            data = []
         data = self.__processData(data)
         self.__noColumns = noColumns
 
@@ -904,9 +905,9 @@ class ListTable(QTableWidget):
 class Completer(QCompleter):
     """Define custom auto completer for multiple words."""
 
-    def __init__(self, list, parent=None):
+    def __init__(self, items_list, parent=None):
         """Init completer."""
-        super().__init__(list, parent)
+        super().__init__(items_list, parent)
 
         self.setCaseSensitivity(Qt.CaseInsensitive)
         self.setCompletionMode(QCompleter.UnfilteredPopupCompletion)
@@ -963,7 +964,7 @@ class GenericProgressDialog(QProgressDialog):
         self.move(main_window.pos() + relativeChange)
 
         self.show()
-        for i in range(10):
+        for __ in range(10):
             QApplication.processEvents()
         self.run()
 
@@ -1010,7 +1011,6 @@ class InitialUpdater(QProgressDialog):
     def run(self):
         """Run the initial process."""
         try:
-            from scctool.settings.client_config import ClientConfig
             from scctool.tasks.updater import extractData
             from pyupdater.client import Client
             client = Client(ClientConfig())
@@ -1034,9 +1034,9 @@ class InitialUpdater(QProgressDialog):
         except Exception:
             module_logger.exception("message")
 
-    def setCopyProgress(self, int):
+    def setCopyProgress(self, value):
         """Set progress."""
-        self.setValue(500 + int * 5)
+        self.setValue(500 + value * 5)
 
     def setProgress(self, data):
         """Set the progress of the bar."""
@@ -1141,26 +1141,26 @@ class DragImageLabel(QLabel):
         data = e.mimeData()
         if data.hasFormat("application/x-qabstractitemmodeldatalist"):
             item = e.source().currentItem()
-            map = item.icon().pixmap(self._iconsize)
-            ident = self._logomanager.pixmap2ident(map)
+            pixmap = item.icon().pixmap(self._iconsize)
+            ident = self._logomanager.pixmap2ident(pixmap)
             logo = self._logomanager.findLogo(ident)
             if self._team == 1:
                 self._logomanager.setTeam1Logo(logo)
             elif self._team == 2:
                 self._logomanager.setTeam2Logo(logo)
-            self.setPixmap(map)
+            self.setPixmap(pixmap)
             self._ident = ident
             self._parent.refreshLastUsed()
         elif data.hasFormat("logo/ident") and e.source() != self:
             ident = data.text()
-            map = e.source().pixmap()
+            pixmap = e.source().pixmap()
             logo = self._logomanager.findLogo(ident)
             if self._team == 1:
                 self._logomanager.setTeam1Logo(logo)
             elif self._team == 2:
                 self._logomanager.setTeam2Logo(logo)
             self._ident = ident
-            self.setPixmap(map)
+            self.setPixmap(pixmap)
             self._parent.refreshLastUsed()
 
     def mousePressEvent(self, event):
@@ -1350,12 +1350,13 @@ class ProfileMenu(QMenu):
             self.addProfile(profile.get('id'), profile.get(
                 'name'), profile.get('current'))
 
-    def addProfile(self, id, name, current):
+    def addProfile(self, ident, name, current):
         action = self._menu.addAction(name)
-        action.triggered.connect(lambda x, id=id: self.selectProfile(id))
+        action.triggered.connect(
+            lambda x, ident=ident: self.selectProfile(ident))
         action.setCheckable(True)
         action.setChecked(current)
-        self._profiles[id] = action
+        self._profiles[ident] = action
 
     def removeProfile(self):
         profile = scctool.settings.profileManager.current()
@@ -1392,9 +1393,9 @@ class ProfileMenu(QMenu):
 
             QApplication.setOverrideCursor(Qt.WaitCursor)
             try:
-                id = scctool.settings.profileManager.addProfile(name)
-                self.addProfile(id, name, False)
-                self.selectProfile(id)
+                ident = scctool.settings.profileManager.addProfile(name)
+                self.addProfile(ident, name, False)
+                self.selectProfile(ident)
             except Exception as e:
                 QMessageBox.information(self._parent, _(
                     "Please enter a valid name"), str(e))
@@ -1417,10 +1418,10 @@ class ProfileMenu(QMenu):
             QApplication.setOverrideCursor(Qt.WaitCursor)
             try:
                 self._controller.saveAll()
-                id = scctool.settings.profileManager.addProfile(
+                ident = scctool.settings.profileManager.addProfile(
                     name, copy=current['id'])
-                self.addProfile(id, name, False)
-                self.selectProfile(id)
+                self.addProfile(ident, name, False)
+                self.selectProfile(ident)
             except Exception as e:
                 QMessageBox.information(self._parent, _(
                     "Please enter a valid name"), str(e))
@@ -1473,11 +1474,10 @@ class ProfileMenu(QMenu):
                 return
             QApplication.setOverrideCursor(Qt.WaitCursor)
             try:
-                id = scctool.settings.profileManager.importProfile(
+                ident = scctool.settings.profileManager.importProfile(
                     filename, name)
-                self.addProfile(id, name, False)
-                self.selectProfile(id)
-                pass
+                self.addProfile(ident, name, False)
+                self.selectProfile(ident)
             except Exception as e:
                 QMessageBox.information(self._parent, _(
                     "Please enter a valid name"), str(e))
@@ -1496,7 +1496,7 @@ class ProfileMenu(QMenu):
         if not ok:
             return
         profile = scctool.settings.profileManager.current()
-        id = profile['id']
+        ident = profile['id']
         name = profile['name']
         buttonReply = QMessageBox.question(
             self._parent, _("Overwrite Profile"),
@@ -1511,10 +1511,10 @@ class ProfileMenu(QMenu):
         QApplication.setOverrideCursor(Qt.WaitCursor)
         try:
             scctool.settings.profileManager.deleteProfile(id, True)
-            id = scctool.settings.profileManager.importProfile(
-                filename, name, id)
-            self.addProfile(id, name, False)
-            self.selectProfile(id)
+            ident = scctool.settings.profileManager.importProfile(
+                filename, name, ident)
+            self.addProfile(ident, name, False)
+            self.selectProfile(ident)
         except Exception as e:
             QMessageBox.information(self._parent, _(
                 "Import && Overwrite Profile"), str(e))
@@ -1522,8 +1522,8 @@ class ProfileMenu(QMenu):
             QApplication.restoreOverrideCursor()
 
     def selectProfile(self, myid):
-        for id, action in self._profiles.items():
-            if id == myid:
+        for ident, action in self._profiles.items():
+            if ident == myid:
                 action.setChecked(True)
             else:
                 action.setChecked(False)
@@ -1616,7 +1616,7 @@ class MatchComboBox(QComboBox):
             self.addItem(self._alpha_icon, text, url)
 
     def removeItems(self):
-        for idx in range(2, self.count()):
+        for __ in range(2, self.count()):
             self.removeItem(2)
 
     def setURL(self, url):
@@ -1641,9 +1641,11 @@ class ScopeGroupBox(QGroupBox):
 
     dataModified = pyqtSignal()
 
-    def __init__(self, name='', options=list(), scope='all', parent=None):
+    def __init__(self, name='', options=None, scope='all', parent=None):
         """Init lineedit."""
         super().__init__(name, parent)
+        if options is None:
+            options = list()
         layout = QFormLayout()
         self.bt_dynamic = QRadioButton(_("Dynamic:"))
         self.bt_dynamic.toggled.connect(lambda: self.btnstate('dynamic'))
