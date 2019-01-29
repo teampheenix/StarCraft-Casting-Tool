@@ -261,4 +261,5 @@ class LiquipediaMap:
 
 class MapNotFound(Exception):
     """Map not found on Liquipedia exception."""
+
     pass
