@@ -1,3 +1,4 @@
+"""Profile Manager."""
 import logging
 import os
 import random
@@ -16,30 +17,37 @@ _ = gettext
 
 
 class ProfileManager:
+    """Profile Manager."""
 
     _settings = QSettings(ClientConfig.APP_NAME, ClientConfig.COMPANY_NAME)
 
     def __init__(self, local=False):
+        """Init the manager."""
         self.setupDirs(local)
         self._loadSettings()
 
     def basedir(self):
+        """Get the base dir."""
         return self._basedir
 
     def profilesdir(self):
+        """Get the base profile dir."""
         return self._profilesdir
 
     def profiledir(self, profile=""):
+        """Get the dir of (current) profile."""
         if not profile:
             profile = self._current
         return os.path.join(self._profilesdir, profile)
 
     def getFile(self, file, profile=""):
+        """Get absolut path of file in a profile."""
         if not profile:
             profile = self._current
         return os.path.normpath(os.path.join(self._profilesdir, profile, file))
 
     def setupDirs(self, local=False):
+        """Setup profil directory."""
         if local:
             if getattr(sys, 'frozen', False):
                 self._basedir = os.path.dirname(sys.executable)
@@ -58,9 +66,11 @@ class ProfileManager:
             os.makedirs(self._profilesdir)
 
     def _saveSettings(self):
+        """Save settings."""
         self._settings.setValue('profiles', self._profiles)
 
     def _loadSettings(self):
+        """Load settings."""
         self._default = ""
         self._current = ""
         self._profiles = self._settings.value('profiles', dict())
@@ -68,6 +78,7 @@ class ProfileManager:
         self.setCurrent(self._default)
 
     def _checkProfils(self):
+        """Check all profiles."""
         profiles = list(self._profiles.keys())
         for profile in profiles:
             if not os.path.exists(self.profiledir(profile)):
@@ -93,6 +104,7 @@ class ProfileManager:
         self._saveSettings()
 
     def renameProfile(self, myid, name):
+        """Rename a profile."""
         name = name.strip()
 
         if name == self._profiles[myid].get('name', ''):
@@ -101,7 +113,7 @@ class ProfileManager:
         if not name:
             raise ValueError(_('You cannot use empty names.'))
 
-        for id, info in self._profiles.items():
+        for __, info in self._profiles.items():
             if info['name'] == name:
                 raise ValueError(_('The name is already in use.'))
 
@@ -109,23 +121,27 @@ class ProfileManager:
         self._saveSettings()
 
     def setCurrent(self, profile):
+        """Select the current profile."""
         if profile in self._profiles.keys():
             self._current = profile
             self._createPortFile(profile)
 
     def current(self):
-        id = self._current
+        """Return the current profile info."""
+        ident = self._current
         data = dict()
-        data['id'] = id
-        data['name'] = self._profiles[id]['name']
-        data['default'] = self._profiles[id]['default']
+        data['id'] = ident
+        data['name'] = self._profiles[ident]['name']
+        data['default'] = self._profiles[ident]['default']
         data['current'] = True
         return data
 
     def currentID(self):
+        """Return the id of the current profile."""
         return self._current
 
     def setDefault(self, profile):
+        """Set the default profile."""
         if self._default:
             self._profiles[self._default]['default'] = False
 
@@ -134,7 +150,8 @@ class ProfileManager:
 
         self._saveSettings()
 
-    def addProfile(self, name, current=False, default=False, copy='', id=''):
+    def addProfile(self, name, current=False, default=False, copy='', ident=''):
+        """Add a new profile."""
         name = name.strip()
         if not name:
             raise ValueError(_('You cannot use empty names.'))
@@ -146,8 +163,8 @@ class ProfileManager:
         if copy and copy not in self._profiles.keys():
             raise ValueError(_('Initial profile is not valid.'))
 
-        if id and id not in self._profiles.keys():
-            profile = id
+        if ident and ident not in self._profiles.keys():
+            profile = ident
         else:
             profile = self._uniqid()
 
@@ -173,7 +190,7 @@ class ProfileManager:
 
         self._createPortFile(profile)
 
-        module_logger.info('Profile {} created.'.format(profile))
+        module_logger.info(f'Profile {profile} created.')
         self._saveSettings()
         return profile
 
@@ -189,7 +206,7 @@ class ProfileManager:
         file = os.path.join(dir, 'profile.js')
 
         with open(file, 'w', encoding='utf-8') as o:
-            o.write("var profile = '{}';".format(profile))
+            o.write(f"var profile = '{profile}';")
 
     def _uniqid(self):
         while True:
@@ -198,34 +215,38 @@ class ProfileManager:
                 return uniqid
 
     def deleteProfile(self, profile, force=False):
-        if profile in self._profiles.keys():
-            if not force and len(self._profiles) <= 1:
-                raise ValueError("Last profile cannot be deleted.")
-            dir = self.profiledir(profile)
-            shutil.rmtree(dir)
-            del self._profiles[profile]
-            if self._current == profile or self._default == profile:
-                self._checkProfils()
-            module_logger.info('Profile {} deleted.'.format(profile))
-            self._saveSettings()
-            return True
-        return False
+        """Delete a profile."""
+        if profile not in self._profiles.keys():
+            return False
+        if not force and len(self._profiles) <= 1:
+            raise ValueError("Last profile cannot be deleted.")
+
+        directory = self.profiledir(profile)
+        shutil.rmtree(directory)
+        del self._profiles[profile]
+        if self._current == profile or self._default == profile:
+            self._checkProfils()
+        module_logger.info(f'Profile {profile} deleted.')
+        self._saveSettings()
+        return True
 
     def exportProfile(self, profile, filename):
-        filename, file_extension = os.path.splitext(filename)
+        """Export a profile to a zip archive."""
+        filename, __ = os.path.splitext(filename)
         if profile not in self._profiles.keys():
-            raise ValueError("Profile '{}' is not valid.".format(profile))
-        dir = self.profiledir(profile)
-        shutil.make_archive(filename, 'zip', dir)
+            raise ValueError(f"Profile '{profile}' is not valid.")
+        shutil.make_archive(filename, 'zip', self.profiledir(profile))
 
-    def importProfile(self, filename, name, id=''):
-        id = self.addProfile(name, id=id)
-        dir = self.profiledir(id)
+    def importProfile(self, filename, name, ident=''):
+        """Import a profile from a zip archive."""
+        ident = self.addProfile(name, ident=ident)
+        dir = self.profiledir(ident)
         shutil.unpack_archive(filename, dir)
         self._saveSettings()
-        return id
+        return ident
 
     def getProfiles(self):
+        """Get all profiles."""
         for id, info in self._profiles.items():
             data = dict()
             data['id'] = id
