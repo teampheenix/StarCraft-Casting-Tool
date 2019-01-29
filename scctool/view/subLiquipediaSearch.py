@@ -151,6 +151,7 @@ class SubwindowLiquipediaSearch(QWidget):
 
     def applyLogo(self, skip=False):
         """Apply a logo."""
+        item = self.result_list.currentItem()
         if item is not None and (skip or item.isSelected()):
             self.doubleClicked(item)
         else:
