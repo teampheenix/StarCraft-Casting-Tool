@@ -46,7 +46,6 @@ class MainWindow(QMainWindow):
             self.tlock = TriggerLock()
             self.controller = controller
 
-            self.max_no_sets = scctool.settings.max_no_sets
             self.scoreWidth = 35
             self.raceWidth = 45
             self.labelWidth = 10
@@ -726,7 +725,8 @@ class MainWindow(QMainWindow):
             container.addWidget(QLabel(_("Best of")), 0)
 
             self.cb_bestof = QComboBox()
-            for idx in range(scctool.settings.max_no_sets):
+            max_no_bestof = scctool.settings.max_no_sets - 4
+            for idx in range(max_no_bestof):
                 self.cb_bestof.addItem(str(idx + 1))
             string = _('"Best of" does not count extended Ace Maps.')
             self.cb_bestof.setToolTip(string)
@@ -1167,7 +1167,7 @@ class MainWindow(QMainWindow):
             self.statusBar().showMessage(_('Resetting Score...'))
             with self.tlock:
                 matchDataWidget = self.matchDataTabWidget.currentWidget()
-                for set_idx in range(self.max_no_sets):
+                for set_idx in range(scctool.settings.max_no_sets):
                     matchDataWidget.sl_score[set_idx].setValue(0)
                     self.controller.matchControl.selectedMatch().setMapScore(
                         set_idx, 0, overwrite=True)
