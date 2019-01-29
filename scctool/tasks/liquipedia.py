@@ -9,7 +9,6 @@ from bs4 import BeautifulSoup
 import scctool.settings.translation
 from scctool import __version__ as scct_version
 
-
 # create logger
 module_logger = logging.getLogger(__name__)
 _ = scctool.settings.translation.gettext
@@ -172,8 +171,10 @@ class LiquipediaGrabber:
             return
 
         for sc2map in maps:
-            params['text'] = params['text'] + \
-                "{{Map statistics row|tournament=+|map=" + sc2map.strip() + "}}"
+            params['text'] = (
+                params['text']
+                + "{{Map statistics row|tournament=+|map="
+                + sc2map.strip() + "}}")
         params['text'] = params['text'] + "</div>"
         url = f'{self._base_url}/starcraft2/api.php'
         data = requests.get(url, headers=self._headers, params=params).json()
