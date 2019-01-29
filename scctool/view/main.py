@@ -675,7 +675,7 @@ class MainWindow(QMainWindow):
 
             container = QHBoxLayout()
             label = QLabel(_("Match-URL:"))
-            label.setMinimumWidth(60)
+            label.setMinimumWidth(80)
             container.addWidget(label, 0)
             container.addWidget(self.le_url, 1)
             button = QPushButton()
@@ -701,7 +701,7 @@ class MainWindow(QMainWindow):
             # self.pb_download = QPushButton("Download Images from URL")
             # container.addWidget(self.pb_download)
             label = QLabel()
-            label.setMinimumWidth(60)
+            label.setMinimumWidth(80)
             container.addWidget(label, 0)
             self.pb_refresh = QPushButton(
                 _("Load Data from URL"))

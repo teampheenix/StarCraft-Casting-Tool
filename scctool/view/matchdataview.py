@@ -29,8 +29,8 @@ class MatchDataWidget(QWidget):
         self.max_no_sets = scctool.settings.max_no_sets
         self.max_no_vetos = int(scctool.settings.max_no_sets / 2) * 2
         self.scoreWidth = 35
-        self.raceWidth = 45
-        self.labelWidth = 25
+        self.raceWidth = 50
+        self.labelWidth = 35
         self.mimumLineEditWidth = 130
 
         self._tabWidget = tabWidget
