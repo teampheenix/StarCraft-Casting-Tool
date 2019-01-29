@@ -136,7 +136,7 @@ class SubwindowLiquipediaSearch(QWidget):
                 idx += 1
             self.box.setTitle(
                 _("Results for '{}': {}").format(search_str, idx))
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
         finally:
             QApplication.restoreOverrideCursor()
