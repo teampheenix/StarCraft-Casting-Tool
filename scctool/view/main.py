@@ -128,7 +128,7 @@ class MainWindow(QMainWindow):
         """Close and clean up window."""
         try:
             try:
-                for name, window in self.mysubwindows.items():
+                for __, window in self.mysubwindows.items():
                     if(window and window.isVisible()):
                         window.close()
             finally:
@@ -726,7 +726,7 @@ class MainWindow(QMainWindow):
             container.addWidget(QLabel(_("Best of")), 0)
 
             self.cb_bestof = QComboBox()
-            for idx in range(0, scctool.settings.max_no_sets):
+            for idx in range(scctool.settings.max_no_sets):
                 self.cb_bestof.addItem(str(idx + 1))
             string = _('"Best of" does not count extended Ace Maps.')
             self.cb_bestof.setToolTip(string)
@@ -756,7 +756,7 @@ class MainWindow(QMainWindow):
             container.addWidget(self.cb_extend_ace, 0)
 
             self.cb_ace_bo = QComboBox()
-            for idx in range(0, 3):
+            for idx in range(3):
                 self.cb_ace_bo.addItem(str(2 * idx + 1))
             self.cb_ace_bo.setCurrentIndex(0)
             self.cb_ace_bo.setEnabled(False)
@@ -782,15 +782,17 @@ class MainWindow(QMainWindow):
             action.triggered.connect(self.applycustom_click)
             self.pb_applycustom.setDefaultAction(action)
             self.custom_menu = QMenu(self.pb_applycustom)
-            for format, icon in \
+            for custom_format, icon in \
                     self.controller.matchControl.getCustomFormats():
                 if icon:
                     action = self.custom_menu.addAction(
-                        QIcon(scctool.settings.getResFile(icon)), format)
+                        QIcon(scctool.settings.getResFile(icon)),
+                        custom_format)
                 else:
-                    action = self.custom_menu.addAction(format)
+                    action = self.custom_menu.addAction(custom_format)
                 action.triggered.connect(
-                    lambda x, format=format: self.applyCustomFormat(format))
+                    lambda x,custom_format=custom_format:
+                        self.applyCustomFormat(custom_format))
             self.pb_applycustom.setMenu(self.custom_menu)
             self.pb_applycustom.setPopupMode(QToolButton.MenuButtonPopup)
 
@@ -875,7 +877,7 @@ class MainWindow(QMainWindow):
         bestof = bestof + 1
         self.cb_minSets.clear()
         self.highlightApplyCustom()
-        for idx in range(0, bestof):
+        for idx in range(bestof):
             self.cb_minSets.addItem(str(idx + 1))
 
         self.cb_minSets.setCurrentIndex((bestof - 1) / 2)
@@ -1053,14 +1055,14 @@ class MainWindow(QMainWindow):
         except Exception:
             module_logger.exception("message")
 
-    def applyCustomFormat(self, format):
+    def applyCustomFormat(self, custom_format):
         """Handle click to apply custom format."""
         QApplication.setOverrideCursor(
             Qt.WaitCursor)
         try:
             with self.tlock:
                 self.controller.matchControl.\
-                    selectedMatch().applyCustomFormat(format)
+                    selectedMatch().applyCustomFormat(custom_format)
                 self.controller.updateMatchFormat()
                 matchWidget = self.matchDataTabWidget.currentWidget()
                 matchWidget.updateForms()
@@ -1218,7 +1220,7 @@ class MainWindow(QMainWindow):
 
     def processEvents(self):
         """Process ten PyQt5 events."""
-        for i in range(0, 10):
+        for __ in range(10):
             self.app.processEvents()
 
     def restart(self, save=True):
@@ -1239,7 +1241,7 @@ class TriggerLock():
         """Lock the trigger."""
         self.__trigger = False
 
-    def __exit__(self, type, value, traceback):
+    def __exit__(self, error_type, value, traceback):
         """Exit the lock."""
         self.__trigger = True
 
