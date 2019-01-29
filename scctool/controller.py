@@ -819,16 +819,17 @@ class MainController:
         _, ext = os.path.splitext(file)
         mapdir = scctool.settings.getAbsPath(
             scctool.settings.casting_html_dir)
-        map = mapname.strip().replace(" ", "_") + ext.lower()
-        newfile = os.path.normpath(os.path.join(mapdir, "src/img/maps", map))
+        mapname = mapname.strip()
+        sc2map = mapname.replace(" ", "_") + ext.lower()
+        newfile = os.path.normpath(os.path.join(mapdir, "src/img/maps", sc2map))
         shutil.copy(file, newfile)
         if mapname not in scctool.settings.maps:
             scctool.settings.maps.append(mapname)
 
-    def deleteMap(self, map):
+    def deleteMap(self, mapname):
         """Delete map and file."""
-        os.remove(self.getMapImg(map, True))
-        scctool.settings.maps.remove(map)
+        os.remove(self.getMapImg(mapname, True))
+        scctool.settings.maps.remove(mapname)
 
     def swapTeams(self):
         """Swap teams from left to right."""
@@ -925,19 +926,19 @@ class MainController:
                                                    'DATA',
                                                    processedData)
 
-    def handleMatchDataChange(self, label, object):
+    def handleMatchDataChange(self, label, obj):
         """Send new data to browser sources due to a change of the map data."""
         if label == 'team':
             if not self.matchControl.activeMatch().getSolo():
                 self.websocketThread.sendData2Path(
                     'score', 'CHANGE_TEXT',
-                    {'id': 'team{}'.format(object['idx'] + 1),
-                     'text': object['value']})
+                    {'id': 'team{}'.format(obj['idx'] + 1),
+                     'text': obj['value']})
         elif label == 'bestof':
             self.websocketThread.sendData2Path(
                 'score', 'CHANGE_TEXT', {
                     'id': 'bestof',
-                    'text': f"{object['value']}"})
+                    'text': f"{obj['value']}"})
         elif label == 'score':
             score = self.matchControl.activeMatch().getScore()
             for idx in range(0, 2):
@@ -946,105 +947,105 @@ class MainController:
                         'id': 'score{}'.format(idx + 1),
                         'text': str(score[idx])})
                 color = self.matchControl.activeMatch().getScoreIconColor(
-                    idx, object['set_idx'])
+                    idx, obj['set_idx'])
                 self.websocketThread.sendData2Path(
                     'score', 'CHANGE_SCORE', {
                         'teamid': idx + 1,
-                        'setid': object['set_idx'] + 1,
+                        'setid': obj['set_idx'] + 1,
                         'color': color})
             colorData = self.matchControl.activeMatch(
-            ).getColorData(object['set_idx'])
+            ).getColorData(obj['set_idx'])
             self.websocketThread.sendData2Path(
                 ['mapicons_box', 'mapicons_landscape'],
                 'CHANGE_SCORE', {
-                    'winner': object['value'],
-                    'setid': object['set_idx'] + 1,
+                    'winner': obj['value'],
+                    'setid': obj['set_idx'] + 1,
                     'score_color': colorData['score_color'],
                     'border_color': colorData['border_color'],
                     'hide': colorData['hide'],
                     'opacity': colorData['opacity']})
             if scctool.settings.config.parser.getboolean(
                     "Mapstats", "mark_played",):
-                map = self.matchControl.activeMatch().getMap(object['set_idx'])
-                played = object['value'] != 0
+                sc2_map = self.matchControl.activeMatch().getMap(obj['set_idx'])
+                played = obj['value'] != 0
                 self.websocketThread.sendData2Path(
-                    'mapstats', 'MARK_PLAYED', {'map': map, 'played': played})
+                    'mapstats', 'MARK_PLAYED', {'map': sc2_map, 'played': played})
         elif label == 'map_veto':
             if scctool.settings.config.parser.getboolean(
                     "Mapstats", "mark_vetoed",):
-                map = object.get('map')
-                old_map = object.get('old_map')
-                if(old_map != map
+                sc2_map = obj.get('map')
+                old_map = obj.get('old_map')
+                if(old_map != sc2_map
                    and old_map != 'TBD'
                    and not self.matchControl.activeMatch().isMapVetoed(
                        old_map)):
                     self.websocketThread.sendData2Path(
                         'mapstats', 'MARK_VETOED',
                         {'map': old_map, 'vetoed': False})
-                if map.lower() != 'tbd':
+                if sc2_map.lower() != 'tbd':
                     self.websocketThread.sendData2Path(
                         'mapstats', 'MARK_VETOED',
-                        {'map': map, 'vetoed': True})
+                        {'map': sc2_map, 'vetoed': True})
 
         elif label == 'color':
             for idx in range(0, 2):
                 self.websocketThread.sendData2Path(
                     'score', 'CHANGE_SCORE', {
                         'teamid': idx + 1,
-                        'setid': object['set_idx'] + 1,
-                        'color': object['score_color']})
+                        'setid': obj['set_idx'] + 1,
+                        'color': obj['score_color']})
             self.websocketThread.sendData2Path(
                 ['mapicons_box', 'mapicons_landscape'],
                 'CHANGE_SCORE', {
                     'winner': 0,
-                    'setid': object['set_idx'] + 1,
-                    'score_color': object['score_color'],
-                    'border_color': object['border_color'],
-                    'hide': object['hide'],
-                    'opacity': object['opacity']})
+                    'setid': obj['set_idx'] + 1,
+                    'score_color': obj['score_color'],
+                    'border_color': obj['border_color'],
+                    'hide': obj['hide'],
+                    'opacity': obj['opacity']})
         elif label == 'color-data':
             self.websocketThread.sendData2Path(
                 ['mapicons_box', 'mapicons_landscape'], 'CHANGE_SCORE', {
-                    'winner': object['score'],
-                    'setid': object['set_idx'] + 1,
-                    'score_color': object['score_color'],
-                    'border_color': object['border_color'],
-                    'hide': object['hide'],
-                    'opacity': object['opacity']})
+                    'winner': obj['score'],
+                    'setid': obj['set_idx'] + 1,
+                    'score_color': obj['score_color'],
+                    'border_color': obj['border_color'],
+                    'hide': obj['hide'],
+                    'opacity': obj['opacity']})
         elif label == 'outcome':
-            self.websocketThread.sendData2Path('score', 'SET_WINNER', object)
+            self.websocketThread.sendData2Path('score', 'SET_WINNER', obj)
         elif label == 'player':
             self.websocketThread.sendData2Path(
                 ['mapicons_box', 'mapicons_landscape'],
                 'CHANGE_TEXT', {
-                    'icon': object['set_idx'] + 1,
-                    'label': 'player{}'.format(object['team_idx'] + 1),
-                    'text': object['value']})
-            if(object['set_idx'] == 0
+                    'icon': obj['set_idx'] + 1,
+                    'label': 'player{}'.format(obj['team_idx'] + 1),
+                    'text': obj['value']})
+            if(obj['set_idx'] == 0
                     and self.matchControl.activeMatch().getSolo()):
                 self.websocketThread.sendData2Path(
                     'score', 'CHANGE_TEXT',
-                    {'id': 'team{}'.format(object['team_idx'] + 1),
-                     'text': object['value']})
+                    {'id': 'team{}'.format(obj['team_idx'] + 1),
+                     'text': obj['value']})
         elif label == 'race':
             self.websocketThread.sendData2Path(
                 ['mapicons_box', 'mapicons_landscape'],
                 'CHANGE_RACE', {
-                    'icon': object['set_idx'] + 1,
-                    'team': object['team_idx'] + 1,
-                    'race': object['value'].lower()})
+                    'icon': obj['set_idx'] + 1,
+                    'team': obj['team_idx'] + 1,
+                    'race': obj['value'].lower()})
         elif label == 'map':
             self.websocketThread.sendData2Path(
                 ['mapicons_box', 'mapicons_landscape'],
                 'CHANGE_MAP', {
-                    'icon': object['set_idx'] + 1,
-                    'map': object['value'],
-                    'map_img': self.getMapImg(object['value'])})
+                    'icon': obj['set_idx'] + 1,
+                    'map': obj['value'],
+                    'map_img': self.getMapImg(obj['value'])})
 
         data = self.matchControl.activeMatch().getMapIconsData()
-        for type in ['box', 'landscape']:
+        for icon_type in ['box', 'landscape']:
             for idx in range(0, 3):
-                path = 'mapicons_{}_{}'.format(type, idx + 1)
+                path = f'mapicons_{icon_type}_{idx + 1}'
                 if len(self.websocketThread.connected.get(path, set())) > 0:
                     processedData = dict()
                     for set_idx in \
