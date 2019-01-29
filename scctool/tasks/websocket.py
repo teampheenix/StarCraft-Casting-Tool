@@ -1,3 +1,4 @@
+"""Interaction with Browser Source via Websocket."""
 import asyncio
 import http
 import json
@@ -12,8 +13,6 @@ from PyQt5.QtCore import QThread, pyqtSignal
 
 import scctool.settings
 import scctool.settings.translation
-
-"""Interaction with Browser Source via Websocket."""
 
 
 # create logger
@@ -47,15 +46,19 @@ class WebsocketThread(QThread):
         self.hooked_keys['ctrlx'] = set()
 
     def setup_scopes(self):
+        """Setup all scopes."""
         self.scope_regex = re.compile(r'_\[\d-\d\]')
         for scope in self.valid_scopes:
             scope = self.scope_regex.sub('', scope)
             self.scopes[scope] = set()
 
     def get_primary_scopes(self):
+        """Get all primary scopes."""
         return list(self.scopes.keys())
 
-    def get_port(self):
+    @classmethod
+    def get_port(cls):
+        """Get websocket port from profile ID."""
         return int(scctool.settings.profileManager.currentID(), 16)
 
     def run(self):
@@ -86,6 +89,7 @@ class WebsocketThread(QThread):
         module_logger.info("WebSocketThread finished!")
 
     def stop(self):
+        """Stop Websocket Thread."""
         if self.__loop is not None:
             module_logger.info("Requesting stop of WebsocketThread.")
             self.__loop.call_soon_threadsafe(self.__loop.stop)
@@ -121,6 +125,7 @@ class WebsocketThread(QThread):
         self.hooked_keys[scope].add(value)
 
     def register_hotkeys(self, scope=''):
+        """Register hotkeys."""
         if not scope:
             for scope in self.hooked_keys:
                 self.register_hotkeys(scope)
@@ -155,6 +160,7 @@ class WebsocketThread(QThread):
         module_logger.info('Registered {} hotkeys.'.format(scope))
 
     def unregister_hotkeys(self, scope='', force=False):
+        """Unregister hotkeys."""
         if not scope:
             for scope in self.hooked_keys:
                 self.unregister_hotkeys(scope)
@@ -180,6 +186,7 @@ class WebsocketThread(QThread):
             module_logger.info('Unregistered {} hotkeys.'.format(scope))
 
     def handle_path(self, path):
+        """Check if path repesents a valid scope."""
         paths = path.split('/')[1:]
 
         for path in paths:
@@ -189,6 +196,7 @@ class WebsocketThread(QThread):
         return ''
 
     def get_primary_scope(self, path):
+        """Get the primary scope from the path."""
         if path in self.scopes.keys():
             return path
         for scope in self.valid_scopes:
@@ -197,6 +205,7 @@ class WebsocketThread(QThread):
         return ''
 
     async def handler(self, websocket, input_path):
+        """Handle websocket connetion."""
         try:
             ip = websocket.remote_address[0]
         except Exception:
@@ -243,20 +252,7 @@ class WebsocketThread(QThread):
                 self.mapicon_sets[path].add(idx + 1)
             self.sendData2WS(websocket, 'DATA', processedData)
         elif primary_scope == 'countdown':
-            data = {}
-            data['static'] = scctool.settings.config.parser.getboolean(
-                'Countdown', 'static')
-            data['desc'] = scctool.settings.config.parser.get(
-                'Countdown', 'description')
-            data['restart'] = scctool.settings.config.parser.getboolean(
-                'Countdown', 'restart')
-            data['datetime'] = scctool.settings.config.parser.get(
-                'Countdown', 'datetime')
-            data['duration'] = scctool.settings.config.parser.get(
-                'Countdown', 'duration')
-            data['replacement'] = scctool.settings.config.parser.get(
-                'Countdown', 'replacement')
-            self.sendData2WS(websocket, "DATA", data)
+            self.sendData2WS(websocket, "DATA", self.getCountdownData())
         elif path == 'logo_1':
             logo = self.__controller.logoManager.getTeam(
                 1,
@@ -293,6 +289,7 @@ class WebsocketThread(QThread):
         self.unregisterConnection(websocket, path)
 
     def registerConnection(self, websocket, path):
+        """Register a connection."""
         if path not in self.connected.keys():
             self.connected[path] = set()
         primary_scope = self.get_primary_scope(path)
@@ -307,6 +304,7 @@ class WebsocketThread(QThread):
             # self.register_hotkeys('ctrlx')
 
     def unregisterConnection(self, websocket, path):
+        """Unregister a connection."""
         if path in self.connected.keys():
             self.connected[path].remove(websocket)
             primary_scope = self.get_primary_scope(path)
@@ -319,6 +317,7 @@ class WebsocketThread(QThread):
                 # self.unregister_hotkeys('ctrlx')
 
     def changeStyle(self, path, style=None, websocket=None):
+        """Send a change style command to websockets."""
         primary_scope = self.get_primary_scope(path)
         if primary_scope:
             if style is None:
@@ -334,6 +333,7 @@ class WebsocketThread(QThread):
             raise ValueError('Change style is not available for this path.')
 
     def changePadding(self, path, padding=None, websocket=None):
+        """Send a change padding command to websockets."""
         primary_scope = self.get_primary_scope(path)
         if primary_scope in ['mapicons_box', 'mapicons_landscape']:
             setting = primary_scope.replace('mapicons', 'padding')
@@ -350,6 +350,7 @@ class WebsocketThread(QThread):
             module_logger.info('Path or scope "{}" unknown.'.format(path))
 
     def changeColors(self, path, colors=None, websocket=None):
+        """Send a change colors command to websockets."""
         if path in ['mapstats']:
             if colors is None:
                 colors = dict()
@@ -366,6 +367,7 @@ class WebsocketThread(QThread):
             raise ValueError('Change style is not available for this path.')
 
     def changeFont(self, path=None, font=None, websocket=None):
+        """Send a change font command to websockets."""
         valid_paths = ['mapstats', 'score',
                        'mapicons_box', 'mapicons_landscape', 'countdown']
         if path is None:
@@ -389,17 +391,38 @@ class WebsocketThread(QThread):
             raise ValueError('Change font is not available for this path.')
 
     def showIntro(self, idx):
+        """Send a show intro command to intro browser sources."""
         self.intro_state = self.sendData2Path(
             "intro", "SHOW_INTRO",
             self.__controller.getPlayerIntroData(idx))
 
-    def selectMap(self, map, played=False, vetoed=False):
+    @classmethod
+    def getCountdownData(cls):
+        """Pack and return the countdown data from settings."""
+        data = {}
+        data['static'] = scctool.settings.config.parser.getboolean(
+            'Countdown', 'static')
+        data['desc'] = scctool.settings.config.parser.get(
+            'Countdown', 'description')
+        data['restart'] = scctool.settings.config.parser.getboolean(
+            'Countdown', 'restart')
+        data['datetime'] = scctool.settings.config.parser.get(
+            'Countdown', 'datetime')
+        data['duration'] = scctool.settings.config.parser.get(
+            'Countdown', 'duration')
+        data['replacement'] = scctool.settings.config.parser.get(
+            'Countdown', 'replacement')
+        return data
+
+    def selectMap(self, sc2_map, played=False, vetoed=False):
+        """Send select map command to mapstats browser source."""
         self.sendData2Path('mapstats', 'SELECT_MAP', {
-                           'map': str(map),
+                           'map': str(sc2_map),
                            'played': played,
                            'vetoed': vetoed})
 
     def sendData2Path(self, path, event, input_data=None, state=''):
+        """Send a command to all websocket with a specified path."""
         if not state:
             state = str(uuid4())
 
@@ -428,6 +451,7 @@ class WebsocketThread(QThread):
         return state
 
     def sendData2WS(self, websocket, event, input_data, state=''):
+        """Send data to to a websocket."""
         if not state:
             state = str(uuid4())
 
@@ -449,7 +473,7 @@ class WebsocketThread(QThread):
         return state
 
     def compareMapIconSets(self, path):
-
+        """Compare to old set and yield items if different."""
         scope = path.replace('mapicons', 'scope')
         scope = scctool.settings.config.parser.get("MapIcons", scope)
         if not self.__controller.matchControl.\
@@ -475,6 +499,7 @@ class WebsocketThread(QThread):
                 yield item
 
     async def http_request(self, path, request_headers):
+        """Handle http requests."""
         if len(request_headers.get_all('Sec-WebSocket-Key')) > 0:
             return None
         headers = dict()

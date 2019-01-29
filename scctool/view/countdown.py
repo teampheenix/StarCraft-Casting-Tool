@@ -157,18 +157,7 @@ class CountdownWidget(QWidget):
         self.controller.websocketThread.sendData2Path('countdown', 'START')
 
     def sendData(self):
-        data = {}
-        data['static'] = scctool.settings.config.parser.getboolean(
-            'Countdown', 'static')
-        data['desc'] = scctool.settings.config.parser.get(
-            'Countdown', 'description')
-        data['restart'] = scctool.settings.config.parser.getboolean(
-            'Countdown', 'restart')
-        data['datetime'] = scctool.settings.config.parser.get(
-            'Countdown', 'datetime')
-        data['duration'] = scctool.settings.config.parser.get(
-            'Countdown', 'duration')
-        data['replacement'] = scctool.settings.config.parser.get(
-            'Countdown', 'replacement')
         self.controller.websocketThread.sendData2Path(
-            'countdown', "DATA", data)
+            'countdown',
+            "DATA",
+            self.controller.websocketThread.getCountdownData())
