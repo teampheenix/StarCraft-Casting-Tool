@@ -1,4 +1,4 @@
-"""Grab data from Liquipedia."""
+"""Data grabber for Liquipedia."""
 import logging
 import re
 import urllib.parse
@@ -8,8 +8,6 @@ from bs4 import BeautifulSoup
 
 import scctool.settings.translation
 from scctool import __version__ as scct_version
-
-"""Data grabber for Liquipedia."""
 
 
 # create logger
@@ -105,11 +103,11 @@ class LiquipediaGrabber:
         params['limit'] = 1
         params['namespace'] = 0
 
-        url = '{}/starcraft2/api.php'.format(self._base_url)
+        url = f'{self._base_url}/starcraft2/api.php'
         data = self._session.get(
             url, headers=self._headers, params=params).json()
         try:
-            map = data[1][0]
+            liquipedia_map = data[1][0]
         except IndexError:
             if not retry:
                 return self.get_map(map_name, retry=True)
@@ -119,17 +117,17 @@ class LiquipediaGrabber:
             params = dict()
             params['action'] = "parse"
             params['format'] = "json"
-            params['page'] = map
+            params['page'] = liquipedia_map
 
-            url = '{}/starcraft2/api.php'.format(self._base_url)
+            url = f'{self._base_url}/starcraft2/api.php'
 
             data = self._session.get(url, headers=self._headers,
                                      params=params).json()
             content = data['parse']['text']['*']
             soup = BeautifulSoup(content, 'html.parser')
-            map = LiquipediaMap(soup)
-            if map.is_map():
-                return map
+            liquipedia_map = LiquipediaMap(soup)
+            if liquipedia_map.is_map():
+                return liquipedia_map
             elif not retry:
                 return self.get_map(map_name, retry=True)
             else:
@@ -156,8 +154,8 @@ class LiquipediaGrabber:
         soup = BeautifulSoup(content, 'html.parser')
         for result in soup.find_all("td", class_="navbox-group"):
             if result.contents[0].strip() == "1 vs 1":
-                for map in result.findNext("td").find_all('a'):
-                    yield map.contents[0].replace("LE", '').strip()
+                for mymap in result.findNext("td").find_all('a'):
+                    yield mymap.contents[0].replace("LE", '').strip()
                 break
 
     def get_map_stats(self, maps):
@@ -173,11 +171,11 @@ class LiquipediaGrabber:
         if len(maps) < 1:
             return
 
-        for map in maps:
+        for sc2map in maps:
             params['text'] = params['text'] + \
-                "{{Map statistics row|tournament=+|map=" + map.strip() + "}}"
+                "{{Map statistics row|tournament=+|map=" + sc2map.strip() + "}}"
         params['text'] = params['text'] + "</div>"
-        url = '{}/starcraft2/api.php'.format(self._base_url)
+        url = f'{self._base_url}/starcraft2/api.php'
         data = requests.get(url, headers=self._headers, params=params).json()
         content = data['parse']['text']['*']
         soup = BeautifulSoup(content, 'html.parser')
@@ -212,11 +210,11 @@ class LiquipediaMap:
     def get_name(self):
         """Get the name of the map."""
         infobox = self._soup.find("div", class_="fo-nttax-infobox")
-        map = infobox.find("div", class_="infobox-header").text
-        map = map.replace("[e]", "")
-        map = map.replace("[h]", "")
-        map = map.replace("LE", "")
-        return map.strip()
+        map_name = infobox.find("div", class_="infobox-header").text
+        map_name = map_name.replace("[e]", "")
+        map_name = map_name.replace("[h]", "")
+        map_name = map_name.replace("LE", "")
+        return map_name.strip()
 
     def get_info(self):
         """Get info about map."""
