@@ -240,8 +240,8 @@ class ProfileManager:
     def importProfile(self, filename, name, ident=''):
         """Import a profile from a zip archive."""
         ident = self.addProfile(name, ident=ident)
-        dir = self.profiledir(ident)
-        shutil.unpack_archive(filename, dir)
+        directory = self.profiledir(ident)
+        shutil.unpack_archive(filename, directory)
         self._saveSettings()
         return ident
 

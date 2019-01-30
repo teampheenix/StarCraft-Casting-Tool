@@ -436,7 +436,8 @@ class SC2MatchData:
 
         return False
 
-    def translateRace(self, race_str):
+    @classmethod
+    def translateRace(cls, race_str):
         """Translate SC2-Client-API race to no normal values."""
         try:
             for idx, race in enumerate(scctool.settings.races):

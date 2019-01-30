@@ -136,7 +136,7 @@ class SubwindowLiquipediaSearch(QWidget):
                 idx += 1
             self.box.setTitle(
                 _("Results for '{}': {}").format(search_str, idx))
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
         finally:
             QApplication.restoreOverrideCursor()
@@ -151,6 +151,7 @@ class SubwindowLiquipediaSearch(QWidget):
 
     def applyLogo(self, skip=False):
         """Apply a logo."""
+        item = self.result_list.currentItem()
         if item is not None and (skip or item.isSelected()):
             self.doubleClicked(item)
         else:

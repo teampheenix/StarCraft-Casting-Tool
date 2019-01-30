@@ -29,7 +29,7 @@ logosDir = os.path.join(dataDir, "logos")
 ttsDir = os.path.join(dataDir, "tts")
 
 windows = (platform.system().lower() == "windows")
-max_no_sets = 15
+max_no_sets = 19
 max_no_vetos = 9
 races = ("Random", "Terran", "Protoss", "Zerg")
 
