@@ -13,7 +13,6 @@ import scctool.settings
 import scctool.settings.translation
 from scctool.view.widgets import Completer, MonitoredLineEdit
 
-
 # create logger
 module_logger = logging.getLogger(__name__)
 _ = scctool.settings.translation.gettext
@@ -21,6 +20,7 @@ _ = scctool.settings.translation.gettext
 
 class SubwindowConnections(QWidget):
     """Show connections settings sub window."""
+
     current_tab = -1
 
     def createWindow(self, mainWindow, tab=''):
@@ -58,7 +58,7 @@ class SubwindowConnections(QWidget):
 
             self.setWindowTitle(_("Twitch & Nightbot Connections"))
 
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def createTabs(self, tab=''):
@@ -338,6 +338,7 @@ class SubwindowConnections(QWidget):
 
 class CommandDropBox(QGroupBox):
     """QGroupBox for Nightbot command."""
+
     _instances = set()
     _todelete = set()
 
@@ -389,7 +390,7 @@ class CommandDropBox(QGroupBox):
         self.message.textModified.connect(handler)
 
     def setTitle(self):
-        """"Set the title.""""
+        """Set the title."""
         title = "Command {}".format(self.ident)
         super().setTitle(title)
         self.pushButton2.setDisabled(len(self._instances) == 1)
