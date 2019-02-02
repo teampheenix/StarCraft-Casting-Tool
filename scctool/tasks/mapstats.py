@@ -219,7 +219,7 @@ class MapStatsManager:
             if mymap not in self.getMapPool():
                 continue
             out_data['maps'][mymap] = dict()
-            out_data['maps'][mymap]['map-name'] = map.replace(
+            out_data['maps'][mymap]['map-name'] = mymap.replace(
                 'Dreamcatcher', 'Dream<wbr>catcher')
             if out_data['map'] is None:
                 out_data['map'] = mymap

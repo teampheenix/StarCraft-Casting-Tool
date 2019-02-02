@@ -517,11 +517,16 @@ class MatchData(QObject):
             return False
 
     def yieldMaps(self):
-        """Yield all maps."""
+        """Yield all maps (including vetos)."""
         yielded = set()
         for idx in range(self.getNoSets()):
             sc2_map = self.getMap(idx)
-            if sc2_map and map.lower() != "TBD" and sc2_map not in yielded:
+            if sc2_map and sc2_map.lower() != "TBD" and sc2_map not in yielded:
+                yield sc2_map
+                yielded.add(sc2_map)
+        for idx in range(self.getNoVetos()):
+            sc2_map = self.getVeto(idx).get('map', 'TBD')
+            if sc2_map and sc2_map.lower() != "TBD" and sc2_map not in yielded:
                 yield sc2_map
                 yielded.add(sc2_map)
 

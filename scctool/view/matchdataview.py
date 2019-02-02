@@ -14,7 +14,6 @@ import scctool.settings.config
 import scctool.settings.translation
 from scctool.view.widgets import IconPushButton, MapLineEdit, MonitoredLineEdit
 
-
 module_logger = logging.getLogger(__name__)
 _ = scctool.settings.translation.gettext
 
@@ -509,6 +508,7 @@ class MatchDataWidget(QWidget):
         if not self.tlock.trigger():
             return
         self.matchData.setVeto(idx, self.le_veto_maps[idx].text())
+        self.controller.mapstatsManager.sendMapPool()
 
     def veto_team_changed(self, idx, team):
         """Handle a map veto change."""
