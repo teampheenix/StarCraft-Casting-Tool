@@ -45,11 +45,13 @@ def representsFloat(s):
 
 
 # Setting default values for config file
-def setDefaultConfig(sec, opt, value, func=None):
+def setDefaultConfig(sec, opt, value):
     """Set default value in config."""
     if not this.parser.has_section(sec):
         this.parser.add_section(sec)
 
+    if callable(value):
+        value = value()
     try:
         if not this.parser.has_option(sec, opt):
             pass
@@ -62,10 +64,12 @@ def setDefaultConfig(sec, opt, value, func=None):
         elif representsFloat(value):
             this.parser.getfloat(sec, opt)
             return
+        else:
+            return
     except ValueError:
         pass
 
-    this.parser.set(sec, opt, value if not callable(func) else func())
+    this.parser.set(sec, opt, value)
 
 
 def findTesserAct(
@@ -126,8 +130,7 @@ def setDefaultConfigAll():
     setDefaultConfig("SCT", "blacklist_on", "False")
     setDefaultConfig("SCT", "blacklist", "")
 
-    tesseract = "C:\\Program Files (x86)\\Tesseract-OCR\\tesseract.exe"
-    setDefaultConfig("SCT", "tesseract", tesseract, findTesserAct)
+    setDefaultConfig("SCT", "tesseract", findTesserAct)
 
     setDefaultConfig("Form", "scoreupdate", "False")
     setDefaultConfig("Form", "togglescore", "False")
