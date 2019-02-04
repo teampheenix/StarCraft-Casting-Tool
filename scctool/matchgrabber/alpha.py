@@ -39,6 +39,7 @@ class MatchGrabber(MatchGrabberParent):
                 self._matchData.setNoSets(5, 1, resetPlayers=overwrite)
                 self._matchData.setMinSets(3)
                 self._matchData.setSolo(False)
+                self._matchData.setNoVetos(0)
                 self._matchData.resetLabels()
                 if overwrite:
                     self._matchData.resetSwap()

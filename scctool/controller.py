@@ -753,7 +753,8 @@ class MainController:
                 self.matchControl.activeMatch().getPlayerList(0),
                 self.aliasManager.translatePlayer)
             team2 = newData.playerInList(
-                player_idx, self.matchControl.activeMatch().getPlayerList(1),
+                player_idx,
+                self.matchControl.activeMatch().getPlayerList(1),
                 self.aliasManager.translatePlayer)
 
             if(not team1 and not team2):
@@ -821,7 +822,8 @@ class MainController:
             scctool.settings.casting_html_dir)
         mapname = mapname.strip()
         sc2map = mapname.replace(" ", "_") + ext.lower()
-        newfile = os.path.normpath(os.path.join(mapdir, "src/img/maps", sc2map))
+        newfile = os.path.normpath(
+            os.path.join(mapdir, "src/img/maps", sc2map))
         shutil.copy(file, newfile)
         if mapname not in scctool.settings.maps:
             scctool.settings.maps.append(mapname)
@@ -966,7 +968,8 @@ class MainController:
                     'opacity': colorData['opacity']})
             if scctool.settings.config.parser.getboolean(
                     "Mapstats", "mark_played",):
-                sc2_map = self.matchControl.activeMatch().getMap(obj['set_idx'])
+                sc2_map = self.matchControl.activeMatch().getMap(
+                    obj['set_idx'])
                 played = obj['value'] != 0
                 self.websocketThread.sendData2Path(
                     'mapstats', 'MARK_PLAYED', {'map': sc2_map, 'played': played})

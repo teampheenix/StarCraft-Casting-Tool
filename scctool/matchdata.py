@@ -699,7 +699,7 @@ class MatchData(QObject):
         player_list = []
         try:
             for set_idx in range(self.getNoSets()):
-                list.append(self.getPlayer(team_idx, set_idx))
+                player_list.append(self.getPlayer(team_idx, set_idx))
             return player_list
         except Exception:
             return []
