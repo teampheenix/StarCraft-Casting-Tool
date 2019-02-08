@@ -1,3 +1,4 @@
+"""Define custom widget as countdown control panel."""
 import logging
 
 from PyQt5.QtCore import QDateTime, Qt, QTime
@@ -62,6 +63,7 @@ class CountdownWidget(QWidget):
         self.setLayout(layout)
 
     def openDateTimeMenu(self, position):
+        """Open menu to set date to today."""
         menu = QMenu()
         act1 = QAction(_("Set Today"))
         act1.triggered.connect(self.setToday)
@@ -69,6 +71,7 @@ class CountdownWidget(QWidget):
         menu.exec_(QCursor.pos())
 
     def openDurationMenu(self, position):
+        """Open menu to set the duration."""
         menu = QMenu()
         for duration in [15, 10, 5, 3, 1]:
             act = QAction(_("Set {} min").format(duration), menu)
@@ -78,14 +81,17 @@ class CountdownWidget(QWidget):
         menu.exec_(QCursor.pos())
 
     def setToday(self):
+        """Set date to today."""
         today = QDateTime.currentDateTime()
         today.setTime(self.te_datetime.time())
         self.te_datetime.setDateTime(today)
 
     def setDuration(self, duration):
+        """Set the duration."""
         self.te_duration.setTime(QTime(0, duration, 0))
 
     def toggleRadio(self):
+        """Toggle radio buttion."""
         static = self.rb_static.isChecked()
         self.te_datetime.setEnabled(static)
         self.te_duration.setEnabled(not static)
@@ -93,6 +99,7 @@ class CountdownWidget(QWidget):
         self.pb_start.setEnabled(not static)
 
     def loadSettings(self):
+        """Load data from settings."""
         static = scctool.settings.config.parser.getboolean(
             "Countdown", "static")
         if static:
@@ -118,6 +125,7 @@ class CountdownWidget(QWidget):
         self.te_datetime.setDateTime(datetime)
 
     def connect(self):
+        """Connect all form elements."""
         self.le_desc.textChanged.connect(self.changed_description)
         self.cb_restart.toggled.connect(self.changed_restart)
         self.te_datetime.dateTimeChanged.connect(self.changed_datetime)
@@ -126,12 +134,14 @@ class CountdownWidget(QWidget):
         self.pb_start.pressed.connect(self.start_pressed)
 
     def changed_description(self):
+        """Change the description."""
         desc = self.le_desc.text().strip()
         scctool.settings.config.parser.set('Countdown', 'description', desc)
         self.controller.websocketThread.sendData2Path(
             'countdown', "DESC", desc)
 
     def changed_restart(self):
+        """Handle change of restart option."""
         restart = self.cb_restart.isChecked()
         scctool.settings.config.parser.set(
             'Countdown', 'restart', str(restart))
@@ -139,24 +149,29 @@ class CountdownWidget(QWidget):
             'countdown', "RESTART", restart)
 
     def changed_datetime(self, time):
+        """Handle change of datetime."""
         datetime = time.toString('yyyy-MM-dd HH:mm')
         scctool.settings.config.parser.set('Countdown', 'datetime', datetime)
         self.sendData()
 
     def changed_duration(self, time):
+        """Handle change of duration."""
         duration = time.toString('HH:mm:ss')
         scctool.settings.config.parser.set('Countdown', 'duration', duration)
         self.sendData()
 
     def changed_static(self):
+        """Handle change of static/dynamic."""
         static = self.rb_static.isChecked()
         scctool.settings.config.parser.set('Countdown', 'static', str(static))
         self.sendData()
 
     def start_pressed(self):
+        """Handle press of the start button."""
         self.controller.websocketThread.sendData2Path('countdown', 'START')
 
     def sendData(self):
+        """Send the data to the websocket."""
         self.controller.websocketThread.sendData2Path(
             'countdown',
             "DATA",

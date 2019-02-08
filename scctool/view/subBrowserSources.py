@@ -1,3 +1,4 @@
+"""Show browser source settings in sub window."""
 import logging
 
 from PyQt5.QtCore import QPoint, QSize, Qt
@@ -11,8 +12,6 @@ from PyQt5.QtWidgets import (QCheckBox, QComboBox, QDoubleSpinBox, QFormLayout,
 import scctool.settings
 import scctool.settings.translation
 from scctool.view.widgets import HotkeyLayout, ScopeGroupBox, StyleComboBox
-
-"""Show connections settings sub window."""
 
 
 # create logger
@@ -60,7 +59,7 @@ class SubwindowBrowserSources(QWidget):
 
             self.setWindowTitle(_("Browser Sources"))
 
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def createTabs(self, tab):
@@ -88,10 +87,13 @@ class SubwindowBrowserSources(QWidget):
             table.get(tab, SubwindowBrowserSources.current_tab))
         self.tabs.currentChanged.connect(self.tabChanged)
 
-    def tabChanged(self, idx):
+    @classmethod
+    def tabChanged(cls, idx):
+        """Save the current tab."""
         SubwindowBrowserSources.current_tab = idx
 
     def addHotkey(self, ident, label):
+        """Add a hotkey to the layout."""
         element = HotkeyLayout(
             self, ident, label,
             scctool.settings.config.parser.get("Intros", ident))
@@ -99,6 +101,7 @@ class SubwindowBrowserSources(QWidget):
         return element
 
     def connectHotkeys(self):
+        """Connect the hotkeys."""
         for ident, key in self.hotkeys.items():
             if ident == 'hotkey_debug':
                 for ident2, key2 in self.hotkeys.items():
@@ -108,6 +111,7 @@ class SubwindowBrowserSources(QWidget):
             key.modified.connect(self.hotkeyChanged)
 
     def hotkeyChanged(self, key, ident):
+        """Handle change of hotkeys."""
         self.changed()
 
         if(ident == 'hotkey_player1' and self.cb_single_hotkey.isChecked()):
@@ -128,6 +132,7 @@ class SubwindowBrowserSources(QWidget):
             self.hotkeys['hotkey_debug'].clear()
 
     def singleHotkeyChanged(self):
+        """Handle single hotkey changed event."""
         checked = self.cb_single_hotkey.isChecked()
         self.hotkeys['hotkey_player2'].setDisabled(checked)
         if checked:
@@ -138,6 +143,7 @@ class SubwindowBrowserSources(QWidget):
             self.hotkeys['hotkey_player2'].clear()
 
     def createFormGroupMapstats(self):
+        """Create the form group for mapstats."""
         self.formGroupMapstats = QWidget()
         mainLayout = QVBoxLayout()
 
@@ -234,21 +240,22 @@ class SubwindowBrowserSources(QWidget):
         self.formGroupMapstats.setLayout(mainLayout)
 
     def addMap(self):
+        """Add a map to the list."""
         maplist = list(scctool.settings.maps)
         for i in range(self.maplist.count()):
-            map = str(self.maplist.item(i).text())
-            if map in maplist:
-                maplist.remove(map)
+            sc2map = str(self.maplist.item(i).text())
+            if sc2map in maplist:
+                maplist.remove(sc2map)
 
         if len(maplist) > 0:
-            map, ok = QInputDialog.getItem(
+            sc2map, ok = QInputDialog.getItem(
                 self, _('Add Map'),
                 _('Please select a map') + ':',
                 maplist, editable=False)
 
             if ok:
                 self.__dataChanged = True
-                item = QListWidgetItem(map)
+                item = QListWidgetItem(sc2map)
                 self.maplist.addItem(item)
                 self.maplist.setCurrentItem(item)
         else:
@@ -258,12 +265,14 @@ class SubwindowBrowserSources(QWidget):
                 _('All available maps have already been added.'))
 
     def removeMap(self):
+        """Remove a map from the list."""
         item = self.maplist.currentItem()
         if item:
             self.maplist.takeItem(self.maplist.currentRow())
             self.__dataChanged = True
 
     def createFormGroupMapBox(self):
+        """Create a QWidget for boxed map icons."""
         self.formGroupMapBox = QWidget()
         mainLayout = QVBoxLayout()
         box = QGroupBox(_("General"))
@@ -313,6 +322,7 @@ class SubwindowBrowserSources(QWidget):
         self.formGroupMapBox.setLayout(mainLayout)
 
     def createFormGroupMapLandscape(self):
+        """Create a QWidget for the landscape map icons."""
         self.formGroupMapLandscape = QWidget()
         mainLayout = QVBoxLayout()
         box = QGroupBox(_("General"))
@@ -649,11 +659,12 @@ class SubwindowBrowserSources(QWidget):
         self.controller.openURL(scctool.settings.getAbsPath(file))
 
     def changePadding(self, scope, padding):
+        """Change the padding."""
         scctool.settings.config.parser.set(
-            "MapIcons", "padding_{}".format(scope),
+            "MapIcons", f"padding_{scope}",
             str(padding))
         self.controller.websocketThread.changePadding(
-            "mapicons_{}".format(scope), padding)
+            f"mapicons_{scope}", padding)
 
     def saveCloseWindow(self):
         """Save and close window."""
@@ -683,5 +694,5 @@ class SubwindowBrowserSources(QWidget):
                     self.saveData()
             self.controller.updateHotkeys()
             event.accept()
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")

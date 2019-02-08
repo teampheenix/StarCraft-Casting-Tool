@@ -606,6 +606,7 @@ class AligulacTreeView(QTreeWidget):
         self.sortItems(0, Qt.AscendingOrder)
 
     def insertItem(self, name, new_id):
+        """Insert item."""
         name = str(name).strip()
         if name in self.items:
             self.takeTopLevelItem(self.indexOfTopLevelItem(self.items[name]))
@@ -618,6 +619,7 @@ class AligulacTreeView(QTreeWidget):
         self.setFocus()
 
     def removeItem(self, name):
+        """Remove item."""
         try:
             self.takeTopLevelItem(self.indexOfTopLevelItem(self.items[name]))
             self.manager.removeID(name)
@@ -626,6 +628,7 @@ class AligulacTreeView(QTreeWidget):
             pass
 
     def removeSelected(self):
+        """Remove selected item."""
         indexes = self.selectedIndexes()
 
         if len(indexes) > 0:
@@ -650,6 +653,7 @@ class AligulacTreeView(QTreeWidget):
         self.parent.addAligulacID(name, ident)
 
     def openMenu(self, position):
+        """Open menu."""
         indexes = self.selectedIndexes()
 
         if len(indexes) > 0:
@@ -687,6 +691,7 @@ class AligulacTreeView(QTreeWidget):
 
 
 class AliasTreeView(QTreeWidget):
+    """Tree View to edit alias names of players and teams."""
 
     aliasRemoved = pyqtSignal(str, str)
 
@@ -713,6 +718,7 @@ class AliasTreeView(QTreeWidget):
         self.shortcut2.activated.connect(self.enterClicked)
 
     def insertAliasList(self, name, aliasList):
+        """Insert alias to list."""
         name = str(name).strip()
         self.items[name] = QTreeWidgetItem(self, [name])
         for alias in aliasList:
@@ -734,6 +740,7 @@ class AliasTreeView(QTreeWidget):
             self.setFocus()
 
     def removeName(self, name):
+        """Remove name and it's aliases from list."""
         try:
             for child in self.items[name].takeChildren():
                 self.aliasRemoved.emit(name, child.text(0))
@@ -743,6 +750,7 @@ class AliasTreeView(QTreeWidget):
             pass
 
     def removeAlias(self, alias):
+        """Remove alias."""
         items = self.findItems(alias, Qt.MatchExactly | Qt.MatchRecursive)
         for item in items:
             parent = item.parent()
@@ -757,6 +765,7 @@ class AliasTreeView(QTreeWidget):
                 pass
 
     def delClicked(self):
+        """Handle click on delete."""
         indexes = self.selectedIndexes()
 
         if len(indexes) > 0:
@@ -773,6 +782,7 @@ class AliasTreeView(QTreeWidget):
                 self.removeAlias(text)
 
     def enterClicked(self):
+        """Handle click on enter."""
         indexes = self.selectedIndexes()
 
         if len(indexes) > 0:
@@ -782,12 +792,14 @@ class AliasTreeView(QTreeWidget):
                 index = index.parent()
                 level += 1
 
-            text = self.itemFromIndex(index).text(0)
-
             if level == 0 or level == 1:
-                self.parent.addAlias(self, _('Name'), text)
+                self.parent.addAlias(
+                    self,
+                    _('Name'),
+                    self.itemFromIndex(index).text(0))
 
     def openMenu(self, position):
+        """Open menu."""
         indexes = self.selectedIndexes()
 
         if len(indexes) > 0:
@@ -855,6 +867,7 @@ class ListTable(QTableWidget):
         return uniq
 
     def delClicked(self):
+        """Handle click of delete button."""
         item = self.currentItem()
         if item and item.isSelected() and item.text().strip():
             item.setText("")
@@ -969,6 +982,7 @@ class GenericProgressDialog(QProgressDialog):
         self.run()
 
     def run(self):
+        """Run the generic task."""
         try:
             self.callback(self)
         except Exception:
@@ -1004,7 +1018,7 @@ class InitialUpdater(QProgressDialog):
         self.move(self.pos() + relativeChange)
 
         self.show()
-        for i in range(10):
+        for __ in range(10):
             QApplication.processEvents()
         self.run()
 
@@ -1065,9 +1079,10 @@ class DragDropLogoList(QListWidget):
         self._addIdent = addIdent
 
     def dragEnterEvent(self, e):
+        """Handle drag enter event."""
         data = e.mimeData()
-        if(data.hasFormat("application/x-qabstractitemmodeldatalist")
-           and e.source() != self):
+        if(data.hasFormat("application/x-qabstractitemmodeldatalist") and
+           e.source() != self):
             e.accept()
         elif data.hasFormat("logo/ident"):
             e.accept()
@@ -1075,37 +1090,41 @@ class DragDropLogoList(QListWidget):
             e.ignore()
 
     def dragMoveEvent(self, e):
+        """Handle drag move event."""
         data = e.mimeData()
-        if(data.hasFormat("application/x-qabstractitemmodeldatalist")
-           or data.hasFormat("logo/ident")):
+        if(data.hasFormat("application/x-qabstractitemmodeldatalist") or
+           data.hasFormat("logo/ident")):
             e.setDropAction(Qt.CopyAction)
             e.accept()
         else:
             e.ignore()
 
     def dropEvent(self, e):
+        """Handle drop event."""
         data = e.mimeData()
-        if(data.hasFormat("application/x-qabstractitemmodeldatalist")
-           and e.source() != self):
+        if(data.hasFormat("application/x-qabstractitemmodeldatalist") and
+           e.source() != self):
             item = e.source().currentItem()
-            map = item.icon().pixmap(self._iconsize)
-            ident = self._logoManager.pixmap2ident(map)
+            pixmap = item.icon().pixmap(self._iconsize)
+            ident = self._logoManager.pixmap2ident(pixmap)
         elif data.hasFormat("logo/ident"):
             ident = data.text()
-            map = e.source().pixmap()
+            pixmap = e.source().pixmap()
         else:
             return
         logo = self._logoManager.findLogo(ident)
         item = QListWidgetItem(
-            QIcon(map), logo.getDesc())
+            QIcon(pixmap), logo.getDesc())
 
         if self._addIdent(ident):
             self.addItem(item)
 
 
 class DragImageLabel(QLabel):
+    """Draggable image label."""
 
     def __init__(self, parent, logo, team=0):
+        """Init the drag image label."""
         super().__init__()
 
         self._parent = parent
@@ -1123,10 +1142,12 @@ class DragImageLabel(QLabel):
         self.setAcceptDrops(True)
 
     def setLogo(self, logo):
+        """Set the logo."""
         self.setPixmap(logo.provideQPixmap())
         self._ident = logo.getIdent()
 
     def dragEnterEvent(self, e):
+        """Handle drag enter event."""
         data = e.mimeData()
         if data.hasFormat("application/x-qabstractitemmodeldatalist"):
             e.accept()
@@ -1138,6 +1159,7 @@ class DragImageLabel(QLabel):
         return
 
     def dropEvent(self, e):
+        """Handle drop event."""
         data = e.mimeData()
         if data.hasFormat("application/x-qabstractitemmodeldatalist"):
             item = e.source().currentItem()
@@ -1164,6 +1186,7 @@ class DragImageLabel(QLabel):
             self._parent.refreshLastUsed()
 
     def mousePressEvent(self, event):
+        """Handle mouse press event."""
         mimeData = QMimeData()
         b = bytearray()
         b.extend(self._ident.encode())
@@ -1179,7 +1202,10 @@ class DragImageLabel(QLabel):
 
 
 class TextPreviewer(QTextBrowser):
+    """Text and font previewer."""
+
     def __init__(self):
+        """Init the previewer."""
         super().__init__()
         self.setReadOnly(True)
         self.setMaximumHeight(50)
@@ -1188,6 +1214,7 @@ class TextPreviewer(QTextBrowser):
         self.setTextInteractionFlags(Qt.NoTextInteraction)
 
     def setFont(self, font):
+        """Set font."""
         font = font.strip()
         css = dict()
         css['font-family'] = font
@@ -1198,19 +1225,23 @@ class TextPreviewer(QTextBrowser):
         css['display'] = 'table'
         style = ""
         for key, value in css.items():
-            style += "{}: {};".format(key, value)
+            style += f"{key}: {value};"
         self.setHtml(
-            "<div style='{}'><span style='display: table-cell;"
-            " vertical-align: middle;'>{}</span></div>".format(style, font))
+            f"<div style='{style}'><span style='display: table-cell;"
+            f" vertical-align: middle;'>{font}</span></div>")
 
     def wheelEvent(self, e):
+        """Ignore scrolling."""
         e.ignore()
 
 
 class LedIndicator(QAbstractButton):
+    """LED Indicator."""
+
     scaledSize = 1000.0
 
     def __init__(self, parent=None):
+        """Init the LED."""
         QAbstractButton.__init__(self, parent)
 
         self.setMinimumSize(16, 16)
@@ -1223,9 +1254,11 @@ class LedIndicator(QAbstractButton):
         self.off_color_2 = QColor(0, 128, 0)
 
     def resizeEvent(self, QResizeEvent):
+        """Handle resize event."""
         self.update()
 
     def paintEvent(self, QPaintEvent):
+        """Handle paint event."""
         realSize = min(self.width(), self.height())
 
         painter = QPainter(self)
@@ -1268,40 +1301,50 @@ class LedIndicator(QAbstractButton):
 
     @pyqtProperty(QColor)
     def onColor1(self):
+        """Return Color 1."""
         return self.on_color_1
 
     @onColor1.setter
     def onColor1(self, color):
+        """Set color 1."""
         self.on_color_1 = color
 
     @pyqtProperty(QColor)
     def onColor2(self):
+        """Return color 2."""
         return self.on_color_2
 
     @onColor2.setter
     def onColor2(self, color):
+        """Set color 2."""
         self.on_color_2 = color
 
     @pyqtProperty(QColor)
     def offColor1(self):
+        """"Return off color 1.""""
         return self.off_color_1
 
     @offColor1.setter
     def offColor1(self, color):
+        """Set off color 1."""
         self.off_color_1 = color
 
     @pyqtProperty(QColor)
     def offColor2(self):
+        """Return off color 2."""
         return self.off_color_2
 
     @offColor2.setter
     def offColor2(self, color):
+        """Set off color 2."""
         self.off_color_2 = color
 
 
 class ProfileMenu(QMenu):
+    """Construct profil Menu."""
 
     def __init__(self, parrent_widget, controller):
+        """Init the menu."""
 
         self._parent = parrent_widget
         self._controller = controller
@@ -1351,6 +1394,7 @@ class ProfileMenu(QMenu):
                 'name'), profile.get('current'))
 
     def addProfile(self, ident, name, current):
+        """Add profile to menu."""
         action = self._menu.addAction(name)
         action.triggered.connect(
             lambda x, ident=ident: self.selectProfile(ident))
@@ -1359,6 +1403,7 @@ class ProfileMenu(QMenu):
         self._profiles[ident] = action
 
     def removeProfile(self):
+        """Remove profile"""
         profile = scctool.settings.profileManager.current()
         buttonReply = QMessageBox.question(
             self._parent, _("Remove Profile"),
@@ -1378,10 +1423,12 @@ class ProfileMenu(QMenu):
             QApplication.restoreOverrideCursor()
 
     def openFolder(self):
+        """Open profile folder."""
         self._controller.open_file(
             scctool.settings.profileManager.profiledir())
 
     def newProfile(self):
+        """Make a new profile."""
         name = ''
         while True:
             name, ok = QInputDialog.getText(
@@ -1406,6 +1453,7 @@ class ProfileMenu(QMenu):
             return
 
     def duplicateProfile(self):
+        """Duplicate the current profile."""
         current = scctool.settings.profileManager.current()
         name = current['name'] + ' 2'
         while True:
@@ -1432,6 +1480,7 @@ class ProfileMenu(QMenu):
             return
 
     def exportProfile(self):
+        """Export the current profile."""
         current = scctool.settings.profileManager.current()
         filename = os.path.join(
             scctool.settings.profileManager.basedir(),
@@ -1456,6 +1505,7 @@ class ProfileMenu(QMenu):
             QApplication.restoreOverrideCursor()
 
     def importProfile(self):
+        """Import a profile from zip archive and save it as new."""
         filename, ok = QFileDialog.getOpenFileName(
             self._parent,
             'Import Profile',
@@ -1488,6 +1538,7 @@ class ProfileMenu(QMenu):
             return
 
     def importProfileOverwrite(self):
+        """Import a profile from zip and overwrite the current profile."""
         filename, ok = QFileDialog.getOpenFileName(
             self._parent,
             'Import Profile',
@@ -1522,6 +1573,7 @@ class ProfileMenu(QMenu):
             QApplication.restoreOverrideCursor()
 
     def selectProfile(self, myid):
+        """Select a profle."""
         for ident, action in self._profiles.items():
             if ident == myid:
                 action.setChecked(True)
@@ -1532,6 +1584,7 @@ class ProfileMenu(QMenu):
         self._parent.restart()
 
     def renameProfile(self):
+        """Rename a profile."""
         profile = scctool.settings.profileManager.current()
         name = profile.get('name', '')
         while True:
@@ -1562,6 +1615,7 @@ class MatchComboBox(QComboBox):
     returnPressed = pyqtSignal()
 
     def __init__(self, parent=None):
+        """Init the combobox."""
         super().__init__(parent)
         self.setEditable(True)
         self.lineEdit().setAlignment(Qt.AlignCenter)
@@ -1579,6 +1633,7 @@ class MatchComboBox(QComboBox):
         self.activated.connect(self._handleActivated)
 
     def setText(self, text):
+        """Set the text."""
         self.setURL(text)
 
     def _handleActivated(self, idx):
@@ -1595,6 +1650,7 @@ class MatchComboBox(QComboBox):
         self.setURL(data)
 
     def updateItems(self, matches):
+        """Update the items."""
         # completer = QCompleter(
         #         ["https://alpha.tl/match/",
         #          "http://hdgame.net/en/tournaments/list/tournament/rstl-13/"],
@@ -1616,10 +1672,12 @@ class MatchComboBox(QComboBox):
             self.addItem(self._alpha_icon, text, url)
 
     def removeItems(self):
+        """Remove all items."""
         for __ in range(2, self.count()):
             self.removeItem(2)
 
     def setURL(self, url):
+        """Set a new URL."""
         lower_url = str(url).lower()
         if(lower_url.find('alpha') != -1):
             self.setItemIcon(0, self._alpha_icon)
@@ -1633,6 +1691,7 @@ class MatchComboBox(QComboBox):
         self.setCurrentIndex(0)
 
     def text(self):
+        """Return it's text."""
         return self.lineEdit().text()
 
 
@@ -1702,6 +1761,7 @@ class ScopeGroupBox(QGroupBox):
         self.scope_box.currentIndexChanged.connect(self.triggerSignal)
 
     def btnstate(self, b):
+        """Update button states."""
         if b == 'dynamic':
             self.scope_box.setEnabled(self.bt_dynamic.isChecked())
         elif b == 'static':
@@ -1711,6 +1771,7 @@ class ScopeGroupBox(QGroupBox):
             self.label2.setEnabled(self.bt_static.isChecked())
 
     def adjustRangeUpper(self, lower):
+        """Adjust the range for the scopes."""
         current_idx = self.cb_upper.itemData(self.cb_upper.currentIndex())
         self.cb_upper.clear()
         rg = range(lower, scctool.settings.max_no_sets)
@@ -1724,6 +1785,7 @@ class ScopeGroupBox(QGroupBox):
             idx = idx + 1
 
     def getScope(self):
+        """Get the scope."""
         if self.bt_dynamic.isChecked():
             return self.scope_box.itemData(self.scope_box.currentIndex())
         else:
@@ -1731,7 +1793,8 @@ class ScopeGroupBox(QGroupBox):
                 self.cb_lower.currentIndex())) + 1
             upper = int(self.cb_upper.itemData(
                 self.cb_upper.currentIndex())) + 1
-            return '{}-{}'.format(lower, upper)
+            return f'{lower}-{upper}'
 
     def triggerSignal(self):
+        """Emit a signal."""
         self.dataModified.emit()
