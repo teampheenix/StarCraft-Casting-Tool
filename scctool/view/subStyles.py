@@ -1,3 +1,4 @@
+"""Subwindow for style settings."""
 import logging
 
 from PyQt5.QtCore import QPoint, QSize, Qt
@@ -10,9 +11,6 @@ from PyQt5.QtWidgets import (QCheckBox, QComboBox, QFormLayout, QGridLayout,
 import scctool.settings
 import scctool.settings.translation
 from scctool.view.widgets import ColorLayout, StyleComboBox, TextPreviewer
-
-"""Show styles settings sub window."""
-
 
 
 # create logger
@@ -77,7 +75,9 @@ class SubwindowStyles(QWidget):
         except Exception as e:
             module_logger.exception("message")
 
-    def tabChanged(self, idx):
+    @classmethod
+    def tabChanged(cls, idx):
+        """Save the current tab."""
         SubwindowStyles.current_tab = idx
 
     def changed(self):
@@ -132,15 +132,15 @@ class SubwindowStyles(QWidget):
         try:
             container = QHBoxLayout()
             self.qb_landscapeStyle = StyleComboBox(
-                scctool.settings.casting_html_dir
-                + "/src/css/mapicons_landscape",
+                scctool.settings.casting_html_dir +
+                "/src/css/mapicons_landscape",
                 "mapicons_landscape")
             self.qb_landscapeStyle.connect2WS(
                 self.controller, 'mapicons_landscape')
             button = QPushButton(_("Show in Browser"))
             button.clicked.connect(lambda: self.openHTML(
-                scctool.settings.casting_html_dir
-                + "/mapicons_landscape_1.html"))
+                scctool.settings.casting_html_dir +
+                "/mapicons_landscape_1.html"))
             container.addWidget(self.qb_landscapeStyle)
             container.addWidget(button)
             layout.addRow(QLabel(
@@ -220,7 +220,7 @@ class SubwindowStyles(QWidget):
             container.addWidget(self.qb_countdownStyle)
             container.addWidget(button)
             layout.addRow(QLabel(_("Countdown:")), container)
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
         layout.addRow(QLabel(''))
@@ -350,6 +350,7 @@ class SubwindowStyles(QWidget):
         self.updateFontPreview()
 
     def updateFontPreview(self):
+        """Update the font preview."""
         font = self.cb_font.currentText().strip()
         self.previewer.setFont(font)
 
@@ -424,5 +425,5 @@ class SubwindowStyles(QWidget):
                 if buttonReply == QMessageBox.Yes:
                     self.saveData()
             event.accept()
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")

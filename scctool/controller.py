@@ -351,7 +351,8 @@ class MainController:
         """Update twitch title."""
         self.autoRequestsThread.activateTask('twitch_once')
 
-    def openURL(self, url):
+    @classmethod
+    def openURL(cls, url):
         """Open URL in Browser."""
         if(len(url) < 5):
             url = "https://teampheenix.github.io/StarCraft-Casting-Tool/"
@@ -360,7 +361,8 @@ class MainController:
         except Exception:
             module_logger.exception("message")
 
-    def open_file(self, filename):
+    @classmethod
+    def open_file(cls, filename):
         """Open a local file."""
         if sys.platform == "win32":
             os.startfile(filename)
@@ -530,7 +532,8 @@ class MainController:
         except Exception:
             module_logger.exception("message")
 
-    def toggleWidget(self, widget, condition, ttFalse='', ttTrue=''):
+    @classmethod
+    def toggleWidget(cls, widget, condition, ttFalse='', ttTrue=''):
         """Disable or an enable a widget based on a condition."""
         widget.setAttribute(Qt.WA_AlwaysShowToolTips)
         widget.setToolTip(ttTrue if condition else ttFalse)
@@ -549,8 +552,8 @@ class MainController:
             _('Specify your Twitch Settings to use this feature'),
             '')
 
-        txt = _('Automatically update the title of your'
-                + ' twitch channel in the background.')
+        txt = _('Automatically update the title of your' +
+                ' twitch channel in the background.')
         self.toggleWidget(
             self.view.cb_autoTwitch,
             scctool.settings.config.twitchIsValid(),
@@ -561,8 +564,8 @@ class MainController:
             self.view.cb_autoNightbot,
             scctool.settings.config.nightbotIsValid(),
             _('Specify your Nightbot Settings to use this feature'),
-            _('Automatically update the commands of your'
-              + ' nightbot in the background.'))
+            _('Automatically update the commands of your' +
+              ' nightbot in the background.'))
 
         self.toggleWidget(
             self.view.pb_nightbotupdate,
@@ -579,8 +582,8 @@ class MainController:
                 self.view.cb_autoToggleScore,
                 not network_listener,
                 _('Not available when SC2 is running on a different PC.'),
-                _('Automatically sets the score of your ingame'
-                  + ' UI-interface at the begining of a game.'))
+                _('Automatically sets the score of your ingame' +
+                  ' UI-interface at the begining of a game.'))
 
             self.toggleWidget(
                 self.view.cb_autoToggleProduction,
@@ -624,8 +627,7 @@ class MainController:
                 {'logo': logo, 'display': display})
 
     def requestToggleScore(self, newSC2MatchData, swap=False):
-        """Check if SC2-Client-API players are present."""
-        """Toggle score accordingly."""
+        """Check if players are present in sc2 api and toggle score."""
         try:
             alias = self.aliasManager.translatePlayer
             bo = self.matchControl.activeMatch().getBestOf()
@@ -667,9 +669,10 @@ class MainController:
         except Exception:
             module_logger.exception("message")
 
-    def linkFile(self, file):
+    @classmethod
+    def linkFile(cls, file):
         """Return correct img file ending."""
-        for ext in [".jpg", ".png"]:
+        for ext in [".jpg", ".jpeg", ".png"]:
             if(os.path.isfile(scctool.settings.getAbsPath(file + ext))):
                 return file + ext
         return ""
@@ -796,18 +799,19 @@ class MainController:
                 self.__playerIntroData[player_idx]['tts'] = None
                 module_logger.exception("message")
 
-    def getMapImg(self, map, fullpath=False):
+    def getMapImg(self, mapname, fullpath=False):
         """Get map image from map name."""
-        if map == 'TBD':
-            return map
+        if mapname == 'TBD':
+            return mapname
         mapdir = scctool.settings.getAbsPath(
             scctool.settings.casting_html_dir)
         mapimg = os.path.normpath(os.path.join(
-            mapdir, "src/img/maps", map.replace(" ", "_")))
+            mapdir, "src/img/maps", mapname.replace(" ", "_")))
         mapimg = os.path.basename(self.linkFile(mapimg))
         if not mapimg:
             mapimg = "TBD"
-            self.displayWarning(_("Warning: Map '{}' not found!").format(map))
+            self.displayWarning(
+                _("Warning: Map '{}' not found!").format(mapname))
 
         if(fullpath):
             return os.path.normpath(os.path.join(
@@ -815,9 +819,10 @@ class MainController:
         else:
             return mapimg
 
-    def addMap(self, file, mapname):
+    @classmethod
+    def addMap(cls, file, mapname):
         """Add a new map via file and name."""
-        _, ext = os.path.splitext(file)
+        __, ext = os.path.splitext(file)
         mapdir = scctool.settings.getAbsPath(
             scctool.settings.casting_html_dir)
         mapname = mapname.strip()
@@ -912,10 +917,10 @@ class MainController:
         self.websocketThread.sendData2Path("score", "ALL_DATA", data)
         data = self.matchControl.activeMatch().getMapIconsData()
 
-        for type in ['box', 'landscape']:
+        for boxtype in ['box', 'landscape']:
             for idx in range(0, 3):
-                path = 'mapicons_{}_{}'.format(type, idx + 1)
-                scope = 'scope_{}_{}'.format(type, idx + 1)
+                path = f'mapicons_{boxtype}_{idx + 1}'
+                scope = f'scope_{boxtype}_{idx + 1}'
                 scope = scctool.settings.config.parser.get("MapIcons", scope)
                 if not self.matchControl.activeMatch().isValidScope(scope):
                     scope = 'all'
@@ -978,9 +983,9 @@ class MainController:
                     "Mapstats", "mark_vetoed",):
                 sc2_map = obj.get('map')
                 old_map = obj.get('old_map')
-                if(old_map != sc2_map
-                   and old_map != 'TBD'
-                   and not self.matchControl.activeMatch().isMapVetoed(
+                if(old_map != sc2_map and
+                   old_map != 'TBD' and
+                   not self.matchControl.activeMatch().isMapVetoed(
                        old_map)):
                     self.websocketThread.sendData2Path(
                         'mapstats', 'MARK_VETOED',
@@ -1024,8 +1029,8 @@ class MainController:
                     'icon': obj['set_idx'] + 1,
                     'label': 'player{}'.format(obj['team_idx'] + 1),
                     'text': obj['value']})
-            if(obj['set_idx'] == 0
-                    and self.matchControl.activeMatch().getSolo()):
+            if(obj['set_idx'] == 0 and
+                    self.matchControl.activeMatch().getSolo()):
                 self.websocketThread.sendData2Path(
                     'score', 'CHANGE_TEXT',
                     {'id': 'team{}'.format(obj['team_idx'] + 1),

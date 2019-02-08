@@ -199,11 +199,13 @@ class ProfileManager:
         if not profile:
             profile = self._current
 
-        dir = self.profiledir(profile)
-        dir = os.path.join(dir, casting_html_dir, 'src/js')
-        if not os.path.exists(dir):
-            os.makedirs(dir)
-        file = os.path.join(dir, 'profile.js')
+        js_dir = os.path.join(
+            self.profiledir(profile),
+            casting_html_dir,
+            'src/js')
+        if not os.path.exists(js_dir):
+            os.makedirs(js_dir)
+        file = os.path.join(js_dir, 'profile.js')
 
         with open(file, 'w', encoding='utf-8') as o:
             o.write(f"var profile = '{profile}';")
@@ -247,10 +249,10 @@ class ProfileManager:
 
     def getProfiles(self):
         """Get all profiles."""
-        for id, info in self._profiles.items():
+        for ident, info in self._profiles.items():
             data = dict()
-            data['id'] = id
+            data['id'] = ident
             data['name'] = info['name']
             data['default'] = info['default']
-            data['current'] = self._current == id
+            data['current'] = self._current == ident
             yield data

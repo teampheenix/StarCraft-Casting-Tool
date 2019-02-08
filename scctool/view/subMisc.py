@@ -1,4 +1,4 @@
-"""Subwindow with misc ."""
+"""Subwindow with miscellaneous settings."""
 import logging
 import os.path
 
@@ -17,8 +17,6 @@ import scctool.settings.translation
 from scctool.tasks.liquipedia import LiquipediaGrabber, MapNotFound
 from scctool.view.widgets import (AliasTreeView, AligulacTreeView, ListTable,
                                   MapDownloader, MonitoredLineEdit)
-
-"""Show subwindow with miscellaneous settings."""
 
 
 # create logger
@@ -101,7 +99,8 @@ class SubwindowMisc(QWidget):
         self.tabs.setCurrentIndex(table.get(tab, SubwindowMisc.current_tab))
         self.tabs.currentChanged.connect(self.tabChanged)
 
-    def tabChanged(self, idx):
+    @classmethod
+    def tabChanged(cls, idx):
         """Save the current tab index."""
         SubwindowMisc.current_tab = idx
 
@@ -308,12 +307,12 @@ class SubwindowMisc(QWidget):
         box.setLayout(layout)
         mainLayout.addWidget(box, 0, 1)
 
-        list = self.controller.aliasManager.playerAliasList()
-        for player, aliases in list.items():
+        alias_list = self.controller.aliasManager.playerAliasList()
+        for player, aliases in alias_list.items():
             self.list_aliasPlayers.insertAliasList(player, aliases)
 
-        list = self.controller.aliasManager.teamAliasList()
-        for team, aliases in list.items():
+        alias_list = self.controller.aliasManager.teamAliasList()
+        for team, aliases in alias_list.items():
             self.list_aliasTeams.insertAliasList(team, aliases)
 
         self.aliasBox.setLayout(mainLayout)
@@ -551,7 +550,7 @@ class SubwindowMisc(QWidget):
 
         self.aligulacTab.setLayout(layout)
 
-    def addAligulacID(self, name='', id=1):
+    def addAligulacID(self, name='', aligulac_id=1):
         """Add an aligulac ID."""
         text, ok = QInputDialog.getText(
             self, _('Player Name'), _('Player Name') + ':', text=name)
@@ -559,11 +558,13 @@ class SubwindowMisc(QWidget):
         if not ok or not text:
             return
         id, ok = QInputDialog.getInt(
-            self, _('Aligulac ID'), _('Aligulac ID') + ':', value=id, min=1)
+            self,
+            _('Aligulac ID'), _('Aligulac ID') + ':',
+            value=aligulac_id, min=1)
         if not ok:
             return
 
-        self.aligulacTreeview.insertItem(text, id)
+        self.aligulacTreeview.insertItem(text, aligulac_id)
 
     def removeAligulacID(self):
         """Remove an selected aligulac ID."""
@@ -579,8 +580,8 @@ class SubwindowMisc(QWidget):
 
         self.maplist = QListWidget()
         self.maplist.setSortingEnabled(True)
-        for map in scctool.settings.maps:
-            self.maplist.addItem(QListWidgetItem(map))
+        for sc2map in scctool.settings.maps:
+            self.maplist.addItem(QListWidgetItem(sc2map))
         self.maplist.setCurrentItem(self.maplist.item(0))
         self.maplist.currentItemChanged.connect(self.changePreview)
         # self.maplist.setFixedHeight(self.mapsize)
@@ -683,7 +684,7 @@ class SubwindowMisc(QWidget):
             "", _("Supported Images") + " (*.png *.jpg)")
         if ok:
             base = os.path.basename(fileName)
-            name, ext = os.path.splitext(base)
+            name, __ = os.path.splitext(base)
             name = name.replace("_", " ")
             map_name, ok = QInputDialog.getText(
                 self, _('Map Name'), _('Map Name') + ':', text=name)
@@ -736,7 +737,7 @@ class SubwindowMisc(QWidget):
                         continue
                     try:
                         QApplication.setOverrideCursor(Qt.WaitCursor)
-                        map = grabber.get_map(search_str)
+                        sc2map = grabber.get_map(search_str)
                     except MapNotFound:
                         QMessageBox.critical(
                             self,
@@ -746,7 +747,7 @@ class SubwindowMisc(QWidget):
                         continue
                     finally:
                         QApplication.restoreOverrideCursor()
-                    map_name = map.get_name()
+                    map_name = sc2map.get_name()
 
                     if(map_name in scctool.settings.maps):
                         buttonReply = QMessageBox.warning(
@@ -795,14 +796,14 @@ class SubwindowMisc(QWidget):
     def deleteMap(self):
         """Delete a map."""
         item = self.maplist.currentItem()
-        map = item.text()
+        mapname = item.text()
         buttonReply = QMessageBox.question(
             self, _('Delete map?'),
-            _("Delete '{}' permanently?").format(map),
+            _("Delete '{}' permanently?").format(mapname),
             QMessageBox.Yes | QMessageBox.No,
             QMessageBox.No)
         if buttonReply == QMessageBox.Yes:
-            self.controller.deleteMap(map)
+            self.controller.deleteMap(mapname)
             self.maplist.takeItem(self.maplist.currentRow())
 
     def changePreview(self):
@@ -810,8 +811,8 @@ class SubwindowMisc(QWidget):
         if self.maplist.count() < 1:
             return
 
-        map = self.maplist.currentItem().text()
-        if(map == "TBD"):
+        mapname = self.maplist.currentItem().text()
+        if(mapname == "TBD"):
             self.pb_renameMap.setEnabled(False)
             self.pb_removeMap.setEnabled(False)
             self.sc_removeMap.setEnabled(False)
@@ -820,16 +821,16 @@ class SubwindowMisc(QWidget):
             self.pb_renameMap.setEnabled(True)
             self.sc_removeMap.setEnabled(True)
 
-        file = self.controller.getMapImg(map, True)
-        map = QPixmap(file)
+        file = self.controller.getMapImg(mapname, True)
+        pixmap = QPixmap(file)
         height = map.height()
         width = map.width()
         ext = os.path.splitext(file)[1].replace(".", "").upper()
         size = humanize.naturalsize(os.path.getsize(file))
-        map = QPixmap(file).scaled(
+        pixmap = QPixmap(file).scaled(
             self.mapsize, self.mapsize, Qt.KeepAspectRatio)
-        self.mapPreview.setPixmap(map)
-        text = "{}x{}px, {}, {}".format(width, height, str(size), ext)
+        self.mapPreview.setPixmap(pixmap)
+        text = f"{width}x{height}px, {size}, {ext}"
         self.mapInfo.setText(text)
 
     def createButtonGroup(self):

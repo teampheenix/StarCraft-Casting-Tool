@@ -135,19 +135,20 @@ def loadMapList():
     """Load map list form dir."""
     data = []
     try:
-        dir = os.path.normpath(os.path.join(
+        mapdir = os.path.normpath(os.path.join(
             getAbsPath(casting_html_dir), "src/img/maps"))
 
-        for fname in os.listdir(dir):
-            full_fname = os.path.join(dir, fname)
+        for fname in os.listdir(mapdir):
+            full_fname = os.path.join(mapdir, fname)
             name, ext = os.path.splitext(fname)
-            if os.path.isfile(full_fname) and ext in ['.jpg', '.png']:
+            if os.path.isfile(full_fname) and ext in ['.jpg', '.jpeg', '.png']:
                 mapName = name.replace('_', " ")
                 if mapName not in data:
                     data.append(mapName)
     finally:
         this.maps = data
-        return data
+
+    return data
 
 
 def loadNightbotCommands():

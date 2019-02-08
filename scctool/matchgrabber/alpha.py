@@ -51,10 +51,10 @@ class MatchGrabber(MatchGrabberParent):
                 league = league.replace('Semi-pro', 'Semi-Pro')
                 self._matchData.setLeague(league)
 
-                for idx, map in enumerate(data['maps']):
-                    if not isinstance(map, str):
-                        map = "TBD"
-                    self._matchData.setMap(idx, map)
+                for idx, mapname in enumerate(data['maps']):
+                    if not isinstance(mapname, str):
+                        mapname = "TBD"
+                    self._matchData.setMap(idx, mapname)
 
                 for team_idx in range(2):
                     for set_idx, player in enumerate(
@@ -124,7 +124,7 @@ class MatchGrabber(MatchGrabberParent):
 
     def downloadBanner(self):
         """Download team logos."""
-        dir = scctool.settings.casting_data_dir
+        data_dir = scctool.settings.casting_data_dir
         transparent = scctool.settings.config.parser.getboolean(
             "SCT", "transparent_match_banner")
 
@@ -132,7 +132,7 @@ class MatchGrabber(MatchGrabberParent):
             raise ValueError(
                 "Error: No raw data.")
 
-        fname = dir + "/matchbanner.png"
+        fname = data_dir + "/matchbanner.png"
         url = "https://alpha.tl/announcement/"\
             + str(self.getID())
 

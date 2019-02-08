@@ -154,11 +154,11 @@ class MatchGrabber(MatchGrabberParent):
                 self._matchData.setLeague(data['tournament']['name'])
 
                 try:
-                    map = data['start_maps']["1"]['name']
+                    mapname = data['start_maps']["1"]['name']
                 except KeyError:
-                    map = data['start_map']['name']
+                    mapname = data['start_map']['name']
 
-                self._matchData.setMap(0, map)
+                self._matchData.setMap(0, mapname)
 
                 for team_idx in range(2):
                     for set_idx in range(1):

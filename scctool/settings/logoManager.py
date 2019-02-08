@@ -27,7 +27,7 @@ class LogoManager:
     _last_used = []
     _favorites = []
     _ident2map = dict()
-    _last_used_max_len = 10
+    _last_used_max_len = 10d
 
     def __init__(self, controller):
         """Init the logo manager."""
@@ -278,10 +278,10 @@ class LogoManager:
 
     def clearFolder(self):
         """Clear folder."""
-        dir = getAbsPath(logosDir)
+        logo_dir = getAbsPath(logosDir)
 
-        for fname in os.listdir(dir):
-            full_fname = os.path.join(dir, fname)
+        for fname in os.listdir(logo_dir):
+            full_fname = os.path.join(logo_dir, fname)
             name, ext = os.path.splitext(fname)
             ext = ext.replace(".", "")
             if (os.path.isfile(full_fname)
@@ -347,8 +347,8 @@ class LogoManager:
 
     def pixmap2ident(self, pixmap):
         """Convert a pixmap to the ident of a logo."""
-        for ident, map in self._ident2map.items():
-            if map.cacheKey() == pixmap.cacheKey():
+        for ident, pixmap2 in self._ident2map.items():
+            if pixmap2.cacheKey() == pixmap.cacheKey():
                 return ident
         return ""
 
@@ -471,11 +471,12 @@ class Logo:
         """Refresh the data (height, width, ...)."""
         file = self.getAbsFile()
         self._size = os.path.getsize(file)
-        map = QPixmap(file)
-        self._width = map.height()
-        self._height = map.width()
+        pixmap = QPixmap(file)
+        self._width = pixmap.height()
+        self._height = pixmap.width()
 
-    def _uniqid(self):
+    @classmethod
+    def _uniqid(cls):
         return hex(int(time() * 10000000))[10:]
 
     def toDict(self):
@@ -514,8 +515,9 @@ class Logo:
     def getDesc(self):
         """Return a description of the logo."""
         size = humanize.naturalsize(self._size)
-        return "{}, {}x{}px".format(self._format.upper(),
-                                    self._width, self._height, str(size))
+        return (
+            f"{self._format.upper()}, "
+            f"{self._width}x{self._height}px, {size}")
 
     def __str__(self):
         """Convert logo to string."""

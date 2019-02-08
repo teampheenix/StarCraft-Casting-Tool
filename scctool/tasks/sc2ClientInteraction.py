@@ -23,10 +23,12 @@ if(scctool.settings.windows):
 
 
 def skipScore(score):
+    """Define score default for the overlay."""
     return score == 0
 
 
 def skipBestOf(bo):
+    """Define best of default for the overlay."""
     return bo == 3
 
 
@@ -125,7 +127,8 @@ class SC2ApiThread(QThread):
         module_logger.info(
             'Termination request fo task "' + task + '" cancelled')
 
-    def getURLs(self):
+    @classmethod
+    def getURLs(cls):
         network = scctool.settings.config.parser.getboolean(
             "SCT", "sc2_network_listener_enabled")
         if network:
@@ -176,7 +179,7 @@ class SC2ApiThread(QThread):
             if(not self.exiting
                 and (newData != self.currentData
                      or newData.time < self.currentData.time
-                     or newData.isLive() != self.currentData.isLive())):
+                 or newData.isLive() != self.currentData.isLive())):
 
                 if(self.activeTask['updateScore']
                    and newData.isDecidedGame()
@@ -195,8 +198,8 @@ class SC2ApiThread(QThread):
     def tryToggle(self, data):
         """Wait for SC2 in foreground, then toggle production tab and score."""
         if (scctool.settings.config.parser.getboolean(
-            "SCT", "blacklist_on")
-                and not data.replay):
+            "SCT", "blacklist_on") and
+                not data.replay):
             blacklist = scctool.settings.config.getBlacklist()
             if data.player1 in blacklist or data.player2 in blacklist:
                 module_logger.info("Do not toogle due to blacklist.")
@@ -277,6 +280,7 @@ class SC2ApiThread(QThread):
 
 
 def ocr(players, img, directory=''):
+    """Use OCR to find postion of the playernames."""
     cfg = '--psm 3 --oem 0'
     if directory:
         directory = os.path.join(os.path.dirname(directory), 'tessdata')
@@ -307,6 +311,7 @@ def ocr(players, img, directory=''):
 
 
 def cropImage(full_img, crop_region):
+    """Crop an image."""
     x1, x2, y1, y2 = crop_region
     width, height = full_img.size
     if x1 != 0.0 and x2 == 1.0 and y1 == 0.0 and y2 == 1.0:
@@ -411,7 +416,8 @@ class SC2MatchData:
             player1, player2, weak=weak, translator=translator)
         return found, inorder
 
-    def __no_translator(self, x):
+    @classmethod
+    def __no_translator(cls, x):
         return x
 
     def playerInList(self, player_idx, players, translator=None):
