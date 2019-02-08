@@ -5,7 +5,7 @@ var data = {};
 var duration = 0;
 var countDownDate = new Date("Nov 18, 2018 13:27:00").getTime();
 var interval = null;
-var controller = new Controller(profile, 'countdown');
+var controller = new Controller(profile, "countdown");
 
 Number.prototype.pad = function(size) {
   var s = String(this);
@@ -54,23 +54,23 @@ function startCounter() {
 function printCountDown(days, hours, minutes, seconds) {
   // Output the result in an element with id="demo"
   var countdownStr;
-  if (days == 0 && hours == 0 && minutes == 0 && seconds == 0) {
-    console.log('replacement');
+  if (days === 0 && hours === 0 && minutes === 0 && seconds === 0) {
+    console.log("replacement");
     countdownStr = data.replacement;
     console.log(countdownStr);
   } else if (days > 0) {
     countdownStr = days + "d " + hours.pad() + "h " + minutes.pad() + "m " + seconds.pad() + "s";
   } else if (hours > 0) {
-    countdownStr = hours.pad() + ':' + minutes.pad() + ':' + seconds.pad();
+    countdownStr = hours.pad() + ":" + minutes.pad() + ":" + seconds.pad();
   } else {
-    countdownStr = minutes + ':' + seconds.pad();
+    countdownStr = minutes + ":" + seconds.pad();
   }
   $("#countdown").text(countdownStr);
 }
 
 function loadStoredData() {
   try {
-    data = controller.loadData('data', true);
+    data = controller.loadData("data", true);
     if (data) {
       processData();
     }
@@ -88,18 +88,18 @@ function dataChanged(newData) {
 }
 
 function storeData(scope = null) {
-  if (scope == null || scope == "data") controller.storeData('data', data, true);
+  if (scope == null || scope === "data") controller.storeData("data", data, true);
 }
 
 function processData() {
   clearInterval(interval);
 
-  $('#description').text(data.desc);
-  $('#content').find(".text-fill").textfill({maxFontPixels: 80});
+  $("#description").text(data.desc);
+  $("#content").find(".text-fill").textfill({maxFontPixels: 80});
   if (data.static) {
     countDownDate = new Date(data.datetime).getTime();
   } else {
-    var hms = data.duration.split(':')
+    var hms = data.duration.split(":")
     duration = ((parseInt(hms[0]) * 60 + parseInt(hms[1])) * 60 + parseInt(hms[2])) * 1000;
     countDownDate = new Date().getTime() + duration;
   }
@@ -124,22 +124,22 @@ function connectWebsocket() {
   socket.onmessage = function(message) {
     var jsonObject = JSON.parse(message.data);
     console.log("Message received");
-    if (jsonObject.event == 'DATA') {
+    if (jsonObject.event === "DATA") {
       if (dataChanged(jsonObject.data)) processData();
-    } else if (jsonObject.event == 'CHANGE_STYLE') {
+    } else if (jsonObject.event === "CHANGE_STYLE") {
       controller.setStyle(jsonObject.data.file);
-    } else if (jsonObject.event == 'START') {
+    } else if (jsonObject.event === "START") {
       startCounter();
-    } else if (jsonObject.event == 'DESC') {
+    } else if (jsonObject.event === "DESC") {
       data.desc = jsonObject.data;
-      $('#description').text(data.desc);
-      $('#content').find(".text-fill").textfill({maxFontPixels: 80});
+      $("#description").text(data.desc);
+      $("#content").find(".text-fill").textfill({maxFontPixels: 80});
       storeData();
-    } else if (jsonObject.event == 'RESTART') {
+    } else if (jsonObject.event === "RESTART") {
       data.restart = jsonObject.data;
       if (data.restart) startCounter();
       storeData();
-    } else if (jsonObject.event == 'CHANGE_FONT') {
+    } else if (jsonObject.event === "CHANGE_FONT") {
       controller.setFont(jsonObject.data.font);
     }
   }

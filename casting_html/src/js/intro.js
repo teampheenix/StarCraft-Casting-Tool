@@ -11,7 +11,7 @@ var myAudio2 = new Audio("src/sound/bass.wav");
 myAudio2.volume = volume;
 var myAudio3 = new Audio("src/sound/fanfare.wav");
 myAudio3.volume = volume;
-var controller = new Controller(profile, 'intro');
+var controller = new Controller(profile, "intro");
 
 init();
 
@@ -40,11 +40,11 @@ function Connect() {
   socket.onmessage = function(message) {
     var jsonObject = JSON.parse(message.data);
     var intro = document.getElementById("intro");
-    if (jsonObject.data.hasOwnProperty('font')) {
+    if (jsonObject.data.hasOwnProperty("font")) {
       intro.style.fontFamily = jsonObject.data.font;
     }
     console.log("Message received");
-    if (jsonObject.event == 'SHOW_INTRO') {
+    if (jsonObject.event === "SHOW_INTRO") {
       if (!tween.isActive()) {
         try {
           var tts = new Audio(jsonObject.data.tts);
@@ -52,11 +52,11 @@ function Connect() {
         } catch (e) {}
         socket.send(jsonObject.state);
         tween.clear();
-        $(".race").prop('id', jsonObject.data.race);
+        $(".race").prop("id", jsonObject.data.race);
         $(".logo").css("display", jsonObject.data.display)
         $(".logo").css("background-image", "url(" + jsonObject.data.logo + ")");
-        $('.name span').html(jsonObject.data.name);
-        $('.team span').html(jsonObject.data.team);
+        $(".name span").html(jsonObject.data.name);
+        $(".team span").html(jsonObject.data.team);
         fillText();
         var racelogo = document.getElementsByClassName("race")[0];
         var offset = (window.innerWidth - intro.offsetWidth) / 2;
@@ -64,16 +64,16 @@ function Connect() {
         myAudio2.volume = jsonObject.data.volume / 40.0;
         myAudio3.volume = jsonObject.data.volume / 40.0;
         var animation = "default";
-        if (jsonObject.data.hasOwnProperty('animation')) {
+        if (jsonObject.data.hasOwnProperty("animation")) {
           animation = jsonObject.data.animation;
         } else {
           animation = "default";
         }
-        if (animation == "fanfare") {
+        if (animation === "fanfare") {
           tween.call(playSound, [myAudio3])
             .to(intro, 0, {
               opacity: 0,
-              clearProps: 'left',
+              clearProps: "left",
               transformOrigin: "right top",
               scaleY: 0
             })
@@ -97,7 +97,7 @@ function Connect() {
               clearProps: "transform, transformOrigin",
               opacity: 0
             });
-        } else if (animation == "slide") {
+        } else if (animation === "slide") {
           tween.to(intro, 0, {
               opacity: 0,
               left: offset + "px",
@@ -152,19 +152,19 @@ function Connect() {
         }
       }
 
-    } else if (jsonObject.event == 'CHANGE_STYLE') {
+    } else if (jsonObject.event === "CHANGE_STYLE") {
       controller.setStyle(jsonObject.data.file);
-    } else if (jsonObject.event == 'DEBUG_MODE') {
+    } else if (jsonObject.event === "DEBUG_MODE") {
       if (!debug) {
         tween.kill()
         var offset = (window.innerWidth - intro.offsetWidth) / 2;
-        $('#intro').css('opacity', '1');
-        $('#intro').css('left', offset.toString() + "px");
+        $("#intro").css("opacity", "1");
+        $("#intro").css("left", offset.toString() + "px");
         debug = true;
       } else {
         tween.kill()
-        $('#intro').css('opacity', '0');
-        $('#intro').css('left', '105%');
+        $("#intro").css("opacity", "0");
+        $("#intro").css("left", "105%");
         debug = false;
       }
 
@@ -189,7 +189,7 @@ function fillText() {
 
 function init() {
   var intro = document.getElementById("intro");
-  $('#intro').css('visibility', 'visible');
-  $('#intro').css('left', '105%');
+  $("#intro").css("visibility", "visible");
+  $("#intro").css("left", "105%");
   Connect();
 }
