@@ -198,7 +198,7 @@ class MapDownloader(QProgressDialog):
     def download(self):
         """Download a map."""
         self.show()
-        for i in range(10):
+        for __ in range(10):
             QApplication.processEvents()
 
         with open(self.file_name, "wb") as f:
@@ -573,8 +573,10 @@ class IconPushButton(QPushButton):
 
 
 class AligulacTreeView(QTreeWidget):
+    """Tree view to connect players to aligulac ids."""
 
     def __init__(self, parent, manager):
+        """Init the tree view."""
         super().__init__(parent)
         self.parent = parent
         self.manager = manager
@@ -643,6 +645,7 @@ class AligulacTreeView(QTreeWidget):
                 self.removeItem(text)
 
     def editSelected(self):
+        """Edit selected item."""
         indexes = self.selectedIndexes()
         name = ""
         ident = 1
@@ -727,6 +730,7 @@ class AliasTreeView(QTreeWidget):
         self.sortItems(0, Qt.AscendingOrder)
 
     def insertAlias(self, name, alias, expand=False):
+        """Insert alias."""
         name = str(name).strip()
         if name not in self.items.keys():
             self.items[name] = QTreeWidgetItem(self, [name])
@@ -938,7 +942,8 @@ class Completer(QCompleter):
 
         return path
 
-    def splitPath(self, path):
+    @classmethod
+    def splitPath(cls, path):
         """Add operator to separate between texts."""
         path = str(path.split(' ')[-1]).lstrip(' ')
         return [path]
@@ -1068,7 +1073,10 @@ class InitialUpdater(QProgressDialog):
 
 
 class DragDropLogoList(QListWidget):
+    """QListWidget for logos with drag and drop."""
+
     def __init__(self, logoManager, addIdent=lambda: None):
+        """Init the list widget."""
         super().__init__()
         self.setViewMode(QListWidget.IconMode)
         self.setIconSize(QSize(75, 75))
@@ -1081,8 +1089,8 @@ class DragDropLogoList(QListWidget):
     def dragEnterEvent(self, e):
         """Handle drag enter event."""
         data = e.mimeData()
-        if(data.hasFormat("application/x-qabstractitemmodeldatalist") and
-           e.source() != self):
+        if(data.hasFormat("application/x-qabstractitemmodeldatalist")
+           and e.source() != self):
             e.accept()
         elif data.hasFormat("logo/ident"):
             e.accept()
@@ -1092,8 +1100,8 @@ class DragDropLogoList(QListWidget):
     def dragMoveEvent(self, e):
         """Handle drag move event."""
         data = e.mimeData()
-        if(data.hasFormat("application/x-qabstractitemmodeldatalist") or
-           data.hasFormat("logo/ident")):
+        if(data.hasFormat("application/x-qabstractitemmodeldatalist")
+           or data.hasFormat("logo/ident")):
             e.setDropAction(Qt.CopyAction)
             e.accept()
         else:
@@ -1102,8 +1110,8 @@ class DragDropLogoList(QListWidget):
     def dropEvent(self, e):
         """Handle drop event."""
         data = e.mimeData()
-        if(data.hasFormat("application/x-qabstractitemmodeldatalist") and
-           e.source() != self):
+        if(data.hasFormat("application/x-qabstractitemmodeldatalist")
+           and e.source() != self):
             item = e.source().currentItem()
             pixmap = item.icon().pixmap(self._iconsize)
             ident = self._logoManager.pixmap2ident(pixmap)
