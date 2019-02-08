@@ -21,19 +21,25 @@ if (Array.prototype.equals)
 // attach the .equals method to Array's prototype to call it on any array
 Array.prototype.equals = function(array) {
   // if the other array is a falsy value, return
-  if (!array)
+  if (!array) {
     return false;
+  }
+
 
   // compare lengths - can save a lot of time
-  if (this.length !== array.length)
+  if (this.length !== array.length) {
     return false;
+  }
+
 
   for (var i = 0, l = this.length; i < l; i++) {
     // Check if we have nested arrays
     if (this[i] instanceof Array && array[i] instanceof Array) {
       // recurse into the nested arrays
-      if (!this[i].equals(array[i]))
+      if (!this[i].equals(array[i])) {
         return false;
+      }
+
     } else if (this[i] !== array[i]) {
       // Warning - two different object instances will never be equal: {x:20} != {x:20}
       return false;
@@ -52,11 +58,13 @@ function init() {
   loadStoredData();
   initHide();
   connectWebsocket();
-  if (Object.keys(mapData).length > 0) initAnimation(getCurrentMap());
+  if (Object.keys(mapData).length > 0) {
+    initAnimation(getCurrentMap());
+  }
 }
 
 function getCurrentMap() {
-  if (currentMap === "" || currentMap == undefined || !Object.keys(mapData).includes(currentMap)) {
+  if (currentMap === "" || typeof currentMap === 'undefined' || !Object.keys(mapData).includes(currentMap)) {
     try {
       currentMap = Object.keys(mapData)[0];
     } catch (e) {
@@ -64,15 +72,22 @@ function getCurrentMap() {
     }
 
   }
-  if (currentMap == undefined) currentMap = "";
+  if (typeof currentMap === 'undefined') {
+    currentMap = "";
+  }
   return currentMap;
-
 }
 
 function storeData(scope = null) {
-  if (scope == null || scope === "mapdata") controller.storeData("data", mapData, true);
-  if (scope == null || scope === "colors") controller.storeData("colors", colors, true);
-  if (scope == null || scope === "currentmap") controller.storeData("currentmap", currentMap);
+  if (scope == null || scope === "mapdata") {
+    controller.storeData("data", mapData, true);
+  }
+  if (scope == null || scope === "colors") {
+    controller.storeData("colors", colors, true);
+  }
+  if (scope == null || scope === "currentmap") {
+    controller.storeData("currentmap", currentMap);
+  }
 }
 
 function loadStoredData() {
@@ -81,9 +96,15 @@ function loadStoredData() {
     mapData = controller.loadData("mapdata", true);
     colors = controller.loadData("colors", true);
     currentMap = controller.loadData("currentmap");
-    if (currentMap == null) currentMap = "";
-    if (colors == null) colors = {};
-    if (mapData == null) mapData = {};
+    if (currentMap == null) {
+      currentMap = "";
+    }
+    if (colors == null) {
+      colors = {};
+    }
+    if (mapData == null) {
+      mapData = {};
+    }
     try {
       setColors(colors["color1"], colors["color2"]);
     } catch (e) {}

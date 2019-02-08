@@ -29,7 +29,7 @@ function playSound(audio) {
   } catch (e) {}
 }
 
-function Connect() {
+function connect() {
   socket = new WebSocket(controller.generateKeyURI());
 
   socket.onopen = function() {
@@ -176,10 +176,10 @@ function Connect() {
     socket = null;
     isopen = false
     setTimeout(function() {
-      Connect();
+      connect();
     }, reconnectIntervalMs);
   }
-};
+}
 
 function fillText() {
   $("div.box").find(".text-fill").textfill({
@@ -191,5 +191,5 @@ function init() {
   var intro = document.getElementById("intro");
   $("#intro").css("visibility", "visible");
   $("#intro").css("left", "105%");
-  Connect();
+  connect();
 }

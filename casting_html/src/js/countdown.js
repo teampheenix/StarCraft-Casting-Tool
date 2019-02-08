@@ -88,14 +88,18 @@ function dataChanged(newData) {
 }
 
 function storeData(scope = null) {
-  if (scope == null || scope === "data") controller.storeData("data", data, true);
+  if (scope == null || scope === "data") {
+    controller.storeData("data", data, true);
+  }
 }
 
 function processData() {
   clearInterval(interval);
 
   $("#description").text(data.desc);
-  $("#content").find(".text-fill").textfill({maxFontPixels: 80});
+  $("#content").find(".text-fill").textfill({
+    maxFontPixels: 80
+  });
   if (data.static) {
     countDownDate = new Date(data.datetime).getTime();
   } else {
@@ -133,11 +137,15 @@ function connectWebsocket() {
     } else if (jsonObject.event === "DESC") {
       data.desc = jsonObject.data;
       $("#description").text(data.desc);
-      $("#content").find(".text-fill").textfill({maxFontPixels: 80});
+      $("#content").find(".text-fill").textfill({
+        maxFontPixels: 80
+      });
       storeData();
     } else if (jsonObject.event === "RESTART") {
       data.restart = jsonObject.data;
-      if (data.restart) startCounter();
+      if (data.restart) {
+        startCounter();
+      }
       storeData();
     } else if (jsonObject.event === "CHANGE_FONT") {
       controller.setFont(jsonObject.data.font);

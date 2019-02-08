@@ -1321,7 +1321,7 @@ class LedIndicator(QAbstractButton):
 
     @pyqtProperty(QColor)
     def offColor1(self):
-        """"Return off color 1.""""
+        """Return off color 1."""
         return self.off_color_1
 
     @offColor1.setter

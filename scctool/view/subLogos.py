@@ -265,16 +265,16 @@ class SubwindowLogos(QWidget):
     def addFavorite(self, team):
         """Add to favorite."""
         if team == 1:
-            map = self.team1_icon.pixmap()
+            pixmap = self.team1_icon.pixmap()
         elif team == 2:
-            map = self.team2_icon.pixmap()
+            pixmap = self.team2_icon.pixmap()
         else:
             return
 
-        ident = self.controller.logoManager.pixmap2ident(map)
+        ident = self.controller.logoManager.pixmap2ident(pixmap)
         logo = self.controller.logoManager.findLogo(ident)
         item = QListWidgetItem(
-            QIcon(map), logo.getDesc())
+            QIcon(pixmap), logo.getDesc())
 
         if self.controller.logoManager.addFavorite(ident):
             self.fav_list.addItem(item)
@@ -282,10 +282,10 @@ class SubwindowLogos(QWidget):
     def addFavoriteLastUsed(self):
         """Add last used item to favorite."""
         item = self.lastused_list.currentItem()
-        map = item.icon().pixmap(self.iconsize)
+        pixmap = item.icon().pixmap(self.iconsize)
         item = QListWidgetItem(
-            QIcon(map), item.text())
-        ident = self.controller.logoManager.pixmap2ident(map)
+            QIcon(pixmap), item.text())
+        ident = self.controller.logoManager.pixmap2ident(pixmap)
         if self.controller.logoManager.addFavorite(ident):
             self.fav_list.addItem(item)
 

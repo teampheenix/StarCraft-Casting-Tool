@@ -15,10 +15,10 @@ class MatchGrabber(object):
 
     _provider = "Custom"
 
-    def __init__(self, matchData, controller, id=False):
+    def __init__(self, matchData, controller, ident=False):
         """Init match grabber."""
         self._id = 0
-        self.setID(id)
+        self.setID(ident)
         self._controller = controller
         self._matchData = matchData
         self._urlprefix = ""

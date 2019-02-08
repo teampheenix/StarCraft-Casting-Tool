@@ -12,20 +12,22 @@ function init() {
 
 function loadStoredData() {
   data = controller.loadData("data", true);
-  if(data != null){
+  if (data != null) {
     setLogo(data["logo"]);
-  }else{
+  } else {
     data = {};
     setLogo("casting_html/src/img/SC2.png");
   }
 }
 
 function storeData(scope = null) {
-  if (scope == null || scope === "data") controller.storeData("data", data, true);
+  if (scope == null || scope === "data") {
+    controller.storeData("data", data, true);
+  }
 }
 
-function setLogo(logo_url){
-  if(logo_url){
+function setLogo(logo_url) {
+  if (logo_url) {
     $("#img").css("background-image", "url('../" + logo_url + "')");
     data["logo"] = logo_url;
     storeData();

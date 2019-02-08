@@ -56,7 +56,9 @@ function dataChanged(newData) {
 }
 
 function storeData(scope = null) {
-  if (scope == null || scope === "data") controller.storeData("data", data, true);
+  if (scope == null || scope === "data") {
+    controller.storeData("data", data, true);
+  }
 }
 
 function processData() {
@@ -85,7 +87,9 @@ function processData() {
   function _changeText(object, new_value) {
     object.text(new_value)
     $(document).ready(function() {
-      $("#content").find(".text-fill").textfill({maxFontPixels: 80});
+      $("#content").find(".text-fill").textfill({
+        maxFontPixels: 80
+      });
     });
   }
 }

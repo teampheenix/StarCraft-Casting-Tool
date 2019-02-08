@@ -19,7 +19,9 @@ function init() {
 }
 
 function storeData(scope = null) {
-  if (scope == null || scope === "data") controller.storeData("data", data, true);
+  if (scope == null || scope === "data") {
+    controller.storeData("data", data, true);
+  }
 }
 
 function loadStoredData() {
@@ -96,7 +98,9 @@ function processData(myData) {
 
 function changeScore(winner, set, color, opacity, hide) {
   var mapicon = $("#mapicon" + (set).toString());
-  if (!mapicon.length) return;
+  if (!mapicon.length) {
+    return;
+  }
   $(mapicon).find("div.circle").css("background-color", color);
   $(mapicon).find("div.opa").css("opacity", opacity);
   if (hide) {
@@ -166,7 +170,9 @@ function changeText(iconID, label, new_value) {
   function _changeText(parent, object, new_value) {
     object.text(new_value)
     $(document).ready(function() {
-      parent.find(".text-fill").textfill({maxFontPixels: 80});
+      parent.find(".text-fill").textfill({
+        maxFontPixels: 80
+      });
     });
   }
 }
@@ -199,7 +205,9 @@ function changeRace(iconID, team, race) {
 
 function changeMap(iconID, map, map_img) {
   var icon = $("#mapicon" + iconID.toString());
-  if (!icon.length) return;
+  if (!icon.length) {
+    return;
+  }
   var box = icon.find("div.box");
   var image = icon.find("div.mapimg");
   var name = icon.find("span.mapname")
@@ -232,7 +240,9 @@ function changeMap(iconID, map, map_img) {
     }
 
     $(document).ready(function() {
-      parent.find(".text-fill").textfill({maxFontPixels: 80});
+      parent.find(".text-fill").textfill({
+        maxFontPixels: 80
+      });
     });
   }
 }
@@ -310,7 +320,9 @@ function fillBox(i) {
   }
   $(mapicon).find("div.opa").css("opacity", mapdata["opacity"]);
   $(document).ready(function() {
-    $(mapicon).find(".text-fill").textfill({maxFontPixels: 80});
+    $(mapicon).find(".text-fill").textfill({
+      maxFontPixels: 80
+    });
     if (i === length) {
       $(mapicon).ready(function() {
         initAnimation();

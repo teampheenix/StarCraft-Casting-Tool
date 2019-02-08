@@ -15,7 +15,9 @@ function loadStoredData() {
 }
 
 function storeData(scope = null) {
-  if (scope == null || scope === "data") controller.storeData("data", data, true);
+  if (scope == null || scope === "data") {
+    controller.storeData("data", data, true);
+  }
 }
 
 function connectWebsocket() {

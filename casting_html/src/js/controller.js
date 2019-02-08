@@ -17,7 +17,7 @@ class Controller {
   generateKey() {
     this.key = "scct-" + this.profile + "-" + this.name;
     if (this.ident !== 0) {
-      this.key = this.key + '_' + this.ident.toString();
+      this.key = this.key + "_" + this.ident.toString();
     }
   }
 
@@ -82,7 +82,9 @@ class Controller {
   }
 
   setStyle(file = null) {
-    if (file == null) file = "src/css/" + this.name + "/Default.css";
+    if (file == null) {
+      file = "src/css/" + this.name + "/Default.css";
+    }
     if (file !== this.style) {
       this.storeData("css", file);
       location.reload();
@@ -90,7 +92,7 @@ class Controller {
   }
 
   setFont(newFont) {
-    if (!newFont){
+    if (!newFont) {
       return;
     }
     if (!this.defaultFont) {

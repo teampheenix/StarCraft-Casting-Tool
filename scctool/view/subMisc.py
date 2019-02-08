@@ -667,23 +667,23 @@ class SubwindowMisc(QWidget):
 
     def changeMap(self):
         """Change a map."""
-        map = self.maplist.currentItem().text()
+        current_map = self.maplist.currentItem().text()
         fileName, ok = QFileDialog.getOpenFileName(
             self, _("Select Map Image (> 500x500px recommended)"),
-            "", _("Supported Images") + " (*.png *.jpg)")
+            "", _("Supported Images") + " (*.png *.jpg *.jpeg)")
         if ok:
             base = os.path.basename(fileName)
-            name, ext = os.path.splitext(base)
+            name, __ = os.path.splitext(base)
             name = name.replace("_", " ")
-            self.controller.deleteMap(map)
-            self.controller.addMap(fileName, map)
+            self.controller.deleteMap(current_map)
+            self.controller.addMap(fileName, current_map)
             self.changePreview()
 
     def addMap(self):
         """Add a map."""
         fileName, ok = QFileDialog.getOpenFileName(
             self, _("Select Map Image (> 500x500px recommended)"),
-            "", _("Supported Images") + " (*.png *.jpg)")
+            "", _("Supported Images") + " (*.png *.jpg  *.jpeg)")
         if ok:
             base = os.path.basename(fileName)
             name, __ = os.path.splitext(base)

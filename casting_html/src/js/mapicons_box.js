@@ -20,9 +20,15 @@ function init() {
 
 
 function storeData(scope = null) {
-  if (scope == null || scope === "data") controller.storeData("data", data, true);
-  if (scope == null || scope === "font") controller.storeData("font", font);
-  if (scope == null || scope === "padding") controller.storeData("padding", padding);
+  if (scope == null || scope === "data") {
+    controller.storeData("data", data, true);
+  }
+  if (scope == null || scope === "font") {
+    controller.storeData("font", font);
+  }
+  if (scope == null || scope === "padding") {
+    controller.storeData("padding", padding);
+  }
 }
 
 function loadStoredData() {
@@ -166,7 +172,9 @@ function changeText(iconID, label, new_value) {
   function _changeText(parent, object, new_value) {
     object.text(new_value)
     $(document).ready(function() {
-      parent.find(".text-fill").textfill({maxFontPixels: 80});
+      parent.find(".text-fill").textfill({
+        maxFontPixels: 80
+      });
     });
   }
 }
@@ -230,7 +238,9 @@ function changeMap(iconID, map, map_img) {
       image.css("background-image", 'url("src/img/maps/' + map_img + '")');
     }
     $(document).ready(function() {
-      parent.find(".text-fill").textfill({maxFontPixels: 80});
+      parent.find(".text-fill").textfill({
+        maxFontPixels: 80
+      });
     });
   }
 }
@@ -303,7 +313,9 @@ function fillBox(i) {
   }
   $(mapicon).find("div.opa").css("opacity", mapdata["opacity"]);
   $(document).ready(function() {
-    $(mapicon).find(".text-fill").textfill({maxFontPixels: 80});
+    $(mapicon).find(".text-fill").textfill({
+      maxFontPixels: 80
+    });
     if (i === length) {
       $(mapicon).ready(function() {
         initAnimation();
@@ -341,8 +353,12 @@ function initAnimation() {
       .staggerTo([vs, [race1, race2]], 0.2, {
         opacity: 1.0,
       }, 0.20, "=-0.2")
-      .set(race1, {clearProps:"opacity"})
-      .set(race2, {clearProps:"opacity"})
+      .set(race1, {
+        clearProps: "opacity"
+      })
+      .set(race2, {
+        clearProps: "opacity"
+      })
       .from(player1, 0.15, {
         x: "-=110%"
       }, "=-0.15")

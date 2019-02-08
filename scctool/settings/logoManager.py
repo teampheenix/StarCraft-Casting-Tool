@@ -507,9 +507,9 @@ class Logo:
     def provideQPixmap(self):
         """Return a QPixmap of the logo."""
         if self._manager._ident2map.get(self._ident, None) is None:
-            map = QPixmap(self.getAbsFile()).scaled(
+            pixmap = QPixmap(self.getAbsFile()).scaled(
                 self._iconsize, self._iconsize, Qt.KeepAspectRatio)
-            self._manager._ident2map[self._ident] = map
+            self._manager._ident2map[self._ident] = pixmap
         return self._manager._ident2map[self._ident]
 
     def getDesc(self):

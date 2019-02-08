@@ -67,6 +67,7 @@ class TextToSpeech:
         voices = response.json().get('voices', [])
 
         def sortVoices(elem):
+            """Sort voices by name."""
             return elem['name']
 
         voices.sort(key=sortVoices)
