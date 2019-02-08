@@ -121,9 +121,9 @@ class AliasManager:
 
     def teamAliasList(self):
         """Get list of team aliases."""
-        list = dict()
+        alias_list = dict()
         for alias, player in self.__team_alias.items():
-            if player not in list.keys():
-                list[player] = []
-            list[player].append(alias)
-        return list
+            if player not in alias_list.keys():
+                alias_list[player] = []
+            alias_list[player].append(alias)
+        return alias_list

@@ -174,10 +174,10 @@ def saveNightbotCommands():
         module_logger.exception("message")
 
 
-def race2idx(str):
+def race2idx(race_str):
     """Convert race to idx."""
     for idx, race in enumerate(races):
-        if(race.lower() == str.lower()):
+        if(race.lower() == race_str.lower()):
             return idx
     return 0
 

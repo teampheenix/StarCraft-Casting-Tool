@@ -72,7 +72,7 @@ class SubwindowStyles(QWidget):
 
             self.setWindowTitle(_("Style Settings"))
 
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     @classmethod
@@ -104,7 +104,7 @@ class SubwindowStyles(QWidget):
             layout.addWidget(buttonSave)
 
             self.buttonGroup = layout
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def createStyleBox(self):
@@ -126,26 +126,26 @@ class SubwindowStyles(QWidget):
             container.addWidget(self.qb_boxStyle)
             container.addWidget(button)
             layout.addRow(label, container)
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
         try:
             container = QHBoxLayout()
             self.qb_landscapeStyle = StyleComboBox(
-                scctool.settings.casting_html_dir +
-                "/src/css/mapicons_landscape",
+                scctool.settings.casting_html_dir
+                + "/src/css/mapicons_landscape",
                 "mapicons_landscape")
             self.qb_landscapeStyle.connect2WS(
                 self.controller, 'mapicons_landscape')
             button = QPushButton(_("Show in Browser"))
             button.clicked.connect(lambda: self.openHTML(
-                scctool.settings.casting_html_dir +
-                "/mapicons_landscape_1.html"))
+                scctool.settings.casting_html_dir
+                + "/mapicons_landscape_1.html"))
             container.addWidget(self.qb_landscapeStyle)
             container.addWidget(button)
             layout.addRow(QLabel(
                 _("Landscape Map Icons:")), container)
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
         try:
@@ -160,7 +160,7 @@ class SubwindowStyles(QWidget):
             container.addWidget(self.qb_scoreStyle)
             container.addWidget(button)
             layout.addRow(QLabel(_("Score:")), container)
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
         try:
@@ -175,7 +175,7 @@ class SubwindowStyles(QWidget):
             container.addWidget(self.qb_introStyle)
             container.addWidget(button)
             layout.addRow(QLabel(_("Intros:")), container)
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
         try:
@@ -190,7 +190,7 @@ class SubwindowStyles(QWidget):
             container.addWidget(self.qb_mapstatsStyle)
             container.addWidget(button)
             layout.addRow(QLabel(_("Map Stats:")), container)
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
         try:
@@ -205,7 +205,7 @@ class SubwindowStyles(QWidget):
             container.addWidget(self.qb_aligulacStyle)
             container.addWidget(button)
             layout.addRow(QLabel(_("Aligulac:")), container)
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
         try:
@@ -309,8 +309,8 @@ class SubwindowStyles(QWidget):
         label = QLabel(
             _("Warning: Using a custom font instead of the regular font"
               " defined in the Icon Styles can lead to unitentional"
-              " appereance.") +
-            _("The proper way is to create a custom skin."))
+              " appereance.")
+            + _("The proper way is to create a custom skin."))
         label.setWordWrap(True)
         label.setAlignment(Qt.AlignJustify)
         layout.addWidget(label, 1, 0, 1, 2)

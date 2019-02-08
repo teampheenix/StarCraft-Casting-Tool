@@ -150,7 +150,8 @@ class ProfileManager:
 
         self._saveSettings()
 
-    def addProfile(self, name, current=False, default=False, copy='', ident=''):
+    def addProfile(self, name, current=False,
+                   default=False, copy='', ident=''):
         """Add a new profile."""
         name = name.strip()
         if not name:
@@ -172,15 +173,15 @@ class ProfileManager:
         self._profiles[profile]['name'] = name
         self._profiles[profile]['default'] = default
 
-        dir = self.profiledir(profile)
+        profile_dir = self.profiledir(profile)
 
         if copy:
-            if os.path.exists(dir):
-                shutil.rmtree(dir)
-            shutil.copytree(self.profiledir(copy), dir)
+            if os.path.exists(profile_dir):
+                shutil.rmtree(profile_dir)
+            shutil.copytree(self.profiledir(copy), profile_dir)
         else:
-            if not os.path.exists(dir):
-                os.makedirs(dir)
+            if not os.path.exists(profile_dir):
+                os.makedirs(profile_dir)
 
         if current:
             self.setCurrent(profile)

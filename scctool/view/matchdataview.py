@@ -734,7 +734,7 @@ class TriggerLock():
         """Enter the lock."""
         self.__trigger = False
 
-    def __exit__(self, type, value, traceback):
+    def __exit__(self, error_type, value, traceback):
         """Exit the lock."""
         self.__trigger = True
 

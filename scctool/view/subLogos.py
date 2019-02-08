@@ -127,10 +127,10 @@ class SubwindowLogos(QWidget):
             self.listItemRightClickedFav)
 
         for logo in self.controller.logoManager.getFavorites():
-            map = logo.provideQPixmap()
-            item = QListWidgetItem(
-                QIcon(map), logo.getDesc())
-            self.fav_list.addItem(item)
+            self.fav_list.addItem(
+                QListWidgetItem(
+                    QIcon(logo.provideQPixmap()),
+                    logo.getDesc()))
 
         self.fav_list.setAcceptDrops(True)
         layout.addWidget(self.fav_list)
@@ -251,15 +251,15 @@ class SubwindowLogos(QWidget):
         """Provide logo with double click feature."""
         if self.team == 0:
             return
-        map = item.icon().pixmap(self.iconsize)
-        ident = self.controller.logoManager.pixmap2ident(map)
+        pixmap = item.icon().pixmap(self.iconsize)
+        ident = self.controller.logoManager.pixmap2ident(pixmap)
         logo = self.controller.logoManager.findLogo(ident)
         if self.team == 1:
             self.controller.logoManager.setTeam1Logo(logo)
-            self.team1_icon.setPixmap(map)
+            self.team1_icon.setPixmap(pixmap)
         elif self.team == 2:
             self.controller.logoManager.setTeam2Logo(logo)
-            self.team2_icon.setPixmap(map)
+            self.team2_icon.setPixmap(pixmap)
         self.refreshLastUsed()
 
     def addFavorite(self, team):

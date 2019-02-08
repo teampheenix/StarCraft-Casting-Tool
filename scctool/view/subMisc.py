@@ -557,7 +557,7 @@ class SubwindowMisc(QWidget):
         text = text.strip()
         if not ok or not text:
             return
-        id, ok = QInputDialog.getInt(
+        aligulac_id, ok = QInputDialog.getInt(
             self,
             _('Aligulac ID'), _('Aligulac ID') + ':',
             value=aligulac_id, min=1)
@@ -636,13 +636,15 @@ class SubwindowMisc(QWidget):
     def renameMap(self):
         """Rename maps."""
         item = self.maplist.currentItem()
-        map = item.text()
+        mapname = item.text()
         text, ok = QInputDialog.getText(
-            self, _('Map Name'), _('Map Name') + ':', text=map)
+            self, _('Map Name'),
+            _('Map Name') + ':',
+            text=mapname)
         if not ok:
             return
         text = text.strip()
-        if(text == map):
+        if(text == mapname):
             return
         if text.lower() == 'tbd':
             QMessageBox.critical(
@@ -659,8 +661,8 @@ class SubwindowMisc(QWidget):
             if buttonReply == QMessageBox.No:
                 return
 
-        self.controller.addMap(self.controller.getMapImg(map, True), text)
-        self.controller.deleteMap(map)
+        self.controller.addMap(self.controller.getMapImg(mapname, True), text)
+        self.controller.deleteMap(mapname)
         item.setText(text)
 
     def changeMap(self):
@@ -790,8 +792,7 @@ class SubwindowMisc(QWidget):
             except Exception as e:
                 module_logger.exception("message")
                 QMessageBox.critical(self, _("Error"), str(e))
-            finally:
-                break
+            break
 
     def deleteMap(self):
         """Delete a map."""

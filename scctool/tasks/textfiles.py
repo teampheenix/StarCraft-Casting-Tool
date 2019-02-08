@@ -6,9 +6,6 @@ import scctool.settings
 import scctool.settings.translation
 from scctool.tasks.tasksthread import TasksThread
 
-"""Write streaming data to txt-files if needed."""
-
-
 # from PyQt5.QtCore import pyqtSignal
 
 

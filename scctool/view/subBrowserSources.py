@@ -581,7 +581,7 @@ class SubwindowBrowserSources(QWidget):
             layout.addWidget(buttonSave)
 
             self.buttonGroup = layout
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def changed(self, *values):

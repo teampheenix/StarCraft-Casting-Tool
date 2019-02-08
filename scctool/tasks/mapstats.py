@@ -97,9 +97,9 @@ class MapStatsManager:
                 self.__controller.websocketThread.selectMap(
                     map2select, played, vetoed)
 
-    def setMapPoolType(self, id):
+    def setMapPoolType(self, pool_id):
         """Set the mappool type."""
-        self.__mappool = int(id)
+        self.__mappool = int(pool_id)
 
     def getMapPoolType(self):
         """Get the map pool type."""

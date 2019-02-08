@@ -1274,7 +1274,7 @@ class EmitLock():
         self.__locked = self.__useLock
         return self
 
-    def __exit__(self, type, value, traceback):
+    def __exit__(self, error_type, value, traceback):
         """Exit the lock."""
         self.__locked = False
         if self.__useLock and self.__signal:
