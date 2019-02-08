@@ -129,6 +129,7 @@ class SC2ApiThread(QThread):
 
     @classmethod
     def getURLs(cls):
+        """Get the URLs for the sc2 client api."""
         network = scctool.settings.config.parser.getboolean(
             "SCT", "sc2_network_listener_enabled")
         if network:

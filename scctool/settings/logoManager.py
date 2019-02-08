@@ -27,7 +27,7 @@ class LogoManager:
     _last_used = []
     _favorites = []
     _ident2map = dict()
-    _last_used_max_len = 10d
+    _last_used_max_len = 10
 
     def __init__(self, controller):
         """Init the logo manager."""

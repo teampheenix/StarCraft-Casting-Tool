@@ -63,7 +63,7 @@ class myHandler(http.server.SimpleHTTPRequestHandler):
         else:
             self.send_error(404, "File not found")
 
-    def log_message(self, log_format, *args):
+    def log_message(self, format, *args):
         """Log a message."""
         pass
 
