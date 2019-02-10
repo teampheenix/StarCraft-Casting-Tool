@@ -222,11 +222,11 @@ class MatchData(QObject):
 
     def getAceSets(self):
         """Get the number of ace sets."""
-        return int(self.__data['ace_sets'])
+        return int(self.__data.get('ace_sets', 0))
 
     def getAllKill(self):
         """Check if format is allkill."""
-        return bool(self.__data['allkill'])
+        return bool(self.__data.get('allkill', 0))
 
     def allkillUpdate(self):
         """Move the winner to the next set in case of allkill format."""
