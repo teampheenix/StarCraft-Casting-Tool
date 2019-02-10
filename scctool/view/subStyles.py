@@ -226,15 +226,15 @@ class SubwindowStyles(QWidget):
         try:
             container = QHBoxLayout()
             self.qb_countdownStyle = StyleComboBox(
-                scctool.settings.casting_html_dir + "/src/css/vetos",
-                "vetos")
-            self.qb_countdownStyle.connect2WS(self.controller, 'vetos')
+                scctool.settings.casting_html_dir + "/src/css/vetoes",
+                "vetoes")
+            self.qb_countdownStyle.connect2WS(self.controller, 'vetoes')
             button = QPushButton(_("Show in Browser"))
             button.clicked.connect(lambda: self.openHTML(
-                scctool.settings.casting_html_dir + "/vetos.html"))
+                scctool.settings.casting_html_dir + "/vetoes.html"))
             container.addWidget(self.qb_countdownStyle)
             container.addWidget(button)
-            layout.addRow(QLabel(_("Vetos") + ':'), container)
+            layout.addRow(QLabel(_("Vetoes") + ':'), container)
         except Exception:
             module_logger.exception("message")
 

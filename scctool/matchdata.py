@@ -134,7 +134,7 @@ class MatchData(QObject):
         self.__data['no_sets'] = 0
         self.__data['best_of'] = 0
         self.__data['min_sets'] = 0
-        self.__data['no_vetos'] = 0
+        self.__data['no_vetoes'] = 0
         self.__data['ace_sets'] = 0
         self.__data['allkill'] = False
         self.__data['solo'] = False
@@ -143,7 +143,7 @@ class MatchData(QObject):
         self.__data['teams'] = []
         self.__data['teams'].append({'name': 'TBD', 'tag': None})
         self.__data['teams'].append({'name': 'TBD', 'tag': None})
-        self.__data['vetos'] = []
+        self.__data['vetoes'] = []
         self.__data['sets'] = []
         self.__data['players'] = [[], []]
 
@@ -159,9 +159,9 @@ class MatchData(QObject):
         for set_idx in range(len(self.__data['sets'])):
             self.__data['sets'][set_idx]['score'] = - \
                 self.__data['sets'][set_idx]['score']
-        for veto_idx in range(len(self.__data['vetos'])):
-            self.__data['vetos'][veto_idx]['team'] = \
-                1 - self.__data['vetos'][veto_idx]['team']
+        for veto_idx in range(len(self.__data['vetoes'])):
+            self.__data['vetoes'][veto_idx]['team'] = \
+                1 - self.__data['vetoes'][veto_idx]['team']
         self.__emitSignal('meta')
 
     def getSwappedIdx(self, idx):
@@ -251,35 +251,35 @@ class MatchData(QObject):
 
         return False
 
-    def setNoVetos(self, no_vetos):
-        """Set the number of vetos."""
-        no_vetos = int(no_vetos)
-        self.__data['no_vetos'] = int(no_vetos)
-        vetos = []
-        for i in range(no_vetos):
+    def setNoVetoes(self, no_vetoes):
+        """Set the number of vetoes."""
+        no_vetoes = int(no_vetoes)
+        self.__data['no_vetoes'] = int(no_vetoes)
+        vetoes = []
+        for i in range(no_vetoes):
             try:
-                sc2_map = self.__data['vetos'][i]['map']
+                sc2_map = self.__data['vetoes'][i]['map']
             except Exception:
                 sc2_map = "TBD"
             try:
-                team = self.__data['vetos'][i]['team']
+                team = self.__data['vetoes'][i]['team']
             except Exception:
                 team = i % 2
-            vetos.append({'map': sc2_map, 'team': team})
+            vetoes.append({'map': sc2_map, 'team': team})
 
-        self.__data['vetos'] = vetos
+        self.__data['vetoes'] = vetoes
 
-    def getNoVetos(self):
-        """Get the number of vetos."""
-        return int(self.__data.get('no_vetos', 0))
+    def getNoVetoes(self):
+        """Get the number of vetoes."""
+        return int(self.__data.get('no_vetoes', 0))
 
-    def setCustom(self, regular_sets, allkill, solo, ace_sets=0, vetos=0):
+    def setCustom(self, regular_sets, allkill, solo, ace_sets=0, vetoes=0):
         """Set a custom match format."""
         regular_sets = int(regular_sets)
         ace_sets = int(ace_sets)
         self.setNoSets(regular_sets, ace_sets)
         self.resetLabels()
-        self.setNoVetos(vetos)
+        self.setNoVetoes(vetoes)
         self.setAllKill(bool(allkill))
         self.setProvider("Custom")
         self.setID(0)
@@ -300,7 +300,7 @@ class MatchData(QObject):
 
             self.resetLabels()
 
-            for idx in range(self.getNoVetos()):
+            for idx in range(self.getNoVetoes()):
                 self.setVeto(idx, 'TBD', idx % 2)
 
             self.setLeague("TBD")
@@ -463,16 +463,16 @@ class MatchData(QObject):
     def setVeto(self, idx, sc2_map="TBD", team=None):
         """Set a map veto."""
         try:
-            if(not (idx >= 0 and idx < self.__data['no_vetos'])):
+            if(not (idx >= 0 and idx < self.__data['no_vetoes'])):
                 return False
             sc2_map, __ = autoCorrectMap(sc2_map)
             if team not in [0, 1]:
-                team = self.__data['vetos'][idx]['team']
-            is_new_map = self.__data['vetos'][idx]['map'] != sc2_map
-            if(is_new_map or self.__data['vetos'][idx]['team'] != team):
-                old_map = self.__data['vetos'][idx]['map']
-                self.__data['vetos'][idx]['map'] = sc2_map
-                self.__data['vetos'][idx]['team'] = team
+                team = self.__data['vetoes'][idx]['team']
+            is_new_map = self.__data['vetoes'][idx]['map'] != sc2_map
+            if(is_new_map or self.__data['vetoes'][idx]['team'] != team):
+                old_map = self.__data['vetoes'][idx]['map']
+                self.__data['vetoes'][idx]['map'] = sc2_map
+                self.__data['vetoes'][idx]['team'] = team
                 self.__emitSignal(
                     'data', 'map_veto',
                     {'idx': idx, 'map': sc2_map,
@@ -484,10 +484,10 @@ class MatchData(QObject):
     def getVeto(self, idx):
         """Get the map of a veto."""
         try:
-            if(not (idx >= 0 and idx < self.__data['no_vetos'])):
+            if(not (idx >= 0 and idx < self.__data['no_vetoes'])):
                 return {'idx': idx, 'map': 'TBD', 'team':  idx % 2}
 
-            return self.__data['vetos'][idx]
+            return self.__data['vetoes'][idx]
         except Exception:
             return {'idx': idx, 'map': 'TBD', 'team':  idx % 2}
 
@@ -517,14 +517,14 @@ class MatchData(QObject):
             return False
 
     def yieldMaps(self):
-        """Yield all maps (including vetos)."""
+        """Yield all maps (including vetoes)."""
         yielded = set()
         for idx in range(self.getNoSets()):
             sc2_map = self.getMap(idx)
             if sc2_map and sc2_map.lower() != "TBD" and sc2_map not in yielded:
                 yield sc2_map
                 yielded.add(sc2_map)
-        for idx in range(self.getNoVetos()):
+        for idx in range(self.getNoVetoes()):
             sc2_map = self.getVeto(idx).get('map', 'TBD')
             if sc2_map and sc2_map.lower() != "TBD" and sc2_map not in yielded:
                 yield sc2_map
@@ -648,7 +648,7 @@ class MatchData(QObject):
 
     def isMapVetoed(self, sc2_map):
         """Return if map is vetoed."""
-        for idx in range(self.getNoVetos()):
+        for idx in range(self.getNoVetoes()):
             if (sc2_map.lower() == self.getVeto(idx).get('map').lower()):
                 return True
         return False
@@ -972,7 +972,7 @@ class MatchData(QObject):
         """Return the veto data."""
         data = []
 
-        for idx in range(self.getNoVetos()):
+        for idx in range(self.getNoVetoes()):
             veto = self.getVeto(idx)
             data.append(
                 {'map_name': veto['map'],

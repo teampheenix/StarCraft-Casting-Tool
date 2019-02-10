@@ -28,7 +28,7 @@ class WebsocketThread(QThread):
     socketConnectionChanged = pyqtSignal(int, str)
     valid_scopes = ['score', 'mapicons_box_[1-3]', 'mapicons_landscape_[1-3]',
                     'intro', 'mapstats', 'logo_[1-2]', 'ui_logo_[1-2]',
-                    'aligulac', 'countdown', 'vetos']
+                    'aligulac', 'countdown', 'vetoes']
     mapicon_sets = dict()
     scopes = dict()
     intro_state = ''
@@ -251,7 +251,7 @@ class WebsocketThread(QThread):
                 processedData[idx + 1] = data[idx + 1]
                 self.mapicon_sets[path].add(idx + 1)
             self.sendData2WS(websocket, 'DATA', processedData)
-        elif primary_scope == 'vetos':
+        elif primary_scope == 'vetoes':
             self.changePadding(primary_scope, websocket=websocket)
             data = self.__controller.matchControl.\
                 activeMatch().getVetoData()
@@ -351,9 +351,9 @@ class WebsocketThread(QThread):
             else:
                 self.sendData2WS(websocket, "CHANGE_PADDING",
                                  {'padding': padding})
-        elif primary_scope == 'vetos':
+        elif primary_scope == 'vetoes':
             padding = scctool.settings.config.parser.getfloat(
-                "Vetos", 'padding')
+                "Vetoes", 'padding')
             padding = f'{padding}px'
             if websocket is None:
                 self.sendData2Path(path, "CHANGE_PADDING",

@@ -185,16 +185,16 @@ class MainController:
             self.view.le_url_custom.setText(
                 self.matchControl.selectedMatch().getURL())
 
-            vetos = self.matchControl.selectedMatch().getNoVetos()
-            index = self.view.cb_vetos.findText(
-                str(vetos),
+            vetoes = self.matchControl.selectedMatch().getNoVetoes()
+            index = self.view.cb_vetoes.findText(
+                str(vetoes),
                 Qt.MatchFixedString)
             if index >= 0:
-                self.view.cb_vetos.setCurrentIndex(index)
+                self.view.cb_vetoes.setCurrentIndex(index)
 
             idx = self.matchControl.selectedMatchIdx()
             matchWidget = self.view.matchDataTabWidget.widget(idx)
-            matchWidget.toggleVetos(vetos > 0)
+            matchWidget.toggleVetoes(vetoes > 0)
 
             self.autoSetNextMap()
 
@@ -209,7 +209,7 @@ class MainController:
         matchWidget.updateLogos(force)
 
     def applyCustom(self, bestof, allkill, solo,
-                    minSets, url, vetos, extend_ace):
+                    minSets, url, vetoes, extend_ace):
         """Apply a custom match format."""
         msg = ''
         try:
@@ -218,7 +218,7 @@ class MainController:
             with match.emitLock(
                     True,
                     match.metaChanged):
-                match.setCustom(bestof, allkill, solo, extend_ace, vetos)
+                match.setCustom(bestof, allkill, solo, extend_ace, vetoes)
                 match.setMinSets(minSets)
                 match.setURL(url)
                 self.matchControl.writeJsonFile()
@@ -932,7 +932,7 @@ class MainController:
                                                    'DATA',
                                                    processedData)
         data = self.matchControl.activeMatch().getVetoData()
-        self.websocketThread.sendData2Path('vetos', "DATA", data)
+        self.websocketThread.sendData2Path('vetoes', "DATA", data)
 
     def handleMatchDataChange(self, label, obj):
         """Send new data to browser sources due to a change of the map data."""
@@ -996,7 +996,7 @@ class MainController:
                         'mapstats', 'MARK_VETOED',
                         {'map': sc2_map, 'vetoed': True})
             self.websocketThread.sendData2Path(
-                'vetos', "VETO",
+                'vetoes', "VETO",
                 {'idx': obj['idx'],
                  'map_name': obj['map'],
                  'map_img': self.getMapImg(obj['map']),

@@ -30,7 +30,7 @@ ttsDir = os.path.join(dataDir, "tts")
 
 windows = (platform.system().lower() == "windows")
 max_no_sets = 19
-max_no_vetos = 9
+max_no_vetoes = 9
 races = ("Random", "Terran", "Protoss", "Zerg")
 
 this.profileManager = ProfileManager()

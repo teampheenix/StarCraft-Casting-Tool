@@ -336,11 +336,11 @@ class MainWindow(QMainWindow):
                              {'name': _('Icon Set {}').format(3),
                               'icon': 'three.png',
                               'file': 'mapicons_landscape_3.html'}]})
-        srcs.append({'name': _('Vetos'),
+        srcs.append({'name': _('Vetoes'),
                      'icon': 'veto.png',
-                     'file': 'vetos.html',
+                     'file': 'vetoes.html',
                      'settings': lambda: self.openBrowserSourcesDialog(
-            'vetos')})
+            'vetoes')})
         srcs.append({'name': _('Misc'),
                      'icon': 'misc.png',
                      'sub': [{'name': _('Logo {}').format(1),
@@ -767,15 +767,15 @@ class MainWindow(QMainWindow):
             self.cb_ace_bo.setEnabled(False)
             self.cb_ace_bo.currentIndexChanged.connect(self.change_ace_bo)
             container.addWidget(self.cb_ace_bo, 0)
-            container.addWidget(QLabel(_("map(s). ")), 0)
+            container.addWidget(QLabel(_("map(s).") + ' '), 0)
 
-            self.cb_vetos = QComboBox()
-            for idx in range(scctool.settings.max_no_vetos + 1):
-                self.cb_vetos.addItem(str(idx))
-            self.cb_vetos.setCurrentIndex(0)
-            self.cb_vetos.currentIndexChanged.connect(self.change_vetos)
-            container.addWidget(self.cb_vetos, 0)
-            container.addWidget(QLabel(_("Vetos. ")), 0)
+            self.cb_vetoes = QComboBox()
+            for idx in range(scctool.settings.max_no_vetoes + 1):
+                self.cb_vetoes.addItem(str(idx))
+            self.cb_vetoes.setCurrentIndex(0)
+            self.cb_vetoes.currentIndexChanged.connect(self.change_vetoes)
+            container.addWidget(self.cb_vetoes, 0)
+            container.addWidget(QLabel(_("Vetoes.") + ' '), 0)
 
             label = QLabel("")
             container.addWidget(label, 1)
@@ -896,8 +896,8 @@ class MainWindow(QMainWindow):
         """Handle a change of ace bo."""
         self.highlightApplyCustom()
 
-    def change_vetos(self, vetos):
-        """Handle a change of no vetos."""
+    def change_vetoes(self, vetoes):
+        """Handle a change of no vetoes."""
         self.highlightApplyCustom()
 
     def createHorizontalGroupBox(self):
@@ -1095,7 +1095,7 @@ class MainWindow(QMainWindow):
                     self.cb_solo.isChecked(),
                     int(self.cb_minSets.currentText()),
                     self.le_url_custom.text().strip(),
-                    int(self.cb_vetos.currentText()),
+                    int(self.cb_vetoes.currentText()),
                     ace_bo)
                 self.statusBar().showMessage(msg)
             self.highlightApplyCustom(False)

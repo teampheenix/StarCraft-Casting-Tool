@@ -163,7 +163,7 @@ def setDefaultConfigAll():
     setDefaultConfig("Style", "use_custom_font", "False")
     setDefaultConfig("Style", "custom_font", "Verdana")
     setDefaultConfig("Style", "countdown", "Minimal")
-    setDefaultConfig("Style", "vetos", "Default")
+    setDefaultConfig("Style", "vetoes", "Default")
 
     setDefaultConfig("Intros", "hotkey_player1", "")
     setDefaultConfig("Intros", "hotkey_player2", "")
@@ -191,7 +191,7 @@ def setDefaultConfigAll():
     setDefaultConfig("Countdown", 'datetime', '2018-11-18 20:00')
     setDefaultConfig("Countdown", 'static', 'False')
 
-    setDefaultConfig("Vetos", "padding", "2.0")
+    setDefaultConfig("Vetoes", "padding", "2.0")
 
 
 def renameConfigOptions():

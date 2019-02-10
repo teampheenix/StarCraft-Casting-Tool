@@ -15,9 +15,11 @@
 
 * Vetoed maps can now be marked in the MapStats Browser Source.
 
-* Added option to enter map vetos.
+* Added option to enter map vetoes.
 
 ### Changes
+
+* Executable can now be placed in folders that require admin priviliges.
 
 * Reworked the Custom Match-Format Tab.
 

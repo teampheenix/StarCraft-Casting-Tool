@@ -6,7 +6,7 @@ var initNeeded = true;
 var padding = "2px";
 var tweens = {};
 var tweenInitial = new TimelineMax();
-var controller = new Controller(profile, "vetos");
+var controller = new Controller(profile, "vetoes");
 
 init();
 

@@ -26,7 +26,7 @@ class MatchDataWidget(QWidget):
         super().__init__(parent)
 
         self.max_no_sets = scctool.settings.max_no_sets
-        self.max_no_vetos = int(scctool.settings.max_no_sets / 2) * 2
+        self.max_no_vetoes = int(scctool.settings.max_no_sets / 2) * 2
         self.scoreWidth = 35
         self.raceWidth = 50
         self.labelWidth = 35
@@ -325,17 +325,17 @@ class MatchDataWidget(QWidget):
         self.updateTeamCompleters()
 
     def createVetoGroupBox(self):
-        """Create a group box to insert vetos."""
-        self.veto_groupbox = QGroupBox(_('Map Vetos'))
+        """Create a group box to insert vetoes."""
+        self.veto_groupbox = QGroupBox(_('Map Vetoes'))
         self.veto_groupbox.setVisible(False)
         box_layout = QGridLayout()
-        rows = int(self.max_no_vetos / 2)
-        self.le_veto_maps = [MapLineEdit() for i in range(self.max_no_vetos)]
-        self.veto_label = [QLabel(f'#{i+1}') for i in range(self.max_no_vetos)]
+        rows = int(self.max_no_vetoes / 2)
+        self.le_veto_maps = [MapLineEdit() for i in range(self.max_no_vetoes)]
+        self.veto_label = [QLabel(f'#{i+1}') for i in range(self.max_no_vetoes)]
         self.sl_veto = [QSlider(Qt.Horizontal)
-                        for i in range(self.max_no_vetos)]
+                        for i in range(self.max_no_vetoes)]
         self.row_label = [QLabel('') for y in range(rows)]
-        for veto_idx in range(self.max_no_vetos):
+        for veto_idx in range(self.max_no_vetoes):
             row = veto_idx / 2
             col = (veto_idx % 2) * 2
             veto_layout = QHBoxLayout()
@@ -362,16 +362,16 @@ class MatchDataWidget(QWidget):
             self.sl_veto[veto_idx].setTickInterval(1)
             self.sl_veto[veto_idx].setTracking(False)
             self.sl_veto[veto_idx].setToolTip(
-                _('Select which player/team vetos.'))
+                _('Select which player/team vetoes.'))
             self.sl_veto[veto_idx].setFixedWidth(self.scoreWidth - 5)
             veto_layout.addWidget(self.sl_veto[veto_idx])
             box_layout.addLayout(veto_layout, row, col)
-        for idx in range(int(self.max_no_vetos / 2)):
+        for idx in range(int(self.max_no_vetoes / 2)):
             self.row_label[idx].setFixedWidth(self.labelWidth / 2 + 5)
             box_layout.addWidget(self.row_label[idx], idx, 1)
         self.veto_groupbox.setLayout(box_layout)
 
-    def toggleVetos(self, visible=True):
+    def toggleVetoes(self, visible=True):
         """Toggle the visibility of the veto group box."""
         self.veto_groupbox.setVisible(visible)
 
@@ -541,7 +541,7 @@ class MatchDataWidget(QWidget):
             completer.activated.connect(self.le_map[i].completerFinished)
             self.le_map[i].setCompleter(completer)
 
-        for i in range(self.max_no_vetos):
+        for i in range(self.max_no_vetoes):
             map_list = scctool.settings.maps.copy()
             if 'TBD' in map_list:
                 map_list.remove('TBD')
@@ -643,9 +643,9 @@ class MatchDataWidget(QWidget):
                 self.sl_score[i].show()
                 self.label_set[i].show()
 
-            no_vetos = self.matchData.getNoVetos()
-            for i in range(self.max_no_vetos):
-                visible = no_vetos > i
+            no_vetoes = self.matchData.getNoVetoes()
+            for i in range(self.max_no_vetoes):
+                visible = no_vetoes > i
                 self.le_veto_maps[i].setVisible(visible)
                 self.veto_label[i].setVisible(visible)
                 self.sl_veto[i].setVisible(visible)
