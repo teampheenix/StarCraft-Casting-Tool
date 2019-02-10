@@ -1,6 +1,13 @@
 # Changelog
 
 
+## v2.7.1 (2019-02-10)
+
+### Fix
+
+* Fixed a bug that would prevent the misc setttings to show.
+
+
 ## v2.7.0 (2019-02-10)
 
 ### New
