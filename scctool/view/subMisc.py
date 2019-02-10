@@ -824,8 +824,8 @@ class SubwindowMisc(QWidget):
 
         file = self.controller.getMapImg(mapname, True)
         pixmap = QPixmap(file)
-        height = map.height()
-        width = map.width()
+        height = pixmap.height()
+        width = pixmap.width()
         ext = os.path.splitext(file)[1].replace(".", "").upper()
         size = humanize.naturalsize(os.path.getsize(file))
         pixmap = QPixmap(file).scaled(

@@ -114,7 +114,7 @@ class AliasManager:
         """Get the list of player aliases."""
         player_list = dict()
         for alias, player in self.__player_alias.items():
-            if player not in list.keys():
+            if player not in player_list.keys():
                 player_list[player] = []
             player_list[player].append(alias)
         return player_list
