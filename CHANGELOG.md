@@ -1,6 +1,35 @@
 # Changelog
 
 
+## v2.7.0 (2019-02-10)
+
+### New
+
+* Added a new Veto Browser Source.
+
+* Added '(Race1)' and '(Race2)' placeholders for Twitch and Nightbot (in a team match these refer to player's races of the next set).
+
+* Added 'bestof.txt' file to 'casting_data'.
+
+* "BoX" can now be displayed in the score browser source as demonstrated by the "Blue" skin.
+
+* Vetoed maps can now be marked in the MapStats Browser Source.
+
+* Added option to enter map vetos.
+
+### Changes
+
+* Reworked the Custom Match-Format Tab.
+
+* Updated map images of Acid Plant, Automaton, Cyber Forest, Dreamcatcher, Kairos Junction, King's Cove, New Repuganancy, Para Site, Stasis, and Year Zero.
+
+### Fix
+
+* Fixed a bug that would prevent interaction with the mapstats browser source in OBS when using the 'StarCraft 2' skin.
+
+* Fixed bug where the maps would not be order alphabetically in mapstats browser source.
+
+
 ## v2.6.2 (2019-01-19)
 
 ### Changes
