@@ -26,6 +26,7 @@
 -   **Animated Player Intros** in `casting_html` including Text-to-Speech, playername & race via SC2-Client, team with logo via SCC Tool
 -   **Map Preview with Statistics** from Liquipedia in `casting_html`
 -   **Aligulac Browser Source** that predicts the outcome of a 1vs1 match in `casting_html`
+-   **Map Vetoes Browser Source** in `vetoes.html`
 -   **Countdown Browser Source** in `countdown.html`
 -   **TXT-files** with match infos in `casting_data`
 -   **Twitch & Nightbot Integration**: Update your stream title or bot commands via a single click or automatically

@@ -15,7 +15,7 @@
 
 * Vetoed maps can now be marked in the MapStats Browser Source.
 
-* Added option to enter map vetoes.
+* Added option to enter map vetos.
 
 ### Changes
 
