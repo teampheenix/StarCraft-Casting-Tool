@@ -252,6 +252,7 @@ class WebsocketThread(QThread):
                 self.mapicon_sets[path].add(idx + 1)
             self.sendData2WS(websocket, 'DATA', processedData)
         elif primary_scope == 'vetos':
+            self.changePadding(primary_scope, websocket=websocket)
             data = self.__controller.matchControl.\
                 activeMatch().getVetoData()
             self.sendData2WS(websocket, "DATA", data)
@@ -343,7 +344,17 @@ class WebsocketThread(QThread):
             setting = primary_scope.replace('mapicons', 'padding')
             padding = scctool.settings.config.parser.getfloat(
                 "MapIcons", setting)
-            padding = '{}px'.format(padding)
+            padding = f'{padding}px'
+            if websocket is None:
+                self.sendData2Path(path, "CHANGE_PADDING",
+                                   {'padding': padding})
+            else:
+                self.sendData2WS(websocket, "CHANGE_PADDING",
+                                 {'padding': padding})
+        elif primary_scope == 'vetos':
+            padding = scctool.settings.config.parser.getfloat(
+                "Vetos", 'padding')
+            padding = f'{padding}px'
             if websocket is None:
                 self.sendData2Path(path, "CHANGE_PADDING",
                                    {'padding': padding})

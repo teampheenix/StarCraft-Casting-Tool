@@ -82,8 +82,8 @@ def findTesserAct(
             import winreg
             key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE,
                                  "SOFTWARE\\WOW6432Node\\Tesseract-OCR")
-            return os.path.normpath(winreg.QueryValueEx(key, "Path")[0]
-                                    + '\\tesseract.exe')
+            return os.path.normpath(winreg.QueryValueEx(key, "Path")[0] +
+                                    '\\tesseract.exe')
     except Exception:
         return default
 
@@ -191,6 +191,8 @@ def setDefaultConfigAll():
     setDefaultConfig("Countdown", 'datetime', '2018-11-18 20:00')
     setDefaultConfig("Countdown", 'static', 'False')
 
+    setDefaultConfig("Vetos", "padding", "2.0")
+
 
 def renameConfigOptions():
     """Delete and rename old config options."""
@@ -242,8 +244,8 @@ def renameConfigOptions():
 def nightbotIsValid():
     """Check if nightbot data is valid."""
     from scctool.settings import nightbot_commands
-    return (len(this.parser.get("Nightbot", "token")) > 0
-            and len(nightbot_commands) > 0)
+    return (len(this.parser.get("Nightbot", "token")) > 0 and
+            len(nightbot_commands) > 0)
 
 
 def twitchIsValid():

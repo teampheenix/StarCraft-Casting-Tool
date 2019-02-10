@@ -336,6 +336,11 @@ class MainWindow(QMainWindow):
                              {'name': _('Icon Set {}').format(3),
                               'icon': 'three.png',
                               'file': 'mapicons_landscape_3.html'}]})
+        srcs.append({'name': _('Vetos'),
+                     'icon': 'veto.png',
+                     'file': 'vetos.html',
+                     'settings': lambda: self.openBrowserSourcesDialog(
+            'vetos')})
         srcs.append({'name': _('Misc'),
                      'icon': 'misc.png',
                      'sub': [{'name': _('Logo {}').format(1),
@@ -791,7 +796,7 @@ class MainWindow(QMainWindow):
                 else:
                     action = self.custom_menu.addAction(custom_format)
                 action.triggered.connect(
-                    lambda x,custom_format=custom_format:
+                    lambda x, custom_format=custom_format:
                         self.applyCustomFormat(custom_format))
             self.pb_applycustom.setMenu(self.custom_menu)
             self.pb_applycustom.setPopupMode(QToolButton.MenuButtonPopup)

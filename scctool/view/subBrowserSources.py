@@ -70,6 +70,7 @@ class SubwindowBrowserSources(QWidget):
         self.createFormGroupMapstats()
         self.createFormGroupMapBox()
         self.createFormGroupMapLandscape()
+        self.createFormGroupVetos()
 
         # Add tabs
         self.tabs.addTab(self.formGroupIntro, _("Intros"))
@@ -77,12 +78,14 @@ class SubwindowBrowserSources(QWidget):
 
         self.tabs.addTab(self.formGroupMapBox, _("Box Map Icons"))
         self.tabs.addTab(self.formGroupMapLandscape, _("Landscape Map Icons"))
+        self.tabs.addTab(self.formGroupVetos, _("Veto Icons"))
 
         table = dict()
         table['intro'] = 0
         table['mapstats'] = 1
         table['mapicons_box'] = 2
         table['mapicons_landscape'] = 3
+        table['vetos'] = 4
         self.tabs.setCurrentIndex(
             table.get(tab, SubwindowBrowserSources.current_tab))
         self.tabs.currentChanged.connect(self.tabChanged)
@@ -320,6 +323,44 @@ class SubwindowBrowserSources(QWidget):
         mainLayout.addItem(QSpacerItem(
             0, 0, QSizePolicy.Minimum, QSizePolicy.Expanding))
         self.formGroupMapBox.setLayout(mainLayout)
+
+    def createFormGroupVetos(self):
+        """Create a QWidget for veto icons."""
+        self.formGroupVetos = QWidget()
+        mainLayout = QVBoxLayout()
+        box = QGroupBox(_("General"))
+        layout = QFormLayout()
+
+        container = QHBoxLayout()
+        self.qb_boxStyle = StyleComboBox(
+            scctool.settings.casting_html_dir + "/src/css/vetos",
+            "vetos")
+        self.qb_boxStyle.connect2WS(self.controller, 'vetos')
+        label = QLabel(_("Style:"))
+        label.setMinimumWidth(120)
+        button = QPushButton(_("Show in Browser"))
+        button.clicked.connect(lambda: self.openHTML(
+            scctool.settings.casting_html_dir + "/vetos.html"))
+        container.addWidget(self.qb_boxStyle, 2)
+        container.addWidget(button, 1)
+        layout.addRow(label, container)
+
+        self.sb_padding_box = QDoubleSpinBox()
+        self.sb_padding_box.setRange(0, 50)
+        self.sb_padding_box.setDecimals(1)
+        self.sb_padding_box.setValue(
+            scctool.settings.config.parser.getfloat("Vetos", "padding"))
+        self.sb_padding_box.setSuffix(" " + _("Pixel"))
+        self.sb_padding_box.valueChanged.connect(
+            lambda x: self.changePadding('vetos', x))
+        layout.addRow(QLabel(
+            _("Icon Padding:") + " "), self.sb_padding_box)
+        box.setLayout(layout)
+        mainLayout.addWidget(box)
+
+        mainLayout.addItem(QSpacerItem(
+            0, 0, QSizePolicy.Minimum, QSizePolicy.Expanding))
+        self.formGroupVetos.setLayout(mainLayout)
 
     def createFormGroupMapLandscape(self):
         """Create a QWidget for the landscape map icons."""
@@ -660,11 +701,18 @@ class SubwindowBrowserSources(QWidget):
 
     def changePadding(self, scope, padding):
         """Change the padding."""
-        scctool.settings.config.parser.set(
-            "MapIcons", f"padding_{scope}",
-            str(padding))
-        self.controller.websocketThread.changePadding(
-            f"mapicons_{scope}", padding)
+        if scope == 'vetos':
+            scctool.settings.config.parser.set(
+                "Vetos", "padding",
+                str(padding))
+            self.controller.websocketThread.changePadding(
+                "vetos", padding)
+        else:
+            scctool.settings.config.parser.set(
+                "MapIcons", f"padding_{scope}",
+                str(padding))
+            self.controller.websocketThread.changePadding(
+                f"mapicons_{scope}", padding)
 
     def saveCloseWindow(self):
         """Save and close window."""

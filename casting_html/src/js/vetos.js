@@ -3,6 +3,7 @@ var isopen = false;
 var reconnectIntervalMs = 5000;
 var data = {};
 var initNeeded = true;
+var padding = "2px";
 var tweens = {};
 var tweenInitial = new TimelineMax();
 var controller = new Controller(profile, "vetos");
@@ -19,7 +20,9 @@ function init() {
 
 function loadStoredData() {
   try {
+    var storage = window.localStorage;
     data = controller.loadData("data", true);
+    setPadding(controller.loadData("padding") || "2px");
   } catch (e) {}
 }
 
@@ -58,6 +61,9 @@ function connectWebsocket() {
       }
     } else if(jsonObject.event === "VETO"){
       handleVeto(jsonObject.data);
+    } else if (jsonObject.event === "CHANGE_PADDING") {
+      setPadding(jsonObject.data.padding);
+
     } else if (jsonObject.event === "CHANGE_STYLE") {
       controller.setStyle(jsonObject.data.file);
     } else if (jsonObject.event === "CHANGE_FONT") {
@@ -211,4 +217,12 @@ function outroAnimation() {
 function refreshData() {
   $("#container").empty();
   handleData();
+}
+
+function setPadding(newPadding) {
+  if (padding !== newPadding) {
+    padding = newPadding;
+    document.documentElement.style.setProperty("--padding", padding);
+    storeData("padding");
+  }
 }
