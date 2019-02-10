@@ -218,9 +218,8 @@ class MainController:
             with match.emitLock(
                     True,
                     match.metaChanged):
-                match.setCustom(bestof, allkill, solo, extend_ace)
+                match.setCustom(bestof, allkill, solo, extend_ace, vetos)
                 match.setMinSets(minSets)
-                match.setNoVetos(vetos)
                 match.setURL(url)
                 self.matchControl.writeJsonFile()
                 self.updateMatchFormat()
@@ -552,8 +551,8 @@ class MainController:
             _('Specify your Twitch Settings to use this feature'),
             '')
 
-        txt = _('Automatically update the title of your' +
-                ' twitch channel in the background.')
+        txt = _('Automatically update the title of your'
+                + ' twitch channel in the background.')
         self.toggleWidget(
             self.view.cb_autoTwitch,
             scctool.settings.config.twitchIsValid(),
@@ -564,8 +563,8 @@ class MainController:
             self.view.cb_autoNightbot,
             scctool.settings.config.nightbotIsValid(),
             _('Specify your Nightbot Settings to use this feature'),
-            _('Automatically update the commands of your' +
-              ' nightbot in the background.'))
+            _('Automatically update the commands of your'
+              + ' nightbot in the background.'))
 
         self.toggleWidget(
             self.view.pb_nightbotupdate,
@@ -582,8 +581,8 @@ class MainController:
                 self.view.cb_autoToggleScore,
                 not network_listener,
                 _('Not available when SC2 is running on a different PC.'),
-                _('Automatically sets the score of your ingame' +
-                  ' UI-interface at the begining of a game.'))
+                _('Automatically sets the score of your ingame'
+                  + ' UI-interface at the begining of a game.'))
 
             self.toggleWidget(
                 self.view.cb_autoToggleProduction,
@@ -932,6 +931,8 @@ class MainController:
                 self.websocketThread.sendData2Path(path,
                                                    'DATA',
                                                    processedData)
+        data = self.matchControl.activeMatch().getVetoData()
+        self.websocketThread.sendData2Path('vetos', "DATA", data)
 
     def handleMatchDataChange(self, label, obj):
         """Send new data to browser sources due to a change of the map data."""
@@ -983,9 +984,9 @@ class MainController:
                     "Mapstats", "mark_vetoed",):
                 sc2_map = obj.get('map')
                 old_map = obj.get('old_map')
-                if(old_map != sc2_map and
-                   old_map != 'TBD' and
-                   not self.matchControl.activeMatch().isMapVetoed(
+                if(old_map != sc2_map
+                   and old_map != 'TBD'
+                   and not self.matchControl.activeMatch().isMapVetoed(
                        old_map)):
                     self.websocketThread.sendData2Path(
                         'mapstats', 'MARK_VETOED',
@@ -994,6 +995,13 @@ class MainController:
                     self.websocketThread.sendData2Path(
                         'mapstats', 'MARK_VETOED',
                         {'map': sc2_map, 'vetoed': True})
+            self.websocketThread.sendData2Path(
+                'vetos', "VETO",
+                {'idx': obj['idx'],
+                 'map_name': obj['map'],
+                 'map_img': self.getMapImg(obj['map']),
+                 'team': obj['team']
+                 })
 
         elif label == 'color':
             for idx in range(0, 2):
@@ -1029,8 +1037,8 @@ class MainController:
                     'icon': obj['set_idx'] + 1,
                     'label': 'player{}'.format(obj['team_idx'] + 1),
                     'text': obj['value']})
-            if(obj['set_idx'] == 0 and
-                    self.matchControl.activeMatch().getSolo()):
+            if(obj['set_idx'] == 0
+                    and self.matchControl.activeMatch().getSolo()):
                 self.websocketThread.sendData2Path(
                     'score', 'CHANGE_TEXT',
                     {'id': 'team{}'.format(obj['team_idx'] + 1),

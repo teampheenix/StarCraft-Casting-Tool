@@ -256,14 +256,13 @@ class MatchData(QObject):
         no_vetos = int(no_vetos)
         self.__data['no_vetos'] = int(no_vetos)
         vetos = []
-
         for i in range(no_vetos):
             try:
                 sc2_map = self.__data['vetos'][i]['map']
             except Exception:
                 sc2_map = "TBD"
             try:
-                team = self.__data['sets'][i]['team']
+                team = self.__data['vetos'][i]['team']
             except Exception:
                 team = i % 2
             vetos.append({'map': sc2_map, 'team': team})
@@ -328,8 +327,8 @@ class MatchData(QObject):
             if(ace_sets == 1):
                 self.setLabel(set_idx, "Ace Map")
             else:
-                self.setLabel(set_idx, "Ace Map "
-                              + str(set_idx - ace_start + 1))
+                self.setLabel(set_idx, "Ace Map " +
+                              str(set_idx - ace_start + 1))
 
     def setNoSets(self, regular_sets=5, ace_sets=0, resetPlayers=False):
         """Set the number of sets/maps."""
@@ -473,6 +472,7 @@ class MatchData(QObject):
             if(is_new_map or self.__data['vetos'][idx]['team'] != team):
                 old_map = self.__data['vetos'][idx]['map']
                 self.__data['vetos'][idx]['map'] = sc2_map
+                self.__data['vetos'][idx]['team'] = team
                 self.__emitSignal(
                     'data', 'map_veto',
                     {'idx': idx, 'map': sc2_map,
@@ -641,8 +641,8 @@ class MatchData(QObject):
     def wasMapPlayed(self, sc2_map):
         """Return if map was already played."""
         for set_idx in range(self.getNoSets()):
-            if (sc2_map.lower() == self.getMap(set_idx).lower()
-                    and self.getMapScore(set_idx) != 0):
+            if (sc2_map.lower() == self.getMap(set_idx).lower() and
+                    self.getMapScore(set_idx) != 0):
                 return True
         return False
 
@@ -676,8 +676,8 @@ class MatchData(QObject):
     def setPlayer(self, team_idx, set_idx, name="TBD", race=False):
         """Set the player of a set."""
         try:
-            if(not (set_idx >= 0 and set_idx < self.__data['no_sets']
-                    and team_idx in range(2))):
+            if(not (set_idx >= 0 and set_idx < self.__data['no_sets'] and
+                    team_idx in range(2))):
                 return False
 
             if(self.__data['players'][team_idx][set_idx]['name'] != name):
@@ -707,8 +707,8 @@ class MatchData(QObject):
     def getPlayer(self, team_idx, set_idx):
         """Get the player (name) of a set."""
         try:
-            if(not (set_idx >= 0 and set_idx < self.__data['no_sets']
-                    and team_idx in range(2))):
+            if(not (set_idx >= 0 and set_idx < self.__data['no_sets'] and
+                    team_idx in range(2))):
                 return False
 
             return self.__data['players'][team_idx][set_idx]['name'].strip()
@@ -719,8 +719,8 @@ class MatchData(QObject):
     def setRace(self, team_idx, set_idx, race="Random"):
         """Set a players race."""
         try:
-            if(not (set_idx >= 0 and set_idx < self.__data['no_sets']
-                    and team_idx in range(2))):
+            if(not (set_idx >= 0 and set_idx < self.__data['no_sets'] and
+                    team_idx in range(2))):
                 return False
 
             race = getRace(race)
@@ -738,8 +738,8 @@ class MatchData(QObject):
     def getRace(self, team_idx, set_idx):
         """Get a players race."""
         try:
-            if(not (set_idx >= 0 and set_idx < self.__data['no_sets']
-                    and team_idx in range(2))):
+            if(not (set_idx >= 0 and set_idx < self.__data['no_sets'] and
+                    team_idx in range(2))):
                 return False
 
             return getRace(self.__data['players'][team_idx][set_idx]['race'])
@@ -968,13 +968,26 @@ class MatchData(QObject):
 
         return data
 
+    def getVetoData(self):
+        """Return the veto data."""
+        data = []
+
+        for idx in range(self.getNoVetos()):
+            veto = self.getVeto(idx)
+            data.append(
+                {'map_name': veto['map'],
+                 'map_img': self.__controller.getMapImg(veto['map']),
+                 'team': veto['team']})
+
+        return data
+
     def getScoreIconColor(self, team_idx, set_idx):
         """Return the score icon color."""
         score = self.getMapScore(set_idx)
         team = 2 * team_idx - 1
         if score == 0:
-            if (set_idx >= self.getMinSets()
-                    and max(self.getScore()) > int(self.getBestOf() / 2)):
+            if (set_idx >= self.getMinSets() and
+                    max(self.getScore()) > int(self.getBestOf() / 2)):
                 return scctool.settings.config.parser.get(
                     "MapIcons",
                     "notplayed_color")
@@ -1013,9 +1026,9 @@ class MatchData(QObject):
             score_color = border_color
             opacity = 0.0
         else:
-            if (score == 0
-                and set_idx >= self.getMinSets()
-                    and max(self.getScore()) > int(self.getBestOf() / 2)):
+            if (score == 0 and
+                set_idx >= self.getMinSets() and
+                    max(self.getScore()) > int(self.getBestOf() / 2)):
                 border_color = scctool.settings.config.parser.get(
                     "MapIcons",
                     "notplayed_color")

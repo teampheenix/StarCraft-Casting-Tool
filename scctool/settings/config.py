@@ -163,6 +163,7 @@ def setDefaultConfigAll():
     setDefaultConfig("Style", "use_custom_font", "False")
     setDefaultConfig("Style", "custom_font", "Verdana")
     setDefaultConfig("Style", "countdown", "Minimal")
+    setDefaultConfig("Style", "vetos", "Default")
 
     setDefaultConfig("Intros", "hotkey_player1", "")
     setDefaultConfig("Intros", "hotkey_player2", "")

@@ -28,7 +28,7 @@ class WebsocketThread(QThread):
     socketConnectionChanged = pyqtSignal(int, str)
     valid_scopes = ['score', 'mapicons_box_[1-3]', 'mapicons_landscape_[1-3]',
                     'intro', 'mapstats', 'logo_[1-2]', 'ui_logo_[1-2]',
-                    'aligulac', 'countdown']
+                    'aligulac', 'countdown', 'vetos']
     mapicon_sets = dict()
     scopes = dict()
     intro_state = ''
@@ -251,6 +251,10 @@ class WebsocketThread(QThread):
                 processedData[idx + 1] = data[idx + 1]
                 self.mapicon_sets[path].add(idx + 1)
             self.sendData2WS(websocket, 'DATA', processedData)
+        elif primary_scope == 'vetos':
+            data = self.__controller.matchControl.\
+                activeMatch().getVetoData()
+            self.sendData2WS(websocket, "DATA", data)
         elif primary_scope == 'countdown':
             self.sendData2WS(websocket, "DATA", self.getCountdownData())
         elif path == 'logo_1':
