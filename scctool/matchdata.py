@@ -333,18 +333,24 @@ class MatchData(QObject):
                 self.setLabel(set_idx, "Ace Map "
                               + str(set_idx - ace_start + 1))
 
+    @classmethod
+    def calcTotalSets(cls, regular_sets, ace_sets):
+        """Calculate the total number of sets."""
+        if ace_sets > 0:
+            if regular_sets % 2:
+                total_sets = regular_sets + ace_sets - 1
+            else:
+                total_sets = regular_sets + ace_sets
+        else:
+            total_sets = regular_sets
+        return total_sets
+
     def setNoSets(self, regular_sets=5, ace_sets=0, resetPlayers=False):
         """Set the number of sets/maps."""
         try:
             regular_sets = int(regular_sets)
             ace_sets = int(ace_sets)
-            if ace_sets > 0:
-                if regular_sets % 2:
-                    total_sets = regular_sets + ace_sets - 1
-                else:
-                    total_sets = regular_sets + ace_sets
-            else:
-                total_sets = regular_sets
+            total_sets = self.calcTotalSets(regular_sets, ace_sets)
 
             if(total_sets < 0):
                 total_sets = 0

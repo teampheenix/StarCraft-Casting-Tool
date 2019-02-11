@@ -552,7 +552,7 @@ class MainController:
             '')
 
         txt = _('Automatically update the title of your'
-                + ' twitch channel in the background.')
+                ' twitch channel in the background.')
         self.toggleWidget(
             self.view.cb_autoTwitch,
             scctool.settings.config.twitchIsValid(),
@@ -564,7 +564,7 @@ class MainController:
             scctool.settings.config.nightbotIsValid(),
             _('Specify your Nightbot Settings to use this feature'),
             _('Automatically update the commands of your'
-              + ' nightbot in the background.'))
+              ' nightbot in the background.'))
 
         self.toggleWidget(
             self.view.pb_nightbotupdate,
@@ -582,7 +582,7 @@ class MainController:
                 not network_listener,
                 _('Not available when SC2 is running on a different PC.'),
                 _('Automatically sets the score of your ingame'
-                  + ' UI-interface at the begining of a game.'))
+                  ' UI-interface at the begining of a game.'))
 
             self.toggleWidget(
                 self.view.cb_autoToggleProduction,
@@ -934,129 +934,156 @@ class MainController:
         data = self.matchControl.activeMatch().getVetoData()
         self.websocketThread.sendData2Path('vetoes', "DATA", data)
 
+    def handleTeamChange(self, obj):
+        if not self.matchControl.activeMatch().getSolo():
+            self.websocketThread.sendData2Path(
+                'score', 'CHANGE_TEXT',
+                {'id': 'team{}'.format(obj['idx'] + 1),
+                 'text': obj['value']})
+
+    def handleBoChange(self, obj):
+        self.websocketThread.sendData2Path(
+            'score', 'CHANGE_TEXT', {
+                'id': 'bestof',
+                'text': f"{obj['value']}"})
+
+    def handleScoreChange(self, obj):
+        score = self.matchControl.activeMatch().getScore()
+        for idx in range(0, 2):
+            self.websocketThread.sendData2Path(
+                'score', 'CHANGE_TEXT', {
+                    'id': 'score{}'.format(idx + 1),
+                    'text': str(score[idx])})
+            color = self.matchControl.activeMatch().getScoreIconColor(
+                idx, obj['set_idx'])
+            self.websocketThread.sendData2Path(
+                'score', 'CHANGE_SCORE', {
+                    'teamid': idx + 1,
+                    'setid': obj['set_idx'] + 1,
+                    'color': color})
+        colorData = self.matchControl.activeMatch(
+        ).getColorData(obj['set_idx'])
+        self.websocketThread.sendData2Path(
+            ['mapicons_box', 'mapicons_landscape'],
+            'CHANGE_SCORE', {
+                'winner': obj['value'],
+                'setid': obj['set_idx'] + 1,
+                'score_color': colorData['score_color'],
+                'border_color': colorData['border_color'],
+                'hide': colorData['hide'],
+                'opacity': colorData['opacity']})
+        if scctool.settings.config.parser.getboolean(
+                "Mapstats", "mark_played",):
+            sc2_map = self.matchControl.activeMatch().getMap(
+                obj['set_idx'])
+            played = obj['value'] != 0
+            self.websocketThread.sendData2Path(
+                'mapstats', 'MARK_PLAYED',
+                {'map': sc2_map, 'played': played})
+
+    def handleVetoChange(self, obj):
+        if scctool.settings.config.parser.getboolean(
+                "Mapstats", "mark_vetoed",):
+            sc2_map = obj.get('map')
+            old_map = obj.get('old_map')
+            if(old_map != sc2_map and
+               old_map != 'TBD' and
+               not self.matchControl.activeMatch().isMapVetoed(
+                   old_map)):
+                self.websocketThread.sendData2Path(
+                    'mapstats', 'MARK_VETOED',
+                    {'map': old_map, 'vetoed': False})
+            if sc2_map.lower() != 'tbd':
+                self.websocketThread.sendData2Path(
+                    'mapstats', 'MARK_VETOED',
+                    {'map': sc2_map, 'vetoed': True})
+        self.websocketThread.sendData2Path(
+            'vetoes', "VETO",
+            {'idx': obj['idx'],
+             'map_name': obj['map'],
+             'map_img': self.getMapImg(obj['map']),
+             'team': obj['team']
+             })
+
+    def handleColorChange(self, obj):
+        for idx in range(0, 2):
+            self.websocketThread.sendData2Path(
+                'score', 'CHANGE_SCORE', {
+                    'teamid': idx + 1,
+                    'setid': obj['set_idx'] + 1,
+                    'color': obj['score_color']})
+        self.websocketThread.sendData2Path(
+            ['mapicons_box', 'mapicons_landscape'],
+            'CHANGE_SCORE', {
+                'winner': 0,
+                'setid': obj['set_idx'] + 1,
+                'score_color': obj['score_color'],
+                'border_color': obj['border_color'],
+                'hide': obj['hide'],
+                'opacity': obj['opacity']})
+
+    def handleColorDataChange(self, obj):
+        self.websocketThread.sendData2Path(
+            ['mapicons_box', 'mapicons_landscape'], 'CHANGE_SCORE', {
+                'winner': obj['score'],
+                'setid': obj['set_idx'] + 1,
+                'score_color': obj['score_color'],
+                'border_color': obj['border_color'],
+                'hide': obj['hide'],
+                'opacity': obj['opacity']})
+
+    def handlePlayerChange(self, obj):
+        self.websocketThread.sendData2Path(
+            ['mapicons_box', 'mapicons_landscape'],
+            'CHANGE_TEXT', {
+                'icon': obj['set_idx'] + 1,
+                'label': 'player{}'.format(obj['team_idx'] + 1),
+                'text': obj['value']})
+        if(obj['set_idx'] == 0 and
+                self.matchControl.activeMatch().getSolo()):
+            self.websocketThread.sendData2Path(
+                'score', 'CHANGE_TEXT',
+                {'id': 'team{}'.format(obj['team_idx'] + 1),
+                 'text': obj['value']})
+
+    def handleRaceChange(self, obj):
+        self.websocketThread.sendData2Path(
+            ['mapicons_box', 'mapicons_landscape'],
+            'CHANGE_RACE', {
+                'icon': obj['set_idx'] + 1,
+                'team': obj['team_idx'] + 1,
+                'race': obj['value'].lower()})
+
+    def handleMapChange(self, obj):
+        self.websocketThread.sendData2Path(
+            ['mapicons_box', 'mapicons_landscape'],
+            'CHANGE_MAP', {
+                'icon': obj['set_idx'] + 1,
+                'map': obj['value'],
+                'map_img': self.getMapImg(obj['value'])})
+
     def handleMatchDataChange(self, label, obj):
         """Send new data to browser sources due to a change of the map data."""
         if label == 'team':
-            if not self.matchControl.activeMatch().getSolo():
-                self.websocketThread.sendData2Path(
-                    'score', 'CHANGE_TEXT',
-                    {'id': 'team{}'.format(obj['idx'] + 1),
-                     'text': obj['value']})
+            self.handleTeamChange(obj)
         elif label == 'bestof':
-            self.websocketThread.sendData2Path(
-                'score', 'CHANGE_TEXT', {
-                    'id': 'bestof',
-                    'text': f"{obj['value']}"})
+            self.handleBoChange(obj)
         elif label == 'score':
-            score = self.matchControl.activeMatch().getScore()
-            for idx in range(0, 2):
-                self.websocketThread.sendData2Path(
-                    'score', 'CHANGE_TEXT', {
-                        'id': 'score{}'.format(idx + 1),
-                        'text': str(score[idx])})
-                color = self.matchControl.activeMatch().getScoreIconColor(
-                    idx, obj['set_idx'])
-                self.websocketThread.sendData2Path(
-                    'score', 'CHANGE_SCORE', {
-                        'teamid': idx + 1,
-                        'setid': obj['set_idx'] + 1,
-                        'color': color})
-            colorData = self.matchControl.activeMatch(
-            ).getColorData(obj['set_idx'])
-            self.websocketThread.sendData2Path(
-                ['mapicons_box', 'mapicons_landscape'],
-                'CHANGE_SCORE', {
-                    'winner': obj['value'],
-                    'setid': obj['set_idx'] + 1,
-                    'score_color': colorData['score_color'],
-                    'border_color': colorData['border_color'],
-                    'hide': colorData['hide'],
-                    'opacity': colorData['opacity']})
-            if scctool.settings.config.parser.getboolean(
-                    "Mapstats", "mark_played",):
-                sc2_map = self.matchControl.activeMatch().getMap(
-                    obj['set_idx'])
-                played = obj['value'] != 0
-                self.websocketThread.sendData2Path(
-                    'mapstats', 'MARK_PLAYED', {'map': sc2_map, 'played': played})
+            self.handleScoreChange(obj)
         elif label == 'map_veto':
-            if scctool.settings.config.parser.getboolean(
-                    "Mapstats", "mark_vetoed",):
-                sc2_map = obj.get('map')
-                old_map = obj.get('old_map')
-                if(old_map != sc2_map
-                   and old_map != 'TBD'
-                   and not self.matchControl.activeMatch().isMapVetoed(
-                       old_map)):
-                    self.websocketThread.sendData2Path(
-                        'mapstats', 'MARK_VETOED',
-                        {'map': old_map, 'vetoed': False})
-                if sc2_map.lower() != 'tbd':
-                    self.websocketThread.sendData2Path(
-                        'mapstats', 'MARK_VETOED',
-                        {'map': sc2_map, 'vetoed': True})
-            self.websocketThread.sendData2Path(
-                'vetoes', "VETO",
-                {'idx': obj['idx'],
-                 'map_name': obj['map'],
-                 'map_img': self.getMapImg(obj['map']),
-                 'team': obj['team']
-                 })
-
+            self.handleVetoChange(obj)
         elif label == 'color':
-            for idx in range(0, 2):
-                self.websocketThread.sendData2Path(
-                    'score', 'CHANGE_SCORE', {
-                        'teamid': idx + 1,
-                        'setid': obj['set_idx'] + 1,
-                        'color': obj['score_color']})
-            self.websocketThread.sendData2Path(
-                ['mapicons_box', 'mapicons_landscape'],
-                'CHANGE_SCORE', {
-                    'winner': 0,
-                    'setid': obj['set_idx'] + 1,
-                    'score_color': obj['score_color'],
-                    'border_color': obj['border_color'],
-                    'hide': obj['hide'],
-                    'opacity': obj['opacity']})
+            self.handleColorChange(obj)
         elif label == 'color-data':
-            self.websocketThread.sendData2Path(
-                ['mapicons_box', 'mapicons_landscape'], 'CHANGE_SCORE', {
-                    'winner': obj['score'],
-                    'setid': obj['set_idx'] + 1,
-                    'score_color': obj['score_color'],
-                    'border_color': obj['border_color'],
-                    'hide': obj['hide'],
-                    'opacity': obj['opacity']})
+            self.handleColorDataChange(obj)
         elif label == 'outcome':
             self.websocketThread.sendData2Path('score', 'SET_WINNER', obj)
         elif label == 'player':
-            self.websocketThread.sendData2Path(
-                ['mapicons_box', 'mapicons_landscape'],
-                'CHANGE_TEXT', {
-                    'icon': obj['set_idx'] + 1,
-                    'label': 'player{}'.format(obj['team_idx'] + 1),
-                    'text': obj['value']})
-            if(obj['set_idx'] == 0
-                    and self.matchControl.activeMatch().getSolo()):
-                self.websocketThread.sendData2Path(
-                    'score', 'CHANGE_TEXT',
-                    {'id': 'team{}'.format(obj['team_idx'] + 1),
-                     'text': obj['value']})
+            self.handlePlayerChange(obj)
         elif label == 'race':
-            self.websocketThread.sendData2Path(
-                ['mapicons_box', 'mapicons_landscape'],
-                'CHANGE_RACE', {
-                    'icon': obj['set_idx'] + 1,
-                    'team': obj['team_idx'] + 1,
-                    'race': obj['value'].lower()})
+            self.handleRaceChange(obj)
         elif label == 'map':
-            self.websocketThread.sendData2Path(
-                ['mapicons_box', 'mapicons_landscape'],
-                'CHANGE_MAP', {
-                    'icon': obj['set_idx'] + 1,
-                    'map': obj['value'],
-                    'map_img': self.getMapImg(obj['value'])})
+            self.handleMapChange(obj)
 
         data = self.matchControl.activeMatch().getMapIconsData()
         for icon_type in ['box', 'landscape']:

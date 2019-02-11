@@ -4,7 +4,8 @@ from bs4 import BeautifulSoup
 import requests
 import re
 
-from PyQt5.QtWidgets import QInputDialog
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QInputDialog, QApplication
 import scctool.settings
 import scctool.settings.translation
 from scctool.matchgrabber.custom import MatchGrabber as MatchGrabberParent
@@ -60,10 +61,12 @@ class MatchGrabber(MatchGrabberParent):
                 else:
                     name = f'{match["team1"]} vs {match["team2"]}'
                 match_list.append(name)
+            QApplication.restoreOverrideCursor()
             match, ok = QInputDialog.getItem(
                 self._controller.view, _('Select Match'),
                 _('Please select a match') + ':',
                 match_list, editable=False)
+            QApplication.setOverrideCursor(Qt.WaitCursor)
             if not ok:
                 return
             self._rawData = matches[match_list.index(match)]
@@ -147,7 +150,9 @@ class MatchGrabber(MatchGrabberParent):
             return imgur.get(match.group(1), 'R')
 
     def parse_article(self):
-        r = requests.get(self._url)
+        """Parse chobo team league article for lineups."""
+        r = requests.get(self._url, timeout=2)
+        module_logger.info('Request to ChoboTeamLeague successfull.')
         soup = BeautifulSoup(r.content, 'html.parser')
         matches = []
         for article in soup.find_all('div', class_='article'):
@@ -163,48 +168,55 @@ class MatchGrabber(MatchGrabberParent):
                 league = 'Chobo Team League'
             content = article.find('div', class_='article-content')
             for match in content.find_all('h1'):
-                match_data = {}
-                re_match = self.re_teams.match(match.text.strip())
-                match_data['league'] = league
-                match_data['season'] = season
-                match_data['week'] = week
-                match_data['team1'] = re_match.group(1)
-                match_data['team2'] = re_match.group(2)
-                lineups = match.find_next('p')
-                idx = 0
-                matchups = []
-                for line in lineups.find_all():
-                    if line.name == 'br':
-                        if len(matchups) > 0:
-                            idx = idx + 1
-                        continue
-                    elif len(matchups) - 1 < idx:
-                        matchups.append(dict())
+                matches.append(
+                    self.parse_match(match, league, season, week))
 
-                    if line.name == 'a':
-                        if 'player1' not in matchups[idx]:
-                            matchups[idx]['player1'] = line.text.strip().split(' ')[
-                                0]
-                        elif 'player2' not in matchups[idx]:
-                            matchups[idx]['player2'] = line.text.strip().split(' ')[
-                                0]
-                        else:
-                            module_logger.error(
-                                'Number of players does not match!')
-                    elif line.name == 'img':
-                        if 'race1' not in matchups[idx]:
-                            matchups[idx]['race1'] = self.convert_race(
-                                line['src'])
-                        elif 'race2' not in matchups[idx]:
-                            matchups[idx]['race2'] = self.convert_race(
-                                line['src'])
-                        else:
-                            module_logger.error(
-                                'Number of races does not match!')
-                    elif line.name == 'i':
-                        matchups[idx]['map'] = line.text.replace(
-                            '[', '').replace(']', '').replace('LE', '').strip()
-
-                match_data['lineups'] = matchups
-                matches.append(match_data)
         return matches
+
+    def parse_match(self, match, league, season, week):
+        """Parse a single match."""
+        match_data = {}
+        re_match = self.re_teams.match(match.text.strip())
+        match_data['league'] = league
+        match_data['season'] = season
+        match_data['week'] = week
+        match_data['team1'] = re_match.group(1)
+        match_data['team2'] = re_match.group(2)
+        lineups = match.find_next('p')
+        idx = 0
+        matchups = []
+        module_logger.info(
+            f"Found Chobo Match {match_data['team1']}"
+            f" vs {match_data['team2']}")
+        for line in lineups.find_all():
+            if line.name == 'br':
+                if len(matchups) > 0:
+                    idx = idx + 1
+                continue
+            elif len(matchups) - 1 < idx:
+                matchups.append(dict())
+
+            if line.name == 'a':
+                if 'player1' not in matchups[idx]:
+                    matchups[idx]['player1'] = line.text.strip().split(' ')[0]
+                elif 'player2' not in matchups[idx]:
+                    matchups[idx]['player2'] = line.text.strip().split(' ')[0]
+                else:
+                    module_logger.error(
+                        'Number of players does not match!')
+            elif line.name == 'img':
+                if 'race1' not in matchups[idx]:
+                    matchups[idx]['race1'] = self.convert_race(
+                        line['src'])
+                elif 'race2' not in matchups[idx]:
+                    matchups[idx]['race2'] = self.convert_race(
+                        line['src'])
+                else:
+                    module_logger.error(
+                        'Number of races does not match!')
+            elif line.name == 'i':
+                matchups[idx]['map'] = line.text.replace(
+                    '[', '').replace(']', '').replace('LE', '').strip()
+
+        match_data['lineups'] = matchups
+        return match_data
