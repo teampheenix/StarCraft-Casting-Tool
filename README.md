@@ -19,11 +19,11 @@
 
 ## Feature List
 
--   **Match Grabber** for [Alpha Team League](https://alpha.tl/) and [Russian StarCraft 2 League](https://rfcs.ru/en/tournaments/list/tournament/rsl-1/)
--   **Custom Match Format**: Bo1-Bo15, All-Kill format, 1vs1 - including predefined formats for Chobo, Koprulu, WardiTV, and PSISTORM Gaming Team League.
+-   **Match Grabber** for [Alpha Team League](https://alpha.tl/), [Russian StarCraft 2 League](https://rfcs.ru/en/tournaments/list/tournament/rsl-1/) and [Chobo Team League](https://www.choboteamleague.com/home/)
+-   **Custom Match Format**: Bo1-Bo15, All-Kill format, 1vs1 - including predefined formats for Koprulu, WardiTV, and PSISTORM Gaming Team League.
 -   Two sets of **Map Icons**: Box and Landscape in `casting_html`
 -   **Scoreboard** including team icons in `casting_html`
--   **Animated Player Intros** in `casting_html` including Text-to-Speech, playername & race via SC2-Client, team with logo via SCC Tool
+-   **Animated Player Intros** in `casting_html` including Text-to-Speech, player name & race via SC2-Client, team with logo via SCC Tool
 -   **Map Preview with Statistics** from Liquipedia in `casting_html`
 -   **Aligulac Browser Source** that predicts the outcome of a 1vs1 match in `casting_html`
 -   **Map Vetoes Browser Source** in `vetoes.html`

@@ -146,8 +146,8 @@ class MatchFormatChobo(MatchFormat):
 
     def applyFormat(self):
         """Apply format."""
-        self._matchData.setCustom(8, False, False)
-        self._matchData.setMinSets(8)
+        self._matchData.setCustom(7, False, False, 3)
+        self._matchData.setMinSets(9)
         self._matchData.setURL(self._url)
         self._matchData.setLeague(self._name)
         self._matchData.writeJsonFile()

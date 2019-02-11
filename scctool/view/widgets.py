@@ -1634,6 +1634,7 @@ class MatchComboBox(QComboBox):
         self._alpha_icon = QIcon(scctool.settings.getResFile('alpha.png'))
         self._rstl_icon = QIcon(scctool.settings.getResFile('rstl.png'))
         self._rsl_icon = QIcon(scctool.settings.getResFile('rsl.png'))
+        self._ctl_icon = QIcon(scctool.settings.getResFile('chobo.png'))
         self.addItem(self._alpha_icon, 'https://alpha.tl/match/3000')
         self.setItemData(0, Qt.AlignCenter, Qt.TextAlignmentRole)
         self.insertSeparator(1)
@@ -1693,6 +1694,8 @@ class MatchComboBox(QComboBox):
             self.setItemIcon(0, self._rsl_icon)
         elif(lower_url.find('hdgame') != -1):
             self.setItemIcon(0, self._rstl_icon)
+        elif(lower_url.find('choboteamleague') != -1):
+            self.setItemIcon(0, self._ctl_icon)
         else:
             self.setItemIcon(0, QIcon())
         self.setItemText(0, url)

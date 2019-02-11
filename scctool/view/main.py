@@ -658,7 +658,8 @@ class MainWindow(QMainWindow):
             # self.tabs.resize(300,200)
 
             # Add tabs
-            self.tabs.addTab(self.tab1, _("Match Grabber for AlphaTL && RSL"))
+            self.tabs.addTab(self.tab1, _(
+                "Match Grabber for AlphaTL, RSL && CTL"))
             self.tabs.addTab(self.tab2, _("Custom Match"))
 
             # Create first tab
@@ -696,6 +697,14 @@ class MainWindow(QMainWindow):
             button.setIcon(pixmap)
             button.clicked.connect(
                 lambda: self.controller.openURL("https://rfcs.ru/en/"))
+            container.addWidget(button, 0)
+            button = QPushButton()
+            pixmap = QIcon(
+                scctool.settings.getResFile('chobo.png'))
+            button.setIcon(pixmap)
+            button.clicked.connect(
+                lambda: self.controller.openURL(
+                    "https://www.choboteamleague.com/home"))
             container.addWidget(button, 0)
 
             self.tab1.layout = QFormLayout()
@@ -742,6 +751,17 @@ class MainWindow(QMainWindow):
 
             container.addWidget(QLabel(_(" but at least")), 0)
 
+            self.cb_extend_ace = QCheckBox(_("Ace extended to"))
+            self.cb_extend_ace.setChecked(False)
+            self.cb_extend_ace.stateChanged.connect(self.change_extend_ace)
+
+            self.cb_ace_bo = QComboBox()
+            for idx in range(3):
+                self.cb_ace_bo.addItem(str(2 * idx + 1))
+            self.cb_ace_bo.setCurrentIndex(0)
+            self.cb_ace_bo.setEnabled(False)
+            self.cb_ace_bo.currentIndexChanged.connect(self.change_ace_bo)
+
             self.cb_minSets = QComboBox()
             self.cb_bestof.setCurrentIndex(2)
             self.cb_minSets.setToolTip(
@@ -755,17 +775,8 @@ class MainWindow(QMainWindow):
             self.cb_minSets.currentIndexChanged.connect(
                 lambda idx: self.highlightApplyCustom())
 
-            self.cb_extend_ace = QCheckBox(_("Ace extended to"))
-            self.cb_extend_ace.setChecked(False)
-            self.cb_extend_ace.stateChanged.connect(self.change_extend_ace)
             container.addWidget(self.cb_extend_ace, 0)
 
-            self.cb_ace_bo = QComboBox()
-            for idx in range(3):
-                self.cb_ace_bo.addItem(str(2 * idx + 1))
-            self.cb_ace_bo.setCurrentIndex(0)
-            self.cb_ace_bo.setEnabled(False)
-            self.cb_ace_bo.currentIndexChanged.connect(self.change_ace_bo)
             container.addWidget(self.cb_ace_bo, 0)
             container.addWidget(QLabel(_("map(s).") + ' '), 0)
 
@@ -879,21 +890,41 @@ class MainWindow(QMainWindow):
 
     def changeBestOf(self, bestof):
         """Change the minimum sets combo box on change of BoX."""
-        bestof = bestof + 1
+        self.update_minSets(True)
+
+    def update_minSets(self, refresh):
+        old_idx = self.cb_minSets.currentIndex()
         self.cb_minSets.clear()
+        regular_sets = int(self.cb_bestof.currentText())
+        if self.cb_extend_ace.isChecked():
+            ace_sets = int(self.cb_ace_bo.currentText())
+        else:
+            ace_sets = 0
+        if ace_sets > 0:
+            if regular_sets % 2:
+                total_sets = regular_sets + ace_sets - 1
+            else:
+                total_sets = regular_sets + ace_sets
+        else:
+            total_sets = regular_sets
         self.highlightApplyCustom()
-        for idx in range(bestof):
+        for idx in range(total_sets):
             self.cb_minSets.addItem(str(idx + 1))
 
-        self.cb_minSets.setCurrentIndex((bestof - 1) / 2)
+        if refresh:
+            self.cb_minSets.setCurrentIndex(regular_sets / 2)
+        else:
+            self.cb_minSets.setCurrentIndex(min(old_idx, total_sets - 1))
 
     def change_extend_ace(self, extend_ace):
         """Handle a change of extend ace checkbox."""
         self.cb_ace_bo.setEnabled(extend_ace)
+        self.update_minSets(False)
         self.highlightApplyCustom()
 
     def change_ace_bo(self, bestof):
         """Handle a change of ace bo."""
+        self.update_minSets(False)
         self.highlightApplyCustom()
 
     def change_vetoes(self, vetoes):
