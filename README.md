@@ -69,7 +69,7 @@ This tool should run on any operating system that supports Python 3, e.g., Windo
 
 ### Basics
 
-Run StarCraft Casting Tool via `StarCraft-Casting-Tool.exe` (or `StarCraftCastingTool.pyw`). Search for an Alpha-TL match or enter the Match-URL of an AlphaTL or RSL match in the _Match Grabber_ tab, e.g., `https://alpha.tl/match/3000`, and press _Load Data from URL_. Alternatively one can create a match in the _Custom Match_ tab.  Edit the data if necessary. The sliders control the score of each map. The top slider is to select _your_ team. Once selected the border of the Map Icons turn (by default) green or red depending on the result. To select your team automatically you can add it to _Favorite Teams_ list under _Settings: Misc_. Similarly you can enter your players' nicknames into _Favorite Players_ for auto completion.
+Run StarCraft Casting Tool via `StarCraft-Casting-Tool.exe` (or `StarCraftCastingTool.pyw`). Search for an Alpha-TL match or enter the Match-URL of an AlphaTL or RSL match in the _Match Grabber_ tab, e.g., `https://alpha.tl/match/3000`, and press _Load Data from URL_ (For Chobo Team League one has to enter a link to an article with the match ups -- for the most recent matches `https://www.choboteamleague.com/home` is sufficient). Alternatively one can create a match in the _Custom Match_ tab.  Edit the data if necessary. The sliders control the score of each map. The top slider is to select _your_ team. Once selected the border of the Map Icons turn (by default) green or red depending on the result. To select your team automatically you can add it to _Favorite Teams_ list under _Settings: Misc_. Similarly you can enter your players' nicknames into _Favorite Players_ for auto completion.
 
 ### Data for Streaming
 
