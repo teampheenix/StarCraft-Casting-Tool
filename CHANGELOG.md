@@ -1,6 +1,13 @@
 # Changelog
 
 
+## v2.7.2 (2019-02-11)
+
+### New
+
+* Added a MatchGrabber for Chobo Team League.
+
+
 ## v2.7.1 (2019-02-10)
 
 ### Fix
