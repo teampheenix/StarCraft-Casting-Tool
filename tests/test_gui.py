@@ -53,10 +53,14 @@ class TestGUI(object):
             assert self.cntlr.matchControl.activeMatch().getTeam(
                 team_idx) == f'My Test Team {team_idx + 1}'
             for player_idx in range(bo):
+                assert matchWidget.cb_race[team_idx][player_idx].currentIndex(
+                ) == scctool.settings.race2idx('Random')
                 assert matchWidget.le_player[team_idx][player_idx].text(
                 ) == 'TBD'
                 assert self.cntlr.matchControl.activeMatch().getPlayer(
                     team_idx, player_idx) == 'TBD'
+                assert self.cntlr.matchControl.activeMatch().getRace(
+                    team_idx, player_idx) == 'Random'
                 self.insert_into_widget(
                     matchWidget.le_player[team_idx][player_idx],
                     f'Player {team_idx+1} {player_idx+1}')
@@ -64,6 +68,11 @@ class TestGUI(object):
                     self.cntlr.matchControl.activeMatch().getPlayer(
                         team_idx, player_idx) ==
                     f'Player {team_idx+1} {player_idx+1}')
+                race = scctool.settings.idx2race((team_idx + player_idx) % 4)
+                matchWidget.cb_race[team_idx][player_idx].setCurrentIndex(
+                    scctool.settings.race2idx(race))
+                assert (self.cntlr.matchControl.activeMatch().getRace(
+                        team_idx, player_idx) == race)
 
         for set_idx in range(bo):
             assert matchWidget.le_map[set_idx].text() == 'TBD'
@@ -74,6 +83,20 @@ class TestGUI(object):
                 sc2map, True)
             assert (self.cntlr.matchControl.activeMatch().getMap(
                 set_idx) == sc2map)
+            assert matchWidget.sl_score[set_idx].value() == 0
+            assert (self.cntlr.matchControl.activeMatch().getMapScore(
+                set_idx) == 0)
+            score = (set_idx % 2) * 2 - 1
+            matchWidget.sl_score[set_idx].setValue(score)
+            assert matchWidget.sl_score[set_idx].value() == score
+            assert (self.cntlr.matchControl.activeMatch().getMapScore(
+                set_idx) == score)
+
+        self.qtbot.mouseClick(self.main_window.pb_resetscore, Qt.LeftButton)
+        for set_idx in range(bo):
+            assert matchWidget.sl_score[set_idx].value() == 0
+            assert (self.cntlr.matchControl.activeMatch().getMapScore(
+                set_idx) == 0)
 
     def assert_bo(self, bo):
         self.main_window.cb_bestof.setCurrentIndex(bo - 1)
@@ -98,7 +121,7 @@ class TestGUI(object):
             self.qtbot.keyClick(widget, Qt.Key_Delete)
         assert widget.text() == text
         widget.clearFocus()
-        self.qtbot.wait(10)
+        self.qtbot.wait(5)
 
     def assert_subwindows(self):
         self.main_window.openBrowserSourcesDialog()
