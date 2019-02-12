@@ -35,17 +35,18 @@ class TestGUI(object):
         self.qtbot.mouseClick(self.main_window.pb_resetdata, Qt.LeftButton)
         self.main_window.tabs.setCurrentIndex(1)
         assert self.main_window.tabs.currentIndex() == 1
+        for bo in range(1, scctool.settings.max_no_sets - 3):
+            self.assert_bo(bo)
         matchWidget = self.main_window.matchDataTabWidget.widget(
             self.cntlr.matchControl.activeMatchIdx())
         assert matchWidget.le_league.text() == 'TBD'
         self.insert_into_widget(matchWidget.le_league, 'My Test League')
         assert self.cntlr.matchControl.activeMatch().getLeague() == 'My Test League'
 
-        for bo in range(1, scctool.settings.max_no_sets - 3):
-            self.assert_bo(bo)
-
         for team_idx in range(2):
             assert matchWidget.le_team[team_idx].text() == 'TBD'
+            assert self.cntlr.matchControl.activeMatch().getTeam(
+                team_idx) == 'TBD'
             self.insert_into_widget(
                 matchWidget.le_team[team_idx], f'My Test Team {team_idx + 1}')
             assert self.cntlr.matchControl.activeMatch().getTeam(
@@ -53,11 +54,13 @@ class TestGUI(object):
             for player_idx in range(bo):
                 assert matchWidget.le_player[team_idx][player_idx].text(
                 ) == 'TBD'
+                assert self.cntlr.matchControl.activeMatch().getPlayer(
+                    team_idx, player_idx) == 'TBD'
                 self.insert_into_widget(
                     matchWidget.le_player[team_idx][player_idx],
-                    f'Player {team_idx} {player_idx}')
+                    f'Player {team_idx+1} {player_idx+1}')
                 assert self.cntlr.matchControl.activeMatch().getPlayer(
-                    team_idx, player_idx) == f'Player {team_idx} {player_idx}'
+                    team_idx, player_idx) == f'Player {team_idx+1} {player_idx+1}'
 
     def assert_bo(self, bo):
         self.main_window.cb_bestof.setCurrentIndex(bo - 1)
@@ -76,6 +79,7 @@ class TestGUI(object):
         widget.setFocus(Qt.TabFocusReason)
         widget.selectAll()
         self.qtbot.keyClicks(widget, text, Qt.NoModifier, 10)
+        self.qtbot.keyClick(widget, Qt.Key_Delete)
         assert widget.text() == text
         widget.clearFocus()
         self.qtbot.wait(100)
