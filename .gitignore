@@ -31,4 +31,4 @@ src/safe.json
 .cache/
 *.egg-info/
 .tox/
-test/__pycache__/
+tests/__pycache__/

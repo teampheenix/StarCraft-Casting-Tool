@@ -41,7 +41,8 @@ class TestGUI(object):
             self.cntlr.matchControl.activeMatchIdx())
         assert matchWidget.le_league.text() == 'TBD'
         self.insert_into_widget(matchWidget.le_league, 'My Test League')
-        assert self.cntlr.matchControl.activeMatch().getLeague() == 'My Test League'
+        assert (self.cntlr.matchControl.activeMatch().getLeague()
+                == 'My Test League')
 
         for team_idx in range(2):
             assert matchWidget.le_team[team_idx].text() == 'TBD'
@@ -59,8 +60,20 @@ class TestGUI(object):
                 self.insert_into_widget(
                     matchWidget.le_player[team_idx][player_idx],
                     f'Player {team_idx+1} {player_idx+1}')
-                assert self.cntlr.matchControl.activeMatch().getPlayer(
-                    team_idx, player_idx) == f'Player {team_idx+1} {player_idx+1}'
+                assert (
+                    self.cntlr.matchControl.activeMatch().getPlayer(
+                        team_idx, player_idx) ==
+                    f'Player {team_idx+1} {player_idx+1}')
+
+        for set_idx in range(bo):
+            assert matchWidget.le_map[set_idx].text() == 'TBD'
+            sc2map = scctool.settings.maps[set_idx %
+                                           len(scctool.settings.maps)]
+            self.insert_into_widget(
+                matchWidget.le_map[set_idx],
+                sc2map, True)
+            assert (self.cntlr.matchControl.activeMatch().getMap(
+                set_idx) == sc2map)
 
     def assert_bo(self, bo):
         self.main_window.cb_bestof.setCurrentIndex(bo - 1)
@@ -68,21 +81,24 @@ class TestGUI(object):
         assert self.main_window.cb_minSets.currentText() == str(int(bo / 2) + 1)
         assert self.main_window.cb_minSets.count() == bo
         self.main_window.cb_extend_ace.setChecked(False)
-        assert self.main_window.cb_ace_bo.isEnabled() == False
+        assert self.main_window.cb_ace_bo.isEnabled() is False
         self.qtbot.mouseClick(self.main_window.pb_applycustom, Qt.LeftButton)
         match = self.cntlr.matchControl.activeMatch()
         assert match.getBestOf() == bo
         assert match.getNoSets() == bo
         assert match.getMinSets() == int(bo / 2) + 1
 
-    def insert_into_widget(self, widget, text):
+    def insert_into_widget(self, widget, text, completer=False):
         widget.setFocus(Qt.TabFocusReason)
         widget.selectAll()
-        self.qtbot.keyClicks(widget, text, Qt.NoModifier, 10)
-        self.qtbot.keyClick(widget, Qt.Key_Delete)
+        self.qtbot.keyClicks(widget, text, Qt.NoModifier, 1)
+        if completer:
+            self.qtbot.keyClick(widget.completer().popup(), Qt.Key_Enter)
+        else:
+            self.qtbot.keyClick(widget, Qt.Key_Delete)
         assert widget.text() == text
         widget.clearFocus()
-        self.qtbot.wait(100)
+        self.qtbot.wait(10)
 
     def assert_subwindows(self):
         self.main_window.openBrowserSourcesDialog()
