@@ -9,7 +9,7 @@ import scctool.settings.config
 module_logger = logging.getLogger(__name__)
 
 this = sys.modules[__name__]
-this.tr = gt.NullTranslations()
+this.translation = gt.NullTranslations()
 
 
 def gettext(msg):

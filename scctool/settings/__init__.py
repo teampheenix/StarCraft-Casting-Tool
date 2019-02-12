@@ -81,7 +81,13 @@ def getResFile(file):
     if hasattr(sys, '_MEIPASS'):
         return os.path.normpath(os.path.join(sys._MEIPASS, 'src', file))
     else:
-        return os.path.normpath(os.path.join(basedir, 'src', file))
+        path = os.path.normpath(os.path.join(basedir, 'src', file))
+        if not os.path.exists(path):
+            path = os.path.normpath(os.path.join(
+                os.path.dirname(__file__), '../../src', file))
+        if not os.path.exists(path):
+            raise FileNotFoundError(path)
+        return path
 
 
 def getLocalesDir():
@@ -89,7 +95,13 @@ def getLocalesDir():
     if hasattr(sys, '_MEIPASS'):
         return os.path.normpath(os.path.join(sys._MEIPASS, 'locales'))
     else:
-        return os.path.normpath(os.path.join(basedir, 'locales'))
+        path = os.path.normpath(os.path.join(basedir, 'locales'))
+        if os.path.exists(path):
+            path = os.path.normpath(os.path.join(
+                os.path.dirname(__file__), '../../locales'))
+        if not os.path.exists(path):
+            raise FileNotFoundError(path)
+        return path
 
 
 def getJsonFile(scope):
@@ -111,8 +123,8 @@ def getLogFile():
         # Delete old logfiles
         for f in os.listdir(logdir):
             full = os.path.join(logdir, f)
-            if (os.path.isfile(full)
-                    and os.stat(full).st_mtime < time.time() - 7 * 86400):
+            if (os.path.isfile(full) and
+                    os.stat(full).st_mtime < time.time() - 7 * 86400):
                 os.remove(full)
 
     filename = 'scct-{}-{}.log'.format(time.strftime(

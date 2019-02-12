@@ -28,3 +28,7 @@ scctool/__init__.pyc
 casting_html/src/js/profile.js
 build_data_old.py
 src/safe.json
+.cache/
+*.egg-info/
+.tox/
+test/__pycache__/
