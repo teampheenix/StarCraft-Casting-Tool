@@ -41,15 +41,23 @@ class TestGUI(object):
         self.insert_into_widget(matchWidget.le_league, 'My Test League')
         assert self.cntlr.matchControl.activeMatch().getLeague() == 'My Test League'
 
+        for bo in range(1, scctool.settings.max_no_sets - 3):
+            self.assert_bo(bo)
+
         for team_idx in range(2):
             assert matchWidget.le_team[team_idx].text() == 'TBD'
             self.insert_into_widget(
                 matchWidget.le_team[team_idx], f'My Test Team {team_idx + 1}')
             assert self.cntlr.matchControl.activeMatch().getTeam(
                 team_idx) == f'My Test Team {team_idx + 1}'
-
-        for bo in range(1, scctool.settings.max_no_sets - 3):
-            self.assert_bo(bo)
+            for player_idx in range(bo):
+                assert matchWidget.le_player[team_idx][player_idx].text(
+                ) == 'TBD'
+                self.insert_into_widget(
+                    matchWidget.le_player[team_idx][player_idx],
+                    f'Player {team_idx} {player_idx}')
+                assert self.cntlr.matchControl.activeMatch().getPlayer(
+                    team_idx, player_idx) == f'Player {team_idx} {player_idx}'
 
     def assert_bo(self, bo):
         self.main_window.cb_bestof.setCurrentIndex(bo - 1)
