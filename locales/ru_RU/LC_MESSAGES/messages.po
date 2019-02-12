@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: StarCraft Casting Tool\n"
-"POT-Creation-Date: 2019-02-10 15:10+0100\n"
-"PO-Revision-Date: 2019-02-10 15:13+0100\n"
+"POT-Creation-Date: 2019-02-12 21:12+0100\n"
+"PO-Revision-Date: 2019-02-12 21:12+0100\n"
 "Last-Translator: \n"
 "Language-Team: Mayhem, TanTall\n"
 "Language: ru\n"
@@ -59,14 +59,14 @@ msgstr "Автоматическое обновление команд nightbot 
 msgid "Not available when SC2 is running on a different PC."
 msgstr "Недоступно, если SC2 работает на другом ПК."
 
-#: scctool/controller.py:584 scctool/view/main.py:963
+#: scctool/controller.py:584 scctool/view/main.py:994
 msgid ""
 "Automatically sets the score of your ingame UI-interface at the begining of "
 "a game."
 msgstr ""
 "Автоматически задает счет внутри вашего игрового интерфейса в начале игры."
 
-#: scctool/controller.py:591 scctool/view/main.py:972
+#: scctool/controller.py:591 scctool/view/main.py:1003
 msgid ""
 "Automatically toggles the production tab of your ingame UI-interface at the "
 "begining of a game."
@@ -81,23 +81,23 @@ msgstr "Внимание: Карта '{}' Не найдена!"
 msgid "{} {} Browser Source(s) connected on port {}."
 msgstr "{} {} Источник (и) браузера подключен к порту {}."
 
-#: scctool/controller.py:1085
+#: scctool/controller.py:1112
 msgid "A new version {} is available."
 msgstr "Доступна новая версия {}."
 
-#: scctool/controller.py:1087
+#: scctool/controller.py:1114
 msgid "Update to new version?"
 msgstr "Загрузить новую версию?"
 
-#: scctool/controller.py:1088
+#: scctool/controller.py:1115
 msgid "New StarCraft Casting Tool Version"
 msgstr "Новая версия StarCraft Casting Tool"
 
-#: scctool/controller.py:1097
+#: scctool/controller.py:1124
 msgid "Don't show on startup."
 msgstr "Не показывать при запуске."
 
-#: scctool/controller.py:1106
+#: scctool/controller.py:1133
 msgid "A new version {} is available on GitHub!"
 msgstr "Новая версия {} доступна на GitHub!"
 
@@ -138,17 +138,26 @@ msgstr "Текущая и предыдущая карта"
 msgid "Undecided Maps"
 msgstr "Неопределенные карты"
 
-#: scctool/settings/profileManager.py:114
-#: scctool/settings/profileManager.py:158
+#: scctool/matchgrabber/ctl.py:66
+msgid "Select Match"
+msgstr "Выберите матч"
+
+# Google Translate
+#: scctool/matchgrabber/ctl.py:67
+msgid "Please select a match"
+msgstr "Выберите совпадение"
+
+#: scctool/settings/profileManager.py:121
+#: scctool/settings/profileManager.py:165
 msgid "You cannot use empty names."
 msgstr "Вы не можете использовать пустые имена."
 
-#: scctool/settings/profileManager.py:118
-#: scctool/settings/profileManager.py:162
+#: scctool/settings/profileManager.py:125
+#: scctool/settings/profileManager.py:169
 msgid "The name is already in use."
 msgstr "Имя уже используется."
 
-#: scctool/settings/profileManager.py:165
+#: scctool/settings/profileManager.py:172
 msgid "Initial profile is not valid."
 msgstr "Исходный профиль недействителен."
 
@@ -360,7 +369,7 @@ msgid "Aligulac (only 1vs1)"
 msgstr "Aligulac (только 1vs1)"
 
 # Google Translate
-#: scctool/view/main.py:361 scctool/view/main.py:940
+#: scctool/view/main.py:361 scctool/view/main.py:971
 msgid "Countdown"
 msgstr "обратный отсчет"
 
@@ -379,7 +388,7 @@ msgstr "Открыть папку"
 
 #: scctool/view/main.py:396 scctool/view/main.py:447
 msgid "Open local URL in Browser"
-msgstr ""
+msgstr "Открыть локальный URL в браузере"
 
 #: scctool/view/main.py:403 scctool/view/main.py:454
 msgid "Copy local URL to Clipboard"
@@ -407,125 +416,125 @@ msgstr "Добавить игру"
 msgid "Copy Match Tab"
 msgstr "Скопировать вкладку"
 
-#: scctool/view/main.py:661
-msgid "Match Grabber for AlphaTL && RSL"
-msgstr "Граббер матчей для AlphaTL и RSL"
-
 #: scctool/view/main.py:662
+msgid "Match Grabber for AlphaTL, RSL && CTL"
+msgstr "Граббер матчей для AlphaTL, RSL и CTL"
+
+#: scctool/view/main.py:663
 msgid "Custom Match"
 msgstr "Кастомный матч"
 
-#: scctool/view/main.py:675
+#: scctool/view/main.py:676
 msgid "Open in Browser"
 msgstr "Открыть в браузере"
 
-#: scctool/view/main.py:682 scctool/view/main.py:833
+#: scctool/view/main.py:683 scctool/view/main.py:844
 msgid "Match-URL:"
 msgstr "URL матча:"
 
-#: scctool/view/main.py:712
+#: scctool/view/main.py:721
 msgid "Load Data from URL"
 msgstr "Загрузить данные по URL"
 
 # Google Translate
-#: scctool/view/main.py:726
+#: scctool/view/main.py:735
 msgid "Maps:"
 msgstr "Карты:"
 
-#: scctool/view/main.py:730
+#: scctool/view/main.py:739
 msgid "Best of"
 msgstr "Лучший из"
 
-#: scctool/view/main.py:736
+#: scctool/view/main.py:745
 msgid "\"Best of\" does not count extended Ace Maps."
 msgstr "«Лучший из» не считается расширенным Карты Туза."
 
-#: scctool/view/main.py:743
+#: scctool/view/main.py:752
 msgid " but at least"
 msgstr " но как минимум"
 
-#: scctool/view/main.py:748
-msgid "Minimum number of maps played (even if the match is decided already)"
-msgstr "Минимальное количество сыгранных карт (Даже если матч уже завершен)"
-
 #: scctool/view/main.py:754
-msgid "maps"
-msgstr "карты"
-
-#: scctool/view/main.py:758
 msgid "Ace extended to"
 msgstr "Туз продлен до"
 
-#: scctool/view/main.py:770
+#: scctool/view/main.py:768
+msgid "Minimum number of maps played (even if the match is decided already)"
+msgstr "Минимальное количество сыгранных карт (Даже если матч уже завершен)"
+
+#: scctool/view/main.py:774
+msgid "maps"
+msgstr "карты"
+
+#: scctool/view/main.py:781
 msgid "map(s)."
 msgstr "Карта (ы)."
 
 # Google Translate
-#: scctool/view/main.py:778
+#: scctool/view/main.py:789
 msgid "Vetoes."
 msgstr "Вето."
 
-#: scctool/view/main.py:786
+#: scctool/view/main.py:797
 msgid "Apply Format"
 msgstr "Применить формат"
 
-#: scctool/view/main.py:813
+#: scctool/view/main.py:824
 msgid "Modes:"
 msgstr "Режимы работы:"
 
-#: scctool/view/main.py:817
+#: scctool/view/main.py:828
 msgid "All-Kill"
 msgstr "All-Kill"
 
-#: scctool/view/main.py:820
+#: scctool/view/main.py:831
 msgid "Winner stays and is automatically placed into the next set"
 msgstr "Победитель автоматически переносится в следующий сет"
 
-#: scctool/view/main.py:825
+#: scctool/view/main.py:836
 msgid "1vs1"
 msgstr "1vs1"
 
-#: scctool/view/main.py:828
+#: scctool/view/main.py:839
 msgid "Select for solo (non-team matches)"
 msgstr "Выбрать для дуэлей (не командных игр)"
 
-#: scctool/view/main.py:839
+#: scctool/view/main.py:850
 msgid "Optionally specify the Match-URL, e.g., for Nightbot commands"
 msgstr "Опционально введите URL матча, например для команд Nightbot"
 
-#: scctool/view/main.py:842
+#: scctool/view/main.py:853
 msgid "Specify the Match-URL of your Custom Match"
 msgstr "Введите URL вашего матча"
 
-#: scctool/view/main.py:860
+#: scctool/view/main.py:871
 msgid "Reset Match Data"
 msgstr "Сброс данных матча"
 
-#: scctool/view/main.py:906
+#: scctool/view/main.py:937
 msgid "Tasks"
 msgstr "Задачи"
 
-#: scctool/view/main.py:910
+#: scctool/view/main.py:941
 msgid "Update Twitch Title"
 msgstr "Обновить заголовок на Twitch"
 
-#: scctool/view/main.py:914
+#: scctool/view/main.py:945
 msgid "Update Nightbot"
 msgstr "Обновить Nightbot"
 
-#: scctool/view/main.py:917
+#: scctool/view/main.py:948
 msgid "Reset Score"
 msgstr "Сбросить счет"
 
-#: scctool/view/main.py:937
+#: scctool/view/main.py:968
 msgid "Background Tasks"
 msgstr "Задачи в фоновом режиме"
 
-#: scctool/view/main.py:951
+#: scctool/view/main.py:982
 msgid "Auto Score Update"
 msgstr "Автообновление счета"
 
-#: scctool/view/main.py:953
+#: scctool/view/main.py:984
 msgid ""
 "Automatically detects the outcome of SC2 matches that are played/observed in "
 "your SC2-client and updates the score accordingly."
@@ -533,52 +542,52 @@ msgstr ""
 "Автоматически определяет вывод о текущем матче из вашего клиента SC2 и "
 "обновляет счет."
 
-#: scctool/view/main.py:961
+#: scctool/view/main.py:992
 msgid "Set Ingame Score"
 msgstr "Задать счет"
 
-#: scctool/view/main.py:970
+#: scctool/view/main.py:1001
 msgid "Toggle Production Tab"
 msgstr "Включать вкладку \"Производство\""
 
-#: scctool/view/main.py:979
+#: scctool/view/main.py:1010
 msgid "Auto Twitch Update"
 msgstr "Автообновление Twitch"
 
-#: scctool/view/main.py:984
+#: scctool/view/main.py:1015
 msgid "Auto Nightbot Update"
 msgstr "Автообновление Nightbot"
 
-#: scctool/view/main.py:993 scctool/view/main.py:997
+#: scctool/view/main.py:1024 scctool/view/main.py:1028
 msgid "Only Windows"
 msgstr "Только Windows"
 
-#: scctool/view/main.py:1087
+#: scctool/view/main.py:1118
 msgid "Applying Custom Match..."
 msgstr "Применение матча..."
 
 # Google Translate
-#: scctool/view/main.py:1130
+#: scctool/view/main.py:1161
 msgid "Match Grabber"
 msgstr "Граббер матчей"
 
-#: scctool/view/main.py:1132
+#: scctool/view/main.py:1163
 msgid "Collecting data from {}"
 msgstr "Сбор данных из {}"
 
-#: scctool/view/main.py:1135
+#: scctool/view/main.py:1166
 msgid "Reading {}..."
 msgstr "Чтение {}..."
 
-#: scctool/view/main.py:1154
+#: scctool/view/main.py:1185
 msgid "Updating Nightbot Command..."
 msgstr "Обновление команды Nightbot..."
 
-#: scctool/view/main.py:1163
+#: scctool/view/main.py:1194
 msgid "Updating Twitch Title..."
 msgstr "Обновление заголовка Twitch..."
 
-#: scctool/view/main.py:1172
+#: scctool/view/main.py:1203
 msgid "Resetting Score..."
 msgstr "Сброс счета..."
 
@@ -616,8 +625,8 @@ msgstr "Игрок {} из команды {}"
 msgid "Set the score"
 msgstr "Установить счет"
 
-#: scctool/view/matchdataview.py:281 scctool/view/widgets.py:1741
-#: scctool/view/widgets.py:1749 scctool/view/widgets.py:1790
+#: scctool/view/matchdataview.py:281 scctool/view/widgets.py:1745
+#: scctool/view/widgets.py:1753 scctool/view/widgets.py:1794
 msgid "Map {}"
 msgstr "Карта {}"
 
@@ -1690,12 +1699,12 @@ msgstr "Вы действительно хотите удалить профил
 msgid "Add Profile"
 msgstr "Добавить профиль"
 
-#: scctool/view/widgets.py:1444 scctool/view/widgets.py:1601
+#: scctool/view/widgets.py:1444 scctool/view/widgets.py:1602
 msgid "Please enter the name of the profile"
 msgstr "Введите имя профиля"
 
 #: scctool/view/widgets.py:1456 scctool/view/widgets.py:1483
-#: scctool/view/widgets.py:1541 scctool/view/widgets.py:1612
+#: scctool/view/widgets.py:1541 scctool/view/widgets.py:1613
 msgid "Please enter a valid name"
 msgstr "Пожалуйста, введите верное имя"
 
@@ -1730,30 +1739,32 @@ msgid "Are you sure you wish to overwrite the current profile '{}'?"
 msgstr "Вы действительно хотите перезаписать текущий профиль '{}'?"
 
 #: scctool/view/widgets.py:1579
-msgid "Import && Overwrite Profile"
+#, fuzzy
+#| msgid "Import && Overwrite Profile"
+msgid "Import & Overwrite Profile"
 msgstr "Импорт и перезапись профилей"
 
-#: scctool/view/widgets.py:1600
+#: scctool/view/widgets.py:1601
 msgid "Rename Profile"
 msgstr "Переименовать профиль"
 
-#: scctool/view/widgets.py:1630
+#: scctool/view/widgets.py:1631
 msgid "Enter AlphaTL/RSL Match-URL or search for an upcoming AlphaTL Match."
 msgstr "Введите AlphaTL / RSL Match-URL или найдите предстоящее AlphaTL Match."
 
-#: scctool/view/widgets.py:1717
+#: scctool/view/widgets.py:1721
 msgid "Dynamic:"
 msgstr "Динамический:"
 
-#: scctool/view/widgets.py:1732
+#: scctool/view/widgets.py:1736
 msgid "Static:"
 msgstr "Статическая:"
 
-#: scctool/view/widgets.py:1737
+#: scctool/view/widgets.py:1741
 msgid "From"
 msgstr "от"
 
-#: scctool/view/widgets.py:1744
+#: scctool/view/widgets.py:1748
 msgid "to"
 msgstr "в"
 

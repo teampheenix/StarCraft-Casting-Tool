@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: StarCraft Casting Tool\n"
-"POT-Creation-Date: 2019-02-10 15:17+0100\n"
-"PO-Revision-Date: 2019-02-10 15:19+0100\n"
+"POT-Creation-Date: 2019-02-12 21:10+0100\n"
+"PO-Revision-Date: 2019-02-12 21:10+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -57,7 +57,7 @@ msgstr ""
 msgid "Not available when SC2 is running on a different PC."
 msgstr "Non disponible lorsque SC2 est en cours d'exécution sur un autre PC."
 
-#: controller.py:584 view/main.py:963
+#: controller.py:584 view/main.py:994
 msgid ""
 "Automatically sets the score of your ingame UI-interface at the begining of "
 "a game."
@@ -65,7 +65,7 @@ msgstr ""
 "Règle automatiquement le pointage de votre interface utilisateur au débutdu "
 "match."
 
-#: controller.py:591 view/main.py:972
+#: controller.py:591 view/main.py:1003
 msgid ""
 "Automatically toggles the production tab of your ingame UI-interface at the "
 "begining of a game."
@@ -81,23 +81,23 @@ msgstr "Attention: Carte '{}' introuvable!"
 msgid "{} {} Browser Source(s) connected on port {}."
 msgstr "{} {} Source(s) du navigateur connectée(s) sur le port {}."
 
-#: controller.py:1085
+#: controller.py:1112
 msgid "A new version {} is available."
 msgstr "Une nouvelle version {} est disponible."
 
-#: controller.py:1087
+#: controller.py:1114
 msgid "Update to new version?"
 msgstr "Mettre à jour vers la nouvelle version?"
 
-#: controller.py:1088
+#: controller.py:1115
 msgid "New StarCraft Casting Tool Version"
 msgstr "Nouvelle version de StarCraft Casting Tool"
 
-#: controller.py:1097
+#: controller.py:1124
 msgid "Don't show on startup."
 msgstr "Ne pas afficher au démarrage."
 
-#: controller.py:1106
+#: controller.py:1133
 msgid "A new version {} is available on GitHub!"
 msgstr "Une nouvelle version {} est disponible sur GitHub!"
 
@@ -133,15 +133,25 @@ msgstr ""
 msgid "Undecided Maps"
 msgstr ""
 
-#: settings/profileManager.py:114 settings/profileManager.py:158
+#: matchgrabber/ctl.py:66
+#, fuzzy
+#| msgid "Close Match"
+msgid "Select Match"
+msgstr "Fermer le match"
+
+#: matchgrabber/ctl.py:67
+msgid "Please select a match"
+msgstr ""
+
+#: settings/profileManager.py:121 settings/profileManager.py:165
 msgid "You cannot use empty names."
 msgstr "Vous ne pouvez pas utiliser de noms vides."
 
-#: settings/profileManager.py:118 settings/profileManager.py:162
+#: settings/profileManager.py:125 settings/profileManager.py:169
 msgid "The name is already in use."
 msgstr "Le nom est déjà utilisé."
 
-#: settings/profileManager.py:165
+#: settings/profileManager.py:172
 msgid "Initial profile is not valid."
 msgstr "Profil initial invalide."
 
@@ -334,7 +344,7 @@ msgstr "Logo d'IU {}"
 msgid "Aligulac (only 1vs1)"
 msgstr "Aligulac (seulement 1c1)"
 
-#: view/main.py:361 view/main.py:940
+#: view/main.py:361 view/main.py:971
 msgid "Countdown"
 msgstr ""
 
@@ -378,125 +388,125 @@ msgstr "Ajouter l'onglet Match"
 msgid "Copy Match Tab"
 msgstr "Copier l'onglet Match"
 
-#: view/main.py:661
-msgid "Match Grabber for AlphaTL && RSL"
+#: view/main.py:662
+msgid "Match Grabber for AlphaTL, RSL && CTL"
 msgstr ""
 
-#: view/main.py:662
+#: view/main.py:663
 msgid "Custom Match"
 msgstr "Match personnalisé"
 
-#: view/main.py:675
+#: view/main.py:676
 msgid "Open in Browser"
 msgstr "Ouvrir dans le navigateur"
 
-#: view/main.py:682 view/main.py:833
+#: view/main.py:683 view/main.py:844
 msgid "Match-URL:"
 msgstr "Match-URL:"
 
-#: view/main.py:712
+#: view/main.py:721
 msgid "Load Data from URL"
 msgstr "Charger les données du URL"
 
-#: view/main.py:726
+#: view/main.py:735
 msgid "Maps:"
 msgstr "Maps:"
 
-#: view/main.py:730
+#: view/main.py:739
 msgid "Best of"
 msgstr "Série au meilleur de"
 
-#: view/main.py:736
+#: view/main.py:745
 msgid "\"Best of\" does not count extended Ace Maps."
 msgstr ""
 
-#: view/main.py:743
+#: view/main.py:752
 msgid " but at least"
 msgstr " mais au moins"
 
-#: view/main.py:748
+#: view/main.py:754
+msgid "Ace extended to"
+msgstr ""
+
+#: view/main.py:768
 msgid "Minimum number of maps played (even if the match is decided already)"
 msgstr ""
 "Nombre minimum de cartes joués (même si le vainqueur est déjà déterminé)"
 
-#: view/main.py:754
+#: view/main.py:774
 msgid "maps"
 msgstr "maps"
 
-#: view/main.py:758
-msgid "Ace extended to"
-msgstr ""
-
-#: view/main.py:770
+#: view/main.py:781
 msgid "map(s)."
 msgstr ""
 
-#: view/main.py:778
+#: view/main.py:789
 msgid "Vetoes."
 msgstr ""
 
-#: view/main.py:786
+#: view/main.py:797
 msgid "Apply Format"
 msgstr "Appliquer le format"
 
-#: view/main.py:813
+#: view/main.py:824
 msgid "Modes:"
 msgstr ""
 
-#: view/main.py:817
+#: view/main.py:828
 msgid "All-Kill"
 msgstr "All-Kill"
 
-#: view/main.py:820
+#: view/main.py:831
 msgid "Winner stays and is automatically placed into the next set"
 msgstr "Le gagnant reste et est automatiquement placé dans le prochain set"
 
-#: view/main.py:825
+#: view/main.py:836
 msgid "1vs1"
 msgstr "1c1"
 
-#: view/main.py:828
+#: view/main.py:839
 msgid "Select for solo (non-team matches)"
 msgstr "Choisir pour solo (matchs sans équipe)"
 
-#: view/main.py:839
+#: view/main.py:850
 msgid "Optionally specify the Match-URL, e.g., for Nightbot commands"
 msgstr ""
 "Spécifier le Match-URL (optionnel), par exemple pour les commandes Nightbot"
 
-#: view/main.py:842
+#: view/main.py:853
 msgid "Specify the Match-URL of your Custom Match"
 msgstr "Indiquer le Match-URL de votre match personnalisé"
 
-#: view/main.py:860
+#: view/main.py:871
 msgid "Reset Match Data"
 msgstr "Réinitialiser les données du match"
 
-#: view/main.py:906
+#: view/main.py:937
 msgid "Tasks"
 msgstr "Tâches"
 
-#: view/main.py:910
+#: view/main.py:941
 msgid "Update Twitch Title"
 msgstr "Mettre à jour le titre Twitch"
 
-#: view/main.py:914
+#: view/main.py:945
 msgid "Update Nightbot"
 msgstr "Mettre à jour Nightbot"
 
-#: view/main.py:917
+#: view/main.py:948
 msgid "Reset Score"
 msgstr "Réinitialiser le pointage"
 
-#: view/main.py:937
+#: view/main.py:968
 msgid "Background Tasks"
 msgstr "Tâches en arrière-plan"
 
-#: view/main.py:951
+#: view/main.py:982
 msgid "Auto Score Update"
 msgstr "Mis à jour du pointage automatique"
 
-#: view/main.py:953
+#: view/main.py:984
 msgid ""
 "Automatically detects the outcome of SC2 matches that are played/observed in "
 "your SC2-client and updates the score accordingly."
@@ -504,51 +514,51 @@ msgstr ""
 "Détecte automatiquement le résultat des matchs de SC2 qui sont joués/"
 "observés dans votre client SC2 et mets à jour le pointage en conséquence."
 
-#: view/main.py:961
+#: view/main.py:992
 msgid "Set Ingame Score"
 msgstr "Régler le pointage dans le jeu"
 
-#: view/main.py:970
+#: view/main.py:1001
 msgid "Toggle Production Tab"
 msgstr "Afficher l'onglet de production"
 
-#: view/main.py:979
+#: view/main.py:1010
 msgid "Auto Twitch Update"
 msgstr "Mis à jour automatique de Twitch"
 
-#: view/main.py:984
+#: view/main.py:1015
 msgid "Auto Nightbot Update"
 msgstr "Mis à jour automatique de Nightbot"
 
-#: view/main.py:993 view/main.py:997
+#: view/main.py:1024 view/main.py:1028
 msgid "Only Windows"
 msgstr "Windows seulement"
 
-#: view/main.py:1087
+#: view/main.py:1118
 msgid "Applying Custom Match..."
 msgstr "Application du match personnalisé..."
 
-#: view/main.py:1130
+#: view/main.py:1161
 msgid "Match Grabber"
 msgstr ""
 
-#: view/main.py:1132
+#: view/main.py:1163
 msgid "Collecting data from {}"
 msgstr ""
 
-#: view/main.py:1135
+#: view/main.py:1166
 msgid "Reading {}..."
 msgstr "Lecture de {}..."
 
-#: view/main.py:1154
+#: view/main.py:1185
 msgid "Updating Nightbot Command..."
 msgstr "Mise à jour de la commande Nightbot..."
 
-#: view/main.py:1163
+#: view/main.py:1194
 msgid "Updating Twitch Title..."
 msgstr "Mise à jour du titre de Twitch..."
 
-#: view/main.py:1172
+#: view/main.py:1203
 msgid "Resetting Score..."
 msgstr "Réinitialisation du pointage..."
 
@@ -584,8 +594,8 @@ msgstr "Joueur  {} de l'équipe {}"
 msgid "Set the score"
 msgstr "Régler le pointage"
 
-#: view/matchdataview.py:281 view/widgets.py:1741 view/widgets.py:1749
-#: view/widgets.py:1790
+#: view/matchdataview.py:281 view/widgets.py:1745 view/widgets.py:1753
+#: view/widgets.py:1794
 msgid "Map {}"
 msgstr "Carte {}"
 
@@ -1586,12 +1596,12 @@ msgstr "Êtes-vous sûr de vouloir supprimer le Profil '{}'?"
 msgid "Add Profile"
 msgstr "Ajouter un profil"
 
-#: view/widgets.py:1444 view/widgets.py:1601
+#: view/widgets.py:1444 view/widgets.py:1602
 msgid "Please enter the name of the profile"
 msgstr "Veuillez entrer le nom du profil"
 
 #: view/widgets.py:1456 view/widgets.py:1483 view/widgets.py:1541
-#: view/widgets.py:1612
+#: view/widgets.py:1613
 msgid "Please enter a valid name"
 msgstr "Veuillez entrer un nom valide"
 
@@ -1624,30 +1634,30 @@ msgid "Are you sure you wish to overwrite the current profile '{}'?"
 msgstr "Êtes-vous sûr de vouloir remplacer le profil actuel '{}'?"
 
 #: view/widgets.py:1579
-msgid "Import && Overwrite Profile"
+msgid "Import & Overwrite Profile"
 msgstr ""
 
-#: view/widgets.py:1600
+#: view/widgets.py:1601
 msgid "Rename Profile"
 msgstr "Renommer le profil"
 
-#: view/widgets.py:1630
+#: view/widgets.py:1631
 msgid "Enter AlphaTL/RSL Match-URL or search for an upcoming AlphaTL Match."
 msgstr ""
 
-#: view/widgets.py:1717
+#: view/widgets.py:1721
 msgid "Dynamic:"
 msgstr "Dynamique:"
 
-#: view/widgets.py:1732
+#: view/widgets.py:1736
 msgid "Static:"
 msgstr "Statique:"
 
-#: view/widgets.py:1737
+#: view/widgets.py:1741
 msgid "From"
 msgstr ""
 
-#: view/widgets.py:1744
+#: view/widgets.py:1748
 msgid "to"
 msgstr ""
 
