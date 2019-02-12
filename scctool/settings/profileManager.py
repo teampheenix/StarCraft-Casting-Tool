@@ -85,6 +85,13 @@ class ProfileManager:
                 del self._profiles[profile]
 
         if len(self._profiles) == 0:
+            for f in os.scandir(self._profilesdir):
+                if f.is_dir():
+                    self._profiles[f.name] = {
+                        'name': 'Default', 'default': True}
+                    self._createPortFile(f.name)
+
+        if len(self._profiles) == 0:
             self.addProfile("Default", True, True)
 
         self._default = ""
@@ -142,7 +149,7 @@ class ProfileManager:
 
     def setDefault(self, profile):
         """Set the default profile."""
-        if self._default:
+        if self._default and self._default in self._profiles.keys():
             self._profiles[self._default]['default'] = False
 
         self._profiles[profile]['default'] = True
@@ -220,16 +227,22 @@ class ProfileManager:
     def deleteProfile(self, profile, force=False):
         """Delete a profile."""
         if profile not in self._profiles.keys():
+            module_logger.warning('Profile to delete does not exist.')
             return False
-        if not force and len(self._profiles) <= 1:
-            raise ValueError("Last profile cannot be deleted.")
+        if len(self._profiles) <= 1:
+            if force:
+                self._profiles = dict()
+            else:
+                raise ValueError("Last profile cannot be deleted.")
+        else:
+            del self._profiles[profile]
 
         directory = self.profiledir(profile)
         shutil.rmtree(directory)
-        del self._profiles[profile]
-        if self._current == profile or self._default == profile:
+        if ((self._current == profile or self._default == profile) and
+                not force):
             self._checkProfils()
-        module_logger.info(f'Profile {profile} deleted.')
+        module_logger.info(f'Profile {profile} deleted: {self._profiles}')
         self._saveSettings()
         return True
 

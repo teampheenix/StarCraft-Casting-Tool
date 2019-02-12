@@ -1569,18 +1569,19 @@ class ProfileMenu(QMenu):
 
         QApplication.setOverrideCursor(Qt.WaitCursor)
         try:
-            scctool.settings.profileManager.deleteProfile(id, True)
+            scctool.settings.profileManager.deleteProfile(ident, True)
             ident = scctool.settings.profileManager.importProfile(
                 filename, name, ident)
             self.addProfile(ident, name, False)
-            self.selectProfile(ident)
+            self.selectProfile(ident, False)
         except Exception as e:
             QMessageBox.information(self._parent, _(
-                "Import && Overwrite Profile"), str(e))
+                "Import & Overwrite Profile"), str(e))
+            module_logger.exception('importProfileOverwrite')
         finally:
             QApplication.restoreOverrideCursor()
 
-    def selectProfile(self, myid):
+    def selectProfile(self, myid, save=True):
         """Select a profle."""
         for ident, action in self._profiles.items():
             if ident == myid:
@@ -1589,7 +1590,7 @@ class ProfileMenu(QMenu):
                 action.setChecked(False)
         scctool.settings.profileManager.setDefault(myid)
         # scctool.settings.profileManager.setCurrent(myid)
-        self._parent.restart()
+        self._parent.restart(save)
 
     def renameProfile(self):
         """Rename a profile."""

@@ -157,6 +157,8 @@ def loadMapList():
                 mapName = name.replace('_', " ")
                 if mapName not in data:
                     data.append(mapName)
+    except FileNotFoundError:
+        data = []
     finally:
         this.maps = data
 
