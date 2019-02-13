@@ -9,6 +9,9 @@ environment:
           PYTHON_VERSION: "3.6"
           PYTHON_ARCH: "64"
 
+platform:
+  - x64
+
 init:
     # Used to RDP into build worker
     #- ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
