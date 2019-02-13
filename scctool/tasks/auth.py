@@ -14,14 +14,10 @@ from scctool.settings import getResFile, safe
 
 module_logger = logging.getLogger(__name__)
 _ = scctool.settings.translation.gettext
-try:
-    NIGHTBOT_REDIRECT_URI = "http://localhost:65010/nightbot_callback"
 
-    TWITCH_REDIRECT_URI = "http://localhost:65010/twitch_callback"
+NIGHTBOT_REDIRECT_URI = "http://localhost:65010/nightbot_callback"
 
-except Exception:
-    module_logger.exception("message")
-    raise
+TWITCH_REDIRECT_URI = "http://localhost:65010/twitch_callback"
 
 
 class myHandler(http.server.SimpleHTTPRequestHandler):
@@ -109,11 +105,13 @@ class AuthThread(http.server.HTTPServer, QtCore.QThread):
 
     tokenRecived = QtCore.pyqtSignal(str, str)
     pending_requests = set()
+    allow_reuse_address = True
 
     def __init__(self):
         """Init thread."""
         QtCore.QThread.__init__(self)
-        http.server.HTTPServer.__init__(self, ('', 65010), myHandler)
+        http.server.HTTPServer.__init__(
+            self, ('', 65010), myHandler, bind_and_activate=False)
 
     def __del__(self):
         """Delete thread."""
@@ -140,9 +138,11 @@ class AuthThread(http.server.HTTPServer, QtCore.QThread):
         """Run thread."""
         module_logger.info("AuthThread started")
         try:
+            self.server_bind()
+            self.server_activate()
             self.serve_forever()
         except OSError:
-            pass
+            self.server_close()
         finally:
             module_logger.info("AuthThread done")
 
@@ -158,6 +158,6 @@ class AuthThread(http.server.HTTPServer, QtCore.QThread):
         webbrowser.open("http://localhost:65010/{}".format(scope))
 
     def server_bind(self):
-        http.server.HTTPServer.server_bind(self)
         self.socket.setsockopt(http.server.socket.SOL_SOCKET,
                                http.server.socket.SO_REUSEADDR, 1)
+        http.server.HTTPServer.server_bind(self)

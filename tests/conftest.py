@@ -4,6 +4,7 @@ from scctool.controller import MainController
 from scctool.view.main import MainWindow
 import scctool.settings
 import sys
+import time
 
 
 @pytest.fixture()
@@ -17,4 +18,5 @@ def scct_app():
     main_window.show()
     yield (main_window, cntlr)
     main_window.close()
+    cntlr.cleanUp()
     app.exit(1)
