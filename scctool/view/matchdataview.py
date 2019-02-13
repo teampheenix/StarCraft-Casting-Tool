@@ -331,7 +331,8 @@ class MatchDataWidget(QWidget):
         box_layout = QGridLayout()
         rows = int(self.max_no_vetoes / 2)
         self.le_veto_maps = [MapLineEdit() for i in range(self.max_no_vetoes)]
-        self.veto_label = [QLabel(f'#{i+1}') for i in range(self.max_no_vetoes)]
+        self.veto_label = [QLabel(f'#{i+1}')
+                           for i in range(self.max_no_vetoes)]
         self.sl_veto = [QSlider(Qt.Horizontal)
                         for i in range(self.max_no_vetoes)]
         self.row_label = [QLabel('') for y in range(rows)]

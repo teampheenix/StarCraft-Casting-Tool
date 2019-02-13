@@ -21,9 +21,9 @@ class ProfileManager:
 
     _settings = QSettings(ClientConfig.APP_NAME, ClientConfig.COMPANY_NAME)
 
-    def __init__(self, local=False):
+    def __init__(self, tmp_dir=''):
         """Init the manager."""
-        self.setupDirs(local)
+        self.setupDirs(tmp_dir)
         self._loadSettings()
 
     def basedir(self):
@@ -46,14 +46,15 @@ class ProfileManager:
             profile = self._current
         return os.path.normpath(os.path.join(self._profilesdir, profile, file))
 
-    def setupDirs(self, local=False):
+    def setupDirs(self, tmp_dir=''):
         """Setup profil directory."""
-        if local:
-            if getattr(sys, 'frozen', False):
-                self._basedir = os.path.dirname(sys.executable)
-            else:
-                self._basedir = os.path.dirname(
-                    sys.modules['__main__'].__file__)
+        if tmp_dir and os.path.isdir(tmp_dir):
+            self._basedir = os.path.abspath(tmp_dir)
+            # if getattr(sys, 'frozen', False):
+            #     self._basedir = os.path.dirname(sys.executable)
+            # else:
+            #     self._basedir = os.path.dirname(
+            #         sys.modules['__main__'].__file__)
         else:
             self._basedir = appdirs.user_data_dir(
                 ClientConfig.APP_NAME, ClientConfig.COMPANY_NAME)
@@ -239,8 +240,8 @@ class ProfileManager:
 
         directory = self.profiledir(profile)
         shutil.rmtree(directory)
-        if ((self._current == profile or self._default == profile) and
-                not force):
+        if ((self._current == profile or self._default == profile)
+                and not force):
             self._checkProfils()
         module_logger.info(f'Profile {profile} deleted: {self._profiles}')
         self._saveSettings()

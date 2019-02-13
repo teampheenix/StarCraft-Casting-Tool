@@ -194,7 +194,8 @@ class MainController:
 
             idx = self.matchControl.selectedMatchIdx()
             matchWidget = self.view.matchDataTabWidget.widget(idx)
-            matchWidget.toggleVetoes(vetoes > 0)
+            if matchWidget is not None:
+                matchWidget.toggleVetoes(vetoes > 0)
 
             self.autoSetNextMap()
 

@@ -39,9 +39,9 @@ this.nightbot_commands = dict()
 this.safe = SafeGuard()
 
 
-def loadSettings():
+def loadSettings(tmp_dir=''):
     """Load all settings."""
-    this.profileManager = ProfileManager()
+    this.profileManager = ProfileManager(tmp_dir)
 
     initConfig(configFile())
 

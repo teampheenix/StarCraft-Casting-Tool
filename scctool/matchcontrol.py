@@ -141,6 +141,9 @@ class MatchControl(QObject):
         if ident in self.__matches.keys() and self.__selectedMatch != ident:
             self.__selectedMatch = ident
             module_logger.info('Selected match {}'.format(ident))
+            return True
+        else:
+            return False
 
     def activateMatch(self, ident):
         """Activate a match."""
@@ -185,7 +188,7 @@ class MatchControl(QObject):
         return self.__selectedMatch
 
     def selectedMatchIdx(self):
-        """Gett index of selected match."""
+        """Get index of selected match."""
         return self.__order.index(self.__selectedMatch)
 
     def getMatches(self):

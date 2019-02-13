@@ -640,9 +640,9 @@ class MainWindow(QMainWindow):
         """Perform adjustements if the match tab is changed."""
         dataWidget = self.matchDataTabWidget.widget(idx)
         ident = dataWidget.matchData.getControlID()
-        self.controller.matchControl.selectMatch(ident)
-        with self.tlock:
-            self.controller.updateMatchFormat()
+        if self.controller.matchControl.selectMatch(ident):
+            with self.tlock:
+                self.controller.updateMatchFormat()
 
     def tabMoved(self, toIdx, fromIdx):
         """Update the order in the match controller when a tab is moved."""
