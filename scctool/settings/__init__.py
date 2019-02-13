@@ -37,10 +37,12 @@ this.profileManager = ProfileManager()
 this.maps = []
 this.nightbot_commands = dict()
 this.safe = SafeGuard()
+this.test = False
 
 
-def loadSettings(tmp_dir=''):
+def loadSettings(tmp_dir='', test=False):
     """Load all settings."""
+    this.test = bool(test)
     this.profileManager = ProfileManager(tmp_dir)
 
     initConfig(configFile())

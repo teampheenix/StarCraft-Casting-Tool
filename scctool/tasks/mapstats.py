@@ -25,8 +25,9 @@ class MapStatsManager:
         self.__thread = MapStatsThread(self)
         self.__thread.newMapData.connect(self._newData)
         self.__thread.newMapPool.connect(self._newMapPool)
-        self.refreshMapPool()
-        self.refreshMaps()
+        if not scctool.settings.test:
+            self.refreshMapPool()
+            self.refreshMaps()
 
     def _getMaps(self):
         return self.__maps.keys()

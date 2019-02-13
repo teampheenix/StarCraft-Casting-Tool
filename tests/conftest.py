@@ -26,7 +26,7 @@ def scct_app(tmpdir_factory):
             shutil.copytree(
                 casting_html_src,
                 casting_html)
-    scctool.settings.loadSettings(str(tmp_dir))
+    scctool.settings.loadSettings(str(tmp_dir), True)
     cntlr = MainController()
     main_window = MainWindow(
         cntlr, app, False)

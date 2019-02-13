@@ -65,8 +65,6 @@ class TestGUI(object):
         new_active = self.cntlr.matchControl.activeMatchId()
         assert old_selected == new_selected
         assert old_active == new_active
-        # self.qtbot.mouseClick(
-        #     self.main_window.pb_copy_match_tab, Qt.LeftButton)
         self.catch_errors()
 
     @pytest.mark.parametrize("player_before_race",
@@ -76,7 +74,7 @@ class TestGUI(object):
                                  scct_app, player_before_race):
         self.gui_setup(qtbot, caplog, scct_app)
 
-        self.qtbot.mouseClick(self.main_window.pb_resetdata, Qt.LeftButton)
+        self.new_tab()
         self.assert_bo(3)
         self.main_window.cb_allkill.setChecked(False)
         match = self.cntlr.matchControl.activeMatch()
@@ -114,10 +112,101 @@ class TestGUI(object):
 
         self.catch_errors()
 
+    def test_solo_mode(self, qtbot, caplog, scct_app):
+        self.gui_setup(qtbot, caplog, scct_app)
+
+        self.new_tab()
+        bo = 15
+        self.assert_bo(bo)
+
+        self.main_window.cb_solo.setChecked(False)
+        match = self.cntlr.matchControl.activeMatch()
+        assert self.main_window.cb_solo.isChecked() is False
+        assert match.getSolo() is False
+        self.main_window.cb_solo.setChecked(True)
+        assert match.getSolo() is False
+        self.qtbot.mouseClick(self.main_window.pb_applycustom, Qt.LeftButton)
+        assert match.getSolo()
+
+        matchWidget = self.main_window.matchDataTabWidget.widget(
+            self.cntlr.matchControl.activeMatchIdx())
+        for team_idx in range(2):
+            assert matchWidget.le_team[team_idx].text() == 'TBD'
+            assert match.getTeam(
+                team_idx) == 'TBD'
+            self.insert_into_widget(
+                matchWidget.le_team[team_idx], f'My Test Team {team_idx + 1}')
+            assert match.getTeam(
+                team_idx) == f'My Test Team {team_idx + 1}'
+            assert match.getTeamOrPlayer(team_idx) == 'TBD'
+        for team_idx in range(2):
+            self.assert_player(team_idx, 0, 'TBD')
+            self.assert_race(team_idx, 0, 'Random')
+            player_name = f'Player for Team {team_idx + 1}'
+            race = scctool.settings.idx2race(random.choice([1, 2, 3]))
+            matchWidget.cb_race[team_idx][0].setCurrentIndex(
+                scctool.settings.race2idx(race))
+            self.insert_into_widget(
+                matchWidget.le_player[team_idx][0], player_name)
+            assert match.getTeamOrPlayer(
+                team_idx) == player_name
+
+            for set_idx in range(bo):
+                self.assert_player(team_idx, set_idx, player_name)
+                self.assert_race(team_idx, set_idx, race)
+                if set_idx > 0:
+                    assert matchWidget.le_player[team_idx][
+                        set_idx].isReadOnly()
+                    new_race = scctool.settings.idx2race(
+                        random.choice([1, 2, 3]))
+                    matchWidget.cb_race[team_idx][set_idx].setCurrentIndex(
+                        scctool.settings.race2idx(new_race))
+                    self.assert_race(team_idx, set_idx, new_race)
+
+        self.catch_errors()
+
+    @pytest.mark.parametrize("match_url", ['https://alpha.tl/match/4709'])
+    def test_alpha_match_grabber(self, qtbot, caplog, scct_app, match_url):
+        self.gui_setup(qtbot, caplog, scct_app)
+
+        self.new_tab()
+        self.assert_bo(3)
+        self.main_window.tabs.setCurrentIndex(0)
+        assert self.main_window.tabs.currentIndex() == 0
+        self.insert_into_widget(self.main_window.le_url, match_url)
+        assert self.main_window.le_url.text() == match_url
+        with self.qtbot.waitSignal(self.cntlr.matchControl.metaChanged) as blocker:
+            self.qtbot.mouseClick(self.main_window.pb_refresh, Qt.LeftButton)
+
+        assert self.main_window.cb_bestof.currentText() == str(5)
+        assert self.main_window.cb_minSets.currentText() == '3'
+        assert self.main_window.cb_ace_bo.isEnabled()
+        match = self.cntlr.matchControl.activeMatch()
+        assert match.getBestOf() == 5
+        assert match.getNoSets() == 5
+        assert match.getMinSets() == 3
+        assert match.getNoAceSets() == 1
+
+        self.catch_errors()
+
+    def new_tab(self):
+        self.qtbot.mouseClick(self.main_window.pb_add_match_tab, Qt.LeftButton)
+        selected = self.cntlr.matchControl.selectedMatchId()
+        while(self.main_window.matchDataTabWidget.count() > 1):
+            self.qtbot.mouseClick(self.main_window.matchDataTabWidget.widget(
+                0)._closeButton, Qt.LeftButton)
+        assert self.main_window.matchDataTabWidget.count() == 1
+        assert (self.cntlr.matchControl.selectedMatchId() ==
+                self.cntlr.matchControl.activeMatchId())
+        assert self.cntlr.matchControl.selectedMatchIdx() == 0
+        assert self.cntlr.matchControl.activeMatchIdx() == 0
+        assert self.cntlr.matchControl.activeMatchId() == selected
+        self.catch_errors()
+
     def test_allkill_update(self, qtbot, caplog, scct_app):
         self.gui_setup(qtbot, caplog, scct_app)
 
-        self.qtbot.mouseClick(self.main_window.pb_resetdata, Qt.LeftButton)
+        self.new_tab()
         bo = 15
         self.assert_bo(bo)
         self.main_window.cb_allkill.setChecked(False)
@@ -181,7 +270,7 @@ class TestGUI(object):
         assert (match.getMapScore(set_idx) == score)
 
     def assert_match_format(self):
-        self.qtbot.mouseClick(self.main_window.pb_resetdata, Qt.LeftButton)
+        self.new_tab()
         self.main_window.tabs.setCurrentIndex(1)
         assert self.main_window.tabs.currentIndex() == 1
         for bo in range(1, scctool.settings.max_no_sets - 3):

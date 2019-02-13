@@ -1706,6 +1706,9 @@ class MatchComboBox(QComboBox):
         """Return it's text."""
         return self.lineEdit().text()
 
+    def selectAll(self):
+        self.lineEdit().selectAll()
+
 
 class ScopeGroupBox(QGroupBox):
     """Define QGroupBox for icon scope."""
