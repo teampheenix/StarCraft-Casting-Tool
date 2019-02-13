@@ -16,6 +16,7 @@ class TestGUI(object):
         self.qtbot = qtbot
         self.qtbot.addWidget(self.main_window)
         self.qtbot.waitForWindowShown(self.main_window)
+        self.catch_errors()
 
     def catch_errors(self):
         for record in self.caplog.records:
@@ -34,6 +35,38 @@ class TestGUI(object):
 
         self.assert_subwindows()
 
+        self.catch_errors()
+
+    @pytest.mark.parametrize("copy",
+                             [True, False],
+                             ids=["copy", "add"])
+    def test_match_tabs(self, qtbot, caplog, scct_app, copy):
+        self.gui_setup(qtbot, caplog, scct_app)
+        old_selected = self.cntlr.matchControl.selectedMatchId()
+        old_active = self.cntlr.matchControl.activeMatchId()
+        assert old_selected == old_active
+        if copy:
+            button = self.main_window.pb_copy_match_tab
+        else:
+            button = self.main_window.pb_add_match_tab
+        self.qtbot.mouseClick(button, Qt.LeftButton)
+        new_selected = self.cntlr.matchControl.selectedMatchId()
+        new_active = self.cntlr.matchControl.activeMatchId()
+        assert old_selected != new_selected
+        assert old_active == new_active
+        new_widget = self.main_window.matchDataTabWidget.widget(
+            self.cntlr.matchControl.selectedMatchIdx())
+        self.qtbot.mouseClick(new_widget._radioButton, Qt.LeftButton)
+        new_active = self.cntlr.matchControl.activeMatchId()
+        assert new_selected == new_active
+        assert old_active != new_active
+        self.qtbot.mouseClick(new_widget._closeButton, Qt.LeftButton)
+        new_selected = self.cntlr.matchControl.selectedMatchId()
+        new_active = self.cntlr.matchControl.activeMatchId()
+        assert old_selected == new_selected
+        assert old_active == new_active
+        # self.qtbot.mouseClick(
+        #     self.main_window.pb_copy_match_tab, Qt.LeftButton)
         self.catch_errors()
 
     @pytest.mark.parametrize("player_before_race",

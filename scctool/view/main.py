@@ -584,22 +584,22 @@ class MainWindow(QMainWindow):
         buttonLayout = QHBoxLayout()
         buttonLayout.setContentsMargins(2, 1, 1, 2)
         buttonLayout.setSpacing(1)
-        button = QPushButton()
+        self.pb_add_match_tab = QPushButton()
         pixmap = QIcon(scctool.settings.getResFile('add.png'))
-        button.setIcon(pixmap)
-        button.setFixedSize(28, 28)
-        # button.setFlat(True)
-        button.setToolTip(_('Add Match Tab'))
-        button.clicked.connect(self.addMatchTab)
-        buttonLayout.addWidget(button)
-        button = QPushButton()
-        button.setFixedSize(28, 28)
+        self.pb_add_match_tab.setIcon(pixmap)
+        self.pb_add_match_tab.setFixedSize(28, 28)
+        self.pb_add_match_tab.setToolTip(_('Add Match Tab'))
+        self.pb_add_match_tab.clicked.connect(self.addMatchTab)
+        buttonLayout.addWidget(self.pb_add_match_tab)
+
+        self.pb_copy_match_tab = QPushButton()
+        self.pb_copy_match_tab.setFixedSize(28, 28)
         pixmap = QIcon(scctool.settings.getResFile('copy.png'))
-        button.setIcon(pixmap)
-        # button.setFlat(True)
-        button.setToolTip(_('Copy Match Tab'))
-        button.clicked.connect(self.copyMatchTab)
-        buttonLayout.addWidget(button)
+        self.pb_copy_match_tab.setIcon(pixmap)
+        self.pb_copy_match_tab.setToolTip(_('Copy Match Tab'))
+        self.pb_copy_match_tab.clicked.connect(self.copyMatchTab)
+        buttonLayout.addWidget(self.pb_copy_match_tab)
+
         container.setLayout(buttonLayout)
         self.matchDataTabWidget.setCornerWidget(container)
 
@@ -675,8 +675,8 @@ class MainWindow(QMainWindow):
             self.pb_openBrowser = QPushButton(
                 _("Open in Browser"))
             self.pb_openBrowser.clicked.connect(self.openBrowser_click)
-            width = (self.scoreWidth + 2 * self.raceWidth + 2
-                     * self.mimumLineEditWidth + 4 * 6) / 2 - 2
+            width = (self.scoreWidth + 2 * self.raceWidth + 2 *
+                     self.mimumLineEditWidth + 4 * 6) / 2 - 2
             self.pb_openBrowser.setMinimumWidth(width)
 
             container = QHBoxLayout()
@@ -981,18 +981,18 @@ class MainWindow(QMainWindow):
             self.cb_autoUpdate = QCheckBox(
                 _("Auto Score Update"))
             self.cb_autoUpdate.setChecked(False)
-            string = _('Automatically detects the outcome'
-                       + ' of SC2 matches that are '
-                       + 'played/observed in your SC2-client'
-                       + ' and updates the score accordingly.')
+            string = _('Automatically detects the outcome' +
+                       ' of SC2 matches that are ' +
+                       'played/observed in your SC2-client' +
+                       ' and updates the score accordingly.')
             self.cb_autoUpdate.setToolTip(string)
             self.cb_autoUpdate.stateChanged.connect(self.autoUpdate_change)
 
             self.cb_autoToggleScore = QCheckBox(
                 _("Set Ingame Score"))
             self.cb_autoToggleScore.setChecked(False)
-            string = _('Automatically sets the score of your ingame'
-                       + ' UI-interface at the begining of a game.')
+            string = _('Automatically sets the score of your ingame' +
+                       ' UI-interface at the begining of a game.')
             self.cb_autoToggleScore.setToolTip(string)
             self.cb_autoToggleScore.stateChanged.connect(
                 self.autoToggleScore_change)
@@ -1000,8 +1000,8 @@ class MainWindow(QMainWindow):
             self.cb_autoToggleProduction = QCheckBox(
                 _("Toggle Production Tab"))
             self.cb_autoToggleProduction.setChecked(False)
-            string = _('Automatically toggles the production tab of your'
-                       + ' ingame UI-interface at the begining of a game.')
+            string = _('Automatically toggles the production tab of your' +
+                       ' ingame UI-interface at the begining of a game.')
             self.cb_autoToggleProduction.setToolTip(string)
             self.cb_autoToggleProduction.stateChanged.connect(
                 self.autoToggleProduction_change)
