@@ -57,7 +57,10 @@ class myHandler(http.server.SimpleHTTPRequestHandler):
             par = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)
             self.server.emit_token(scope, par.get('access_token', [''])[0])
         else:
-            self.send_error(404, "File not found")
+            try:
+                self.send_error(404, "File not found")
+            except (ConnectionAbortedError, ConnectionResetError):
+                pass
 
     def log_message(self, format, *args):
         """Log a message."""
@@ -111,7 +114,7 @@ class AuthThread(http.server.HTTPServer, QtCore.QThread):
         """Init thread."""
         QtCore.QThread.__init__(self)
         http.server.HTTPServer.__init__(
-            self, ('', 65010), myHandler, bind_and_activate=False)
+            self, ('', 65010), myHandler)
 
     def __del__(self):
         """Delete thread."""
@@ -138,8 +141,6 @@ class AuthThread(http.server.HTTPServer, QtCore.QThread):
         """Run thread."""
         module_logger.info("AuthThread started")
         try:
-            self.server_bind()
-            self.server_activate()
             self.serve_forever()
         except OSError:
             self.server_close()
