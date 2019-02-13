@@ -1,7 +1,16 @@
 # Changelog
 
 
-## v2.7.2 (2019-02-11)
+## v2.7.3 (2019-02-13)
+
+### Fix
+
+* Fixed a crash caused by closing match tabs.
+
+* Fixed a bug where import & overwrite profile would fail if only one profile exists.
+
+
+## v2.7.2 (2019-02-12)
 
 ### New
 
