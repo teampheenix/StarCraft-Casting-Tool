@@ -38,6 +38,7 @@ install:
     # about it being out of date.
     - "python -m pip install --upgrade pip"
     - "pip --version"
+    - "pip install -r requirements.txt -U"
     - "pip install -r tests/requirements.txt -U"
     - "pip install -e ."
 
