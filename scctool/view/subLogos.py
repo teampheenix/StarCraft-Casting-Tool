@@ -54,10 +54,11 @@ class SubwindowLogos(QWidget):
         button = QPushButton(_("Load from URL"))
         button.clicked.connect(lambda: self.logoFromUrlDialog(1))
         layout.addWidget(button, 1, 1)
-        button = QPushButton(_("Search Liquipedia"))
-        button.clicked.connect(lambda: self.liqupediaSearchDialog(
-            1, self.matchDataWidget.le_team[0].text()))
-        layout.addWidget(button, 2, 1)
+        self.pb_liquipedia_1 = QPushButton(_("Search Liquipedia"))
+        self.pb_liquipedia_1.clicked.connect(
+            lambda: self.liqupediaSearchDialog(
+                1, self.matchDataWidget.le_team[0].text()))
+        layout.addWidget(self.pb_liquipedia_1, 2, 1)
         button = QPushButton(_("Add to Favorites"))
         button.clicked.connect(lambda: self.addFavorite(1))
         layout.addWidget(button, 3, 1)
@@ -103,10 +104,11 @@ class SubwindowLogos(QWidget):
         button = QPushButton(_("Load from URL"))
         button.clicked.connect(lambda: self.logoFromUrlDialog(2))
         layout.addWidget(button, 1, 0)
-        button = QPushButton(_("Search Liquipedia"))
-        button.clicked.connect(lambda: self.liqupediaSearchDialog(
-            2, self.matchDataWidget.le_team[1].text()))
-        layout.addWidget(button, 2, 0)
+        self.pb_liquipedia_2 = QPushButton(_("Search Liquipedia"))
+        self.pb_liquipedia_2.clicked.connect(
+            lambda: self.liqupediaSearchDialog(
+                2, self.matchDataWidget.le_team[1].text()))
+        layout.addWidget(self.pb_liquipedia_2, 2, 0)
         button = QPushButton(_("Add to Favorites"))
         button.clicked.connect(lambda: self.addFavorite(2))
         layout.addWidget(button, 3, 0)

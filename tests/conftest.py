@@ -1,13 +1,14 @@
+import os
+import random
+import shutil
+import sys
+
 import pytest
 from PyQt5.QtWidgets import QApplication, QStyleFactory
+
+import scctool.settings
 from scctool.controller import MainController
 from scctool.view.main import MainWindow
-import scctool.settings
-import sys
-import random
-import time
-import os
-import shutil
 
 
 @pytest.fixture()

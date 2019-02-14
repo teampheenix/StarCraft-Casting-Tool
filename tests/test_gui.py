@@ -1,10 +1,11 @@
-from PyQt5.QtCore import Qt
-
-import pytest
-import scctool.settings
 import logging
 import random
 import string
+
+import pytest
+from PyQt5.QtCore import Qt
+
+import scctool.settings
 
 
 class TestGUI(object):
@@ -175,7 +176,7 @@ class TestGUI(object):
         assert self.main_window.tabs.currentIndex() == 0
         self.insert_into_widget(self.main_window.le_url, match_url)
         assert self.main_window.le_url.text() == match_url
-        with self.qtbot.waitSignal(self.cntlr.matchControl.metaChanged) as blocker:
+        with self.qtbot.waitSignal(self.cntlr.matchControl.metaChanged):
             self.qtbot.mouseClick(self.main_window.pb_refresh, Qt.LeftButton)
 
         assert self.main_window.cb_bestof.currentText() == str(5)
@@ -196,8 +197,8 @@ class TestGUI(object):
             self.qtbot.mouseClick(self.main_window.matchDataTabWidget.widget(
                 0)._closeButton, Qt.LeftButton)
         assert self.main_window.matchDataTabWidget.count() == 1
-        assert (self.cntlr.matchControl.selectedMatchId() ==
-                self.cntlr.matchControl.activeMatchId())
+        assert (self.cntlr.matchControl.selectedMatchId()
+                == self.cntlr.matchControl.activeMatchId())
         assert self.cntlr.matchControl.selectedMatchIdx() == 0
         assert self.cntlr.matchControl.activeMatchIdx() == 0
         assert self.cntlr.matchControl.activeMatchId() == selected
@@ -326,7 +327,8 @@ class TestGUI(object):
     def assert_bo(self, bo):
         self.main_window.cb_bestof.setCurrentIndex(bo - 1)
         assert self.main_window.cb_bestof.currentText() == str(bo)
-        assert self.main_window.cb_minSets.currentText() == str(int(bo / 2) + 1)
+        assert (self.main_window.cb_minSets.currentText()
+                == str(int(bo / 2) + 1))
         assert self.main_window.cb_minSets.count() == bo
         self.main_window.cb_extend_ace.setChecked(False)
         assert self.main_window.cb_ace_bo.isEnabled() is False
@@ -349,6 +351,42 @@ class TestGUI(object):
             assert widget.text() == text
         widget.clearFocus()
         self.qtbot.wait(5)
+
+    def test_logo_manager(self, qtbot, caplog, scct_app):
+        self.gui_setup(qtbot, caplog, scct_app)
+        self.new_tab()
+        matchWidget = self.main_window.matchDataTabWidget.widget(
+            self.cntlr.matchControl.activeMatchIdx())
+        teams = ['team pheeniX', 'Wolfs Lair', 'PaniC Fighters', 'Dark Oath']
+        for logo_button in [matchWidget.qb_logo1, matchWidget.qb_logo2]:
+            self.qtbot.mouseClick(logo_button, Qt.LeftButton)
+            logo_dialog = self.main_window.mysubwindows['icons']
+            self.qtbot.waitForWindowShown(logo_dialog)
+            for liquipedia_button in [logo_dialog.pb_liquipedia_1,
+                                      logo_dialog.pb_liquipedia_2]:
+                team = random.choice(teams)
+                self.qtbot.mouseClick(
+                    liquipedia_button, Qt.LeftButton)
+                self.qtbot.waitForWindowShown(logo_dialog.mysubwindow)
+                self.insert_into_widget(
+                    logo_dialog.mysubwindow.qle_search, team, True)
+                assert (logo_dialog.mysubwindow.qle_search.text()
+                        == team)
+                self.qtbot.mouseClick(
+                    logo_dialog.mysubwindow.searchButton, Qt.LeftButton)
+
+                def check_for_result():
+                    assert len(logo_dialog.mysubwindow.data) > 0
+                    assert len(logo_dialog.mysubwindow.nams) > 0
+                    logo_dialog.mysubwindow.nams
+                    with qtbot.waitSignal(
+                            logo_dialog.mysubwindow.nams[0].finished,
+                            timeout=10000):
+                        pass
+                qtbot.waitUntil(check_for_result)
+                self.qtbot.mouseClick(
+                    logo_dialog.mysubwindow.selectButton, Qt.LeftButton)
+            logo_dialog.closeWindow()
 
     def assert_subwindows(self):
         self.main_window.openBrowserSourcesDialog()

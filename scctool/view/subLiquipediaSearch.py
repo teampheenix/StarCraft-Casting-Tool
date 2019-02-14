@@ -14,8 +14,6 @@ import scctool.settings.translation
 from scctool.tasks.liquipedia import LiquipediaGrabber
 from scctool.view.widgets import LogoDownloader
 
-
-
 # create logger
 module_logger = logging.getLogger(__name__)
 base_url = 'https://liquipedia.net'
@@ -56,9 +54,9 @@ class SubwindowLiquipediaSearch(QWidget):
         self.qle_search.setCompleter(completer)
 
         mainLayout.addWidget(self.qle_search, 0, 0, 1, 2)
-        searchButton = QPushButton(_("Search"))
-        searchButton.clicked.connect(self.search)
-        mainLayout.addWidget(searchButton, 0, 2)
+        self.searchButton = QPushButton(_("Search"))
+        self.searchButton.clicked.connect(self.search)
+        mainLayout.addWidget(self.searchButton, 0, 2)
 
         self.box = QGroupBox(_("Results"))
         layout = QHBoxLayout()
@@ -80,16 +78,16 @@ class SubwindowLiquipediaSearch(QWidget):
 
         mainLayout.addWidget(self.box, 1, 0, 1, 3)
 
-        selectButton = QPushButton(
+        self.selectButton = QPushButton(
             " " + _("Use Selected Logo") + " ")
-        selectButton.clicked.connect(self.applyLogo)
-        closeButton = QPushButton(_("Cancel"))
-        closeButton.clicked.connect(self.close)
+        self.selectButton.clicked.connect(self.applyLogo)
+        self.closeButton = QPushButton(_("Cancel"))
+        self.closeButton.clicked.connect(self.close)
         mainLayout.addItem(QSpacerItem(
             0, 0, QSizePolicy.Expanding,
             QSizePolicy.Minimum), 2, 0)
-        mainLayout.addWidget(closeButton, 2, 1)
-        mainLayout.addWidget(selectButton, 2, 2)
+        mainLayout.addWidget(self.closeButton, 2, 1)
+        mainLayout.addWidget(self.selectButton, 2, 2)
         self.setLayout(mainLayout)
 
         self.setWindowTitle(_("Liquipedia Image Search"))
