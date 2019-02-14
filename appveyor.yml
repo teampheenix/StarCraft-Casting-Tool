@@ -48,6 +48,7 @@ install:
     - "pip --version"
     - "pip install -r requirements.txt -U"
     - "pip install -r tests/requirements.txt -U"
+    - "pip install codecov"
     - "pip install -e ."
 
 build: none
@@ -58,4 +59,5 @@ on_finish:
 
 test_script:
     # Split tests into several subprocesses.
-    - "pytest"
+    - "pytest --cov=./"
+    - "codecov"
