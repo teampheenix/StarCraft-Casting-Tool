@@ -1,3 +1,4 @@
+import logging
 import os
 import random
 import shutil
@@ -12,7 +13,8 @@ from scctool.view.main import MainWindow
 
 
 @pytest.fixture()
-def scct_app(tmpdir_factory):
+def scct_app(tmpdir_factory, caplog):
+    caplog.set_level(logging.ERROR)
     app = QApplication(sys.argv)
     app.setStyle(QStyleFactory.create('Fusion'))
     tmp_dir = tmpdir_factory.getbasetemp()
@@ -36,3 +38,6 @@ def scct_app(tmpdir_factory):
     main_window.close()
     cntlr.cleanUp()
     app.exit(1)
+    for record in caplog.records:
+        assert record.levelname != 'CRITICAL'
+        assert record.levelname != 'ERROR'

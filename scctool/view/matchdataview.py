@@ -187,14 +187,14 @@ class MatchDataWidget(QWidget):
 
         container = QGridLayout()
 
-        button = QPushButton()
+        self.pb_swap = QPushButton()
         pixmap = QIcon(
             scctool.settings.getResFile('update.png'))
-        button.setIcon(pixmap)
-        button.clicked.connect(self.controller.swapTeams)
-        button.setFixedWidth(self.labelWidth)
-        button.setToolTip(_("Swap teams and logos."))
-        container.addWidget(button, 0, 0, 2, 1)
+        self.pb_swap.setIcon(pixmap)
+        self.pb_swap.clicked.connect(self.controller.swapTeams)
+        self.pb_swap.setFixedWidth(self.labelWidth)
+        self.pb_swap.setToolTip(_("Swap teams and logos."))
+        container.addWidget(self.pb_swap, 0, 0, 2, 1)
 
         label = QLabel(_("League:"))
         label.setAlignment(Qt.AlignCenter)

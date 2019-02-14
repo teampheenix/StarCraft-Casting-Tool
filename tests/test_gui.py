@@ -1,4 +1,3 @@
-import logging
 import random
 import string
 
@@ -10,39 +9,27 @@ import scctool.settings
 
 class TestGUI(object):
 
-    def gui_setup(self, qtbot, caplog, scct_app):
-        caplog.set_level(logging.ERROR)
-        self.caplog = caplog
+    def gui_setup(self, qtbot, scct_app):
         self.main_window, self.cntlr = scct_app
         self.qtbot = qtbot
         self.qtbot.addWidget(self.main_window)
         self.qtbot.waitForWindowShown(self.main_window)
-        self.catch_errors()
 
-    def catch_errors(self):
-        for record in self.caplog.records:
-            assert record.levelname != 'CRITICAL'
-            assert record.levelname != 'ERROR'
-
-    def test_match_formats(self, qtbot, caplog, scct_app):
-        self.gui_setup(qtbot, caplog, scct_app)
+    def test_match_formats(self, qtbot, scct_app):
+        self.gui_setup(qtbot, scct_app)
 
         self.assert_match_format()
 
-        self.catch_errors()
-
-    def test_subwindows(self, qtbot, caplog, scct_app):
-        self.gui_setup(qtbot, caplog, scct_app)
+    def test_subwindows(self, qtbot, scct_app):
+        self.gui_setup(qtbot, scct_app)
 
         self.assert_subwindows()
-
-        self.catch_errors()
 
     @pytest.mark.parametrize("copy",
                              [True, False],
                              ids=["copy", "add"])
-    def test_match_tabs(self, qtbot, caplog, scct_app, copy):
-        self.gui_setup(qtbot, caplog, scct_app)
+    def test_match_tabs(self, qtbot, scct_app, copy):
+        self.gui_setup(qtbot, scct_app)
         old_selected = self.cntlr.matchControl.selectedMatchId()
         old_active = self.cntlr.matchControl.activeMatchId()
         assert old_selected == old_active
@@ -66,14 +53,13 @@ class TestGUI(object):
         new_active = self.cntlr.matchControl.activeMatchId()
         assert old_selected == new_selected
         assert old_active == new_active
-        self.catch_errors()
 
     @pytest.mark.parametrize("player_before_race",
                              [True, False],
                              ids=["player_race", "race_player"])
-    def test_player_autocomplete(self, qtbot, caplog,
+    def test_player_autocomplete(self, qtbot,
                                  scct_app, player_before_race):
-        self.gui_setup(qtbot, caplog, scct_app)
+        self.gui_setup(qtbot, scct_app)
 
         self.new_tab()
         self.assert_bo(3)
@@ -111,10 +97,8 @@ class TestGUI(object):
         self.assert_player(team_idx, set_idx, player)
         self.assert_race(team_idx, set_idx, race)
 
-        self.catch_errors()
-
-    def test_solo_mode(self, qtbot, caplog, scct_app):
-        self.gui_setup(qtbot, caplog, scct_app)
+    def test_solo_mode(self, qtbot, scct_app):
+        self.gui_setup(qtbot, scct_app)
 
         self.new_tab()
         bo = 15
@@ -164,11 +148,9 @@ class TestGUI(object):
                         scctool.settings.race2idx(new_race))
                     self.assert_race(team_idx, set_idx, new_race)
 
-        self.catch_errors()
-
     @pytest.mark.parametrize("match_url", ['https://alpha.tl/match/4709'])
-    def test_alpha_match_grabber(self, qtbot, caplog, scct_app, match_url):
-        self.gui_setup(qtbot, caplog, scct_app)
+    def test_alpha_match_grabber(self, qtbot, scct_app, match_url):
+        self.gui_setup(qtbot, scct_app)
 
         self.new_tab()
         self.assert_bo(3)
@@ -188,8 +170,6 @@ class TestGUI(object):
         assert match.getMinSets() == 3
         assert match.getNoAceSets() == 1
 
-        self.catch_errors()
-
     def new_tab(self):
         self.qtbot.mouseClick(self.main_window.pb_add_match_tab, Qt.LeftButton)
         selected = self.cntlr.matchControl.selectedMatchId()
@@ -202,10 +182,9 @@ class TestGUI(object):
         assert self.cntlr.matchControl.selectedMatchIdx() == 0
         assert self.cntlr.matchControl.activeMatchIdx() == 0
         assert self.cntlr.matchControl.activeMatchId() == selected
-        self.catch_errors()
 
-    def test_allkill_update(self, qtbot, caplog, scct_app):
-        self.gui_setup(qtbot, caplog, scct_app)
+    def test_allkill_update(self, qtbot, scct_app):
+        self.gui_setup(qtbot, scct_app)
 
         self.new_tab()
         bo = 15
@@ -242,8 +221,6 @@ class TestGUI(object):
             self.assert_race(other_team, set_idx + 1, 'Random')
             self.assert_player(team, set_idx + 1, players[team]['player'])
             self.assert_race(team, set_idx + 1, players[team]['race'])
-
-        self.catch_errors()
 
     def assert_race(self, team_idx, set_idx, race):
         match = self.cntlr.matchControl.activeMatch()
@@ -315,6 +292,24 @@ class TestGUI(object):
                 set_idx) == sc2map)
             self.assert_score(set_idx, 0)
             score = (set_idx % 2) * 2 - 1
+            matchWidget.sl_score[set_idx].setValue(score)
+            self.assert_score(set_idx, score)
+
+        with self.qtbot.waitSignal(self.cntlr.matchControl.metaChanged):
+            self.qtbot.mouseClick(matchWidget.pb_swap, Qt.LeftButton)
+
+        for team_idx in range(2):
+            other_team = 1 - team_idx
+            assert match.getTeam(
+                team_idx) == f'My Test Team {other_team + 1}'
+            for player_idx in range(bo):
+                self.assert_player(team_idx, player_idx,
+                                   f'Player {other_team+1} {player_idx+1}')
+                race = scctool.settings.idx2race((other_team + player_idx) % 4)
+                self.assert_race(team_idx, player_idx, race)
+
+        for set_idx in range(bo):
+            score = -((set_idx % 2) * 2 - 1)
             matchWidget.sl_score[set_idx].setValue(score)
             self.assert_score(set_idx, score)
 
