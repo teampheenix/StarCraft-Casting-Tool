@@ -347,8 +347,8 @@ class TestGUI(object):
         widget.clearFocus()
         self.qtbot.wait(5)
 
-    def test_logo_manager(self, qtbot, caplog, scct_app):
-        self.gui_setup(qtbot, caplog, scct_app)
+    def test_logo_manager(self, qtbot, scct_app):
+        self.gui_setup(qtbot, scct_app)
         self.new_tab()
         matchWidget = self.main_window.matchDataTabWidget.widget(
             self.cntlr.matchControl.activeMatchIdx())
