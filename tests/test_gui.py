@@ -376,7 +376,7 @@ class TestGUI(object):
                     logo_dialog.mysubwindow.nams
                     with qtbot.waitSignal(
                             logo_dialog.mysubwindow.nams[0].finished,
-                            timeout=10000):
+                            timeout=30000):
                         pass
                 qtbot.waitUntil(check_for_result)
                 self.qtbot.mouseClick(
