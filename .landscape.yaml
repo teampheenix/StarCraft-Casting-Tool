@@ -1,6 +1,0 @@
-doc-warnings: false
-strictness: medium
-max-line-length: 100
-autodetect: true
-python-targets:
-  - 3
