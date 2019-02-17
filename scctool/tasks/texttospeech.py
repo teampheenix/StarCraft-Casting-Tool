@@ -85,7 +85,7 @@ class TextToSpeech:
     def getLine(self, option, player, race, team=''):
         """Convert a line to ssml."""
         option = self.options[option]
-        if not team and option['backup']:
+        if not team and option.get('backup', ''):
             option = self.options[option['backup']]
 
         return option['ssml'].format(player=player, race=race, team=team)
