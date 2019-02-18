@@ -177,10 +177,10 @@ class MainWindow(QMainWindow):
 
             infoMenu = menubar.addMenu(_('Info && Links'))
 
-            myAct = QAction(QIcon(scctool.settings.getResFile(
+            self.action_about = QAction(QIcon(scctool.settings.getResFile(
                 'about.png')), _('About'), self)
-            myAct.triggered.connect(self.showAbout)
-            infoMenu.addAction(myAct)
+            self.action_about.triggered.connect(self.showAbout)
+            infoMenu.addAction(self.action_about)
 
             myAct = QAction(QIcon(scctool.settings.getResFile(
                 'readme.ico')), _('Readme'), self)
@@ -798,6 +798,7 @@ class MainWindow(QMainWindow):
             action.triggered.connect(self.applycustom_click)
             self.pb_applycustom.setDefaultAction(action)
             self.custom_menu = QMenu(self.pb_applycustom)
+            self.custom_format_actions = []
             for custom_format, icon in \
                     self.controller.matchControl.getCustomFormats():
                 if icon:
@@ -809,6 +810,7 @@ class MainWindow(QMainWindow):
                 action.triggered.connect(
                     lambda x, custom_format=custom_format:
                         self.applyCustomFormat(custom_format))
+                self.custom_format_actions.append(action)
             self.pb_applycustom.setMenu(self.custom_menu)
             self.pb_applycustom.setPopupMode(QToolButton.MenuButtonPopup)
 

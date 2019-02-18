@@ -2,6 +2,7 @@ import random
 import string
 
 import pytest
+from PyQt5.QtWidgets import QMessageBox
 from PyQt5.QtCore import Qt
 
 import scctool.settings
@@ -20,10 +21,19 @@ class TestGUI(object):
 
         self.assert_match_format()
 
-    def test_subwindows(self, qtbot, scct_app):
+    def test_subwindows(self, qtbot, scct_app, mocker):
         self.gui_setup(qtbot, scct_app)
 
         self.assert_subwindows()
+
+        mocker.patch.object(QMessageBox, 'about', return_value=QMessageBox.Ok)
+        self.main_window.action_about.trigger()
+
+    def test_vetoes(self, qtbot, scct_app, mocker):
+        self.gui_setup(qtbot, scct_app)
+
+        for no_vetos in range(scctool.settings.max_no_vetoes + 1):
+            self.assert_vetoes(no_vetos)
 
     @pytest.mark.parametrize("copy",
                              [True, False],
@@ -171,17 +181,25 @@ class TestGUI(object):
         assert match.getNoAceSets() == 1
 
     def new_tab(self):
-        self.qtbot.mouseClick(self.main_window.pb_add_match_tab, Qt.LeftButton)
-        selected = self.cntlr.matchControl.selectedMatchId()
-        while(self.main_window.matchDataTabWidget.count() > 1):
-            self.qtbot.mouseClick(self.main_window.matchDataTabWidget.widget(
-                0)._closeButton, Qt.LeftButton)
+        with self.qtbot.waitSignal(self.cntlr.matchControl.metaChanged):
+            self.qtbot.mouseClick(
+                self.main_window.pb_add_match_tab, Qt.LeftButton)
+            selected = self.cntlr.matchControl.selectedMatchId()
+            while(self.main_window.matchDataTabWidget.count() > 1):
+                self.qtbot.mouseClick(self.main_window.matchDataTabWidget.widget(
+                    0)._closeButton, Qt.LeftButton)
         assert self.main_window.matchDataTabWidget.count() == 1
-        assert (self.cntlr.matchControl.selectedMatchId()
-                == self.cntlr.matchControl.activeMatchId())
+        assert (self.cntlr.matchControl.selectedMatchId() ==
+                self.cntlr.matchControl.activeMatchId())
         assert self.cntlr.matchControl.selectedMatchIdx() == 0
         assert self.cntlr.matchControl.activeMatchIdx() == 0
         assert self.cntlr.matchControl.activeMatchId() == selected
+
+    def test_custom_formats(self, qtbot, scct_app):
+        self.gui_setup(qtbot, scct_app)
+        for action in self.main_window.custom_format_actions:
+            with self.qtbot.waitSignal(self.cntlr.matchControl.metaChanged):
+                action.trigger()
 
     def test_allkill_update(self, qtbot, scct_app):
         self.gui_setup(qtbot, scct_app)
@@ -248,11 +266,12 @@ class TestGUI(object):
         assert (match.getMapScore(set_idx) == score)
 
     def assert_match_format(self):
-        self.new_tab()
         self.main_window.tabs.setCurrentIndex(1)
         assert self.main_window.tabs.currentIndex() == 1
         for bo in range(1, scctool.settings.max_no_sets - 3):
-            self.assert_bo(bo)
+            for ace_bo in [0, 1, 3, 5]:
+                self.new_tab()
+                self.assert_bo(bo, ace_bo)
         matchWidget = self.main_window.matchDataTabWidget.widget(
             self.cntlr.matchControl.activeMatchIdx())
         match = self.cntlr.matchControl.activeMatch()
@@ -268,7 +287,7 @@ class TestGUI(object):
                 matchWidget.le_team[team_idx], f'My Test Team {team_idx + 1}')
             assert match.getTeam(
                 team_idx) == f'My Test Team {team_idx + 1}'
-            for player_idx in range(bo):
+            for player_idx in range(match.getNoSets()):
                 self.assert_player(team_idx, player_idx, 'TBD')
                 self.assert_race(team_idx, player_idx, 'Random')
                 self.insert_into_widget(
@@ -281,7 +300,7 @@ class TestGUI(object):
                     scctool.settings.race2idx(race))
                 self.assert_race(team_idx, player_idx, race)
 
-        for set_idx in range(bo):
+        for set_idx in range(match.getNoSets()):
             assert matchWidget.le_map[set_idx].text() == 'TBD'
             sc2map = scctool.settings.maps[set_idx %
                                            len(scctool.settings.maps)]
@@ -308,7 +327,7 @@ class TestGUI(object):
                 race = scctool.settings.idx2race((other_team + player_idx) % 4)
                 self.assert_race(team_idx, player_idx, race)
 
-        for set_idx in range(bo):
+        for set_idx in range(match.getNoSets()):
             score = -((set_idx % 2) * 2 - 1)
             matchWidget.sl_score[set_idx].setValue(score)
             self.assert_score(set_idx, score)
@@ -319,18 +338,62 @@ class TestGUI(object):
             assert (match.getMapScore(
                 set_idx) == 0)
 
-    def assert_bo(self, bo):
+    def assert_vetoes(self, no_vetos):
+        self.new_tab()
+        self.main_window.cb_vetoes.setCurrentIndex(no_vetos)
+        assert self.main_window.cb_vetoes.currentText() == str(no_vetos)
+        self.qtbot.mouseClick(self.main_window.pb_applycustom, Qt.LeftButton)
+        matchWidget = self.main_window.matchDataTabWidget.widget(
+            self.cntlr.matchControl.activeMatchIdx())
+        match = self.cntlr.matchControl.activeMatch()
+        assert match.getNoVetoes() == no_vetos
+
+        for set_idx in range(no_vetos):
+            old_veto_data = match.getVeto(set_idx)
+            assert old_veto_data['map'] == 'TBD'
+            assert old_veto_data['team'] == (set_idx % 2)
+            assert matchWidget.le_veto_maps[set_idx].text() == 'TBD'
+            sc2map = scctool.settings.maps[(no_vetos + set_idx) %
+                                           len(scctool.settings.maps)]
+            self.insert_into_widget(
+                matchWidget.le_veto_maps[set_idx],
+                sc2map, True)
+            matchWidget.sl_veto[set_idx].setValue((set_idx + 1) % 2)
+            veto_data = match.getVeto(set_idx)
+            assert (veto_data['map'] == sc2map)
+            assert (veto_data['team'] == (set_idx + 1) % 2)
+
+        assert len(match.getVetoData()) == no_vetos
+
+        with self.qtbot.waitSignal(self.cntlr.matchControl.metaChanged):
+            self.qtbot.mouseClick(matchWidget.pb_swap, Qt.LeftButton)
+
+        for set_idx in range(no_vetos):
+            assert matchWidget.sl_veto[set_idx].value() == set_idx % 2
+            veto_data = match.getVeto(set_idx)
+            assert (veto_data['team'] == set_idx % 2)
+
+    def assert_bo(self, bo, ace_bo=0):
+        if ace_bo != 0:
+            total_sets = (bo - bo % 2) + ace_bo
+        else:
+            total_sets = bo
         self.main_window.cb_bestof.setCurrentIndex(bo - 1)
         assert self.main_window.cb_bestof.currentText() == str(bo)
-        assert (self.main_window.cb_minSets.currentText()
-                == str(int(bo / 2) + 1))
+        assert (self.main_window.cb_minSets.currentText() ==
+                str(int(bo / 2) + 1))
         assert self.main_window.cb_minSets.count() == bo
-        self.main_window.cb_extend_ace.setChecked(False)
-        assert self.main_window.cb_ace_bo.isEnabled() is False
+        self.main_window.cb_extend_ace.setChecked(ace_bo != 0)
+        assert self.main_window.cb_ace_bo.isEnabled() is (ace_bo != 0)
+        if ace_bo != 0:
+            self.main_window.cb_ace_bo.setCurrentIndex(int(ace_bo / 2))
+            self.main_window.cb_ace_bo.currentText() == str(ace_bo)
+        assert self.main_window.cb_minSets.count() == total_sets
         self.qtbot.mouseClick(self.main_window.pb_applycustom, Qt.LeftButton)
         match = self.cntlr.matchControl.activeMatch()
-        assert match.getBestOf() == bo
-        assert match.getNoSets() == bo
+        assert match.getBestOf() == bo if bo != 1 else total_sets
+        assert match.getNoSets() == total_sets
+        assert match.getNoAceSets() == ace_bo
         assert match.getMinSets() == int(bo / 2) + 1
 
     def insert_into_widget(self, widget, text,
@@ -365,8 +428,8 @@ class TestGUI(object):
                 self.qtbot.waitForWindowShown(logo_dialog.mysubwindow)
                 self.insert_into_widget(
                     logo_dialog.mysubwindow.qle_search, team, True)
-                assert (logo_dialog.mysubwindow.qle_search.text()
-                        == team)
+                assert (logo_dialog.mysubwindow.qle_search.text() ==
+                        team)
                 # There is an error that is only fixed in PyQt5.12.2:
                 # self.qtbot.mouseClick(
                 #     logo_dialog.mysubwindow.searchButton, Qt.LeftButton)
