@@ -69,16 +69,20 @@ class MatchDataWidget(QWidget):
 
     def closeTab(self):
         """Close the tab."""
-        if self._tabWidget.count() > 1:
-            idx = self._tabWidget.indexOf(self)
-            ident = self.matchData.getControlID()
-            self._tabWidget.removeTab(idx)
-            new_index = self.controller.matchControl.removeMatch(ident)
-            if new_index is not None:
-                self._tabWidget.widget(new_index).checkButton()
-        count = self._tabWidget.count()
-        if count == 1:
-            self._tabWidget.widget(0).setClosable(False)
+        self.controller.matchControl.mutex.lock()
+        try:
+            if self._tabWidget.count() > 1:
+                idx = self._tabWidget.indexOf(self)
+                ident = self.matchData.getControlID()
+                self._tabWidget.removeTab(idx)
+                new_index = self.controller.matchControl.removeMatch(ident)
+                if new_index is not None:
+                    self._tabWidget.widget(new_index).checkButton()
+            count = self._tabWidget.count()
+            if count == 1:
+                self._tabWidget.widget(0).setClosable(False)
+        finally:
+            self.controller.matchControl.mutex.unlock()
 
     def checkButton(self):
         """Check the button."""
@@ -86,19 +90,23 @@ class MatchDataWidget(QWidget):
 
     def activate(self, checked):
         """Activate match tab."""
-        if (checked
-                and self.controller.matchControl.activeMatchId()
-                != self._ctrlID):
-            self.controller.matchControl.activateMatch(
-                self.matchData.getControlID())
-            self.autoSetNextMap(send=False)
-            self.controller.mapstatsManager.sendMapPool()
-            self.parent.updateAllMapButtons()
-            self.controller.updateLogosWebsocket()
-        elif self.controller.matchControl.countMatches() == 1:
-            self._radioButton.toggled.disconnect()
-            self._radioButton.setChecked(True)
-            self._radioButton.toggled.connect(self.activate)
+        self.controller.matchControl.mutex.lock()
+        try:
+            if (checked
+                    and self.controller.matchControl.activeMatchId()
+                    != self._ctrlID):
+                self.controller.matchControl.activateMatch(
+                    self.matchData.getControlID())
+                self.autoSetNextMap(send=False)
+                self.controller.mapstatsManager.sendMapPool()
+                self.parent.updateAllMapButtons()
+                self.controller.updateLogosWebsocket()
+            elif self.controller.matchControl.countMatches() == 1:
+                self._radioButton.toggled.disconnect()
+                self._radioButton.setChecked(True)
+                self._radioButton.toggled.connect(self.activate)
+        finally:
+            self.controller.matchControl.mutex.unlock()
 
     def setName(self):
         """Set the name of the tab."""

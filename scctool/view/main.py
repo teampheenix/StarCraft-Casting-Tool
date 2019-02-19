@@ -611,42 +611,59 @@ class MainWindow(QMainWindow):
 
     def addMatchTab(self):
         """Add a match tab."""
-        match = self.controller.matchControl.newMatchData()
-        MatchDataWidget(self,
-                        self.matchDataTabWidget,
-                        match)
-        count = self.matchDataTabWidget.count()
-        self.matchDataTabWidget.setCurrentIndex(count - 1)
-        if count > 1:
-            for idx in range(count):
-                self.matchDataTabWidget.widget(idx).setClosable(True)
+        self.controller.matchControl.mutex.lock()
+        try:
+            match = self.controller.matchControl.newMatchData()
+            MatchDataWidget(self,
+                            self.matchDataTabWidget,
+                            match)
+            count = self.matchDataTabWidget.count()
+            self.matchDataTabWidget.setCurrentIndex(count - 1)
+            if count > 1:
+                for idx in range(count):
+                    self.matchDataTabWidget.widget(idx).setClosable(True)
+        except:
+            self.controller.matchControl.mutex.unlock()
 
     def copyMatchTab(self):
         """Copy add a copy of the current match tab."""
-        matchId = self.controller.matchControl.selectedMatchId()
-        data = self.controller.matchControl.selectedMatch().getData()
-        match = self.controller.matchControl.newMatchData(data)
-        self.controller.logoManager.copyMatch(match.getControlID(), matchId)
-        MatchDataWidget(self,
-                        self.matchDataTabWidget,
-                        match)
-        count = self.matchDataTabWidget.count()
-        self.matchDataTabWidget.setCurrentIndex(count - 1)
-        if count > 1:
-            for idx in range(count):
-                self.matchDataTabWidget.widget(idx).setClosable(True)
+        self.controller.matchControl.mutex.lock()
+        try:
+            matchId = self.controller.matchControl.selectedMatchId()
+            data = self.controller.matchControl.selectedMatch().getData()
+            match = self.controller.matchControl.newMatchData(data)
+            self.controller.logoManager.copyMatch(
+                match.getControlID(), matchId)
+            MatchDataWidget(self,
+                            self.matchDataTabWidget,
+                            match)
+            count = self.matchDataTabWidget.count()
+            self.matchDataTabWidget.setCurrentIndex(count - 1)
+            if count > 1:
+                for idx in range(count):
+                    self.matchDataTabWidget.widget(idx).setClosable(True)
+        finally:
+            self.controller.matchControl.mutex.unlock()
 
     def currentMatchTabChanged(self, idx):
         """Perform adjustements if the match tab is changed."""
-        dataWidget = self.matchDataTabWidget.widget(idx)
-        ident = dataWidget.matchData.getControlID()
-        if self.controller.matchControl.selectMatch(ident):
-            with self.tlock:
-                self.controller.updateMatchFormat()
+        self.controller.matchControl.mutex.lock()
+        try:
+            dataWidget = self.matchDataTabWidget.widget(idx)
+            ident = dataWidget.matchData.getControlID()
+            if self.controller.matchControl.selectMatch(ident):
+                with self.tlock:
+                    self.controller.updateMatchFormat()
+        finally:
+            self.controller.matchControl.mutex.unlock()
 
     def tabMoved(self, toIdx, fromIdx):
         """Update the order in the match controller when a tab is moved."""
-        self.controller.matchControl.updateOrder(toIdx, fromIdx)
+        self.controller.matchControl.mutex.lock()
+        try:
+            self.controller.matchControl.updateOrder(toIdx, fromIdx)
+        finally:
+            self.controller.matchControl.mutex.unlock()
 
     def createTabs(self):
         """Create tabs in main window."""
@@ -675,8 +692,8 @@ class MainWindow(QMainWindow):
             self.pb_openBrowser = QPushButton(
                 _("Open in Browser"))
             self.pb_openBrowser.clicked.connect(self.openBrowser_click)
-            width = (self.scoreWidth + 2 * self.raceWidth + 2
-                     * self.mimumLineEditWidth + 4 * 6) / 2 - 2
+            width = (self.scoreWidth + 2 * self.raceWidth + 2 *
+                     self.mimumLineEditWidth + 4 * 6) / 2 - 2
             self.pb_openBrowser.setMinimumWidth(width)
 
             container = QHBoxLayout()
@@ -983,18 +1000,18 @@ class MainWindow(QMainWindow):
             self.cb_autoUpdate = QCheckBox(
                 _("Auto Score Update"))
             self.cb_autoUpdate.setChecked(False)
-            string = _('Automatically detects the outcome'
-                       + ' of SC2 matches that are '
-                       + 'played/observed in your SC2-client'
-                       + ' and updates the score accordingly.')
+            string = _('Automatically detects the outcome' +
+                       ' of SC2 matches that are ' +
+                       'played/observed in your SC2-client' +
+                       ' and updates the score accordingly.')
             self.cb_autoUpdate.setToolTip(string)
             self.cb_autoUpdate.stateChanged.connect(self.autoUpdate_change)
 
             self.cb_autoToggleScore = QCheckBox(
                 _("Set Ingame Score"))
             self.cb_autoToggleScore.setChecked(False)
-            string = _('Automatically sets the score of your ingame'
-                       + ' UI-interface at the begining of a game.')
+            string = _('Automatically sets the score of your ingame' +
+                       ' UI-interface at the begining of a game.')
             self.cb_autoToggleScore.setToolTip(string)
             self.cb_autoToggleScore.stateChanged.connect(
                 self.autoToggleScore_change)
@@ -1002,8 +1019,8 @@ class MainWindow(QMainWindow):
             self.cb_autoToggleProduction = QCheckBox(
                 _("Toggle Production Tab"))
             self.cb_autoToggleProduction.setChecked(False)
-            string = _('Automatically toggles the production tab of your'
-                       + ' ingame UI-interface at the begining of a game.')
+            string = _('Automatically toggles the production tab of your' +
+                       ' ingame UI-interface at the begining of a game.')
             self.cb_autoToggleProduction.setToolTip(string)
             self.cb_autoToggleProduction.stateChanged.connect(
                 self.autoToggleProduction_change)

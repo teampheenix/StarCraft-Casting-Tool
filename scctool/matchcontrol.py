@@ -4,7 +4,7 @@ import logging
 from collections import OrderedDict
 from time import time
 
-from PyQt5.QtCore import QObject, pyqtSignal
+from PyQt5.QtCore import QObject, pyqtSignal, QMutex
 
 import scctool.settings
 import scctool.settings.translation
@@ -24,6 +24,7 @@ class MatchControl(QObject):
     dataChanged = pyqtSignal(str, object)
     metaChanged = pyqtSignal()
     scopes = {}
+    mutex = QMutex(QMutex.Recursive)
 
     def __init__(self, controller):
         """Init and define custom providers."""
@@ -39,6 +40,7 @@ class MatchControl(QObject):
 
     def readJsonFile(self):
         """Read json data from file."""
+        self.mutex.lock()
         new_id = self._uniqid()
         try:
             with open(scctool.settings.getJsonFile('matchdata'),
@@ -64,15 +66,19 @@ class MatchControl(QObject):
                     'selected': new_id,
                     'order': [new_id]}
 
-        for ident, match in data.get('matches', {new_id: dict()}).items():
-            self.newMatchData(match, ident)
+        try:
+            for ident, match in data.get('matches', {new_id: dict()}).items():
+                self.newMatchData(match, ident)
 
-        self.__order = data.get('order', self.__matches.keys())
-        self.activateMatch(data.get('active', id))
-        self.selectMatch(data.get('selected', id))
+            self.__order = data.get('order', self.__matches.keys())
+            self.activateMatch(data.get('active', id))
+            self.selectMatch(data.get('selected', id))
+        finally:
+            self.mutex.unlock()
 
     def writeJsonFile(self):
         """Write json data to file."""
+        self.mutex.lock()
         try:
             matches = {}
             for ident, match in self.__matches.items():
@@ -86,6 +92,8 @@ class MatchControl(QObject):
                 json.dump(data, outfile)
         except Exception:
             module_logger.exception("message")
+        finally:
+            self.mutex.unlock()
 
     def __initScopes(self):
         self.scopes = {'all': _('All Maps'),
@@ -116,54 +124,76 @@ class MatchControl(QObject):
 
     def newMatchData(self, data=None, ident=''):
         """Insert new match data."""
-        if not data:
-            data = dict()
-        if not ident:
-            while True:
-                ident = self._uniqid()
-                if id not in self.__matches.keys():
-                    break
-        match = MatchData(self, self.__controller, ident, data)
-        self.__matches[ident] = match
-        self.__order.append(ident)
-        return match
+        self.mutex.lock()
+        try:
+            if not data:
+                data = dict()
+            if not ident:
+                while True:
+                    ident = self._uniqid()
+                    if id not in self.__matches.keys():
+                        break
+            match = MatchData(self, self.__controller, ident, data)
+            self.__matches[ident] = match
+            self.__order.append(ident)
+            return match
+        finally:
+            self.mutex.unlock()
 
     def activeMatch(self):
         """Return the active match."""
-        return self.__matches[self.__activeMatch]
+        self.mutex.lock()
+        try:
+            return self.__matches[self.__activeMatch]
+        finally:
+            self.mutex.unlock()
 
     def selectedMatch(self):
         """Return the selected match."""
-        return self.__matches[self.__selectedMatch]
+        self.mutex.lock()
+        try:
+            return self.__matches[self.__selectedMatch]
+        finally:
+            self.mutex.unlock()
 
     def selectMatch(self, ident):
         """Select a match."""
-        if ident in self.__matches.keys() and self.__selectedMatch != ident:
-            self.__selectedMatch = ident
-            module_logger.info('Selected match {}'.format(ident))
-            return True
-        else:
-            return False
+        self.mutex.lock()
+        try:
+            if ident in self.__matches.keys() and self.__selectedMatch != ident:
+                self.__selectedMatch = ident
+                module_logger.info('Selected match {}'.format(ident))
+                return True
+            else:
+                return False
+        finally:
+            self.mutex.unlock()
 
     def activateMatch(self, ident):
         """Activate a match."""
-        if ident in self.__matches.keys() and self.__activeMatch != ident:
-            old_ident = self.__activeMatch
-            self.__activeMatch = ident
-            if old_ident is not None and old_ident in self.__matches.keys():
-                try:
-                    self.__matches[old_ident].metaChanged.disconnect()
-                except TypeError:
-                    module_logger.exception("message")
-                try:
-                    self.__matches[old_ident].dataChanged.disconnect()
-                except TypeError:
-                    module_logger.exception("message")
-            self.__controller.placeholderSetup()
-            self.__matches[ident].metaChanged.connect(self.__handleMetaSignal)
-            self.__matches[ident].dataChanged.connect(self.__handleDataSignal)
-            self.metaChanged.emit()
-            module_logger.info(f'Activated match {ident}')
+        self.mutex.lock()
+        try:
+            if ident in self.__matches.keys() and self.__activeMatch != ident:
+                old_ident = self.__activeMatch
+                self.__activeMatch = ident
+                if old_ident is not None and old_ident in self.__matches.keys():
+                    try:
+                        self.__matches[old_ident].metaChanged.disconnect()
+                    except TypeError:
+                        module_logger.exception("message")
+                    try:
+                        self.__matches[old_ident].dataChanged.disconnect()
+                    except TypeError:
+                        module_logger.exception("message")
+                self.__controller.placeholderSetup()
+                self.__matches[ident].metaChanged.connect(
+                    self.__handleMetaSignal)
+                self.__matches[ident].dataChanged.connect(
+                    self.__handleDataSignal)
+                self.metaChanged.emit()
+                module_logger.info(f'Activated match {ident}')
+        finally:
+            self.mutex.unlock()
 
     def __handleDataSignal(self, *args):
         self.dataChanged.emit(*args)
@@ -173,32 +203,59 @@ class MatchControl(QObject):
 
     def getMatch(self, ident):
         """Get a match by id."""
-        return self.__matches[ident]
+        self.mutex.lock()
+        try:
+            return self.__matches[ident]
+        finally:
+            self.mutex.unlock()
 
     def activeMatchId(self):
         """Get id of the active match."""
-        return self.__activeMatch
+        self.mutex.lock()
+        try:
+            return self.__activeMatch
+        finally:
+            self.mutex.unlock()
 
     def activeMatchIdx(self):
         """Get index of the active match."""
-        return self.__order.index(self.__activeMatch)
+        self.mutex.lock()
+        try:
+            return self.__order.index(self.__activeMatch)
+        finally:
+            self.mutex.unlock()
 
     def selectedMatchId(self):
         """Get id of selected match."""
-        return self.__selectedMatch
+        self.mutex.lock()
+        try:
+            return self.__selectedMatch
+        finally:
+            self.mutex.unlock()
 
     def selectedMatchIdx(self):
         """Get index of selected match."""
-        return self.__order.index(self.__selectedMatch)
+        self.mutex.lock()
+        idx = self.__order.index(self.__selectedMatch)
+        self.mutex.unlock()
+        return idx
 
     def getMatches(self):
         """Yield all matches."""
-        for ident in self.__order:
-            yield self.__matches[ident]
+        self.mutex.lock()
+        try:
+            for ident in self.__order:
+                yield self.__matches[ident]
+        finally:
+            self.mutex.unlock()
 
     def getMatchIDs(self):
         """Get match IDs."""
-        return self.__order
+        self.mutex.lock()
+        try:
+            return self.__order
+        finally:
+            self.mutex.unlock()
 
     @classmethod
     def _uniqid(cls):
@@ -206,29 +263,38 @@ class MatchControl(QObject):
 
     def countMatches(self):
         """Return the number of matches."""
-        return len(self.__matches)
+        self.mutex.lock()
+        try:
+            return len(self.__matches)
+        finally:
+            self.mutex.unlock()
 
     def updateOrder(self, toIdx, fromIdx):
         """Update the order of the matches."""
-        self.__order[toIdx], self.__order[fromIdx] =\
-            self.__order[fromIdx], self.__order[toIdx]
+        try:
+            self.__order[toIdx], self.__order[fromIdx] =\
+                self.__order[fromIdx], self.__order[toIdx]
+        finally:
+            self.mutex.unlock()
 
     def removeMatch(self, ident):
         """Remove a match."""
-        index = self.__order.index(ident)
-        self.__order.pop(index)
+        self.mutex.lock()
         try:
-            self.__matches[ident].metaChanged.disconnect()
-        except TypeError:
-            pass
-        try:
-            self.__matches[ident].dataChanged.disconnect()
-        except TypeError:
-            pass
-        self.__controller.logoManager.deleteMatch(ident)
-        del self.__matches[ident]
-        if ident == self.activeMatchId():
-            new_index = index - 1 if index > 0 else 0
-            # new_ident = self.__order[new_index]
-            # self.activateMatch(new_ident)
-            return new_index
+            index = self.__order.index(ident)
+            self.__order.pop(index)
+            try:
+                self.__matches[ident].metaChanged.disconnect()
+            except TypeError:
+                pass
+            try:
+                self.__matches[ident].dataChanged.disconnect()
+            except TypeError:
+                pass
+            self.__controller.logoManager.deleteMatch(ident)
+            del self.__matches[ident]
+            if ident == self.activeMatchId():
+                new_index = index - 1 if index > 0 else 0
+                return new_index
+        finally:
+            self.mutex.unlock()

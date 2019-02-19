@@ -379,6 +379,7 @@ class TestGUI(object):
         else:
             total_sets = bo
         self.main_window.cb_bestof.setCurrentIndex(bo - 1)
+        self.main_window.cb_extend_ace.setChecked(False)
         assert self.main_window.cb_bestof.currentText() == str(bo)
         assert (self.main_window.cb_minSets.currentText() ==
                 str(int(bo / 2) + 1))
