@@ -622,7 +622,7 @@ class MainWindow(QMainWindow):
             if count > 1:
                 for idx in range(count):
                     self.matchDataTabWidget.widget(idx).setClosable(True)
-        except:
+        finally:
             self.controller.matchControl.mutex.unlock()
 
     def copyMatchTab(self):
@@ -692,8 +692,8 @@ class MainWindow(QMainWindow):
             self.pb_openBrowser = QPushButton(
                 _("Open in Browser"))
             self.pb_openBrowser.clicked.connect(self.openBrowser_click)
-            width = (self.scoreWidth + 2 * self.raceWidth + 2 *
-                     self.mimumLineEditWidth + 4 * 6) / 2 - 2
+            width = (self.scoreWidth + 2 * self.raceWidth + 2
+                     * self.mimumLineEditWidth + 4 * 6) / 2 - 2
             self.pb_openBrowser.setMinimumWidth(width)
 
             container = QHBoxLayout()
@@ -1000,18 +1000,18 @@ class MainWindow(QMainWindow):
             self.cb_autoUpdate = QCheckBox(
                 _("Auto Score Update"))
             self.cb_autoUpdate.setChecked(False)
-            string = _('Automatically detects the outcome' +
-                       ' of SC2 matches that are ' +
-                       'played/observed in your SC2-client' +
-                       ' and updates the score accordingly.')
+            string = _('Automatically detects the outcome'
+                       + ' of SC2 matches that are '
+                       + 'played/observed in your SC2-client'
+                       + ' and updates the score accordingly.')
             self.cb_autoUpdate.setToolTip(string)
             self.cb_autoUpdate.stateChanged.connect(self.autoUpdate_change)
 
             self.cb_autoToggleScore = QCheckBox(
                 _("Set Ingame Score"))
             self.cb_autoToggleScore.setChecked(False)
-            string = _('Automatically sets the score of your ingame' +
-                       ' UI-interface at the begining of a game.')
+            string = _('Automatically sets the score of your ingame'
+                       + ' UI-interface at the begining of a game.')
             self.cb_autoToggleScore.setToolTip(string)
             self.cb_autoToggleScore.stateChanged.connect(
                 self.autoToggleScore_change)
@@ -1019,8 +1019,8 @@ class MainWindow(QMainWindow):
             self.cb_autoToggleProduction = QCheckBox(
                 _("Toggle Production Tab"))
             self.cb_autoToggleProduction.setChecked(False)
-            string = _('Automatically toggles the production tab of your' +
-                       ' ingame UI-interface at the begining of a game.')
+            string = _('Automatically toggles the production tab of your'
+                       + ' ingame UI-interface at the begining of a game.')
             self.cb_autoToggleProduction.setToolTip(string)
             self.cb_autoToggleProduction.stateChanged.connect(
                 self.autoToggleProduction_change)
