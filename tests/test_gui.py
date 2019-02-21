@@ -2,8 +2,8 @@ import random
 import string
 
 import pytest
-from PyQt5.QtWidgets import QMessageBox
 from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QMessageBox
 
 import scctool.settings
 
@@ -186,11 +186,12 @@ class TestGUI(object):
                 self.main_window.pb_add_match_tab, Qt.LeftButton)
             selected = self.cntlr.matchControl.selectedMatchId()
             while(self.main_window.matchDataTabWidget.count() > 1):
-                self.qtbot.mouseClick(self.main_window.matchDataTabWidget.widget(
-                    0)._closeButton, Qt.LeftButton)
+                self.qtbot.mouseClick(
+                    self.main_window.matchDataTabWidget.widget(
+                        0)._closeButton, Qt.LeftButton)
         assert self.main_window.matchDataTabWidget.count() == 1
-        assert (self.cntlr.matchControl.selectedMatchId() ==
-                self.cntlr.matchControl.activeMatchId())
+        assert (self.cntlr.matchControl.selectedMatchId()
+                == self.cntlr.matchControl.activeMatchId())
         assert self.cntlr.matchControl.selectedMatchIdx() == 0
         assert self.cntlr.matchControl.activeMatchIdx() == 0
         assert self.cntlr.matchControl.activeMatchId() == selected
@@ -381,8 +382,8 @@ class TestGUI(object):
         self.main_window.cb_bestof.setCurrentIndex(bo - 1)
         self.main_window.cb_extend_ace.setChecked(False)
         assert self.main_window.cb_bestof.currentText() == str(bo)
-        assert (self.main_window.cb_minSets.currentText() ==
-                str(int(bo / 2) + 1))
+        assert (self.main_window.cb_minSets.currentText()
+                == str(int(bo / 2) + 1))
         assert self.main_window.cb_minSets.count() == bo
         self.main_window.cb_extend_ace.setChecked(ace_bo != 0)
         assert self.main_window.cb_ace_bo.isEnabled() is (ace_bo != 0)
@@ -429,8 +430,8 @@ class TestGUI(object):
                 self.qtbot.waitForWindowShown(logo_dialog.mysubwindow)
                 self.insert_into_widget(
                     logo_dialog.mysubwindow.qle_search, team, True)
-                assert (logo_dialog.mysubwindow.qle_search.text() ==
-                        team)
+                assert (logo_dialog.mysubwindow.qle_search.text()
+                        == team)
                 # There is an error that is only fixed in PyQt5.12.2:
                 # self.qtbot.mouseClick(
                 #     logo_dialog.mysubwindow.searchButton, Qt.LeftButton)
