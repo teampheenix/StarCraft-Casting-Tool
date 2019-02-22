@@ -180,7 +180,7 @@ class SC2ApiThread(QThread):
             if(not self.exiting
                 and (newData != self.currentData
                      or newData.time < self.currentData.time
-                 or newData.isLive() != self.currentData.isLive())):
+                     or newData.isLive() != self.currentData.isLive())):
 
                 if(self.activeTask['updateScore']
                    and newData.isDecidedGame()
@@ -199,8 +199,8 @@ class SC2ApiThread(QThread):
     def tryToggle(self, data):
         """Wait for SC2 in foreground, then toggle production tab and score."""
         if (scctool.settings.config.parser.getboolean(
-            "SCT", "blacklist_on") and
-                not data.replay):
+            "SCT", "blacklist_on")
+                and not data.replay):
             blacklist = scctool.settings.config.getBlacklist()
             if data.player1 in blacklist or data.player2 in blacklist:
                 module_logger.info("Do not toogle due to blacklist.")
@@ -311,6 +311,45 @@ def ocr(players, img, directory=''):
         return False, False
 
 
+def ocr_new(players, img, api, crop_region):
+    """Use OCR to find postion of the playernames."""
+    api.SetImage(img)
+    regions = cropImage_new(img, crop_region)
+    api.SetRectangle(*regions)
+    text = api.GetUTF8Text()
+    if not text:
+        return False, False
+    items = api.MapWordConfidences()
+    threshold = 0.30
+    ratios = [0.0, 0.0]
+    positions = [None, None]
+    regex = re.compile(r"<[^>]+>")
+    for item_idx, item in enumerate(items):
+        text = item[0].strip()
+        if not text:
+            continue
+        conf = item[1]
+        print(item)
+        text = regex.sub("", text)
+        for player_idx, player in enumerate(players):
+            ratio = SequenceMatcher(
+                None, text.lower(), player.lower()).ratio() * conf / 100
+            if(ratio >= max(threshold, ratios[player_idx])):
+                positions[player_idx] = item_idx
+                ratios[player_idx] = ratio
+                print(player, ratio, text)
+
+    found = ratios[0] > 0.0 and ratios[1] > 0.0
+
+    if found:
+        if(positions[0] > positions[1]):
+            return True, True
+        else:
+            return True, False
+    else:
+        return False, False
+
+
 def cropImage(full_img, crop_region):
     """Crop an image."""
     x1, x2, y1, y2 = crop_region
@@ -322,6 +361,19 @@ def cropImage(full_img, crop_region):
                               int(height * y1),
                               int(width * x2),
                               int(height * y2)))
+
+
+def cropImage_new(full_img, crop_region):
+    """Crop an image."""
+    x1, x2, y1, y2 = crop_region
+    width, height = full_img.size
+    if x1 != 0.0 and x2 == 1.0 and y1 == 0.0 and y2 == 1.0:
+        return (0, 0, width, height)
+    else:
+        return (int(width * x1),
+                int(height * y1),
+                int(width * (x2 - x1)),
+                int(height * (y2 - y1)))
 
 
 def isSC2onForeground():
