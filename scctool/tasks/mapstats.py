@@ -148,14 +148,14 @@ class MapStatsManager:
         """Refresh map data from liquipedia."""
         for mymap in scctool.settings.maps:
             if mymap != 'TBD' and mymap not in self.__maps.keys():
-                self.__maps[map] = dict()
-                self.__maps[map]['tvz'] = None
-                self.__maps[map]['zvp'] = None
-                self.__maps[map]['pvt'] = None
-                self.__maps[map]['creator'] = None
-                self.__maps[map]['size'] = None
-                self.__maps[map]['spawn-positions'] = None
-                self.__maps[map]['refreshed'] = None
+                self.__maps[mymap] = dict()
+                self.__maps[mymap]['tvz'] = None
+                self.__maps[mymap]['zvp'] = None
+                self.__maps[mymap]['pvt'] = None
+                self.__maps[mymap]['creator'] = None
+                self.__maps[mymap]['size'] = None
+                self.__maps[mymap]['spawn-positions'] = None
+                self.__maps[mymap]['refreshed'] = None
 
         maps2refresh = list()
         maps2refresh_full = list()
