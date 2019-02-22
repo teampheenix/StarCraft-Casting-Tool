@@ -1,6 +1,19 @@
 # Changelog
 
 
+## v2.7.4 (2019-02-22)
+
+### Fix
+
+* Fixed a bug that would prevent the map statistics from being updated.
+
+* Fixed a bug that could occure when deleting match tabs.
+
+* Fixed a bug that would hinder text-to-speech.
+
+* Fixed a bug, where the logo in the browser logo source would not be centered.
+
+
 ## v2.7.3 (2019-02-13)
 
 ### Fix
