@@ -1,11 +1,12 @@
 """Provide match grabber for Chobo Team League."""
 import logging
-from bs4 import BeautifulSoup
-import requests
 import re
 
+import requests
+from bs4 import BeautifulSoup
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QInputDialog, QApplication
+from PyQt5.QtWidgets import QApplication, QInputDialog
+
 import scctool.settings
 import scctool.settings.translation
 from scctool.matchgrabber.custom import MatchGrabber as MatchGrabberParent
@@ -168,8 +169,12 @@ class MatchGrabber(MatchGrabberParent):
                 league = 'Chobo Team League'
             content = article.find('div', class_='article-content')
             for match in content.find_all('h1'):
-                matches.append(
-                    self.parse_match(match, league, season, week))
+                try:
+                    matches.append(
+                        self.parse_match(match, league, season, week))
+                except Exception:
+                    module_logger.warning(
+                        'Exception raised in CTL match grabber:')
 
         return matches
 
