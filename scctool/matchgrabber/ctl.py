@@ -80,6 +80,7 @@ class MatchGrabber(MatchGrabberParent):
                                       self._matchData.metaChanged):
             self._matchData.setNoSets(7, 3, resetPlayers=overwrite)
             self._matchData.setMinSets(9)
+            self._matchData.setAllKill(False)
             self._matchData.setSolo(False)
             self._matchData.setNoVetoes(0)
             self._matchData.resetLabels()

@@ -3,7 +3,7 @@ import string
 
 import pytest
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QMessageBox
+from PyQt5.QtWidgets import QInputDialog, QMessageBox
 
 import scctool.settings
 
@@ -179,6 +179,40 @@ class TestGUI(object):
         assert match.getNoSets() == 5
         assert match.getMinSets() == 3
         assert match.getNoAceSets() == 1
+
+    @pytest.mark.parametrize(
+        "match_url",
+        ['https://www.choboteamleague.com/home/m/6235882/article/4940572',
+         'https://www.choboteamleague.com/home/m/6235882/article/4938137'])
+    def test_ctl_match_grabber(self, qtbot, scct_app, mocker, match_url):
+        def getItem_mocker(view, msg1, msg2, list, editable=True):
+            assert editable is False
+            assert len(list) > 0
+            return random.choice(list), QMessageBox.Ok
+        self.gui_setup(qtbot, scct_app)
+
+        self.new_tab()
+        self.assert_bo(3)
+        self.main_window.tabs.setCurrentIndex(0)
+        assert self.main_window.tabs.currentIndex() == 0
+        self.insert_into_widget(self.main_window.le_url, match_url)
+        assert self.main_window.le_url.text() == match_url
+        mock_api = mocker.MagicMock(side_effect=getItem_mocker)
+        mocker.patch.object(QInputDialog, 'getItem', new=mock_api)
+        with self.qtbot.waitSignal(self.cntlr.matchControl.metaChanged):
+            self.qtbot.mouseClick(self.main_window.pb_refresh, Qt.LeftButton)
+
+        match = self.cntlr.matchControl.activeMatch()
+        assert match.getBestOf() == 7
+        assert match.getNoSets() == 9
+        assert match.getMinSets() == 9
+        assert match.getNoAceSets() == 3
+
+        assert self.main_window.cb_bestof.currentText() == '7'
+        assert self.main_window.cb_minSets.currentText() == '9'
+        assert self.main_window.cb_ace_bo.currentText() == '3'
+        assert self.main_window.cb_ace_bo.isEnabled()
+        assert self.main_window.cb_extend_ace.isChecked()
 
     def new_tab(self):
         with self.qtbot.waitSignal(self.cntlr.matchControl.metaChanged):

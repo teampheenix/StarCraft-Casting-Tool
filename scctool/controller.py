@@ -166,12 +166,6 @@ class MainController:
             if index >= 0:
                 self.view.cb_bestof.setCurrentIndex(index)
 
-            index = self.view.cb_minSets.findText(
-                str(self.matchControl.selectedMatch().getMinSets()),
-                Qt.MatchFixedString)
-            if index >= 0:
-                self.view.cb_minSets.setCurrentIndex(index)
-
             ace_sets = self.matchControl.selectedMatch().getAceSets()
             index = self.view.cb_ace_bo.findText(
                 str(ace_sets),
@@ -179,6 +173,12 @@ class MainController:
             if index >= 0:
                 self.view.cb_ace_bo.setCurrentIndex(index)
             self.view.cb_extend_ace.setChecked(ace_sets > 0)
+
+            index = self.view.cb_minSets.findText(
+                str(self.matchControl.selectedMatch().getMinSets()),
+                Qt.MatchFixedString)
+            if index >= 0:
+                self.view.cb_minSets.setCurrentIndex(index)
 
             self.view.le_url.setURL(
                 self.matchControl.selectedMatch().getURL())
@@ -987,9 +987,9 @@ class MainController:
                 "Mapstats", "mark_vetoed",):
             sc2_map = obj.get('map')
             old_map = obj.get('old_map')
-            if(old_map != sc2_map and
-               old_map != 'TBD' and
-               not self.matchControl.activeMatch().isMapVetoed(
+            if(old_map != sc2_map
+               and old_map != 'TBD'
+               and not self.matchControl.activeMatch().isMapVetoed(
                    old_map)):
                 self.websocketThread.sendData2Path(
                     'mapstats', 'MARK_VETOED',
@@ -1040,8 +1040,8 @@ class MainController:
                 'icon': obj['set_idx'] + 1,
                 'label': 'player{}'.format(obj['team_idx'] + 1),
                 'text': obj['value']})
-        if(obj['set_idx'] == 0 and
-                self.matchControl.activeMatch().getSolo()):
+        if(obj['set_idx'] == 0
+                and self.matchControl.activeMatch().getSolo()):
             self.websocketThread.sendData2Path(
                 'score', 'CHANGE_TEXT',
                 {'id': 'team{}'.format(obj['team_idx'] + 1),
