@@ -4,7 +4,7 @@ import logging
 from collections import OrderedDict
 from time import time
 
-from PyQt5.QtCore import QObject, pyqtSignal, QMutex
+from PyQt5.QtCore import QMutex, QObject, pyqtSignal
 
 import scctool.settings
 import scctool.settings.translation
@@ -160,7 +160,8 @@ class MatchControl(QObject):
         """Select a match."""
         self.mutex.lock()
         try:
-            if ident in self.__matches.keys() and self.__selectedMatch != ident:
+            if (ident in self.__matches.keys()
+                    and self.__selectedMatch != ident):
                 self.__selectedMatch = ident
                 module_logger.info('Selected match {}'.format(ident))
                 return True
@@ -176,7 +177,8 @@ class MatchControl(QObject):
             if ident in self.__matches.keys() and self.__activeMatch != ident:
                 old_ident = self.__activeMatch
                 self.__activeMatch = ident
-                if old_ident is not None and old_ident in self.__matches.keys():
+                if (old_ident is not None
+                        and old_ident in self.__matches.keys()):
                     try:
                         self.__matches[old_ident].metaChanged.disconnect()
                     except TypeError:
