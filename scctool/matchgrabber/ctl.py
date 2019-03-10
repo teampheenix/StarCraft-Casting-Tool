@@ -25,8 +25,8 @@ class MatchGrabber(MatchGrabberParent):
         """Init match grabber."""
         super().__init__(*args)
         self._urlprefix = "https://www.choboteamleague.com/"
-        self._apiprefix = "https://alpha.tl/api?match="
-        self._url = self._matchData.getURL()
+        self._apiprefix = ""
+        self._url = self._matchData._url
         self.re_race = re.compile(
             r'^https?:\/\/i\.imgur\.com\/([^\/\.\s]+)\.png$')
         self.re_heading = re.compile(
@@ -51,7 +51,7 @@ class MatchGrabber(MatchGrabberParent):
 
     def grabData(self, metaChange=False, logoManager=None):
         """Grab match data."""
-        self._url = self._matchData.getURL()
+        self._url = self._matchData._url
         matches = self.parse_article()
         if(len(matches) > 0):
             match_list = []
