@@ -287,7 +287,7 @@ class MatchData(QObject):
         self.setAllKill(bool(allkill))
         self.setProvider("Custom")
         self.setID(0)
-        self.setURL("", all=True)
+        self.setURL("", intern=True)
         self.setSolo(solo)
 
     def resetData(self, reset_options=True):
@@ -872,7 +872,7 @@ class MatchData(QObject):
         """Get league."""
         return self.__data['league']
 
-    def setURL(self, url, all=False):
+    def setURL(self, url, intern=False):
         """Set URL."""
         self.__data['matchlink'] = str(url)
         if all:
@@ -912,7 +912,7 @@ class MatchData(QObject):
     def grabData(self, metaChange=False, logoManager=None):
         """Grab the match data via a provider."""
         self.__matchGrabber.grabData(metaChange, logoManager)
-        self.setURL(self.__matchGrabber.getURL(), all=True)
+        self.setURL(self.__matchGrabber.getURL(), intern=True)
 
     def downloadBanner(self):
         """Download the match banner via a provider."""
