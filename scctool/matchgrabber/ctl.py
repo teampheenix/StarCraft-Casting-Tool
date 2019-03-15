@@ -31,7 +31,8 @@ class MatchGrabber(MatchGrabberParent):
             r'^https?:\/\/i\.imgur\.com\/([^\/\.\s]+)\.png$')
         self.re_heading = re.compile(
             r'.*S(?:eason)?\s*(\d+)\s+Week\s(\d+).*$')
-        self.re_teams = re.compile(r'^\s*(\S+)\s+vs\.?\s+(\S+)\s*$')
+        self.re_teams = re.compile(
+            r'([a-zA-Z0-9_\-]+)\s+vs\.?\s+([a-zA-Z0-9_\-]+)')
         self.team_table = {
             'QTp2T': 'Cutie Patootie',
             'JaMiT': 'JaM iT Gaming',
@@ -182,7 +183,7 @@ class MatchGrabber(MatchGrabberParent):
     def parse_match(self, match, league, season, week):
         """Parse a single match."""
         match_data = {}
-        re_match = self.re_teams.match(match.text.strip())
+        re_match = self.re_teams.search(match.text.strip())
         match_data['league'] = league
         match_data['season'] = season
         match_data['week'] = week

@@ -18,7 +18,7 @@ setup(name='StarCraftCastingTool',
       license='GPL-3.0',
       python_requires='>=3.6.0',
       tests_require=[
-          'pytest >= 4.3.0',
+          'pytest >= 4.3.1',
           'pytest-mock >= 1.10.1',
           'pytest-qt >= 3.2.2'],
       packages=['scctool'],
