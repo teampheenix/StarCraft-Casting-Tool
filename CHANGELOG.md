@@ -1,6 +1,17 @@
 # Changelog
 
 
+## v2.7.5 (2019-03-15)
+
+### Fix
+
+* Fixed another instance where the Chobo Team League match grabber would not worker properly.
+
+* Fixed a bug where match grabber would not overwrite old data.
+
+* Fixed a bug where the Chobo Team League match grabber would not work.
+
+
 ## v2.7.4 (2019-02-22)
 
 ### Fix
