@@ -8,6 +8,6 @@ pywin32 >= 224; platform_system == 'Windows'
 PyQt5 >= 5.11.3
 pytesseract >= 0.2.6; platform_system == 'Windows'
 # PyUpdater >= 2.5.4
-git+git://github.com/2press/PyUpdater@my-admin-fix
+git+git://github.com/JMSwag/PyUpdater@master
 requests >= 2.21.0
 websockets >= 7.0
