@@ -1,12 +1,10 @@
+"""Task to write out txt-files with match data."""
 import logging
 import queue
 
 import scctool.settings
 import scctool.settings.translation
 from scctool.tasks.tasksthread import TasksThread
-
-"""Write streaming data to txt-files if needed."""
-
 
 # from PyQt5.QtCore import pyqtSignal
 
@@ -24,7 +22,7 @@ class TextFilesThread(TasksThread):
         super().__init__()
         self._matchControl = matchControl
         self._q = SetQueue()
-        self._available_items = ['team', 'score', 'meta', 'league']
+        self._available_items = ['team', 'score', 'meta', 'league', 'bestof']
         self._matchControl.dataChanged.connect(self.put)
         self._matchControl.metaChanged.connect(self.put)
         self.addTask('write', self.__writeTask)
@@ -32,6 +30,7 @@ class TextFilesThread(TasksThread):
         self.put('meta')
 
     def put(self, item='meta', *args):
+        """Put a item into the queue."""
         if item == 'player' and self._matchControl.activeMatch().getSolo():
             self._q.put('team')
         elif item in self._available_items:
@@ -44,7 +43,10 @@ class TextFilesThread(TasksThread):
                 self.__writeTeam()
             elif item == "score":
                 self.__writeScore()
+            elif item == "bestof":
+                self.__writeBestOf()
             else:
+                self.__writeBestOf()
                 self.__writeTeam()
                 self.__writeScore()
                 self.__writeLeague()
@@ -98,9 +100,19 @@ class TextFilesThread(TasksThread):
         with open(file, mode='w', encoding='utf-8') as f:
             f.write(self._matchControl.activeMatch().getLeague())
 
+    def __writeBestOf(self):
+        file = scctool.settings.getAbsPath(
+            scctool.settings.casting_data_dir + "/bestof.txt")
+        with open(file, mode='w', encoding='utf-8') as f:
+            bo = self._matchControl.activeMatch().getBestOf()
+            f.write(f'Bo{bo}')
+
 
 class SetQueue(queue.Queue):
+    """Queue to write to txt-files."""
+
     def _init(self, maxsize):
+        """Init queue."""
         self.queue = set()
 
     def _put(self, item):

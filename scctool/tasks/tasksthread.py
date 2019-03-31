@@ -1,12 +1,10 @@
+"""Define generic thread for various tasks."""
 import logging
 import time
 
 from PyQt5.QtCore import QThread
 
 import scctool.settings.translation
-
-"""Define generic thread for various tasks."""
-
 
 # create logger
 module_logger = logging.getLogger(__name__)
@@ -28,6 +26,7 @@ class TasksThread(QThread):
         self.__wait_first = False
 
     def setWaitFirst(self, wait_first):
+        """Set the thread to wait first."""
         self.__wait_first = bool(wait_first)
 
     def setTimeout(self, timeout):
@@ -104,7 +103,7 @@ class TasksThread(QThread):
         cycles = int(self.__timeout / cycletime)
         rest = max(self.__timeout - cycles * cycletime, 0.0)
 
-        for i in range(cycles):
+        for __ in range(cycles):
             time.sleep(cycletime)
             if(not self.hasActiveTask()):
                 return

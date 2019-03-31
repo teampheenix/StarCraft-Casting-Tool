@@ -1,3 +1,4 @@
+"""Show browser source settings in sub window."""
 import logging
 
 from PyQt5.QtCore import QPoint, QSize, Qt
@@ -11,9 +12,6 @@ from PyQt5.QtWidgets import (QCheckBox, QComboBox, QDoubleSpinBox, QFormLayout,
 import scctool.settings
 import scctool.settings.translation
 from scctool.view.widgets import HotkeyLayout, ScopeGroupBox, StyleComboBox
-
-"""Show connections settings sub window."""
-
 
 
 # create logger
@@ -61,7 +59,7 @@ class SubwindowBrowserSources(QWidget):
 
             self.setWindowTitle(_("Browser Sources"))
 
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def createTabs(self, tab):
@@ -72,6 +70,7 @@ class SubwindowBrowserSources(QWidget):
         self.createFormGroupMapstats()
         self.createFormGroupMapBox()
         self.createFormGroupMapLandscape()
+        self.createFormGroupVetoes()
 
         # Add tabs
         self.tabs.addTab(self.formGroupIntro, _("Intros"))
@@ -79,20 +78,25 @@ class SubwindowBrowserSources(QWidget):
 
         self.tabs.addTab(self.formGroupMapBox, _("Box Map Icons"))
         self.tabs.addTab(self.formGroupMapLandscape, _("Landscape Map Icons"))
+        self.tabs.addTab(self.formGroupVetoes, _("Veto Icons"))
 
         table = dict()
         table['intro'] = 0
         table['mapstats'] = 1
         table['mapicons_box'] = 2
         table['mapicons_landscape'] = 3
+        table['vetoes'] = 4
         self.tabs.setCurrentIndex(
             table.get(tab, SubwindowBrowserSources.current_tab))
         self.tabs.currentChanged.connect(self.tabChanged)
 
-    def tabChanged(self, idx):
+    @classmethod
+    def tabChanged(cls, idx):
+        """Save the current tab."""
         SubwindowBrowserSources.current_tab = idx
 
     def addHotkey(self, ident, label):
+        """Add a hotkey to the layout."""
         element = HotkeyLayout(
             self, ident, label,
             scctool.settings.config.parser.get("Intros", ident))
@@ -100,6 +104,7 @@ class SubwindowBrowserSources(QWidget):
         return element
 
     def connectHotkeys(self):
+        """Connect the hotkeys."""
         for ident, key in self.hotkeys.items():
             if ident == 'hotkey_debug':
                 for ident2, key2 in self.hotkeys.items():
@@ -109,6 +114,7 @@ class SubwindowBrowserSources(QWidget):
             key.modified.connect(self.hotkeyChanged)
 
     def hotkeyChanged(self, key, ident):
+        """Handle change of hotkeys."""
         self.changed()
 
         if(ident == 'hotkey_player1' and self.cb_single_hotkey.isChecked()):
@@ -129,6 +135,7 @@ class SubwindowBrowserSources(QWidget):
             self.hotkeys['hotkey_debug'].clear()
 
     def singleHotkeyChanged(self):
+        """Handle single hotkey changed event."""
         checked = self.cb_single_hotkey.isChecked()
         self.hotkeys['hotkey_player2'].setDisabled(checked)
         if checked:
@@ -139,6 +146,7 @@ class SubwindowBrowserSources(QWidget):
             self.hotkeys['hotkey_player2'].clear()
 
     def createFormGroupMapstats(self):
+        """Create the form group for mapstats."""
         self.formGroupMapstats = QWidget()
         mainLayout = QVBoxLayout()
 
@@ -186,6 +194,15 @@ class SubwindowBrowserSources(QWidget):
         label.setMinimumWidth(120)
         layout.addRow(label, self.cb_mark_played)
 
+        self.cb_mark_vetoed = QCheckBox(_("Mark vetoed maps"))
+        self.cb_mark_vetoed.setChecked(
+            scctool.settings.config.parser.getboolean(
+                "Mapstats", "mark_vetoed"))
+        self.cb_mark_vetoed.stateChanged.connect(self.changed)
+        label = QLabel(" ")
+        label.setMinimumWidth(120)
+        layout.addRow(label, self.cb_mark_vetoed)
+
         box.setLayout(layout)
         mainLayout.addWidget(box)
 
@@ -226,21 +243,22 @@ class SubwindowBrowserSources(QWidget):
         self.formGroupMapstats.setLayout(mainLayout)
 
     def addMap(self):
+        """Add a map to the list."""
         maplist = list(scctool.settings.maps)
         for i in range(self.maplist.count()):
-            map = str(self.maplist.item(i).text())
-            if map in maplist:
-                maplist.remove(map)
+            sc2map = str(self.maplist.item(i).text())
+            if sc2map in maplist:
+                maplist.remove(sc2map)
 
         if len(maplist) > 0:
-            map, ok = QInputDialog.getItem(
+            sc2map, ok = QInputDialog.getItem(
                 self, _('Add Map'),
                 _('Please select a map') + ':',
                 maplist, editable=False)
 
             if ok:
                 self.__dataChanged = True
-                item = QListWidgetItem(map)
+                item = QListWidgetItem(sc2map)
                 self.maplist.addItem(item)
                 self.maplist.setCurrentItem(item)
         else:
@@ -250,12 +268,14 @@ class SubwindowBrowserSources(QWidget):
                 _('All available maps have already been added.'))
 
     def removeMap(self):
+        """Remove a map from the list."""
         item = self.maplist.currentItem()
         if item:
             self.maplist.takeItem(self.maplist.currentRow())
             self.__dataChanged = True
 
     def createFormGroupMapBox(self):
+        """Create a QWidget for boxed map icons."""
         self.formGroupMapBox = QWidget()
         mainLayout = QVBoxLayout()
         box = QGroupBox(_("General"))
@@ -304,7 +324,46 @@ class SubwindowBrowserSources(QWidget):
             0, 0, QSizePolicy.Minimum, QSizePolicy.Expanding))
         self.formGroupMapBox.setLayout(mainLayout)
 
+    def createFormGroupVetoes(self):
+        """Create a QWidget for veto icons."""
+        self.formGroupVetoes = QWidget()
+        mainLayout = QVBoxLayout()
+        box = QGroupBox(_("General"))
+        layout = QFormLayout()
+
+        container = QHBoxLayout()
+        self.qb_boxStyle = StyleComboBox(
+            scctool.settings.casting_html_dir + "/src/css/vetoes",
+            "vetoes")
+        self.qb_boxStyle.connect2WS(self.controller, 'vetoes')
+        label = QLabel(_("Style:"))
+        label.setMinimumWidth(120)
+        button = QPushButton(_("Show in Browser"))
+        button.clicked.connect(lambda: self.openHTML(
+            scctool.settings.casting_html_dir + "/vetoes.html"))
+        container.addWidget(self.qb_boxStyle, 2)
+        container.addWidget(button, 1)
+        layout.addRow(label, container)
+
+        self.sb_padding_box = QDoubleSpinBox()
+        self.sb_padding_box.setRange(0, 50)
+        self.sb_padding_box.setDecimals(1)
+        self.sb_padding_box.setValue(
+            scctool.settings.config.parser.getfloat("Vetoes", "padding"))
+        self.sb_padding_box.setSuffix(" " + _("Pixel"))
+        self.sb_padding_box.valueChanged.connect(
+            lambda x: self.changePadding('vetoes', x))
+        layout.addRow(QLabel(
+            _("Icon Padding:") + " "), self.sb_padding_box)
+        box.setLayout(layout)
+        mainLayout.addWidget(box)
+
+        mainLayout.addItem(QSpacerItem(
+            0, 0, QSizePolicy.Minimum, QSizePolicy.Expanding))
+        self.formGroupVetoes.setLayout(mainLayout)
+
     def createFormGroupMapLandscape(self):
+        """Create a QWidget for the landscape map icons."""
         self.formGroupMapLandscape = QWidget()
         mainLayout = QVBoxLayout()
         box = QGroupBox(_("General"))
@@ -563,7 +622,7 @@ class SubwindowBrowserSources(QWidget):
             layout.addWidget(buttonSave)
 
             self.buttonGroup = layout
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def changed(self, *values):
@@ -592,6 +651,11 @@ class SubwindowBrowserSources(QWidget):
                 "Mapstats",
                 "mark_played",
                 str(self.cb_mark_played.isChecked()))
+
+            scctool.settings.config.parser.set(
+                "Mapstats",
+                "mark_vetoed",
+                str(self.cb_mark_vetoed.isChecked()))
 
             self.controller.mapstatsManager.sendMapPool()
             self.mainWindow.updateAllMapButtons()
@@ -636,11 +700,19 @@ class SubwindowBrowserSources(QWidget):
         self.controller.openURL(scctool.settings.getAbsPath(file))
 
     def changePadding(self, scope, padding):
-        scctool.settings.config.parser.set(
-            "MapIcons", "padding_{}".format(scope),
-            str(padding))
-        self.controller.websocketThread.changePadding(
-            "mapicons_{}".format(scope), padding)
+        """Change the padding."""
+        if scope == 'vetoes':
+            scctool.settings.config.parser.set(
+                "Vetoes", "padding",
+                str(padding))
+            self.controller.websocketThread.changePadding(
+                "vetoes", padding)
+        else:
+            scctool.settings.config.parser.set(
+                "MapIcons", f"padding_{scope}",
+                str(padding))
+            self.controller.websocketThread.changePadding(
+                f"mapicons_{scope}", padding)
 
     def saveCloseWindow(self):
         """Save and close window."""
@@ -670,5 +742,5 @@ class SubwindowBrowserSources(QWidget):
                     self.saveData()
             self.controller.updateHotkeys()
             event.accept()
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")

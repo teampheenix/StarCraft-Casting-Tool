@@ -1,3 +1,4 @@
+"""Provide settings for SCCTool."""
 import json
 import logging
 import os
@@ -11,9 +12,6 @@ from scctool.settings.client_config import ClientConfig
 from scctool.settings.config import init as initConfig
 from scctool.settings.profileManager import ProfileManager
 from scctool.settings.safeGuard import SafeGuard
-
-"""Provide settings for SCCTool."""
-
 
 module_logger = logging.getLogger(__name__)
 this = sys.modules[__name__]
@@ -31,18 +29,21 @@ logosDir = os.path.join(dataDir, "logos")
 ttsDir = os.path.join(dataDir, "tts")
 
 windows = (platform.system().lower() == "windows")
-max_no_sets = 15
+max_no_sets = 19
+max_no_vetoes = 9
 races = ("Random", "Terran", "Protoss", "Zerg")
 
 this.profileManager = ProfileManager()
 this.maps = []
 this.nightbot_commands = dict()
 this.safe = SafeGuard()
+this.test = False
 
 
-def loadSettings():
-
-    this.profileManager = ProfileManager()
+def loadSettings(tmp_dir='', test=False):
+    """Load all settings."""
+    this.test = bool(test)
+    this.profileManager = ProfileManager(tmp_dir)
 
     initConfig(configFile())
 
@@ -78,28 +79,45 @@ def loadSettings():
 
 
 def getResFile(file):
+    """Get the norm path of a resource file."""
     if hasattr(sys, '_MEIPASS'):
         return os.path.normpath(os.path.join(sys._MEIPASS, 'src', file))
     else:
-        return os.path.normpath(os.path.join(basedir, 'src', file))
+        path = os.path.normpath(os.path.join(basedir, 'src', file))
+        if not os.path.exists(path):
+            path = os.path.normpath(os.path.join(
+                os.path.dirname(__file__), '../../src', file))
+        if not os.path.exists(path):
+            raise FileNotFoundError(path)
+        return path
 
 
 def getLocalesDir():
+    """Get the locales dir."""
     if hasattr(sys, '_MEIPASS'):
         return os.path.normpath(os.path.join(sys._MEIPASS, 'locales'))
     else:
-        return os.path.normpath(os.path.join(basedir, 'locales'))
+        path = os.path.normpath(os.path.join(basedir, 'locales'))
+        if os.path.exists(path):
+            path = os.path.normpath(os.path.join(
+                os.path.dirname(__file__), '../../locales'))
+        if not os.path.exists(path):
+            raise FileNotFoundError(path)
+        return path
 
 
 def getJsonFile(scope):
-    return getAbsPath(dataDir + "/{}.json".format(scope))
+    """Get the absolute path of a json file."""
+    return getAbsPath(f"{dataDir}/{scope}.json")
 
 
 def configFile():
+    """Get the absolute path of the config file."""
     return getAbsPath("config.ini")
 
 
 def getLogFile():
+    """Get the absolute path to the logfile."""
     logdir = getLogDir()
     if not os.path.exists(logdir):
         os.makedirs(logdir)
@@ -107,8 +125,8 @@ def getLogFile():
         # Delete old logfiles
         for f in os.listdir(logdir):
             full = os.path.join(logdir, f)
-            if (os.path.isfile(full)
-                    and os.stat(full).st_mtime < time.time() - 7 * 86400):
+            if (os.path.isfile(full) and
+                    os.stat(full).st_mtime < time.time() - 7 * 86400):
                 os.remove(full)
 
     filename = 'scct-{}-{}.log'.format(time.strftime(
@@ -117,13 +135,13 @@ def getLogFile():
 
 
 def getLogDir():
+    """Get the absolut path to the log dir."""
     return appdirs.user_log_dir(
         ClientConfig.APP_NAME, ClientConfig.COMPANY_NAME)
 
 
 def getAbsPath(file):
     """Link to absolute path of a file."""
-
     return this.profileManager.getFile(file)
 
 
@@ -131,19 +149,22 @@ def loadMapList():
     """Load map list form dir."""
     data = []
     try:
-        dir = os.path.normpath(os.path.join(
+        mapdir = os.path.normpath(os.path.join(
             getAbsPath(casting_html_dir), "src/img/maps"))
 
-        for fname in os.listdir(dir):
-            full_fname = os.path.join(dir, fname)
+        for fname in os.listdir(mapdir):
+            full_fname = os.path.join(mapdir, fname)
             name, ext = os.path.splitext(fname)
-            if os.path.isfile(full_fname) and ext in ['.jpg', '.png']:
+            if os.path.isfile(full_fname) and ext in ['.jpg', '.jpeg', '.png']:
                 mapName = name.replace('_', " ")
                 if mapName not in data:
                     data.append(mapName)
+    except FileNotFoundError:
+        data = []
     finally:
         this.maps = data
-        return data
+
+    return data
 
 
 def loadNightbotCommands():
@@ -169,10 +190,10 @@ def saveNightbotCommands():
         module_logger.exception("message")
 
 
-def race2idx(str):
+def race2idx(race_str):
     """Convert race to idx."""
     for idx, race in enumerate(races):
-        if(race.lower() == str.lower()):
+        if(race.lower() == race_str.lower()):
             return idx
     return 0
 

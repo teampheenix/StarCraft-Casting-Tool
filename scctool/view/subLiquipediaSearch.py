@@ -1,3 +1,4 @@
+"""Liquipedia search subwindow."""
 import logging
 
 from PyQt5.QtCore import QPoint, QSize, Qt, QUrl
@@ -13,10 +14,6 @@ import scctool.settings.translation
 from scctool.tasks.liquipedia import LiquipediaGrabber
 from scctool.view.widgets import LogoDownloader
 
-"""Show readme sub window."""
-
-
-
 # create logger
 module_logger = logging.getLogger(__name__)
 base_url = 'https://liquipedia.net'
@@ -24,7 +21,7 @@ _ = scctool.settings.translation.gettext
 
 
 class SubwindowLiquipediaSearch(QWidget):
-    """Show readme sub window."""
+    """Liquipedia Search subwindow."""
 
     nams = dict()
     results = dict()
@@ -57,9 +54,9 @@ class SubwindowLiquipediaSearch(QWidget):
         self.qle_search.setCompleter(completer)
 
         mainLayout.addWidget(self.qle_search, 0, 0, 1, 2)
-        searchButton = QPushButton(_("Search"))
-        searchButton.clicked.connect(self.search)
-        mainLayout.addWidget(searchButton, 0, 2)
+        self.searchButton = QPushButton(_("Search"))
+        self.searchButton.clicked.connect(self.search)
+        mainLayout.addWidget(self.searchButton, 0, 2)
 
         self.box = QGroupBox(_("Results"))
         layout = QHBoxLayout()
@@ -81,16 +78,16 @@ class SubwindowLiquipediaSearch(QWidget):
 
         mainLayout.addWidget(self.box, 1, 0, 1, 3)
 
-        selectButton = QPushButton(
+        self.selectButton = QPushButton(
             " " + _("Use Selected Logo") + " ")
-        selectButton.clicked.connect(self.applyLogo)
-        closeButton = QPushButton(_("Cancel"))
-        closeButton.clicked.connect(self.close)
+        self.selectButton.clicked.connect(self.applyLogo)
+        self.closeButton = QPushButton(_("Cancel"))
+        self.closeButton.clicked.connect(self.close)
         mainLayout.addItem(QSpacerItem(
             0, 0, QSizePolicy.Expanding,
             QSizePolicy.Minimum), 2, 0)
-        mainLayout.addWidget(closeButton, 2, 1)
-        mainLayout.addWidget(selectButton, 2, 2)
+        mainLayout.addWidget(self.closeButton, 2, 1)
+        mainLayout.addWidget(self.selectButton, 2, 2)
         self.setLayout(mainLayout)
 
         self.setWindowTitle(_("Liquipedia Image Search"))
@@ -104,11 +101,13 @@ class SubwindowLiquipediaSearch(QWidget):
         self.move(mainWindow.pos() + relativeChange)
 
     def clean(self):
+        """Clear all data."""
         self.nams.clear()
         self.results.clear()
         self.data.clear()
 
     def search(self):
+        """Search on Liquipedia."""
         QApplication.setOverrideCursor(
             Qt.WaitCursor)
         self.clean()
@@ -135,36 +134,29 @@ class SubwindowLiquipediaSearch(QWidget):
                 idx += 1
             self.box.setTitle(
                 _("Results for '{}': {}").format(search_str, idx))
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
         finally:
             QApplication.restoreOverrideCursor()
 
     def finishRequest(self, reply, idx):
+        """Handle a finished request."""
         img = QImage()
         img.loadFromData(reply.readAll())
-        map = QPixmap(img).scaled(
+        pixmap = QPixmap(img).scaled(
             75, 75, Qt.KeepAspectRatio)
-        self.results[idx].setIcon(QIcon(map))
+        self.results[idx].setIcon(QIcon(pixmap))
 
     def applyLogo(self, skip=False):
-        QApplication.setOverrideCursor(Qt.WaitCursor)
+        """Apply a logo."""
         item = self.result_list.currentItem()
         if item is not None and (skip or item.isSelected()):
-            for idx, iteritem in self.results.items():
-                if item is iteritem:
-                    images = self.liquipediaGrabber.get_images(self.data[idx])
-                    image = ""
-                    for size in sorted(images):
-                        if not image or size <= 600 * 600:
-                            image = images[size]
-
-                    self.downloadLogo(base_url + image)
-                    break
-        QApplication.restoreOverrideCursor()
-        self.close()
+            self.doubleClicked(item)
+        else:
+            self.close()
 
     def doubleClicked(self, item):
+        """Apply a logo from double click."""
         QApplication.setOverrideCursor(Qt.WaitCursor)
         for idx, iteritem in self.results.items():
             if item is iteritem:
@@ -180,6 +172,7 @@ class SubwindowLiquipediaSearch(QWidget):
         self.close()
 
     def listItemRightClicked(self, QPos):
+        """Provide right click context menu."""
         self.listMenu = QMenu()
         menu_item = self.listMenu.addAction(_("Open on Liquipedia"))
         menu_item.triggered.connect(self.openLiquipedia)
@@ -191,6 +184,7 @@ class SubwindowLiquipediaSearch(QWidget):
         self.listMenu.show()
 
     def openLiquipedia(self):
+        """Open current logo on liquipedia."""
         item = self.result_list.currentItem()
         for idx, iteritem in self.results.items():
             if item is iteritem:
@@ -199,18 +193,19 @@ class SubwindowLiquipediaSearch(QWidget):
                 break
 
     def downloadLogo(self, url):
+        """Download logo."""
         logo = LogoDownloader(
             self.controller, self, url).download()
         logo.refreshData()
-        map = logo.provideQPixmap()
+        pixmap = logo.provideQPixmap()
 
         if self.team == 1:
             self.controller.logoManager.setTeam1Logo(logo)
-            self.mainWindow.team1_icon.setPixmap(map)
+            self.mainWindow.team1_icon.setPixmap(pixmap)
             self.mainWindow.refreshLastUsed()
         elif self.team == 2:
             self.controller.logoManager.setTeam2Logo(logo)
-            self.mainWindow.team2_icon.setPixmap(map)
+            self.mainWindow.team2_icon.setPixmap(pixmap)
             self.mainWindow.refreshLastUsed()
 
     def closeEvent(self, event):
@@ -218,5 +213,5 @@ class SubwindowLiquipediaSearch(QWidget):
         try:
             self.clean()
             event.accept()
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")

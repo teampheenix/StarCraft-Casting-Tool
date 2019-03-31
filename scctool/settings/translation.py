@@ -1,3 +1,4 @@
+"""Provide gettext translations."""
 import gettext as gt
 import logging
 import sys
@@ -8,14 +9,16 @@ import scctool.settings.config
 module_logger = logging.getLogger(__name__)
 
 this = sys.modules[__name__]
-this.tr = gt.NullTranslations()
+this.translation = gt.NullTranslations()
 
 
 def gettext(msg):
+    """Return gettext translation."""
     return this.translation.gettext(msg)
 
 
 def set_language():
+    """Set language in PyQt5 and gettext."""
     global this
     lang = scctool.settings.config.parser.get("SCT", "language")
     localesDir = scctool.settings.getLocalesDir()
@@ -27,4 +30,4 @@ def set_language():
             languages=[lang])
     except Exception:
         this.translation = gt.NullTranslations()
-        module_logger.exception("Lang '{}', dir '{}':".format(lang, dir))
+        module_logger.exception(f"Lang '{lang}', dir '{dir}':")

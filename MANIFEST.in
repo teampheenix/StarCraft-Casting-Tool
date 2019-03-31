@@ -1,0 +1,3 @@
+include requirements.txt
+include src/*
+include CHANGELOG.md

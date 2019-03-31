@@ -1,3 +1,4 @@
+"""Provide match grabber for RSL."""
 import logging
 
 import requests
@@ -6,14 +7,9 @@ import scctool.settings
 import scctool.settings.translation
 from scctool.matchgrabber.custom import MatchGrabber as MatchGrabberParent
 
-"""Provide match grabber for RSL."""
-
-
-
-
 # create logger
 module_logger = logging.getLogger(__name__)
-_ = scctool.settings.translation.gettext
+# _ = scctool.settings.translation.gettext
 
 
 class MatchGrabber(MatchGrabberParent):
@@ -31,7 +27,7 @@ class MatchGrabber(MatchGrabberParent):
             + "&data_type=json&lang=en&service=match&match_id="
 
     def _getJson(self):
-        """Overwriting this parent method as ssl verfication fails for RSL."""
+        """Overwrite the parent method as ssl verfication fails for RSL."""
         data = requests.get(url=self._getAPI(), verify=False).json()
         return data
 
@@ -56,7 +52,7 @@ class MatchGrabber(MatchGrabberParent):
 
             # In RSL this is apparently ProLeague format
             if(data['game_format'] == "3"):
-                self._matchData.setNoSets(5, resetPlayers=overwrite)
+                self._matchData.setNoSets(5, 1, resetPlayers=overwrite)
                 self._matchData.setMinSets(3)
                 self._matchData.resetLabels()
                 self._matchData.setSolo(False)
@@ -106,8 +102,7 @@ class MatchGrabber(MatchGrabberParent):
                                     race = "Random"
                             try:
                                 temp_player = data['result'][str(
-                                    5 + set_idx)]['member_name' +
-                                                  str(team_idx + 1)]
+                                    5 + set_idx)][f'member_name{team_idx + 1}']
                                 if temp_player is not None:
                                     player = temp_player
                             finally:
@@ -126,9 +121,6 @@ class MatchGrabber(MatchGrabberParent):
                     self._matchData.setTeam(
                         self._matchData.getSwappedIdx(team_idx),
                         self._aliasTeam(team['name']), team['tag'])
-
-                self._matchData.setLabel(4, "Ace Map")
-                self._matchData.setAce(4, True)
 
                 for set_idx in range(5):
                     try:
@@ -156,17 +148,17 @@ class MatchGrabber(MatchGrabberParent):
 
                 # self._matchData.resetData()
                 bo = int(data['game_format_bo'])
-                self._matchData.setNoSets(bo, bo, resetPlayers=overwrite)
+                self._matchData.setNoSets(bo, 0, resetPlayers=overwrite)
                 self._matchData.setMinSets(0)
                 self._matchData.setSolo(False)
                 self._matchData.setLeague(data['tournament']['name'])
 
                 try:
-                    map = data['start_maps']["1"]['name']
+                    mapname = data['start_maps']["1"]['name']
                 except KeyError:
-                    map = data['start_map']['name']
+                    mapname = data['start_map']['name']
 
-                self._matchData.setMap(0, map)
+                self._matchData.setMap(0, mapname)
 
                 for team_idx in range(2):
                     for set_idx in range(1):
@@ -188,8 +180,8 @@ class MatchGrabber(MatchGrabberParent):
                                 try:
                                     idx = str(set_idx * 2 + 1)
                                     race = \
-                                        data['result'][idx]['r_name'
-                                                            + str(team_idx + 1)]
+                                        data['result'][idx][
+                                            f'r_name{team_idx + 1}']
                                 except Exception:
                                     race = "Random"
                             else:
@@ -197,8 +189,7 @@ class MatchGrabber(MatchGrabberParent):
                                     set_idx * 2)]['r_name' + str(team_idx + 1)]
                             player = \
                                 data['result'][str(
-                                    set_idx * 2)]['member_name' +
-                                                  str(team_idx + 1)]
+                                    set_idx * 2)][f'member_name{team_idx + 1}']
                             player = self._aliasPlayer(player)
                             self._matchData.setPlayer(
                                 self._matchData.getSwappedIdx(team_idx),
@@ -245,7 +236,6 @@ class MatchGrabber(MatchGrabberParent):
 
     def downloadLogos(self, logoManager):
         """Download team logos."""
-
         if self._rawData is None:
             raise ValueError(
                 "Error: No raw data.")
@@ -271,5 +261,5 @@ class MatchGrabber(MatchGrabberParent):
                     logoManager.setTeamLogo(logo_idx, logo)
                 else:
                     module_logger.info("Logo download is not needed.")
-            except Exception as e:
+            except Exception:
                 module_logger.exception('message')

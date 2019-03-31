@@ -64,6 +64,10 @@ div.misc {
   box-sizing: border-box;
 }
 
+.bestof {
+  visibility: hidden;
+}
+
 .score {
   font-size: 80px;
   line-height: var(--height);

@@ -1,3 +1,4 @@
+"""Subwindow with miscellaneous settings."""
 import logging
 import os.path
 
@@ -17,9 +18,6 @@ from scctool.tasks.liquipedia import LiquipediaGrabber, MapNotFound
 from scctool.view.widgets import (AliasTreeView, AligulacTreeView, ListTable,
                                   MapDownloader, MonitoredLineEdit)
 
-"""Show subwindow with miscellaneous settings."""
-
-
 
 # create logger
 module_logger = logging.getLogger(__name__)
@@ -28,6 +26,7 @@ _ = scctool.settings.translation.gettext
 
 class SubwindowMisc(QWidget):
     """Show subwindow with miscellaneous settings."""
+
     current_tab = -1
 
     def createWindow(self, mainWindow, tab=''):
@@ -65,7 +64,7 @@ class SubwindowMisc(QWidget):
 
             self.setWindowTitle(_("Miscellaneous Settings"))
 
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def createTabs(self, tab=''):
@@ -100,7 +99,9 @@ class SubwindowMisc(QWidget):
         self.tabs.setCurrentIndex(table.get(tab, SubwindowMisc.current_tab))
         self.tabs.currentChanged.connect(self.tabChanged)
 
-    def tabChanged(self, idx):
+    @classmethod
+    def tabChanged(cls, idx):
+        """Save the current tab index."""
         SubwindowMisc.current_tab = idx
 
     def changed(self):
@@ -306,18 +307,18 @@ class SubwindowMisc(QWidget):
         box.setLayout(layout)
         mainLayout.addWidget(box, 0, 1)
 
-        list = self.controller.aliasManager.playerAliasList()
-        for player, aliases in list.items():
+        alias_list = self.controller.aliasManager.playerAliasList()
+        for player, aliases in alias_list.items():
             self.list_aliasPlayers.insertAliasList(player, aliases)
 
-        list = self.controller.aliasManager.teamAliasList()
-        for team, aliases in list.items():
+        alias_list = self.controller.aliasManager.teamAliasList()
+        for team, aliases in alias_list.items():
             self.list_aliasTeams.insertAliasList(team, aliases)
 
         self.aliasBox.setLayout(mainLayout)
 
     def addAlias(self, widget, scope, name=""):
-
+        """Add an alias."""
         name, ok = QInputDialog.getText(
             self, scope, scope + ':', text=name)
         if not ok:
@@ -525,6 +526,7 @@ class SubwindowMisc(QWidget):
             self.changed()
 
     def createAligulacTab(self):
+        """Create the aligulac tab."""
         self.aligulacTab = QWidget()
 
         layout = QGridLayout()
@@ -548,20 +550,24 @@ class SubwindowMisc(QWidget):
 
         self.aligulacTab.setLayout(layout)
 
-    def addAligulacID(self, name='', id=1):
+    def addAligulacID(self, name='', aligulac_id=1):
+        """Add an aligulac ID."""
         text, ok = QInputDialog.getText(
             self, _('Player Name'), _('Player Name') + ':', text=name)
         text = text.strip()
         if not ok or not text:
             return
-        id, ok = QInputDialog.getInt(
-            self, _('Aligulac ID'), _('Aligulac ID') + ':', value=id, min=1)
+        aligulac_id, ok = QInputDialog.getInt(
+            self,
+            _('Aligulac ID'), _('Aligulac ID') + ':',
+            value=aligulac_id, min=1)
         if not ok:
             return
 
-        self.aligulacTreeview.insertItem(text, id)
+        self.aligulacTreeview.insertItem(text, aligulac_id)
 
     def removeAligulacID(self):
+        """Remove an selected aligulac ID."""
         self.aligulacTreeview.removeSelected()
 
     def createMapsBox(self):
@@ -574,8 +580,8 @@ class SubwindowMisc(QWidget):
 
         self.maplist = QListWidget()
         self.maplist.setSortingEnabled(True)
-        for map in scctool.settings.maps:
-            self.maplist.addItem(QListWidgetItem(map))
+        for sc2map in scctool.settings.maps:
+            self.maplist.addItem(QListWidgetItem(sc2map))
         self.maplist.setCurrentItem(self.maplist.item(0))
         self.maplist.currentItemChanged.connect(self.changePreview)
         # self.maplist.setFixedHeight(self.mapsize)
@@ -630,13 +636,15 @@ class SubwindowMisc(QWidget):
     def renameMap(self):
         """Rename maps."""
         item = self.maplist.currentItem()
-        map = item.text()
+        mapname = item.text()
         text, ok = QInputDialog.getText(
-            self, _('Map Name'), _('Map Name') + ':', text=map)
+            self, _('Map Name'),
+            _('Map Name') + ':',
+            text=mapname)
         if not ok:
             return
         text = text.strip()
-        if(text == map):
+        if(text == mapname):
             return
         if text.lower() == 'tbd':
             QMessageBox.critical(
@@ -653,32 +661,32 @@ class SubwindowMisc(QWidget):
             if buttonReply == QMessageBox.No:
                 return
 
-        self.controller.addMap(self.controller.getMapImg(map, True), text)
-        self.controller.deleteMap(map)
+        self.controller.addMap(self.controller.getMapImg(mapname, True), text)
+        self.controller.deleteMap(mapname)
         item.setText(text)
 
     def changeMap(self):
         """Change a map."""
-        map = self.maplist.currentItem().text()
+        current_map = self.maplist.currentItem().text()
         fileName, ok = QFileDialog.getOpenFileName(
             self, _("Select Map Image (> 500x500px recommended)"),
-            "", _("Supported Images") + " (*.png *.jpg)")
+            "", _("Supported Images") + " (*.png *.jpg *.jpeg)")
         if ok:
             base = os.path.basename(fileName)
-            name, ext = os.path.splitext(base)
+            name, __ = os.path.splitext(base)
             name = name.replace("_", " ")
-            self.controller.deleteMap(map)
-            self.controller.addMap(fileName, map)
+            self.controller.deleteMap(current_map)
+            self.controller.addMap(fileName, current_map)
             self.changePreview()
 
     def addMap(self):
         """Add a map."""
         fileName, ok = QFileDialog.getOpenFileName(
             self, _("Select Map Image (> 500x500px recommended)"),
-            "", _("Supported Images") + " (*.png *.jpg)")
+            "", _("Supported Images") + " (*.png *.jpg  *.jpeg)")
         if ok:
             base = os.path.basename(fileName)
-            name, ext = os.path.splitext(base)
+            name, __ = os.path.splitext(base)
             name = name.replace("_", " ")
             map_name, ok = QInputDialog.getText(
                 self, _('Map Name'), _('Map Name') + ':', text=name)
@@ -713,6 +721,7 @@ class SubwindowMisc(QWidget):
                 self.changePreview()
 
     def addFromLquipedia(self):
+        """Add a map from Liquipedia."""
         grabber = LiquipediaGrabber()
         search_str = ''
         while True:
@@ -730,7 +739,7 @@ class SubwindowMisc(QWidget):
                         continue
                     try:
                         QApplication.setOverrideCursor(Qt.WaitCursor)
-                        map = grabber.get_map(search_str)
+                        sc2map = grabber.get_map(search_str)
                     except MapNotFound:
                         QMessageBox.critical(
                             self,
@@ -740,7 +749,7 @@ class SubwindowMisc(QWidget):
                         continue
                     finally:
                         QApplication.restoreOverrideCursor()
-                    map_name = map.get_name()
+                    map_name = sc2map.get_name()
 
                     if(map_name in scctool.settings.maps):
                         buttonReply = QMessageBox.warning(
@@ -783,20 +792,19 @@ class SubwindowMisc(QWidget):
             except Exception as e:
                 module_logger.exception("message")
                 QMessageBox.critical(self, _("Error"), str(e))
-            finally:
-                break
+            break
 
     def deleteMap(self):
         """Delete a map."""
         item = self.maplist.currentItem()
-        map = item.text()
+        mapname = item.text()
         buttonReply = QMessageBox.question(
             self, _('Delete map?'),
-            _("Delete '{}' permanently?").format(map),
+            _("Delete '{}' permanently?").format(mapname),
             QMessageBox.Yes | QMessageBox.No,
             QMessageBox.No)
         if buttonReply == QMessageBox.Yes:
-            self.controller.deleteMap(map)
+            self.controller.deleteMap(mapname)
             self.maplist.takeItem(self.maplist.currentRow())
 
     def changePreview(self):
@@ -804,8 +812,8 @@ class SubwindowMisc(QWidget):
         if self.maplist.count() < 1:
             return
 
-        map = self.maplist.currentItem().text()
-        if(map == "TBD"):
+        mapname = self.maplist.currentItem().text()
+        if(mapname == "TBD"):
             self.pb_renameMap.setEnabled(False)
             self.pb_removeMap.setEnabled(False)
             self.sc_removeMap.setEnabled(False)
@@ -814,16 +822,16 @@ class SubwindowMisc(QWidget):
             self.pb_renameMap.setEnabled(True)
             self.sc_removeMap.setEnabled(True)
 
-        file = self.controller.getMapImg(map, True)
-        map = QPixmap(file)
-        height = map.height()
-        width = map.width()
+        file = self.controller.getMapImg(mapname, True)
+        pixmap = QPixmap(file)
+        height = pixmap.height()
+        width = pixmap.width()
         ext = os.path.splitext(file)[1].replace(".", "").upper()
         size = humanize.naturalsize(os.path.getsize(file))
-        map = QPixmap(file).scaled(
+        pixmap = QPixmap(file).scaled(
             self.mapsize, self.mapsize, Qt.KeepAspectRatio)
-        self.mapPreview.setPixmap(map)
-        text = "{}x{}px, {}, {}".format(width, height, str(size), ext)
+        self.mapPreview.setPixmap(pixmap)
+        text = f"{width}x{height}px, {size}, {ext}"
         self.mapInfo.setText(text)
 
     def createButtonGroup(self):
@@ -846,7 +854,7 @@ class SubwindowMisc(QWidget):
             layout.addWidget(buttonSave)
 
             self.buttonGroup = layout
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def saveData(self):
@@ -918,5 +926,5 @@ class SubwindowMisc(QWidget):
                 if buttonReply == QMessageBox.Yes:
                     self.saveData()
             event.accept()
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")

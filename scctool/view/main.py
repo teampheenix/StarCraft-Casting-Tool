@@ -47,10 +47,9 @@ class MainWindow(QMainWindow):
             self.tlock = TriggerLock()
             self.controller = controller
 
-            self.max_no_sets = scctool.settings.max_no_sets
             self.scoreWidth = 35
             self.raceWidth = 45
-            self.labelWidth = 25
+            self.labelWidth = 10
             self.mimumLineEditWidth = 130
 
             self.createTabs()
@@ -105,7 +104,7 @@ class MainWindow(QMainWindow):
             if showChangelog:
                 self.openChangelog()
 
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def showAbout(self):
@@ -129,7 +128,7 @@ class MainWindow(QMainWindow):
         """Close and clean up window."""
         try:
             try:
-                for name, window in self.mysubwindows.items():
+                for __, window in self.mysubwindows.items():
                     if(window and window.isVisible()):
                         window.close()
             finally:
@@ -138,7 +137,7 @@ class MainWindow(QMainWindow):
                 self.controller.cleanUp(self._save)
                 QMainWindow.closeEvent(self, event)
                 # event.accept()
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def createMenuBar(self):
@@ -179,10 +178,10 @@ class MainWindow(QMainWindow):
 
             infoMenu = menubar.addMenu(_('Info && Links'))
 
-            myAct = QAction(QIcon(scctool.settings.getResFile(
+            self.action_about = QAction(QIcon(scctool.settings.getResFile(
                 'about.png')), _('About'), self)
-            myAct.triggered.connect(self.showAbout)
-            infoMenu.addAction(myAct)
+            self.action_about.triggered.connect(self.showAbout)
+            infoMenu.addAction(self.action_about)
 
             myAct = QAction(QIcon(scctool.settings.getResFile(
                 'readme.ico')), _('Readme'), self)
@@ -263,10 +262,11 @@ class MainWindow(QMainWindow):
                 "https://paypal.me/StarCraftCastingTool"))
             infoMenu.addAction(myAct)
 
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def createLangMenu(self):
+        """Create menu to select the language."""
         menubar = self.menuBar()
 
         langMenu = menubar.addMenu(_('Language'))
@@ -293,6 +293,7 @@ class MainWindow(QMainWindow):
             langMenu.addAction(myAct)
 
     def createBrowserSrcMenu(self):
+        """Create menu for Browser Sources."""
         menubar = self.menuBar()
         main_menu = menubar.addMenu(_('Browser Sources'))
 
@@ -336,6 +337,11 @@ class MainWindow(QMainWindow):
                              {'name': _('Icon Set {}').format(3),
                               'icon': 'three.png',
                               'file': 'mapicons_landscape_3.html'}]})
+        srcs.append({'name': _('Vetoes'),
+                     'icon': 'veto.png',
+                     'file': 'vetoes.html',
+                     'settings': lambda: self.openBrowserSourcesDialog(
+            'vetoes')})
         srcs.append({'name': _('Misc'),
                      'icon': 'misc.png',
                      'sub': [{'name': _('Logo {}').format(1),
@@ -388,18 +394,38 @@ class MainWindow(QMainWindow):
                     icon['file'] = os.path.join(
                         scctool.settings.casting_html_dir, icon['file'])
                     act = QAction(QIcon(scctool.settings.getResFile(
-                        'html.png')), _('Open URL in Browser'), self)
+                        'html.png')), _('Open local URL in Browser'), self)
                     act.triggered.connect(
                         lambda x,
                         file=short_file: self.controller.openURL(
                             self.controller.getBrowserSourceURL(file)))
                     mySubMenu.addAction(act)
                     act = QAction(QIcon(scctool.settings.getResFile(
-                        'copy.png')), _('Copy URL to Clipboard'), self)
+                        'copy.png')), _('Copy local URL to Clipboard'), self)
                     act.triggered.connect(
                         lambda x, file=short_file:
                         QApplication.clipboard().setText(
                             self.controller.getBrowserSourceURL(file)))
+                    mySubMenu.addAction(act)
+                    act = QAction(
+                        QIcon(scctool.settings.getResFile(
+                            'open_internet.png')),
+                        _('Open external URL in Browser'),
+                        self)
+                    act.triggered.connect(
+                        lambda x,
+                        file=short_file: self.controller.openURL(
+                            self.controller.getBrowserSourceURL(file, True)))
+                    mySubMenu.addAction(act)
+                    act = QAction(
+                        QIcon(scctool.settings.getResFile(
+                            'copy_internet.png')),
+                        _('Copy external URL to Clipboard'),
+                        self)
+                    act.triggered.connect(
+                        lambda x, file=short_file:
+                        QApplication.clipboard().setText(
+                            self.controller.getBrowserSourceURL(file, True)))
                     mySubMenu.addAction(act)
                     act = QAction(QIcon(scctool.settings.getResFile(
                         'browser2.png')), _('Open File in Browser'), self)
@@ -419,18 +445,37 @@ class MainWindow(QMainWindow):
                 src['file'] = os.path.join(
                     scctool.settings.casting_html_dir, src['file'])
                 act = QAction(QIcon(scctool.settings.getResFile(
-                    'html.png')), _('Open URL in Browser'), self)
+                    'html.png')), _('Open local URL in Browser'), self)
                 act.triggered.connect(
                     lambda x,
                     file=short_file: self.controller.openURL(
                         self.controller.getBrowserSourceURL(file)))
                 myMenu.addAction(act)
                 act = QAction(QIcon(scctool.settings.getResFile(
-                    'copy.png')), _('Copy URL to Clipboard'), self)
+                    'copy.png')), _('Copy local URL to Clipboard'), self)
                 act.triggered.connect(
                     lambda x, file=short_file:
                     QApplication.clipboard().setText(
                         self.controller.getBrowserSourceURL(file)))
+                myMenu.addAction(act)
+                act = QAction(
+                    QIcon(scctool.settings.getResFile(
+                        'open_internet.png')),
+                    _('Open external URL in Browser'),
+                    self)
+                act.triggered.connect(
+                    lambda x,
+                    file=short_file: self.controller.openURL(
+                        self.controller.getBrowserSourceURL(file, True)))
+                myMenu.addAction(act)
+                act = QAction(
+                    QIcon(scctool.settings.getResFile('copy_internet.png')),
+                    _('Copy external URL to Clipboard'),
+                    self)
+                act.triggered.connect(
+                    lambda x, file=short_file:
+                    QApplication.clipboard().setText(
+                        self.controller.getBrowserSourceURL(file, True)))
                 myMenu.addAction(act)
                 act = QAction(QIcon(scctool.settings.getResFile(
                     'browser2.png')), _('Open File in Browser'), self)
@@ -521,18 +566,22 @@ class MainWindow(QMainWindow):
         self.restart()
 
     def updateAllMapCompleters(self):
+        """Update all completers for map input fields."""
         for idx in range(self.matchDataTabWidget.count()):
             self.matchDataTabWidget.widget(idx).updateMapCompleters()
 
     def updateAllPlayerCompleters(self):
+        """Update all completers for player input fields."""
         for idx in range(self.matchDataTabWidget.count()):
             self.matchDataTabWidget.widget(idx).updatePlayerCompleters()
 
     def updateAllMapButtons(self):
+        """Update all buttons to select a map in mapstats."""
         for idx in range(self.matchDataTabWidget.count()):
             self.matchDataTabWidget.widget(idx).updateMapButtons()
 
     def createMatchDataTabs(self):
+        """Create tabs for match data."""
         self.matchDataTabWidget = QTabWidget()
         self.matchDataTabWidget.setMovable(True)
         closeable = self.controller.matchControl.countMatches() > 1
@@ -546,22 +595,22 @@ class MainWindow(QMainWindow):
         buttonLayout = QHBoxLayout()
         buttonLayout.setContentsMargins(2, 1, 1, 2)
         buttonLayout.setSpacing(1)
-        button = QPushButton()
+        self.pb_add_match_tab = QPushButton()
         pixmap = QIcon(scctool.settings.getResFile('add.png'))
-        button.setIcon(pixmap)
-        button.setFixedSize(28, 28)
-        # button.setFlat(True)
-        button.setToolTip(_('Add Match Tab'))
-        button.clicked.connect(self.addMatchTab)
-        buttonLayout.addWidget(button)
-        button = QPushButton()
-        button.setFixedSize(28, 28)
+        self.pb_add_match_tab.setIcon(pixmap)
+        self.pb_add_match_tab.setFixedSize(28, 28)
+        self.pb_add_match_tab.setToolTip(_('Add Match Tab'))
+        self.pb_add_match_tab.clicked.connect(self.addMatchTab)
+        buttonLayout.addWidget(self.pb_add_match_tab)
+
+        self.pb_copy_match_tab = QPushButton()
+        self.pb_copy_match_tab.setFixedSize(28, 28)
         pixmap = QIcon(scctool.settings.getResFile('copy.png'))
-        button.setIcon(pixmap)
-        # button.setFlat(True)
-        button.setToolTip(_('Copy Match Tab'))
-        button.clicked.connect(self.copyMatchTab)
-        buttonLayout.addWidget(button)
+        self.pb_copy_match_tab.setIcon(pixmap)
+        self.pb_copy_match_tab.setToolTip(_('Copy Match Tab'))
+        self.pb_copy_match_tab.clicked.connect(self.copyMatchTab)
+        buttonLayout.addWidget(self.pb_copy_match_tab)
+
         container.setLayout(buttonLayout)
         self.matchDataTabWidget.setCornerWidget(container)
 
@@ -572,39 +621,60 @@ class MainWindow(QMainWindow):
         tabBar.tabMoved.connect(self.tabMoved)
 
     def addMatchTab(self):
-        match = self.controller.matchControl.newMatchData()
-        MatchDataWidget(self,
-                        self.matchDataTabWidget,
-                        match)
-        count = self.matchDataTabWidget.count()
-        self.matchDataTabWidget.setCurrentIndex(count - 1)
-        if count > 1:
-            for idx in range(count):
-                self.matchDataTabWidget.widget(idx).setClosable(True)
+        """Add a match tab."""
+        self.controller.matchControl.mutex.lock()
+        try:
+            match = self.controller.matchControl.newMatchData()
+            MatchDataWidget(self,
+                            self.matchDataTabWidget,
+                            match)
+            count = self.matchDataTabWidget.count()
+            self.matchDataTabWidget.setCurrentIndex(count - 1)
+            if count > 1:
+                for idx in range(count):
+                    self.matchDataTabWidget.widget(idx).setClosable(True)
+        finally:
+            self.controller.matchControl.mutex.unlock()
 
     def copyMatchTab(self):
-        matchId = self.controller.matchControl.selectedMatchId()
-        data = self.controller.matchControl.selectedMatch().getData()
-        match = self.controller.matchControl.newMatchData(data)
-        self.controller.logoManager.copyMatch(match.getControlID(), matchId)
-        MatchDataWidget(self,
-                        self.matchDataTabWidget,
-                        match)
-        count = self.matchDataTabWidget.count()
-        self.matchDataTabWidget.setCurrentIndex(count - 1)
-        if count > 1:
-            for idx in range(count):
-                self.matchDataTabWidget.widget(idx).setClosable(True)
+        """Copy add a copy of the current match tab."""
+        self.controller.matchControl.mutex.lock()
+        try:
+            matchId = self.controller.matchControl.selectedMatchId()
+            data = self.controller.matchControl.selectedMatch().getData()
+            match = self.controller.matchControl.newMatchData(data)
+            self.controller.logoManager.copyMatch(
+                match.getControlID(), matchId)
+            MatchDataWidget(self,
+                            self.matchDataTabWidget,
+                            match)
+            count = self.matchDataTabWidget.count()
+            self.matchDataTabWidget.setCurrentIndex(count - 1)
+            if count > 1:
+                for idx in range(count):
+                    self.matchDataTabWidget.widget(idx).setClosable(True)
+        finally:
+            self.controller.matchControl.mutex.unlock()
 
     def currentMatchTabChanged(self, idx):
-        dataWidget = self.matchDataTabWidget.widget(idx)
-        ident = dataWidget.matchData.getControlID()
-        self.controller.matchControl.selectMatch(ident)
-        with self.tlock:
-            self.controller.updateMatchFormat()
+        """Perform adjustements if the match tab is changed."""
+        self.controller.matchControl.mutex.lock()
+        try:
+            dataWidget = self.matchDataTabWidget.widget(idx)
+            ident = dataWidget.matchData.getControlID()
+            if self.controller.matchControl.selectMatch(ident):
+                with self.tlock:
+                    self.controller.updateMatchFormat()
+        finally:
+            self.controller.matchControl.mutex.unlock()
 
     def tabMoved(self, toIdx, fromIdx):
-        self.controller.matchControl.updateOrder(toIdx, fromIdx)
+        """Update the order in the match controller when a tab is moved."""
+        self.controller.matchControl.mutex.lock()
+        try:
+            self.controller.matchControl.updateOrder(toIdx, fromIdx)
+        finally:
+            self.controller.matchControl.mutex.unlock()
 
     def createTabs(self):
         """Create tabs in main window."""
@@ -616,7 +686,8 @@ class MainWindow(QMainWindow):
             # self.tabs.resize(300,200)
 
             # Add tabs
-            self.tabs.addTab(self.tab1, _("Match Grabber for AlphaTL && RSL"))
+            self.tabs.addTab(self.tab1, _(
+                "Match Grabber for AlphaTL, RSL && CTL"))
             self.tabs.addTab(self.tab2, _("Custom Match"))
 
             # Create first tab
@@ -637,9 +708,6 @@ class MainWindow(QMainWindow):
             self.pb_openBrowser.setMinimumWidth(width)
 
             container = QHBoxLayout()
-            label = QLabel()
-            label.setFixedWidth(self.labelWidth)
-            container.addWidget(label, 0)
             label = QLabel(_("Match-URL:"))
             label.setMinimumWidth(80)
             container.addWidget(label, 0)
@@ -658,6 +726,14 @@ class MainWindow(QMainWindow):
             button.clicked.connect(
                 lambda: self.controller.openURL("https://rfcs.ru/en/"))
             container.addWidget(button, 0)
+            button = QPushButton()
+            pixmap = QIcon(
+                scctool.settings.getResFile('chobo.png'))
+            button.setIcon(pixmap)
+            button.clicked.connect(
+                lambda: self.controller.openURL(
+                    "https://www.choboteamleague.com/home"))
+            container.addWidget(button, 0)
 
             self.tab1.layout = QFormLayout()
             self.tab1.layout.addRow(container)
@@ -666,9 +742,6 @@ class MainWindow(QMainWindow):
 
             # self.pb_download = QPushButton("Download Images from URL")
             # container.addWidget(self.pb_download)
-            label = QLabel()
-            label.setFixedWidth(self.labelWidth)
-            container.addWidget(label, 0)
             label = QLabel()
             label.setMinimumWidth(80)
             container.addWidget(label, 0)
@@ -687,43 +760,102 @@ class MainWindow(QMainWindow):
 
             container = QHBoxLayout()
 
-            label = QLabel()
-            label.setMinimumWidth(self.labelWidth)
-            container.addWidget(label, 0)
-
-            label = QLabel(_("Match Format:"))
-            label.setMinimumWidth(80)
+            label = QLabel(_("Maps:"))
+            label.setMinimumWidth(35)
             container.addWidget(label, 0)
 
             container.addWidget(QLabel(_("Best of")), 0)
 
             self.cb_bestof = QComboBox()
-            for idx in range(0, scctool.settings.max_no_sets):
+            max_no_bestof = scctool.settings.max_no_sets - 4
+            for idx in range(max_no_bestof):
                 self.cb_bestof.addItem(str(idx + 1))
-            self.cb_bestof.setCurrentIndex(3)
-            string = _('"Best of 6/4": First, a Bo5/3 is played and the'
-                       ' ace map gets extended to a Bo3 if needed;'
-                       ' Best of 2: Bo3 with only two maps played.')
+            string = _('"Best of" does not count extended Ace Maps.')
             self.cb_bestof.setToolTip(string)
             self.cb_bestof.setMaximumWidth(45)
+            self.cb_bestof.setMinimumWidth(45)
             self.cb_bestof.currentIndexChanged.connect(self.changeBestOf)
             container.addWidget(self.cb_bestof, 0)
 
             container.addWidget(QLabel(_(" but at least")), 0)
 
-            self.cb_minSets = QComboBox()
+            self.cb_extend_ace = QCheckBox(_("Ace extended to"))
+            self.cb_extend_ace.setChecked(False)
+            self.cb_extend_ace.stateChanged.connect(self.change_extend_ace)
 
+            self.cb_ace_bo = QComboBox()
+            for idx in range(3):
+                self.cb_ace_bo.addItem(str(2 * idx + 1))
+            self.cb_ace_bo.setCurrentIndex(0)
+            self.cb_ace_bo.setEnabled(False)
+            self.cb_ace_bo.currentIndexChanged.connect(self.change_ace_bo)
+
+            self.cb_minSets = QComboBox()
+            self.cb_bestof.setCurrentIndex(2)
             self.cb_minSets.setToolTip(
                 _('Minimum number of maps played (even if the match'
                   ' is decided already)'))
             self.cb_minSets.setMaximumWidth(45)
+            self.cb_minSets.setMinimumWidth(45)
             container.addWidget(self.cb_minSets, 0)
             container.addWidget(
-                QLabel(" " + _("maps") + "  "), 0)
+                QLabel(_("maps") + ". "), 0)
             self.cb_minSets.currentIndexChanged.connect(
                 lambda idx: self.highlightApplyCustom())
 
-            self.cb_allkill = QCheckBox(_("All-Kill Format"))
+            container.addWidget(self.cb_extend_ace, 0)
+
+            container.addWidget(self.cb_ace_bo, 0)
+            container.addWidget(QLabel(_("map(s).") + ' '), 0)
+
+            self.cb_vetoes = QComboBox()
+            for idx in range(scctool.settings.max_no_vetoes + 1):
+                self.cb_vetoes.addItem(str(idx))
+            self.cb_vetoes.setCurrentIndex(0)
+            self.cb_vetoes.currentIndexChanged.connect(self.change_vetoes)
+            container.addWidget(self.cb_vetoes, 0)
+            container.addWidget(QLabel(_("Vetoes.") + ' '), 0)
+
+            label = QLabel("")
+            container.addWidget(label, 1)
+
+            self.applycustom_is_highlighted = False
+
+            self.pb_applycustom = QToolButton()
+            action = QAction(_("Apply Format"))
+            action.triggered.connect(self.applycustom_click)
+            self.pb_applycustom.setDefaultAction(action)
+            self.custom_menu = QMenu(self.pb_applycustom)
+            self.custom_format_actions = []
+            for custom_format, icon in \
+                    self.controller.matchControl.getCustomFormats():
+                if icon:
+                    action = self.custom_menu.addAction(
+                        QIcon(scctool.settings.getResFile(icon)),
+                        custom_format)
+                else:
+                    action = self.custom_menu.addAction(custom_format)
+                action.triggered.connect(
+                    lambda x, custom_format=custom_format:
+                        self.applyCustomFormat(custom_format))
+                self.custom_format_actions.append(action)
+            self.pb_applycustom.setMenu(self.custom_menu)
+            self.pb_applycustom.setPopupMode(QToolButton.MenuButtonPopup)
+
+            self.pb_applycustom.setFixedWidth(150)
+            container.addWidget(self.pb_applycustom, 0)
+
+            self.defaultButtonPalette = self.pb_applycustom.palette()
+
+            self.tab2.layout.addLayout(container)
+
+            container = QHBoxLayout()
+
+            label = QLabel(_("Modes:"))
+            label.setMinimumWidth(35)
+            container.addWidget(label, 0)
+
+            self.cb_allkill = QCheckBox(_("All-Kill"))
             self.cb_allkill.setChecked(False)
             self.cb_allkill.setToolTip(
                 _('Winner stays and is automatically'
@@ -739,43 +871,7 @@ class MainWindow(QMainWindow):
             self.cb_solo.stateChanged.connect(
                 lambda idx: self.highlightApplyCustom())
 
-            label = QLabel("")
-            container.addWidget(label, 1)
-
-            self.applycustom_is_highlighted = False
-
-            self.pb_applycustom = QToolButton()
-            action = QAction(_("Apply Format"))
-            action.triggered.connect(self.applycustom_click)
-            self.pb_applycustom.setDefaultAction(action)
-            self.custom_menu = QMenu(self.pb_applycustom)
-            for format, icon in \
-                    self.controller.matchControl.getCustomFormats():
-                if icon:
-                    action = self.custom_menu.addAction(
-                        QIcon(scctool.settings.getResFile(icon)), format)
-                else:
-                    action = self.custom_menu.addAction(format)
-                action.triggered.connect(
-                    lambda x, format=format: self.applyCustomFormat(format))
-            self.pb_applycustom.setMenu(self.custom_menu)
-            self.pb_applycustom.setPopupMode(QToolButton.MenuButtonPopup)
-
-            self.pb_applycustom.setFixedWidth(150)
-            container.addWidget(self.pb_applycustom, 0)
-
-            self.defaultButtonPalette = self.pb_applycustom.palette()
-
-            self.tab2.layout.addLayout(container)
-
-            container = QHBoxLayout()
-
-            label = QLabel()
-            label.setMinimumWidth(self.labelWidth)
-            container.addWidget(label, 0)
-
             label = QLabel(_("Match-URL:"))
-            label.setMinimumWidth(80)
             container.addWidget(label, 0)
 
             self.le_url_custom = MonitoredLineEdit()
@@ -811,27 +907,59 @@ class MainWindow(QMainWindow):
 
             self.tab2.setLayout(self.tab2.layout)
 
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def allkill_change(self):
+        """Handle a change of the all-kill format."""
         try:
             self.controller.matchControl.\
                 selectedMatch().setAllKill(self.cb_allkill.isChecked())
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def changeBestOf(self, bestof):
         """Change the minimum sets combo box on change of BoX."""
-        bestof = bestof + 1
+        self.update_minSets(True)
+
+    def update_minSets(self, refresh):
+        old_idx = self.cb_minSets.currentIndex()
         self.cb_minSets.clear()
-        self.highlightApplyCustom()
-        for idx in range(0, bestof):
-            self.cb_minSets.addItem(str(idx + 1))
-            if bestof == 2:
-                self.cb_minSets.setCurrentIndex(1)
+        regular_sets = int(self.cb_bestof.currentText())
+        if self.cb_extend_ace.isChecked():
+            ace_sets = int(self.cb_ace_bo.currentText())
+        else:
+            ace_sets = 0
+        if ace_sets > 0:
+            if regular_sets % 2:
+                total_sets = regular_sets + ace_sets - 1
             else:
-                self.cb_minSets.setCurrentIndex((bestof - 1) / 2)
+                total_sets = regular_sets + ace_sets
+        else:
+            total_sets = regular_sets
+        self.highlightApplyCustom()
+        for idx in range(total_sets):
+            self.cb_minSets.addItem(str(idx + 1))
+
+        if refresh:
+            self.cb_minSets.setCurrentIndex(regular_sets / 2)
+        else:
+            self.cb_minSets.setCurrentIndex(min(old_idx, total_sets - 1))
+
+    def change_extend_ace(self, extend_ace):
+        """Handle a change of extend ace checkbox."""
+        self.cb_ace_bo.setEnabled(extend_ace)
+        self.update_minSets(False)
+        self.highlightApplyCustom()
+
+    def change_ace_bo(self, bestof):
+        """Handle a change of ace bo."""
+        self.update_minSets(False)
+        self.highlightApplyCustom()
+
+    def change_vetoes(self, vetoes):
+        """Handle a change of no vetoes."""
+        self.highlightApplyCustom()
 
     def createHorizontalGroupBox(self):
         """Create horizontal group box for tasks."""
@@ -856,7 +984,7 @@ class MainWindow(QMainWindow):
 
             self.horizontalGroupBox.setLayout(layout)
 
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def createLowerTabWidget(self):
@@ -871,7 +999,7 @@ class MainWindow(QMainWindow):
             self.lowerTabWidget.addTab(
                 self.countdownTab,
                 _("Countdown"))
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def createBackgroundTasksTab(self):
@@ -946,7 +1074,7 @@ class MainWindow(QMainWindow):
 
             self.backgroundTasksTab.setLayout(layout)
 
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def autoTwitch_change(self):
@@ -956,7 +1084,7 @@ class MainWindow(QMainWindow):
                 self.controller.autoRequestsThread.activateTask('twitch')
             else:
                 self.controller.autoRequestsThread.deactivateTask('twitch')
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def autoNightbot_change(self):
@@ -966,7 +1094,7 @@ class MainWindow(QMainWindow):
                 self.controller.autoRequestsThread.activateTask('nightbot')
             else:
                 self.controller.autoRequestsThread.deactivateTask('nightbot')
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def autoUpdate_change(self):
@@ -976,7 +1104,7 @@ class MainWindow(QMainWindow):
                 self.controller.runSC2ApiThread("updateScore")
             else:
                 self.controller.stopSC2ApiThread("updateScore")
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def autoToggleScore_change(self):
@@ -986,7 +1114,7 @@ class MainWindow(QMainWindow):
                 self.controller.runSC2ApiThread("toggleScore")
             else:
                 self.controller.stopSC2ApiThread("toggleScore")
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def autoToggleProduction_change(self):
@@ -996,23 +1124,23 @@ class MainWindow(QMainWindow):
                 self.controller.runSC2ApiThread("toggleProduction")
             else:
                 self.controller.stopSC2ApiThread("toggleProduction")
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
-    def applyCustomFormat(self, format):
+    def applyCustomFormat(self, custom_format):
         """Handle click to apply custom format."""
         QApplication.setOverrideCursor(
             Qt.WaitCursor)
         try:
             with self.tlock:
                 self.controller.matchControl.\
-                    selectedMatch().applyCustomFormat(format)
+                    selectedMatch().applyCustomFormat(custom_format)
                 self.controller.updateMatchFormat()
                 matchWidget = self.matchDataTabWidget.currentWidget()
                 matchWidget.updateForms()
                 self.resizeWindow()
             self.highlightApplyCustom(False)
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
         finally:
             QApplication.restoreOverrideCursor()
@@ -1024,15 +1152,21 @@ class MainWindow(QMainWindow):
         try:
             with self.tlock:
                 self.statusBar().showMessage(_('Applying Custom Match...'))
+                if self.cb_extend_ace.checkState():
+                    ace_bo = int(self.cb_ace_bo.currentText())
+                else:
+                    ace_bo = 0
                 msg = self.controller.applyCustom(
                     int(self.cb_bestof.currentText()),
                     self.cb_allkill.isChecked(),
                     self.cb_solo.isChecked(),
                     int(self.cb_minSets.currentText()),
-                    self.le_url_custom.text().strip())
+                    self.le_url_custom.text().strip(),
+                    int(self.cb_vetoes.currentText()),
+                    ace_bo)
                 self.statusBar().showMessage(msg)
             self.highlightApplyCustom(False)
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
         finally:
             QApplication.restoreOverrideCursor()
@@ -1045,16 +1179,17 @@ class MainWindow(QMainWindow):
             with self.tlock:
                 msg = self.controller.resetData()
                 self.statusBar().showMessage(msg)
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
         finally:
             QApplication.restoreOverrideCursor()
 
     def refresh_click(self):
         """Handle click to refresh/load data from an URL."""
-        GenericProgressDialog(self.refresh_job)
+        GenericProgressDialog(self, self.refresh_job)
 
     def refresh_job(self, progress_dialog):
+        """Refresh data gathered by the match grabber."""
         QApplication.setOverrideCursor(
             Qt.WaitCursor)
         try:
@@ -1067,7 +1202,7 @@ class MainWindow(QMainWindow):
                 self.statusBar().showMessage(_('Reading {}...').format(url))
                 msg = self.controller.refreshData(url)
                 self.statusBar().showMessage(msg)
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
         finally:
             QApplication.restoreOverrideCursor()
@@ -1077,7 +1212,7 @@ class MainWindow(QMainWindow):
         try:
             url = self.le_url.text()
             self.controller.openURL(url)
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def updatenightbot_click(self):
@@ -1086,7 +1221,7 @@ class MainWindow(QMainWindow):
             self.statusBar().showMessage(_('Updating Nightbot Command...'))
             msg = self.controller.updateNightbotCommand()
             self.statusBar().showMessage(msg)
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def updatetwitch_click(self):
@@ -1095,7 +1230,7 @@ class MainWindow(QMainWindow):
             self.statusBar().showMessage(_('Updating Twitch Title...'))
             msg = self.controller.updateTwitchTitle()
             self.statusBar().showMessage(msg)
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def resetscore_click(self, myteam=False):
@@ -1104,7 +1239,7 @@ class MainWindow(QMainWindow):
             self.statusBar().showMessage(_('Resetting Score...'))
             with self.tlock:
                 matchDataWidget = self.matchDataTabWidget.currentWidget()
-                for set_idx in range(self.max_no_sets):
+                for set_idx in range(scctool.settings.max_no_sets):
                     matchDataWidget.sl_score[set_idx].setValue(0)
                     self.controller.matchControl.selectedMatch().setMapScore(
                         set_idx, 0, overwrite=True)
@@ -1115,10 +1250,11 @@ class MainWindow(QMainWindow):
                 if not self.controller.resetWarning():
                     self.statusBar().showMessage('')
 
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def highlightApplyCustom(self, highlight=True, force=False):
+        """Highlight the apply custom button."""
         if not force and not self.tlock.trigger():
             return
         try:
@@ -1156,7 +1292,7 @@ class MainWindow(QMainWindow):
 
     def processEvents(self):
         """Process ten PyQt5 events."""
-        for i in range(0, 10):
+        for __ in range(10):
             self.app.processEvents()
 
     def restart(self, save=True):
@@ -1167,14 +1303,20 @@ class MainWindow(QMainWindow):
 
 
 class TriggerLock():
+    """Lock to deactivate all triggers regarding match data."""
+
     def __init__(self):
+        """Init the lock."""
         self.__trigger = True
 
     def __enter__(self):
+        """Lock the trigger."""
         self.__trigger = False
 
-    def __exit__(self, type, value, traceback):
+    def __exit__(self, error_type, value, traceback):
+        """Exit the lock."""
         self.__trigger = True
 
     def trigger(self):
+        """Return if trigger should fire."""
         return bool(self.__trigger)

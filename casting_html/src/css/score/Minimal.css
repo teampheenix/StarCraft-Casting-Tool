@@ -120,6 +120,10 @@ div.box_middle {
   filter: drop-shadow(2px 2px 3px black);
 }
 
+.bestof {
+  visibility: hidden;
+}
+
 div.score_middle {
   visibility: hidden;
 }

@@ -47,10 +47,10 @@ div.left-column:after {
   bottom: 0;
   display: block;
   left: 0;
-  pointer-events: none;
   position: absolute;
   right: 0;
   top: 0;
+  pointer-events: none;
 }
 
 div.right-column {
@@ -70,7 +70,6 @@ div.right-column:after {
   bottom: 0;
   display: block;
   left: 0;
-  pointer-events: none;
   position: absolute;
   right: 0;
   top: 0;
@@ -101,6 +100,7 @@ div.container-right, div.container-left {
   overflow: hidden;
   background-color: blue;
   background-image: url(../../img/textures/background.jpg);
+  pointer-events: none;
 }
 
 div.container-right {
@@ -227,7 +227,7 @@ ul li {
   color: #70d6f6;
   cursor: pointer;
   white-space: nowrap;
-  z-index: 2;
+  pointer-events: all;
 }
 
 ul li.selected {
@@ -237,6 +237,10 @@ ul li.selected {
 
 div.played {
   filter: opacity(0.30);
+}
+
+div.vetoed {
+  text-decoration: line-through;
 }
 
 div.stat {

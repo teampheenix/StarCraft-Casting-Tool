@@ -1,3 +1,4 @@
+"""Sent request to Nightbot and Twitch if needed."""
 import logging
 
 from PyQt5.QtCore import pyqtSignal
@@ -7,8 +8,6 @@ import scctool.settings.translation
 import scctool.tasks.nightbot
 import scctool.tasks.twitch
 from scctool.tasks.tasksthread import TasksThread
-
-"""Sent request to Nightbot and Twitch if needed."""
 
 
 # create logger
@@ -58,7 +57,7 @@ class AutoRequestsThread(TasksThread):
             title = scctool.settings.config.parser.get(
                 "Twitch", "title_template")
             title = self.__controller.placeholders.replace(title)
-            msg, success = scctool.tasks.twitch.updateTitle(title)
+            msg, __ = scctool.tasks.twitch.updateTitle(title)
             self.twitchSignal.emit(msg)
         finally:
             self.deactivateTask('twitch_once')

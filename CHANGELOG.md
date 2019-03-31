@@ -1,6 +1,106 @@
 # Changelog
 
 
+## v2.7.5 (2019-03-15)
+
+### Fix
+
+* Fixed another instance where the Chobo Team League match grabber would not worker properly.
+
+* Fixed a bug where match grabber would not overwrite old data.
+
+* Fixed a bug where the Chobo Team League match grabber would not work.
+
+
+## v2.7.4 (2019-02-22)
+
+### Fix
+
+* Fixed a bug that would prevent the map statistics from being updated.
+
+* Fixed a bug that could occure when deleting match tabs.
+
+* Fixed a bug that would hinder text-to-speech.
+
+* Fixed a bug, where the logo in the browser logo source would not be centered.
+
+
+## v2.7.3 (2019-02-13)
+
+### Fix
+
+* Fixed a crash caused by closing match tabs.
+
+* Fixed a bug where import & overwrite profile would fail if only one profile exists.
+
+
+## v2.7.2 (2019-02-12)
+
+### New
+
+* Added a MatchGrabber for Chobo Team League.
+
+
+## v2.7.1 (2019-02-10)
+
+### Fix
+
+* Fixed a bug that would prevent the misc setttings to show.
+
+
+## v2.7.0 (2019-02-10)
+
+### New
+
+* Added a new Veto Browser Source.
+
+* Added '(Race1)' and '(Race2)' placeholders for Twitch and Nightbot (in a team match these refer to player's races of the next set).
+
+* Added 'bestof.txt' file to 'casting_data'.
+
+* "BoX" can now be displayed in the score browser source as demonstrated by the "Blue" skin.
+
+* Vetoed maps can now be marked in the MapStats Browser Source.
+
+* Added option to enter map vetos.
+
+### Changes
+
+* Executable can now be placed in folders that require admin priviliges.
+
+* Reworked the Custom Match-Format Tab.
+
+* Updated map images of Acid Plant, Automaton, Cyber Forest, Dreamcatcher, Kairos Junction, King's Cove, New Repuganancy, Para Site, Stasis, and Year Zero.
+
+### Fix
+
+* Fixed a bug that would prevent interaction with the mapstats browser source in OBS when using the 'StarCraft 2' skin.
+
+* Fixed bug where the maps would not be order alphabetically in mapstats browser source.
+
+
+## v2.6.2 (2019-01-19)
+
+### Changes
+
+* Added two misc div containers in score.html to allow for more freedom in designing a score skin/style.
+
+* Added span-tags to race logos in html templates of both mapicons as well as the intro to allow for an easier custom coloring.
+
+* Added upcoming ladder maps (Cyper Forest, King's Cove, New Repugnancy, Year Zero) and removed old maps (16-Bit, Catalyst, Darkness Sanctuary, Redshift). Note: If you want old maps removed from you profile, you have to remove them by yourself using the Map Manager in Misc Settings.
+
+
+## v2.6.1 (2019-01-15)
+
+### New
+
+* Added the options to open/copy the external URL of a browser source to the menus.
+
+### Fix
+
+* Fixed a bug where a new profile would only work after a restart.
+
+
 ## v2.6.0 (2019-01-12)
 
 ### New

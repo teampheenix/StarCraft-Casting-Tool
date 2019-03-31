@@ -1,13 +1,10 @@
+"""Provide match grabber for AlphaTL."""
 import logging
 from urllib.request import urlopen, urlretrieve
 
 import scctool.settings
 import scctool.settings.translation
 from scctool.matchgrabber.custom import MatchGrabber as MatchGrabberParent
-
-"""Provide match grabber for AlphaTL."""
-
-
 
 # create logger
 module_logger = logging.getLogger(__name__)
@@ -39,9 +36,10 @@ class MatchGrabber(MatchGrabberParent):
                          != self.getURL().strip())
             with self._matchData.emitLock(overwrite,
                                           self._matchData.metaChanged):
-                self._matchData.setNoSets(5, resetPlayers=overwrite)
+                self._matchData.setNoSets(5, 1, resetPlayers=overwrite)
                 self._matchData.setMinSets(3)
                 self._matchData.setSolo(False)
+                self._matchData.setNoVetoes(0)
                 self._matchData.resetLabels()
                 if overwrite:
                     self._matchData.resetSwap()
@@ -53,17 +51,14 @@ class MatchGrabber(MatchGrabberParent):
                 league = league.replace('Semi-pro', 'Semi-Pro')
                 self._matchData.setLeague(league)
 
-                for idx, map in enumerate(data['maps']):
-                    if not isinstance(map, str):
-                        map = "TBD"
-                    self._matchData.setMap(idx, map)
-
-                self._matchData.setLabel(4, "Ace Map")
-                self._matchData.setAce(4, True)
+                for idx, mapname in enumerate(data['maps']):
+                    if not isinstance(mapname, str):
+                        mapname = "TBD"
+                    self._matchData.setMap(idx, mapname)
 
                 for team_idx in range(2):
-                    for set_idx, player in enumerate(data['lineup'
-                                                          + str(team_idx + 1)]):
+                    for set_idx, player in enumerate(
+                            data[f'lineup{team_idx + 1}']):
                         try:
                             playername = self._aliasPlayer(player['nickname'])
                             if not isinstance(playername, str):
@@ -77,7 +72,7 @@ class MatchGrabber(MatchGrabberParent):
                                 self._matchData.getSwappedIdx(team_idx),
                                 set_idx, 'TBD', 'Random')
 
-                    team = data['team' + str(team_idx + 1)]
+                    team = data[f'team{team_idx + 1}']
                     name, tag = team['name'], team['tag']
                     if not isinstance(name, str):
                         name = "TBD"
@@ -114,22 +109,22 @@ class MatchGrabber(MatchGrabberParent):
                 logo_idx = self._matchData.getSwappedIdx(idx) + 1
                 oldLogo = logoManager.getTeam(logo_idx)
                 logo = logoManager.newLogo()
-                url = self._rawData['team' + str(idx + 1)]['logo']
+                url = self._rawData[f'team{idx + 1}']['logo']
                 if url:
                     new_logo = logo.fromURL(
-                        self._rawData['team' + str(idx + 1)]['logo'],
+                        self._rawData[f'team{idx + 1}']['logo'],
                         localFile=oldLogo.getAbsFile())
                     if new_logo:
                         logoManager.setTeamLogo(logo_idx, logo)
                     else:
                         module_logger.info("Logo download is not needed.")
 
-            except Exception as e:
+            except Exception:
                 module_logger.exception("message")
 
     def downloadBanner(self):
         """Download team logos."""
-        dir = scctool.settings.casting_data_dir
+        data_dir = scctool.settings.casting_data_dir
         transparent = scctool.settings.config.parser.getboolean(
             "SCT", "transparent_match_banner")
 
@@ -137,7 +132,7 @@ class MatchGrabber(MatchGrabberParent):
             raise ValueError(
                 "Error: No raw data.")
 
-        fname = dir + "/matchbanner.png"
+        fname = data_dir + "/matchbanner.png"
         url = "https://alpha.tl/announcement/"\
             + str(self.getID())
 
@@ -158,16 +153,16 @@ class MatchGrabber(MatchGrabberParent):
 
             if(data == local_byte):
                 needs_download = False
-        except FileNotFoundError as e:
-            pass
-        except Exception as e:
+        except FileNotFoundError:
+            module_logger.warning("Match banner not found.")
+        except Exception:
             module_logger.exception("message")
 
         if needs_download:
             try:
                 urlretrieve(url, scctool.settings.getAbsPath(fname))
 
-            except Exception as e:
+            except Exception:
                 module_logger.exception("message")
         else:
             module_logger.info('No need to redownload match banner')

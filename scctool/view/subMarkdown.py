@@ -1,3 +1,4 @@
+"""Readme sub window."""
 import logging
 import re
 
@@ -9,9 +10,6 @@ from PyQt5.QtWidgets import (QGridLayout, QPushButton, QSizePolicy,
 
 import scctool.settings
 import scctool.settings.translation
-
-"""Show readme sub window."""
-
 
 
 # create logger

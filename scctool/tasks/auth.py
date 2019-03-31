@@ -1,3 +1,4 @@
+"""Request auth tokens from twitch and nightbot."""
 import http.server
 import logging
 import threading
@@ -10,32 +11,28 @@ from PyQt5 import QtCore
 import scctool.settings.translation
 from scctool.settings import getResFile, safe
 
-"""Request auth tokens from twitch and nightbot."""
-
 
 module_logger = logging.getLogger(__name__)
 _ = scctool.settings.translation.gettext
-try:
-    NIGHTBOT_REDIRECT_URI = "http://localhost:65010/nightbot_callback"
 
-    TWITCH_REDIRECT_URI = "http://localhost:65010/twitch_callback"
+NIGHTBOT_REDIRECT_URI = "http://localhost:65010/nightbot_callback"
 
-except Exception:
-    module_logger.exception("message")
-    raise
+TWITCH_REDIRECT_URI = "http://localhost:65010/twitch_callback"
 
 
 class myHandler(http.server.SimpleHTTPRequestHandler):
+    """HTTP handle for oauth."""
 
     # Handler for the GET requests
     def do_GET(self):
+        """Handle GET request."""
         if self.path in ['/nightbot', '/twitch']:
             js_response = ('<script type="text/javascript">'
                            'window.location = "{}";'
                            '</script>')
             state = str(uuid4())
             scope = self.path.replace('/', '')
-            url = getattr(self, 'get_auth_url_{}'.format(scope))(state)
+            url = getattr(self, f'get_auth_url_{scope}')(state)
             self.send_content(js_response.format(url))
         if self.path in ['/nightbot_callback', '/twitch_callback']:
             js_response = ('<script type="text/javascript">'
@@ -60,19 +57,25 @@ class myHandler(http.server.SimpleHTTPRequestHandler):
             par = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)
             self.server.emit_token(scope, par.get('access_token', [''])[0])
         else:
-            self.send_error(404, "File not found")
+            try:
+                self.send_error(404, "File not found")
+            except (ConnectionAbortedError, ConnectionResetError):
+                pass
 
     def log_message(self, format, *args):
+        """Log a message."""
         pass
 
     def send_content(self, response):
+        """Send content."""
         self.send_response(200)
         self.send_header("Content-type", "text/html")
         self.send_header("Content-length", len(response))
         self.end_headers()
         self.wfile.write(response.encode('utf-8'))
 
-    def get_auth_url_nightbot(self, state):
+    @classmethod
+    def get_auth_url_nightbot(cls, state):
         """Generate auth url for nightbot."""
         # Generate a random string for the state parameter
         # Save it for use later to prevent xsrf attacks
@@ -85,7 +88,8 @@ class myHandler(http.server.SimpleHTTPRequestHandler):
             urllib.parse.urlencode(params)
         return url
 
-    def get_auth_url_twitch(self, state):
+    @classmethod
+    def get_auth_url_twitch(cls, state):
         """Generate auth url for twitch."""
         # Generate a random string for the state parameter
         # Save it for use later to prevent xsrf attacks
@@ -104,17 +108,20 @@ class AuthThread(http.server.HTTPServer, QtCore.QThread):
 
     tokenRecived = QtCore.pyqtSignal(str, str)
     pending_requests = set()
+    allow_reuse_address = True
 
     def __init__(self):
         """Init thread."""
         QtCore.QThread.__init__(self)
-        http.server.HTTPServer.__init__(self, ('', 65010), myHandler)
+        http.server.HTTPServer.__init__(
+            self, ('', 65010), myHandler)
 
     def __del__(self):
         """Delete thread."""
         self.terminate()
 
     def terminate(self):
+        """Terminate thread."""
         if self.isRunning():
             assassin = threading.Thread(target=self.shutdown)
             assassin.daemon = True
@@ -122,6 +129,7 @@ class AuthThread(http.server.HTTPServer, QtCore.QThread):
             self.server_close()
 
     def emit_token(self, scope, token):
+        """Emit signal that a new token was recived."""
         self.pending_requests.remove(scope)
         if len(self.pending_requests) == 0:
             assassin = threading.Thread(target=self.shutdown)
@@ -135,11 +143,12 @@ class AuthThread(http.server.HTTPServer, QtCore.QThread):
         try:
             self.serve_forever()
         except OSError:
-            pass
+            self.server_close()
         finally:
             module_logger.info("AuthThread done")
 
     def requestToken(self, scope):
+        """Request oauth for a new token."""
         if scope not in ['twitch', 'nightbot']:
             return
 
@@ -150,6 +159,6 @@ class AuthThread(http.server.HTTPServer, QtCore.QThread):
         webbrowser.open("http://localhost:65010/{}".format(scope))
 
     def server_bind(self):
-        http.server.HTTPServer.server_bind(self)
         self.socket.setsockopt(http.server.socket.SOL_SOCKET,
                                http.server.socket.SO_REUSEADDR, 1)
+        http.server.HTTPServer.server_bind(self)

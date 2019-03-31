@@ -1,3 +1,4 @@
+"""Show connections settings sub window."""
 import logging
 import weakref
 
@@ -12,9 +13,6 @@ import scctool.settings
 import scctool.settings.translation
 from scctool.view.widgets import Completer, MonitoredLineEdit
 
-"""Show connections settings sub window."""
-
-
 # create logger
 module_logger = logging.getLogger(__name__)
 _ = scctool.settings.translation.gettext
@@ -22,6 +20,7 @@ _ = scctool.settings.translation.gettext
 
 class SubwindowConnections(QWidget):
     """Show connections settings sub window."""
+
     current_tab = -1
 
     def createWindow(self, mainWindow, tab=''):
@@ -59,7 +58,7 @@ class SubwindowConnections(QWidget):
 
             self.setWindowTitle(_("Twitch & Nightbot Connections"))
 
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def createTabs(self, tab=''):
@@ -79,11 +78,13 @@ class SubwindowConnections(QWidget):
         table['twitch'] = 0
         table['nightbot'] = 1
         self.tabs.setCurrentIndex(
-            table.get(tab, SubwindowConnections.current_tab))
+            table.get(tab, self.current_tab))
         self.tabs.currentChanged.connect(self.tabChanged)
 
-    def tabChanged(self, idx):
-        SubwindowConnections.current_tab = idx
+    @classmethod
+    def tabChanged(cls, idx):
+        """Save current tab index."""
+        cls.current_tab = idx
 
     def createFormGroupTwitch(self):
         """Create forms for twitch."""
@@ -222,7 +223,7 @@ class SubwindowConnections(QWidget):
         layout = QHBoxLayout()
         layout.addWidget(QLabel(""))
         addButton = QPushButton(_('Add Command'))
-        addButton.clicked.connect(lambda: self.addCommand())
+        addButton.clicked.connect(self.addCommand)
         layout.addWidget(addButton)
 
         mainLayout.addLayout(layout, 0)
@@ -241,6 +242,7 @@ class SubwindowConnections(QWidget):
         self.formGroupNightbot.setLayout(mainLayout)
 
     def addCommand(self, cmd="", msg=""):
+        """Add a nightbot command."""
         if msg != "__DELETE__":
             dropbox = CommandDropBox(self.controller, cmd=cmd, msg=msg)
             dropbox.connect(self.changed)
@@ -268,7 +270,7 @@ class SubwindowConnections(QWidget):
             layout.addWidget(buttonSave)
 
             self.buttonGroup = layout
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def changed(self, *values):
@@ -325,7 +327,7 @@ class SubwindowConnections(QWidget):
                     self.saveData()
             CommandDropBox.clean()
             event.accept()
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def testPlaceholder(self, string):
@@ -335,10 +337,13 @@ class SubwindowConnections(QWidget):
 
 
 class CommandDropBox(QGroupBox):
+    """QGroupBox for Nightbot command."""
+
     _instances = set()
     _todelete = set()
 
     def __init__(self, controller, cmd="", msg="", parent=None):
+        """Init dropbox."""
         super().__init__(parent)
         self.controller = controller
         self._instances.add(weakref.ref(self))
@@ -380,20 +385,24 @@ class CommandDropBox(QGroupBox):
                 obj.setTitle()
 
     def connect(self, handler):
+        """Connect handler."""
         self.command.textModified.connect(handler)
         self.message.textModified.connect(handler)
 
     def setTitle(self):
+        """Set the title."""
         title = "Command {}".format(self.ident)
         super().setTitle(title)
         self.pushButton2.setDisabled(len(self._instances) == 1)
 
     def adjustIdent(self, removedIdent):
+        """Adjust ident."""
         if removedIdent < self.ident:
             self.ident -= 1
         self.setTitle()
 
     def remove(self):
+        """Remove command."""
         self.parent().layout().removeWidget(self)
         cmd = self.command.text().strip()
         if cmd:
@@ -412,10 +421,12 @@ class CommandDropBox(QGroupBox):
 
     @classmethod
     def addDeletedCommand(cls, cmd):
+        """Delete command to to-delete-list."""
         cls._todelete.add(cmd.strip())
 
     @classmethod
     def getData(cls):
+        """Return commands."""
         data = dict()
         for cmd in cls._todelete:
             data[cmd] = "__DELETE__"
@@ -430,5 +441,6 @@ class CommandDropBox(QGroupBox):
 
     @classmethod
     def clean(cls):
+        """Clean command."""
         cls._instances = set()
         cls._todelete = set()

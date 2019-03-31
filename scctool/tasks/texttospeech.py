@@ -1,3 +1,4 @@
+"""Provide StarCraft Casting Tool with text-to-speech from google-API."""
 import base64
 import json
 import logging
@@ -14,18 +15,21 @@ _ = scctool.settings.translation.gettext
 
 
 class TextToSpeech:
+    """Provide StarCraft Casting Tool with text-to-speech from google-API."""
 
     def __init__(self):
+        """Init tts manager."""
         self.__cache_size = 20
         self.__synthesize_url =\
             'https://texttospeech.googleapis.com/v1/text:synthesize?key={}'
         self.__voices_url =\
             'https://texttospeech.googleapis.com/v1/voices'
+        self.__voices = []
         self.defineOptions()
         self.loadJson()
 
     def synthesize(self, ssml, voice, pitch=0.00, rate=1.00):
-
+        """Synthesize a voice line."""
         cache = self.searchCache(ssml, voice, pitch, rate)
         if cache:
             return cache
@@ -52,27 +56,36 @@ class TextToSpeech:
         return file
 
     def getVoices(self):
+        """Get all voices (and cache them)."""
+        if len(self.__voices) > 0:
+            return self.__voices
         params = {}
         params['languageCode'] = 'en-US'
         params['key'] = self.getKey()
 
         response = requests.get(self.__voices_url, params=params)
         voices = response.json().get('voices', [])
-        voices.sort(key=self.sortVoices)
+
+        def sortVoices(elem):
+            """Sort voices by name."""
+            return elem['name']
+
+        voices.sort(key=sortVoices)
         return voices
 
-    def sortVoices(self, elem):
-        return elem['name']
-
-    def getKey(self):
+    @classmethod
+    def getKey(cls):
+        """Return google-api key."""
         return scctool.settings.safe.get('texttospeech-api-key')
 
     def getOptions(self):
+        """Get options."""
         return self.options
 
     def getLine(self, option, player, race, team=''):
+        """Convert a line to ssml."""
         option = self.options[option]
-        if not team and option['backup']:
+        if not team and option.get('backup', ''):
             option = self.options[option['backup']]
 
         return option['ssml'].format(player=player, race=race, team=team)
@@ -107,10 +120,12 @@ class TextToSpeech:
                 return uniqid
 
     def getIDs(self):
+        """Return all ids."""
         for item in self.__cache:
             yield item['id']
 
     def newCacheItem(self, ssml, voice, pitch=0.00, rate=1.00):
+        """Add a new item to the cache."""
         item = {}
         item['id'] = self._uniqid()
         item['ssml'] = ssml
@@ -126,6 +141,7 @@ class TextToSpeech:
         return item['file']
 
     def limitCacheSize(self):
+        """Limit the cache size."""
         while len(self.__cache) > self.__cache_size:
             item = self.__cache.pop()
             try:
@@ -134,6 +150,7 @@ class TextToSpeech:
                 pass
 
     def searchCache(self, ssml, voice, pitch=0.00, rate=1.00):
+        """Search cache for an item."""
         for item in self.__cache:
             if item['ssml'] != ssml:
                 continue
@@ -151,6 +168,7 @@ class TextToSpeech:
         return None
 
     def cleanCache(self):
+        """Remove all invalid items from cache."""
         ids = set()
         for item in self.__cache:
             if not os.path.isfile(scctool.settings.getAbsPath(item['file'])):
@@ -158,9 +176,9 @@ class TextToSpeech:
             else:
                 ids.add(item['id'])
 
-        dir = scctool.settings.getAbsPath(scctool.settings.ttsDir)
-        for fname in os.listdir(dir):
-            full_fname = os.path.join(dir, fname)
+        tts_dir = scctool.settings.getAbsPath(scctool.settings.ttsDir)
+        for fname in os.listdir(tts_dir):
+            full_fname = os.path.join(tts_dir, fname)
             name, ext = os.path.splitext(fname)
             ext = ext.replace(".", "")
             if (os.path.isfile(full_fname) and name not in ids):
@@ -168,6 +186,7 @@ class TextToSpeech:
                 module_logger.info("Removed tts file {}".format(full_fname))
 
     def defineOptions(self):
+        """Define the available voicelines."""
         self.options = {}
 
         option = {}

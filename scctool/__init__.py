@@ -11,7 +11,7 @@ import scctool.settings.translation
 
 logger = logging.getLogger(__name__)
 
-__version__ = "2.6.0"
+__version__ = "2.7.5"
 __latest_version__ = __version__
 __new_version__ = False
 
@@ -69,7 +69,6 @@ def main_window(app, showChangelog=False):
     from scctool.view.main import MainWindow
 
     try:
-        """Run the main program."""
         icon = QIcon()
         icon.addFile(scctool.settings.getResFile('scct.ico'), QSize(32, 32))
         icon.addFile(scctool.settings.getResFile('scct.png'), QSize(256, 256))
@@ -88,10 +87,10 @@ def initial_download():
     """Download the required data at an inital startup."""
     import scctool.tasks.updater
     from scctool.view.widgets import InitialUpdater
+    scctool.tasks.updater.readJsonFile(True)
     version = scctool.tasks.updater.getDataVersion()
     restart_flag = scctool.tasks.updater.getRestartFlag()
     updater = False
-
     if scctool.tasks.updater.needInitialUpdate(version):
         InitialUpdater()
         updater = True
@@ -105,7 +104,7 @@ def initial_download():
 
 
 def choose_language(app, translator):
-
+    """Select a language for gettext and PyQt."""
     scctool.settings.translation.set_language()
 
     language = scctool.settings.config.parser.get("SCT", "language")

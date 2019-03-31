@@ -9,51 +9,57 @@ class Controller {
     this.storage = window.localStorage;
     this.generateKey();
     if (load_style) {
-      this.loadCssFile(this.loadData('css'));
-      this.setFont(this.loadData('font'));
+      this.loadCssFile(this.loadData("css"));
+      this.setFont(this.loadData("font"));
     }
   }
 
   generateKey() {
-    this.key = 'scct-' + this.profile + '-' + this.name;
-    if (this.ident != 0) {
-      this.key = this.key + '_' + this.ident.toString();
+    this.key = "scct-" + this.profile + "-" + this.name;
+    if (this.ident !== 0) {
+      this.key = this.key + "_" + this.ident.toString();
     }
   }
 
   generateKeyURI() {
-    var path = this.name;
-    if (this.ident != 0) {
-      path = path + '_' + this.ident.toString();
+    let path = this.name;
+    let host;
+    let port;
+    if (this.ident !== 0) {
+      path = path + "_" + this.ident.toString();
     }
-    if (window.location.hostname && window.location.hostname != 'absolute') {
-      var host = window.location.hostname;
+    if (window.location.hostname && window.location.hostname !== "absolute") {
+      host = window.location.hostname;
       if (window.location.port) {
-        var port = window.location.port;
+        port = window.location.port;
       } else {
-        var port = 80;
+        port = 80;
       }
     } else {
-      var port = parseInt("0x".concat(this.profile), 16);
-      var host = 'localhost';
+      port = parseInt("0x".concat(this.profile), 16);
+      host = "localhost";
     }
     console.log(("ws://" + host + ":").concat(port, "/", path));
     return ("ws://" + host + ":").concat(port, "/", path);
   }
 
   storeData(key, value, json = false) {
-    if (json) value = JSON.stringify(value);
-    this.storage.setItem(this.key + '-' + key, value);
+    if (json) {
+      value = JSON.stringify(value);
+    }
+    this.storage.setItem(this.key + "-" + key, value);
   }
 
   loadData(key, json = false) {
-    var data = this.storage.getItem(this.key + '-' + key);
-    if (json) data = JSON.parse(data);
+    var data = this.storage.getItem(this.key + "-" + key);
+    if (json) {
+      data = JSON.parse(data);
+    }
     return data;
   }
 
   loadCssFile(file = null) {
-    if (file == null) file = 'src/css/' + this.name + '/Default.css';
+    if (file == null) file = "src/css/" + this.name + "/Default.css";
     this.style = file;
     console.log(file);
     var fileref = document.createElement("link");
@@ -65,7 +71,7 @@ class Controller {
   }
 
   css_loaded() {
-    this.defaultFont = getComputedStyle(document.body).getPropertyValue('--font').trim();
+    this.defaultFont = getComputedStyle(document.body).getPropertyValue("--font").trim();
     this.font = this.defaultFont;
     this.setFont(this.newFont);
     try {
@@ -76,26 +82,30 @@ class Controller {
   }
 
   setStyle(file = null) {
-    if (file == null) file = 'src/css/' + this.name + '/Default.css';
-    if (file != this.style) {
-      this.storeData('css', file);
+    if (file == null) {
+      file = "src/css/" + this.name + "/Default.css";
+    }
+    if (file !== this.style) {
+      this.storeData("css", file);
       location.reload();
     }
   }
 
   setFont(newFont) {
-    if (!newFont) return;
+    if (!newFont) {
+      return;
+    }
     if (!this.defaultFont) {
       this.newFont = newFont;
       return;
     }
     newFont = newFont.trim();
-    if (newFont == 'DEFAULT' || !newFont) {
+    if (newFont === "DEFAULT" || !newFont) {
       newFont = this.defaultFont;
     }
-    if (this.font != newFont) {
+    if (this.font !== newFont) {
       console.log("Set font to " + newFont);
-      document.documentElement.style.setProperty('--font', newFont);
+      document.documentElement.style.setProperty("--font", newFont);
       this.font = newFont;
     }
     this.newFont = null;

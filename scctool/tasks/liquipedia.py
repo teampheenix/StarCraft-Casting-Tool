@@ -1,3 +1,4 @@
+"""Data grabber for Liquipedia."""
 import logging
 import re
 import urllib.parse
@@ -8,19 +9,18 @@ from bs4 import BeautifulSoup
 import scctool.settings.translation
 from scctool import __version__ as scct_version
 
-"""Data grabber for Liquipedia."""
-
-
 # create logger
 module_logger = logging.getLogger(__name__)
 _ = scctool.settings.translation.gettext
 
 
 class LiquipediaGrabber:
+    """Grab data from Liquipedia."""
 
     _base_url = 'https://liquipedia.net'
 
     def __init__(self):
+        """Init the grabber."""
         scct_url = "https://teampheenix.github.io/StarCraft-Casting-Tool/"
         self._session = requests.Session()
         self._session.trust_env = False
@@ -30,6 +30,7 @@ class LiquipediaGrabber:
         self._headers["Accept-Encoding"] = "gzip"
 
     def image_search(self, search_str):
+        """Search for an image."""
         params = {'title': 'Special:Search',
                   'profile': 'advanced', 'fulltext': 'Search', 'ns6': 1}
         params['search'] = str(search_str).strip()
@@ -62,6 +63,7 @@ class LiquipediaGrabber:
             pass
 
     def get_images(self, image):
+        """Get all image sizes available for an image."""
         r = self._session.get(self._base_url + image)
         regex = re.compile(r'(\d+,?\d*)\s+×\s+(\d+,?\d*)')
         soup = BeautifulSoup(r.content, 'html.parser')
@@ -85,37 +87,46 @@ class LiquipediaGrabber:
         return images
 
     def get_images_new(self, image):
+        """Get all image sizes available for an image by using the API."""
         pass
 
     def get_map(self, map_name, retry=False):
+        """Search for an map."""
         params = dict()
         params['action'] = "opensearch"
         if retry:
             params['search'] = str(map_name).strip() + ' LE'
         else:
             params['search'] = str(map_name).strip()
+        module_logger.info(f'Try to find map {params["search"]}')
         params['limit'] = 1
         params['namespace'] = 0
 
-        url = '{}/starcraft2/api.php'.format(self._base_url)
+        url = f'{self._base_url}/starcraft2/api.php'
         data = self._session.get(
             url, headers=self._headers, params=params).json()
-        map = data[1][0]
+        try:
+            liquipedia_map = data[1][0]
+        except IndexError:
+            if not retry:
+                return self.get_map(map_name, retry=True)
+            else:
+                raise MapNotFound
         if map:
             params = dict()
             params['action'] = "parse"
             params['format'] = "json"
-            params['page'] = map
+            params['page'] = liquipedia_map
 
-            url = '{}/starcraft2/api.php'.format(self._base_url)
+            url = f'{self._base_url}/starcraft2/api.php'
 
             data = self._session.get(url, headers=self._headers,
                                      params=params).json()
             content = data['parse']['text']['*']
             soup = BeautifulSoup(content, 'html.parser')
-            map = LiquipediaMap(soup)
-            if map.is_map():
-                return map
+            liquipedia_map = LiquipediaMap(soup)
+            if liquipedia_map.is_map():
+                return liquipedia_map
             elif not retry:
                 return self.get_map(map_name, retry=True)
             else:
@@ -126,6 +137,7 @@ class LiquipediaGrabber:
             raise MapNotFound
 
     def get_ladder_mappool(self):
+        """Get the current 1v1 ladder mappool."""
         params = dict()
         params['action'] = "parse"
         params['format'] = "json"
@@ -141,11 +153,12 @@ class LiquipediaGrabber:
         soup = BeautifulSoup(content, 'html.parser')
         for result in soup.find_all("td", class_="navbox-group"):
             if result.contents[0].strip() == "1 vs 1":
-                for map in result.findNext("td").find_all('a'):
-                    yield map.contents[0].replace("LE", '').strip()
+                for mymap in result.findNext("td").find_all('a'):
+                    yield mymap.contents[0].replace("LE", '').strip()
                 break
 
     def get_map_stats(self, maps):
+        """Get map statistics of specified maps."""
         params = dict()
         params['action'] = "parse"
         params['format'] = "json"
@@ -157,11 +170,13 @@ class LiquipediaGrabber:
         if len(maps) < 1:
             return
 
-        for map in maps:
-            params['text'] = params['text'] + \
-                "{{Map statistics row|tournament=+|map=" + map.strip() + "}}"
+        for sc2map in maps:
+            params['text'] = (
+                params['text']
+                + "{{Map statistics row|tournament=+|map="
+                + sc2map.strip() + "}}")
         params['text'] = params['text'] + "</div>"
-        url = '{}/starcraft2/api.php'.format(self._base_url)
+        url = f'{self._base_url}/starcraft2/api.php'
         data = requests.get(url, headers=self._headers, params=params).json()
         content = data['parse']['text']['*']
         soup = BeautifulSoup(content, 'html.parser')
@@ -182,23 +197,28 @@ class LiquipediaGrabber:
 
 
 class LiquipediaMap:
+    """StarCraft 2 map present on Liquipedia."""
 
     def __init__(self, soup):
+        """Init the map with BeautifulSoup."""
         self._soup = soup
 
     def is_map(self):
+        """Test if this is an actual map."""
         return self._soup.find(
             href='/starcraft2/Template:Infobox_map') is not None
 
     def get_name(self):
+        """Get the name of the map."""
         infobox = self._soup.find("div", class_="fo-nttax-infobox")
-        map = infobox.find("div", class_="infobox-header").text
-        map = map.replace("[e]", "")
-        map = map.replace("[h]", "")
-        map = map.replace("LE", "")
-        return map.strip()
+        map_name = infobox.find("div", class_="infobox-header").text
+        map_name = map_name.replace("[e]", "")
+        map_name = map_name.replace("[h]", "")
+        map_name = map_name.replace("LE", "")
+        return map_name.strip()
 
     def get_info(self):
+        """Get info about map."""
         key = ""
         data = dict()
         infobox = self._soup.find("div", class_="fo-nttax-infobox")
@@ -218,9 +238,11 @@ class LiquipediaMap:
         return data
 
     def get_map_images(self):
+        """Get map images."""
         return self._soup.find('a', class_='image')['href']
 
     def get_stats(self):
+        """Get map statistics."""
         data = dict()
         try:
             data['games'] = self._soup.find(
@@ -237,4 +259,6 @@ class LiquipediaMap:
 
 
 class MapNotFound(Exception):
+    """Map not found on Liquipedia exception."""
+
     pass

@@ -1,12 +1,10 @@
+"""Update Nightbot commands."""
 import logging
 
 import requests
 
 import scctool.settings
 import scctool.settings.translation
-
-"""Update Nightbot commands."""
-
 
 # create logger
 module_logger = logging.getLogger(__name__)
@@ -30,7 +28,7 @@ def updateCommand(data):
         headers = base_headers()
         headers.update({"Authorization": "Bearer "
                         + scctool.settings.config.parser.get("Nightbot",
-                                                             "token")})
+                                                           "token")})
 
         response = requests.get(
             "https://api.nightbot.tv/1/commands",
@@ -57,7 +55,7 @@ def updateCommand(data):
         module_logger.exception("message")
         yield '', msg, success, False
 
-    for cmdFound, skipUpdate, id, cmd, message in \
+    for cmdFound, skipUpdate, cmd_id, cmd, message in \
             findCommands(response.json(), data):
         try:
             deleted = False
@@ -72,12 +70,14 @@ def updateCommand(data):
             elif(cmdFound):
                 if message != "__DELETE__":
                     put_data = {"message": message}
-                    requests.put("https://api.nightbot.tv/1/commands/" + id,
-                                 headers=headers,
-                                 data=put_data).raise_for_status()
+                    requests.put(
+                        "https://api.nightbot.tv/1/commands/" + cmd_id,
+                        headers=headers,
+                        data=put_data).raise_for_status()
                 else:
-                    requests.delete("https://api.nightbot.tv/1/commands/" + id,
-                                    headers=headers).raise_for_status()
+                    requests.delete(
+                        "https://api.nightbot.tv/1/commands/" + cmd_id,
+                        headers=headers).raise_for_status()
                     deleted = True
             elif(message != "__DELETE__"):
                 post_data = {"message": message,
@@ -125,6 +125,7 @@ def updateCommand(data):
 
 
 def findCommands(response, data):
+    """Search for commands response."""
     commands_found = dict()
     for i in range(0, response['_total']):
         commands_found[response['commands'][i]['name']] = i

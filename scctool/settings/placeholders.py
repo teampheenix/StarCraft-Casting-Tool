@@ -1,8 +1,7 @@
+"""Define placeholders."""
 import logging
 
 import scctool.settings.translation
-
-"""Define placeholders."""
 
 # create logger
 module_logger = logging.getLogger(__name__)

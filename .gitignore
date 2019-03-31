@@ -16,7 +16,9 @@ build_app.py
 build_data.py
 sign.py
 *Ducklings.css
+*WCS.css
 casting_html/src/ducklings/
+casting_html/src/wcs/
 casting_html/src/sound/player1.mp3
 casting_html/src/sound/player2.mp3
 OBS_*/
@@ -26,3 +28,7 @@ scctool/__init__.pyc
 casting_html/src/js/profile.js
 build_data_old.py
 src/safe.json
+.cache/
+*.egg-info/
+.tox/
+tests/__pycache__/

@@ -1,10 +1,9 @@
+"""Provide config for SCCTool."""
 import configparser
 import logging
 import os.path
 import platform
 import sys
-
-"""Provide config for SCCTool."""
 
 module_logger = logging.getLogger(__name__)  # create logger
 
@@ -28,6 +27,7 @@ def init(file):
 
 
 def representsInt(s):
+    """Test if the value can be casted to an integer."""
     try:
         int(s)
         return True
@@ -36,6 +36,7 @@ def representsInt(s):
 
 
 def representsFloat(s):
+    """Test if the value can be casted to a float."""
     try:
         float(s)
         return True
@@ -44,48 +45,31 @@ def representsFloat(s):
 
 
 # Setting default values for config file
-def setDefaultConfig(sec, opt, value, func=None):
+def setDefaultConfig(sec, opt, value):
     """Set default value in config."""
-    if(not this.parser.has_section(sec)):
+    if not this.parser.has_section(sec):
         this.parser.add_section(sec)
 
-    if(not this.parser.has_option(sec, opt)):
-        if(func):
-            try:
-                value = func()
-            except Exception:
-                pass
-        this.parser.set(sec, opt, value)
-    elif(value in ["True", "False"]):
-        try:
+    if callable(value):
+        value = value()
+    try:
+        if not this.parser.has_option(sec, opt):
+            pass
+        elif value in ["True", "False"]:
             this.parser.getboolean(sec, opt)
-        except Exception:
-            if(func):
-                try:
-                    value = func()
-                except Exception:
-                    pass
-            this.parser.set(sec, opt, value)
-    elif(representsInt(value)):
-        try:
+            return
+        elif representsInt(value):
             this.parser.getint(sec, opt)
-        except Exception:
-            if(func):
-                try:
-                    value = func()
-                except Exception:
-                    pass
-            this.parser.set(sec, opt, value)
-    elif(representsFloat(value)):
-        try:
+            return
+        elif representsFloat(value):
             this.parser.getfloat(sec, opt)
-        except Exception:
-            if(func):
-                try:
-                    value = func()
-                except Exception:
-                    pass
-            this.parser.set(sec, opt, value)
+            return
+        else:
+            return
+    except ValueError:
+        pass
+
+    this.parser.set(sec, opt, value)
 
 
 def findTesserAct(
@@ -98,8 +82,8 @@ def findTesserAct(
             import winreg
             key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE,
                                  "SOFTWARE\\WOW6432Node\\Tesseract-OCR")
-            return os.path.normpath(winreg.QueryValueEx(key, "Path")[0]
-                                    + '\\tesseract.exe')
+            return os.path.normpath(winreg.QueryValueEx(key, "Path")[0] +
+                                    '\\tesseract.exe')
     except Exception:
         return default
 
@@ -146,8 +130,7 @@ def setDefaultConfigAll():
     setDefaultConfig("SCT", "blacklist_on", "False")
     setDefaultConfig("SCT", "blacklist", "")
 
-    tesseract = "C:\\Program Files (x86)\\Tesseract-OCR\\tesseract.exe"
-    setDefaultConfig("SCT", "tesseract", tesseract, findTesserAct)
+    setDefaultConfig("SCT", "tesseract", findTesserAct)
 
     setDefaultConfig("Form", "scoreupdate", "False")
     setDefaultConfig("Form", "togglescore", "False")
@@ -180,6 +163,7 @@ def setDefaultConfigAll():
     setDefaultConfig("Style", "use_custom_font", "False")
     setDefaultConfig("Style", "custom_font", "Verdana")
     setDefaultConfig("Style", "countdown", "Minimal")
+    setDefaultConfig("Style", "vetoes", "Default")
 
     setDefaultConfig("Intros", "hotkey_player1", "")
     setDefaultConfig("Intros", "hotkey_player2", "")
@@ -198,6 +182,7 @@ def setDefaultConfigAll():
     setDefaultConfig("Mapstats", "color2", "#000000")
     setDefaultConfig("Mapstats", "autoset_next_map", "True")
     setDefaultConfig("Mapstats", "mark_played", "False")
+    setDefaultConfig("Mapstats", "mark_vetoed", "False")
 
     setDefaultConfig("Countdown", 'restart', 'True')
     setDefaultConfig("Countdown", 'description', 'Stream will be back in')
@@ -205,6 +190,8 @@ def setDefaultConfigAll():
     setDefaultConfig("Countdown", 'duration', '00:05:00')
     setDefaultConfig("Countdown", 'datetime', '2018-11-18 20:00')
     setDefaultConfig("Countdown", 'static', 'False')
+
+    setDefaultConfig("Vetoes", "padding", "2.0")
 
 
 def renameConfigOptions():
@@ -257,8 +244,8 @@ def renameConfigOptions():
 def nightbotIsValid():
     """Check if nightbot data is valid."""
     from scctool.settings import nightbot_commands
-    return (len(this.parser.get("Nightbot", "token")) > 0
-            and len(nightbot_commands) > 0)
+    return (len(this.parser.get("Nightbot", "token")) > 0 and
+            len(nightbot_commands) > 0)
 
 
 def twitchIsValid():
@@ -291,6 +278,7 @@ def getMyPlayers(append=False):
 
 
 def loadHotkey(string):
+    """Unpack hotkey from config."""
     try:
         name, scan_code, is_keypad = str(string).split(',')
         data = dict()
@@ -303,6 +291,7 @@ def loadHotkey(string):
 
 
 def dumpHotkey(data):
+    """Pack hotkey to config."""
     try:
         return "{name}, {scan_code}, {is_keypad}".format(**data)
     except Exception:

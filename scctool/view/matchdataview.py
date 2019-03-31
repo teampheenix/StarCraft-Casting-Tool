@@ -1,36 +1,35 @@
+"""Widget to display match data (in a tab)."""
 import logging
 
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QCursor, QIcon
 from PyQt5.QtWidgets import (QAction, QComboBox, QCompleter, QGridLayout,
-                             QHBoxLayout, QInputDialog, QLabel, QMessageBox,
-                             QPushButton, QRadioButton, QSizePolicy, QSlider,
-                             QSpacerItem, QTabBar, QVBoxLayout, QWidget)
+                             QGroupBox, QHBoxLayout, QInputDialog, QLabel,
+                             QMessageBox, QPushButton, QRadioButton,
+                             QSizePolicy, QSlider, QSpacerItem, QTabBar,
+                             QVBoxLayout, QWidget)
 
 import scctool.settings
 import scctool.settings.config
 import scctool.settings.translation
 from scctool.view.widgets import IconPushButton, MapLineEdit, MonitoredLineEdit
 
-"""Define the match data widget/view."""
-
-
-
 module_logger = logging.getLogger(__name__)
 _ = scctool.settings.translation.gettext
 
 
 class MatchDataWidget(QWidget):
-    """Widget to display matchd data."""
+    """Widget to display match data."""
 
     def __init__(self, parent, tabWidget, matchData, closeable=True):
-        """Init widget"""
+        """Init widget."""
         super().__init__(parent)
 
         self.max_no_sets = scctool.settings.max_no_sets
+        self.max_no_vetoes = int(scctool.settings.max_no_sets / 2) * 2
         self.scoreWidth = 35
-        self.raceWidth = 45
-        self.labelWidth = 25
+        self.raceWidth = 50
+        self.labelWidth = 35
         self.mimumLineEditWidth = 130
 
         self._tabWidget = tabWidget
@@ -65,45 +64,59 @@ class MatchDataWidget(QWidget):
         self.setClosable(closeable)
 
     def setClosable(self, closeable):
+        """Make the tab closable."""
         self._closeButton.setHidden(not closeable)
 
     def closeTab(self):
-        if self._tabWidget.count() > 1:
-            idx = self._tabWidget.indexOf(self)
-            ident = self.matchData.getControlID()
-            self._tabWidget.removeTab(idx)
-            new_index = self.controller.matchControl.removeMatch(ident)
-            if new_index is not None:
-                self._tabWidget.widget(new_index).checkButton()
-        count = self._tabWidget.count()
-        if count == 1:
-            self._tabWidget.widget(0).setClosable(False)
+        """Close the tab."""
+        self.controller.matchControl.mutex.lock()
+        try:
+            if self._tabWidget.count() > 1:
+                idx = self._tabWidget.indexOf(self)
+                ident = self.matchData.getControlID()
+                self._tabWidget.removeTab(idx)
+                new_index = self.controller.matchControl.removeMatch(ident)
+                if new_index is not None:
+                    self._tabWidget.widget(new_index).checkButton()
+            count = self._tabWidget.count()
+            if count == 1:
+                self._tabWidget.widget(0).setClosable(False)
+        finally:
+            self.controller.matchControl.mutex.unlock()
 
     def checkButton(self):
+        """Check the button."""
         self._radioButton.setChecked(True)
 
     def activate(self, checked):
-        if (checked
-                and self.controller.matchControl.activeMatchId() != self._ctrlID):
-            self.controller.matchControl.activateMatch(
-                self.matchData.getControlID())
-            self.autoSetNextMap(send=False)
-            self.controller.mapstatsManager.sendMapPool()
-            self.parent.updateAllMapButtons()
-            self.controller.updateLogosWebsocket()
-        elif self.controller.matchControl.countMatches() == 1:
-            self._radioButton.toggled.disconnect()
-            self._radioButton.setChecked(True)
-            self._radioButton.toggled.connect(self.activate)
+        """Activate match tab."""
+        self.controller.matchControl.mutex.lock()
+        try:
+            if (checked
+                    and self.controller.matchControl.activeMatchId()
+                    != self._ctrlID):
+                self.controller.matchControl.activateMatch(
+                    self.matchData.getControlID())
+                self.autoSetNextMap(send=False)
+                self.controller.mapstatsManager.sendMapPool()
+                self.parent.updateAllMapButtons()
+                self.controller.updateLogosWebsocket()
+            elif self.controller.matchControl.countMatches() == 1:
+                self._radioButton.toggled.disconnect()
+                self._radioButton.setChecked(True)
+                self._radioButton.toggled.connect(self.activate)
+        finally:
+            self.controller.matchControl.mutex.unlock()
 
     def setName(self):
+        """Set the name of the tab."""
         team1 = self.matchData.getTeamOrPlayer(0).replace('&', '&&')
         team2 = self.matchData.getTeamOrPlayer(1).replace('&', '&&')
         name = " {} vs {}".format(team1, team2)
         self._tabWidget.tabBar().setTabText(self._tabIdx, name)
 
     def _createView(self):
-
+        """Create the view."""
         layout = QVBoxLayout()
 
         self.le_league = MonitoredLineEdit()
@@ -182,15 +195,14 @@ class MatchDataWidget(QWidget):
 
         container = QGridLayout()
 
-        button = QPushButton()
+        self.pb_swap = QPushButton()
         pixmap = QIcon(
             scctool.settings.getResFile('update.png'))
-        button.setIcon(pixmap)
-        button.clicked.connect(
-            lambda: self.controller.swapTeams())
-        button.setFixedWidth(self.labelWidth)
-        button.setToolTip(_("Swap teams and logos."))
-        container.addWidget(button, 0, 0, 2, 1)
+        self.pb_swap.setIcon(pixmap)
+        self.pb_swap.clicked.connect(self.controller.swapTeams)
+        self.pb_swap.setFixedWidth(self.labelWidth)
+        self.pb_swap.setToolTip(_("Swap teams and logos."))
+        container.addWidget(self.pb_swap, 0, 0, 2, 1)
 
         label = QLabel(_("League:"))
         label.setAlignment(Qt.AlignCenter)
@@ -202,7 +214,7 @@ class MatchDataWidget(QWidget):
         label.setSizePolicy(policy)
         container.addWidget(label, 0, 1, 1, 1)
 
-        label = QLabel(_("Maps \ Teams:"))
+        label = QLabel(_('Maps \\ Teams:'))
         label.setAlignment(Qt.AlignCenter)
         policy = QSizePolicy()
         policy.setHorizontalStretch(4)
@@ -308,6 +320,9 @@ class MatchDataWidget(QWidget):
                 self.cb_race[1][player_idx], 0)
             layout.addLayout(self.setContainer[player_idx])
 
+        self.createVetoGroupBox()
+        layout.addWidget(self.veto_groupbox)
+
         layout.addItem(QSpacerItem(
             0, 0, QSizePolicy.Minimum,
             QSizePolicy.Expanding))
@@ -317,7 +332,60 @@ class MatchDataWidget(QWidget):
         self.updatePlayerCompleters()
         self.updateTeamCompleters()
 
+    def createVetoGroupBox(self):
+        """Create a group box to insert vetoes."""
+        self.veto_groupbox = QGroupBox(_('Map Vetoes'))
+        self.veto_groupbox.setVisible(False)
+        box_layout = QGridLayout()
+        rows = int(self.max_no_vetoes / 2)
+        self.le_veto_maps = [MapLineEdit() for i in range(self.max_no_vetoes)]
+        self.veto_label = [QLabel(f'#{i+1}')
+                           for i in range(self.max_no_vetoes)]
+        self.sl_veto = [QSlider(Qt.Horizontal)
+                        for i in range(self.max_no_vetoes)]
+        self.row_label = [QLabel('') for y in range(rows)]
+        for veto_idx in range(self.max_no_vetoes):
+            row = veto_idx / 2
+            col = (veto_idx % 2) * 2
+            veto_layout = QHBoxLayout()
+            self.le_veto_maps[veto_idx].textModified.connect(
+                lambda veto_idx=veto_idx: self.map_veto_changed(veto_idx))
+            self.sl_veto[veto_idx].valueChanged.connect(
+                lambda value, veto_idx=veto_idx:
+                    self.veto_team_changed(veto_idx, value))
+            self.veto_label[veto_idx].setFixedWidth(self.labelWidth - 5)
+            veto_layout.addWidget(self.veto_label[veto_idx])
+            self.le_veto_maps[veto_idx].setText("TBD")
+            self.le_veto_maps[veto_idx].setAlignment(
+                Qt.AlignCenter)
+            self.le_veto_maps[veto_idx].setPlaceholderText(
+                _("Map Veto {}").format(veto_idx + 1))
+            self.le_veto_maps[veto_idx].setMinimumWidth(
+                self.mimumLineEditWidth)
+            veto_layout.addWidget(self.le_veto_maps[veto_idx])
+            self.sl_veto[veto_idx].setMinimum(0)
+            self.sl_veto[veto_idx].setMaximum(1)
+            self.sl_veto[veto_idx].setValue(veto_idx % 2)
+            self.sl_veto[veto_idx].setTickPosition(
+                QSlider.TicksBothSides)
+            self.sl_veto[veto_idx].setTickInterval(1)
+            self.sl_veto[veto_idx].setTracking(False)
+            self.sl_veto[veto_idx].setToolTip(
+                _('Select which player/team vetoes.'))
+            self.sl_veto[veto_idx].setFixedWidth(self.scoreWidth - 5)
+            veto_layout.addWidget(self.sl_veto[veto_idx])
+            box_layout.addLayout(veto_layout, row, col)
+        for idx in range(int(self.max_no_vetoes / 2)):
+            self.row_label[idx].setFixedWidth(self.labelWidth / 2 + 5)
+            box_layout.addWidget(self.row_label[idx], idx, 1)
+        self.veto_groupbox.setLayout(box_layout)
+
+    def toggleVetoes(self, visible=True):
+        """Toggle the visibility of the veto group box."""
+        self.veto_groupbox.setVisible(visible)
+
     def openPlayerContextMenu(self, team_idx, player_idx):
+        """Open the player context menu."""
         menu = self.le_player[team_idx][player_idx].\
             createStandardContextMenu()
         first_action = menu.actions()[0]
@@ -330,6 +398,7 @@ class MatchDataWidget(QWidget):
         menu.exec_(QCursor.pos())
 
     def addAlias(self, team_idx, player_idx):
+        """Add a player alias."""
         name = self.le_player[team_idx][player_idx].text().strip()
         name, ok = QInputDialog.getText(
             self, _('Player Alias'), _('Name') + ':', text=name)
@@ -350,6 +419,7 @@ class MatchDataWidget(QWidget):
             QMessageBox.critical(self, _("Error"), str(e))
 
     def league_changed(self):
+        """Handle a change of the league."""
         if not self.tlock.trigger():
             return
         self.matchData.setLeague(self.le_league.text())
@@ -364,7 +434,7 @@ class MatchDataWidget(QWidget):
                     self.matchData.setMapScore(set_idx, value, True)
                     self.allkillUpdate()
                     self.autoSetNextMap()
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def player_changed(self, team_idx, player_idx):
@@ -393,7 +463,7 @@ class MatchDataWidget(QWidget):
                 self.cb_race[team_idx][player_idx].setCurrentIndex(0)
             self.updatePlayerCompleters()
             self.setName()
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def race_changed(self, team_idx, player_idx):
@@ -413,10 +483,11 @@ class MatchDataWidget(QWidget):
                 for player_idx in range(1, self.max_no_sets):
                     self.cb_race[team_idx][player_idx].setCurrentIndex(idx)
 
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def team_changed(self, team_idx):
+        """Handle change of the team."""
         if not self.tlock.trigger():
             return
         team = self.le_team[team_idx].text().strip()
@@ -434,29 +505,43 @@ class MatchDataWidget(QWidget):
         self.setName()
 
     def map_changed(self, set_idx):
+        """Handle a map change."""
         if not self.tlock.trigger():
             return
         self.matchData.setMap(set_idx, self.le_map[set_idx].text())
         self.updateMapButtons()
-        self.controller.matchControl.activeMatch()
         self.autoSetNextMap(set_idx)
 
+    def map_veto_changed(self, idx):
+        """Handle a map veto change."""
+        if not self.tlock.trigger():
+            return
+        self.matchData.setVeto(idx, self.le_veto_maps[idx].text())
+        self.controller.mapstatsManager.sendMapPool()
+
+    def veto_team_changed(self, idx, team):
+        """Handle a map veto change."""
+        if not self.tlock.trigger():
+            return
+        self.matchData.setVeto(idx, self.le_veto_maps[idx].text(), team)
+
     def autoSetNextMap(self, idx=-1, send=True):
+        """Set the next map automatically."""
         if self.controller.matchControl.activeMatchId() == self._ctrlID:
             self.controller.autoSetNextMap(idx, send)
 
     def updateMapCompleters(self):
         """Update the auto completers for maps."""
         for i in range(self.max_no_sets):
-            list = scctool.settings.maps.copy()
+            map_list = scctool.settings.maps.copy()
             try:
-                list.remove("TBD")
-            except Exception as e:
+                map_list.remove("TBD")
+            except Exception:
                 pass
             finally:
-                list.sort()
-                list.append("TBD")
-            completer = QCompleter(list, self.le_map[i])
+                map_list.sort()
+                map_list.append("TBD")
+            completer = QCompleter(map_list, self.le_map[i])
             completer.setCaseSensitivity(Qt.CaseInsensitive)
             completer.setFilterMode(Qt.MatchContains)
             completer.setCompletionMode(
@@ -465,14 +550,29 @@ class MatchDataWidget(QWidget):
             completer.activated.connect(self.le_map[i].completerFinished)
             self.le_map[i].setCompleter(completer)
 
+        for i in range(self.max_no_vetoes):
+            map_list = scctool.settings.maps.copy()
+            if 'TBD' in map_list:
+                map_list.remove('TBD')
+            map_list.sort()
+            map_list.append('TBD')
+            completer = QCompleter(map_list, self.le_veto_maps[i])
+            completer.setCaseSensitivity(Qt.CaseInsensitive)
+            completer.setFilterMode(Qt.MatchContains)
+            completer.setCompletionMode(
+                QCompleter.UnfilteredPopupCompletion)
+            completer.setWrapAround(True)
+            completer.activated.connect(self.le_veto_maps[i].completerFinished)
+            self.le_veto_maps[i].setCompleter(completer)
+
     def updatePlayerCompleters(self):
         """Refresh the completer for the player line edits."""
-        list = scctool.settings.config.getMyPlayers(
+        player_list = scctool.settings.config.getMyPlayers(
             True) + ["TBD"] + self.controller.historyManager.getPlayerList()
         for player_idx in range(self.max_no_sets):
             for team_idx in range(2):
                 completer = QCompleter(
-                    list, self.le_player[team_idx][player_idx])
+                    player_list, self.le_player[team_idx][player_idx])
                 completer.setCaseSensitivity(
                     Qt.CaseInsensitive)
                 completer.setCompletionMode(
@@ -486,11 +586,11 @@ class MatchDataWidget(QWidget):
 
     def updateTeamCompleters(self):
         """Refresh the completer for the team line edits."""
-        list = scctool.settings.config.getMyTeams() + \
+        team_list = scctool.settings.config.getMyTeams() + \
             ["TBD"] + self.controller.historyManager.getTeamList()
         for team_idx in range(2):
             completer = QCompleter(
-                list, self.le_team[team_idx])
+                team_list, self.le_team[team_idx])
             completer.setCaseSensitivity(Qt.CaseInsensitive)
             completer.setCompletionMode(
                 QCompleter.InlineCompletion)
@@ -552,26 +652,37 @@ class MatchDataWidget(QWidget):
                 self.sl_score[i].show()
                 self.label_set[i].show()
 
+            no_vetoes = self.matchData.getNoVetoes()
+            for i in range(self.max_no_vetoes):
+                visible = no_vetoes > i
+                self.le_veto_maps[i].setVisible(visible)
+                self.veto_label[i].setVisible(visible)
+                self.sl_veto[i].setVisible(visible)
+                if i % 2:
+                    self.row_label[int(i / 2)].setVisible(visible)
+                if visible:
+                    veto = self.matchData.getVeto(i)
+                    self.le_veto_maps[i].setText(veto.get('map'))
+                    self.sl_veto[i].setValue(veto.get('team'))
+
             self.updatePlayerCompleters()
             self.updateTeamCompleters()
             self.updateMapButtons()
             self.setName()
             # self.autoSetNextMap()
 
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
             raise
 
     def updateMapButtons(self):
+        """Update the map buttons."""
         mappool = list(self.controller.mapstatsManager.getMapPool())
         for i in range(self.max_no_sets):
-            map = self.matchData.getMap(i)
-            if map in mappool:
-                self.label_set[i].setEnabled(True)
-            else:
-                self.label_set[i].setEnabled(False)
+            self.label_set[i].setEnabled(self.matchData.getMap(i) in mappool)
         if (self.controller.mapstatsManager.getMapPoolType() == 2
-                and self.controller.matchControl.activeMatchId() == self._ctrlID):
+                and self.controller.matchControl.activeMatchId()
+                == self._ctrlID):
             self.controller.mapstatsManager.sendMapPool()
 
     def updateLogos(self, force=False):
@@ -612,23 +723,30 @@ class MatchDataWidget(QWidget):
                 return True
             else:
                 return False
-        except Exception as e:
+        except Exception:
             module_logger.exception("message")
 
     def showMap(self, player_idx):
+        """Show the map in the mapstats browser source."""
         self.controller.mapstatsManager.selectMap(
             self.matchData.getMap(player_idx))
 
 
 class TriggerLock():
+    """Trigger lock."""
+
     def __init__(self):
+        """Init the lock."""
         self.__trigger = True
 
     def __enter__(self):
+        """Enter the lock."""
         self.__trigger = False
 
-    def __exit__(self, type, value, traceback):
+    def __exit__(self, error_type, value, traceback):
+        """Exit the lock."""
         self.__trigger = True
 
     def trigger(self):
+        """Return if the logged is triggered."""
         return bool(self.__trigger)

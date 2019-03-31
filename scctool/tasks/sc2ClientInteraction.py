@@ -23,10 +23,12 @@ if(scctool.settings.windows):
 
 
 def skipScore(score):
+    """Define score default for the overlay."""
     return score == 0
 
 
 def skipBestOf(bo):
+    """Define best of default for the overlay."""
     return bo == 3
 
 
@@ -42,7 +44,7 @@ def ToggleScore(score1=0, score2=0, bestof=5):
     times = scctool.settings.config.parser.getint("SCT", "CtrlShiftR")
     if times > 0:
         # For some reason the first time pressing CTRL+SHIFT+R does nothing.
-        for x in range(0, times + 1):
+        for __ in range(times + 1):
             keyboard.send("ctrl+shift+r")
 
     if(not skipBestOf(bestof)):
@@ -90,7 +92,6 @@ class SC2ApiThread(QThread):
             self.currentData = SC2MatchData()
             self.introData = SC2MatchData()
             self.controller = controller
-            self.currentÍngameStatus = False
         except Exception:
             module_logger.exception("message")
 
@@ -126,7 +127,9 @@ class SC2ApiThread(QThread):
         module_logger.info(
             'Termination request fo task "' + task + '" cancelled')
 
-    def getURLs(self):
+    @classmethod
+    def getURLs(cls):
+        """Get the URLs for the sc2 client api."""
         network = scctool.settings.config.parser.getboolean(
             "SCT", "sc2_network_listener_enabled")
         if network:
@@ -177,7 +180,7 @@ class SC2ApiThread(QThread):
             if(not self.exiting
                 and (newData != self.currentData
                      or newData.time < self.currentData.time
-                     or newData.isLive() != self.currentData.isLive())):
+                 or newData.isLive() != self.currentData.isLive())):
 
                 if(self.activeTask['updateScore']
                    and newData.isDecidedGame()
@@ -194,11 +197,10 @@ class SC2ApiThread(QThread):
             module_logger.exception("message")
 
     def tryToggle(self, data):
-        """Wait until SC2 is in foreground and toggle"""
-        """production tab and score."""
+        """Wait for SC2 in foreground, then toggle production tab and score."""
         if (scctool.settings.config.parser.getboolean(
-            "SCT", "blacklist_on")
-                and not data.replay):
+            "SCT", "blacklist_on") and
+                not data.replay):
             blacklist = scctool.settings.config.getBlacklist()
             if data.player1 in blacklist or data.player2 in blacklist:
                 module_logger.info("Do not toogle due to blacklist.")
@@ -229,8 +231,7 @@ class SC2ApiThread(QThread):
             module_logger.info("Toggle not working on this OS.")
 
     def swapPlayers(self, data, force=False):
-        """Detect if players are swapped relative"""
-        """to SC2-Client-API data via ocr."""
+        """Detect if players are swapped in SC2-Client-API data via ocr."""
         try:
             if(not scctool.settings.config.parser.getboolean("SCT",
                                                              "use_ocr")):
@@ -279,11 +280,12 @@ class SC2ApiThread(QThread):
             return False
 
 
-def ocr(players, img, dir=''):
+def ocr(players, img, directory=''):
+    """Use OCR to find postion of the playernames."""
     cfg = '--psm 3 --oem 0'
-    if dir:
-        dir = os.path.join(os.path.dirname(dir), 'tessdata')
-        cfg = cfg + ' --tessdata-dir "{}"'.format(dir)
+    if directory:
+        directory = os.path.join(os.path.dirname(directory), 'tessdata')
+        cfg = f'{cfg} --tessdata-dir "{directory}"'
     crop_text = pytesseract.image_to_string(img, config=cfg)
     items = re.split(r'\s+', crop_text)
     threshold = 0.35
@@ -310,6 +312,7 @@ def ocr(players, img, dir=''):
 
 
 def cropImage(full_img, crop_region):
+    """Crop an image."""
     x1, x2, y1, y2 = crop_region
     width, height = full_img.size
     if x1 != 0.0 and x2 == 1.0 and y1 == 0.0 and y2 == 1.0:
@@ -414,7 +417,8 @@ class SC2MatchData:
             player1, player2, weak=weak, translator=translator)
         return found, inorder
 
-    def __no_translator(self, x):
+    @classmethod
+    def __no_translator(cls, x):
         return x
 
     def playerInList(self, player_idx, players, translator=None):
@@ -439,17 +443,16 @@ class SC2MatchData:
 
         return False
 
-    def translateRace(self, str):
+    @classmethod
+    def translateRace(cls, race_str):
         """Translate SC2-Client-API race to no normal values."""
         try:
             for idx, race in enumerate(scctool.settings.races):
-                if(str[0].upper() == race[0].upper()):
+                if(race_str[0].upper() == race[0].upper()):
                     return scctool.settings.races[idx]
         except Exception:
-            module_logger.exception("message")
-
-        module_logger.info("Race " + str + " not found")
-        return ""
+            module_logger.exception(f"Race {race_str} not found")
+            return ""
 
     def isDecidedGame(self):
         """Check if the game is decided."""
