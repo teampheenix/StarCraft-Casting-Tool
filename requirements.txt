@@ -3,9 +3,9 @@ beautifulsoup4 >= 4.7.1
 humanize >= 0.5.1
 keyboard==0.13.3
 markdown2 >= 2.3.7
-Pillow >= 5.4.1; platform_system == 'Windows'
+Pillow >= 6.0.0; platform_system == 'Windows'
 pywin32 >= 224; platform_system == 'Windows'
-PyQt5 >= 5.11.3
+PyQt5 >= 5.12.1
 pytesseract >= 0.2.6; platform_system == 'Windows'
 # PyUpdater >= 2.5.4
 git+git://github.com/JMSwag/PyUpdater@master
