@@ -1,6 +1,21 @@
 # Changelog
 
 
+## v2.7.6 (2019-04-06)
+
+### New
+
+* Added Countdown Settings Tab in Misc Settings Menu.
+
+* Added casting_data/countdown.txt containing a custom text depending on wheter the countdown is running or finished.
+
+* Added option to update static countdown via the match grabber (AlphaTL only).
+
+### Changes
+
+* Updated to Python 3.7.3.
+
+
 ## v2.7.5 (2019-03-15)
 
 ### Fix
