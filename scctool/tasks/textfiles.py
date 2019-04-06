@@ -22,7 +22,9 @@ class TextFilesThread(TasksThread):
         super().__init__()
         self._matchControl = matchControl
         self._q = SetQueue()
-        self._available_items = ['team', 'score', 'meta', 'league', 'bestof']
+        self._available_items = ['team', 'score',
+                                 'meta', 'league', 'bestof',
+                                 'cd_start', 'cd_end']
         self._matchControl.dataChanged.connect(self.put)
         self._matchControl.metaChanged.connect(self.put)
         self.addTask('write', self.__writeTask)
@@ -45,6 +47,10 @@ class TextFilesThread(TasksThread):
                 self.__writeScore()
             elif item == "bestof":
                 self.__writeBestOf()
+            elif item == "cd_start":
+                self.__writeCountdown(True)
+            elif item == "cd_end":
+                self.__writeCountdown(False)
             else:
                 self.__writeBestOf()
                 self.__writeTeam()
@@ -54,6 +60,17 @@ class TextFilesThread(TasksThread):
             pass
         finally:
             pass
+
+    def __writeCountdown(self, start=True):
+        file = scctool.settings.getAbsPath(
+            scctool.settings.casting_data_dir
+            + "/countdown.txt")
+        if start:
+            txt = scctool.settings.config.parser.get("Countdown", "pre_txt")
+        else:
+            txt = scctool.settings.config.parser.get("Countdown", "post_txt")
+        with open(file, mode='w', encoding='utf-8') as f:
+            f.write(txt)
 
     def __writeTeam(self):
         file = scctool.settings.getAbsPath(

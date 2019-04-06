@@ -9,9 +9,9 @@ from PyQt5.QtGui import QIcon, QKeySequence, QPixmap, QRegExpValidator
 from PyQt5.QtWidgets import (QApplication, QCheckBox, QComboBox, QFileDialog,
                              QFormLayout, QGridLayout, QGroupBox, QHBoxLayout,
                              QInputDialog, QLabel, QListWidget,
-                             QListWidgetItem, QMessageBox, QPushButton,
-                             QShortcut, QSizePolicy, QSpacerItem, QTabWidget,
-                             QVBoxLayout, QWidget)
+                             QListWidgetItem, QMessageBox, QPlainTextEdit,
+                             QPushButton, QShortcut, QSizePolicy, QSpacerItem,
+                             QTabWidget, QVBoxLayout, QWidget)
 
 import scctool.settings
 import scctool.settings.translation
@@ -578,13 +578,23 @@ class SubwindowMisc(QWidget):
         self.counterTab = QWidget()
 
         layout = QFormLayout()
-        self.cb_counter_matchgrabber_update = QCheckBox(
-            ' ' + _('Update Static Countdown via MatchGrabber'))
+        self.cb_counter_matchgrabber_update = QCheckBox('')
         self.cb_counter_matchgrabber_update.setChecked(
             scctool.settings.config.parser.getboolean(
                 "Countdown", "matchgrabber_update"))
         self.cb_counter_matchgrabber_update.stateChanged.connect(self.changed)
-        layout.addRow(QLabel(''), self.cb_counter_matchgrabber_update)
+        layout.addRow(QLabel(_('Update Static Countdown via MatchGrabber')),
+                      self.cb_counter_matchgrabber_update)
+        self.counter_pretext = QPlainTextEdit()
+        self.counter_pretext.setPlainText(scctool.settings.config.parser.get(
+            "Countdown", "pre_txt"))
+        self.counter_pretext.textChanged.connect(self.changed)
+        self.counter_posttext = QPlainTextEdit()
+        self.counter_posttext.setPlainText(scctool.settings.config.parser.get(
+            "Countdown", "post_txt"))
+        self.counter_posttext.textChanged.connect(self.changed)
+        layout.addRow(QLabel('Pre-Text'), self.counter_pretext)
+        layout.addRow(QLabel('Post-Text'), self.counter_posttext)
 
         self.counterTab.setLayout(layout)
 
@@ -915,6 +925,10 @@ class SubwindowMisc(QWidget):
             scctool.settings.config.parser.set(
                 "Countdown", "matchgrabber_update",
                 str(self.cb_counter_matchgrabber_update.isChecked()))
+            scctool.settings.config.parser.set(
+                "Countdown", "pre_txt", self.counter_pretext.toPlainText())
+            scctool.settings.config.parser.set(
+                "Countdown", "post_txt", self.counter_posttext.toPlainText())
             self.controller.refreshButtonStatus()
             # self.controller.setCBS()
             self.__dataChanged = False

@@ -191,6 +191,8 @@ def setDefaultConfigAll():
     setDefaultConfig("Countdown", 'datetime', '2018-11-18 20:00')
     setDefaultConfig("Countdown", 'static', 'False')
     setDefaultConfig("Countdown", 'matchgrabber_update', 'False')
+    setDefaultConfig("Countdown", 'pre_txt', 'Countdown is running...')
+    setDefaultConfig("Countdown", 'post_txt', 'Countdown is over!')
 
     setDefaultConfig("Vetoes", "padding", "2.0")
 

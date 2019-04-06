@@ -39,6 +39,7 @@ function count() {
   if (distance < 0) {
     printCountDown(0, 0, 0, 0);
     clearInterval(interval);
+    socket.send('countdown_finished');
   } else {
     printCountDown(days, hours, minutes, seconds);
   }
@@ -48,6 +49,7 @@ function startCounter() {
   if (!data.static) {
     countDownDate = new Date().getTime() + duration + 500;
     interval = setInterval(count, 1000);
+    socket.send('countdown_started');
   }
 }
 
@@ -55,7 +57,6 @@ function printCountDown(days, hours, minutes, seconds) {
   // Output the result in an element with id="demo"
   var countdownStr;
   if (days === 0 && hours === 0 && minutes === 0 && seconds === 0) {
-    console.log("replacement");
     countdownStr = data.replacement;
     console.log(countdownStr);
   } else if (days > 0) {
@@ -108,6 +109,7 @@ function processData() {
     countDownDate = new Date().getTime() + duration;
   }
 
+  socket.send('countdown_started');
   if (data.static || data.restart) {
     interval = setInterval(count, 1000);
   } else {
