@@ -7,17 +7,17 @@ import requests
 from PyQt5.QtCore import QPoint, QRegExp, QSize, Qt
 from PyQt5.QtGui import QIcon, QKeySequence, QPixmap, QRegExpValidator
 from PyQt5.QtWidgets import (QApplication, QCheckBox, QComboBox, QFileDialog,
-                             QGridLayout, QGroupBox, QHBoxLayout, QInputDialog,
-                             QLabel, QListWidget, QListWidgetItem, QMessageBox,
-                             QPushButton, QShortcut, QSizePolicy, QSpacerItem,
-                             QTabWidget, QVBoxLayout, QWidget)
+                             QFormLayout, QGridLayout, QGroupBox, QHBoxLayout,
+                             QInputDialog, QLabel, QListWidget,
+                             QListWidgetItem, QMessageBox, QPushButton,
+                             QShortcut, QSizePolicy, QSpacerItem, QTabWidget,
+                             QVBoxLayout, QWidget)
 
 import scctool.settings
 import scctool.settings.translation
 from scctool.tasks.liquipedia import LiquipediaGrabber, MapNotFound
 from scctool.view.widgets import (AliasTreeView, AligulacTreeView, ListTable,
                                   MapDownloader, MonitoredLineEdit)
-
 
 # create logger
 module_logger = logging.getLogger(__name__)
@@ -78,6 +78,7 @@ class SubwindowMisc(QWidget):
         self.createAlphaBox()
         self.createSC2ClientAPIBox()
         self.createAligulacTab()
+        self.createCounterTab()
 
         # Add tabs
         self.tabs.addTab(self.mapsBox, _("Map Manager"))
@@ -87,6 +88,7 @@ class SubwindowMisc(QWidget):
         self.tabs.addTab(self.alphaBox, _("AlphaTL && Ingame Score"))
         self.tabs.addTab(self.clientapiBox, _("SC2 Client API"))
         self.tabs.addTab(self.aligulacTab, _("Aligulac"))
+        self.tabs.addTab(self.counterTab, _("Countdown"))
 
         table = dict()
         table['mapmanager'] = 0
@@ -96,6 +98,7 @@ class SubwindowMisc(QWidget):
         table['alphatl'] = 4
         table['sc2clientapi'] = 5
         table['aligulac'] = 6
+        table['counter'] = 7
         self.tabs.setCurrentIndex(table.get(tab, SubwindowMisc.current_tab))
         self.tabs.currentChanged.connect(self.tabChanged)
 
@@ -570,6 +573,21 @@ class SubwindowMisc(QWidget):
         """Remove an selected aligulac ID."""
         self.aligulacTreeview.removeSelected()
 
+    def createCounterTab(self):
+        """Create the aligulac tab."""
+        self.counterTab = QWidget()
+
+        layout = QFormLayout()
+        self.cb_counter_matchgrabber_update = QCheckBox(
+            ' ' + _('Update Static Countdown via MatchGrabber'))
+        self.cb_counter_matchgrabber_update.setChecked(
+            scctool.settings.config.parser.getboolean(
+                "Countdown", "matchgrabber_update"))
+        self.cb_counter_matchgrabber_update.stateChanged.connect(self.changed)
+        layout.addRow(QLabel(''), self.cb_counter_matchgrabber_update)
+
+        self.counterTab.setLayout(layout)
+
     def createMapsBox(self):
         """Create box for map manager."""
         self.mapsize = 300
@@ -894,6 +912,9 @@ class SubwindowMisc(QWidget):
             scctool.settings.config.parser.set(
                 "SCT", "sc2_network_listener_enabled",
                 str(self.cb_usesc2listener.isChecked()))
+            scctool.settings.config.parser.set(
+                "Countdown", "matchgrabber_update",
+                str(self.cb_counter_matchgrabber_update.isChecked()))
             self.controller.refreshButtonStatus()
             # self.controller.setCBS()
             self.__dataChanged = False

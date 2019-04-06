@@ -1,5 +1,6 @@
 """Provide match grabber for AlphaTL."""
 import logging
+from datetime import datetime, timedelta, timezone
 from urllib.request import urlopen, urlretrieve
 
 import scctool.settings
@@ -22,6 +23,16 @@ class MatchGrabber(MatchGrabberParent):
         self._urlprefix = "https://alpha.tl/match/"
         self._apiprefix = "https://alpha.tl/api?match="
 
+    def updateCountdown(self, datetime_str):
+        if not datetime_str or not scctool.settings.config.parser.getboolean(
+                "Countdown", "matchgrabber_update"):
+            return
+        dt_obj = datetime.strptime(
+            datetime_str, '%Y-%m-%d %H:%M:%S')
+        dt_obj = dt_obj.replace(tzinfo=timezone(timedelta(hours=0)))
+        dt_obj = dt_obj.astimezone()
+        self._controller.view.countdownTab.setFromTimestamp(dt_obj.timestamp())
+
     def grabData(self, metaChange=False, logoManager=None):
         """Grab match data."""
         data = self._getJson()
@@ -43,7 +54,7 @@ class MatchGrabber(MatchGrabberParent):
                 self._matchData.resetLabels()
                 if overwrite:
                     self._matchData.resetSwap()
-
+                self.updateCountdown(data.get('datetime', ''))
                 league = data['tournament']
                 if not isinstance(league, str):
                     league = "TBD"
