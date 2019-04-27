@@ -1,6 +1,21 @@
 # Changelog
 
 
+## v2.7.7 (2019-04-27)
+
+### New
+
+* Added `ticker.txt` to `casting_data`. This file contains all non-zero score matches defined by your open tabs in the form `Team A 1-2 TeamB | TeamC 1-0 TeamD | ` to be readily included as a ticker for all latest results.
+
+### Changes
+
+* Added the China Team Championship Format (3xBo2, Bo1 Ace) to the Custom Formats. Updated the ESL Team League Format.
+
+### Fix
+
+* Fixed a bug where the map name in the vetos browser source would not be fully visible.
+
+
 ## v2.7.6 (2019-04-06)
 
 ### New
