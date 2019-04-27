@@ -173,17 +173,37 @@ class ProleagueFormat(MatchFormat):
         self._matchData.writeJsonFile()
 
 
-class MatchFormatESL(MatchFormat):
+class ChineseFormat(MatchFormat):
     """Interface definition."""
 
-    _name = "ESL SC2 Open Team League Autumn 2018"
-    _icon = "esl.ico"
+    _name = "Chinese Team Championship"
+    _icon = "scct.ico"
 
     def __init__(self, *args):
         """Init match grabber."""
         super().__init__(*args)
-        self._url = ("https://play.eslgaming.com/starcraft/global/sc2/open/"
-                     "league/all-kill-autumn-2018/")
+        self._url = "https://github.com/teampheenix/StarCraft-Casting-Tool"
+
+    def applyFormat(self):
+        """Apply format."""
+        self._matchData.setCustom(7, False, False, ace_sets=1)
+        self._matchData.setMinSets(6)
+        self._matchData.setURL(self._url)
+        self._matchData.setLeague(self._name)
+        self._matchData.writeJsonFile()
+
+
+class MatchFormatESL(MatchFormat):
+    """Interface definition."""
+
+    _name = "ESL SC2 Open Team Tournament Spring 2019"
+    _icon = "esl.png"
+
+    def __init__(self, *args):
+        """Init match grabber."""
+        super().__init__(*args)
+        self._url = ("https://play.eslgaming.com/starcraft/global/sc2/"
+                     "open/all-kill-spring-2019/")
 
     def applyFormat(self):
         """Apply format."""
