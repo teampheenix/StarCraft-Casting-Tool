@@ -802,7 +802,7 @@ class SubwindowMisc(QWidget):
 
                     try:
                         QApplication.setOverrideCursor(Qt.WaitCursor)
-                        images = grabber.get_images(map.get_map_images())
+                        images = grabber.get_images(sc2map.get_map_images())
                         image = ""
                         for size in sorted(images):
                             if not image or size <= 2500 * 2500:
