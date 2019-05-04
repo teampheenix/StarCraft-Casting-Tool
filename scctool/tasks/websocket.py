@@ -529,6 +529,7 @@ class WebsocketThread(QThread):
         html_dir = scctool.settings.casting_html_dir
         casting_data_dir = scctool.settings.casting_data_dir
         data_dir = scctool.settings.dataDir
+        tts_dir = scctool.settings.ttsDir
 
         if path in ['/', '']:
             path = "/score.html"
@@ -545,6 +546,7 @@ class WebsocketThread(QThread):
 
         path = path[1:]
         module_logger.info(f'HTTP request for {path}')
+        tts = False
 
         try:
             if path.endswith(".html"):
@@ -563,6 +565,7 @@ class WebsocketThread(QThread):
                 mimetype = 'image/gif'
             elif path.endswith(".wav"):
                 mimetype = 'audio/x-wav'
+                tts = True
             elif path.endswith(".mp3"):
                 mimetype = 'audio/mpeg'
             elif path.endswith(".js"):
@@ -582,6 +585,9 @@ class WebsocketThread(QThread):
             if not sendReply:
                 file = scctool.settings.getAbsPath(
                     os.path.join(casting_data_dir, path))
+                sendReply = os.path.isfile(file)
+            if not sendReply and tts:
+                file = scctool.settings.getAbsPath(path)
                 sendReply = os.path.isfile(file)
 
             if path.count('..') > 1:
