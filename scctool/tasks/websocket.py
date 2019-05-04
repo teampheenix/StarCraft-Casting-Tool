@@ -529,7 +529,6 @@ class WebsocketThread(QThread):
         html_dir = scctool.settings.casting_html_dir
         casting_data_dir = scctool.settings.casting_data_dir
         data_dir = scctool.settings.dataDir
-        tts_dir = scctool.settings.ttsDir
 
         if path in ['/', '']:
             path = "/score.html"
