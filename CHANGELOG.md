@@ -1,6 +1,25 @@
 # Changelog
 
 
+## v2.7.8 (2019-05-05)
+
+### New
+
+* Added new GSL map Cobalt.
+
+### Changes
+
+* Updated locales and mapstats.
+
+### Fix
+
+* Fixed a bug that would prevent the dynamic countdown from working.
+
+* Adding map via Liquipedia fixed.
+
+* Fixed a bug where tts would not work for intros when serving via http.
+
+
 ## v2.7.7 (2019-04-27)
 
 ### New
