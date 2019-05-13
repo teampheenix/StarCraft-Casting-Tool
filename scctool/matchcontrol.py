@@ -297,11 +297,8 @@ class MatchControl(QObject):
 
     def updateOrder(self, toIdx, fromIdx):
         """Update the order of the matches."""
-        try:
-            self.__order[toIdx], self.__order[fromIdx] =\
-                self.__order[fromIdx], self.__order[toIdx]
-        finally:
-            self.mutex.unlock()
+        self.__order[toIdx], self.__order[fromIdx] \
+                = self.__order[fromIdx], self.__order[toIdx]
 
     def removeMatch(self, ident):
         """Remove a match."""
