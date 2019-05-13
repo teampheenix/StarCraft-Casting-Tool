@@ -1,6 +1,17 @@
 # Changelog
 
 
+## v2.7.9 (2019-05-13)
+
+### Changes
+
+* Added upcoming ladder maps: Acropolis, Thunderbird, Turbo Cruise '84.
+
+### Fix
+
+* Fixed a crash that would occure when moving a match tab.
+
+
 ## v2.7.8 (2019-05-05)
 
 ### New
