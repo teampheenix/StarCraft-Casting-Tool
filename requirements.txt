@@ -8,5 +8,5 @@ pywin32 >= 224; platform_system == 'Windows'
 PyQt5 >= 5.12.2
 pytesseract >= 0.2.6; platform_system == 'Windows'
 PyUpdater >= 3.0.1
-requests >= 2.21.0
+requests >= 2.22.0
 websockets >= 7.0
