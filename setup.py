@@ -8,7 +8,7 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(name='StarCraftCastingTool',
-      version='2.7.6',
+      version='2.7.9',
       description=(''),
       long_description=long_description,
       long_description_content_type='text/markdown',
@@ -18,7 +18,7 @@ setup(name='StarCraftCastingTool',
       license='GPL-3.0',
       python_requires='>=3.6.0',
       tests_require=[
-          'pytest >= 4.5.0',
+          'pytest >= 5.0.0',
           'pytest-mock >= 1.10.4',
           'pytest-qt >= 3.2.2'],
       packages=['scctool'],

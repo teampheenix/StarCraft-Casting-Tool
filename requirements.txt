@@ -2,11 +2,11 @@ appdirs >= 1.4.3
 beautifulsoup4 >= 4.7.1
 humanize >= 0.5.1
 keyboard==0.13.3
-markdown2 >= 2.3.7
+markdown2 >= 2.3.8
 Pillow >= 6.0.0; platform_system == 'Windows'
 pywin32 >= 224; platform_system == 'Windows'
 PyQt5 >= 5.12.3
 pytesseract >= 0.2.7; platform_system == 'Windows'
-PyUpdater >= 3.0.1
+PyUpdater >= 3.1.1
 requests >= 2.22.0
 websockets >= 7.0
