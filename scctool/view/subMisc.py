@@ -776,7 +776,7 @@ class SubwindowMisc(QWidget):
                         continue
                     try:
                         QApplication.setOverrideCursor(Qt.WaitCursor)
-                        sc2map = grabber.get_map(search_str)
+                        sc2map = grabber.find_map(search_str)
                     except MapNotFound:
                         QMessageBox.critical(
                             self,

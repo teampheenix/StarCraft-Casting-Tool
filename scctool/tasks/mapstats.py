@@ -156,6 +156,7 @@ class MapStatsManager:
                 self.__maps[mymap]['size'] = None
                 self.__maps[mymap]['spawn-positions'] = None
                 self.__maps[mymap]['refreshed'] = None
+                self.__maps[mymap]['broodwar'] = False
 
         maps2refresh = list()
         maps2refresh_full = list()
@@ -282,7 +283,7 @@ class MapStatsThread(TasksThread):
         try:
             mymap = self.__fullmaps.pop()
             try:
-                liquipediaMap = self.__grabber.get_map(mymap)
+                liquipediaMap = self.__grabber.find_map(mymap)
                 stats = liquipediaMap.get_stats()
                 info = liquipediaMap.get_info()
                 data = dict()
@@ -290,6 +291,7 @@ class MapStatsThread(TasksThread):
                 data['zvp'] = stats['zvp']
                 data['pvt'] = stats['pvt']
                 data['creator'] = info['creator']
+                data['broodwar'] = liquipediaMap.is_broodwar()
                 data['size'] = info['size']
                 data['spawn-positions'] = info['spawn-positions']
                 data['refreshed'] = int(time.time())
