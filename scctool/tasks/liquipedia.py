@@ -2,6 +2,7 @@
 import logging
 import re
 import urllib.parse
+import time
 
 import requests
 from bs4 import BeautifulSoup
@@ -95,6 +96,7 @@ class LiquipediaGrabber:
         try:
             return self.get_map(map_name, False)
         except MapNotFound:
+            time.sleep(3)
             return self.get_map(map_name, True)
 
     def get_map(self, map_name, broodwar=False, retry=False):
@@ -106,6 +108,7 @@ class LiquipediaGrabber:
         params = dict()
         params['action'] = "opensearch"
         if retry:
+            time.sleep(1)
             params['search'] = str(map_name).strip() + ' LE'
         else:
             params['search'] = str(map_name).strip()
@@ -114,8 +117,14 @@ class LiquipediaGrabber:
         params['namespace'] = 0
 
         url = f'{self._base_url}/{wiki_url}/api.php'
-        data = self._session.get(
-            url, headers=self._headers, params=params).json()
+        r = self._session.get(
+            url, headers=self._headers, params=params)
+        try:
+            r.raise_for_status()
+            data = r.json()
+        except Exception:
+            raise MapNotFound
+
         try:
             liquipedia_map = data[1][0]
         except IndexError:
