@@ -1,6 +1,17 @@
 # Changelog
 
 
+## v2.7.11 (2019-08-06)
+
+### New
+
+* Added (limited) support for Broodwar maps. You can now add Broodwar maps via the Map Manager, and the map statistics are automatically refreshed.
+
+### Fix
+
+* Fixed a bug that would cause the tool to crash at the startup.
+
+
 ## v2.7.9 (2019-05-13)
 
 ### Changes
