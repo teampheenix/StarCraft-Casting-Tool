@@ -91,20 +91,8 @@ class LiquipediaGrabber:
         """Get all image sizes available for an image by using the API."""
         pass
 
-    def find_map(self, map_name):
+    def get_map(self, map_name, retry=False):
         """Search for an map."""
-        try:
-            return self.get_map(map_name, False)
-        except MapNotFound:
-            time.sleep(3)
-            return self.get_map(map_name, True)
-
-    def get_map(self, map_name, broodwar=False, retry=False):
-        """Search for an map."""
-        if broodwar:
-            wiki_url = 'starcraft'
-        else:
-            wiki_url = 'starcraft2'
         params = dict()
         params['action'] = "opensearch"
         if retry:
@@ -116,7 +104,7 @@ class LiquipediaGrabber:
         params['limit'] = 1
         params['namespace'] = 0
 
-        url = f'{self._base_url}/{wiki_url}/api.php'
+        url = f'{self._base_url}/starcraft2/api.php'
         r = self._session.get(
             url, headers=self._headers, params=params)
         try:
@@ -129,7 +117,7 @@ class LiquipediaGrabber:
             liquipedia_map = data[1][0]
         except IndexError:
             if not retry:
-                return self.get_map(map_name, broodwar=broodwar, retry=True)
+                return self.get_map(map_name, retry=True)
             else:
                 raise MapNotFound
         if map:
@@ -138,24 +126,24 @@ class LiquipediaGrabber:
             params['format'] = "json"
             params['page'] = liquipedia_map.replace(' ', '_')
 
-            url = f'{self._base_url}/{wiki_url}/api.php'
+            url = f'{self._base_url}/starcraft2/api.php'
 
             data = self._session.get(url, headers=self._headers,
                                      params=params).json()
             content = data['parse']['text']['*']
             soup = BeautifulSoup(content, 'html.parser')
-            liquipedia_map = LiquipediaMap(soup, broodwar=broodwar)
+            liquipedia_map = LiquipediaMap(soup)
             redirect = liquipedia_map.redirect()
             if liquipedia_map.is_map():
                 return liquipedia_map
             elif redirect:
-                return self.get_map(redirect, broodwar=broodwar, retry=False)
+                return self.get_map(redirect, retry=False)
             elif not retry:
-                return self.get_map(map_name, broodwar=broodwar, retry=True)
+                return self.get_map(map_name, retry=True)
             else:
                 raise MapNotFound
         elif not retry:
-            return self.get_map(map_name, broodwar=broodwar, retry=True)
+            return self.get_map(map_name, retry=True)
         else:
             raise MapNotFound
 
@@ -222,27 +210,21 @@ class LiquipediaGrabber:
 class LiquipediaMap:
     """StarCraft 2 map present on Liquipedia."""
 
-    def __init__(self, soup, broodwar):
+    def __init__(self, soup):
         """Init the map with BeautifulSoup."""
         self._soup = soup
-        self._broodwar = broodwar
-        if broodwar:
-            self._wiki_url = 'starcraft'
-        else:
-            self._wiki_url = 'starcraft2'
 
     def is_map(self):
         """Test if this is an actual map."""
         return self._soup.find(
-            href=f'/{self._wiki_url}/Template:Infobox_map') is not None
+            href='/starcraft2/Template:Infobox_map') is not None
 
     def redirect(self):
         redirect = self._soup.find("div", class_="redirectMsg")
         if redirect:
             link = redirect.find(
-                'a', attrs={
-                    'href': re.compile(f"^/{self._wiki_url}/")}).get('href')
-            return link.replace(f'/{self._wiki_url}/', '')
+                'a', attrs={'href': re.compile("^/starcraft2/")}).get('href')
+            return link.replace('/starcraft2/', '')
         else:
             return ''
 
@@ -279,10 +261,6 @@ class LiquipediaMap:
     def get_map_images(self):
         """Get map images."""
         return self._soup.find('a', class_='image')['href']
-
-    def is_broodwar(self):
-        """Returns if this a broodwar map."""
-        return self._broodwar
 
     def get_stats(self):
         """Get map statistics."""
