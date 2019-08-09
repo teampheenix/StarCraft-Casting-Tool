@@ -239,9 +239,9 @@ class MainController:
         """Reset the match data."""
         msg = ''
         try:
+            self.matchControl.selectedMatch().resetData(False)
             self.logoManager.resetTeam1Logo()
             self.logoManager.resetTeam2Logo()
-            self.matchControl.selectedMatch().resetData(False)
             self.matchControl.writeJsonFile()
             self.updateLogos(True)
             idx = self.matchControl.selectedMatchIdx()
