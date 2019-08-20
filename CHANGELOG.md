@@ -1,6 +1,19 @@
 # Changelog
 
 
+## v2.7.12 (2019-08-20)
+
+### Changes
+
+* Added new upcoming ladder maps.
+
+* Reverted Broodwar map support.
+
+### Fix
+
+* Fixed a bug, where you could get blocked from Liquipedia.
+
+
 ## v2.7.11 (2019-08-06)
 
 ### New
