@@ -6,7 +6,7 @@ markdown2 >= 2.3.8
 Pillow >= 6.1.0; platform_system == 'Windows'
 pywin32 >= 224; platform_system == 'Windows'
 PyQt5 >= 5.13.0
-pytesseract >= 0.2.7; platform_system == 'Windows'
+pytesseract >= 0.3.0; platform_system == 'Windows'
 # PyUpdater >= 3.1.1
 git+git://github.com/pyinstaller/pyinstaller@develop
 git+git://github.com/Digital-Sapphire/PyUpdater@master
