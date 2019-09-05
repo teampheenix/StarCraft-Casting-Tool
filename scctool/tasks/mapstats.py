@@ -221,7 +221,9 @@ class MapStatsManager:
                 continue
             out_data['maps'][mymap] = dict()
             out_data['maps'][mymap]['map-name'] = mymap.replace(
-                'Dreamcatcher', 'Dream<wbr>catcher')
+                'Dreamcatcher', 'Dream&shy;catcher')
+            out_data['maps'][mymap]['map-name'] = mymap.replace(
+                'Thunderbird', 'Thunder&shy;bird')
             if out_data['map'] is None:
                 out_data['map'] = mymap
             if scctool.settings.config.parser.getboolean(
