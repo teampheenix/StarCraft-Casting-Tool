@@ -41,12 +41,16 @@ class MatchFormatKoprulu(MatchFormat):
 
     def applyFormat(self):
         """Apply format."""
+        # Very old format:
         # self._matchData.setCustom(5, False, False)
         # self._matchData.setLabel(4, "Ace Map")
         # self._matchData.setAce(4, True)
         # self._matchData.setMinSets(3)
-        self._matchData.setCustom(7, True, False)
-        self._matchData.setMinSets(4)
+        # Old format:
+        #self._matchData.setCustom(7, True, False)
+        #self._matchData.setMinSets(4)
+        self._matchData.setCustom(7, False, False, ace_sets=1)
+        self._matchData.setMinSets(6)
         self._matchData.setURL(self._url)
         self._matchData.setLeague(self._name)
         self._matchData.writeJsonFile()
