@@ -1,6 +1,17 @@
 # Changelog
 
 
+## v2.7.13 (2019-09-24)
+
+### Changes
+
+* Updated Koprulu Team League Format.
+
+### Fix
+
+* 'Thunderbird' is now wrapped correctly in the Mapstats browser source.
+
+
 ## v2.7.12 (2019-08-20)
 
 ### Changes
