@@ -1,6 +1,19 @@
 # Changelog
 
 
+## v2.7.14 (2019-11-16)
+
+### Changes
+
+* Removed 'Winner Highlight Color' as this color can only be controlled via the css-styles.
+
+* Added upcoming 1vs1 ladder maps Eternal Empire, Nightshade, Simulacrum, and Zen.
+
+### Fix
+
+* Increased compatibility with Python 3.8.
+
+
 ## v2.7.13 (2019-09-24)
 
 ### Changes
