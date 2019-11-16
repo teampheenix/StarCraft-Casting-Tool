@@ -269,12 +269,12 @@ class SubwindowStyles(QWidget):
                 "MapIcons", "default_border_color"),
             "#f29b00")
         layout.addLayout(self.default_color)
-        self.winner_color = ColorLayout(
-            self, _("Winner Highlight:"),
-            scctool.settings.config.parser.get(
-                "MapIcons", "winner_highlight_color"),
-            "#f29b00")
-        layout.addLayout(self.winner_color)
+        # self.winner_color = ColorLayout(
+        #     self, _("Winner Highlight:"),
+        #     scctool.settings.config.parser.get(
+        #         "MapIcons", "winner_highlight_color"),
+        #     "#f29b00")
+        # layout.addLayout(self.winner_color)
         self.win_color = ColorLayout(
             self, _("Win:"),
             scctool.settings.config.parser.get("MapIcons", "win_color"),
@@ -377,9 +377,9 @@ class SubwindowStyles(QWidget):
             scctool.settings.config.parser.set(
                 "MapIcons", "undecided_color",
                 self.undecided_color.getColor())
-            scctool.settings.config.parser.set(
-                "MapIcons", "winner_highlight_color",
-                self.winner_color.getColor())
+            # scctool.settings.config.parser.set(
+            #     "MapIcons", "winner_highlight_color",
+            #     self.winner_color.getColor())
             scctool.settings.config.parser.set(
                 "MapIcons", "win_color",
                 self.win_color.getColor())
