@@ -692,8 +692,8 @@ class MainWindow(QMainWindow):
             self.pb_openBrowser = QPushButton(
                 _("Open in Browser"))
             self.pb_openBrowser.clicked.connect(self.openBrowser_click)
-            width = (self.scoreWidth + 2 * self.raceWidth + 2
-                     * self.mimumLineEditWidth + 4 * 6) / 2 - 2
+            width = int((self.scoreWidth + 2 * self.raceWidth + 2
+                         * self.mimumLineEditWidth + 4 * 6) / 2 - 2)
             self.pb_openBrowser.setMinimumWidth(width)
 
             container = QHBoxLayout()
@@ -931,7 +931,7 @@ class MainWindow(QMainWindow):
             self.cb_minSets.addItem(str(idx + 1))
 
         if refresh:
-            self.cb_minSets.setCurrentIndex(regular_sets / 2)
+            self.cb_minSets.setCurrentIndex(int(regular_sets / 2))
         else:
             self.cb_minSets.setCurrentIndex(min(old_idx, total_sets - 1))
 

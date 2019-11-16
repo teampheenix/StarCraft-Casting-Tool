@@ -345,8 +345,8 @@ class MatchDataWidget(QWidget):
                         for i in range(self.max_no_vetoes)]
         self.row_label = [QLabel('') for y in range(rows)]
         for veto_idx in range(self.max_no_vetoes):
-            row = veto_idx / 2
-            col = (veto_idx % 2) * 2
+            row = int(veto_idx / 2)
+            col = int((veto_idx % 2) * 2)
             veto_layout = QHBoxLayout()
             self.le_veto_maps[veto_idx].textModified.connect(
                 lambda veto_idx=veto_idx: self.map_veto_changed(veto_idx))
@@ -376,7 +376,7 @@ class MatchDataWidget(QWidget):
             veto_layout.addWidget(self.sl_veto[veto_idx])
             box_layout.addLayout(veto_layout, row, col)
         for idx in range(int(self.max_no_vetoes / 2)):
-            self.row_label[idx].setFixedWidth(self.labelWidth / 2 + 5)
+            self.row_label[idx].setFixedWidth(int(self.labelWidth / 2) + 5)
             box_layout.addWidget(self.row_label[idx], idx, 1)
         self.veto_groupbox.setLayout(box_layout)
 
