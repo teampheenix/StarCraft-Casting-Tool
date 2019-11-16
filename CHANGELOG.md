@@ -3,6 +3,10 @@
 
 ## v2.7.14 (2019-11-16)
 
+### New
+
+* Switched to Python 3.8.
+
 ### Changes
 
 * Removed 'Winner Highlight Color' as this color can only be controlled via the css-styles.
