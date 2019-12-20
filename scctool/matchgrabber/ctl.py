@@ -25,13 +25,14 @@ class MatchGrabber(MatchGrabberParent):
         """Init match grabber."""
         super().__init__(*args)
         self._urlprefix = "https://www.choboteamleague.com/"
-        self._apiprefix = "https://alpha.tl/api?match="
-        self._url = self._matchData.getURL()
+        self._apiprefix = ""
+        self._url = self._matchData._url
         self.re_race = re.compile(
             r'^https?:\/\/i\.imgur\.com\/([^\/\.\s]+)\.png$')
         self.re_heading = re.compile(
             r'.*S(?:eason)?\s*(\d+)\s+Week\s(\d+).*$')
-        self.re_teams = re.compile(r'^\s*(\S+)\s+vs\.?\s+(\S+)\s*$')
+        self.re_teams = re.compile(
+            r'([a-zA-Z0-9_\-]+)\s+vs\.?\s+([a-zA-Z0-9_\-]+)')
         self.team_table = {
             'QTp2T': 'Cutie Patootie',
             'JaMiT': 'JaM iT Gaming',
@@ -51,7 +52,7 @@ class MatchGrabber(MatchGrabberParent):
 
     def grabData(self, metaChange=False, logoManager=None):
         """Grab match data."""
-        self._url = self._matchData.getURL()
+        self._url = self._matchData._url
         matches = self.parse_article()
         if(len(matches) > 0):
             match_list = []
@@ -80,6 +81,7 @@ class MatchGrabber(MatchGrabberParent):
                                       self._matchData.metaChanged):
             self._matchData.setNoSets(7, 3, resetPlayers=overwrite)
             self._matchData.setMinSets(9)
+            self._matchData.setAllKill(False)
             self._matchData.setSolo(False)
             self._matchData.setNoVetoes(0)
             self._matchData.resetLabels()
@@ -181,7 +183,7 @@ class MatchGrabber(MatchGrabberParent):
     def parse_match(self, match, league, season, week):
         """Parse a single match."""
         match_data = {}
-        re_match = self.re_teams.match(match.text.strip())
+        re_match = self.re_teams.search(match.text.strip())
         match_data['league'] = league
         match_data['season'] = season
         match_data['week'] = week

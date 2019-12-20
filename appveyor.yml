@@ -13,6 +13,11 @@ environment:
           PYTHON: "C:\\Python37-x64"
           PYTHON_VERSION: "3.7"
           PYTHON_ARCH: "64"
+        - JOB: "3.8 64-bit"
+          TOXENV: "py38"
+          PYTHON: "C:\\Python38-x64"
+          PYTHON_VERSION: "3.8"
+          PYTHON_ARCH: "64"
 
 platform:
   - x64

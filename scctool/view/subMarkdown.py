@@ -42,12 +42,12 @@ class SubwindowMarkdown(QWidget):
 
         self.setWindowTitle(title)
 
-        self.resize(QSize(mainWindow.size().width() * 0.9,
+        self.resize(QSize(int(mainWindow.size().width() * 0.9),
                           self.sizeHint().height()))
-        relativeChange = QPoint(mainWindow.size().width() / 2,
-                                mainWindow.size().height() / 3)\
-            - QPoint(self.size().width() / 2,
-                     self.size().height() / 3)
+        relativeChange = QPoint(int(mainWindow.size().width() / 2),
+                                int(mainWindow.size().height() / 3))\
+            - QPoint(int(self.size().width() / 2),
+                     int(self.size().height() / 3))
         self.move(mainWindow.pos() + relativeChange)
 
     def createMarkdownViewer(self, markdown):

@@ -1,6 +1,129 @@
 # Changelog
 
 
+## v2.7.14 (2019-11-16)
+
+### New
+
+* Switched to Python 3.8.
+
+### Changes
+
+* Removed 'Winner Highlight Color' as this color can only be controlled via the css-styles.
+
+* Added upcoming 1vs1 ladder maps Eternal Empire, Nightshade, Simulacrum, and Zen.
+
+### Fix
+
+* Increased compatibility with Python 3.8.
+
+
+## v2.7.13 (2019-09-24)
+
+### Changes
+
+* Updated Koprulu Team League Format.
+
+### Fix
+
+* 'Thunderbird' is now wrapped correctly in the Mapstats browser source.
+
+
+## v2.7.12 (2019-08-20)
+
+### Changes
+
+* Added new upcoming ladder maps.
+
+* Reverted Broodwar map support.
+
+### Fix
+
+* Fixed a bug, where you could get blocked from Liquipedia.
+
+
+## v2.7.11 (2019-08-06)
+
+### New
+
+* Added (limited) support for Broodwar maps. You can now add Broodwar maps via the Map Manager, and the map statistics are automatically refreshed.
+
+### Fix
+
+* Fixed a bug that would cause the tool to crash at the startup.
+
+
+## v2.7.9 (2019-05-13)
+
+### Changes
+
+* Added upcoming ladder maps: Acropolis, Thunderbird, Turbo Cruise '84.
+
+### Fix
+
+* Fixed a crash that would occure when moving a match tab.
+
+
+## v2.7.8 (2019-05-05)
+
+### New
+
+* Added new GSL map Cobalt.
+
+### Changes
+
+* Updated locales and mapstats.
+
+### Fix
+
+* Fixed a bug that would prevent the dynamic countdown from working.
+
+* Adding map via Liquipedia fixed.
+
+* Fixed a bug where tts would not work for intros when serving via http.
+
+
+## v2.7.7 (2019-04-27)
+
+### New
+
+* Added `ticker.txt` to `casting_data`. This file contains all non-zero score matches defined by your open tabs in the form `Team A 1-2 TeamB | TeamC 1-0 TeamD | ` to be readily included as a ticker for all latest results.
+
+### Changes
+
+* Added the China Team Championship Format (3xBo2, Bo1 Ace) to the Custom Formats. Updated the ESL Team League Format.
+
+### Fix
+
+* Fixed a bug where the map name in the vetos browser source would not be fully visible.
+
+
+## v2.7.6 (2019-04-06)
+
+### New
+
+* Added Countdown Settings Tab in Misc Settings Menu.
+
+* Added casting_data/countdown.txt containing a custom text depending on wheter the countdown is running or finished.
+
+* Added option to update static countdown via the match grabber (AlphaTL only).
+
+### Changes
+
+* Updated to Python 3.7.3.
+
+
+## v2.7.5 (2019-03-15)
+
+### Fix
+
+* Fixed another instance where the Chobo Team League match grabber would not worker properly.
+
+* Fixed a bug where match grabber would not overwrite old data.
+
+* Fixed a bug where the Chobo Team League match grabber would not work.
+
+
 ## v2.7.4 (2019-02-22)
 
 ### Fix

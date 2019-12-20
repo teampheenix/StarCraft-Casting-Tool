@@ -86,6 +86,10 @@ class CountdownWidget(QWidget):
         today.setTime(self.te_datetime.time())
         self.te_datetime.setDateTime(today)
 
+    def setFromTimestamp(self, timestamp):
+        """Set time and date based on timestamp."""
+        self.te_datetime.setDateTime(QDateTime.fromTime_t(int(timestamp)))
+
     def setDuration(self, duration):
         """Set the duration."""
         self.te_duration.setTime(QTime(0, duration, 0))

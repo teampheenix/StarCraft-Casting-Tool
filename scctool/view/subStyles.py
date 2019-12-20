@@ -12,7 +12,6 @@ import scctool.settings
 import scctool.settings.translation
 from scctool.view.widgets import ColorLayout, StyleComboBox, TextPreviewer
 
-
 # create logger
 module_logger = logging.getLogger(__name__)
 _ = scctool.settings.translation.gettext
@@ -62,12 +61,12 @@ class SubwindowStyles(QWidget):
             mainLayout.addLayout(self.buttonGroup)
             self.setLayout(mainLayout)
 
-            self.resize(QSize(mainWindow.size().width() * .80,
+            self.resize(QSize(int(mainWindow.size().width() * 0.8),
                               self.sizeHint().height()))
-            relativeChange = + QPoint(mainWindow.size().width() / 2,
-                                      mainWindow.size().height() / 3)\
-                - QPoint(self.size().width() / 2,
-                         self.size().height() / 3)
+            relativeChange = + QPoint(int(mainWindow.size().width() / 2),
+                                      int(mainWindow.size().height() / 3))\
+                - QPoint(int(self.size().width() / 2),
+                         int(self.size().height() / 3))
             self.move(mainWindow.pos() + relativeChange)
 
             self.setWindowTitle(_("Style Settings"))
@@ -132,15 +131,15 @@ class SubwindowStyles(QWidget):
         try:
             container = QHBoxLayout()
             self.qb_landscapeStyle = StyleComboBox(
-                scctool.settings.casting_html_dir +
-                "/src/css/mapicons_landscape",
+                scctool.settings.casting_html_dir
+                + "/src/css/mapicons_landscape",
                 "mapicons_landscape")
             self.qb_landscapeStyle.connect2WS(
                 self.controller, 'mapicons_landscape')
             button = QPushButton(_("Show in Browser"))
             button.clicked.connect(lambda: self.openHTML(
-                scctool.settings.casting_html_dir +
-                "/mapicons_landscape_1.html"))
+                scctool.settings.casting_html_dir
+                + "/mapicons_landscape_1.html"))
             container.addWidget(self.qb_landscapeStyle)
             container.addWidget(button)
             layout.addRow(QLabel(
@@ -270,12 +269,12 @@ class SubwindowStyles(QWidget):
                 "MapIcons", "default_border_color"),
             "#f29b00")
         layout.addLayout(self.default_color)
-        self.winner_color = ColorLayout(
-            self, _("Winner Highlight:"),
-            scctool.settings.config.parser.get(
-                "MapIcons", "winner_highlight_color"),
-            "#f29b00")
-        layout.addLayout(self.winner_color)
+        # self.winner_color = ColorLayout(
+        #     self, _("Winner Highlight:"),
+        #     scctool.settings.config.parser.get(
+        #         "MapIcons", "winner_highlight_color"),
+        #     "#f29b00")
+        # layout.addLayout(self.winner_color)
         self.win_color = ColorLayout(
             self, _("Win:"),
             scctool.settings.config.parser.get("MapIcons", "win_color"),
@@ -324,8 +323,8 @@ class SubwindowStyles(QWidget):
         label = QLabel(
             _("Warning: Using a custom font instead of the regular font"
               " defined in the Icon Styles can lead to unitentional"
-              " appereance.") +
-            _("The proper way is to create a custom skin."))
+              " appereance.")
+            + _("The proper way is to create a custom skin."))
         label.setWordWrap(True)
         label.setAlignment(Qt.AlignJustify)
         layout.addWidget(label, 1, 0, 1, 2)
@@ -378,9 +377,9 @@ class SubwindowStyles(QWidget):
             scctool.settings.config.parser.set(
                 "MapIcons", "undecided_color",
                 self.undecided_color.getColor())
-            scctool.settings.config.parser.set(
-                "MapIcons", "winner_highlight_color",
-                self.winner_color.getColor())
+            # scctool.settings.config.parser.set(
+            #     "MapIcons", "winner_highlight_color",
+            #     self.winner_color.getColor())
             scctool.settings.config.parser.set(
                 "MapIcons", "win_color",
                 self.win_color.getColor())

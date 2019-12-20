@@ -2,6 +2,7 @@
 import logging
 import re
 import urllib.parse
+import time
 
 import requests
 from bs4 import BeautifulSoup
@@ -95,6 +96,7 @@ class LiquipediaGrabber:
         params = dict()
         params['action'] = "opensearch"
         if retry:
+            time.sleep(1)
             params['search'] = str(map_name).strip() + ' LE'
         else:
             params['search'] = str(map_name).strip()
@@ -103,8 +105,14 @@ class LiquipediaGrabber:
         params['namespace'] = 0
 
         url = f'{self._base_url}/starcraft2/api.php'
-        data = self._session.get(
-            url, headers=self._headers, params=params).json()
+        r = self._session.get(
+            url, headers=self._headers, params=params)
+        try:
+            r.raise_for_status()
+            data = r.json()
+        except Exception:
+            raise MapNotFound
+
         try:
             liquipedia_map = data[1][0]
         except IndexError:
@@ -116,7 +124,7 @@ class LiquipediaGrabber:
             params = dict()
             params['action'] = "parse"
             params['format'] = "json"
-            params['page'] = liquipedia_map
+            params['page'] = liquipedia_map.replace(' ', '_')
 
             url = f'{self._base_url}/starcraft2/api.php'
 
@@ -125,8 +133,11 @@ class LiquipediaGrabber:
             content = data['parse']['text']['*']
             soup = BeautifulSoup(content, 'html.parser')
             liquipedia_map = LiquipediaMap(soup)
+            redirect = liquipedia_map.redirect()
             if liquipedia_map.is_map():
                 return liquipedia_map
+            elif redirect:
+                return self.get_map(redirect, retry=False)
             elif not retry:
                 return self.get_map(map_name, retry=True)
             else:
@@ -208,6 +219,15 @@ class LiquipediaMap:
         return self._soup.find(
             href='/starcraft2/Template:Infobox_map') is not None
 
+    def redirect(self):
+        redirect = self._soup.find("div", class_="redirectMsg")
+        if redirect:
+            link = redirect.find(
+                'a', attrs={'href': re.compile("^/starcraft2/")}).get('href')
+            return link.replace('/starcraft2/', '')
+        else:
+            return ''
+
     def get_name(self):
         """Get the name of the map."""
         infobox = self._soup.find("div", class_="fo-nttax-infobox")
@@ -215,6 +235,7 @@ class LiquipediaMap:
         map_name = map_name.replace("[e]", "")
         map_name = map_name.replace("[h]", "")
         map_name = map_name.replace("LE", "")
+        map_name = map_name.replace("GSL", "")
         return map_name.strip()
 
     def get_info(self):

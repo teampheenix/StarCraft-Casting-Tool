@@ -3,9 +3,10 @@ var isopen = false;
 var reconnectIntervalMs = 5000;
 var data = {};
 var duration = 0;
-var countDownDate = new Date("Nov 18, 2018 13:27:00").getTime();
+var countDownDate = new Date("Apr 4, 2020 20:00:00").getTime();
 var interval = null;
 var controller = new Controller(profile, "countdown");
+var send_msg = "";
 
 Number.prototype.pad = function(size) {
   var s = String(this);
@@ -39,6 +40,11 @@ function count() {
   if (distance < 0) {
     printCountDown(0, 0, 0, 0);
     clearInterval(interval);
+    try {
+      socket.send('countdown_finished');
+    } catch (e) {
+      send_msg = 'countdown_finished';
+    }
   } else {
     printCountDown(days, hours, minutes, seconds);
   }
@@ -48,6 +54,11 @@ function startCounter() {
   if (!data.static) {
     countDownDate = new Date().getTime() + duration + 500;
     interval = setInterval(count, 1000);
+    try {
+      socket.send('countdown_started');
+    } catch (e) {
+      send_msg = 'countdown_started';
+    }
   }
 }
 
@@ -55,9 +66,7 @@ function printCountDown(days, hours, minutes, seconds) {
   // Output the result in an element with id="demo"
   var countdownStr;
   if (days === 0 && hours === 0 && minutes === 0 && seconds === 0) {
-    console.log("replacement");
     countdownStr = data.replacement;
-    console.log(countdownStr);
   } else if (days > 0) {
     countdownStr = days + "d " + hours.pad() + "h " + minutes.pad() + "m " + seconds.pad() + "s";
   } else if (hours > 0) {
@@ -94,6 +103,7 @@ function storeData(scope = null) {
 }
 
 function processData() {
+  console.log("Process data", data);
   clearInterval(interval);
 
   $("#description").text(data.desc);
@@ -107,7 +117,11 @@ function processData() {
     duration = ((parseInt(hms[0]) * 60 + parseInt(hms[1])) * 60 + parseInt(hms[2])) * 1000;
     countDownDate = new Date().getTime() + duration;
   }
-
+  try {
+    socket.send('countdown_started');
+  } catch (e) {
+    send_msg = 'countdown_started';
+  }
   if (data.static || data.restart) {
     interval = setInterval(count, 1000);
   } else {
@@ -123,6 +137,10 @@ function connectWebsocket() {
   socket.onopen = function() {
     console.log("Connected!");
     isopen = true;
+    if (send_msg !== "") {
+      socket.send(send_msg);
+      send_msg = "";
+    }
   }
 
   socket.onmessage = function(message) {

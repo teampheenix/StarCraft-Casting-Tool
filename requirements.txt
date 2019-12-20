@@ -1,13 +1,14 @@
 appdirs >= 1.4.3
-beautifulsoup4 >= 4.7.1
+beautifulsoup4 >= 4.8.1
 humanize >= 0.5.1
-keyboard == 0.13.2
-markdown2 >= 2.3.7
-Pillow >= 5.4.1; platform_system == 'Windows'
-pywin32 >= 224; platform_system == 'Windows'
-PyQt5 >= 5.11.3
-pytesseract >= 0.2.6; platform_system == 'Windows'
-# PyUpdater >= 2.5.4
-git+git://github.com/2press/PyUpdater@my-admin-fix
-requests >= 2.21.0
-websockets >= 7.0
+keyboard==0.13.4
+markdown2 >= 2.3.8
+Pillow >= 6.2.1; platform_system == 'Windows'
+pywin32 >= 227; platform_system == 'Windows'
+PyQt5 >= 5.14.0
+pytesseract >= 0.3.0; platform_system == 'Windows'
+# PyUpdater >= 3.1.1
+git+git://github.com/pyinstaller/pyinstaller@develop
+git+git://github.com/Digital-Sapphire/PyUpdater@master
+requests >= 2.22.0
+websockets >= 8.1

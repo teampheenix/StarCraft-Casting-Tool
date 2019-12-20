@@ -4,7 +4,7 @@ import logging
 from collections import OrderedDict
 from time import time
 
-from PyQt5.QtCore import QObject, pyqtSignal, QMutex
+from PyQt5.QtCore import QMutex, QObject, pyqtSignal
 
 import scctool.settings
 import scctool.settings.translation
@@ -23,6 +23,7 @@ class MatchControl(QObject):
 
     dataChanged = pyqtSignal(str, object)
     metaChanged = pyqtSignal()
+    tickerChanged = pyqtSignal()
     scopes = {}
     mutex = QMutex(QMutex.Recursive)
 
@@ -49,8 +50,8 @@ class MatchControl(QObject):
                 if isinstance(data, dict):
                     if ('matches' not in data
                             or 'active' not in data
-                            or 'selected' not in data
-                            or 'order' not in data):
+                            or'selected' not in data
+                            or'order' not in data):
                         data = {'matches': {new_id: data},
                                 'active': new_id,
                                 'selected': new_id,
@@ -136,6 +137,8 @@ class MatchControl(QObject):
             match = MatchData(self, self.__controller, ident, data)
             self.__matches[ident] = match
             self.__order.append(ident)
+            self.__matches[ident].dataChanged.connect(
+                self.__handleTickerSignal)
             return match
         finally:
             self.mutex.unlock()
@@ -160,7 +163,8 @@ class MatchControl(QObject):
         """Select a match."""
         self.mutex.lock()
         try:
-            if ident in self.__matches.keys() and self.__selectedMatch != ident:
+            if (ident in self.__matches.keys()
+                    and self.__selectedMatch != ident):
                 self.__selectedMatch = ident
                 module_logger.info('Selected match {}'.format(ident))
                 return True
@@ -176,7 +180,8 @@ class MatchControl(QObject):
             if ident in self.__matches.keys() and self.__activeMatch != ident:
                 old_ident = self.__activeMatch
                 self.__activeMatch = ident
-                if old_ident is not None and old_ident in self.__matches.keys():
+                if (old_ident is not None
+                        and old_ident in self.__matches.keys()):
                     try:
                         self.__matches[old_ident].metaChanged.disconnect()
                     except TypeError:
@@ -185,6 +190,8 @@ class MatchControl(QObject):
                         self.__matches[old_ident].dataChanged.disconnect()
                     except TypeError:
                         module_logger.exception("message")
+                    self.__matches[old_ident].dataChanged.connect(
+                        self.__handleTickerSignal)
                 self.__controller.placeholderSetup()
                 self.__matches[ident].metaChanged.connect(
                     self.__handleMetaSignal)
@@ -200,6 +207,10 @@ class MatchControl(QObject):
 
     def __handleMetaSignal(self):
         self.metaChanged.emit()
+
+    def __handleTickerSignal(self, *args):
+        if(args[0] in ['team', 'player', 'score']):
+            self.tickerChanged.emit()
 
     def getMatch(self, ident):
         """Get a match by id."""
@@ -257,6 +268,21 @@ class MatchControl(QObject):
         finally:
             self.mutex.unlock()
 
+    def getTickerText(self):
+        """Get ticker text (Team A 2-0 Team B) from all tabs."""
+        matches = []
+        for match in self.getMatches():
+            score = match.getScore()
+            if(score[0] + score[1] == 0):
+                continue
+            player1 = match.getTeamOrPlayer(0)
+            player2 = match.getTeamOrPlayer(1)
+            if(player1.lower() == 'tbd' or player2.lower() == 'tbd'):
+                continue
+            text = (f'{player1} {score[0]}-{score[1]} {player2} | ')
+            matches.append(text)
+        return ''.join(matches)
+
     @classmethod
     def _uniqid(cls):
         return hex(int(time() * 10000000))[10:]
@@ -271,11 +297,8 @@ class MatchControl(QObject):
 
     def updateOrder(self, toIdx, fromIdx):
         """Update the order of the matches."""
-        try:
-            self.__order[toIdx], self.__order[fromIdx] =\
-                self.__order[fromIdx], self.__order[toIdx]
-        finally:
-            self.mutex.unlock()
+        self.__order[toIdx], self.__order[fromIdx] \
+                = self.__order[fromIdx], self.__order[toIdx]
 
     def removeMatch(self, ident):
         """Remove a match."""
@@ -298,3 +321,4 @@ class MatchControl(QObject):
                 return new_index
         finally:
             self.mutex.unlock()
+        self.tickerChanged.emit()
