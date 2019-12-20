@@ -189,10 +189,10 @@ class MapDownloader(QProgressDialog):
 
         self.resize(QSize(
             mainWindow.size().width() * 0.8, self.sizeHint().height()))
-        relativeChange = QPoint(mainWindow.size().width() / 2,
-                                mainWindow.size().height() / 3)\
-            - QPoint(self.size().width() / 2,
-                     self.size().height() / 3)
+        relativeChange = QPoint(int(mainWindow.size().width() / 2),
+                                int(mainWindow.size().height() / 3))\
+            - QPoint(int(self.size().width() / 2),
+                     int(self.size().height() / 3))
         self.move(mainWindow.pos() + relativeChange)
 
     def download(self):
@@ -311,10 +311,10 @@ class HotkeyRecorder(QProgressDialog):
 
         self.resize(QSize(
             mainWindow.size().width() * 0.8, self.sizeHint().height()))
-        relativeChange = QPoint(mainWindow.size().width() / 2,
-                                mainWindow.size().height() / 3)\
-            - QPoint(self.size().width() / 2,
-                     self.size().height() / 3)
+        relativeChange = QPoint(int(mainWindow.size().width() / 2),
+                                int(mainWindow.size().height() / 3))\
+            - QPoint(int(self.size().width() / 2),
+                     int(self.size().height() / 3))
         self.move(mainWindow.pos() + relativeChange)
 
     def run(self):
@@ -370,10 +370,10 @@ class LogoDownloader(QProgressDialog):
 
         self.resize(QSize(
             mainWindow.size().width() * 0.8, self.sizeHint().height()))
-        relativeChange = QPoint(mainWindow.size().width() / 2,
-                                mainWindow.size().height() / 3)\
-            - QPoint(self.size().width() / 2,
-                     self.size().height() / 3)
+        relativeChange = QPoint(int(mainWindow.size().width() / 2),
+                                int(mainWindow.size().height() / 3))\
+            - QPoint(int(self.size().width() / 2),
+                     int(self.size().height() / 3))
         self.move(mainWindow.pos() + relativeChange)
 
     def download(self):
@@ -426,10 +426,10 @@ class ToolUpdater(QProgressDialog):
 
         self.resize(QSize(
             mainWindow.size().width() * 0.8, self.sizeHint().height()))
-        relativeChange = QPoint(mainWindow.size().width() / 2,
-                                mainWindow.size().height() / 3)\
-            - QPoint(self.size().width() / 2,
-                     self.size().height() / 3)
+        relativeChange = QPoint(int(mainWindow.size().width() / 2),
+                                int(mainWindow.size().height() / 3))\
+            - QPoint(int(self.size().width() / 2),
+                     int(self.size().height() / 3))
         self.move(mainWindow.pos() + relativeChange)
         self.show()
 
@@ -973,12 +973,12 @@ class GenericProgressDialog(QProgressDialog):
         self.setRange(0, 100)
         self.setValue(0)
 
-        self.resize(QSize(main_window.size().width() * 0.66,
+        self.resize(QSize(int(main_window.size().width() * 0.66),
                           self.sizeHint().height()))
-        relativeChange = QPoint(main_window.size().width() / 2,
-                                main_window.size().height() / 3)\
-            - QPoint(self.size().width() / 2,
-                     self.size().height() / 3)
+        relativeChange = QPoint(int(main_window.size().width() / 2),
+                                int(main_window.size().height() / 3))\
+            - QPoint(int(self.size().width() / 2),
+                     int(self.size().height() / 3))
         self.move(main_window.pos() + relativeChange)
 
         self.show()
@@ -1017,9 +1017,9 @@ class InitialUpdater(QProgressDialog):
         m_width = self.size().width()
         m_height = self.size().height()
         self.resize(QSize(self.sizeHint().width(), self.sizeHint().height()))
-        relativeChange = QPoint(m_width / 2, m_height / 2)\
-            - QPoint(self.size().width() / 2,
-                     self.size().height() / 2)
+        relativeChange = QPoint(int(m_width / 2), int(m_height / 2))\
+            - QPoint(int(self.size().width() / 2),
+                     int(self.size().height() / 2))
         self.move(self.pos() + relativeChange)
 
         self.show()

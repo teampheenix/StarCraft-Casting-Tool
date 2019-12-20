@@ -154,6 +154,9 @@ function insertData(i){
   }
 
   $(icon).find("div.mapname > span").text(vetodata["map_name"]);
+  $(icon).find(".text-fill").textfill({
+    maxFontPixels: 80
+  });
   var image = $(icon).find("div.map");
   if (vetodata["map_name"] === "TBD" || vetodata["map_img"] === "TBD") {
     image.addClass("tbd");

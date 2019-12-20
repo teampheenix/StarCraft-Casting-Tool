@@ -76,14 +76,14 @@ def findTesserAct(
         default="C:\\Program Files (x86)\\Tesseract-OCR\\tesseract.exe"):
     """Search for Tesseract exceutable via registry."""
     try:
-        if(platform.system().lower() != "windows"):
+        if (platform.system().lower() != "windows"):
             return default
         else:
             import winreg
             key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE,
                                  "SOFTWARE\\WOW6432Node\\Tesseract-OCR")
-            return os.path.normpath(winreg.QueryValueEx(key, "Path")[0] +
-                                    '\\tesseract.exe')
+            return os.path.normpath(
+                winreg.QueryValueEx(key, "Path")[0] + '\\tesseract.exe')
     except Exception:
         return default
 
@@ -91,11 +91,11 @@ def findTesserAct(
 def getTesserAct():
     """Get Tesseract exceutable via config or registry."""
     tesseract = this.parser.get("SCT", "tesseract")
-    if(os.path.isfile(tesseract)):
+    if (os.path.isfile(tesseract)):
         return os.path.normpath(tesseract)
     else:
         new = findTesserAct(tesseract)
-        if(new != tesseract):
+        if (new != tesseract):
             this.parser.set("SCT", "tesseract", new)
         return os.path.normpath(new)
 
@@ -190,6 +190,9 @@ def setDefaultConfigAll():
     setDefaultConfig("Countdown", 'duration', '00:05:00')
     setDefaultConfig("Countdown", 'datetime', '2018-11-18 20:00')
     setDefaultConfig("Countdown", 'static', 'False')
+    setDefaultConfig("Countdown", 'matchgrabber_update', 'False')
+    setDefaultConfig("Countdown", 'pre_txt', 'Countdown is running...')
+    setDefaultConfig("Countdown", 'post_txt', 'Countdown is over!')
 
     setDefaultConfig("Vetoes", "padding", "2.0")
 
@@ -244,8 +247,8 @@ def renameConfigOptions():
 def nightbotIsValid():
     """Check if nightbot data is valid."""
     from scctool.settings import nightbot_commands
-    return (len(this.parser.get("Nightbot", "token")) > 0 and
-            len(nightbot_commands) > 0)
+    return (len(this.parser.get("Nightbot", "token")) > 0
+            and len(nightbot_commands) > 0)
 
 
 def twitchIsValid():
@@ -257,14 +260,16 @@ def twitchIsValid():
 
 def getMyTeams():
     """Enpack my teams."""
-    return list(map(str.strip,
-                    str(this.parser.get("SCT", "myteams")).split(',')))
+    return list(
+        map(str.strip,
+            str(this.parser.get("SCT", "myteams")).split(',')))
 
 
 def getBlacklist():
     """Enpack my teams."""
-    return list(map(str.strip,
-                    str(this.parser.get("SCT", "blacklist")).split(',')))
+    return list(
+        map(str.strip,
+            str(this.parser.get("SCT", "blacklist")).split(',')))
 
 
 def getMyPlayers(append=False):
@@ -272,7 +277,7 @@ def getMyPlayers(append=False):
     players = list(
         map(str.strip,
             str(this.parser.get("SCT", "commonplayers")).split(',')))
-    if(append):
+    if (append):
         players.append("TBD")
     return players
 

@@ -467,7 +467,8 @@ class TestGUI(object):
                     logo_dialog.mysubwindow.qle_search, team, True)
                 assert (logo_dialog.mysubwindow.qle_search.text()
                         == team)
-                # There is an error that is only fixed in PyQt5.12.2:
+                # There is an error that should have been fixed in PyQt5.12.2,
+                # but isn't?
                 # self.qtbot.mouseClick(
                 #     logo_dialog.mysubwindow.searchButton, Qt.LeftButton)
                 #

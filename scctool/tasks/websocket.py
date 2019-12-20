@@ -14,7 +14,6 @@ from PyQt5.QtCore import QThread, pyqtSignal
 import scctool.settings
 import scctool.settings.translation
 
-
 # create logger
 module_logger = logging.getLogger(__name__)
 _ = scctool.settings.translation.gettext
@@ -277,6 +276,12 @@ class WebsocketThread(QThread):
                 if msg == self.intro_state:
                     self.intro_state = ''
                     self.introShown.emit()
+                elif msg == 'countdown_started':
+                    module_logger.info("Countdown started")
+                    self.__controller.textFilesThread.put('cd_start')
+                elif msg == 'countdown_finished':
+                    module_logger.info("Countdown finished")
+                    self.__controller.textFilesThread.put('cd_end')
             except asyncio.TimeoutError:
                 try:
                     pong_waiter = await websocket.ping()
@@ -540,6 +545,7 @@ class WebsocketThread(QThread):
 
         path = path[1:]
         module_logger.info(f'HTTP request for {path}')
+        tts = False
 
         try:
             if path.endswith(".html"):
@@ -558,6 +564,7 @@ class WebsocketThread(QThread):
                 mimetype = 'image/gif'
             elif path.endswith(".wav"):
                 mimetype = 'audio/x-wav'
+                tts = True
             elif path.endswith(".mp3"):
                 mimetype = 'audio/mpeg'
             elif path.endswith(".js"):
@@ -577,6 +584,9 @@ class WebsocketThread(QThread):
             if not sendReply:
                 file = scctool.settings.getAbsPath(
                     os.path.join(casting_data_dir, path))
+                sendReply = os.path.isfile(file)
+            if not sendReply and tts:
+                file = scctool.settings.getAbsPath(path)
                 sendReply = os.path.isfile(file)
 
             if path.count('..') > 1:

@@ -171,11 +171,11 @@ class SubwindowLogos(QWidget):
         self.setWindowTitle(_("Logo Manager"))
 
         self.resize(QSize(self.sizeHint().width(),
-                          mainWindow.size().height() * 0.95))
-        relativeChange = QPoint(mainWindow.size().width() / 2,
-                                mainWindow.size().height() / 2)\
-            - QPoint(self.size().width() / 2,
-                     self.size().height() / 2)
+                          int(mainWindow.size().height() * 0.95)))
+        relativeChange = QPoint(int(mainWindow.size().width() / 2),
+                                int(mainWindow.size().height() / 2))\
+            - QPoint(int(self.size().width() / 2),
+                     int(self.size().height() / 2))
         self.move(mainWindow.pos() + relativeChange)
 
     def listItemRightClickedFav(self, QPos):

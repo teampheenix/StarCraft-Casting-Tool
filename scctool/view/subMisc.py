@@ -7,8 +7,9 @@ import requests
 from PyQt5.QtCore import QPoint, QRegExp, QSize, Qt
 from PyQt5.QtGui import QIcon, QKeySequence, QPixmap, QRegExpValidator
 from PyQt5.QtWidgets import (QApplication, QCheckBox, QComboBox, QFileDialog,
-                             QGridLayout, QGroupBox, QHBoxLayout, QInputDialog,
-                             QLabel, QListWidget, QListWidgetItem, QMessageBox,
+                             QFormLayout, QGridLayout, QGroupBox, QHBoxLayout,
+                             QInputDialog, QLabel, QLineEdit, QListWidget,
+                             QListWidgetItem, QMessageBox, QPlainTextEdit,
                              QPushButton, QShortcut, QSizePolicy, QSpacerItem,
                              QTabWidget, QVBoxLayout, QWidget)
 
@@ -17,7 +18,6 @@ import scctool.settings.translation
 from scctool.tasks.liquipedia import LiquipediaGrabber, MapNotFound
 from scctool.view.widgets import (AliasTreeView, AligulacTreeView, ListTable,
                                   MapDownloader, MonitoredLineEdit)
-
 
 # create logger
 module_logger = logging.getLogger(__name__)
@@ -54,12 +54,12 @@ class SubwindowMisc(QWidget):
 
             self.setLayout(mainLayout)
 
-            self.resize(QSize(mainWindow.size().width() * 0.9,
+            self.resize(QSize(int(mainWindow.size().width() * 0.9),
                               self.sizeHint().height()))
-            relativeChange = QPoint(mainWindow.size().width() / 2,
-                                    mainWindow.size().height() / 3)\
-                - QPoint(self.size().width() / 2,
-                         self.size().height() / 3)
+            relativeChange = QPoint(int(mainWindow.size().width() / 2),
+                                    int(mainWindow.size().height() / 3))\
+                - QPoint(int(self.size().width() / 2),
+                         int(self.size().height() / 3))
             self.move(mainWindow.pos() + relativeChange)
 
             self.setWindowTitle(_("Miscellaneous Settings"))
@@ -78,6 +78,7 @@ class SubwindowMisc(QWidget):
         self.createAlphaBox()
         self.createSC2ClientAPIBox()
         self.createAligulacTab()
+        self.createCounterTab()
 
         # Add tabs
         self.tabs.addTab(self.mapsBox, _("Map Manager"))
@@ -87,6 +88,7 @@ class SubwindowMisc(QWidget):
         self.tabs.addTab(self.alphaBox, _("AlphaTL && Ingame Score"))
         self.tabs.addTab(self.clientapiBox, _("SC2 Client API"))
         self.tabs.addTab(self.aligulacTab, _("Aligulac"))
+        self.tabs.addTab(self.counterTab, _("Countdown"))
 
         table = dict()
         table['mapmanager'] = 0
@@ -96,6 +98,7 @@ class SubwindowMisc(QWidget):
         table['alphatl'] = 4
         table['sc2clientapi'] = 5
         table['aligulac'] = 6
+        table['counter'] = 7
         self.tabs.setCurrentIndex(table.get(tab, SubwindowMisc.current_tab))
         self.tabs.currentChanged.connect(self.tabChanged)
 
@@ -570,6 +573,40 @@ class SubwindowMisc(QWidget):
         """Remove an selected aligulac ID."""
         self.aligulacTreeview.removeSelected()
 
+    def createCounterTab(self):
+        """Create the aligulac tab."""
+        self.counterTab = QWidget()
+
+        layout = QFormLayout()
+        self.le_countdown_replacement = QLineEdit()
+        self.le_countdown_replacement.setText(
+            scctool.settings.config.parser.get(
+                "Countdown", "replacement"))
+        self.le_countdown_replacement.textChanged.connect(self.changed)
+        layout.addRow(QLabel(_('Replacement Text')),
+                      self.le_countdown_replacement)
+        self.cb_counter_matchgrabber_update = QCheckBox('')
+        self.cb_counter_matchgrabber_update.setChecked(
+            scctool.settings.config.parser.getboolean(
+                "Countdown", "matchgrabber_update"))
+        self.cb_counter_matchgrabber_update.stateChanged.connect(self.changed)
+        layout.addRow(QLabel(_('Update Static Countdown via MatchGrabber')),
+                      self.cb_counter_matchgrabber_update)
+        self.counter_pretext = QPlainTextEdit()
+        self.counter_pretext.setPlainText(scctool.settings.config.parser.get(
+            "Countdown", "pre_txt"))
+        self.counter_pretext.textChanged.connect(self.changed)
+        self.counter_posttext = QPlainTextEdit()
+        self.counter_posttext.setPlainText(scctool.settings.config.parser.get(
+            "Countdown", "post_txt"))
+        self.counter_posttext.textChanged.connect(self.changed)
+        layout.addRow(QLabel('Pre-Text (in countdown.txt)'),
+                      self.counter_pretext)
+        layout.addRow(QLabel('Post-Text (in countdown.txt)'),
+                      self.counter_posttext)
+
+        self.counterTab.setLayout(layout)
+
     def createMapsBox(self):
         """Create box for map manager."""
         self.mapsize = 300
@@ -765,7 +802,7 @@ class SubwindowMisc(QWidget):
 
                     try:
                         QApplication.setOverrideCursor(Qt.WaitCursor)
-                        images = grabber.get_images(map.get_map_images())
+                        images = grabber.get_images(sc2map.get_map_images())
                         image = ""
                         for size in sorted(images):
                             if not image or size <= 2500 * 2500:
@@ -894,6 +931,16 @@ class SubwindowMisc(QWidget):
             scctool.settings.config.parser.set(
                 "SCT", "sc2_network_listener_enabled",
                 str(self.cb_usesc2listener.isChecked()))
+            scctool.settings.config.parser.set(
+                "Countdown", "matchgrabber_update",
+                str(self.cb_counter_matchgrabber_update.isChecked()))
+            scctool.settings.config.parser.set(
+                "Countdown", "replacement",
+                self.le_countdown_replacement.text())
+            scctool.settings.config.parser.set(
+                "Countdown", "pre_txt", self.counter_pretext.toPlainText())
+            scctool.settings.config.parser.set(
+                "Countdown", "post_txt", self.counter_posttext.toPlainText())
             self.controller.refreshButtonStatus()
             # self.controller.setCBS()
             self.__dataChanged = False
