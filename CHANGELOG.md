@@ -1,6 +1,17 @@
 # Changelog
 
 
+## v2.7.15 (2020-03-02)
+
+### Changes
+
+* Adjusted Liquipedia format to gather map info.
+
+* Added upcoming Ladder Maps.
+
+* Map images of Ephemeron, Eternal Empire, Nightshade, Simulacrum, Triton, World of Sleepers, and Zen updated.
+
+
 ## v2.7.14 (2019-11-16)
 
 ### New
