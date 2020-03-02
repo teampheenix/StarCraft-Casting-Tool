@@ -245,12 +245,12 @@ class LiquipediaMap:
         infobox = self._soup.find("div", class_="fo-nttax-infobox")
         for cell in infobox.find_all("div", class_="infobox-cell-2"):
             if 'infobox-description' in cell.get("class"):
-                key = cell.contents[0].strip().replace(":", "")
+                key = cell.getText().replace(":", "")
             else:
                 if key:
                     try:
                         key = key.lower().replace(" ", "-")
-                        data[key] = cell.contents[0].strip()
+                        data[key] = cell.getText()
                         key = ""
                     except Exception:
                         pass
