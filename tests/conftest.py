@@ -11,10 +11,12 @@ import scctool.settings
 from scctool.controller import MainController
 from scctool.view.main import MainWindow
 
+app = None
 
 @pytest.fixture()
 def scct_app(tmpdir_factory, caplog):
     caplog.set_level(logging.ERROR)
+    global app
     app = QApplication(sys.argv)
     app.setStyle(QStyleFactory.create('Fusion'))
     tmp_dir = tmpdir_factory.getbasetemp()
