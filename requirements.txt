@@ -7,8 +7,8 @@ Pillow >= 7.0.0; platform_system == 'Windows'
 pywin32 >= 227; platform_system == 'Windows'
 PyQt5 >= 5.14.1
 pytesseract >= 0.3.2; platform_system == 'Windows'
+PyInstaller >=  3.6
 # PyUpdater >= 3.1.1
-git+git://github.com/pyinstaller/pyinstaller@develop
 git+git://github.com/Digital-Sapphire/PyUpdater@master
 requests >= 2.23.0
 websockets >= 8.1
