@@ -508,11 +508,6 @@ class TestGUI(object):
         self.qtbot.waitForWindowShown(self.sub_window)
         self.sub_window.closeWindow()
 
-        self.main_window.openApiDialog()
-        self.sub_window = self.main_window.mysubwindows['connections']
-        self.qtbot.waitForWindowShown(self.sub_window)
-        self.sub_window.closeWindow()
-
         self.main_window.openReadme()
         self.sub_window = self.main_window.mysubwindows['readme']
         self.qtbot.waitForWindowShown(self.sub_window)
