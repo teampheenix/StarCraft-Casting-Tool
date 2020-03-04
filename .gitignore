@@ -8,8 +8,8 @@ data/*
 config.ini
 casting_html/data/*-data.html
 __pycache__/*
-StarCraftCastingTool.spec
-*.spec
+build/*
+dist/*
 *.log
 build_app.py
 build_data.py
