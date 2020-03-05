@@ -4,11 +4,11 @@ block_cipher = None
 
 
 a = Analysis(['StarCraftCastingTool.py'],
-             pathex=['C:\\Users\\tasch\\OneDrive\\Dokumente\\GitHub\\StarCraft-Casting-Tool'],
+             pathex=['C:\\Users\\tasch\\\\GitHub\\StarCraft-Casting-Tool'],
              binaries=[],
              datas=[('src/*', 'src'), ('locales', 'locales')],
              hiddenimports=[],
-             hookspath=[],
+             hookspath=['hooks'],
              runtime_hooks=[],
              excludes=[],
              win_no_prefer_redirects=False,
