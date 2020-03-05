@@ -11,9 +11,6 @@ __pycache__/*
 build/*
 dist/*
 *.log
-build_app.py
-build_data.py
-sign.py
 *Ducklings.css
 *WCS.css
 casting_html/src/ducklings/
