@@ -28,9 +28,11 @@ def test_aligulac(aligulac_api_key):
     
 def test_liquipedia():
     grabber = LiquipediaGrabber()
-    mappool = [grabber.get_ladder_mappool()]
+    mappool = list(grabber.get_ladder_mappool())
+    print(mappool)
     assert len(mappool) == 7
-    stats = [grabber.get_map_stats(mappool)]
+    stats = list(grabber.get_map_stats(mappool))
+    print(stats)
     assert len(stats) == len(mappool)
     for map_stats in stats:
         assert map_stats['map'] in mappool
