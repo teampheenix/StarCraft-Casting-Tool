@@ -18,7 +18,7 @@ def test_aligulac(aligulac_api_key):
     assert len(prediction['outcomes']) == 6
     assert prediction['pla']['id'] == 49
     assert prediction['plb']['id'] == 485
-    score = algulac.predict_score(prediction)
+    score = aligulac.predict_score(prediction)
     assert score is not None
 
     history = aligulac.get_history('Maru', 'Serral')
