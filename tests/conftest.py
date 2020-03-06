@@ -11,6 +11,17 @@ import scctool.settings
 from scctool.controller import MainController
 from scctool.view.main import MainWindow
 
+
+def pytest_addoption(parser):
+    """Add options to pytest parser."""
+    parser.addoption("--aligulac_api_key", action="store",
+                     default='', help="aligulac apikey")
+
+@pytest.fixture
+def aligulac_api_key(request):
+    """Return API key."""
+    return request.config.getoption("--aligulac_api_key")
+
 app = None
 
 @pytest.fixture()

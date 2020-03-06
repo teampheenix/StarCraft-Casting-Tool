@@ -65,5 +65,5 @@ on_finish:
 
 test_script:
     # Split tests into several subprocesses.
-    - "pytest -v --cov=./"
+    - "pytest -v --cov=./ --aligulac_api_key=%aligulac_api_key%"
     - "codecov"
