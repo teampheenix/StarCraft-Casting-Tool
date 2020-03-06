@@ -1,4 +1,5 @@
 from scctool.tasks.aligulac import AligulacInterface
+from scctool.tasks.liquipedia import LiquipediaGrabber
 
 def test_aligulac(aligulac_api_key):
     aligulac = AligulacInterface(aligulac_api_key)
@@ -24,3 +25,12 @@ def test_aligulac(aligulac_api_key):
     history = aligulac.get_history('Maru', 'Serral')
     assert history is not None
     assert len(history['objects']) > 0
+    
+def test_liquipedia():
+    grabber = LiquipediaGrabber()
+    mappool = [grabber.get_ladder_mappool()]
+    assert len(mappool) == 7
+    stats = [grabber.get_map_stats(mappool)]
+    assert len(stats) == len(mappool)
+    for map_stats in stats:
+        assert map_stats['map'] in mappool
