@@ -3,6 +3,10 @@
 
 ## v2.8.0 (2020-03-06)
 
+### New
+
+* Update broken - due to a hard drive crash, v2.8.0 needs to be updated manually.
+
 ### Changes
 
 * Adjusted Liquipedia format to gather map info.
