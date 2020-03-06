@@ -351,6 +351,8 @@ class CommandDropBox(QGroupBox):
         layout = QHBoxLayout()
 
         self.command = MonitoredLineEdit()
+        if not cmd:
+            cmd = ''
         self.command.setText(cmd)
         self.command.setAlignment(Qt.AlignCenter)
         self.command.setPlaceholderText(("!command"))
