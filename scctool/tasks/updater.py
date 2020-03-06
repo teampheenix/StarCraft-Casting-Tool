@@ -134,8 +134,8 @@ def extractData(asset_update, handler=lambda x: None):
             myzip.extractall(targetdir)
         handler(50)
         file = os.path.join(targetdir,
-                            'SCCT-data.tar')
-        with tarfile.open(file, "r") as tar:
+                            'SCCT-data')
+        with tarfile.open(file, "r:gz") as tar:
             tar.extractall(targetdir)
         handler(90)
         os.remove(file)

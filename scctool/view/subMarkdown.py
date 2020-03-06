@@ -57,8 +57,11 @@ class SubwindowMarkdown(QWidget):
         self.viewer.setMinimumHeight(400)
         self.viewer.setOpenExternalLinks(True)
         # self.viewer.setAlignment(Qt.AlignJustify)
-        html = markdown2.markdown_path(
-            scctool.settings.getAbsPath(markdown))
+        try:
+            html = markdown2.markdown_path(
+                scctool.settings.getAbsPath(markdown))
+        except UnicodeDecodeError:
+            html = '<b>Something went wrong...</b>'
         p = re.compile(r'<img.*?/>')
         html = p.sub('', html)
 

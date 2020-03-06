@@ -1,7 +1,7 @@
 # Changelog
 
 
-## v2.7.15 (2020-03-02)
+## v2.8.0 (2020-03-06)
 
 ### Changes
 
@@ -157,7 +157,7 @@
 * Fixed a bug where import & overwrite profile would fail if only one profile exists.
 
 
-## v2.7.2 (2019-02-12)
+## v2.7.2 (2019-02-11)
 
 ### New
 
@@ -213,7 +213,7 @@
 * Added upcoming ladder maps (Cyper Forest, King's Cove, New Repugnancy, Year Zero) and removed old maps (16-Bit, Catalyst, Darkness Sanctuary, Redshift). Note: If you want old maps removed from you profile, you have to remove them by yourself using the Map Manager in Misc Settings.
 
 
-## v2.6.1 (2019-01-15)
+## v2.6.1 (2019-01-16)
 
 ### New
 
@@ -271,7 +271,7 @@
 
 ### Changes
 
-* Countdown will now display 'soonTM' or a custom text once the countdown is finished - it can be changed in config.ini.
+* Countdown will now display 'soon™' or a custom text once the countdown is finished - it can be changed in config.ini.
 
 ### Fix
 
@@ -369,15 +369,6 @@
 * Fixed entanglement issue of match tabs.
 
 
-## v2.2.1 (2018-09-09)
-
-### Fix
-
-* Fixed a bug where placeholders used by Twitch and Nighbot would use the selected match tab instead of the active tab.
-
-* Fixed a bug where copying a match tab would entangle both tabs.
-
-
 ## v2.2.0 (2018-09-09)
 
 ### New
@@ -398,11 +389,13 @@
 
 ### Fix
 
+* Fixed a bug where placeholders used by Twitch and Nighbot would use the selected match tab instead of the active tab.
+
+* Fixed a bug where copying a match tab would entangle both tabs.
+
 * Fixed a bug where TTS would announce team 'TBD'.
 
 * Fixed a bug that impaired tts.
-
-* Fixed a crash that would occur when adding a map to the mapstats custom map pool.
 
 
 ## v2.1.4 (2018-08-20)
@@ -411,21 +404,18 @@
 
 * Fixed a crash that would occure when adding a map to the mapstats custom map pool.
 
+* Fixed a crash that would occur when adding a map to the mapstats custom map pool.
+
 
 ## v2.1.3 (2018-08-19)
-
-### Fix
-
-* Fixed a bug where the new AlphaTL Match Banner would not be downloaded.
-
-
-## v2.1.2 (2018-08-14)
 
 ### New
 
 * Added link to Tutorial Video.
 
 ### Fix
+
+* Fixed a bug where the new AlphaTL Match Banner would not be downloaded.
 
 * Fixed a bug where "0 - 0" would always be written into score.txt.
 
@@ -438,8 +428,14 @@
 
 * Implemented Google-Cloud Text-to-Speech Voices for the Intros.
 
+### Fix
 
-## v2.0.1 (2018-08-07)
+* Fixed a bug where the hotkeys for intros would not be reactivated.
+
+* Fixed various typos in the localization.
+
+
+## v2.0.1 (2018-08-03)
 
 ### New
 
@@ -448,6 +444,8 @@
 * Added a new Mapstats Browser Source.
 
 * Added a blacklist for the ingame score task to deactivate it when you are playing yourself.
+
+* Prepared tool for upcoming upgrade to v2.0; This is the last update prior to v2.0.
 
 * Already played maps can be marked in the mapstats browser source.
 
@@ -461,9 +459,15 @@
 
 * Restructured the settings.
 
+* Added a Profile Manager.
+
+* Added LEDs to status bar indicating when browser sources are connected to StarCraft Casting Tool.
+
 ### Changes
 
 * Added upcoming ladder maps.
+
+* Upgrade to Twitch-API v5.
 
 * Updated to Twitch-API v5 and included the option to set game to 'StarCraft 2' and community to 'StarCraft Casting Tool'.
 
@@ -476,10 +480,6 @@
 * One can now use a single combined hotkey for both player intros. This option is the new default.
 
 ### Fix
-
-* Fixed a bug where the hotkeys for intros would not be reactivated.
-
-* Fixed various typos in the localization.
 
 * Fixed a bug in the AlphaTL match grabber that occured if a team has no logo.
 
@@ -494,17 +494,6 @@
 * Fixed a bug in connection with tesseract OCR.
 
 * Text-to-Speech is now disabled by default.
-
-
-## v1.13.0 (2018-07-29)
-
-### New
-
-* Prepared tool for upcoming upgrade to v2.0; This is the last update prior to v2.0.
-
-### Changes
-
-* Upgrade to Twitch-API v5.
 
 
 ## v1.12.3 (2018-07-20)
@@ -526,11 +515,6 @@
 ### Fix
 
 * Fixed a bug that prevented StarCraft Casting Tool from terminating.
-
-
-## v1.12.0 (2018-05-26)
-
-### Fix
 
 * Text-to-Speech is now disabled by default.
 
@@ -580,15 +564,6 @@
 ### Changes
 
 * Improved centering of mapname and label of landscape map icons.
-
-
-## v2.0.0 (2018-04-29)
-
-### New
-
-* Added a Profile Manager.
-
-* Added LEDs to status bar indicating when browser sources are connected to StarCraft Casting Tool.
 
 
 ## v1.9.12 (2018-04-29)
@@ -648,11 +623,6 @@
 ### Fix
 
 * Fixed a bug in the Intros that would associate both players always with Team 1.
-
-
-## v1.9.4 (2018-04-12)
-
-### Fix
 
 * Fixed crash when "Update Twitch" and "Update Nightbot" was pressed.
 
@@ -789,16 +759,22 @@
 
 ## v1.8.2 (2018-04-02)
 
+### New
+
+* Player names are used or have been used in the current session are available for auto completion.
+
+### Changes
+
+* All-Kill Format no longer needs to be applied via "Apply Format".
+
 ### Fix
 
 * Winning player should now be properly transfered to the next map when using All-Kill-Format/Mode.
 
 
-## v1.8.1 (2018-04-02)
+## v1.8.0 (2018-03-31)
 
 ### New
-
-* Player names are used or have been used in the current session are available for auto completion.
 
 * Match Grabber can now be used by pressing enter.
 
@@ -807,8 +783,6 @@
 * Added Logo Manager featuring last used logos, favorites, adding from URL, and searching Liquipedia for logos.
 
 ### Changes
-
-* All-Kill Format no longer needs to be applied via "Apply Format".
 
 * Migrated to Python 3.6.5.
 
