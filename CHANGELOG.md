@@ -1,6 +1,19 @@
 # Changelog
 
 
+## v2.8.1 (2020-03-15)
+
+### Changes
+
+* Map Images fo Ever Dream, Golden Wall, Purity and Industry, and Zen updated.
+
+### Fix
+
+* Nightbot OAuth fixed.
+
+* Fixed bug when adding Nightbot commands.
+
+
 ## v2.8.0 (2020-03-06)
 
 ### New
