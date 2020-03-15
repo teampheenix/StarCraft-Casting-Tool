@@ -38,8 +38,6 @@ body {
 }
 
 .block {
-  height: var(--total-height);
-  width: calc(var(--total-width) + 34px);
   padding: var(--padding);
   margin: 11px;
 }
