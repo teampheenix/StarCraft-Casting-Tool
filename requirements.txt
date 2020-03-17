@@ -5,7 +5,7 @@ keyboard==0.13.4
 markdown2 >= 2.3.8
 Pillow >= 7.0.0; platform_system == 'Windows'
 pywin32 >= 227; platform_system == 'Windows'
-PyQt5==5.13.2  # rq.filter: >= 5.15
+PyQt5==5.13.2  # rq.filter: != 5.14.*
 pytesseract >= 0.3.3; platform_system == 'Windows'
 PyInstaller >=  3.6
 # PyUpdater >= 3.1.1
