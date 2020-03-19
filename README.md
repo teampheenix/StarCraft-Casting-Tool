@@ -12,9 +12,13 @@
 
 ![scct-v2](https://user-images.githubusercontent.com/26044736/43646667-c915c8e2-9735-11e8-883c-4e9d6b94061b.jpg)
 
+## Important Note (2020-03-06)
+
+Due to a crash of my hard drive, I lost the keypack to sign the updates. Therefore, I had to rebuild the update channel of the application. Thus, in order to update your version of StarCraft Casting Tool you have to download the **[latest Setup](https://github.com/teampheenix/StarCraft-Casting-Tool/releases/latest)** and install the latest version manually
+
 ## Downloads
 
--   **[Latest executable](https://github.com/teampheenix/StarCraft-Casting-Tool/releases/latest)** for Windows
+-   **[Latest Setup](https://github.com/teampheenix/StarCraft-Casting-Tool/releases/latest)** for Windows (64-bit only)
 -   **[Source code](https://github.com/teampheenix/StarCraft-Casting-Tool/archive/master.zip)**
 
 ## Feature List
