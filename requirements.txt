@@ -1,7 +1,7 @@
 appdirs >= 1.4.3
 beautifulsoup4 >= 4.8.2
 humanize >= 2.0.0
-keyboard==0.13.4
+keyboard==0.13.5
 markdown2 >= 2.3.8
 Pillow >= 7.0.0; platform_system == 'Windows'
 pywin32 >= 227; platform_system == 'Windows'
