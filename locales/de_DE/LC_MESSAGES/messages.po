@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: StarCraft Casting Tool\n"
-"POT-Creation-Date: 2019-05-05 12:33+0200\n"
+"POT-Creation-Date: 2020-03-29 11:58+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 2.3\n"
 "X-Poedit-Basepath: ../../../scctool\n"
 "X-Poedit-SearchPath-0: .\n"
 
@@ -898,11 +898,11 @@ msgstr "Erzeugen"
 msgid "Access-Token:"
 msgstr "Zugangs-Token:"
 
-#: view/subConnections.py:137 view/subConnections.py:364
+#: view/subConnections.py:137 view/subConnections.py:366
 msgid "Available placeholders:"
 msgstr "Verfügbare Platzhalter:"
 
-#: view/subConnections.py:147 view/subConnections.py:372
+#: view/subConnections.py:147 view/subConnections.py:374
 msgid "Test"
 msgstr "Testen"
 
@@ -926,15 +926,15 @@ msgstr "Drücke 'Erzeugen' um einen Token zu generieren."
 msgid "Add Command"
 msgstr "Kommando hinzufügen"
 
-#: view/subConnections.py:336 view/subConnections.py:420
+#: view/subConnections.py:336 view/subConnections.py:422
 msgid "Output:"
 msgstr "Ausgabe:"
 
-#: view/subConnections.py:362
+#: view/subConnections.py:364
 msgid "message, e.g.,"
 msgstr "Nachricht, z.B."
 
-#: view/subConnections.py:377
+#: view/subConnections.py:379
 msgid "Delete"
 msgstr "Löschen"
 
@@ -1423,10 +1423,6 @@ msgstr "Karten und Spielstand Icons"
 msgid "Default Border:"
 msgstr "Standardrahmen:"
 
-#: view/subStyles.py:273
-msgid "Winner Highlight:"
-msgstr "Sieger Highlight:"
-
 #: view/subStyles.py:279
 msgid "Win:"
 msgstr "Sieg:"
@@ -1677,6 +1673,9 @@ msgstr "Von"
 #: view/widgets.py:1751
 msgid "to"
 msgstr "bis"
+
+#~ msgid "Winner Highlight:"
+#~ msgstr "Sieger Highlight:"
 
 #~ msgid "Match Format:"
 #~ msgstr "Partie-Format:"
