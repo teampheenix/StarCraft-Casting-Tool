@@ -123,8 +123,11 @@ class StyleComboBox(QComboBox):
         for fname in os.listdir(style_dir):
             full_fname = os.path.join(style_dir, fname)
             if os.path.isfile(full_fname):
-                label = re.search(
-                    r'^(.+)\.css$', fname).group(1)
+                match = re.search(r'^(.+)\.css$', fname)
+                if not match:
+                    continue
+                else:
+                    label = match.group(1)
                 if ' ' in label:
                     os.rename(full_fname, os.path.join(
                         style_dir, label.replace(' ', '-') + '.css'))
