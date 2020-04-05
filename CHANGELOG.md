@@ -1,6 +1,21 @@
 # Changelog
 
 
+## v2.8.2 (2020-04-05)
+
+### New
+
+* Added clan1.txt and clan2.txt files that will always contain the name of the team even in 1vs1 mode.
+
+* HTTP server now servers otf font files.
+
+### Fix
+
+* Fixed error when a non-css file would be placed in the css folder.
+
+* Landscape map icons are now properly centered horizontally for the StarCraft2 skin.
+
+
 ## v2.8.1 (2020-03-15)
 
 ### Changes
