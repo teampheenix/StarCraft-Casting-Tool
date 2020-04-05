@@ -571,6 +571,8 @@ class WebsocketThread(QThread):
                 mimetype = 'application/javascript; charset=utf-8'
             elif path.endswith(".css"):
                 mimetype = 'text/css; charset=utf-8'
+            elif path.endswith('.otf'):
+                mimetype = 'font/opentype'
             else:
                 path = f'{path}.html'
                 mimetype = 'text/html'
