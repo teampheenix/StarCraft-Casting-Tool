@@ -106,6 +106,13 @@ class TextFilesThread(TasksThread):
             with open(file, mode='w', encoding='utf-8') as f:
                 f.write(team)
 
+        for idx in range(2):
+            team = self._matchControl.activeMatch().getTeam(idx)
+            file = scctool.settings.getAbsPath(
+                f'{scctool.settings.casting_data_dir}/clan{idx+1}.txt')
+            with open(file, mode='w', encoding='utf-8') as f:
+                f.write(team)
+
     def __writeScore(self):
         file = scctool.settings.getAbsPath(
             f"{scctool.settings.casting_data_dir}/score.txt")
