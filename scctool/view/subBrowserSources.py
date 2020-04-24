@@ -314,8 +314,8 @@ class SubwindowBrowserSources(QWidget):
             self.scope_box[idx] = ScopeGroupBox(
                 _("Icon Set {} Scope".format(idx + 1)),
                 options,
-                scctool.settings.config.parser.get(
-                    "MapIcons", "scope_box_{}".format(idx + 1)),
+                f'box_{idx + 1}',
+                self.controller,
                 self)
             self.scope_box[idx].dataModified.connect(self.changed)
             mainLayout.addWidget(self.scope_box[idx])
@@ -403,8 +403,8 @@ class SubwindowBrowserSources(QWidget):
             self.scope_landscape[idx] = ScopeGroupBox(
                 _("Icon Set {} Scope".format(idx + 1)),
                 options,
-                scctool.settings.config.parser.get(
-                    "MapIcons", "scope_landscape_{}".format(idx + 1)),
+                f'landscape_{idx + 1}',
+                self.controller,
                 self)
             self.scope_landscape[idx].dataModified.connect(self.changed)
             mainLayout.addWidget(self.scope_landscape[idx])

@@ -9,6 +9,7 @@ from uuid import uuid4
 
 import keyboard
 import websockets
+from configparser import NoOptionError
 from PyQt5.QtCore import QThread, pyqtSignal
 
 import scctool.settings
@@ -329,9 +330,22 @@ class WebsocketThread(QThread):
     def changeStyle(self, path, style=None, websocket=None):
         """Send a change style command to websockets."""
         primary_scope = self.get_primary_scope(path)
+        scope = path
         if primary_scope:
             if style is None:
-                style = scctool.settings.config.parser.get(
+                try:
+                    separate_style = scctool.settings.config.parser.getboolean(
+                        "MapIcons",
+                        path.replace("mapicons","separate_style"))
+                    if separate_style:
+                        style = scctool.settings.config.parser.get(
+                            "Style", path)
+                    else:
+                        style = scctool.settings.config.parser.get(
+                            "Style", primary_scope)
+                except NoOptionError:
+                    module_logger.exception('Test')
+                    style = scctool.settings.config.parser.get(
                     "Style", primary_scope)
             style_file = "src/css/{}/{}.css".format(primary_scope, style)
             if websocket is None:

@@ -11,7 +11,7 @@ from PyQt5.QtCore import (QMimeData, QPoint, QPointF, QSettings, QSize, Qt,
                           pyqtProperty, pyqtSignal)
 from PyQt5.QtGui import (QBrush, QColor, QDrag, QIcon, QKeySequence, QPainter,
                          QPen, QRadialGradient)
-from PyQt5.QtWidgets import (QAbstractButton, QAction, QApplication,
+from PyQt5.QtWidgets import (QAbstractButton, QAction, QApplication, QCheckBox,
                              QColorDialog, QComboBox, QCompleter, QFileDialog,
                              QFormLayout, QFrame, QGroupBox, QHBoxLayout,
                              QHeaderView, QInputDialog, QLabel, QLineEdit,
@@ -1718,16 +1718,20 @@ class ScopeGroupBox(QGroupBox):
 
     dataModified = pyqtSignal()
 
-    def __init__(self, name='', options=None, scope='all', parent=None):
+    def __init__(self, name='', options=None, ident='', controller=None, parent=None):
         """Init lineedit."""
         super().__init__(name, parent)
         if options is None:
             options = list()
         layout = QFormLayout()
+        self.controller = controller
+        scope = scctool.settings.config.parser.get("MapIcons", f"scope_{ident}")
         self.bt_dynamic = QRadioButton(_("Dynamic:"))
         self.bt_dynamic.toggled.connect(lambda: self.btnstate('dynamic'))
         self.bt_dynamic.setMinimumWidth(120)
         self.scope_box = QComboBox()
+        self.path = f"mapicons_{ident}"
+        self.ident = ident
         found = False
         idx = 0
         for key, item in options.items():
@@ -1767,6 +1771,19 @@ class ScopeGroupBox(QGroupBox):
                 self.cb_upper.setCurrentIndex(int(m.group(2)) - 1)
                 self.cb_lower.setCurrentIndex(int(m.group(1)) - 1)
 
+        self.cb_separate_style = QCheckBox(_('Activate Separate Style:'))
+        primary = ident.split('_')[0]
+        self.qb_boxStyle = StyleComboBox(
+            f"{scctool.settings.casting_html_dir}/src/css/mapicons_{primary}",
+            self.path)
+        active = scctool.settings.config.parser.getboolean(
+                "MapIcons", f"separate_style_{ident}")
+        self.cb_separate_style.setChecked(active)
+        self.qb_boxStyle.setEnabled(active)
+        self.cb_separate_style.toggled.connect(self.toggleStyleComboBox)
+        self.qb_boxStyle.connect2WS(self.controller, self.path)
+        layout.addRow(self.cb_separate_style, self.qb_boxStyle)
+
         self.setLayout(layout)
 
         self.btnstate('dynamic')
@@ -1787,6 +1804,14 @@ class ScopeGroupBox(QGroupBox):
             self.cb_upper.setEnabled(self.bt_static.isChecked())
             self.label1.setEnabled(self.bt_static.isChecked())
             self.label2.setEnabled(self.bt_static.isChecked())
+
+    def toggleStyleComboBox(self, state):
+        """Toggle style box."""
+        self.qb_boxStyle.setEnabled(state)
+        scctool.settings.config.parser.set(
+            "MapIcons", f"separate_style_{self.ident}",
+            str(state))
+        self.controller.websocketThread.changeStyle(self.path)
 
     def adjustRangeUpper(self, lower):
         """Adjust the range for the scopes."""
