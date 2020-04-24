@@ -93,7 +93,7 @@ You can use this to serve browser sources to another PC in the network (`http://
 
 ### Twitch & Nightbot
 
-To update your [Twitch](https://www.twitch.tv/) title (and set your game to _StarCraft 2_) or [Nightbot](https://nightbot.tv/) command via click on _Update Twitch Title_ or _Update Nightbot_ you have to set your Twitch _Channel_ and/or generate an corresponding access token. This can be done via _Settings: Connections_. Note that you can also change the title of Twitch channels that do not belong to the user you have generated the access token with as long as this user is registered as an editor of corresponding channel. The format of your new title can be customized via the _Title Template_ with the use of placeholders (hover over the input field to get a list of all available placeholders) and specified under _Settings: Connections_.
+To update your [Twitch](https://www.twitch.tv/) title (and set your game to _StarCraft 2_) or [Nightbot](https://nightbot.tv/) command via click on _Update Twitch Title_ or _Update Nightbot_ you have to set your Twitch _Channel_ and/or generate an corresponding access token. This can be done via _Settings: Connections_. Note that you can also change the title of Twitch channels that do not belong to the user you have generated the access token with as long as this user is registered as an editor of the corresponding channel. The format of your new title can be customized via the _Title Template_ with the use of placeholders (hover over the input field to get a list of all available placeholders) and specified under _Settings: Connections_.
 
 ### Background Tasks
 
