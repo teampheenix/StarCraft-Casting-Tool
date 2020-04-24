@@ -1,12 +1,12 @@
 appdirs >= 1.4.3
-beautifulsoup4 >= 4.8.2
-humanize >= 2.2.0
+beautifulsoup4 >= 4.9.0
+humanize >= 2.4.0
 keyboard==0.13.5
 markdown2 >= 2.3.8
 Pillow >= 7.1.1; platform_system == 'Windows'
 pywin32 >= 227; platform_system == 'Windows'
 PyQt5==5.13.2  # rq.filter: != 5.14.*
-pytesseract >= 0.3.3; platform_system == 'Windows'
+pytesseract >= 0.3.4; platform_system == 'Windows'
 PyInstaller >= 3.6
 # PyUpdater >= 3.1.1
 git+git://github.com/Digital-Sapphire/PyUpdater@master
