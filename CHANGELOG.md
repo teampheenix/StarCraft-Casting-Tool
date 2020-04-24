@@ -1,6 +1,13 @@
 # Changelog
 
 
+## v2.8.3 (2020-04-24)
+
+### New
+
+* Separate style can be assigned to each instance of the mapicons.
+
+
 ## v2.8.2 (2020-04-05)
 
 ### New
