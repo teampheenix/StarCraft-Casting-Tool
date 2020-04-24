@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: StarCraft Casting Tool\n"
-"POT-Creation-Date: 2020-03-29 11:58+0200\n"
-"PO-Revision-Date: 2020-03-29 11:58+0200\n"
+"POT-Creation-Date: 2020-04-25 00:49+0200\n"
+"PO-Revision-Date: 2020-04-25 00:49+0200\n"
 "Last-Translator: \n"
 "Language-Team: Mayhem, TanTall\n"
 "Language: ru\n"
@@ -625,8 +625,8 @@ msgstr "Игрок {} из команды {}"
 msgid "Set the score"
 msgstr "Установить счет"
 
-#: scctool/view/matchdataview.py:289 scctool/view/widgets.py:1748
-#: scctool/view/widgets.py:1756 scctool/view/widgets.py:1797
+#: scctool/view/matchdataview.py:289 scctool/view/widgets.py:1755
+#: scctool/view/widgets.py:1763 scctool/view/widgets.py:1825
 msgid "Map {}"
 msgstr "Карта {}"
 
@@ -652,8 +652,8 @@ msgstr "Выберите, какой игрок / команда наклады�
 msgid "Player Alias"
 msgstr "Псевдоним игрока"
 
-#: scctool/view/matchdataview.py:404 scctool/view/widgets.py:802
-#: scctool/view/widgets.py:822
+#: scctool/view/matchdataview.py:404 scctool/view/widgets.py:805
+#: scctool/view/widgets.py:825
 msgid "Name"
 msgstr "Имя"
 
@@ -669,7 +669,7 @@ msgstr "Псевдоним {}"
 #: scctool/view/matchdataview.py:419 scctool/view/subMisc.py:346
 #: scctool/view/subMisc.py:689 scctool/view/subMisc.py:735
 #: scctool/view/subMisc.py:773 scctool/view/subMisc.py:831
-#: scctool/view/widgets.py:1510
+#: scctool/view/widgets.py:1513
 msgid "Error"
 msgstr "Ошибка"
 
@@ -1050,7 +1050,7 @@ msgid "Add to Favorites"
 msgstr "Добавить в избранное"
 
 #: scctool/view/subLogos.py:65 scctool/view/subLogos.py:115
-#: scctool/view/subMisc.py:645 scctool/view/widgets.py:1381
+#: scctool/view/subMisc.py:645 scctool/view/widgets.py:1384
 msgid "Remove"
 msgstr "Удалить"
 
@@ -1242,7 +1242,7 @@ msgid "Player Aliases"
 msgstr "Псевдонимы игроков"
 
 #: scctool/view/subMisc.py:293 scctool/view/subMisc.py:306
-#: scctool/view/widgets.py:819
+#: scctool/view/widgets.py:822
 msgid "Add Alias"
 msgstr "Добавить псевдоним"
 
@@ -1397,7 +1397,7 @@ msgstr "Добавить из Liquipedia"
 msgid "Add from File"
 msgstr "Добавить из файла"
 
-#: scctool/view/subMisc.py:641 scctool/view/widgets.py:1377
+#: scctool/view/subMisc.py:641 scctool/view/widgets.py:1380
 msgid "Rename"
 msgstr "Переименовать"
 
@@ -1561,215 +1561,220 @@ msgstr "Активировать пользовательский шрифт"
 msgid "Custom Font"
 msgstr "Пользовательский шрифт"
 
-#: scctool/view/widgets.py:183
+#: scctool/view/widgets.py:186
 msgid "Map Downloader"
 msgstr "Загрузчик карт"
 
-#: scctool/view/widgets.py:185 scctool/view/widgets.py:366
+#: scctool/view/widgets.py:188 scctool/view/widgets.py:369
 msgid "Downloading {}"
 msgstr "Загрузка {}"
 
-#: scctool/view/widgets.py:249
+#: scctool/view/widgets.py:252
 msgid "Not set"
 msgstr "Не задано"
 
-#: scctool/view/widgets.py:252
+#: scctool/view/widgets.py:255
 msgid "Set Hotkey"
 msgstr "Установить хоткей"
 
-#: scctool/view/widgets.py:255
+#: scctool/view/widgets.py:258
 msgid "Clear"
 msgstr "Очистить"
 
 # Google Translate
-#: scctool/view/widgets.py:306
+#: scctool/view/widgets.py:309
 msgid "Recording Hotkey"
 msgstr "Горячая клавиша записи"
 
 # Needs to be checked by Russian.
-#: scctool/view/widgets.py:308
+#: scctool/view/widgets.py:311
 msgid "Press a Hotkey for {}"
 msgstr "Нажмите горячую клавишу для {}"
 
-#: scctool/view/widgets.py:364
+#: scctool/view/widgets.py:367
 msgid "Logo Downloader"
 msgstr "Загрузчик логотипов"
 
-#: scctool/view/widgets.py:420
+#: scctool/view/widgets.py:423
 msgid "Updater"
 msgstr "Обновления"
 
-#: scctool/view/widgets.py:422
+#: scctool/view/widgets.py:425
 msgid "Updating to a new version..."
 msgstr "Обновление на новую версию..."
 
-#: scctool/view/widgets.py:449
+#: scctool/view/widgets.py:452
 msgid "Downloading a new version: Total file size {}, Time remaining {}."
 msgstr "Загрузка новой версии: размер файла {}, осталось времени {}."
 
-#: scctool/view/widgets.py:496
+#: scctool/view/widgets.py:499
 msgid "Select"
 msgstr "Выбрать"
 
-#: scctool/view/widgets.py:499
+#: scctool/view/widgets.py:502
 msgid "Default"
 msgstr "По умолчанию"
 
 # Google Translate
-#: scctool/view/widgets.py:673
+#: scctool/view/widgets.py:676
 msgid "Add Entry"
 msgstr "Добавить запись"
 
-#: scctool/view/widgets.py:678
+#: scctool/view/widgets.py:681
 msgid "Edit Entry"
 msgstr "Изменить запись"
 
-#: scctool/view/widgets.py:683
+#: scctool/view/widgets.py:686
 msgid "Remove Entry"
 msgstr "Удалить запись"
 
 # Google Translate
-#: scctool/view/widgets.py:687
+#: scctool/view/widgets.py:690
 msgid "Open on Aligulac.com"
 msgstr "Открыть на Aligulac.com"
 
-#: scctool/view/widgets.py:824
+#: scctool/view/widgets.py:827
 msgid "Remove with Aliases"
 msgstr "Удалить с помощью псевдонимов"
 
-#: scctool/view/widgets.py:829
+#: scctool/view/widgets.py:832
 msgid "Remove Alias"
 msgstr "Удалить псевдоним"
 
-#: scctool/view/widgets.py:971
+#: scctool/view/widgets.py:974
 msgid "Processing..."
 msgstr "Обработка ..."
 
-#: scctool/view/widgets.py:1009
+#: scctool/view/widgets.py:1012
 msgid "Collecting data..."
 msgstr "Сбор данных..."
 
-#: scctool/view/widgets.py:1048
+#: scctool/view/widgets.py:1051
 msgid "Extracting data..."
 msgstr "Получение данных..."
 
-#: scctool/view/widgets.py:1050
+#: scctool/view/widgets.py:1053
 msgid "Done."
 msgstr "Готово."
 
-#: scctool/view/widgets.py:1065
+#: scctool/view/widgets.py:1068
 msgid "Downloading required files: Total file size {}, Time remaining {}."
 msgstr "Загрузка необходимых файлов: размер файла {}, осталось времени {}."
 
-#: scctool/view/widgets.py:1362
+#: scctool/view/widgets.py:1365
 msgid "Profile"
 msgstr "профили"
 
 # Google Translate
-#: scctool/view/widgets.py:1365
+#: scctool/view/widgets.py:1368
 msgid "Open current Profile Folder"
 msgstr "Открыть текущую папку профилей"
 
-#: scctool/view/widgets.py:1369
+#: scctool/view/widgets.py:1372
 msgid "New"
 msgstr "новый"
 
 # Google Translate
-#: scctool/view/widgets.py:1373
+#: scctool/view/widgets.py:1376
 msgid "Duplicate"
 msgstr "дублировать"
 
-#: scctool/view/widgets.py:1385
+#: scctool/view/widgets.py:1388
 msgid "Import as New"
 msgstr "мпорт как новый"
 
-#: scctool/view/widgets.py:1389
+#: scctool/view/widgets.py:1392
 msgid "Import && Overwrite"
 msgstr "Импорт и перезапись"
 
-#: scctool/view/widgets.py:1393
+#: scctool/view/widgets.py:1396
 msgid "Export"
 msgstr "экспорт"
 
-#: scctool/view/widgets.py:1417 scctool/view/widgets.py:1429
+#: scctool/view/widgets.py:1420 scctool/view/widgets.py:1432
 msgid "Remove Profile"
 msgstr "Удалить профиль"
 
-#: scctool/view/widgets.py:1418
+#: scctool/view/widgets.py:1421
 msgid "Are you sure you wish to remove profile '{}'?"
 msgstr "Вы действительно хотите удалить профиль '{}'?"
 
 # Google Translate
-#: scctool/view/widgets.py:1443
+#: scctool/view/widgets.py:1446
 msgid "Add Profile"
 msgstr "Добавить профиль"
 
-#: scctool/view/widgets.py:1444 scctool/view/widgets.py:1602
+#: scctool/view/widgets.py:1447 scctool/view/widgets.py:1605
 msgid "Please enter the name of the profile"
 msgstr "Введите имя профиля"
 
-#: scctool/view/widgets.py:1456 scctool/view/widgets.py:1483
-#: scctool/view/widgets.py:1541 scctool/view/widgets.py:1613
+#: scctool/view/widgets.py:1459 scctool/view/widgets.py:1486
+#: scctool/view/widgets.py:1544 scctool/view/widgets.py:1616
 msgid "Please enter a valid name"
 msgstr "Пожалуйста, введите верное имя"
 
 # Google Translate
-#: scctool/view/widgets.py:1469
+#: scctool/view/widgets.py:1472
 msgid "Duplicate Profile"
 msgstr "Дублированный профиль"
 
-#: scctool/view/widgets.py:1470
+#: scctool/view/widgets.py:1473
 msgid "Please enter the name of the new profile"
 msgstr "Введите имя нового профиля"
 
-#: scctool/view/widgets.py:1500 scctool/view/widgets.py:1521
-#: scctool/view/widgets.py:1554
+#: scctool/view/widgets.py:1503 scctool/view/widgets.py:1524
+#: scctool/view/widgets.py:1557
 msgid "ZIP archive"
 msgstr "ZIP-архив"
 
-#: scctool/view/widgets.py:1528
+#: scctool/view/widgets.py:1531
 msgid "Import Profile"
 msgstr "Импорт профилей"
 
-#: scctool/view/widgets.py:1529
+#: scctool/view/widgets.py:1532
 msgid "Please enter the name of the imported profile"
 msgstr "Введите имя импортируемого профиля"
 
-#: scctool/view/widgets.py:1561
+#: scctool/view/widgets.py:1564
 msgid "Overwrite Profile"
 msgstr "Перезаписать профили"
 
-#: scctool/view/widgets.py:1562
+#: scctool/view/widgets.py:1565
 msgid "Are you sure you wish to overwrite the current profile '{}'?"
 msgstr "Вы действительно хотите перезаписать текущий профиль '{}'?"
 
-#: scctool/view/widgets.py:1579
+#: scctool/view/widgets.py:1582
 msgid "Import & Overwrite Profile"
 msgstr "Импорт и перезапись профиля"
 
-#: scctool/view/widgets.py:1601
+#: scctool/view/widgets.py:1604
 msgid "Rename Profile"
 msgstr "Переименовать профиль"
 
-#: scctool/view/widgets.py:1631
+#: scctool/view/widgets.py:1634
 msgid "Enter AlphaTL/RSL Match-URL or search for an upcoming AlphaTL Match."
 msgstr "Введите AlphaTL / RSL Match-URL или найдите предстоящее AlphaTL Match."
 
-#: scctool/view/widgets.py:1724
+#: scctool/view/widgets.py:1729
 msgid "Dynamic:"
 msgstr "Динамический:"
 
-#: scctool/view/widgets.py:1739
+#: scctool/view/widgets.py:1746
 msgid "Static:"
 msgstr "Статическая:"
 
-#: scctool/view/widgets.py:1744
+#: scctool/view/widgets.py:1751
 msgid "From"
 msgstr "от"
 
-#: scctool/view/widgets.py:1751
+#: scctool/view/widgets.py:1758
 msgid "to"
 msgstr "в"
+
+# Google Translate
+#: scctool/view/widgets.py:1774
+msgid "Activate Separate Style:"
+msgstr "Активировать отдельный стиль:"
 
 #~ msgid "Winner Highlight:"
 #~ msgstr "Победитель:"

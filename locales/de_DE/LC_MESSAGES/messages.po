@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: StarCraft Casting Tool\n"
-"POT-Creation-Date: 2020-03-29 11:58+0200\n"
+"POT-Creation-Date: 2020-04-25 00:50+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -585,8 +585,8 @@ msgstr "Spieler {} von Team {}"
 msgid "Set the score"
 msgstr "Setze den Spielstand"
 
-#: view/matchdataview.py:289 view/widgets.py:1748 view/widgets.py:1756
-#: view/widgets.py:1797
+#: view/matchdataview.py:289 view/widgets.py:1755 view/widgets.py:1763
+#: view/widgets.py:1825
 msgid "Map {}"
 msgstr "Karte {}"
 
@@ -610,7 +610,7 @@ msgstr "Wähle Team/Spieler für Veto aus."
 msgid "Player Alias"
 msgstr "Spieleralias"
 
-#: view/matchdataview.py:404 view/widgets.py:802 view/widgets.py:822
+#: view/matchdataview.py:404 view/widgets.py:805 view/widgets.py:825
 msgid "Name"
 msgstr "Name"
 
@@ -624,7 +624,7 @@ msgstr "Alias von {}"
 
 #: view/matchdataview.py:419 view/subMisc.py:346 view/subMisc.py:689
 #: view/subMisc.py:735 view/subMisc.py:773 view/subMisc.py:831
-#: view/widgets.py:1510
+#: view/widgets.py:1513
 msgid "Error"
 msgstr "Fehler"
 
@@ -987,7 +987,7 @@ msgid "Add to Favorites"
 msgstr "Zu Favoriten hinzufügen"
 
 #: view/subLogos.py:65 view/subLogos.py:115 view/subMisc.py:645
-#: view/widgets.py:1381
+#: view/widgets.py:1384
 msgid "Remove"
 msgstr "Entfernen"
 
@@ -1171,7 +1171,7 @@ msgstr ""
 msgid "Player Aliases"
 msgstr "Spieleraliase"
 
-#: view/subMisc.py:293 view/subMisc.py:306 view/widgets.py:819
+#: view/subMisc.py:293 view/subMisc.py:306 view/widgets.py:822
 msgid "Add Alias"
 msgstr "Alias hinzufügen"
 
@@ -1313,7 +1313,7 @@ msgstr "Aus Liquipedia hinzufügen"
 msgid "Add from File"
 msgstr "Aus Datei hinzufügen"
 
-#: view/subMisc.py:641 view/widgets.py:1377
+#: view/subMisc.py:641 view/widgets.py:1380
 msgid "Rename"
 msgstr "Umbennen"
 
@@ -1472,207 +1472,211 @@ msgstr "Aktiviere benutzerdefinierte Schrift"
 msgid "Custom Font"
 msgstr "Benutzerdefinierte Schrift"
 
-#: view/widgets.py:183
+#: view/widgets.py:186
 msgid "Map Downloader"
 msgstr "Karten Downloader"
 
-#: view/widgets.py:185 view/widgets.py:366
+#: view/widgets.py:188 view/widgets.py:369
 msgid "Downloading {}"
 msgstr "Lade {} herunter"
 
-#: view/widgets.py:249
+#: view/widgets.py:252
 msgid "Not set"
 msgstr "Nicht gesetzt"
 
-#: view/widgets.py:252
+#: view/widgets.py:255
 msgid "Set Hotkey"
 msgstr "Setze Kürrzel"
 
-#: view/widgets.py:255
+#: view/widgets.py:258
 msgid "Clear"
 msgstr "Löschen"
 
-#: view/widgets.py:306
+#: view/widgets.py:309
 msgid "Recording Hotkey"
 msgstr "Nehme Tastenkürzel auf"
 
-#: view/widgets.py:308
+#: view/widgets.py:311
 msgid "Press a Hotkey for {}"
 msgstr "Drücke ein Tastenkürzel für {}."
 
-#: view/widgets.py:364
+#: view/widgets.py:367
 msgid "Logo Downloader"
 msgstr "Logo Downloader"
 
-#: view/widgets.py:420
+#: view/widgets.py:423
 msgid "Updater"
 msgstr "Aktualisierer"
 
-#: view/widgets.py:422
+#: view/widgets.py:425
 msgid "Updating to a new version..."
 msgstr "Aktualisiere auf eine neue Version..."
 
-#: view/widgets.py:449
+#: view/widgets.py:452
 msgid "Downloading a new version: Total file size {}, Time remaining {}."
 msgstr "Lade eine neue Version herunter: {} Gesamtgröße, {} Zeit verbleibend."
 
-#: view/widgets.py:496
+#: view/widgets.py:499
 msgid "Select"
 msgstr "Auswählen"
 
-#: view/widgets.py:499
+#: view/widgets.py:502
 msgid "Default"
 msgstr "Voreinstellung"
 
-#: view/widgets.py:673
+#: view/widgets.py:676
 msgid "Add Entry"
 msgstr "Eintrag hinzufügen"
 
-#: view/widgets.py:678
+#: view/widgets.py:681
 msgid "Edit Entry"
 msgstr "Eintrag editieren."
 
-#: view/widgets.py:683
+#: view/widgets.py:686
 msgid "Remove Entry"
 msgstr "Eintrag entfernen"
 
-#: view/widgets.py:687
+#: view/widgets.py:690
 msgid "Open on Aligulac.com"
 msgstr "Auf Aligulac.com öffnen"
 
-#: view/widgets.py:824
+#: view/widgets.py:827
 msgid "Remove with Aliases"
 msgstr "Alias löschen"
 
-#: view/widgets.py:829
+#: view/widgets.py:832
 msgid "Remove Alias"
 msgstr "Lösche Alias"
 
-#: view/widgets.py:971
+#: view/widgets.py:974
 msgid "Processing..."
 msgstr "Wird verarbeitet..."
 
-#: view/widgets.py:1009
+#: view/widgets.py:1012
 msgid "Collecting data..."
 msgstr "Sammele Daten..."
 
-#: view/widgets.py:1048
+#: view/widgets.py:1051
 msgid "Extracting data..."
 msgstr "Extrahiere Daten..."
 
-#: view/widgets.py:1050
+#: view/widgets.py:1053
 msgid "Done."
 msgstr "Fertig."
 
-#: view/widgets.py:1065
+#: view/widgets.py:1068
 msgid "Downloading required files: Total file size {}, Time remaining {}."
 msgstr "Lade benötige Dateien herunter: {} Gesamtgröße, {} Zeit verbleibend."
 
-#: view/widgets.py:1362
+#: view/widgets.py:1365
 msgid "Profile"
 msgstr "Profil"
 
-#: view/widgets.py:1365
+#: view/widgets.py:1368
 msgid "Open current Profile Folder"
 msgstr "Öffne aktuellen Profil-Ordner"
 
-#: view/widgets.py:1369
+#: view/widgets.py:1372
 msgid "New"
 msgstr "Neu"
 
-#: view/widgets.py:1373
+#: view/widgets.py:1376
 msgid "Duplicate"
 msgstr "Duplikat"
 
-#: view/widgets.py:1385
+#: view/widgets.py:1388
 msgid "Import as New"
 msgstr "Importieren als neues Profil"
 
-#: view/widgets.py:1389
+#: view/widgets.py:1392
 msgid "Import && Overwrite"
 msgstr "Import und Überschreiben"
 
-#: view/widgets.py:1393
+#: view/widgets.py:1396
 msgid "Export"
 msgstr "Exportieren"
 
-#: view/widgets.py:1417 view/widgets.py:1429
+#: view/widgets.py:1420 view/widgets.py:1432
 msgid "Remove Profile"
 msgstr "Lösche Profil"
 
-#: view/widgets.py:1418
+#: view/widgets.py:1421
 msgid "Are you sure you wish to remove profile '{}'?"
 msgstr "Sicher, dass das Profil '{}' gelöscht werden soll?"
 
-#: view/widgets.py:1443
+#: view/widgets.py:1446
 msgid "Add Profile"
 msgstr "Profil hinzufügen"
 
-#: view/widgets.py:1444 view/widgets.py:1602
+#: view/widgets.py:1447 view/widgets.py:1605
 msgid "Please enter the name of the profile"
 msgstr "Bitte den Namen des Profils eingeben"
 
-#: view/widgets.py:1456 view/widgets.py:1483 view/widgets.py:1541
-#: view/widgets.py:1613
+#: view/widgets.py:1459 view/widgets.py:1486 view/widgets.py:1544
+#: view/widgets.py:1616
 msgid "Please enter a valid name"
 msgstr "Bitte einen gültigen Namen angeben"
 
-#: view/widgets.py:1469
+#: view/widgets.py:1472
 msgid "Duplicate Profile"
 msgstr "Dupliziere Profil"
 
-#: view/widgets.py:1470
+#: view/widgets.py:1473
 msgid "Please enter the name of the new profile"
 msgstr "Bitte Name des neuen Profils eingeben"
 
-#: view/widgets.py:1500 view/widgets.py:1521 view/widgets.py:1554
+#: view/widgets.py:1503 view/widgets.py:1524 view/widgets.py:1557
 msgid "ZIP archive"
 msgstr "ZIP-Archiv"
 
-#: view/widgets.py:1528
+#: view/widgets.py:1531
 msgid "Import Profile"
 msgstr "Importiere Profil"
 
-#: view/widgets.py:1529
+#: view/widgets.py:1532
 msgid "Please enter the name of the imported profile"
 msgstr "Bitte Namen für das importierte Profile eingeben"
 
-#: view/widgets.py:1561
+#: view/widgets.py:1564
 msgid "Overwrite Profile"
 msgstr "Überschreibe Profil"
 
-#: view/widgets.py:1562
+#: view/widgets.py:1565
 msgid "Are you sure you wish to overwrite the current profile '{}'?"
 msgstr "Sicher, dass das aktuelle Profil '{}' überschrieben werden soll?"
 
-#: view/widgets.py:1579
+#: view/widgets.py:1582
 msgid "Import & Overwrite Profile"
 msgstr "Importiere und überschreibe Profil"
 
-#: view/widgets.py:1601
+#: view/widgets.py:1604
 msgid "Rename Profile"
 msgstr "Profil umbenennen"
 
-#: view/widgets.py:1631
+#: view/widgets.py:1634
 msgid "Enter AlphaTL/RSL Match-URL or search for an upcoming AlphaTL Match."
 msgstr ""
 "Gebe eine AlphaTL/RSL Match-URL ein oder suche nach kommenden Alpha Partien."
 
-#: view/widgets.py:1724
+#: view/widgets.py:1729
 msgid "Dynamic:"
 msgstr "Dynamisch:"
 
-#: view/widgets.py:1739
+#: view/widgets.py:1746
 msgid "Static:"
 msgstr "Statisch:"
 
-#: view/widgets.py:1744
+#: view/widgets.py:1751
 msgid "From"
 msgstr "Von"
 
-#: view/widgets.py:1751
+#: view/widgets.py:1758
 msgid "to"
 msgstr "bis"
+
+#: view/widgets.py:1774
+msgid "Activate Separate Style:"
+msgstr "Aktiviere separaten Stil:"
 
 #~ msgid "Winner Highlight:"
 #~ msgstr "Sieger Highlight:"
