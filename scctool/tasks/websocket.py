@@ -344,7 +344,6 @@ class WebsocketThread(QThread):
                         style = scctool.settings.config.parser.get(
                             "Style", primary_scope)
                 except NoOptionError:
-                    module_logger.exception('Test')
                     style = scctool.settings.config.parser.get(
                     "Style", primary_scope)
             style_file = "src/css/{}/{}.css".format(primary_scope, style)

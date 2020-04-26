@@ -683,7 +683,7 @@ class SubwindowBrowserSources(QWidget):
         scctool.settings.config.parser.set(
             "Intros", "animation", self.cb_animation.currentData().strip())
         scctool.settings.config.parser.set(
-            "Intros", "tts_voice", self.cb_tts_voice.currentData().strip())
+            "Intros", "tts_voice", '' if self.cb_tts_voice.currentData() is None else self.cb_tts_voice.currentData().strip())
         scctool.settings.config.parser.set(
             "Intros", "tts_scope", self.cb_tts_scope.currentData().strip())
         scctool.settings.config.parser.set(
