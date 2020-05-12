@@ -1,6 +1,15 @@
 # Changelog
 
 
+## v2.8.4 (2020-05-12)
+
+### Fix
+
+* Twitch Title Updater patched to reflect recent OAuth requirement.
+
+* Prevent crash when running from source without TTS API key.
+
+
 ## v2.8.3 (2020-04-24)
 
 ### New
@@ -22,6 +31,8 @@
 
 * Landscape map icons are now properly centered horizontally for the StarCraft2 skin.
 
+* Nightbot OAuth fixed.
+
 
 ## v2.8.1 (2020-03-15)
 
@@ -30,8 +41,6 @@
 * Map Images fo Ever Dream, Golden Wall, Purity and Industry, and Zen updated.
 
 ### Fix
-
-* Nightbot OAuth fixed.
 
 * Fixed bug when adding Nightbot commands.
 
