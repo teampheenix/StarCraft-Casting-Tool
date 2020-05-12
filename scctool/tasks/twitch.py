@@ -27,7 +27,7 @@ def updateTitle(newTitle):
         oauth = scctool.settings.config.parser.get("Twitch", "oauth")
 
         headers = {'Accept': 'application/vnd.twitchtv.v5+json',
-                   'Authorization': 'OAuth ' + oauth,
+                   'Authorization': f'OAuth {oauth}',
                    'Client-ID': clientID}
 
         params = {'channel[status]': newTitle}
@@ -35,7 +35,7 @@ def updateTitle(newTitle):
         if scctool.settings.config.parser.getboolean("Twitch", "set_game"):
             params['channel[game]'] = 'StarCraft II'
 
-        requests.put('https://api.twitch.tv/kraken/channels/' + userID,
+        requests.put(f'https://api.twitch.tv/kraken/channels/{userID}',
                      headers=headers, params=params).raise_for_status()
         msg = _('Updated Twitch title of {} to: "{}"').format(
             twitchChannel, newTitle)
@@ -71,7 +71,8 @@ def getUserID(login):
     """Get a user's ID from twitch API."""
     client_id = scctool.settings.safe.get('twitch-client-id')
     url = 'https://api.twitch.tv/helix/users'
-    headers = {'Client-ID': client_id}
+    oauth = scctool.settings.config.parser.get("Twitch", "oauth")
+    headers = {'Client-ID': client_id, 'Authorization': f'Bearer {oauth}'}
     params = {'login': login}
 
     r = requests.get(url, headers=headers, params=params)

@@ -98,7 +98,7 @@ class myHandler(http.server.SimpleHTTPRequestHandler):
                   "state": state,
                   "redirect_uri": TWITCH_REDIRECT_URI,
                   "scope": "channel_editor"}
-        url = "https://api.twitch.tv/kraken/oauth2/authorize?" + \
+        url = "https://id.twitch.tv/oauth2/authorize?" + \
             urllib.parse.urlencode(params)
         return url
 
