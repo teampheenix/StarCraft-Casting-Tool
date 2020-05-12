@@ -31,3 +31,5 @@ tests/__pycache__/
 hooks/__pycache__/
 inno-setup/Output
 inno-setup/*.exe
+.venv
+.vscode
