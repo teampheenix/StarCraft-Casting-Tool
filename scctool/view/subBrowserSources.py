@@ -310,7 +310,7 @@ class SubwindowBrowserSources(QWidget):
 
         options = self.controller.matchControl.scopes
         self.scope_box = dict()
-        for idx in range(0, 3):
+        for idx in range(3):
             self.scope_box[idx] = ScopeGroupBox(
                 _("Icon Set {} Scope".format(idx + 1)),
                 options,
@@ -399,7 +399,7 @@ class SubwindowBrowserSources(QWidget):
 
         options = self.controller.matchControl.scopes
         self.scope_landscape = dict()
-        for idx in range(0, 3):
+        for idx in range(3):
             self.scope_landscape[idx] = ScopeGroupBox(
                 _("Icon Set {} Scope".format(idx + 1)),
                 options,
@@ -660,7 +660,7 @@ class SubwindowBrowserSources(QWidget):
             self.controller.mapstatsManager.sendMapPool()
             self.mainWindow.updateAllMapButtons()
 
-            for idx in range(0, 3):
+            for idx in range(3):
                 scctool.settings.config.parser.set(
                     "MapIcons", "scope_box_{}".format(idx + 1),
                     self.scope_box[idx].getScope())

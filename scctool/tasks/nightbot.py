@@ -127,7 +127,7 @@ def updateCommand(data):
 def findCommands(response, data):
     """Search for commands response."""
     commands_found = dict()
-    for i in range(0, response['_total']):
+    for i in range(response['_total']):
         commands_found[response['commands'][i]['name']] = i
     for cmd, msg in data.items():
         if cmd in commands_found:

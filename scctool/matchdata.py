@@ -1174,27 +1174,27 @@ class MatchData(QObject):
     def parseScope(self, scope='all'):
         """Parse the scope."""
         if scope == 'all':
-            for idx in range(0, self.getNoSets()):
+            for idx in range(self.getNoSets()):
                 yield idx
             return
         if scope == 'not-ace':
-            for idx in range(0, self.getNoSets()):
+            for idx in range(self.getNoSets()):
                 if not self.isAce(idx):
                     yield idx
             return
         if scope == 'ace':
-            for idx in range(0, self.getNoSets()):
+            for idx in range(self.getNoSets()):
                 if self.isAce(idx):
                     yield idx
             return
         if scope == 'decided':
-            for idx in range(0, self.getNoSets()):
+            for idx in range(self.getNoSets()):
                 if self.getMapScore(idx) != 0:
                     yield idx
             return
         if scope == 'decided+1':
             stop = False
-            for idx in range(0, self.getNoSets()):
+            for idx in range(self.getNoSets()):
                 if self.getMapScore(idx) != 0:
                     stop = False
                     yield idx
@@ -1205,7 +1205,7 @@ class MatchData(QObject):
                     return
             return
         if scope == 'undecided':
-            for idx in range(0, self.getNoSets()):
+            for idx in range(self.getNoSets()):
                 if self.getMapScore(idx) == 0:
                     yield idx
             return
@@ -1239,7 +1239,7 @@ class MatchData(QObject):
                 yield idx
             return
         else:
-            for idx in range(0, self.getNoSets()):
+            for idx in range(self.getNoSets()):
                 yield idx
             return
 

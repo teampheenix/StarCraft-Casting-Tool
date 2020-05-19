@@ -918,7 +918,7 @@ class MainController:
         data = self.matchControl.activeMatch().getMapIconsData()
 
         for boxtype in ['box', 'landscape']:
-            for idx in range(0, 3):
+            for idx in range(3):
                 path = f'mapicons_{boxtype}_{idx + 1}'
                 scope = f'scope_{boxtype}_{idx + 1}'
                 scope = scctool.settings.config.parser.get("MapIcons", scope)
@@ -950,7 +950,7 @@ class MainController:
 
     def handleScoreChange(self, obj):
         score = self.matchControl.activeMatch().getScore()
-        for idx in range(0, 2):
+        for idx in range(2):
             self.websocketThread.sendData2Path(
                 'score', 'CHANGE_TEXT', {
                     'id': 'score{}'.format(idx + 1),
@@ -1007,7 +1007,7 @@ class MainController:
              })
 
     def handleColorChange(self, obj):
-        for idx in range(0, 2):
+        for idx in range(2):
             self.websocketThread.sendData2Path(
                 'score', 'CHANGE_SCORE', {
                     'teamid': idx + 1,
@@ -1088,7 +1088,7 @@ class MainController:
 
         data = self.matchControl.activeMatch().getMapIconsData()
         for icon_type in ['box', 'landscape']:
-            for idx in range(0, 3):
+            for idx in range(3):
                 path = f'mapicons_{icon_type}_{idx + 1}'
                 if len(self.websocketThread.connected.get(path, set())) > 0:
                     processedData = dict()

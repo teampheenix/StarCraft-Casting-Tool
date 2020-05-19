@@ -1751,7 +1751,7 @@ class ScopeGroupBox(QGroupBox):
         self.label1 = QLabel(_('From'))
         container.addWidget(self.label1)
         self.cb_lower = QComboBox()
-        for set_idx in range(0, scctool.settings.max_no_sets):
+        for set_idx in range(scctool.settings.max_no_sets):
             self.cb_lower.addItem(_('Map {}').format(set_idx + 1), set_idx)
         self.cb_lower.currentIndexChanged.connect(self.adjustRangeUpper)
         container.addWidget(self.cb_lower, 0)
@@ -1759,7 +1759,7 @@ class ScopeGroupBox(QGroupBox):
         self.label2.setAlignment(Qt.AlignCenter)
         container.addWidget(self.label2, 0)
         self.cb_upper = QComboBox()
-        for set_idx in range(0, scctool.settings.max_no_sets):
+        for set_idx in range(scctool.settings.max_no_sets):
             self.cb_upper.addItem(_('Map {}').format(set_idx + 1), set_idx)
         container.addWidget(self.cb_upper, 0)
         layout.addRow(self.bt_static, container)
