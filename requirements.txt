@@ -1,5 +1,5 @@
 appdirs >= 1.4.4
-beautifulsoup4 >= 4.9.0
+beautifulsoup4 >= 4.9.1
 humanize >= 2.4.0
 keyboard==0.13.5
 markdown2 >= 2.3.9
