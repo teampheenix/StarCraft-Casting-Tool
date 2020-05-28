@@ -184,7 +184,8 @@ class TestGUI(object):
         "match_url",
         ['https://www.choboteamleague.com/home/m/6235882/article/4940572',
          'https://www.choboteamleague.com/home/m/6235882/article/4938137',
-         'https://www.choboteamleague.com/home/m/6235882/article/4945692'])
+         'https://www.choboteamleague.com/home/m/6235882/article/4945692',
+         'https://www.choboteamleague.com/home/m/6235882/article/5032847'])
     def test_ctl_match_grabber(self, qtbot, scct_app, mocker, match_url):
         def getItem_mocker(view, msg1, msg2, list, editable=True):
             assert editable is False
