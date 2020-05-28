@@ -1,6 +1,13 @@
 # Changelog
 
 
+## v2.8.5 (2020-05-28)
+
+### Changes
+
+* Maps updated - Acropolis, Cobalt, Disco Bloodbath, Thunderbird, and Winter's Gate removed; Deathaura, Ice and Chrom, Pillars of Gold, and Submarine added.
+
+
 ## v2.8.4 (2020-05-12)
 
 ### Fix
