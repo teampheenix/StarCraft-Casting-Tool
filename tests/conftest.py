@@ -3,6 +3,7 @@ import os
 import random
 import shutil
 import sys
+import time
 
 import pytest
 from PyQt5.QtWidgets import QApplication, QStyleFactory
@@ -50,7 +51,9 @@ def scct_app(tmpdir_factory, caplog):
     yield (main_window, cntlr)
     main_window.close()
     cntlr.cleanUp()
+    time.sleep(1)
     app.exit(1)
+    time.sleep(1)
     for record in caplog.records:
         assert record.levelname != 'CRITICAL'
         assert record.levelname != 'ERROR'
