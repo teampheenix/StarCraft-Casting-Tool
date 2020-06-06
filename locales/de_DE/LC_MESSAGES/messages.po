@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: StarCraft Casting Tool\n"
-"POT-Creation-Date: 2020-04-25 00:50+0200\n"
+"POT-Creation-Date: 2020-06-06 12:02+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -26,69 +26,99 @@ msgstr ""
 msgid "Critical Error"
 msgstr "Kritischer Fehler"
 
-#: controller.py:100
+#: controller.py:101
 msgid "This version is up to date."
 msgstr "Diese Version ist aktuell."
 
-#: controller.py:552 controller.py:560
+#: controller.py:553 controller.py:561
 msgid "Specify your Twitch Settings to use this feature"
 msgstr "Geben Sie Ihre Twitch-Einstellungen an, um diese Funktion zu verwenden"
 
-#: controller.py:555
+#: controller.py:556
 msgid ""
 "Automatically update the title of your twitch channel in the background."
 msgstr "Automatische Hintergrund-Aktualisierung des Twitch Titel."
 
-#: controller.py:566 controller.py:573
+#: controller.py:567 controller.py:574
 msgid "Specify your Nightbot Settings to use this feature"
 msgstr "Geben Sie Ihre Nightbot-Einstellungen an, um diese Funktion zu nutzen"
 
-#: controller.py:567
+#: controller.py:568
 msgid "Automatically update the commands of your nightbot in the background."
 msgstr "Automatische Hintergrund-Aktualisierung der Nightbot Kommandos."
 
-#: controller.py:584 controller.py:591
+#: controller.py:585 controller.py:592
 msgid "Not available when SC2 is running on a different PC."
 msgstr "Nicht verfügbar, wenn SC2 auf einem anderen PC läuft."
 
-#: controller.py:585 view/main.py:1013
+#: controller.py:586 view/main.py:1013
 msgid ""
 "Automatically sets the score of your ingame UI-interface at the begining of "
 "a game."
 msgstr ""
 "Setzt automatisch den Spielstand des UI-Interface zu Beginn einer Partie."
 
-#: controller.py:592 view/main.py:1022
+#: controller.py:593 view/main.py:1022
 msgid ""
 "Automatically toggles the production tab of your ingame UI-interface at the "
 "begining of a game."
 msgstr "Zeigt automatisch das Produktions-Tab zu Beginn eines Spieles an."
 
-#: controller.py:814
+#: controller.py:692
+msgid "New ladder maps have been detected, but automatic download is disabled."
+msgstr ""
+"Neue Ranglisten-Karten wurden detektiert, aber automatischer Download is "
+"deaktiviert."
+
+#: controller.py:695
+msgid "New ladder maps have been detected."
+msgstr "Neue Ranglisten-Karten wurden detektiert."
+
+#: controller.py:699
+msgid "Should {} be download from Liquipedia?"
+msgstr "Sollen {} von Liquipedia heruntergeladen werden?"
+
+#: controller.py:700
+msgid "New Ladder Maps"
+msgstr "Neue Ranglistenkarten"
+
+#: controller.py:708
+msgid "Don't show this message again."
+msgstr "Zeige diese Meldung nicht mehr an."
+
+#: controller.py:726 view/subMisc.py:791
+msgid "Map not found"
+msgstr "Karte nicht gefunden"
+
+#: controller.py:727 view/subMisc.py:792
+msgid "\"{}\" was not found on Liquipedia."
+msgstr "\"{}\" wurde nicht auf Liquipedia gefunden."
+
+#: controller.py:885
 msgid "Warning: Map '{}' not found!"
 msgstr "Warnung: Karte '{}' nicht gefunden!"
 
-#: controller.py:886
+#: controller.py:957
 msgid "{} {} Browser Source(s) connected on port {}."
 msgstr "{} {} Browser Quellen auf Port {} verbunden."
 
-#: controller.py:1113
+#: controller.py:1184
 msgid "A new version {} is available."
 msgstr "Eine neue Version {} ist verfügbar."
 
-#: controller.py:1115
+#: controller.py:1186
 msgid "Update to new version?"
 msgstr "Auf die neue Version aktualisieren?"
 
-#: controller.py:1116
+#: controller.py:1187
 msgid "New StarCraft Casting Tool Version"
 msgstr "Neue StarCraft Casting Tool Version"
 
-#: controller.py:1125
+#: controller.py:1196
 msgid "Don't show on startup."
 msgstr "Nicht mehr beim Programm-Start zeigen."
 
-#: controller.py:1134
+#: controller.py:1205
 msgid "A new version {} is available on GitHub!"
 msgstr "Die neue Version {} ist bei GitHub verfügbar!"
 
@@ -622,8 +652,8 @@ msgstr "Alias"
 msgid "Alias of {}"
 msgstr "Alias von {}"
 
-#: view/matchdataview.py:419 view/subMisc.py:346 view/subMisc.py:689
-#: view/subMisc.py:735 view/subMisc.py:773 view/subMisc.py:831
+#: view/matchdataview.py:419 view/subMisc.py:346 view/subMisc.py:697
+#: view/subMisc.py:743 view/subMisc.py:781 view/subMisc.py:839
 #: view/widgets.py:1513
 msgid "Error"
 msgstr "Fehler"
@@ -837,21 +867,21 @@ msgstr ""
 "{tts} getestet werden."
 
 #: view/subBrowserSources.py:612 view/subConnections.py:260
-#: view/subLiquipediaSearch.py:84 view/subMisc.py:881 view/subStyles.py:93
+#: view/subLiquipediaSearch.py:84 view/subMisc.py:889 view/subStyles.py:93
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: view/subBrowserSources.py:616 view/subConnections.py:264 view/subMisc.py:885
+#: view/subBrowserSources.py:616 view/subConnections.py:264 view/subMisc.py:893
 #: view/subStyles.py:97
 msgid "&Save && Close"
 msgstr "&Speichern && Schließen"
 
-#: view/subBrowserSources.py:617 view/subConnections.py:265 view/subMisc.py:886
+#: view/subBrowserSources.py:617 view/subConnections.py:265 view/subMisc.py:894
 #: view/subStyles.py:98
 msgid "Shortcut: {}"
 msgstr "Tastenkürzel: {}"
 
-#: view/subBrowserSources.py:738 view/subConnections.py:323 view/subMisc.py:970
+#: view/subBrowserSources.py:738 view/subConnections.py:323 view/subMisc.py:980
 #: view/subStyles.py:436
 msgid "Save data?"
 msgstr "Daten speichern?"
@@ -1027,7 +1057,7 @@ msgstr "Von Favoriten entfernen"
 msgid "Select Team Logo"
 msgstr "Wähle das Team Logo aus"
 
-#: view/subLogos.py:331 view/subMisc.py:710 view/subMisc.py:723
+#: view/subLogos.py:331 view/subMisc.py:718 view/subMisc.py:731
 msgid "Supported Images"
 msgstr "Unterstütze Bild-Formate"
 
@@ -1321,44 +1351,40 @@ msgstr "Umbennen"
 msgid "Change Image"
 msgstr "Ändere Bild"
 
-#: view/subMisc.py:678 view/subMisc.py:679 view/subMisc.py:729
-#: view/subMisc.py:766
+#: view/subMisc.py:654
+msgid "Prompt to download new ladders maps."
+msgstr ""
+
+#: view/subMisc.py:686 view/subMisc.py:687 view/subMisc.py:737
+#: view/subMisc.py:774
 msgid "Map Name"
 msgstr "Karten-Name"
 
-#: view/subMisc.py:690 view/subMisc.py:736 view/subMisc.py:774
+#: view/subMisc.py:698 view/subMisc.py:744 view/subMisc.py:782
 msgid "\"{}\" is not a valid map name."
 msgstr "\"{}\" ist kein gültiger Kartenname."
 
-#: view/subMisc.py:694 view/subMisc.py:741 view/subMisc.py:793
+#: view/subMisc.py:702 view/subMisc.py:749 view/subMisc.py:801
 msgid "Duplicate Entry"
 msgstr "Doppelter Eintrag"
 
-#: view/subMisc.py:695 view/subMisc.py:742
+#: view/subMisc.py:703 view/subMisc.py:750
 msgid "Map is already in list! Overwrite?"
 msgstr "Karte ist bereits in der Liste! Überschreiben?"
 
-#: view/subMisc.py:709 view/subMisc.py:722
+#: view/subMisc.py:717 view/subMisc.py:730
 msgid "Select Map Image (> 500x500px recommended)"
 msgstr "Wähle Karten-Bild aus (> 500x500px empfohlen)"
 
-#: view/subMisc.py:783
-msgid "Map not found"
-msgstr "Karte nicht gefunden"
-
-#: view/subMisc.py:784
-msgid "\"{}\" was not found on Liquipedia."
-msgstr "\"{}\" wurde nicht auf Liquipedia gefunden."
-
-#: view/subMisc.py:794
+#: view/subMisc.py:802
 msgid "Map {} is already in list! Overwrite?"
 msgstr "Karte {} ist bereits in der Liste! Überschreiben?"
 
-#: view/subMisc.py:839
+#: view/subMisc.py:847
 msgid "Delete map?"
 msgstr "Karte löschen?"
 
-#: view/subMisc.py:840
+#: view/subMisc.py:848
 msgid "Delete '{}' permanently?"
 msgstr "Soll '{}' permanent gelöschtt werden?"
 

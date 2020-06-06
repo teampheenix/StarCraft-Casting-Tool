@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: StarCraft Casting Tool\n"
-"POT-Creation-Date: 2020-04-25 00:49+0200\n"
-"PO-Revision-Date: 2020-04-25 00:49+0200\n"
+"POT-Creation-Date: 2020-06-06 12:06+0200\n"
+"PO-Revision-Date: 2020-06-06 12:08+0200\n"
 "Last-Translator: \n"
 "Language-Team: Mayhem, TanTall\n"
 "Language: ru\n"
@@ -32,72 +32,105 @@ msgstr ""
 msgid "Critical Error"
 msgstr "Критическая ошибка"
 
-#: scctool/controller.py:100
+#: scctool/controller.py:101
 msgid "This version is up to date."
 msgstr "Вы используете новейшую версию."
 
-#: scctool/controller.py:552 scctool/controller.py:560
+#: scctool/controller.py:553 scctool/controller.py:561
 msgid "Specify your Twitch Settings to use this feature"
 msgstr "Укажите настройки Twitch для использования этой возможности"
 
-#: scctool/controller.py:555
+#: scctool/controller.py:556
 msgid ""
 "Automatically update the title of your twitch channel in the background."
 msgstr ""
 "Автоматическое обновление заголовка вашего Twitch-канала в фоновом режиме."
 
-#: scctool/controller.py:566 scctool/controller.py:573
+#: scctool/controller.py:567 scctool/controller.py:574
 msgid "Specify your Nightbot Settings to use this feature"
 msgstr "Укажите настройки Nightbot для использования этой возможности"
 
-#: scctool/controller.py:567
+#: scctool/controller.py:568
 msgid "Automatically update the commands of your nightbot in the background."
 msgstr "Автоматическое обновление команд nightbot в фоновом режиме."
 
 # Google Translate
-#: scctool/controller.py:584 scctool/controller.py:591
+#: scctool/controller.py:585 scctool/controller.py:592
 msgid "Not available when SC2 is running on a different PC."
 msgstr "Недоступно, если SC2 работает на другом ПК."
 
-#: scctool/controller.py:585 scctool/view/main.py:1013
+#: scctool/controller.py:586 scctool/view/main.py:1013
 msgid ""
 "Automatically sets the score of your ingame UI-interface at the begining of "
 "a game."
 msgstr ""
 "Автоматически задает счет внутри вашего игрового интерфейса в начале игры."
 
-#: scctool/controller.py:592 scctool/view/main.py:1022
+#: scctool/controller.py:593 scctool/view/main.py:1022
 msgid ""
 "Automatically toggles the production tab of your ingame UI-interface at the "
 "begining of a game."
 msgstr "Автоматически переключается на вкладку Производство в начале игры."
 
-#: scctool/controller.py:814
+# Google
+#: scctool/controller.py:692
+msgid "New ladder maps have been detected, but automatic download is disabled."
+msgstr "Обнаружены новые релейные карты, но автоматическая загрузка отключена."
+
+# Google Translate
+#: scctool/controller.py:695
+msgid "New ladder maps have been detected."
+msgstr "Новые карты лестниц были обнаружены."
+
+# Google
+#: scctool/controller.py:699
+msgid "Should {} be download from Liquipedia?"
+msgstr "Должен ли {} быть загружен из Liquipedia?"
+
+# Google
+#: scctool/controller.py:700
+msgid "New Ladder Maps"
+msgstr "Новые Лестничные Карты"
+
+# Google
+#: scctool/controller.py:708
+msgid "Don't show this message again."
+msgstr "Не показывать это сообщение снова."
+
+#: scctool/controller.py:726 scctool/view/subMisc.py:791
+msgid "Map not found"
+msgstr "Карта не найдена"
+
+#: scctool/controller.py:727 scctool/view/subMisc.py:792
+msgid "\"{}\" was not found on Liquipedia."
+msgstr "\"{}\"  не найден на Liquipedia."
+
+#: scctool/controller.py:885
 msgid "Warning: Map '{}' not found!"
 msgstr "Внимание: Карта '{}' Не найдена!"
 
 # Google Translate
-#: scctool/controller.py:886
+#: scctool/controller.py:957
 msgid "{} {} Browser Source(s) connected on port {}."
 msgstr "{} {} Источник (и) браузера подключен к порту {}."
 
-#: scctool/controller.py:1113
+#: scctool/controller.py:1184
 msgid "A new version {} is available."
 msgstr "Доступна новая версия {}."
 
-#: scctool/controller.py:1115
+#: scctool/controller.py:1186
 msgid "Update to new version?"
 msgstr "Загрузить новую версию?"
 
-#: scctool/controller.py:1116
+#: scctool/controller.py:1187
 msgid "New StarCraft Casting Tool Version"
 msgstr "Новая версия StarCraft Casting Tool"
 
-#: scctool/controller.py:1125
+#: scctool/controller.py:1196
 msgid "Don't show on startup."
 msgstr "Не показывать при запуске."
 
-#: scctool/controller.py:1134
+#: scctool/controller.py:1205
 msgid "A new version {} is available on GitHub!"
 msgstr "Новая версия {} доступна на GitHub!"
 
@@ -667,8 +700,8 @@ msgid "Alias of {}"
 msgstr "Псевдоним {}"
 
 #: scctool/view/matchdataview.py:419 scctool/view/subMisc.py:346
-#: scctool/view/subMisc.py:689 scctool/view/subMisc.py:735
-#: scctool/view/subMisc.py:773 scctool/view/subMisc.py:831
+#: scctool/view/subMisc.py:697 scctool/view/subMisc.py:743
+#: scctool/view/subMisc.py:781 scctool/view/subMisc.py:839
 #: scctool/view/widgets.py:1513
 msgid "Error"
 msgstr "Ошибка"
@@ -898,23 +931,23 @@ msgstr ""
 "href='{patreon}'> Патроне </a>. Вы можете проверить все голоса на {tts}."
 
 #: scctool/view/subBrowserSources.py:612 scctool/view/subConnections.py:260
-#: scctool/view/subLiquipediaSearch.py:84 scctool/view/subMisc.py:881
+#: scctool/view/subLiquipediaSearch.py:84 scctool/view/subMisc.py:889
 #: scctool/view/subStyles.py:93
 msgid "Cancel"
 msgstr "Отмена"
 
 #: scctool/view/subBrowserSources.py:616 scctool/view/subConnections.py:264
-#: scctool/view/subMisc.py:885 scctool/view/subStyles.py:97
+#: scctool/view/subMisc.py:893 scctool/view/subStyles.py:97
 msgid "&Save && Close"
 msgstr "Сохранить и закрыть"
 
 #: scctool/view/subBrowserSources.py:617 scctool/view/subConnections.py:265
-#: scctool/view/subMisc.py:886 scctool/view/subStyles.py:98
+#: scctool/view/subMisc.py:894 scctool/view/subStyles.py:98
 msgid "Shortcut: {}"
 msgstr "Горячая клавиша: {}"
 
 #: scctool/view/subBrowserSources.py:738 scctool/view/subConnections.py:323
-#: scctool/view/subMisc.py:970 scctool/view/subStyles.py:436
+#: scctool/view/subMisc.py:980 scctool/view/subStyles.py:436
 msgid "Save data?"
 msgstr "Сохранить данные?"
 
@@ -1090,8 +1123,8 @@ msgstr "Удалить из избранного"
 msgid "Select Team Logo"
 msgstr "Выбрать логотип команды"
 
-#: scctool/view/subLogos.py:331 scctool/view/subMisc.py:710
-#: scctool/view/subMisc.py:723
+#: scctool/view/subLogos.py:331 scctool/view/subMisc.py:718
+#: scctool/view/subMisc.py:731
 msgid "Supported Images"
 msgstr "Поддерживаемые изображения"
 
@@ -1405,46 +1438,42 @@ msgstr "Переименовать"
 msgid "Change Image"
 msgstr "Изменить изображение"
 
-#: scctool/view/subMisc.py:678 scctool/view/subMisc.py:679
-#: scctool/view/subMisc.py:729 scctool/view/subMisc.py:766
+#: scctool/view/subMisc.py:654
+msgid "Prompt to download new ladders maps."
+msgstr ""
+
+#: scctool/view/subMisc.py:686 scctool/view/subMisc.py:687
+#: scctool/view/subMisc.py:737 scctool/view/subMisc.py:774
 msgid "Map Name"
 msgstr "Название карты"
 
-#: scctool/view/subMisc.py:690 scctool/view/subMisc.py:736
-#: scctool/view/subMisc.py:774
+#: scctool/view/subMisc.py:698 scctool/view/subMisc.py:744
+#: scctool/view/subMisc.py:782
 msgid "\"{}\" is not a valid map name."
 msgstr "\"{}\" недопустимое имя карты."
 
-#: scctool/view/subMisc.py:694 scctool/view/subMisc.py:741
-#: scctool/view/subMisc.py:793
+#: scctool/view/subMisc.py:702 scctool/view/subMisc.py:749
+#: scctool/view/subMisc.py:801
 msgid "Duplicate Entry"
 msgstr "Повторяющийся ввод"
 
-#: scctool/view/subMisc.py:695 scctool/view/subMisc.py:742
+#: scctool/view/subMisc.py:703 scctool/view/subMisc.py:750
 msgid "Map is already in list! Overwrite?"
 msgstr "Карта уже в списке! Переписать?"
 
-#: scctool/view/subMisc.py:709 scctool/view/subMisc.py:722
+#: scctool/view/subMisc.py:717 scctool/view/subMisc.py:730
 msgid "Select Map Image (> 500x500px recommended)"
 msgstr "Выберите изображение карты (> 500x500px рекомендовано)"
 
-#: scctool/view/subMisc.py:783
-msgid "Map not found"
-msgstr "Карта не найдена"
-
-#: scctool/view/subMisc.py:784
-msgid "\"{}\" was not found on Liquipedia."
-msgstr "\"{}\"  не найден на Liquipedia."
-
-#: scctool/view/subMisc.py:794
+#: scctool/view/subMisc.py:802
 msgid "Map {} is already in list! Overwrite?"
 msgstr "Карта {} уже в списке! Переписать?"
 
-#: scctool/view/subMisc.py:839
+#: scctool/view/subMisc.py:847
 msgid "Delete map?"
 msgstr "Удалить карту?"
 
-#: scctool/view/subMisc.py:840
+#: scctool/view/subMisc.py:848
 msgid "Delete '{}' permanently?"
 msgstr "Удалить '{}'?"
 
