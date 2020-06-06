@@ -7,7 +7,7 @@ import sys
 import webbrowser
 
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QCheckBox, QMessageBox
+from PyQt5.QtWidgets import QApplication, QCheckBox, QMessageBox
 
 import scctool.settings
 import scctool.settings.translation
@@ -23,6 +23,7 @@ from scctool.tasks.aligulac import AligulacThread
 from scctool.tasks.auth import AuthThread
 from scctool.tasks.autorequests import AutoRequestsThread
 from scctool.tasks.housekeeper import HouseKeeperThread
+from scctool.tasks.liquipedia import LiquipediaGrabber, MapNotFound
 from scctool.tasks.mapstats import MapStatsManager
 from scctool.tasks.sc2ClientInteraction import (SC2ApiThread, SwapPlayerNames,
                                                 ToggleScore)
@@ -30,7 +31,7 @@ from scctool.tasks.textfiles import TextFilesThread
 from scctool.tasks.texttospeech import TextToSpeech
 from scctool.tasks.updater import VersionHandler
 from scctool.tasks.websocket import WebsocketThread
-from scctool.view.widgets import ToolUpdater
+from scctool.view.widgets import MapDownloader, ToolUpdater
 
 # create logger
 module_logger = logging.getLogger(__name__)
@@ -677,6 +678,76 @@ class MainController:
                 return file + ext
         return ""
 
+    def downloadNewMapsPrompt(self, missing_maps):
+        """Called by MapStatsManager to prompt to download missing maps from the current
+           ladder map pool.
+
+        Args:
+            missing_maps ([list]): [missing_maps]
+        """
+        new_maps_prompt = scctool.settings.config.parser.getboolean(
+            "SCT", "new_maps_prompt")
+        if not new_maps_prompt:
+            self.view.statusBar().showMessage(
+                _("New ladder maps have been detected, but automatic download is disabled."))
+            return
+        messagebox = QMessageBox(self.view)
+        text = _("New ladder maps have been detected.")
+        messagebox.setText(text)
+        map_list = ', '.join(missing_maps)
+        messagebox.setInformativeText(
+            _("Should {} be download from Liquipedia?").format(map_list))
+        messagebox.setWindowTitle(_("New Ladder Maps"))
+        messagebox.setStandardButtons(
+            QMessageBox.Yes | QMessageBox.No)
+        messagebox.setDefaultButton(QMessageBox.Yes)
+        messagebox.setIcon(QMessageBox.Information)
+        messagebox.setWindowModality(Qt.ApplicationModal)
+        cb = QCheckBox()
+        cb.setChecked(not new_maps_prompt)
+        cb.setText(_("Don't show this message again."))
+        messagebox.setCheckBox(cb)
+        if messagebox.exec_() == QMessageBox.Yes:
+            for map_name in missing_maps:
+                self.autoDownloadMap(map_name)
+            self.view.updateAllMapCompleters()
+        scctool.settings.config.parser.set("SCT",
+                                           "new_maps_prompt",
+                                           str(not cb.isChecked()))
+
+    def autoDownloadMap(self, map_name):
+        grabber = LiquipediaGrabber()
+        try:
+            QApplication.setOverrideCursor(Qt.WaitCursor)
+            sc2map = grabber.get_map(map_name)
+        except MapNotFound:
+            QMessageBox.critical(
+                self,
+                _("Map not found"),
+                _('"{}" was not found on Liquipedia.')
+                .format(map_name))
+            return
+        finally:
+            QApplication.restoreOverrideCursor()
+        map_name = sc2map.get_name()
+        try:
+            QApplication.setOverrideCursor(Qt.WaitCursor)
+            images = grabber.get_images(sc2map.get_map_images())
+            image = ""
+            for size in sorted(images):
+                if not image or size <= 2500 * 2500:
+                    image = images[size]
+            url = grabber._base_url + image
+
+            downloader = MapDownloader(self.view, map_name, url)
+            downloader.download()
+            if map_name not in scctool.settings.maps:
+                scctool.settings.maps.append(map_name)
+        except Exception:
+            raise
+        finally:
+            QApplication.restoreOverrideCursor()
+
     def updateLogosWebsocket(self):
         """Update logos in browser sources via websocket."""
         match_ident = self.matchControl.activeMatchId()
@@ -1109,7 +1180,7 @@ class MainController:
         prompt = force or scctool.settings.config.parser.getboolean(
             "SCT", "new_version_prompt")
         if hasattr(sys, "frozen") and prompt:
-            messagebox = QMessageBox()
+            messagebox = QMessageBox(self.view)
             text = _("A new version {} is available.")
             messagebox.setText(text.format(version))
             messagebox.setInformativeText(_("Update to new version?"))

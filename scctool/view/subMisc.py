@@ -650,6 +650,12 @@ class SubwindowMisc(QWidget):
         self.sc_removeMap.setContext(Qt.WidgetWithChildrenShortcut)
         self.sc_removeMap.activated.connect(self.deleteMap)
 
+        self.cb_newMapsPrompt = QCheckBox(
+            _('Prompt to download new ladders maps.'))
+        self.cb_newMapsPrompt.setChecked(
+            scctool.settings.config.parser.getboolean("SCT", "new_maps_prompt"))
+        self.cb_newMapsPrompt.stateChanged.connect(self.changed)
+
         box = QWidget()
         container = QHBoxLayout()
 
@@ -663,9 +669,11 @@ class SubwindowMisc(QWidget):
 
         layout.addWidget(box, 2, 0, 1, 2)
 
+        layout.addWidget(self.cb_newMapsPrompt, 3, 0, 1, 2)
+
         layout.addItem(QSpacerItem(0, 0, QSizePolicy.Minimum,
                                    QSizePolicy.Expanding),
-                       3, 0, 1, 2)
+                       4, 0, 1, 2)
 
         self.changePreview()
         self.mapsBox.setLayout(layout)
@@ -906,6 +914,8 @@ class SubwindowMisc(QWidget):
                 "SCT", "tesseract", self.tesseract.text().strip())
             scctool.settings.config.parser.set(
                 "SCT", "use_ocr", str(self.cb_useocr.isChecked()))
+            scctool.settings.config.parser.set(
+                "SCT", "new_maps_prompt", str(self.cb_newMapsPrompt.isChecked()))
             scctool.settings.config.parser.set(
                 "SCT", "transparent_match_banner",
                 str(self.cb_trans_banner.isChecked()))
