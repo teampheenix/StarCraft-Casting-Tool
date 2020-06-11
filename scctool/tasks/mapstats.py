@@ -140,8 +140,6 @@ class MapStatsManager:
 
     def refreshMapPool(self):
         """Refresh the map pool."""
-        self.__thread.activateTask('refresh_mappool')
-        return
         if (not self.__mappool_refresh
                 or (time.time() - int(self.__mappool_refresh)) > 24 * 60 * 60):
             self.__thread.activateTask('refresh_mappool')
