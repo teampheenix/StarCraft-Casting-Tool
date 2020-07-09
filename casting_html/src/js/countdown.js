@@ -8,7 +8,7 @@ var interval = null;
 var controller = new Controller(profile, "countdown");
 var send_msg = "";
 
-Number.prototype.pad = function(size) {
+Number.prototype.pad = function (size) {
   var s = String(this);
   while (s.length < (size || 2)) {
     s = "0" + s;
@@ -53,7 +53,7 @@ function count() {
 function startCounter() {
   if (!data.static) {
     countDownDate = new Date().getTime() + duration + 500;
-    interval = setInterval(count, 1000);
+    interval = setInterval(count, 100);
     try {
       socket.send('countdown_started');
     } catch (e) {
@@ -123,7 +123,7 @@ function processData() {
     send_msg = 'countdown_started';
   }
   if (data.static || data.restart) {
-    interval = setInterval(count, 1000);
+    interval = setInterval(count, 100);
   } else {
     clearInterval(interval);
     count();
@@ -134,7 +134,7 @@ function processData() {
 function connectWebsocket() {
   socket = new WebSocket(controller.generateKeyURI());
 
-  socket.onopen = function() {
+  socket.onopen = function () {
     console.log("Connected!");
     isopen = true;
     if (send_msg !== "") {
@@ -143,7 +143,7 @@ function connectWebsocket() {
     }
   }
 
-  socket.onmessage = function(message) {
+  socket.onmessage = function (message) {
     var jsonObject = JSON.parse(message.data);
     console.log("Message received");
     if (jsonObject.event === "DATA") {
@@ -170,11 +170,11 @@ function connectWebsocket() {
     }
   }
 
-  socket.onclose = function(e) {
+  socket.onclose = function (e) {
     console.log("Connection closed.");
     socket = null;
     isopen = false
-    setTimeout(function() {
+    setTimeout(function () {
       connectWebsocket();
     }, reconnectIntervalMs);
   }
