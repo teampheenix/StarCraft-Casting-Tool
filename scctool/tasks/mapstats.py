@@ -221,9 +221,10 @@ class MapStatsManager:
             out_data['map'] = None
         out_data['maps'] = dict()
         self._sortMaps()
-        for mymap, data in self.__maps.items():
-            if mymap not in self.getMapPool():
+        for mymap in self.getMapPool():
+            if mymap not in self.__maps:
                 continue
+            data = self.__maps[mymap]
             out_data['maps'][mymap] = dict()
             out_data['maps'][mymap]['map-name'] = mymap.replace(
                 'Dreamcatcher', 'Dream&shy;catcher')
@@ -232,7 +233,7 @@ class MapStatsManager:
             if out_data['map'] is None:
                 out_data['map'] = mymap
             if scctool.settings.config.parser.getboolean(
-                    "Mapstats", "mark_played",):
+                    "Mapstats", "mark_played"):
                 out_data['maps'][mymap]['played'] = \
                     self.__controller.matchControl.\
                     activeMatch().wasMapPlayed(mymap)
@@ -252,7 +253,9 @@ class MapStatsManager:
                     item = "?"
                 key = key.replace('spawn-positions', 'positions')
                 out_data['maps'][mymap][key] = item
-
+        if scctool.settings.config.parser.getboolean(
+                "Mapstats", "sort_maps"):
+            out_data['maps'] = dict(sorted(out_data['maps'].items()))
         return out_data
 
     def sendMapPool(self):

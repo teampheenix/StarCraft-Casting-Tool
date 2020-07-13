@@ -199,9 +199,20 @@ class SubwindowBrowserSources(QWidget):
             scctool.settings.config.parser.getboolean(
                 "Mapstats", "mark_vetoed"))
         self.cb_mark_vetoed.stateChanged.connect(self.changed)
+
         label = QLabel(" ")
         label.setMinimumWidth(120)
         layout.addRow(label, self.cb_mark_vetoed)
+
+        self.cb_sort_maps = QCheckBox(_("Sort currently entered maps"))
+        self.cb_sort_maps.setChecked(
+            scctool.settings.config.parser.getboolean(
+                "Mapstats", "sort_maps"))
+        self.cb_sort_maps.stateChanged.connect(self.changed)
+
+        label = QLabel(_("Sort:"))
+        label.setMinimumWidth(120)
+        layout.addRow(label, self.cb_sort_maps)
 
         box.setLayout(layout)
         mainLayout.addWidget(box)
@@ -656,6 +667,11 @@ class SubwindowBrowserSources(QWidget):
                 "Mapstats",
                 "mark_vetoed",
                 str(self.cb_mark_vetoed.isChecked()))
+
+            scctool.settings.config.parser.set(
+                "Mapstats",
+                "sort_maps",
+                str(self.cb_sort_maps.isChecked()))
 
             self.controller.mapstatsManager.sendMapPool()
             self.mainWindow.updateAllMapButtons()
