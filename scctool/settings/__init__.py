@@ -146,7 +146,7 @@ def getAbsPath(file):
 
 
 def loadMapList():
-    """Load map list form dir."""
+    """Load map list from dir."""
     data = []
     try:
         mapdir = os.path.normpath(os.path.join(

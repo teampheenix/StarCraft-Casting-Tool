@@ -1,8 +1,9 @@
 """StarCraft Casting Tool."""
 import logging
+import os
 import sys
 
-from PyQt5.QtCore import QLocale, QTranslator
+from PyQt5.QtCore import QLocale, Qt, QTranslator
 from PyQt5.QtWidgets import QApplication, QMessageBox, QStyleFactory
 
 import scctool.settings
@@ -11,7 +12,7 @@ import scctool.settings.translation
 
 logger = logging.getLogger(__name__)
 
-__version__ = "2.8.5"
+__version__ = "2.8.6"
 __latest_version__ = __version__
 __new_version__ = False
 
@@ -25,12 +26,14 @@ def main():
     from PyQt5.QtGui import QIcon
 
     translator = None
+    os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
 
     currentExitCode = MainWindow.EXIT_CODE_REBOOT
     while currentExitCode == MainWindow.EXIT_CODE_REBOOT:
         try:
             scctool.settings.loadSettings()
             app = QApplication(sys.argv)
+            app.setAttribute(Qt.AA_EnableHighDpiScaling)
             app.setStyle(QStyleFactory.create('Fusion'))
             translator = choose_language(app, translator)
 
