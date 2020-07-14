@@ -1,6 +1,23 @@
 # Changelog
 
 
+## v2.8.6 (2020-07-14)
+
+### New
+
+* Added one-click button to download all current ladder maps to map manager.
+
+* Currently entered maps can be displayed in the playing order for the map stats.
+
+* Prompt to download missing current ladder maps.
+
+### Fix
+
+* Fixed and issue with high DPI displays.
+
+* Countdown should no longer occasionally skip a second.
+
+
 ## v2.8.5 (2020-05-28)
 
 ### Changes
