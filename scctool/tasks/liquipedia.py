@@ -147,7 +147,7 @@ class LiquipediaGrabber:
         else:
             raise MapNotFound
 
-    def get_ladder_mappool(self):
+    def get_ladder_mappool(self, players_per_team=1):
         """Get the current 1v1 ladder mappool."""
         params = dict()
         params['action'] = "parse"
@@ -163,7 +163,7 @@ class LiquipediaGrabber:
         content = data['parse']['text']['*']
         soup = BeautifulSoup(content, 'html.parser')
         for result in soup.find_all("td", class_="navbox-group"):
-            if result.contents[0].strip() == "1 vs 1":
+            if result.contents[0].strip() == f"{players_per_team} vs {players_per_team}":
                 for mymap in result.findNext("td").find_all('a'):
                     yield mymap.contents[0].replace("LE", '').strip()
                 break

@@ -656,12 +656,17 @@ class SubwindowMisc(QWidget):
             scctool.settings.config.parser.getboolean("SCT", "new_maps_prompt"))
         self.cb_newMapsPrompt.stateChanged.connect(self.changed)
 
+        self.pb_downloadLadderMaps = QPushButton(_("Download Ladder Maps"))
+        self.pb_downloadLadderMaps.clicked.connect(self.downloadLadderMaps)
+
         box = QWidget()
         container = QHBoxLayout()
 
         container.addWidget(self.pb_addMapLiquipedia, 0)
         container.addWidget(self.pb_addMap, 0)
-        container.addWidget(QLabel(), 4)
+        container.addWidget(QLabel(), 1)
+        container.addWidget(self.pb_downloadLadderMaps, 0)
+        container.addWidget(QLabel(), 1)
         container.addWidget(self.pb_renameMap, 0)
         container.addWidget(self.pb_changeMap, 0)
         container.addWidget(self.pb_removeMap, 0)
@@ -669,7 +674,10 @@ class SubwindowMisc(QWidget):
 
         layout.addWidget(box, 2, 0, 1, 2)
 
-        layout.addWidget(self.cb_newMapsPrompt, 3, 0, 1, 2)
+        layout.addWidget(self.cb_newMapsPrompt, 3, 0, 1, 1)
+        layout.addItem(QSpacerItem(0, 0, QSizePolicy.Minimum,
+                                   QSizePolicy.Expanding),
+                       3, 2, 1, 2)
 
         layout.addItem(QSpacerItem(0, 0, QSizePolicy.Minimum,
                                    QSizePolicy.Expanding),
@@ -764,6 +772,35 @@ class SubwindowMisc(QWidget):
                 else:
                     self.maplist.setCurrentItem(items[0])
                 self.changePreview()
+
+    def downloadLadderMaps(self):
+        players_per_team, ok = QInputDialog.getItem(
+            self, _(
+                'Select the type of ladder maps to download'),
+            _('Please select a map type') + ':',
+            ['1vs1',  '2vs2', '3vs3', '4vs4'], editable=False)
+        players_per_team = int(players_per_team[0])
+        found_a_map = False
+        for sc2map in LiquipediaGrabber().get_ladder_mappool(
+                players_per_team):
+            if not sc2map in scctool.settings.maps:
+                found_a_map = True
+                self.controller.autoDownloadMap(sc2map, self)
+                scctool.settings.maps.append(sc2map)
+                items = self.maplist.findItems(sc2map,
+                                               Qt.MatchExactly)
+                if len(items) == 0:
+                    item = QListWidgetItem(sc2map)
+                    self.maplist.addItem(item)
+                    self.maplist.setCurrentItem(item)
+                else:
+                    self.maplist.setCurrentItem(items[0])
+                self.changePreview()
+        if not found_a_map:
+            QMessageBox.information(
+                self,
+                _("No missing map"),
+                _('All of the current ladder maps are already present.'))
 
     def addFromLquipedia(self):
         """Add a map from Liquipedia."""

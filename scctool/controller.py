@@ -715,7 +715,7 @@ class MainController:
                                            "new_maps_prompt",
                                            str(not cb.isChecked()))
 
-    def autoDownloadMap(self, map_name):
+    def autoDownloadMap(self, map_name, parent=None):
         grabber = LiquipediaGrabber()
         try:
             QApplication.setOverrideCursor(Qt.WaitCursor)
@@ -738,8 +738,9 @@ class MainController:
                 if not image or size <= 2500 * 2500:
                     image = images[size]
             url = grabber._base_url + image
-
-            downloader = MapDownloader(self.view, map_name, url)
+            if parent is None:
+                parent = self.view
+            downloader = MapDownloader(parent, map_name, url)
             downloader.download()
             if map_name not in scctool.settings.maps:
                 scctool.settings.maps.append(map_name)

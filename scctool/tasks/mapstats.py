@@ -296,12 +296,12 @@ class MapStatsThread(TasksThread):
                 stats = liquipediaMap.get_stats()
                 info = liquipediaMap.get_info()
                 data = dict()
-                data['tvz'] = stats['tvz']
-                data['zvp'] = stats['zvp']
-                data['pvt'] = stats['pvt']
-                data['creator'] = info['creator']
-                data['size'] = info['size']
-                data['spawn-positions'] = info['spawn-positions']
+                data['tvz'] = stats.get('tvz', '-')
+                data['zvp'] = stats.get('zvp', '-')
+                data['pvt'] = stats.get('pvt', '-')
+                data['creator'] = stats.get('creator', '')
+                data['size'] = stats.get('size', '')
+                data['spawn-positions'] = stats.get('spawn-positions', '')
                 data['refreshed'] = int(time.time())
                 self.newMapData.emit(mymap, data)
                 module_logger.info(f'Map {mymap} found.')
