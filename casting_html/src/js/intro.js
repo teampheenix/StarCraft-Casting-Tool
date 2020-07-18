@@ -32,14 +32,16 @@ function playSound(audio) {
 function connect() {
   socket = new WebSocket(controller.generateKeyURI());
 
-  socket.onopen = function() {
+  socket.onopen = function () {
     console.log("Connected!");
     isopen = true;
   }
 
-  socket.onmessage = function(message) {
+  socket.onmessage = function (message) {
     var jsonObject = JSON.parse(message.data);
     var intro = document.getElementById("intro");
+    var asset1 = document.getElementById("asset1");
+    var asset2 = document.getElementById("asset2");
     if (jsonObject.data.hasOwnProperty("font")) {
       intro.style.fontFamily = jsonObject.data.font;
     }
@@ -80,6 +82,10 @@ function connect() {
             .to(intro, 0.1, {
               opacity: 1,
             })
+            .staggerTo([asset1, asset2], 0.35, {
+              ease: Power2.easeIn,
+              opacity: 1
+            }, 0.0, "=-0.35")
             .to(intro, 0.35, {
               ease: Power2.easeOut,
               scaleY: 1
@@ -92,6 +98,10 @@ function connect() {
               scaleY: 0,
               ease: Power1.easeOut
             })
+            .staggerTo([asset1, asset2], 0.50, {
+              ease: Power2.easeOut,
+              opacity: 0
+            }, 0.0, "=-0.35")
             .to(intro, 0, {
               left: "105%",
               clearProps: "transform, transformOrigin",
@@ -112,6 +122,10 @@ function connect() {
               scaleX: 1,
               force3D: true
             })
+            .staggerTo([asset1, asset2], 0.35, {
+              ease: Power2.easeIn,
+              opacity: 1
+            }, 0.0, "=-0.4")
             .call(playSound, [tts])
             .to(intro, jsonObject.data.display_time, {
               scaleX: 1
@@ -122,6 +136,10 @@ function connect() {
               force3D: true,
               ease: Power2.easeIn
             })
+            .staggerTo([asset1, asset2], 0.35, {
+              ease: Power2.easeIn,
+              opacity: 0
+            }, 0.0, "=-0.4")
             .to(intro, 0, {
               left: "105%",
               opacity: 0,
@@ -137,6 +155,10 @@ function connect() {
               ease: Power2.easeIn,
               left: offset + "px"
             })
+            .staggerTo([asset1, asset2], 0.2, {
+              ease: Power2.easeIn,
+              opacity: 1
+            }, 0.0, "=-0.2")
             .call(playSound, [tts])
             .to(intro, jsonObject.data.display_time, {
               left: offset + "px"
@@ -145,6 +167,10 @@ function connect() {
               opacity: 0,
               ease: Power1.easeInOut
             })
+            .staggerTo([asset1, asset2], 0.5, {
+              ease: Power2.easeInOut,
+              opacity: 0
+            }, 0.0, "=-0.5")
             .to(intro, 0, {
               left: "105%",
               opacity: 0
@@ -159,11 +185,15 @@ function connect() {
         tween.kill()
         var offset = (window.innerWidth - intro.offsetWidth) / 2;
         $("#intro").css("opacity", "1");
+        $("#asset1").css("opacity", "1");
+        $("#asset2").css("opacity", "1");
         $("#intro").css("left", offset.toString() + "px");
         debug = true;
       } else {
         tween.kill()
         $("#intro").css("opacity", "0");
+        $("#asset1").css("opacity", "0");
+        $("#asset2").css("opacity", "0");
         $("#intro").css("left", "105%");
         debug = false;
       }
@@ -171,11 +201,11 @@ function connect() {
     }
   }
 
-  socket.onclose = function(e) {
+  socket.onclose = function (e) {
     console.log("Connection closed.");
     socket = null;
     isopen = false
-    setTimeout(function() {
+    setTimeout(function () {
       connect();
     }, reconnectIntervalMs);
   }
@@ -190,6 +220,10 @@ function fillText() {
 function init() {
   var intro = document.getElementById("intro");
   $("#intro").css("visibility", "visible");
+  $("#asset1").css("visibility", "visible");
+  $("#asset2").css("visibility", "visible");
+  $("#asset1").css("opacity", "0");
+  $("#asset2").css("opacity", "0");
   $("#intro").css("left", "105%");
   connect();
 }
