@@ -160,6 +160,13 @@ class MatchGrabber(MatchGrabberParent):
 
                 self._matchData.setMap(0, mapname)
 
+                for set_idx in range(7):
+                    try:
+                        self._matchData.setMap(
+                            set_idx, data['start_maps'][str(set_idx)]['name'])
+                    except KeyError:
+                        pass
+
                 for team_idx in range(2):
                     for set_idx in range(1):
                         try:
