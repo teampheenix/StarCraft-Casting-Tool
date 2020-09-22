@@ -784,6 +784,7 @@ class MainController:
             data['logo'] = "../" + self.logoManager.newLogo().getFile(True)
             data['team'] = "team pheeniX"
             data['display'] = "block"
+            data['default_logo'] = True
             self.__playerIntroData[player_idx] = data
 
     def getPlayerIntroData(self, idx):
@@ -836,13 +837,18 @@ class MainController:
                 team = ""
                 logo = ""
                 display = "none"
+                default_logo = True
             elif(team1):
                 team = self.matchControl.activeMatch().getTeam(0)
-                logo = "../" + self.logoManager.getTeam1(matchID).getFile(True)
+                logoObj = self.logoManager.getTeam(1)
+                logo = f"../{logoObj.getFile(True)}"
+                default_logo = logoObj.isDefault()
                 display = "block"
             elif(team2):
                 team = self.matchControl.activeMatch().getTeam(1)
-                logo = "../" + self.logoManager.getTeam2(matchID).getFile(True)
+                logoObj = self.logoManager.getTeam(2)
+                logo = f"../{logoObj.getFile(True)}"
+                default_logo = logoObj.isDefault()
                 display = "block"
 
             name = self.aliasManager.translatePlayer(
@@ -853,6 +859,7 @@ class MainController:
             self.__playerIntroData[player_idx]['race'] = race.lower()
             self.__playerIntroData[player_idx]['logo'] = logo
             self.__playerIntroData[player_idx]['display'] = display
+            self.__playerIntroData[player_idx]['default_logo'] = default_logo
             self.__playerIntroIdx = 0
 
             try:

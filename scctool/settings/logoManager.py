@@ -397,6 +397,9 @@ class Logo:
         else:
             return False
 
+    def isDefault(self):
+        return self._format == "none"
+
     def getFile(self, web=False):
         """Return the logo as file."""
         if self._format == "none":

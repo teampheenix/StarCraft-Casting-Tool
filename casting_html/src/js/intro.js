@@ -54,11 +54,21 @@ function connect() {
         } catch (e) {}
         socket.send(jsonObject.state);
         tween.clear();
+        const cssItems = [".box", ".race", ".logo", ".name", ".team", ".misc", ".label", ".label2", ".label3", ".asset1", ".asset2"];
         $(".race").prop("id", jsonObject.data.race);
         $(".logo").css("display", jsonObject.data.display)
         $(".logo").css("background-image", "url(" + jsonObject.data.logo + ")");
         $(".name span").html(jsonObject.data.name);
         $(".team span").html(jsonObject.data.team);
+        if (jsonObject.data.default_logo) {
+          cssItems.forEach(element => {
+            $(element).addClass("defaultLogo");
+          });
+        } else {
+          cssItems.forEach(element => {
+            $(element).removeClass("defaultLogo");
+          });
+        }
         fillText();
         var racelogo = document.getElementsByClassName("race")[0];
         var offset = (window.innerWidth - intro.offsetWidth) / 2;
