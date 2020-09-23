@@ -840,13 +840,13 @@ class MainController:
                 default_logo = True
             elif(team1):
                 team = self.matchControl.activeMatch().getTeam(0)
-                logoObj = self.logoManager.getTeam(1)
+                logoObj = self.logoManager.getTeam(1, matchID)
                 logo = f"../{logoObj.getFile(True)}"
                 default_logo = logoObj.isDefault()
                 display = "block"
             elif(team2):
                 team = self.matchControl.activeMatch().getTeam(1)
-                logoObj = self.logoManager.getTeam(2)
+                logoObj = self.logoManager.getTeam(2, matchID)
                 logo = f"../{logoObj.getFile(True)}"
                 default_logo = logoObj.isDefault()
                 display = "block"

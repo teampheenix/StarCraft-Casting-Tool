@@ -61,11 +61,11 @@ function connect() {
         $(".name span").html(jsonObject.data.name);
         $(".team span").html(jsonObject.data.team);
         if (jsonObject.data.default_logo) {
-          cssItems.forEach(element => {
+          cssItems.forEach((element) => {
             $(element).addClass("defaultLogo");
           });
         } else {
-          cssItems.forEach(element => {
+          cssItems.forEach((element) => {
             $(element).removeClass("defaultLogo");
           });
         }
