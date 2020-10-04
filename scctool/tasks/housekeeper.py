@@ -16,7 +16,7 @@ _ = scctool.settings.translation.gettext
 class HouseKeeperThread(TasksThread):
     """Do cleaning and other regular tasks."""
 
-    alphaMatches = pyqtSignal(object)
+    spireMatches = pyqtSignal(object)
     ip_updated = pyqtSignal(str)
 
     def __init__(self, controller):
@@ -25,12 +25,12 @@ class HouseKeeperThread(TasksThread):
         self._controller = controller
         self.setTimeout(120)
         self.addTask('save', self.__saveData)
-        self.addTask('alphatl', self.__loadAlphaMatches)
+        self.addTask('spiregg', self.__loadSpireMatches)
         self.addTask('check_ip', self.__check_ip)
         self.addTask('clean', self.__clean)
         self.activateTask('clean')
 
-        self._last_alpha_output = {}
+        self._last_spire_output = {}
         self._last_ip = ''
 
     def __saveData(self):
@@ -39,30 +39,43 @@ class HouseKeeperThread(TasksThread):
         self._controller.historyManager.enforeMaxLength()
         self._controller.saveAll()
 
-    def __loadAlphaMatches(self):
-        """Load latest upcoming alpha matches from alpha api."""
-        module_logger.info('Loading upcoming AlphaTL matches!')
-        url = 'https://alpha.tl/api?upcomingmatches'
+    def __loadSpireMatches(self):
+        """Load latest upcoming spire.gg matches from their API."""
+        module_logger.info('Loading upcoming Spire.gg matches!')
         try:
-            data = requests.get(url=url).json()
             output = dict()
-            for match in data:
-                dt_obj = datetime.strptime(
-                    match['datetime'], '%Y-%m-%d %H:%M:%S')
-                dt_obj = dt_obj.replace(tzinfo=timezone(timedelta(hours=0)))
-                dt_obj = dt_obj.astimezone()
+            for match in self.__yieldSpireMatches():
+                dt_obj = datetime.fromisoformat(match['datetime'])
                 label = "{}: {} vs {} - {}".format(
-                    match['tournament'].replace('Alpha ', ''),
-                    match['team1']['name'],
-                    match['team2']['name'],
+                    'Spire.gg',
+                    match['lineups']['A']['name'],
+                    match['lineups']['B']['name'],
                     dt_obj.strftime('%e %b, %H:%M'))
-                url = 'https://alpha.tl/match/{}'.format(match['id'])
+                url = 'https://spire.gg/match/{}'.format(match['id'])
                 output[label] = url
-            if self._last_alpha_output != output:
-                self._last_alpha_output = output
-                self.alphaMatches.emit(output)
+            if self._last_spire_output != output:
+                self._last_spire_output = output
+                self.spireMatches.emit(output)
         except Exception:
             module_logger.exception("message")
+
+    def __yieldSpireMatches(self):
+        url = 'https://api.spire.gg/matches'
+        for pageNum in range(0, 5):
+            params = {
+                'past': 'false',
+                'solo': 'false',
+                'gameId': 'SC2',
+                'pageNum': 0,
+            }
+            data = requests.get(url=url, params=params).json()
+            if data.get('code', '') != 'ok':
+                return
+            results = data.get('result', {})
+            if results.get('empty', True):
+                return
+            for match in results.get('content', []):
+                yield match
 
     def __check_ip(self):
         """Check current external IP."""

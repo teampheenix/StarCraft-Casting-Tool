@@ -235,11 +235,11 @@ class MainWindow(QMainWindow):
                 lambda: self.controller.openURL("http://team-pheenix.de"))
             infoMenu.addAction(ixAct)
 
-            alphaAct = QAction(QIcon(scctool.settings.getResFile(
-                'alpha.png')), 'AlphaTL', self)
-            alphaAct.triggered.connect(
-                lambda: self.controller.openURL("https://alpha.tl"))
-            infoMenu.addAction(alphaAct)
+            spireAct = QAction(QIcon(scctool.settings.getResFile(
+                'spire.png')), 'Spire.gg', self)
+            spireAct.triggered.connect(
+                lambda: self.controller.openURL("https://spire.gg"))
+            infoMenu.addAction(spireAct)
 
             rslAct = QAction(QIcon(scctool.settings.getResFile(
                 'rsl.png')), 'RSL', self)
@@ -703,10 +703,10 @@ class MainWindow(QMainWindow):
             container.addWidget(self.le_url, 1)
             button = QPushButton()
             pixmap = QIcon(
-                scctool.settings.getResFile('alpha.png'))
+                scctool.settings.getResFile('spire.png'))
             button.setIcon(pixmap)
             button.clicked.connect(
-                lambda: self.controller.openURL("https://alpha.tl/"))
+                lambda: self.controller.openURL("https://spire.gg/"))
             container.addWidget(button, 0)
             button = QPushButton()
             pixmap = QIcon(

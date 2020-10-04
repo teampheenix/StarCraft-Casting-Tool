@@ -140,8 +140,8 @@ class MainController:
             self.setCBs()
             self.view.resizeWindow()
             self.housekeeper.activateTask('save')
-            self.housekeeper.alphaMatches.connect(self.view.le_url.updateItems)
-            self.housekeeper.activateTask('alphatl')
+            self.housekeeper.spireMatches.connect(self.view.le_url.updateItems)
+            self.housekeeper.activateTask('spiregg')
             self.housekeeper.ip_updated.connect(self.update_ip)
             self.housekeeper.activateTask('check_ip')
         except Exception:

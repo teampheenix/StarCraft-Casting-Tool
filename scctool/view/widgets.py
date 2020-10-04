@@ -1636,6 +1636,7 @@ class MatchComboBox(QComboBox):
         self.lineEdit().setPlaceholderText(tooltip)
         self.lineEdit().setToolTip(tooltip)
         self._alpha_icon = QIcon(scctool.settings.getResFile('alpha.png'))
+        self._spire_icon = QIcon(scctool.settings.getResFile('spire.png'))
         self._rstl_icon = QIcon(scctool.settings.getResFile('rstl.png'))
         self._rsl_icon = QIcon(scctool.settings.getResFile('rsl.png'))
         self._ctl_icon = QIcon(scctool.settings.getResFile('chobo.png'))
@@ -1682,7 +1683,7 @@ class MatchComboBox(QComboBox):
         self.setCompleter(completer)
 
         for text, url in self._matches.items():
-            self.addItem(self._alpha_icon, text, url)
+            self.addItem(self._spire_icon, text, url)
 
     def removeItems(self):
         """Remove all items."""
