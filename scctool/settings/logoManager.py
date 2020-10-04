@@ -1,5 +1,6 @@
 """Provide logo manager for SCCTool."""
 import filecmp
+import imghdr
 import itertools
 import json
 import logging
@@ -9,10 +10,9 @@ from time import time
 
 import humanize
 import requests
+import scctool.settings.translation
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
-
-import scctool.settings.translation
 from scctool.settings import (casting_html_dir, getAbsPath, getJsonFile,
                               logosDir)
 
@@ -472,11 +472,24 @@ class Logo:
 
     def refreshData(self):
         """Refresh the data (height, width, ...)."""
+        self.addFileEnding()
         file = self.getAbsFile()
         self._size = os.path.getsize(file)
         pixmap = QPixmap(file)
         self._width = pixmap.height()
         self._height = pixmap.width()
+
+    def addFileEnding(self):
+        """Add file ending if missing."""
+        if self._format:
+            return
+        try:
+            old_file = self.getAbsFile()
+            self._format = imghdr.what(old_file)
+            new_file = self.getAbsFile()
+            shutil.copy(old_file, new_file)
+        except FileNotFoundError:
+            pass
 
     @classmethod
     def _uniqid(cls):
@@ -505,6 +518,7 @@ class Logo:
         self._size = data['size']
 
         self._manager._identifiers.add(self._ident)
+        self.addFileEnding()
         return True
 
     def provideQPixmap(self):

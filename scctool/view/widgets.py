@@ -372,7 +372,7 @@ class LogoDownloader(QProgressDialog):
         self.setValue(self.minimum())
 
         self.resize(QSize(
-            mainWindow.size().width() * 0.8, self.sizeHint().height()))
+            int(mainWindow.size().width() * 0.8), self.sizeHint().height()))
         relativeChange = QPoint(int(mainWindow.size().width() / 2),
                                 int(mainWindow.size().height() / 3))\
             - QPoint(int(self.size().width() / 2),
@@ -1725,7 +1725,8 @@ class ScopeGroupBox(QGroupBox):
             options = list()
         layout = QFormLayout()
         self.controller = controller
-        scope = scctool.settings.config.parser.get("MapIcons", f"scope_{ident}")
+        scope = scctool.settings.config.parser.get(
+            "MapIcons", f"scope_{ident}")
         self.bt_dynamic = QRadioButton(_("Dynamic:"))
         self.bt_dynamic.toggled.connect(lambda: self.btnstate('dynamic'))
         self.bt_dynamic.setMinimumWidth(120)
@@ -1777,7 +1778,7 @@ class ScopeGroupBox(QGroupBox):
             f"{scctool.settings.casting_html_dir}/src/css/mapicons_{primary}",
             self.path)
         active = scctool.settings.config.parser.getboolean(
-                "MapIcons", f"separate_style_{ident}")
+            "MapIcons", f"separate_style_{ident}")
         self.cb_separate_style.setChecked(active)
         self.qb_boxStyle.setEnabled(active)
         self.cb_separate_style.toggled.connect(self.toggleStyleComboBox)
