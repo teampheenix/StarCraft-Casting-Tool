@@ -112,7 +112,7 @@ class SC2ApiThread(QThread):
             else:
                 self.activeTask[task] = False
                 module_logger.info(
-                    'Requesting termination of task "' + task + '"')
+                    f'Requesting termination of task "{task}"')
 
             if(not any(self.activeTask.values())):
                 self.exiting = True
@@ -125,7 +125,7 @@ class SC2ApiThread(QThread):
         self.activeTask[task] = True
         self.exiting = False
         module_logger.info(
-            'Termination request fo task "' + task + '" cancelled')
+            f'Termination request fo task "{task}" cancelled')
 
     @classmethod
     def getURLs(cls):
@@ -180,7 +180,7 @@ class SC2ApiThread(QThread):
             if(not self.exiting
                 and (newData != self.currentData
                      or newData.time < self.currentData.time
-                 or newData.isLive() != self.currentData.isLive())):
+                     or newData.isLive() != self.currentData.isLive())):
 
                 if(self.activeTask['updateScore']
                    and newData.isDecidedGame()
@@ -254,9 +254,11 @@ class SC2ApiThread(QThread):
                 crop_regions.append((0.3, 0.7, 0.0, 0.08))
                 crop_regions.append((0.3, 0.7, 0.0, 0.14))
                 crop_regions.append((0.12, 0.35, 0.88, 1.0))
+                crop_regions.append((0.16, 0.33, 0.89, 1.0))
                 crop_regions.append((0.1, 0.4, 0.8, 1.0))
             else:
                 crop_regions.append((0.12, 0.35, 0.88, 1.0))
+                crop_regions.append((0.16, 0.33, 0.89, 1.0))
                 crop_regions.append((0.1, 0.4, 0.8, 1.0))
                 crop_regions.append((0.3, 0.7, 0.0, 0.08))
 
