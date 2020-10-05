@@ -443,6 +443,17 @@ class SubwindowBrowserSources(QWidget):
         box.setLayout(layout)
         mainLayout.addWidget(box)
 
+        self.behaviorIntroBox = QGroupBox(_("Behavior"))
+        layout = QVBoxLayout()
+        self.cb_hardcode_players = QCheckBox(
+            _("Read player names and order in 1vs1 mode from SCCT instead of SC2"))
+        self.cb_hardcode_players.setChecked(
+            scctool.settings.config.parser.getboolean("Intros", "hardcode_players"))
+        self.cb_hardcode_players.stateChanged.connect(self.changed)
+        layout.addWidget(self.cb_hardcode_players)
+        self.behaviorIntroBox.setLayout(layout)
+        mainLayout.addWidget(self.behaviorIntroBox)
+
         self.hotkeyBox = QGroupBox(_("Hotkeys"))
         layout = QVBoxLayout()
         self.controller.websocketThread.unregister_hotkeys(force=True)
@@ -672,6 +683,11 @@ class SubwindowBrowserSources(QWidget):
                 "Mapstats",
                 "sort_maps",
                 str(self.cb_sort_maps.isChecked()))
+
+            scctool.settings.config.parser.set(
+                "Intros",
+                "hardcode_players",
+                str(self.cb_hardcode_players.isChecked()))
 
             self.controller.mapstatsManager.sendMapPool()
             self.mainWindow.updateAllMapButtons()

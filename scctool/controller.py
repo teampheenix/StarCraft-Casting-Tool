@@ -822,16 +822,26 @@ class MainController:
             "Intros", "tts_rate")
 
         matchID = self.matchControl.activeMatchId()
+        active_match = self.matchControl.activeMatch()
+
+        hardcode_players = (active_match.getSolo() and
+                            scctool.settings.config.parser.getboolean("Intros", "hardcode_players"))
 
         for player_idx in range(2):
-            team1 = newData.playerInList(
-                player_idx,
-                self.matchControl.activeMatch().getPlayerList(0),
-                self.aliasManager.translatePlayer)
-            team2 = newData.playerInList(
-                player_idx,
-                self.matchControl.activeMatch().getPlayerList(1),
-                self.aliasManager.translatePlayer)
+            if hardcode_players:
+                if player_idx == 0:
+                    team1, team2 = True, False
+                else:
+                    team1, team2 = False, True
+            else:
+                team1 = newData.playerInList(
+                    player_idx,
+                    active_match.getPlayerList(0),
+                    self.aliasManager.translatePlayer)
+                team2 = newData.playerInList(
+                    player_idx,
+                    active_match.getPlayerList(1),
+                    self.aliasManager.translatePlayer)
 
             if(not team1 and not team2):
                 team = ""
@@ -839,21 +849,25 @@ class MainController:
                 display = "none"
                 default_logo = True
             elif(team1):
-                team = self.matchControl.activeMatch().getTeam(0)
+                team = active_match.getTeam(0)
                 logoObj = self.logoManager.getTeam(1, matchID)
                 logo = f"../{logoObj.getFile(True)}"
                 default_logo = logoObj.isDefault()
                 display = "block"
             elif(team2):
-                team = self.matchControl.activeMatch().getTeam(1)
+                team = active_match.getTeam(1)
                 logoObj = self.logoManager.getTeam(2, matchID)
                 logo = f"../{logoObj.getFile(True)}"
                 default_logo = logoObj.isDefault()
                 display = "block"
 
-            name = self.aliasManager.translatePlayer(
-                newData.getPlayer(player_idx))
-            race = newData.getRace(player_idx)
+            if hardcode_players:
+                name = active_match.getPlayer(player_idx, 0)
+                race = active_match.getRace(player_idx, 0)
+            else:
+                name = self.aliasManager.translatePlayer(
+                    newData.getPlayer(player_idx))
+                race = newData.getRace(player_idx)
             self.__playerIntroData[player_idx]['name'] = name
             self.__playerIntroData[player_idx]['team'] = team
             self.__playerIntroData[player_idx]['race'] = race.lower()

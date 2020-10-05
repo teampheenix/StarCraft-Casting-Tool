@@ -180,6 +180,7 @@ def setDefaultConfigAll():
 
     setDefaultConfig("Intros", "hotkey_player1", "")
     setDefaultConfig("Intros", "hotkey_player2", "")
+    setDefaultConfig("Intros", "hardcode_players", "False")
     setDefaultConfig("Intros", "hotkey_debug", "")
     setDefaultConfig("Intros", "sound_volume", "5")
     setDefaultConfig("Intros", "display_time", "3.0")
