@@ -66,7 +66,7 @@ class HouseKeeperThread(TasksThread):
                 'past': 'false',
                 'solo': 'false',
                 'gameId': 'SC2',
-                'pageNum': 0,
+                'pageNum': pageNum,
             }
             data = requests.get(url=url, params=params).json()
             if data.get('code', '') != 'ok':
