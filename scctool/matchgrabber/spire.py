@@ -1,8 +1,7 @@
 """Provide match grabber for Spire.gg."""
 import json
 import logging
-from datetime import datetime, timedelta, timezone
-from urllib.request import urlopen, urlretrieve
+from datetime import datetime
 
 import scctool.settings
 import scctool.settings.translation
@@ -24,13 +23,6 @@ class MatchGrabber(MatchGrabberParent):
         super().__init__(*args)
         self._urlprefix = "https://spire.gg/match/"
         self._apiprefix = "https://api.spire.gg/matches/"
-
-    def updateCountdown(self, datetime_str):
-        if not datetime_str or not scctool.settings.config.parser.getboolean(
-                "Countdown", "matchgrabber_update"):
-            return
-        dt_obj = datetime.fromisoformat(datetime_str)
-        self._controller.view.countdownTab.setFromTimestamp(dt_obj.timestamp())
 
     def grabData(self, metaChange=False, logoManager=None):
         """Grab match data."""
@@ -165,3 +157,11 @@ class MatchGrabber(MatchGrabberParent):
             raise ValueError('Unknown Format')
 
             self._matchData.resetLabels()
+
+    def updateCountdown(self, datetime_str):
+        """Set countdown to datetime of the match."""
+        if not datetime_str or not scctool.settings.config.parser.getboolean(
+                "Countdown", "matchgrabber_update"):
+            return
+        dt_obj = datetime.fromisoformat(datetime_str)
+        self._controller.view.countdownTab.setFromTimestamp(dt_obj.timestamp())
