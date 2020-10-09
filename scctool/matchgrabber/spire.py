@@ -7,6 +7,7 @@ from urllib.request import urlopen, urlretrieve
 import scctool.settings
 import scctool.settings.translation
 from scctool.matchgrabber.custom import MatchGrabber as MatchGrabberParent
+import re
 
 # create logger
 module_logger = logging.getLogger(__name__)
@@ -40,17 +41,13 @@ class MatchGrabber(MatchGrabberParent):
             raise ValueError(msg)
         else:
             self._rawData = data.get('result', {})
-            try:
-                matchFormat = json.loads(self._rawData.get(
-                    'tournamentStage', {}).get('setsLimitsJson', ''))
-            except AttributeError:
-                matchFormat = {}
+            setsLimits = self._rawData.get('setsLimits', {})
             overwrite = (metaChange
                          or self._matchData.getURL().strip()
                          != self.getURL().strip())
             with self._matchData.emitLock(overwrite,
                                           self._matchData.metaChanged):
-                self._setMatchFormat(matchFormat, overwrite)
+                self._setMatchFormat(setsLimits, overwrite)
                 self._matchData.resetLabels()
                 if overwrite:
                     self._matchData.resetSwap()
@@ -64,7 +61,9 @@ class MatchGrabber(MatchGrabberParent):
                     league = "TBD"
                 self._matchData.setLeague(league)
 
-                # TODO: Set maps
+                for idx, mapData in enumerate(self._rawData.get('maps', [])):
+                    mapname = mapData.get('name')
+                    self._matchData.setMap(idx, mapname)
 
                 for team_idx, team_label in {0: 'A', 1: 'B'}.items():
                     name = self._rawData['lineups'][team_label]['name']
@@ -77,7 +76,29 @@ class MatchGrabber(MatchGrabberParent):
                         self._matchData.getSwappedIdx(team_idx),
                         self._aliasTeam(name), tag)
 
-                # TODO: Set map scores, maps and lineup
+                    for set_idx, player in enumerate(self._rawData['lineups'][team_label].get('lineup', [])):
+                        name = self._aliasPlayer(
+                            player.get('name', 'TBD'))
+                        race = json.loads(player.get('playerJson')).get('race')
+                        if self._format == 'CHINESE':
+                            self._matchData.setPlayer(
+                                self._matchData.getSwappedIdx(team_idx),
+                                set_idx*2,
+                                name,
+                                race)
+                            self._matchData.setPlayer(
+                                self._matchData.getSwappedIdx(team_idx),
+                                set_idx*2+1,
+                                name,
+                                race)
+                        else:
+                            self._matchData.setPlayer(
+                                self._matchData.getSwappedIdx(team_idx),
+                                set_idx,
+                                name,
+                                'Random')
+
+                # TODO: Set score
 
                 self._matchData.autoSetMyTeam(
                     swap=scctool.settings.config.parser.getboolean(
@@ -108,12 +129,39 @@ class MatchGrabber(MatchGrabberParent):
             except Exception:
                 module_logger.exception("message")
 
-    def _setMatchFormat(self, format_data, overwrite):
-        if format_data.get('format', '') == 'CHINESE_6':
-            self._matchData.setNoSets(7, 1, resetPlayers=overwrite)
-            self._matchData.setMinSets(format_data.get('maxWins', 6))
+    def _setMatchFormat(self, setsLimits, overwrite):
+        self._format = setsLimits.get('format', '')
+        re_proleague = re.compile(r'^PROLEAGUE_(\d+)$')
+        re_chinese = re.compile(r'^CHINESE_(\d+)$')
+        re_allkill = re.compile(r'^ALLKILL_(\d+)$')
+        if (match := re_chinese.match(self._format)) is not None:
+            sets = int(match.group(1))
+            self._format = 'CHINESE'
+            self._matchData.setNoSets(sets + 1, 1, resetPlayers=overwrite)
+            self._matchData.setMinSets(setsLimits.get('maxWins', sets))
             self._matchData.setAllKill(False)
             self._matchData.setSolo(False)
             self._matchData.setNoVetoes(0)
+        elif (match := re_proleague.match(self._format)) is not None:
+            sets = int(match.group(1))
+            self._format = 'PROLEAGUE'
+            self._matchData.setNoSets(
+                sets + 1, 1, resetPlayers=overwrite)
+            self._matchData.setMinSets(setsLimits.get('maxWins', int(sets/2)))
+            self._matchData.setAllKill(False)
+            self._matchData.setSolo(False)
+            self._matchData.setNoVetoes(0)
+        elif (match := re_proleague.match(self._format)) is not None:
+            sets = int(match.group(1))
+            self._format = 'ALLKILL'
+            self._matchData.setNoSets(
+                sets + 1, 0, resetPlayers=overwrite)
+            self._matchData.setMinSets(setsLimits.get('maxWins', int(sets/2)))
+            self._matchData.setAllKill(True)
+            self._matchData.setSolo(False)
+            self._matchData.setNoVetoes(0)
         else:
+            self._format = None
             raise ValueError('Unknown Format')
+
+            self._matchData.resetLabels()

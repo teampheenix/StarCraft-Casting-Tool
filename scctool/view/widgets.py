@@ -1640,7 +1640,6 @@ class MatchComboBox(QComboBox):
         self._rstl_icon = QIcon(scctool.settings.getResFile('rstl.png'))
         self._rsl_icon = QIcon(scctool.settings.getResFile('rsl.png'))
         self._ctl_icon = QIcon(scctool.settings.getResFile('chobo.png'))
-        self.addItem(self._alpha_icon, 'https://alpha.tl/match/3000')
         self.setItemData(0, Qt.AlignCenter, Qt.TextAlignmentRole)
         self.insertSeparator(1)
         self.lineEdit().returnPressed.connect(self.returnPressed.emit)
@@ -1665,10 +1664,6 @@ class MatchComboBox(QComboBox):
 
     def updateItems(self, matches):
         """Update the items."""
-        # completer = QCompleter(
-        #         ["https://alpha.tl/match/",
-        #          "http://hdgame.net/en/tournaments/list/tournament/rstl-13/"],
-        # self.le_url)
         self.removeItems()
         self._matches = matches
         completer = QCompleter(
