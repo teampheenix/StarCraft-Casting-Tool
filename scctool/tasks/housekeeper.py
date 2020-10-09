@@ -46,6 +46,8 @@ class HouseKeeperThread(TasksThread):
             output = dict()
             for match in self.__yieldSpireMatches():
                 dt_obj = datetime.fromisoformat(match['datetime'])
+                dt_obj = dt_obj.replace(tzinfo=timezone(timedelta(hours=0)))
+                dt_obj = dt_obj.astimezone()
                 label = "{}: {} vs {} - {}".format(
                     'spire.gg',
                     match['lineups']['A']['name'],

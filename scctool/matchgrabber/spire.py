@@ -7,6 +7,7 @@ import scctool.settings
 import scctool.settings.translation
 from scctool.matchgrabber.custom import MatchGrabber as MatchGrabberParent
 import re
+from _datetime import timedelta, timezone
 
 # create logger
 module_logger = logging.getLogger(__name__)
@@ -164,4 +165,6 @@ class MatchGrabber(MatchGrabberParent):
                 "Countdown", "matchgrabber_update"):
             return
         dt_obj = datetime.fromisoformat(datetime_str)
+        dt_obj = dt_obj.replace(tzinfo=timezone(timedelta(hours=0)))
+        dt_obj = dt_obj.astimezone()
         self._controller.view.countdownTab.setFromTimestamp(dt_obj.timestamp())
