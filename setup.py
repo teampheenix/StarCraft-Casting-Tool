@@ -16,7 +16,7 @@ setup(name='StarCraftCastingTool',
       author='pressure',
       author_email='pres.sure@ymail.com',
       license='GPL-3.0',
-      python_requires='>=3.7.0',
+      python_requires='>=3.8.0',
       tests_require=[
           'pytest >= 6.1.1',
           'pytest-mock >= 3.3.1',
@@ -27,5 +27,4 @@ setup(name='StarCraftCastingTool',
       zip_safe=False,
       classifiers=[
           'Development Status :: 4 - Beta',
-          'Programming Language :: Python :: 3.7',
           'Programming Language :: Python :: 3.8'])
