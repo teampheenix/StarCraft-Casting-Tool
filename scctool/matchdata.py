@@ -108,6 +108,8 @@ class MatchData(QObject):
 
         if(url.find('alpha') != -1):
             chg = self.setProvider("AlphaSC2")
+        elif(url.find('spire') != -1):
+            chg = self.setProvider("spiregg")
         elif(url.find('rfcs') != -1):
             chg = self.setProvider("RSL")
         elif(url.find('hdgame') != -1):

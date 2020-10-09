@@ -47,7 +47,7 @@ class HouseKeeperThread(TasksThread):
             for match in self.__yieldSpireMatches():
                 dt_obj = datetime.fromisoformat(match['datetime'])
                 label = "{}: {} vs {} - {}".format(
-                    'Spire.gg',
+                    'spire.gg',
                     match['lineups']['A']['name'],
                     match['lineups']['B']['name'],
                     dt_obj.strftime('%e %b, %H:%M'))

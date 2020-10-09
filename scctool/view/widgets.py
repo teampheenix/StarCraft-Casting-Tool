@@ -1631,8 +1631,8 @@ class MatchComboBox(QComboBox):
         super().__init__(parent)
         self.setEditable(True)
         self.lineEdit().setAlignment(Qt.AlignCenter)
-        tooltip = _('Enter AlphaTL/RSL Match-URL or '
-                    'search for an upcoming AlphaTL Match.')
+        tooltip = _('Enter spire.gg, RSL, Alpha, or Chobo Teamleague Match-URL or '
+                    'search for an upcoming spire.gg Match.')
         self.lineEdit().setPlaceholderText(tooltip)
         self.lineEdit().setToolTip(tooltip)
         self._alpha_icon = QIcon(scctool.settings.getResFile('alpha.png'))
@@ -1695,6 +1695,8 @@ class MatchComboBox(QComboBox):
         lower_url = str(url).lower()
         if(lower_url.find('alpha') != -1):
             self.setItemIcon(0, self._alpha_icon)
+        elif(lower_url.find('spire') != -1):
+            self.setItemIcon(0, self._spire_icon)
         elif(lower_url.find('rfcs') != -1):
             self.setItemIcon(0, self._rsl_icon)
         elif(lower_url.find('hdgame') != -1):

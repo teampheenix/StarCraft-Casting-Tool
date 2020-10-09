@@ -236,7 +236,7 @@ class MainWindow(QMainWindow):
             infoMenu.addAction(ixAct)
 
             spireAct = QAction(QIcon(scctool.settings.getResFile(
-                'spire.png')), 'Spire.gg', self)
+                'spire.png')), 'spire.gg', self)
             spireAct.triggered.connect(
                 lambda: self.controller.openURL("https://spire.gg"))
             infoMenu.addAction(spireAct)
