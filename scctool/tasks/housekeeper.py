@@ -41,7 +41,7 @@ class HouseKeeperThread(TasksThread):
 
     def __loadSpireMatches(self):
         """Load latest upcoming spire.gg matches from their API."""
-        module_logger.info('Loading upcoming Spire.gg matches!')
+        module_logger.info('Loading upcoming spire.gg matches!')
         try:
             output = dict()
             for match in self.__yieldSpireMatches():
