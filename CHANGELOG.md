@@ -1,6 +1,39 @@
 # Changelog
 
 
+## v2.9.0 (2020-10-10)
+
+### New
+
+* Added new map images.
+
+* Added match grabber for spire.gg solo matches.
+
+* Added match grabber for spire.gg team matches.
+
+* In 1vs1 mode the intro player names and order can now be directly read from from SCCT instead of SC2.
+
+* Add upcoming spire.gg matches to search bar.
+
+* All CSS items of intro gain the class attribute defaultLogo if the default SC2 logo is used. This allows to hide the logo or change intro layout.
+
+* Added assets to intro browser source that can be used to display items outside of the intro box.
+
+### Changes
+
+* Python 3.7 support removed.
+
+* Improved support for the new WCS overlay.
+
+* Removed Python 3.6 compatibility.
+
+### Fix
+
+* File ending of logos are automatically added when missing.
+
+* MatchGrabber for RSL will correctly read maps in All-Kill format.
+
+
 ## v2.8.6 (2020-07-14)
 
 ### New
