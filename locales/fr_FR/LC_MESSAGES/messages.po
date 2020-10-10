@@ -1,21 +1,21 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: StarCraft Casting Tool\n"
-"POT-Creation-Date: 2020-06-06 12:08+0200\n"
-"PO-Revision-Date: 2020-06-06 12:09+0200\n"
+"POT-Creation-Date: 2020-10-10 11:20+0200\n"
+"PO-Revision-Date: 2020-10-10 11:20+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 2.4.1\n"
 "X-Poedit-Basepath: ../../../scctool\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: __init__.py:51
+#: __init__.py:54
 #, python-brace-format
 msgid ""
 "Critical error <i>`{error}`</i>! Please provide the log-file to the "
@@ -24,7 +24,7 @@ msgstr ""
 "Erreur critique <i>`{error}`</i>! Fournir s'il vous plait le fichier journal "
 "au développeur du Starcraft Casting Tool. <a href=\"{link}\">{link}</a>"
 
-#: __init__.py:55
+#: __init__.py:58
 msgid "Critical Error"
 msgstr "Erreur critique"
 
@@ -93,39 +93,39 @@ msgstr ""
 msgid "Don't show this message again."
 msgstr ""
 
-#: controller.py:726 view/subMisc.py:791
+#: controller.py:726 view/subMisc.py:828
 msgid "Map not found"
 msgstr ""
 
-#: controller.py:727 view/subMisc.py:792
+#: controller.py:727 view/subMisc.py:829
 msgid "\"{}\" was not found on Liquipedia."
 msgstr ""
 
-#: controller.py:885
+#: controller.py:907
 msgid "Warning: Map '{}' not found!"
 msgstr "Attention: Carte '{}' introuvable!"
 
-#: controller.py:957
+#: controller.py:979
 msgid "{} {} Browser Source(s) connected on port {}."
 msgstr "{} {} Source(s) du navigateur connectée(s) sur le port {}."
 
-#: controller.py:1184
+#: controller.py:1206
 msgid "A new version {} is available."
 msgstr "Une nouvelle version {} est disponible."
 
-#: controller.py:1186
+#: controller.py:1208
 msgid "Update to new version?"
 msgstr "Mettre à jour vers la nouvelle version?"
 
-#: controller.py:1187
+#: controller.py:1209
 msgid "New StarCraft Casting Tool Version"
 msgstr "Nouvelle version de StarCraft Casting Tool"
 
-#: controller.py:1196
+#: controller.py:1218
 msgid "Don't show on startup."
 msgstr "Ne pas afficher au démarrage."
 
-#: controller.py:1205
+#: controller.py:1227
 msgid "A new version {} is available on GitHub!"
 msgstr "Une nouvelle version {} est disponible sur GitHub!"
 
@@ -620,8 +620,8 @@ msgstr "Joueur  {} de l'équipe {}"
 msgid "Set the score"
 msgstr "Régler le pointage"
 
-#: view/matchdataview.py:289 view/widgets.py:1755 view/widgets.py:1763
-#: view/widgets.py:1825
+#: view/matchdataview.py:289 view/widgets.py:1754 view/widgets.py:1762
+#: view/widgets.py:1824
 msgid "Map {}"
 msgstr "Carte {}"
 
@@ -657,8 +657,8 @@ msgstr "Alias"
 msgid "Alias of {}"
 msgstr "Alias de {}"
 
-#: view/matchdataview.py:419 view/subMisc.py:346 view/subMisc.py:697
-#: view/subMisc.py:743 view/subMisc.py:781 view/subMisc.py:839
+#: view/matchdataview.py:419 view/subMisc.py:346 view/subMisc.py:705
+#: view/subMisc.py:751 view/subMisc.py:818 view/subMisc.py:876
 #: view/widgets.py:1513
 msgid "Error"
 msgstr "Erreur"
@@ -683,19 +683,19 @@ msgstr "Icones de maps en paysage"
 msgid "Veto Icons"
 msgstr "Icones de vetoes"
 
-#: view/subBrowserSources.py:153 view/subBrowserSources.py:281
-#: view/subBrowserSources.py:331 view/subBrowserSources.py:369
+#: view/subBrowserSources.py:153 view/subBrowserSources.py:292
+#: view/subBrowserSources.py:342 view/subBrowserSources.py:380
 msgid "General"
 msgstr "Général"
 
-#: view/subBrowserSources.py:161 view/subBrowserSources.py:289
-#: view/subBrowserSources.py:339 view/subBrowserSources.py:377
+#: view/subBrowserSources.py:161 view/subBrowserSources.py:300
+#: view/subBrowserSources.py:350 view/subBrowserSources.py:388
 msgid "Style:"
 msgstr "Style:"
 
-#: view/subBrowserSources.py:163 view/subBrowserSources.py:291
-#: view/subBrowserSources.py:341 view/subBrowserSources.py:379
-#: view/subBrowserSources.py:427 view/subStyles.py:122 view/subStyles.py:139
+#: view/subBrowserSources.py:163 view/subBrowserSources.py:302
+#: view/subBrowserSources.py:352 view/subBrowserSources.py:390
+#: view/subBrowserSources.py:438 view/subStyles.py:122 view/subStyles.py:139
 #: view/subStyles.py:156 view/subStyles.py:171 view/subStyles.py:186
 #: view/subStyles.py:201 view/subStyles.py:216 view/subStyles.py:231
 msgid "Show in Browser"
@@ -737,127 +737,145 @@ msgstr "Marquer:"
 msgid "Mark vetoed maps"
 msgstr ""
 
-#: view/subBrowserSources.py:209
+#: view/subBrowserSources.py:207
+#, fuzzy
+#| msgid "Currently entered Maps only"
+msgid "Sort currently entered maps"
+msgstr "Carte enregistré actuellement seulement"
+
+#: view/subBrowserSources.py:213
+msgid "Sort:"
+msgstr ""
+
+#: view/subBrowserSources.py:220
 msgid "Custom Map Pool"
 msgstr "Liste de map personnalisé"
 
-#: view/subBrowserSources.py:255
+#: view/subBrowserSources.py:266
 msgid "Add Map"
 msgstr "Ajouter la map"
 
-#: view/subBrowserSources.py:256
+#: view/subBrowserSources.py:267
 msgid "Please select a map"
 msgstr "Sélectionner une carte s'il vous plait"
 
-#: view/subBrowserSources.py:267
+#: view/subBrowserSources.py:278
 msgid "No maps available"
 msgstr "Pas de map disponible"
 
-#: view/subBrowserSources.py:268
+#: view/subBrowserSources.py:279
 msgid "All available maps have already been added."
 msgstr "Toutes les maps ont déjà été ajoutées."
 
-#: view/subBrowserSources.py:303 view/subBrowserSources.py:353
-#: view/subBrowserSources.py:392
+#: view/subBrowserSources.py:314 view/subBrowserSources.py:364
+#: view/subBrowserSources.py:403
 msgid "Pixel"
 msgstr "Pixel"
 
-#: view/subBrowserSources.py:307 view/subBrowserSources.py:357
-#: view/subBrowserSources.py:396
+#: view/subBrowserSources.py:318 view/subBrowserSources.py:368
+#: view/subBrowserSources.py:407
 msgid "Icon Padding:"
 msgstr "Espacement des icones"
 
-#: view/subBrowserSources.py:315 view/subBrowserSources.py:404
+#: view/subBrowserSources.py:326 view/subBrowserSources.py:415
 msgid "Icon Set {} Scope"
 msgstr "Portée du jeu d'icones {}"
 
-#: view/subBrowserSources.py:421
+#: view/subBrowserSources.py:432
 msgid "Style"
 msgstr "Style"
 
-#: view/subBrowserSources.py:435
+#: view/subBrowserSources.py:446
+msgid "Behavior"
+msgstr ""
+
+#: view/subBrowserSources.py:449
+msgid "Read player names and order in 1vs1 mode from SCCT instead of SC2"
+msgstr ""
+
+#: view/subBrowserSources.py:457
 msgid "Hotkeys"
 msgstr "Raccourci clavier"
 
-#: view/subBrowserSources.py:440
+#: view/subBrowserSources.py:462
 msgid "Use a single hotkey for both players"
 msgstr "Utiliser un seul raccourci clavier pour les deux joueurs"
 
-#: view/subBrowserSources.py:445
+#: view/subBrowserSources.py:467
 msgid "Player 1"
 msgstr "Joueur 1"
 
-#: view/subBrowserSources.py:446
+#: view/subBrowserSources.py:468
 msgid "Player 2"
 msgstr "Joueur 2"
 
-#: view/subBrowserSources.py:447
+#: view/subBrowserSources.py:469
 msgid "Debug"
 msgstr "Debug"
 
-#: view/subBrowserSources.py:453
+#: view/subBrowserSources.py:475
 msgid ""
 "Player 1 is always the player your observer camera is centered on at start "
 "of a game."
 msgstr "Le joueur 1 est toujours le joueur dont la caméra est centré au départ"
 
-#: view/subBrowserSources.py:459
+#: view/subBrowserSources.py:481
 msgid "Animation"
 msgstr "Animation"
 
-#: view/subBrowserSources.py:466
+#: view/subBrowserSources.py:488
 msgid "Fly-In"
 msgstr "Atterrir"
 
-#: view/subBrowserSources.py:467
+#: view/subBrowserSources.py:489
 msgid "Slide"
 msgstr "Glisser"
 
-#: view/subBrowserSources.py:468
+#: view/subBrowserSources.py:490
 msgid "Fanfare"
 msgstr "Fanfare"
 
-#: view/subBrowserSources.py:476
+#: view/subBrowserSources.py:498
 msgid "Animation:"
 msgstr "Animation:"
 
-#: view/subBrowserSources.py:484
+#: view/subBrowserSources.py:506
 msgid "Seconds"
 msgstr "Secondes"
 
-#: view/subBrowserSources.py:487
+#: view/subBrowserSources.py:509
 msgid "Display Duration:"
 msgstr "Afficher la durée:"
 
-#: view/subBrowserSources.py:497 view/subBrowserSources.py:580
+#: view/subBrowserSources.py:519 view/subBrowserSources.py:602
 msgid "Sound Volume:"
 msgstr "Volume du son:"
 
-#: view/subBrowserSources.py:501
+#: view/subBrowserSources.py:523
 msgid "Text-to-Speech"
 msgstr "Synthèse vocale"
 
-#: view/subBrowserSources.py:508
+#: view/subBrowserSources.py:530
 msgid "Activate Text-to-Speech:"
 msgstr "Activer la synthèse vocale:"
 
-#: view/subBrowserSources.py:532
+#: view/subBrowserSources.py:554
 msgid "Voice:"
 msgstr "Voix:"
 
-#: view/subBrowserSources.py:544
+#: view/subBrowserSources.py:566
 msgid "Pitch:"
 msgstr ""
 
-#: view/subBrowserSources.py:554
+#: view/subBrowserSources.py:576
 msgid "Rate:"
 msgstr "Taux:"
 
-#: view/subBrowserSources.py:569
+#: view/subBrowserSources.py:591
 msgid "Line:"
 msgstr "Ligne:"
 
-#: view/subBrowserSources.py:583
+#: view/subBrowserSources.py:605
 #, python-brace-format
 msgid ""
 "Text-to-Speech provided by Google-Cloud is paid for by StarCraft Casting "
@@ -869,27 +887,27 @@ msgstr ""
 "un href='{patreon}'>Patron</a> vous-même. Vous pouvez tester toutes les à "
 "{tts}."
 
-#: view/subBrowserSources.py:612 view/subConnections.py:260
-#: view/subLiquipediaSearch.py:84 view/subMisc.py:889 view/subStyles.py:93
+#: view/subBrowserSources.py:634 view/subConnections.py:260
+#: view/subLiquipediaSearch.py:84 view/subMisc.py:926 view/subStyles.py:93
 msgid "Cancel"
 msgstr "Annuler"
 
-#: view/subBrowserSources.py:616 view/subConnections.py:264 view/subMisc.py:893
+#: view/subBrowserSources.py:638 view/subConnections.py:264 view/subMisc.py:930
 #: view/subStyles.py:97
 msgid "&Save && Close"
 msgstr "Sauvegarder et fermer"
 
-#: view/subBrowserSources.py:617 view/subConnections.py:265 view/subMisc.py:894
+#: view/subBrowserSources.py:639 view/subConnections.py:265 view/subMisc.py:931
 #: view/subStyles.py:98
 msgid "Shortcut: {}"
 msgstr "Raccourci: {}"
 
-#: view/subBrowserSources.py:738 view/subConnections.py:323 view/subMisc.py:980
-#: view/subStyles.py:436
+#: view/subBrowserSources.py:770 view/subConnections.py:323
+#: view/subMisc.py:1017 view/subStyles.py:436
 msgid "Save data?"
 msgstr "Sauvegarder les données?"
 
-#: view/subBrowserSources.py:738 view/subConnections.py:323
+#: view/subBrowserSources.py:770 view/subConnections.py:323
 msgid "Do you want to save the data?"
 msgstr "Voulez-vous enregistrer les données?"
 
@@ -1058,7 +1076,7 @@ msgstr "Enlever des favoris"
 msgid "Select Team Logo"
 msgstr "Sélectionner le logo de l'équipe"
 
-#: view/subLogos.py:331 view/subMisc.py:718 view/subMisc.py:731
+#: view/subLogos.py:331 view/subMisc.py:726 view/subMisc.py:739
 msgid "Supported Images"
 msgstr "Images supportées"
 
@@ -1345,36 +1363,58 @@ msgstr "Modifier l’image"
 msgid "Prompt to download new ladders maps."
 msgstr ""
 
-#: view/subMisc.py:686 view/subMisc.py:687 view/subMisc.py:737
-#: view/subMisc.py:774
+#: view/subMisc.py:659
+msgid "Download Ladder Maps"
+msgstr ""
+
+#: view/subMisc.py:694 view/subMisc.py:695 view/subMisc.py:745
+#: view/subMisc.py:811
 msgid "Map Name"
 msgstr ""
 
-#: view/subMisc.py:698 view/subMisc.py:744 view/subMisc.py:782
+#: view/subMisc.py:706 view/subMisc.py:752 view/subMisc.py:819
 msgid "\"{}\" is not a valid map name."
 msgstr ""
 
-#: view/subMisc.py:702 view/subMisc.py:749 view/subMisc.py:801
+#: view/subMisc.py:710 view/subMisc.py:757 view/subMisc.py:838
 msgid "Duplicate Entry"
 msgstr ""
 
-#: view/subMisc.py:703 view/subMisc.py:750
+#: view/subMisc.py:711 view/subMisc.py:758
 msgid "Map is already in list! Overwrite?"
 msgstr ""
 
-#: view/subMisc.py:717 view/subMisc.py:730
+#: view/subMisc.py:725 view/subMisc.py:738
 msgid "Select Map Image (> 500x500px recommended)"
 msgstr ""
 
+#: view/subMisc.py:779
+msgid "Select the type of ladder maps to download"
+msgstr ""
+
+#: view/subMisc.py:780
+#, fuzzy
+#| msgid "Please select a map"
+msgid "Please select a map type"
+msgstr "Sélectionner une carte s'il vous plait"
+
 #: view/subMisc.py:802
+msgid "No missing map"
+msgstr ""
+
+#: view/subMisc.py:803
+msgid "All of the current ladder maps are already present."
+msgstr ""
+
+#: view/subMisc.py:839
 msgid "Map {} is already in list! Overwrite?"
 msgstr ""
 
-#: view/subMisc.py:847
+#: view/subMisc.py:884
 msgid "Delete map?"
 msgstr ""
 
-#: view/subMisc.py:848
+#: view/subMisc.py:885
 msgid "Delete '{}' permanently?"
 msgstr ""
 
@@ -1668,26 +1708,28 @@ msgid "Rename Profile"
 msgstr "Renommer le profil"
 
 #: view/widgets.py:1634
-msgid "Enter AlphaTL/RSL Match-URL or search for an upcoming AlphaTL Match."
+msgid ""
+"Enter spire.gg, RSL, Alpha, or Chobo Teamleague Match-URL or search for an "
+"upcoming spire.gg Match."
 msgstr ""
 
-#: view/widgets.py:1729
+#: view/widgets.py:1728
 msgid "Dynamic:"
 msgstr "Dynamique:"
 
-#: view/widgets.py:1746
+#: view/widgets.py:1745
 msgid "Static:"
 msgstr "Statique:"
 
-#: view/widgets.py:1751
+#: view/widgets.py:1750
 msgid "From"
 msgstr ""
 
-#: view/widgets.py:1758
+#: view/widgets.py:1757
 msgid "to"
 msgstr ""
 
-#: view/widgets.py:1774
+#: view/widgets.py:1773
 msgid "Activate Separate Style:"
 msgstr ""
 
