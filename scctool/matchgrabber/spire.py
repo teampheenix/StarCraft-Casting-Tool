@@ -73,23 +73,19 @@ class MatchGrabber(MatchGrabberParent):
                         name = self._aliasPlayer(
                             player.get('name', 'TBD'))
                         race = json.loads(player.get('playerJson')).get('race')
+
                         if self._format == 'CHINESE':
-                            self._matchData.setPlayer(
-                                self._matchData.getSwappedIdx(team_idx),
-                                set_idx*2,
-                                name,
-                                race)
-                            self._matchData.setPlayer(
-                                self._matchData.getSwappedIdx(team_idx),
-                                set_idx*2+1,
-                                name,
-                                race)
+                            set_list = [set_idx*2, set_idx*2+1]
+                        elif self._format == 'BESTOF':
+                            set_list = list(range(self._matchData.getNoSets()))
                         else:
+                            set_list = [set_idx]
+                        for index in set_list:
                             self._matchData.setPlayer(
                                 self._matchData.getSwappedIdx(team_idx),
-                                set_idx,
+                                index,
                                 name,
-                                'Random')
+                                race)
 
                 # TODO: Set score
 
@@ -126,7 +122,8 @@ class MatchGrabber(MatchGrabberParent):
         self._format = setsLimits.get('format', '')
         re_proleague = re.compile(r'^PROLEAGUE_(\d+)$')
         re_chinese = re.compile(r'^CHINESE_(\d+)$')
-        re_allkill = re.compile(r'^ALLKILL_(\d+)$')
+        re_allkill = re.compile(r'^ALLKILL_BO(\d+)$')
+        re_bestof = re.compile(r'^BESTOF_(\d+)$')
         if (match := re_chinese.match(self._format)) is not None:
             sets = int(match.group(1))
             self._format = 'CHINESE'
@@ -144,20 +141,31 @@ class MatchGrabber(MatchGrabberParent):
             self._matchData.setAllKill(False)
             self._matchData.setSolo(False)
             self._matchData.setNoVetoes(0)
-        elif (match := re_proleague.match(self._format)) is not None:
+        elif (match := re_allkill.match(self._format)) is not None:
             sets = int(match.group(1))
             self._format = 'ALLKILL'
             self._matchData.setNoSets(
-                sets + 1, 0, resetPlayers=overwrite)
-            self._matchData.setMinSets(setsLimits.get('maxWins', int(sets/2)))
+                sets, 0, resetPlayers=overwrite)
+            self._matchData.setMinSets(
+                setsLimits.get('maxWins', int(sets/2) + 1))
             self._matchData.setAllKill(True)
             self._matchData.setSolo(False)
+            self._matchData.setNoVetoes(0)
+        elif (match := re_bestof.match(self._format)) is not None:
+            sets = int(match.group(1))
+            self._format = 'BESTOF'
+            self._matchData.setNoSets(
+                sets, 0, resetPlayers=overwrite)
+            self._matchData.setMinSets(
+                setsLimits.get('maxWins', int(sets/2) + 1))
+            self._matchData.setAllKill(False)
+            self._matchData.setSolo(True)
             self._matchData.setNoVetoes(0)
         else:
             self._format = None
             raise ValueError('Unknown Format')
 
-            self._matchData.resetLabels()
+        self._matchData.resetLabels()
 
     def updateCountdown(self, datetime_str):
         """Set countdown to datetime of the match."""
