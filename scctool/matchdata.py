@@ -1259,15 +1259,16 @@ class MatchData(QObject):
 
 def autoCorrectMap(sc2_map):
     """Corrects map using list in config."""
+    lower_map_dict = {value.lower(): value for value in scctool.settings.maps}
     if not isinstance(sc2_map, str):
         sc2_map = "TBD"
     try:
         matches = difflib.get_close_matches(
-            sc2_map.lower(), scctool.settings.maps, 1)
+            sc2_map.lower(), lower_map_dict.keys(), 1)
         if(len(matches) == 0):
             return sc2_map, False
         else:
-            return matches[0], True
+            return lower_map_dict[matches[0]], True
 
     except Exception:
         module_logger.exception("message")
