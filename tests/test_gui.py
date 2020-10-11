@@ -202,6 +202,7 @@ class TestGUI(object):
         assert match.getMinSets() == 6
         assert match.getNoAceSets() == 1
         assert match.getAllKill() == False
+        assert match.getSolo() == False
 
     @pytest.mark.parametrize(
         "match_url",
