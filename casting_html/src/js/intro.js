@@ -17,20 +17,24 @@ init();
 
 function playSound(audio) {
   try {
-    if (audio.duration > 0 && !audio.paused) {
-      //already playing
-      audio.pause();
-      audio.currentTime = 0;
-      audio.play();
-    } else {
-      //not playing
-      audio.play();
+    if (!!audio) {
+      if (audio.duration > 0 && !audio.paused) {
+        //already playing
+        audio.pause();
+        audio.currentTime = 0;
+        audio.play();
+      } else {
+        //not playing
+        audio.play();
+      }
     }
-  } catch (e) {}
+  } catch (e) { }
 }
 
 function connect() {
-  socket = new WebSocket(controller.generateKeyURI());
+  try {
+    socket = new WebSocket(controller.generateKeyURI());
+  } catch (e) { }
 
   socket.onopen = function () {
     console.log("Connected!");
@@ -51,7 +55,7 @@ function connect() {
         try {
           var tts = new Audio(jsonObject.data.tts);
           tts.volume = jsonObject.data.tts_volume / 20.0;
-        } catch (e) {}
+        } catch (e) { }
         socket.send(jsonObject.state);
         tween.clear();
         const cssItems = [".box", ".race", ".logo", ".name", ".team", ".misc", ".label", ".label2", ".label3", ".asset1", ".asset2"];
@@ -119,10 +123,10 @@ function connect() {
             });
         } else if (animation === "slide") {
           tween.to(intro, 0, {
-              opacity: 0,
-              left: offset + "px",
-              scaleX: 0
-            })
+            opacity: 0,
+            left: offset + "px",
+            scaleX: 0
+          })
             .to(intro, 0.1, {
               opacity: 1
             })
