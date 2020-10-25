@@ -1,7 +1,7 @@
 # Changelog
 
 
-## v2.9.0 (2020-10-10)
+## v2.9.0 (2020-10-25)
 
 ### New
 
@@ -28,6 +28,8 @@
 * Removed Python 3.6 compatibility.
 
 ### Fix
+
+* Fixed a bug where Lightshade would be correct to Nightshade when fetch with the match grabber.
 
 * File ending of logos are automatically added when missing.
 
