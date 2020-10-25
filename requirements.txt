@@ -1,9 +1,9 @@
 appdirs >= 1.4.4
 beautifulsoup4 >= 4.9.3
-humanize >= 3.0.1
+humanize >= 3.1.0
 keyboard==0.13.5
-markdown2 >= 2.3.9
-Pillow >= 7.2.0; platform_system == 'Windows'
+markdown2 >= 2.3.10
+Pillow >= 8.0.1; platform_system == 'Windows'
 pywin32 >= 228; platform_system == 'Windows'
 PyQt5==5.13.2  # rq.filter: != 5.14.*, != 5.15.*
 pytesseract >= 0.3.6; platform_system == 'Windows'
