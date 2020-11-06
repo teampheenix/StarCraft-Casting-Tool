@@ -1,13 +1,13 @@
 """Provide match grabber for Spire.gg."""
 import json
 import logging
-from datetime import datetime
+import re
+from datetime import datetime, timedelta, timezone
 
+import requests
 import scctool.settings
 import scctool.settings.translation
 from scctool.matchgrabber.custom import MatchGrabber as MatchGrabberParent
-import re
-from _datetime import timedelta, timezone
 
 # create logger
 module_logger = logging.getLogger(__name__)
@@ -88,12 +88,31 @@ class MatchGrabber(MatchGrabberParent):
                                 race)
 
                 # TODO: Set score
+                self.getResults()
 
                 self._matchData.autoSetMyTeam(
                     swap=scctool.settings.config.parser.getboolean(
                         "SCT", "swap_myteam"))
                 if logoManager is not None:
                     self.downloadLogos(logoManager)
+
+    def getResults(self, overwrite=True):
+        sets = requests.get(
+            url=f'{self._getAPI()}/sets').json().get('result', [])
+        if len(sets) < 1:
+            for set_idx in range(self._matchData.getNoSets()):
+                self._matchData.setMapScore(
+                    set_idx, 0, overwrite, True)
+            return
+        for set_idx, data in enumerate(sets):
+            winForTeamA = data.get('resultsMap', {}).get('A', '')
+            if winForTeamA == 'WIN':
+                score = -1
+            elif winForTeamA == 'DEFEAT':
+                score = 1
+            else:
+                score = 0
+            self._matchData.setMapScore(set_idx, score, overwrite, True)
 
     def downloadLogos(self, logoManager):
         """Download team logos."""
