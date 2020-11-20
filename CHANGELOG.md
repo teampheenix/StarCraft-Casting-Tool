@@ -1,6 +1,13 @@
 # Changelog
 
 
+## v2.9.2 (2020-11-20)
+
+### New
+
+* Spire.gg match grabber will now also fetch the match score and reset the score if needed.
+
+
 ## v2.9.0 (2020-10-25)
 
 ### New
