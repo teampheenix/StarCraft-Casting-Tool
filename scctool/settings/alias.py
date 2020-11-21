@@ -56,14 +56,14 @@ class AliasManager:
         name = str(name).strip()
         alias = str(alias).strip()
         if not name or name.lower() == 'tbd':
-            raise ValueError('Invalid player name.')
+            raise ValueError(_('Invalid player name.'))
         if not alias or alias.lower() == 'tbd':
-            raise ValueError('Invalid alias name.')
+            raise ValueError(_('Invalid alias name.'))
         if name == alias:
-            raise ValueError('Alias matches name.')
+            raise ValueError(_('Alias matches name.'))
 
         if alias in self.__player_alias:
-            raise ValueError('Alias {} is already used by {}'.format(
+            raise ValueError(_('Alias {} is already used by {}').format(
                 alias, self.__player_alias[alias]))
         self.__player_alias[alias] = name
 
@@ -72,14 +72,14 @@ class AliasManager:
         name = str(name).strip()
         alias = str(alias).strip()
         if not name or name.lower() == 'tbd':
-            raise ValueError('Invalid team name.')
+            raise ValueError(_('Invalid team name.'))
         if not alias or alias.lower() == 'tbd':
-            raise ValueError('Invalid alias name.')
+            raise ValueError(_('Invalid alias name.'))
         if name == alias:
-            raise ValueError('Alias matches name.')
+            raise ValueError(_('Alias matches name.'))
 
         if alias in self.__team_alias:
-            raise ValueError('Alias {} is already used by {}'.format(
+            raise ValueError(_('Alias {} is already used by {}').format(
                 alias, self.__team_alias[alias]))
         self.__team_alias[alias] = name
 
@@ -87,15 +87,15 @@ class AliasManager:
         """Add a league alias."""
         name = str(name).strip()
         alias = str(alias).strip()
-        if not name:
-            raise ValueError('Invalid team name.')
-        if not alias:
-            raise ValueError('Invalid alias name.')
+        if not name or name.lower() == 'tbd':
+            raise ValueError(_('Invalid league name.'))
+        if not alias or alias.lower() == 'tbd':
+            raise ValueError(_('Invalid alias name.'))
         if name == alias:
-            raise ValueError('Alias matches name.')
+            raise ValueError(_('Alias matches name.'))
 
         if alias in self.__league_alias:
-            raise ValueError('Alias {} is already used by {}'.format(
+            raise ValueError(_('Alias {} is already used by {}').format(
                 alias, self.__league_alias[alias]))
         self.__league_alias[alias] = name
 
