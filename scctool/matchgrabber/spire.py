@@ -86,6 +86,14 @@ class MatchGrabber(MatchGrabberParent):
                                 index,
                                 name,
                                 race)
+                    ace_players = self.getAcePlayers()
+                    if len(ace_players) == 2:
+                        for team_idx, player in enumerate(ace_players):
+                            self._matchData.setPlayer(
+                                self._matchData.getSwappedIdx(team_idx),
+                                self._matchData.getNoSets() - 1,
+                                player['name'],
+                                player['race'])
 
                 # TODO: Set score
                 self.getResults()
@@ -113,6 +121,21 @@ class MatchGrabber(MatchGrabberParent):
             else:
                 score = 0
             self._matchData.setMapScore(set_idx, score, overwrite, True)
+
+    def getAcePlayers(self):
+        players = []
+        try:
+            data = requests.get(
+                url=f'{self._getAPI()}/acePlayers').json().get('result', {})
+            for team_idx in ['A', 'B']:
+                if team_idx in data:
+                    players.append({
+                        'name': data[team_idx]['account']['props']['nickName'],
+                        'race': data[team_idx]['account']['props']['race']
+                    })
+        except Exception:
+            module_logger.exception('message')
+        return players
 
     def downloadLogos(self, logoManager):
         """Download team logos."""
