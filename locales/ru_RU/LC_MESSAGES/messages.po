@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: StarCraft Casting Tool\n"
-"POT-Creation-Date: 2020-10-10 11:21+0200\n"
-"PO-Revision-Date: 2020-10-10 11:21+0200\n"
+"POT-Creation-Date: 2020-11-21 13:26+0100\n"
+"PO-Revision-Date: 2020-11-21 13:27+0100\n"
 "Last-Translator: \n"
 "Language-Team: Mayhem, TanTall\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Poedit 2.4.2\n"
 "X-Poedit-Basepath: ../../..\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
@@ -97,11 +97,11 @@ msgstr "Новые Лестничные Карты"
 msgid "Don't show this message again."
 msgstr "Не показывать это сообщение снова."
 
-#: scctool/controller.py:726 scctool/view/subMisc.py:828
+#: scctool/controller.py:726 scctool/view/subMisc.py:847
 msgid "Map not found"
 msgstr "Карта не найдена"
 
-#: scctool/controller.py:727 scctool/view/subMisc.py:829
+#: scctool/controller.py:727 scctool/view/subMisc.py:848
 msgid "\"{}\" was not found on Liquipedia."
 msgstr "\"{}\"  не найден на Liquipedia."
 
@@ -179,6 +179,33 @@ msgstr "Выберите матч"
 #: scctool/matchgrabber/ctl.py:69
 msgid "Please select a match"
 msgstr "Выберите совпадение"
+
+#: scctool/settings/alias.py:59
+msgid "Invalid player name."
+msgstr "Неверное имя игрока."
+
+#: scctool/settings/alias.py:61 scctool/settings/alias.py:77
+#: scctool/settings/alias.py:93
+msgid "Invalid alias name."
+msgstr "Неверное имя псевдонима."
+
+#: scctool/settings/alias.py:63 scctool/settings/alias.py:79
+#: scctool/settings/alias.py:95
+msgid "Alias matches name."
+msgstr "Псевдоним соответствует имени."
+
+#: scctool/settings/alias.py:66 scctool/settings/alias.py:82
+#: scctool/settings/alias.py:98
+msgid "Alias {} is already used by {}"
+msgstr "Псевдоним {} уже используется {}"
+
+#: scctool/settings/alias.py:75
+msgid "Invalid team name."
+msgstr "Неверное название команды."
+
+#: scctool/settings/alias.py:91
+msgid "Invalid league name."
+msgstr "Неверное название лиги."
 
 #: scctool/settings/profileManager.py:122
 #: scctool/settings/profileManager.py:166
@@ -633,80 +660,97 @@ msgstr "Активировать матч"
 msgid "Close Match"
 msgstr "Закрыть матч"
 
-#: scctool/view/matchdataview.py:186
+#: scctool/view/matchdataview.py:193
 msgid "Choose your team"
 msgstr "Выберите вашу команду"
 
 # Needs to be checked by Russian.
-#: scctool/view/matchdataview.py:204
+#: scctool/view/matchdataview.py:211
 msgid "Swap teams and logos."
 msgstr "Своп команды и логотипы."
 
-#: scctool/view/matchdataview.py:207
+#: scctool/view/matchdataview.py:214
 msgid "League:"
 msgstr "Лига:"
 
-#: scctool/view/matchdataview.py:217
+#: scctool/view/matchdataview.py:224
 msgid "Maps \\ Teams:"
 msgstr "Карты \\ Команды:"
 
-#: scctool/view/matchdataview.py:252
+#: scctool/view/matchdataview.py:259
 msgid "Player {} of team {}"
 msgstr "Игрок {} из команды {}"
 
-#: scctool/view/matchdataview.py:282
+#: scctool/view/matchdataview.py:289
 msgid "Set the score"
 msgstr "Установить счет"
 
-#: scctool/view/matchdataview.py:289 scctool/view/widgets.py:1754
+#: scctool/view/matchdataview.py:296 scctool/view/widgets.py:1754
 #: scctool/view/widgets.py:1762 scctool/view/widgets.py:1824
 msgid "Map {}"
 msgstr "Карта {}"
 
-#: scctool/view/matchdataview.py:300
+#: scctool/view/matchdataview.py:307
 msgid "Select map on Mapstats Browser Source."
 msgstr "Выберите карту в источнике браузера Mapstats."
 
 # Google Translate
-#: scctool/view/matchdataview.py:337
+#: scctool/view/matchdataview.py:344
 msgid "Map Vetoes"
 msgstr "Картен Вето"
 
-#: scctool/view/matchdataview.py:362
+#: scctool/view/matchdataview.py:369
 msgid "Map Veto {}"
 msgstr "Карта Вето {}"
 
-#: scctool/view/matchdataview.py:374
+#: scctool/view/matchdataview.py:381
 msgid "Select which player/team vetoes."
 msgstr "Выберите, какой игрок / команда накладывает вето."
 
+#: scctool/view/matchdataview.py:399 scctool/view/matchdataview.py:412
+#: scctool/view/matchdataview.py:424 scctool/view/subMisc.py:293
+#: scctool/view/subMisc.py:306 scctool/view/subMisc.py:319
+#: scctool/view/widgets.py:822
+msgid "Add Alias"
+msgstr "Добавить псевдоним"
+
 # Google Translate
-#: scctool/view/matchdataview.py:404
+#: scctool/view/matchdataview.py:434
 msgid "Player Alias"
 msgstr "Псевдоним игрока"
 
-#: scctool/view/matchdataview.py:404 scctool/view/widgets.py:805
+#: scctool/view/matchdataview.py:434 scctool/view/matchdataview.py:455
+#: scctool/view/matchdataview.py:476 scctool/view/widgets.py:805
 #: scctool/view/widgets.py:825
 msgid "Name"
 msgstr "Имя"
 
-#: scctool/view/matchdataview.py:410 scctool/view/subMisc.py:86
-#: scctool/view/subMisc.py:332
+#: scctool/view/matchdataview.py:440 scctool/view/matchdataview.py:461
+#: scctool/view/matchdataview.py:482 scctool/view/subMisc.py:86
+#: scctool/view/subMisc.py:349
 msgid "Alias"
 msgstr "Псевдоним"
 
-#: scctool/view/matchdataview.py:410 scctool/view/subMisc.py:332
+#: scctool/view/matchdataview.py:440 scctool/view/matchdataview.py:461
+#: scctool/view/matchdataview.py:482 scctool/view/subMisc.py:349
 msgid "Alias of {}"
 msgstr "Псевдоним {}"
 
-#: scctool/view/matchdataview.py:419 scctool/view/subMisc.py:346
-#: scctool/view/subMisc.py:705 scctool/view/subMisc.py:751
-#: scctool/view/subMisc.py:818 scctool/view/subMisc.py:876
+#: scctool/view/matchdataview.py:449 scctool/view/matchdataview.py:470
+#: scctool/view/matchdataview.py:491 scctool/view/subMisc.py:365
+#: scctool/view/subMisc.py:724 scctool/view/subMisc.py:770
+#: scctool/view/subMisc.py:837 scctool/view/subMisc.py:895
 #: scctool/view/widgets.py:1513
 msgid "Error"
 msgstr "Ошибка"
 
-#: scctool/view/matchdataview.py:714
+#: scctool/view/matchdataview.py:455 scctool/view/matchdataview.py:476
+#, fuzzy
+#| msgid "Team Aliases"
+msgid "Team Alias"
+msgstr "Псевдонимы команды"
+
+#: scctool/view/matchdataview.py:786
 msgid "Updating Score..."
 msgstr "Обновление счета..."
 
@@ -950,23 +994,23 @@ msgstr ""
 "href='{patreon}'> Патроне </a>. Вы можете проверить все голоса на {tts}."
 
 #: scctool/view/subBrowserSources.py:634 scctool/view/subConnections.py:260
-#: scctool/view/subLiquipediaSearch.py:84 scctool/view/subMisc.py:926
+#: scctool/view/subLiquipediaSearch.py:84 scctool/view/subMisc.py:945
 #: scctool/view/subStyles.py:93
 msgid "Cancel"
 msgstr "Отмена"
 
 #: scctool/view/subBrowserSources.py:638 scctool/view/subConnections.py:264
-#: scctool/view/subMisc.py:930 scctool/view/subStyles.py:97
+#: scctool/view/subMisc.py:949 scctool/view/subStyles.py:97
 msgid "&Save && Close"
 msgstr "Сохранить и закрыть"
 
 #: scctool/view/subBrowserSources.py:639 scctool/view/subConnections.py:265
-#: scctool/view/subMisc.py:931 scctool/view/subStyles.py:98
+#: scctool/view/subMisc.py:950 scctool/view/subStyles.py:98
 msgid "Shortcut: {}"
 msgstr "Горячая клавиша: {}"
 
 #: scctool/view/subBrowserSources.py:770 scctool/view/subConnections.py:323
-#: scctool/view/subMisc.py:1017 scctool/view/subStyles.py:436
+#: scctool/view/subMisc.py:1036 scctool/view/subStyles.py:436
 msgid "Save data?"
 msgstr "Сохранить данные?"
 
@@ -1102,7 +1146,7 @@ msgid "Add to Favorites"
 msgstr "Добавить в избранное"
 
 #: scctool/view/subLogos.py:65 scctool/view/subLogos.py:115
-#: scctool/view/subMisc.py:645 scctool/view/widgets.py:1384
+#: scctool/view/subMisc.py:664 scctool/view/widgets.py:1384
 msgid "Remove"
 msgstr "Удалить"
 
@@ -1142,8 +1186,8 @@ msgstr "Удалить из избранного"
 msgid "Select Team Logo"
 msgstr "Выбрать логотип команды"
 
-#: scctool/view/subLogos.py:331 scctool/view/subMisc.py:726
-#: scctool/view/subMisc.py:739
+#: scctool/view/subLogos.py:331 scctool/view/subMisc.py:745
+#: scctool/view/subMisc.py:758
 msgid "Supported Images"
 msgstr "Поддерживаемые изображения"
 
@@ -1278,11 +1322,17 @@ msgid "Swap my favorite team always to the left"
 msgstr "Поменяйте мою любимую команду всегда налево"
 
 #: scctool/view/subMisc.py:276
+#, fuzzy
+#| msgid ""
+#| "Player and team aliases are replaced by the actual name when encountered "
+#| "by the match grabber. Additionally, SC2 player names listed as aliases "
+#| "are replaced in the intros and used to identify players by the automatic "
+#| "background tasks \"Auto Score Update\" and \"Set Ingame Score\"."
 msgid ""
-"Player and team aliases are replaced by the actual name when encountered by "
-"the match grabber. Additionally, SC2 player names listed as aliases are "
-"replaced in the intros and used to identify players by the automatic "
-"background tasks \"Auto Score Update\" and \"Set Ingame Score\"."
+"Player, team, and league aliases are replaced by the actual name when "
+"encountered by the match grabber. Additionally, SC2 player names listed as "
+"aliases are replaced in the intros and used to identify players by the "
+"automatic background tasks \"Auto Score Update\" and \"Set Ingame Score\"."
 msgstr ""
 "Псевдонимы игрока и команды заменяются фактическими именами когда их "
 "собирает граббер матчей. Кроме того, имена игроков SC2, перечисленные как "
@@ -1293,12 +1343,7 @@ msgstr ""
 msgid "Player Aliases"
 msgstr "Псевдонимы игроков"
 
-#: scctool/view/subMisc.py:293 scctool/view/subMisc.py:306
-#: scctool/view/widgets.py:822
-msgid "Add Alias"
-msgstr "Добавить псевдоним"
-
-#: scctool/view/subMisc.py:295 scctool/view/subMisc.py:559
+#: scctool/view/subMisc.py:295 scctool/view/subMisc.py:578
 msgid "Player Name"
 msgstr "Имя игрока"
 
@@ -1310,30 +1355,42 @@ msgstr "Псевдонимы команды"
 msgid "Team Name"
 msgstr "Название команды"
 
+#: scctool/view/subMisc.py:313
+#, fuzzy
+#| msgid "Team Aliases"
+msgid "League Aliases"
+msgstr "Псевдонимы команды"
+
+#: scctool/view/subMisc.py:321
+#, fuzzy
+#| msgid "Team Name"
+msgid "League Name"
+msgstr "Название команды"
+
 # Google Translate
-#: scctool/view/subMisc.py:355
+#: scctool/view/subMisc.py:374
 msgid "SC2 Client API Address"
 msgstr "Адрес API-интерфейса SC2"
 
 # Google Translate
-#: scctool/view/subMisc.py:360
+#: scctool/view/subMisc.py:379
 msgid "Listen to SC2 Client API running on a different PC in the network."
 msgstr "Слушайте клиентский API SC2, работающий на другом ПК в сети."
 
 # Google Translate
-#: scctool/view/subMisc.py:377
+#: scctool/view/subMisc.py:396
 msgid "IP address and port of machine running SC2."
 msgstr ""
 "43/5000\n"
 "IP-адрес и порт машины SC2."
 
 # Google Translate
-#: scctool/view/subMisc.py:384
+#: scctool/view/subMisc.py:403
 msgid "Test SC2 Client API Connection"
 msgstr "Тестирование соединения API клиента SC2"
 
 # Google Translate
-#: scctool/view/subMisc.py:388
+#: scctool/view/subMisc.py:407
 msgid ""
 "Activate this option if you are using a two computer setup with StarCraft "
 "Casting Tool running on a different PC than your SC2 client. Open the Battle."
@@ -1349,21 +1406,21 @@ msgstr ""
 "сетевой адрес ниже: «[SC2 PC IP]: 6119»."
 
 # Google Translate
-#: scctool/view/subMisc.py:406
+#: scctool/view/subMisc.py:425
 msgid "Network Address"
 msgstr "Сетевой адрес"
 
-#: scctool/view/subMisc.py:431
+#: scctool/view/subMisc.py:450
 msgid "Connection Test"
 msgstr "Тест соединения"
 
 # Google Translate
-#: scctool/view/subMisc.py:436
+#: scctool/view/subMisc.py:455
 msgid "Connection to SC2 client API established!"
 msgstr "Установлено подключение к API-интерфейсу SC2!"
 
 # Google Translate
-#: scctool/view/subMisc.py:440
+#: scctool/view/subMisc.py:459
 msgid ""
 "Unable to connect to SC2 client API. Please make sure that SC2 is currently "
 "running on that machine."
@@ -1371,25 +1428,25 @@ msgstr ""
 "Не удается подключиться к API-интерфейсу SC2. Убедитесь, что SC2 в данный "
 "момент запущен на этом компьютере."
 
-#: scctool/view/subMisc.py:451
+#: scctool/view/subMisc.py:470
 msgid "Optical Character Recognition for Automatic Setting of Ingame Score"
 msgstr ""
 "Оптическое распознавание персонажей для автоматической настройки счета в игре"
 
-#: scctool/view/subMisc.py:457
+#: scctool/view/subMisc.py:476
 msgid "Activate Optical Character Recognition"
 msgstr "Активировать оптическое распознавание персонажей"
 
-#: scctool/view/subMisc.py:470 scctool/view/subMisc.py:495
-#: scctool/view/subMisc.py:525
+#: scctool/view/subMisc.py:489 scctool/view/subMisc.py:514
+#: scctool/view/subMisc.py:544
 msgid "Tesseract-OCR Executable"
 msgstr "Исполняемый файл Tesseract-OCR"
 
-#: scctool/view/subMisc.py:472
+#: scctool/view/subMisc.py:491
 msgid "Browse..."
 msgstr "Выбрать..."
 
-#: scctool/view/subMisc.py:476
+#: scctool/view/subMisc.py:495
 msgid ""
 "Sometimes the order of players given by the SC2-Client-API differs from the "
 "order in the Observer-UI resulting in a swapped match score. To correct this "
@@ -1401,124 +1458,122 @@ msgstr ""
 "распознавания вам необходимо скачать {}, установить и выбрать исполняемый "
 "файл ниже, если он не определился автоматически."
 
-#: scctool/view/subMisc.py:509 scctool/view/subMisc.py:513
-#: scctool/view/subMisc.py:517
+#: scctool/view/subMisc.py:528 scctool/view/subMisc.py:532
+#: scctool/view/subMisc.py:536
 msgid "This feature is only available in Windows."
 msgstr "Эта возможность доступна только в Windows."
 
-#: scctool/view/subMisc.py:524
+#: scctool/view/subMisc.py:543
 msgid "Select Tesseract-OCR Executable"
 msgstr "Выберите исполняемый файл Tesseract-OCR"
 
-#: scctool/view/subMisc.py:526
+#: scctool/view/subMisc.py:545
 msgid "Executable"
 msgstr "Исполняемый файл"
 
-#: scctool/view/subMisc.py:526
+#: scctool/view/subMisc.py:545
 msgid "All files"
 msgstr "Все файлы"
 
 # Google Translate
-#: scctool/view/subMisc.py:541
+#: scctool/view/subMisc.py:560
 msgid "Add Aligluac ID"
 msgstr "Добавить Aligulac ID"
 
 # Google Translate
-#: scctool/view/subMisc.py:546
+#: scctool/view/subMisc.py:565
 msgid "Remove Aligulac ID"
 msgstr "Удалить Aligulac ID"
 
-#: scctool/view/subMisc.py:565
+#: scctool/view/subMisc.py:584
 msgid "Aligulac ID"
 msgstr "Aligulac ID"
 
-#: scctool/view/subMisc.py:586
+#: scctool/view/subMisc.py:605
 msgid "Replacement Text"
 msgstr "Текст замены"
 
 # Google Translate
-#: scctool/view/subMisc.py:593
+#: scctool/view/subMisc.py:612
 msgid "Update Static Countdown via MatchGrabber"
 msgstr "Обновление статического отсчета через Граббер матчей"
 
-#: scctool/view/subMisc.py:637
+#: scctool/view/subMisc.py:656
 msgid "Add from Liquipedia"
 msgstr "Добавить из Liquipedia"
 
-#: scctool/view/subMisc.py:639
+#: scctool/view/subMisc.py:658
 msgid "Add from File"
 msgstr "Добавить из файла"
 
-#: scctool/view/subMisc.py:641 scctool/view/widgets.py:1380
+#: scctool/view/subMisc.py:660 scctool/view/widgets.py:1380
 msgid "Rename"
 msgstr "Переименовать"
 
-#: scctool/view/subMisc.py:643
+#: scctool/view/subMisc.py:662
 msgid "Change Image"
 msgstr "Изменить изображение"
 
-#: scctool/view/subMisc.py:654
+#: scctool/view/subMisc.py:673
 msgid "Prompt to download new ladders maps."
-msgstr ""
+msgstr "Предлагаем загрузить новые лестничные карты."
 
 # Google
-#: scctool/view/subMisc.py:659
-#, fuzzy
-#| msgid "New Ladder Maps"
+#: scctool/view/subMisc.py:678
 msgid "Download Ladder Maps"
-msgstr "Новые Лестничные Карты"
+msgstr "Скачать Ladder Maps"
 
-#: scctool/view/subMisc.py:694 scctool/view/subMisc.py:695
-#: scctool/view/subMisc.py:745 scctool/view/subMisc.py:811
+#: scctool/view/subMisc.py:713 scctool/view/subMisc.py:714
+#: scctool/view/subMisc.py:764 scctool/view/subMisc.py:830
 msgid "Map Name"
 msgstr "Название карты"
 
-#: scctool/view/subMisc.py:706 scctool/view/subMisc.py:752
-#: scctool/view/subMisc.py:819
+#: scctool/view/subMisc.py:725 scctool/view/subMisc.py:771
+#: scctool/view/subMisc.py:838
 msgid "\"{}\" is not a valid map name."
 msgstr "\"{}\" недопустимое имя карты."
 
-#: scctool/view/subMisc.py:710 scctool/view/subMisc.py:757
-#: scctool/view/subMisc.py:838
+#: scctool/view/subMisc.py:729 scctool/view/subMisc.py:776
+#: scctool/view/subMisc.py:857
 msgid "Duplicate Entry"
 msgstr "Повторяющийся ввод"
 
-#: scctool/view/subMisc.py:711 scctool/view/subMisc.py:758
+#: scctool/view/subMisc.py:730 scctool/view/subMisc.py:777
 msgid "Map is already in list! Overwrite?"
 msgstr "Карта уже в списке! Переписать?"
 
-#: scctool/view/subMisc.py:725 scctool/view/subMisc.py:738
+#: scctool/view/subMisc.py:744 scctool/view/subMisc.py:757
 msgid "Select Map Image (> 500x500px recommended)"
 msgstr "Выберите изображение карты (> 500x500px рекомендовано)"
 
-#: scctool/view/subMisc.py:779
+#: scctool/view/subMisc.py:798
 msgid "Select the type of ladder maps to download"
 msgstr ""
 
 # Google Translate
-#: scctool/view/subMisc.py:780
+#: scctool/view/subMisc.py:799
 #, fuzzy
 #| msgid "Please select a map"
 msgid "Please select a map type"
 msgstr "Выберите карту"
 
-#: scctool/view/subMisc.py:802
+#: scctool/view/subMisc.py:821
 msgid "No missing map"
 msgstr ""
 
-#: scctool/view/subMisc.py:803
+#: scctool/view/subMisc.py:822
 msgid "All of the current ladder maps are already present."
 msgstr ""
 
-#: scctool/view/subMisc.py:839
+#: scctool/view/subMisc.py:858
 msgid "Map {} is already in list! Overwrite?"
 msgstr "Карта {} уже в списке! Переписать?"
 
-#: scctool/view/subMisc.py:884
+#: scctool/view/subMisc.py:903
 msgid "Delete map?"
 msgstr "Удалить карту?"
 
-#: scctool/view/subMisc.py:885
+#: scctool/view/subMisc.py:904
 msgid "Delete '{}' permanently?"
 msgstr "Удалить '{}'?"
 

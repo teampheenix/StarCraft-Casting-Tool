@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: StarCraft Casting Tool\n"
-"POT-Creation-Date: 2020-10-10 11:14+0200\n"
+"POT-Creation-Date: 2020-11-21 13:25+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Poedit 2.4.2\n"
 "X-Poedit-Basepath: ../../../scctool\n"
 "X-Poedit-SearchPath-0: .\n"
 
@@ -89,11 +89,11 @@ msgstr "New Ladder Maps"
 msgid "Don't show this message again."
 msgstr "Don't show this message again."
 
-#: controller.py:726 view/subMisc.py:828
+#: controller.py:726 view/subMisc.py:847
 msgid "Map not found"
 msgstr "Map not found"
 
-#: controller.py:727 view/subMisc.py:829
+#: controller.py:727 view/subMisc.py:848
 msgid "\"{}\" was not found on Liquipedia."
 msgstr "\"{}\" was not found on Liquipedia."
 
@@ -164,6 +164,30 @@ msgstr "Select Match"
 #: matchgrabber/ctl.py:69
 msgid "Please select a match"
 msgstr "Please select a match"
+
+#: settings/alias.py:59
+msgid "Invalid player name."
+msgstr "Invalid player name."
+
+#: settings/alias.py:61 settings/alias.py:77 settings/alias.py:93
+msgid "Invalid alias name."
+msgstr "Invalid alias name."
+
+#: settings/alias.py:63 settings/alias.py:79 settings/alias.py:95
+msgid "Alias matches name."
+msgstr "Alias matches name."
+
+#: settings/alias.py:66 settings/alias.py:82 settings/alias.py:98
+msgid "Alias {} is already used by {}"
+msgstr "Alias {} is already used by {}"
+
+#: settings/alias.py:75
+msgid "Invalid team name."
+msgstr "Invalid team name."
+
+#: settings/alias.py:91
+msgid "Invalid league name."
+msgstr "Invalid league name."
 
 #: settings/profileManager.py:122 settings/profileManager.py:166
 msgid "You cannot use empty names."
@@ -590,74 +614,90 @@ msgstr "Activate Match"
 msgid "Close Match"
 msgstr "Close Match"
 
-#: view/matchdataview.py:186
+#: view/matchdataview.py:193
 msgid "Choose your team"
 msgstr "Choose your team"
 
-#: view/matchdataview.py:204
+#: view/matchdataview.py:211
 msgid "Swap teams and logos."
 msgstr "Swap teams and logos."
 
-#: view/matchdataview.py:207
+#: view/matchdataview.py:214
 msgid "League:"
 msgstr "League:"
 
-#: view/matchdataview.py:217
+#: view/matchdataview.py:224
 msgid "Maps \\ Teams:"
 msgstr "Maps \\ Teams:"
 
-#: view/matchdataview.py:252
+#: view/matchdataview.py:259
 msgid "Player {} of team {}"
 msgstr "Player {} of team {}"
 
-#: view/matchdataview.py:282
+#: view/matchdataview.py:289
 msgid "Set the score"
 msgstr "Set the score"
 
-#: view/matchdataview.py:289 view/widgets.py:1754 view/widgets.py:1762
+#: view/matchdataview.py:296 view/widgets.py:1754 view/widgets.py:1762
 #: view/widgets.py:1824
 msgid "Map {}"
 msgstr "Map {}"
 
-#: view/matchdataview.py:300
+#: view/matchdataview.py:307
 msgid "Select map on Mapstats Browser Source."
 msgstr "Select map on Mapstats Browser Source."
 
-#: view/matchdataview.py:337
+#: view/matchdataview.py:344
 msgid "Map Vetoes"
 msgstr "Map Vetoes"
 
-#: view/matchdataview.py:362
+#: view/matchdataview.py:369
 msgid "Map Veto {}"
 msgstr "Map Veto {}"
 
-#: view/matchdataview.py:374
+#: view/matchdataview.py:381
 msgid "Select which player/team vetoes."
 msgstr "Select which player/team vetoes."
 
-#: view/matchdataview.py:404
+#: view/matchdataview.py:399 view/matchdataview.py:412
+#: view/matchdataview.py:424 view/subMisc.py:293 view/subMisc.py:306
+#: view/subMisc.py:319 view/widgets.py:822
+msgid "Add Alias"
+msgstr "Add Alias"
+
+#: view/matchdataview.py:434
 msgid "Player Alias"
 msgstr "Player Alias"
 
-#: view/matchdataview.py:404 view/widgets.py:805 view/widgets.py:825
+#: view/matchdataview.py:434 view/matchdataview.py:455
+#: view/matchdataview.py:476 view/widgets.py:805 view/widgets.py:825
 msgid "Name"
 msgstr "Name"
 
-#: view/matchdataview.py:410 view/subMisc.py:86 view/subMisc.py:332
+#: view/matchdataview.py:440 view/matchdataview.py:461
+#: view/matchdataview.py:482 view/subMisc.py:86 view/subMisc.py:349
 msgid "Alias"
 msgstr "Alias"
 
-#: view/matchdataview.py:410 view/subMisc.py:332
+#: view/matchdataview.py:440 view/matchdataview.py:461
+#: view/matchdataview.py:482 view/subMisc.py:349
 msgid "Alias of {}"
 msgstr "Alias of {}"
 
-#: view/matchdataview.py:419 view/subMisc.py:346 view/subMisc.py:705
-#: view/subMisc.py:751 view/subMisc.py:818 view/subMisc.py:876
+#: view/matchdataview.py:449 view/matchdataview.py:470
+#: view/matchdataview.py:491 view/subMisc.py:365 view/subMisc.py:724
+#: view/subMisc.py:770 view/subMisc.py:837 view/subMisc.py:895
 #: view/widgets.py:1513
 msgid "Error"
 msgstr "Error"
 
-#: view/matchdataview.py:714
+#: view/matchdataview.py:455 view/matchdataview.py:476
+#, fuzzy
+#| msgid "Team Aliases"
+msgid "Team Alias"
+msgstr "Team Aliases"
+
+#: view/matchdataview.py:786
 msgid "Updating Score..."
 msgstr "Updating Score..."
 
@@ -883,22 +923,22 @@ msgstr ""
 "href='{patreon}'>Patron</a> yourself. You can test all voices at {tts}."
 
 #: view/subBrowserSources.py:634 view/subConnections.py:260
-#: view/subLiquipediaSearch.py:84 view/subMisc.py:926 view/subStyles.py:93
+#: view/subLiquipediaSearch.py:84 view/subMisc.py:945 view/subStyles.py:93
 msgid "Cancel"
 msgstr "Cancel"
 
-#: view/subBrowserSources.py:638 view/subConnections.py:264 view/subMisc.py:930
+#: view/subBrowserSources.py:638 view/subConnections.py:264 view/subMisc.py:949
 #: view/subStyles.py:97
 msgid "&Save && Close"
 msgstr "&Save && Close"
 
-#: view/subBrowserSources.py:639 view/subConnections.py:265 view/subMisc.py:931
+#: view/subBrowserSources.py:639 view/subConnections.py:265 view/subMisc.py:950
 #: view/subStyles.py:98
 msgid "Shortcut: {}"
 msgstr "Shortcut: {}"
 
 #: view/subBrowserSources.py:770 view/subConnections.py:323
-#: view/subMisc.py:1017 view/subStyles.py:436
+#: view/subMisc.py:1036 view/subStyles.py:436
 msgid "Save data?"
 msgstr "Save data?"
 
@@ -1031,7 +1071,7 @@ msgstr "Search Liquipedia"
 msgid "Add to Favorites"
 msgstr "Add to Favorites"
 
-#: view/subLogos.py:65 view/subLogos.py:115 view/subMisc.py:645
+#: view/subLogos.py:65 view/subLogos.py:115 view/subMisc.py:664
 #: view/widgets.py:1384
 msgid "Remove"
 msgstr "Remove"
@@ -1072,7 +1112,7 @@ msgstr "Remove from Favorites"
 msgid "Select Team Logo"
 msgstr "Select Team Logo"
 
-#: view/subLogos.py:331 view/subMisc.py:726 view/subMisc.py:739
+#: view/subLogos.py:331 view/subMisc.py:745 view/subMisc.py:758
 msgid "Supported Images"
 msgstr "Supported Images"
 
@@ -1199,11 +1239,17 @@ msgid "Swap my favorite team always to the left"
 msgstr "Swap my favorite team always to the left"
 
 #: view/subMisc.py:276
+#, fuzzy
+#| msgid ""
+#| "Player and team aliases are replaced by the actual name when encountered "
+#| "by the match grabber. Additionally, SC2 player names listed as aliases "
+#| "are replaced in the intros and used to identify players by the automatic "
+#| "background tasks \"Auto Score Update\" and \"Set Ingame Score\"."
 msgid ""
-"Player and team aliases are replaced by the actual name when encountered by "
-"the match grabber. Additionally, SC2 player names listed as aliases are "
-"replaced in the intros and used to identify players by the automatic "
-"background tasks \"Auto Score Update\" and \"Set Ingame Score\"."
+"Player, team, and league aliases are replaced by the actual name when "
+"encountered by the match grabber. Additionally, SC2 player names listed as "
+"aliases are replaced in the intros and used to identify players by the "
+"automatic background tasks \"Auto Score Update\" and \"Set Ingame Score\"."
 msgstr ""
 "Player and team aliases are replaced by the actual name when encountered by "
 "the match grabber. Additionally, SC2 player names listed as aliases are "
@@ -1214,11 +1260,7 @@ msgstr ""
 msgid "Player Aliases"
 msgstr "Player Aliases"
 
-#: view/subMisc.py:293 view/subMisc.py:306 view/widgets.py:822
-msgid "Add Alias"
-msgstr "Add Alias"
-
-#: view/subMisc.py:295 view/subMisc.py:559
+#: view/subMisc.py:295 view/subMisc.py:578
 msgid "Player Name"
 msgstr "Player Name"
 
@@ -1230,23 +1272,35 @@ msgstr "Team Aliases"
 msgid "Team Name"
 msgstr "Team Name"
 
-#: view/subMisc.py:355
+#: view/subMisc.py:313
+#, fuzzy
+#| msgid "Team Aliases"
+msgid "League Aliases"
+msgstr "Team Aliases"
+
+#: view/subMisc.py:321
+#, fuzzy
+#| msgid "Team Name"
+msgid "League Name"
+msgstr "Team Name"
+
+#: view/subMisc.py:374
 msgid "SC2 Client API Address"
 msgstr "SC2 Client API Address"
 
-#: view/subMisc.py:360
+#: view/subMisc.py:379
 msgid "Listen to SC2 Client API running on a different PC in the network."
 msgstr "Listen to SC2 Client API running on a different PC in the network."
 
-#: view/subMisc.py:377
+#: view/subMisc.py:396
 msgid "IP address and port of machine running SC2."
 msgstr "IP address and port of machine running SC2."
 
-#: view/subMisc.py:384
+#: view/subMisc.py:403
 msgid "Test SC2 Client API Connection"
 msgstr "Test SC2 Client API Connection"
 
-#: view/subMisc.py:388
+#: view/subMisc.py:407
 msgid ""
 "Activate this option if you are using a two computer setup with StarCraft "
 "Casting Tool running on a different PC than your SC2 client. Open the Battle."
@@ -1260,19 +1314,19 @@ msgstr ""
 "SC2, check 'Additional Command Line Arguments', and enter '-clientapi 6119'. "
 "Finally set as network address below: '[Your SC2 PC IP]:6119'."
 
-#: view/subMisc.py:406
+#: view/subMisc.py:425
 msgid "Network Address"
 msgstr "Network Address"
 
-#: view/subMisc.py:431
+#: view/subMisc.py:450
 msgid "Connection Test"
 msgstr "Connection Test"
 
-#: view/subMisc.py:436
+#: view/subMisc.py:455
 msgid "Connection to SC2 client API established!"
 msgstr "Connection to SC2 client API established!"
 
-#: view/subMisc.py:440
+#: view/subMisc.py:459
 msgid ""
 "Unable to connect to SC2 client API. Please make sure that SC2 is currently "
 "running on that machine."
@@ -1280,23 +1334,23 @@ msgstr ""
 "Unable to connect to SC2 client API. Please make sure that SC2 is currently "
 "running on that machine."
 
-#: view/subMisc.py:451
+#: view/subMisc.py:470
 msgid "Optical Character Recognition for Automatic Setting of Ingame Score"
 msgstr "Optical Character Recognition for Automatic Setting of Ingame Score"
 
-#: view/subMisc.py:457
+#: view/subMisc.py:476
 msgid "Activate Optical Character Recognition"
 msgstr "Activate Optical Character Recognition"
 
-#: view/subMisc.py:470 view/subMisc.py:495 view/subMisc.py:525
+#: view/subMisc.py:489 view/subMisc.py:514 view/subMisc.py:544
 msgid "Tesseract-OCR Executable"
 msgstr "Tesseract-OCR Executable"
 
-#: view/subMisc.py:472
+#: view/subMisc.py:491
 msgid "Browse..."
 msgstr "Browse..."
 
-#: view/subMisc.py:476
+#: view/subMisc.py:495
 msgid ""
 "Sometimes the order of players given by the SC2-Client-API differs from the "
 "order in the Observer-UI resulting in a swapped match score. To correct this "
@@ -1308,112 +1362,112 @@ msgstr ""
 "via Optical Character Recognition you have to download {} and install and "
 "select the exectuable below, if it is not detected automatically."
 
-#: view/subMisc.py:509 view/subMisc.py:513 view/subMisc.py:517
+#: view/subMisc.py:528 view/subMisc.py:532 view/subMisc.py:536
 msgid "This feature is only available in Windows."
 msgstr "This feature is only available in Windows."
 
-#: view/subMisc.py:524
+#: view/subMisc.py:543
 msgid "Select Tesseract-OCR Executable"
 msgstr "Select Tesseract-OCR Executable"
 
-#: view/subMisc.py:526
+#: view/subMisc.py:545
 msgid "Executable"
 msgstr "Executable"
 
-#: view/subMisc.py:526
+#: view/subMisc.py:545
 msgid "All files"
 msgstr "All files"
 
-#: view/subMisc.py:541
+#: view/subMisc.py:560
 msgid "Add Aligluac ID"
 msgstr "Add Aligluac ID"
 
-#: view/subMisc.py:546
+#: view/subMisc.py:565
 msgid "Remove Aligulac ID"
 msgstr "Remove Aligulac ID"
 
-#: view/subMisc.py:565
+#: view/subMisc.py:584
 msgid "Aligulac ID"
 msgstr "Aligulac ID"
 
-#: view/subMisc.py:586
+#: view/subMisc.py:605
 msgid "Replacement Text"
 msgstr "Replacement Text"
 
-#: view/subMisc.py:593
+#: view/subMisc.py:612
 msgid "Update Static Countdown via MatchGrabber"
 msgstr "Update Static Countdown via MatchGrabber"
 
-#: view/subMisc.py:637
+#: view/subMisc.py:656
 msgid "Add from Liquipedia"
 msgstr "Add from Liquipedia"
 
-#: view/subMisc.py:639
+#: view/subMisc.py:658
 msgid "Add from File"
 msgstr "Add from File"
 
-#: view/subMisc.py:641 view/widgets.py:1380
+#: view/subMisc.py:660 view/widgets.py:1380
 msgid "Rename"
 msgstr "Rename"
 
-#: view/subMisc.py:643
+#: view/subMisc.py:662
 msgid "Change Image"
 msgstr "Change Image"
 
-#: view/subMisc.py:654
+#: view/subMisc.py:673
 msgid "Prompt to download new ladders maps."
 msgstr "Prompt to download new ladders maps."
 
-#: view/subMisc.py:659
+#: view/subMisc.py:678
 msgid "Download Ladder Maps"
 msgstr "Download Ladder Maps"
 
-#: view/subMisc.py:694 view/subMisc.py:695 view/subMisc.py:745
-#: view/subMisc.py:811
+#: view/subMisc.py:713 view/subMisc.py:714 view/subMisc.py:764
+#: view/subMisc.py:830
 msgid "Map Name"
 msgstr "Map Name"
 
-#: view/subMisc.py:706 view/subMisc.py:752 view/subMisc.py:819
+#: view/subMisc.py:725 view/subMisc.py:771 view/subMisc.py:838
 msgid "\"{}\" is not a valid map name."
 msgstr "\"{}\" is not a valid map name."
 
-#: view/subMisc.py:710 view/subMisc.py:757 view/subMisc.py:838
+#: view/subMisc.py:729 view/subMisc.py:776 view/subMisc.py:857
 msgid "Duplicate Entry"
 msgstr "Duplicate Entry"
 
-#: view/subMisc.py:711 view/subMisc.py:758
+#: view/subMisc.py:730 view/subMisc.py:777
 msgid "Map is already in list! Overwrite?"
 msgstr "Map is already in list! Overwrite?"
 
-#: view/subMisc.py:725 view/subMisc.py:738
+#: view/subMisc.py:744 view/subMisc.py:757
 msgid "Select Map Image (> 500x500px recommended)"
 msgstr "Select Map Image (> 500x500px recommended)"
 
-#: view/subMisc.py:779
+#: view/subMisc.py:798
 msgid "Select the type of ladder maps to download"
 msgstr "Select the type of ladder maps to download"
 
-#: view/subMisc.py:780
+#: view/subMisc.py:799
 msgid "Please select a map type"
 msgstr "Please select a map type"
 
-#: view/subMisc.py:802
+#: view/subMisc.py:821
 msgid "No missing map"
 msgstr "No missing map"
 
-#: view/subMisc.py:803
+#: view/subMisc.py:822
 msgid "All of the current ladder maps are already present."
 msgstr "All of the current ladder maps are already present."
 
-#: view/subMisc.py:839
+#: view/subMisc.py:858
 msgid "Map {} is already in list! Overwrite?"
 msgstr "Map {} is already in list! Overwrite?"
 
-#: view/subMisc.py:884
+#: view/subMisc.py:903
 msgid "Delete map?"
 msgstr "Delete map?"
 
-#: view/subMisc.py:885
+#: view/subMisc.py:904
 msgid "Delete '{}' permanently?"
 msgstr "Delete '{}' permanently?"
 
