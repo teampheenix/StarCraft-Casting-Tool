@@ -1,11 +1,25 @@
 # Changelog
 
 
-## v2.9.2 (2020-11-20)
+## v2.9.2 (2020-11-21)
 
 ### New
 
+* You can now define aliases for league names  that will be used by the match grabber.
+
+* Match grabber can now retrieve ace players from spire.gg.
+
 * Spire.gg match grabber will now also fetch the match score and reset the score if needed.
+
+### Changes
+
+* Locales updated.
+
+* Dependencies upgraded.
+
+### Fix
+
+* Map creator, size and spawn position is now correctly fetched from Liquipedia.
 
 
 ## v2.9.0 (2020-10-25)
