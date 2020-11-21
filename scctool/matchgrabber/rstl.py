@@ -48,7 +48,9 @@ class MatchGrabber(MatchGrabberParent):
                 self._matchData.setMinSets(4)
                 self._matchData.resetLabels()
                 self._matchData.setSolo(False)
-                self._matchData.setLeague(data['tournament']['name'])
+                self._matchData.setLeague(
+                    self._aliasLeagueself._aliasLeague(
+                        (data['tournament']['name'])))
 
                 for set_idx in range(7):
                     self._matchData.setMap(

@@ -60,7 +60,8 @@ class MatchGrabber(MatchGrabberParent):
                     league = "TBD"
                 league = league.replace('Non-pro', 'Non-Pro')
                 league = league.replace('Semi-pro', 'Semi-Pro')
-                self._matchData.setLeague(league)
+                self._matchData.setLeague(
+                    self._matchData.setLeague(self._aliasLeague(league)))
 
                 for idx, mapname in enumerate(data['maps']):
                     if not isinstance(mapname, str):

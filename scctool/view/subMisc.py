@@ -273,7 +273,7 @@ class SubwindowMisc(QWidget):
         mainLayout = QGridLayout()
 
         aliasDesc = _(
-            'Player and team aliases are replaced by the actual name when'
+            'Player, team, and league aliases are replaced by the actual name when'
             + ' encountered by the match grabber. Additionally, SC2 player'
             + ' names listed as aliases are replaced in the intros'
             + ' and used to identify players by the automatic'
@@ -282,7 +282,7 @@ class SubwindowMisc(QWidget):
         label.setAlignment(Qt.AlignJustify)
         label.setWordWrap(True)
 
-        mainLayout.addWidget(label, 1, 0, 1, 2)
+        mainLayout.addWidget(label, 1, 0, 1, 3)
 
         box = QGroupBox(_("Player Aliases"))
         layout = QVBoxLayout()
@@ -310,13 +310,30 @@ class SubwindowMisc(QWidget):
         box.setLayout(layout)
         mainLayout.addWidget(box, 0, 1)
 
+        box = QGroupBox(_("League Aliases"))
+        layout = QVBoxLayout()
+        self.list_aliasLeagues = AliasTreeView(self)
+        self.list_aliasLeagues.aliasRemoved.connect(
+            self.controller.aliasManager.removeLeagueAlias)
+        layout.addWidget(self.list_aliasLeagues)
+        addButton = QPushButton(_("Add Alias"))
+        addButton.clicked.connect(lambda: self.addAlias(
+            self.list_aliasLeagues, _('League Name')))
+        layout.addWidget(addButton)
+        box.setLayout(layout)
+        mainLayout.addWidget(box, 0, 2)
+
         alias_list = self.controller.aliasManager.playerAliasList()
         for player, aliases in alias_list.items():
             self.list_aliasPlayers.insertAliasList(player, aliases)
 
         alias_list = self.controller.aliasManager.teamAliasList()
-        for team, aliases in alias_list.items():
-            self.list_aliasTeams.insertAliasList(team, aliases)
+        for league, aliases in alias_list.items():
+            self.list_aliasTeams.insertAliasList(league, aliases)
+
+        alias_list = self.controller.aliasManager.leagueAliasList()
+        for league, aliases in alias_list.items():
+            self.list_aliasLeagues.insertAliasList(league, aliases)
 
         self.aliasBox.setLayout(mainLayout)
 
@@ -340,6 +357,8 @@ class SubwindowMisc(QWidget):
                 self.controller.aliasManager.addPlayerAlias(name, alias)
             elif widget == self.list_aliasTeams:
                 self.controller.aliasManager.addTeamAlias(name, alias)
+            elif widget == self.list_aliasLeagues:
+                self.controller.aliasManager.addLeagueAlias(name, alias)
             widget.insertAlias(name, alias, True)
         except Exception as e:
             module_logger.exception("message")

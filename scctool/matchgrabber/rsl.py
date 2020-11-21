@@ -56,7 +56,8 @@ class MatchGrabber(MatchGrabberParent):
                 self._matchData.setMinSets(3)
                 self._matchData.resetLabels()
                 self._matchData.setSolo(False)
-                self._matchData.setLeague(data['tournament']['name'])
+                self._matchData.setLeague(
+                    self._aliasLeague(data['tournament']['name']))
 
                 for set_idx in range(5):
                     try:
@@ -151,7 +152,8 @@ class MatchGrabber(MatchGrabberParent):
                 self._matchData.setNoSets(bo, 0, resetPlayers=overwrite)
                 self._matchData.setMinSets(0)
                 self._matchData.setSolo(False)
-                self._matchData.setLeague(data['tournament']['name'])
+                self._matchData.setLeague(
+                    self._aliasLeague(data['tournament']['name']))
 
                 try:
                     mapname = data['start_maps']["1"]['name']

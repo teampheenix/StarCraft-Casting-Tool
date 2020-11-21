@@ -130,6 +130,9 @@ class MatchDataWidget(QWidget):
         policy.setVerticalStretch(1)
         policy.setVerticalPolicy(QSizePolicy.Fixed)
         self.le_league.setSizePolicy(policy)
+        self.le_league.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.le_league.customContextMenuRequested.connect(
+            self.openLeagueContextMenu)
 
         self.le_team = [MonitoredLineEdit() for y in range(2)]
         self.le_player = [[MonitoredLineEdit() for x in range(
@@ -161,6 +164,10 @@ class MatchDataWidget(QWidget):
             self.le_team[team_idx].setMinimumWidth(self.mimumLineEditWidth)
             self.le_team[team_idx].textModified.connect(
                 lambda team_idx=team_idx: self.team_changed(team_idx))
+            self.le_team[team_idx].setContextMenuPolicy(Qt.CustomContextMenu)
+            self.le_team[team_idx].customContextMenuRequested.connect(
+                lambda x, team_idx=team_idx:
+                self.openTeamContextMenu(team_idx))
 
         self.qb_logo1 = IconPushButton()
         self.qb_logo1.setFixedWidth(self.raceWidth)
@@ -389,10 +396,33 @@ class MatchDataWidget(QWidget):
         menu = self.le_player[team_idx][player_idx].\
             createStandardContextMenu()
         first_action = menu.actions()[0]
-        add_alias_action = QAction('Add Alias')
+        add_alias_action = QAction(_('Add Alias'))
         add_alias_action.triggered.connect(
             lambda x, team_idx=team_idx,
             player_idx=player_idx: self.addAlias(team_idx, player_idx))
+        menu.insertAction(first_action, add_alias_action)
+        menu.insertSeparator(first_action)
+        menu.exec_(QCursor.pos())
+
+    def openTeamContextMenu(self, team_idx):
+        """Open the team context menu."""
+        menu = self.le_team[team_idx].\
+            createStandardContextMenu()
+        first_action = menu.actions()[0]
+        add_alias_action = QAction(_('Add Alias'))
+        add_alias_action.triggered.connect(
+            lambda x, team_idx=team_idx: self.addTeamAlias(team_idx))
+        menu.insertAction(first_action, add_alias_action)
+        menu.insertSeparator(first_action)
+        menu.exec_(QCursor.pos())
+
+    def openLeagueContextMenu(self, team_idx):
+        """Open the team context menu."""
+        menu = self.le_league.\
+            createStandardContextMenu()
+        first_action = menu.actions()[0]
+        add_alias_action = QAction(_('Add Alias'))
+        add_alias_action.triggered.connect(self.addLeagueAlias)
         menu.insertAction(first_action, add_alias_action)
         menu.insertSeparator(first_action)
         menu.exec_(QCursor.pos())
@@ -414,6 +444,48 @@ class MatchDataWidget(QWidget):
             return
         try:
             self.controller.aliasManager.addPlayerAlias(name, alias)
+        except Exception as e:
+            module_logger.exception("message")
+            QMessageBox.critical(self, _("Error"), str(e))
+
+    def addTeamAlias(self, team_idx):
+        """Add a team alias."""
+        input_name = self.le_team[team_idx].text().strip()
+        name, ok = QInputDialog.getText(
+            self, _('Team Alias'), _('Name') + ':', text=input_name)
+        if not ok:
+            return
+
+        name = name.strip()
+        alias, ok = QInputDialog.getText(
+            self, _('Alias'), _('Alias of {}').format(name) + ':', text=input_name)
+
+        alias = alias.strip()
+        if not ok:
+            return
+        try:
+            self.controller.aliasManager.addTeamAlias(name, alias)
+        except Exception as e:
+            module_logger.exception("message")
+            QMessageBox.critical(self, _("Error"), str(e))
+
+    def addLeagueAlias(self, team_idx):
+        """Add a league alias."""
+        input_name = self.le_league.text().strip()
+        name, ok = QInputDialog.getText(
+            self, _('Team Alias'), _('Name') + ':', text=input_name)
+        if not ok:
+            return
+
+        name = name.strip()
+        alias, ok = QInputDialog.getText(
+            self, _('Alias'), _('Alias of {}').format(name) + ':', text=input_name)
+
+        alias = alias.strip()
+        if not ok:
+            return
+        try:
+            self.controller.aliasManager.addLeagueAlias(name, alias)
         except Exception as e:
             module_logger.exception("message")
             QMessageBox.critical(self, _("Error"), str(e))

@@ -85,8 +85,8 @@ class MatchGrabber(MatchGrabberParent):
             self._matchData.setSolo(False)
             self._matchData.setNoVetoes(0)
             self._matchData.resetLabels()
-            self._matchData.setLeague(
-                self._rawData.get('league', 'Chobo Team League'))
+            self._matchData.setLeague(self._aliasLeague(
+                self._rawData.get('league', 'Chobo Team League')))
             if overwrite:
                 self._matchData.resetSwap()
 

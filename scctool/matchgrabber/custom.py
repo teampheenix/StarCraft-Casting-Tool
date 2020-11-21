@@ -61,8 +61,11 @@ class MatchGrabber(object):
     def _aliasPlayer(self, player):
         return self._controller.aliasManager.translatePlayer(player)
 
-    def _aliasTeam(self, player):
-        return self._controller.aliasManager.translateTeam(player)
+    def _aliasTeam(self, team):
+        return self._controller.aliasManager.translateTeam(team)
+
+    def _aliasLeague(self, league):
+        return self._controller.aliasManager.translateLeague(league)
 
     def downloadLogos(self, logoManager):
         """Download logos."""

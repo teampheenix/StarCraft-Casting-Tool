@@ -52,7 +52,7 @@ class MatchGrabber(MatchGrabberParent):
                     league = f'Spire.gg {self._rawData.get("type", "")}'
                 if not isinstance(league, str):
                     league = "TBD"
-                self._matchData.setLeague(league)
+                self._matchData.setLeague(self._aliasLeague(league))
 
                 for idx, mapData in enumerate(self._rawData.get('maps', [])):
                     mapname = mapData.get('name')
