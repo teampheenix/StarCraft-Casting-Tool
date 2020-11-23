@@ -4,11 +4,14 @@ block_cipher = None
 
 
 a = Analysis(['C:\\Users\\tasch\\GitHub\\StarCraft-Casting-Tool\\StarCraftCastingTool.py'],
-             pathex=['C:\\Users\\tasch\\GitHub\\StarCraft-Casting-Tool', 'C:\\Users\\tasch\\GitHub\\StarCraft-Casting-Tool'],
+             pathex=['C:\\Users\\tasch\\GitHub\\StarCraft-Casting-Tool',
+                     'C:\\Users\\tasch\\GitHub\\StarCraft-Casting-Tool'],
              binaries=[],
-             datas=[('src/*', 'src'), ('locales', 'locales'), ('CHANGELOG.md', '.'), ('README.md', '.')],
+             datas=[('src/*', 'src'), ('locales', 'locales'),
+                    ('CHANGELOG.md', '.'), ('README.md', '.')],
              hiddenimports=[],
-             hookspath=['c:\\users\\tasch\\appdata\\local\\programs\\python\\python38\\lib\\site-packages\\pyupdater\\hooks', 'hooks'],
+             hookspath=[
+                 'c:\\users\\tasch\\appdata\\local\\programs\\python\\python38\\lib\\site-packages\\pyupdater\\hooks', 'hooks'],
              runtime_hooks=[],
              excludes=[],
              win_no_prefer_redirects=False,
@@ -16,7 +19,7 @@ a = Analysis(['C:\\Users\\tasch\\GitHub\\StarCraft-Casting-Tool\\StarCraftCastin
              cipher=block_cipher,
              noarchive=False)
 pyz = PYZ(a.pure, a.zipped_data,
-             cipher=block_cipher)
+          cipher=block_cipher)
 exe = EXE(pyz,
           a.scripts,
           a.binaries,
@@ -31,4 +34,4 @@ exe = EXE(pyz,
           upx=True,
           upx_exclude=[],
           runtime_tmpdir=None,
-          console=False )
+          console=True)
