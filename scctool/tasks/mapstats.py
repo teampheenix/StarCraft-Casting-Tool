@@ -164,7 +164,7 @@ class MapStatsManager:
             # TODO: Old elegant version is currently no longer possible:
             is_none = False
             for key in ['creator', 'size', 'spawn-positions']:
-                if data.get(key, None) is None:
+                if data.get(key, '') == '':
                     maps2refresh_full.append(mymap)
                     is_none = True
                     break
