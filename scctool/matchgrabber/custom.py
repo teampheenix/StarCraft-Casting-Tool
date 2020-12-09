@@ -69,10 +69,10 @@ class MatchGrabber(object):
 
     def downloadLogos(self, logoManager):
         """Download logos."""
-        raise UserWarning(
-            "Error: Cannot download logos from this provider.")
+        module_logger.warning(
+            "Warning: Cannot download logos from this provider.")
 
     def downloadBanner(self):
         """Download Banner."""
-        raise UserWarning(
-            "Error: Cannot download a match banner from this provider.")
+        module_logger.warning(
+            "Warning: Cannot download a match banner from this provider.")
