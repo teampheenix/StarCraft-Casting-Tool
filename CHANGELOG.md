@@ -1,7 +1,7 @@
 # Changelog
 
 
-## v2.9.2 (2020-11-23)
+## v2.9.2 (2021-01-19)
 
 ### New
 
@@ -18,6 +18,8 @@
 * Dependencies upgraded.
 
 ### Fix
+
+* Missing meta data of maps will now be updated.
 
 * Map creator, size and spawn position is now correctly fetched from Liquipedia.
 

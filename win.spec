@@ -11,7 +11,7 @@ a = Analysis(['C:\\Users\\tasch\\GitHub\\StarCraft-Casting-Tool\\StarCraftCastin
                     ('CHANGELOG.md', '.'), ('README.md', '.')],
              hiddenimports=[],
              hookspath=[
-                 'c:\\users\\tasch\\appdata\\local\\programs\\python\\python38\\lib\\site-packages\\pyupdater\\hooks', 'hooks'],
+                 'c:\\users\\tasch\\appdata\\local\\programs\\python\\python38\\lib\\site-packages\\pyupdater\\hooks'],
              runtime_hooks=[],
              excludes=[],
              win_no_prefer_redirects=False,
@@ -28,10 +28,10 @@ exe = EXE(pyz,
           [],
           name='win',
           icon='src\\scct.ico',
-          debug=False,
+          debug=True,
           bootloader_ignore_signals=False,
           strip=False,
           upx=True,
           upx_exclude=[],
           runtime_tmpdir=None,
-          console=True)
+          console=False)
