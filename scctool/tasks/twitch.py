@@ -2,6 +2,7 @@
 import logging
 
 import requests
+from requests.api import request
 
 import scctool.settings
 import scctool.settings.translation
@@ -17,26 +18,26 @@ _ = scctool.settings.translation.gettext
 def updateTitle(newTitle):
     """Update the twitch title to the title specified in the config file."""
     global previousTitle
+    twitchChannel = scctool.settings.config.parser.get(
+        "Twitch", "Channel").strip()
 
     try:
-        twitchChannel = scctool.settings.config.parser.get(
-            "Twitch", "Channel").strip()
         userID = getUserID(twitchChannel)
 
         clientID = scctool.settings.safe.get('twitch-client-id')
         oauth = scctool.settings.config.parser.get("Twitch", "oauth")
 
         headers = {'Accept': 'application/vnd.twitchtv.v5+json',
-                   'Authorization': f'OAuth {oauth}',
-                   'Client-ID': clientID}
+                   'Authorization': f'Bearer {oauth}',
+                   'Client-Id': clientID}
 
-        params = {'channel[status]': newTitle}
+        data = {'title': newTitle}
 
         if scctool.settings.config.parser.getboolean("Twitch", "set_game"):
-            params['channel[game]'] = 'StarCraft II'
+            data['game_id'] = '490422'
 
-        requests.put(f'https://api.twitch.tv/kraken/channels/{userID}',
-                     headers=headers, params=params).raise_for_status()
+        requests.patch(
+            url=f'https://api.twitch.tv/helix/channels?broadcaster_id={userID}', headers=headers, json=data).raise_for_status()
         msg = _('Updated Twitch title of {} to: "{}"').format(
             twitchChannel, newTitle)
         success = True
@@ -72,12 +73,16 @@ def getUserID(login):
     client_id = scctool.settings.safe.get('twitch-client-id')
     url = 'https://api.twitch.tv/helix/users'
     oauth = scctool.settings.config.parser.get("Twitch", "oauth")
-    headers = {'Client-ID': client_id, 'Authorization': f'Bearer {oauth}'}
+    headers = {'Client-Id': client_id, 'Authorization': f'Bearer {oauth}'}
     params = {'login': login}
 
     r = requests.get(url, headers=headers, params=params)
     r.raise_for_status()
-    return r.json().get('data')[0]['id']
+    try:
+        return r.json().get('data')[0]['id']
+    except IndexError:
+        raise ValueError(
+            f'Twitch channel "{login}" not found - please check your settings.')
 
 
 # def addCommunity(channelID):

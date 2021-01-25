@@ -97,7 +97,7 @@ class myHandler(http.server.SimpleHTTPRequestHandler):
                   "response_type": "token",
                   "state": state,
                   "redirect_uri": TWITCH_REDIRECT_URI,
-                  "scope": "channel_editor"}
+                  "scope": "user:edit:broadcast"}
         url = "https://id.twitch.tv/oauth2/authorize?" + \
             urllib.parse.urlencode(params)
         return url
