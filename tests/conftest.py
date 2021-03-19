@@ -18,12 +18,15 @@ def pytest_addoption(parser):
     parser.addoption("--aligulac_api_key", action="store",
                      default='', help="aligulac apikey")
 
+
 @pytest.fixture
 def aligulac_api_key(request):
     """Return API key."""
     return request.config.getoption("--aligulac_api_key")
 
+
 app = None
+
 
 @pytest.fixture()
 def scct_app(tmpdir_factory, caplog):
@@ -49,11 +52,11 @@ def scct_app(tmpdir_factory, caplog):
         cntlr, app, False)
     main_window.show()
     yield (main_window, cntlr)
-    main_window.close()
-    cntlr.cleanUp()
-    time.sleep(1)
-    app.exit(1)
-    time.sleep(1)
+    # main_window.close()
+    # cntlr.cleanUp()
+    # time.sleep(1)
+    # app.exit(1)
+    # time.sleep(1)
     for record in caplog.records:
         assert record.levelname != 'CRITICAL'
         assert record.levelname != 'ERROR'

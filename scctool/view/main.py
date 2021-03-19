@@ -247,20 +247,6 @@ class MainWindow(QMainWindow):
                 lambda: self.controller.openURL("https://rfcs.ru/"))
             infoMenu.addAction(rslAct)
 
-            infoMenu.addSeparator()
-
-            myAct = QAction(QIcon(scctool.settings.getResFile(
-                'patreon.png')), _('Become a Patron'), self)
-            myAct.triggered.connect(lambda: self.controller.openURL(
-                "https://www.patreon.com/StarCraftCastingTool"))
-            infoMenu.addAction(myAct)
-
-            myAct = QAction(QIcon(scctool.settings.getResFile(
-                'donate.ico')), _('Donate via PayPal'), self)
-            myAct.triggered.connect(lambda: self.controller.openURL(
-                "https://paypal.me/StarCraftCastingTool"))
-            infoMenu.addAction(myAct)
-
         except Exception:
             module_logger.exception("message")
 

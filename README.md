@@ -124,5 +124,3 @@ Some basic options for customization can be found under _Settings: Styles_, for 
 If you need help, have bugs to report, have suggestions to make, or want to contribute to this project in any way join the Discord Server of this project via <https://discord.gg/G9hFEfh> and/or message me (_pres.sure#5247_) on [Discord](https://discordapp.com/).
 
 In the case of a bug report please provide the log-file (after closing StarCraft Casting Tool) that can be found in the directory `C:\Users\<User>\AppData\Local\team pheeniX\StarCraft-Casting-Tool\Log` or navigated to via the menu.
-
-You can support StarCraft Casting Tool via [Patreon](https://www.patreon.com/StarCraftCastingTool) or [Paypal](https://www.paypal.me/StarCraftCastingTool).
