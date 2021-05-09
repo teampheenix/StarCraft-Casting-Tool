@@ -230,6 +230,8 @@ class MapStatsManager:
                 'Dreamcatcher', 'Dream&shy;catcher')
             out_data['maps'][mymap]['map-name'] = mymap.replace(
                 'Thunderbird', 'Thunder&shy;bird')
+            out_data['maps'][mymap]['map-name'] = mymap.replace(
+                '2000 Atmospheres', '2000 Atmo&shy;spheres')
             if out_data['map'] is None:
                 out_data['map'] = mymap
             if scctool.settings.config.parser.getboolean(
