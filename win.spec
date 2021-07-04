@@ -8,7 +8,7 @@ a = Analysis(['.\\StarCraftCastingTool.py'],
              binaries=[],
              datas=[('src/*', 'src'), ('locales', 'locales'),
                     ('CHANGELOG.md', '.'), ('README.md', '.')],
-             hiddenimports=[],
+             hiddenimports=['websockets.legacy.server'],
              hookspath=[
                  '.\\.venv\\Lib\\site-packages\\pyupdater\\hooks', 'hooks'],
              runtime_hooks=[],
@@ -33,4 +33,4 @@ exe = EXE(pyz,
           upx=True,
           upx_exclude=[],
           runtime_tmpdir=None,
-          console=False)
+          console=True)

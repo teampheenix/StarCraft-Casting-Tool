@@ -7,6 +7,7 @@ Pillow >= 8.1.0; platform_system == 'Windows'
 pywin32 >= 301; platform_system == 'Windows'
 PyQt5 == 5.13.2 # rq.filter: != 5.14.*, != 5.15.*
 pytesseract >= 0.3.8; platform_system == 'Windows'
+pyinstaller-hooks-contrib >= 2021.2 
 PyInstaller >= 4.3
 PyUpdater >= 4.0.0
 # git+git://github.com/Digital-Sapphire/PyUpdater@master

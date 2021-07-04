@@ -1,6 +1,21 @@
 # Changelog
 
 
+## v2.10.0 (2021-07-04)
+
+### Changes
+
+* Dependencies updated.
+
+### Fix
+
+* Fixed a bug where the map stats would not update.
+
+* Prompt about new ladder maps is appearing again!
+
+* Break "2000 Atmospheres" in mapstats.
+
+
 ## v2.9.2 (2021-01-19)
 
 ### New
