@@ -336,7 +336,7 @@ class WebsocketThread(QThread):
                 try:
                     separate_style = scctool.settings.config.parser.getboolean(
                         "MapIcons",
-                        path.replace("mapicons","separate_style"))
+                        path.replace("mapicons", "separate_style"))
                     if separate_style:
                         style = scctool.settings.config.parser.get(
                             "Style", path)
@@ -345,7 +345,7 @@ class WebsocketThread(QThread):
                             "Style", primary_scope)
                 except NoOptionError:
                     style = scctool.settings.config.parser.get(
-                    "Style", primary_scope)
+                        "Style", primary_scope)
             style_file = "src/css/{}/{}.css".format(primary_scope, style)
             if websocket is None:
                 self.sendData2Path(path, "CHANGE_STYLE", {'file': style_file})
