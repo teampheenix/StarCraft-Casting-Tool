@@ -57,6 +57,7 @@ class MainController:
             self.SC2ApiThread.requestScoreUpdate.connect(
                 self.requestScoreUpdate)
             self.versionHandler = VersionHandler(self)
+            self.mapstatsManager = MapStatsManager(self)
             self.websocketThread = WebsocketThread(self)
             self.websocketThread.socketConnectionChanged.connect(
                 self.toogleLEDs)
@@ -73,7 +74,6 @@ class MainController:
             self.logoManager = LogoManager(self)
             self.aliasManager = AliasManager()
             self.historyManager = HistoryManager()
-            self.mapstatsManager = MapStatsManager(self)
             self.tts = TextToSpeech()
             self.housekeeper = HouseKeeperThread(self)
             self.initPlayerIntroData()
@@ -711,6 +711,7 @@ class MainController:
             for map_name in missing_maps:
                 self.autoDownloadMap(map_name)
             self.view.updateAllMapCompleters()
+            self.mapstatsManager.refreshMaps()
         scctool.settings.config.parser.set("SCT",
                                            "new_maps_prompt",
                                            str(not cb.isChecked()))

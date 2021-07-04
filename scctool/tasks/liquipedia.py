@@ -162,7 +162,7 @@ class LiquipediaGrabber:
         data = requests.get(url, headers=self._headers, params=params).json()
         content = data['parse']['text']['*']
         soup = BeautifulSoup(content, 'html.parser')
-        for result in soup.find_all("td", class_="navbox-group"):
+        for result in soup.find_all("th", class_="navbox-group"):
             if result.contents[0].strip() == f"{players_per_team} vs {players_per_team}":
                 for mymap in result.findNext("td").find_all('a'):
                     yield mymap.contents[0].replace("LE", '').strip()
