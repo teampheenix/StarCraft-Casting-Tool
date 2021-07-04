@@ -1,6 +1,13 @@
 # Changelog
 
 
+## v2.10.1 (2021-07-04)
+
+### Fix
+
+* Remove console.
+
+
 ## v2.10.0 (2021-07-04)
 
 ### Changes
