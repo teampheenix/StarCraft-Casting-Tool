@@ -271,7 +271,7 @@ class MapStatsThread(TasksThread):
         super().__init__()
         self.__manager = manager
         self.__grabber = LiquipediaGrabber()
-        self.setTimeout(15)
+        self.setTimeout(30)
         self.addTask('refresh_data', self.__refresh_data)
         self.addTask('refresh_stats', self.__refresh_stats)
         self.addTask('refresh_mappool', self.__refresh_mappool)
