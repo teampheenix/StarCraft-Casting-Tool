@@ -110,6 +110,8 @@ def setDefaultConfigAll():
 
     setDefaultConfig("Nightbot", "token", "")
 
+    setDefaultConfig("Ticker", "prefix", "")
+
     setDefaultConfig("SCT", "myteams", "MiXed Minds, team pheeniX")
     setDefaultConfig("SCT", "commonplayers", "pressure")
     setDefaultConfig("SCT", "swap_myteam", "False")

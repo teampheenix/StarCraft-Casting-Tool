@@ -50,8 +50,8 @@ class MatchControl(QObject):
                 if isinstance(data, dict):
                     if ('matches' not in data
                             or 'active' not in data
-                            or'selected' not in data
-                            or'order' not in data):
+                            or 'selected' not in data
+                            or 'order' not in data):
                         data = {'matches': {new_id: data},
                                 'active': new_id,
                                 'selected': new_id,
@@ -270,6 +270,10 @@ class MatchControl(QObject):
 
     def getTickerText(self):
         """Get ticker text (Team A 2-0 Team B) from all tabs."""
+        prefix = scctool.settings.config.parser.get(
+            "Ticker",
+            "prefix")
+        prefix_string = prefix + (' | ' if prefix else '')
         matches = []
         for match in self.getMatches():
             score = match.getScore()
@@ -281,7 +285,7 @@ class MatchControl(QObject):
                 continue
             text = (f'{player1} {score[0]}-{score[1]} {player2} | ')
             matches.append(text)
-        return ''.join(matches)
+        return prefix_string + ''.join(matches)
 
     @classmethod
     def _uniqid(cls):
@@ -298,7 +302,7 @@ class MatchControl(QObject):
     def updateOrder(self, toIdx, fromIdx):
         """Update the order of the matches."""
         self.__order[toIdx], self.__order[fromIdx] \
-                = self.__order[fromIdx], self.__order[toIdx]
+            = self.__order[fromIdx], self.__order[toIdx]
 
     def removeMatch(self, ident):
         """Remove a match."""
