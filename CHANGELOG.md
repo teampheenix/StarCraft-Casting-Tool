@@ -1,6 +1,17 @@
 # Changelog
 
 
+## v2.10.2 (2021-07-18)
+
+### New
+
+* Add option for prefix text to the ticker.
+
+### Fix
+
+* Increase time between liquipedia API stats queries.
+
+
 ## v2.10.1 (2021-07-04)
 
 ### Fix
