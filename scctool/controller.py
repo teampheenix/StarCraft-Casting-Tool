@@ -723,7 +723,7 @@ class MainController:
             sc2map = grabber.get_map(map_name)
         except MapNotFound:
             QMessageBox.critical(
-                self,
+                self.view,
                 _("Map not found"),
                 _('"{}" was not found on Liquipedia.')
                 .format(map_name))
