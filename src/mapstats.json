@@ -1,1 +1,565 @@
-﻿{"maps": {"2000 Atmospheres": {"tvz": "53.7%", "zvp": "47.5%", "pvt": "49.1%", "creator": "themusic246", "size": "144x134", "spawn-positions": "2 at 2, 8", "refreshed": 1625393383}, "Beckett Industries": {"tvz": "59.1%", "zvp": "57.5%", "pvt": "47.4%", "creator": "Superouman", "size": "108x140", "spawn-positions": "2 at 1, 7", "refreshed": 1625393372}, "Blackburn": {"tvz": "47.0%", "zvp": "50.6%", "pvt": "50.0%", "creator": "Insidioussc2", "size": "144x117", "spawn-positions": "2 at 4, 8", "refreshed": 1625393361}, "Deathaura": {"tvz": "49.3%", "zvp": "47.6%", "pvt": "48.5%", "creator": "Marras", "size": "144x140", "spawn-positions": "2 at 4, 10", "refreshed": 1625393936}, "Eternal Empire": {"tvz": "53.2%", "zvp": "48.7%", "pvt": "48.4%", "creator": "superouman", "size": "140x140", "spawn-positions": "2 at 1, 7", "refreshed": 1625393918}, "Jagannatha": {"tvz": "50.6%", "zvp": "51.6%", "pvt": "48.3%", "creator": "Timmay", "size": "120x146", "spawn-positions": "2 at 2, 8", "refreshed": 1625393349}, "Lightshade": {"tvz": "49.4%", "zvp": "53.5%", "pvt": "50.0%", "creator": "Marras", "size": "136x132", "spawn-positions": "2 at 4, 10", "refreshed": 1625393338}, "Oxide": {"tvz": "56.8%", "zvp": "48.2%", "pvt": "46.5%", "creator": "themusic246", "size": "136x126", "spawn-positions": "2 at 2, 8", "refreshed": 1625393309}, "Pillars of Gold": {"tvz": "52.7%", "zvp": "47.4%", "pvt": "48.8%", "creator": "Agaton", "size": "136x138", "spawn-positions": "2 at 2, 8", "refreshed": 1625393900}, "Romanticide": {"tvz": "50.1%", "zvp": "45.1%", "pvt": "51.2%", "creator": "Marras", "size": "150x132", "spawn-positions": "2 at 4, 10", "refreshed": 1625393247}, "Submarine": {"tvz": "55.4%", "zvp": "52.6%", "pvt": "41.1%", "creator": "ZWECK", "size": "134x122", "spawn-positions": "2 at 4, 10", "refreshed": 1625393882}}, "custom_mappool": [], "ladder_mappool": ["2000 Atmospheres", "Beckett Industries", "Blackburn", "Jagannatha", "Lightshade", "Oxide", "Romanticide"], "mappool": 0, "mappool_refresh": 1625392771}
+﻿{
+  "maps": {
+    "16-Bit": {
+      "tvz": "54.6%",
+      "zvp": "43.0%",
+      "pvt": "42.7%",
+      "creator": "themusic246",
+      "size": "140x156",
+      "spawn-positions": "2 at 2, 8",
+      "refreshed": 1635589481
+    },
+    "2000 Atmospheres": {
+      "tvz": "51.5%",
+      "zvp": "44.4%",
+      "pvt": "48.7%",
+      "creator": "themusic246",
+      "size": "144x134",
+      "spawn-positions": "2 at 2, 8",
+      "refreshed": 1635589481
+    },
+    "Abiogenesis": {
+      "tvz": "51.6%",
+      "zvp": "58.0%",
+      "pvt": "66.0%",
+      "creator": "NegativeZero",
+      "size": "124x140",
+      "spawn-positions": "2 at 5, 11",
+      "refreshed": 1635589481
+    },
+    "Abyssal Reef": {
+      "tvz": "51.6%",
+      "zvp": "50.1%",
+      "pvt": "47.0%",
+      "creator": "SidianTheBard",
+      "size": "152x136",
+      "spawn-positions": "2 at 4, 10",
+      "refreshed": 1635589481
+    },
+    "Acid Plant": {
+      "tvz": "52.3%",
+      "zvp": "51.9%",
+      "pvt": "51.0%",
+      "creator": "nesta-kun",
+      "size": "152x136",
+      "spawn-positions": "2 at 5, 11",
+      "refreshed": 1635589481
+    },
+    "Acropolis": {
+      "tvz": "48.4%",
+      "zvp": "51.7%",
+      "pvt": "61.2%",
+      "creator": "RQM",
+      "size": "140x136",
+      "spawn-positions": "2 at 4, 10",
+      "refreshed": 1635589481
+    },
+    "Ascension to Aiur": {
+      "tvz": "46.6%",
+      "zvp": "52.8%",
+      "pvt": "54.9%",
+      "creator": "SidianTheBard",
+      "size": "160x132",
+      "spawn-positions": "2 at 4, 10",
+      "refreshed": 1635589481
+    },
+    "Automaton": {
+      "tvz": "56.5%",
+      "zvp": "53.5%",
+      "pvt": "54.6%",
+      "creator": "RQM",
+      "size": "148x148",
+      "spawn-positions": "2 at 2, 8",
+      "refreshed": 1635589481
+    },
+    "Backwater": {
+      "tvz": "53.5%",
+      "zvp": "47.8%",
+      "pvt": "56.9%",
+      "creator": "AVEX",
+      "size": "146x136",
+      "spawn-positions": "2 at 4, 10",
+      "refreshed": 1635589481
+    },
+    "Beckett Industries": {
+      "tvz": "55.2%",
+      "zvp": "54.2%",
+      "pvt": "48.5%",
+      "creator": "Superouman",
+      "size": "108x140",
+      "spawn-positions": "2 at 1, 7",
+      "refreshed": 1635589481
+    },
+    "Blackburn": {
+      "tvz": "46.6%",
+      "zvp": "50.1%",
+      "pvt": "51.8%",
+      "creator": "Insidioussc2",
+      "size": "144x117",
+      "spawn-positions": "2 at 4, 8",
+      "refreshed": 1635589481
+    },
+    "Blackpink": {
+      "tvz": "50.2%",
+      "zvp": "49.3%",
+      "pvt": "57.1%",
+      "creator": "AVEX",
+      "size": "148x140",
+      "spawn-positions": "2 at 1, 7",
+      "refreshed": 1635589481
+    },
+    "Blueshift": {
+      "tvz": "49.1%",
+      "zvp": "54.4%",
+      "pvt": "47.5%",
+      "creator": "NegativeZero",
+      "size": "136x136",
+      "spawn-positions": "2 at 2, 8",
+      "refreshed": 1635589481
+    },
+    "Catalyst": {
+      "tvz": "46.8%",
+      "zvp": "50.6%",
+      "pvt": "44.3%",
+      "creator": "NegativeZero",
+      "size": "136x144",
+      "spawn-positions": "2 at 5, 11",
+      "refreshed": 1635589481
+    },
+    "Cerulean Fall": {
+      "tvz": "49.7%",
+      "zvp": "53.8%",
+      "pvt": "47.2%",
+      "creator": "Solstice245",
+      "size": "148x144",
+      "spawn-positions": "2 at 2, 8",
+      "refreshed": 1635589481
+    },
+    "Cobalt": {
+      "tvz": "28.6%",
+      "zvp": "57.1%",
+      "pvt": "66.7%",
+      "creator": "ATTx",
+      "size": "144x160",
+      "spawn-positions": "4 at 11,2,5,8",
+      "refreshed": 1635589481
+    },
+    "Cyber Forest": {
+      "tvz": "45.8%",
+      "zvp": "47.7%",
+      "pvt": "59.7%",
+      "creator": "Pklixian",
+      "size": "128x148",
+      "spawn-positions": "2 at 11, 5",
+      "refreshed": 1635589481
+    },
+    "Darkness Sanctuary": {
+      "tvz": "40.0%",
+      "zvp": "55.2%",
+      "pvt": "69.9%",
+      "creator": "ATTx",
+      "size": "164x164",
+      "spawn-positions": "4 at 1, 5, 7, 11",
+      "refreshed": 1635589481
+    },
+    "Deathaura": {
+      "tvz": "49.1%",
+      "zvp": "47.3%",
+      "pvt": "49.3%",
+      "creator": "Marras",
+      "size": "144x140",
+      "spawn-positions": "2 at 4, 10",
+      "refreshed": 1635589481
+    },
+    "Disco Bloodbath": {
+      "tvz": "58.6%",
+      "zvp": "52.3%",
+      "pvt": "51.9%",
+      "creator": "Marras",
+      "size": "148x132",
+      "spawn-positions": "2 at 4, 10",
+      "refreshed": 1635589481
+    },
+    "Dreamcatcher": {
+      "tvz": "51.4%",
+      "zvp": "48.6%",
+      "pvt": "46.5%",
+      "creator": "Timmay",
+      "size": "136x136",
+      "spawn-positions": "2 at 5, 10",
+      "refreshed": 1635589481
+    },
+    "Eastwatch": {
+      "tvz": "47.6%",
+      "zvp": "50.5%",
+      "pvt": "55.7%",
+      "creator": "IeZaeL",
+      "size": "148x154",
+      "spawn-positions": "2 at 1, 7",
+      "refreshed": 1635589481
+    },
+    "Ephemeron": {
+      "tvz": "51.1%",
+      "zvp": "52.4%",
+      "pvt": "52.5%",
+      "creator": "NegativeZero",
+      "size": "132x148",
+      "spawn-positions": "2 at 4, 10",
+      "refreshed": 1635589481
+    },
+    "Eternal Empire": {
+      "tvz": "53.2%",
+      "zvp": "48.9%",
+      "pvt": "50.2%",
+      "creator": "Superouman",
+      "size": "140x140",
+      "spawn-positions": "2 at 1, 7",
+      "refreshed": 1635589481
+    },
+    "Ever Dream": {
+      "tvz": "52.0%",
+      "zvp": "53.5%",
+      "pvt": "49.8%",
+      "creator": "Marras",
+      "size": "138x141",
+      "spawn-positions": "2 at 1, 7",
+      "refreshed": 1635589481
+    },
+    "Fracture": {
+      "tvz": "52.3%",
+      "zvp": "48.0%",
+      "pvt": "48.1%",
+      "creator": "AVEX",
+      "size": "144x124",
+      "spawn-positions": "2 at 4, 10",
+      "refreshed": 1635589481
+    },
+    "Golden Wall": {
+      "tvz": "56.4%",
+      "zvp": "48.2%",
+      "pvt": "53.1%",
+      "creator": "superouman",
+      "size": "168x140",
+      "spawn-positions": "2 at 4, 8",
+      "refreshed": 1635589481
+    },
+    "Ice and Chrome": {
+      "tvz": "45.2%",
+      "zvp": "57.1%",
+      "pvt": "49.8%",
+      "creator": "themusic246",
+      "size": "144x140",
+      "spawn-positions": "2 at 1, 7",
+      "refreshed": 1635589481
+    },
+    "Jagannatha": {
+      "tvz": "49.3%",
+      "zvp": "50.9%",
+      "pvt": "50.1%",
+      "creator": "Timmay",
+      "size": "120x146",
+      "spawn-positions": "2 at 2, 8",
+      "refreshed": 1635589481
+    },
+    "Kairos Junction": {
+      "tvz": "53.1%",
+      "zvp": "50.8%",
+      "pvt": "51.3%",
+      "creator": "Solstice245",
+      "size": "120x140",
+      "spawn-positions": "2 at 5, 11",
+      "refreshed": 1635589481
+    },
+    "King's Cove": {
+      "tvz": "50.1%",
+      "zvp": "50.8%",
+      "pvt": "48.0%",
+      "creator": "SidianTheBard",
+      "size": "153x148",
+      "spawn-positions": "2 at 11, 5",
+      "refreshed": 1635589481
+    },
+    "Lightshade": {
+      "tvz": "48.4%",
+      "zvp": "53.0%",
+      "pvt": "51.3%",
+      "creator": "Marras",
+      "size": "136x132",
+      "spawn-positions": "2 at 4, 10",
+      "refreshed": 1635589481
+    },
+    "Lost and Found": {
+      "tvz": "43.3%",
+      "zvp": "54.5%",
+      "pvt": "50.5%",
+      "creator": "Zweck",
+      "size": "144x130",
+      "spawn-positions": "2 at 2, 8",
+      "refreshed": 1635589481
+    },
+    "Neon Violet Square": {
+      "tvz": "52.8%",
+      "zvp": "51.4%",
+      "pvt": "52.8%",
+      "creator": "RQM",
+      "size": "148x148",
+      "spawn-positions": "2 at 5, 11",
+      "refreshed": 1635589481
+    },
+    "New Repugnancy": {
+      "tvz": "56.2%",
+      "zvp": "47.7%",
+      "pvt": "45.7%",
+      "creator": "Sanglune",
+      "size": "152x120",
+      "spawn-positions": "2 at 7, 1",
+      "refreshed": 1635589481
+    },
+    "Nightshade": {
+      "tvz": "54.7%",
+      "zvp": "51.6%",
+      "pvt": "47.5%",
+      "creator": "Marras",
+      "size": "138x136",
+      "spawn-positions": "2 at 4, 10",
+      "refreshed": 1635589481
+    },
+    "Obsidian": {
+      "tvz": "0.0%",
+      "zvp": "0.0%",
+      "pvt": "100.0%",
+      "creator": "ATTx",
+      "size": "152x152",
+      "spawn-positions": "4 at 2,4,8,10",
+      "refreshed": 1635589481
+    },
+    "Odyssey": {
+      "tvz": "43.6%",
+      "zvp": "50.8%",
+      "pvt": "55.5%",
+      "creator": "AVEX",
+      "size": "152x156",
+      "spawn-positions": "2 at 11, 4",
+      "refreshed": 1635589481
+    },
+    "Oxide": {
+      "tvz": "56.0%",
+      "zvp": "46.4%",
+      "pvt": "47.6%",
+      "creator": "themusic246",
+      "size": "136x126",
+      "spawn-positions": "2 at 2, 8",
+      "refreshed": 1635589481
+    },
+    "Para Site": {
+      "tvz": "46.1%",
+      "zvp": "49.8%",
+      "pvt": "49.6%",
+      "creator": "Zweck",
+      "size": "176x184",
+      "spawn-positions": "2 at 4, 10",
+      "refreshed": 1635589481
+    },
+    "Pillars of Gold": {
+      "tvz": "52.6%",
+      "zvp": "46.1%",
+      "pvt": "50.4%",
+      "creator": "Agaton",
+      "size": "136x138",
+      "spawn-positions": "2 at 2, 8",
+      "refreshed": 1635589481
+    },
+    "Port Aleksander": {
+      "tvz": "51.5%",
+      "zvp": "44.2%",
+      "pvt": "57.0%",
+      "creator": "Youngrustler",
+      "size": "158x140",
+      "spawn-positions": "2 at 4, 10",
+      "refreshed": 1635589481
+    },
+    "Purity and Industry": {
+      "tvz": "61.6%",
+      "zvp": "45.7%",
+      "pvt": "44.1%",
+      "creator": "superouman",
+      "size": "144x144",
+      "spawn-positions": "2 at 3, 12",
+      "refreshed": 1635589481
+    },
+    "Redshift": {
+      "tvz": "44.1%",
+      "zvp": "51.0%",
+      "pvt": "57.5%",
+      "creator": "NegativeZero",
+      "size": "124x152",
+      "spawn-positions": "2 at 7, 11",
+      "refreshed": 1635589481
+    },
+    "Romanticide": {
+      "tvz": "49.0%",
+      "zvp": "43.9%",
+      "pvt": "51.3%",
+      "creator": "Marras",
+      "size": "150x132",
+      "spawn-positions": "2 at 4, 10",
+      "refreshed": 1635589481
+    },
+    "Simulacrum": {
+      "tvz": "54.4%",
+      "zvp": "55.6%",
+      "pvt": "50.4%",
+      "creator": "Superouman",
+      "size": "144x124",
+      "spawn-positions": "2 at 4, 10",
+      "refreshed": 1635589481
+    },
+    "Stasis": {
+      "tvz": "67.1%",
+      "zvp": "48.5%",
+      "pvt": "52.1%",
+      "creator": "NewSunshine",
+      "size": "152x128",
+      "spawn-positions": "2 at 2, 10",
+      "refreshed": 1635589481
+    },
+    "Submarine": {
+      "tvz": "56.3%",
+      "zvp": "55.1%",
+      "pvt": "39.3%",
+      "creator": "ZWECK",
+      "size": "134x122",
+      "spawn-positions": "2 at 4, 10",
+      "refreshed": 1635589481
+    },
+    "Thunderbird": {
+      "tvz": "53.0%",
+      "zvp": "47.4%",
+      "pvt": "53.7%",
+      "creator": "RQM",
+      "size": "140x140",
+      "spawn-positions": "2 at 4, 10",
+      "refreshed": 1635589481
+    },
+    "Triton": {
+      "tvz": "54.4%",
+      "zvp": "52.4%",
+      "pvt": "53.0%",
+      "creator": "themusic246",
+      "size": "144x144",
+      "spawn-positions": "2 at 5, 11",
+      "refreshed": 1635589481
+    },
+    "Turbo Cruise '84": {
+      "tvz": "42.8%",
+      "zvp": "53.9%",
+      "pvt": "39.0%",
+      "creator": "Superouman",
+      "size": "140x116",
+      "spawn-positions": "2 at 2, 8",
+      "refreshed": 1635589481
+    },
+    "Winter's Gate": {
+      "tvz": "49.1%",
+      "zvp": "60.6%",
+      "pvt": "46.3%",
+      "creator": "Marras",
+      "size": "128x132",
+      "spawn-positions": "2 at 5, 11",
+      "refreshed": 1635589481
+    },
+    "World of Sleepers": {
+      "tvz": "47.9%",
+      "zvp": "54.6%",
+      "pvt": "54.6%",
+      "creator": "NegativeZero",
+      "size": "144x144",
+      "spawn-positions": "2 at 1, 7",
+      "refreshed": 1635589481
+    },
+    "Year Zero": {
+      "tvz": "49.7%",
+      "zvp": "46.7%",
+      "pvt": "59.7%",
+      "creator": "AVEX",
+      "size": "166x128",
+      "spawn-positions": "2 at 10, 1",
+      "refreshed": 1635589481
+    },
+    "Zen": {
+      "tvz": "47.0%",
+      "zvp": "50.9%",
+      "pvt": "47.2%",
+      "creator": "NegativeZero",
+      "size": "132x148",
+      "spawn-positions": "2 at 2, 8",
+      "refreshed": 1635589481
+    },
+    "Glittering Ashes": {
+      "tvz": "54.2%",
+      "zvp": "50.0%",
+      "pvt": "53.8%",
+      "creator": "Insidioussc2",
+      "size": "154x136",
+      "spawn-positions": "2 at 2,8",
+      "refreshed": 1635589582
+    },
+    "Hardwire": {
+      "tvz": "35.7%",
+      "zvp": "54.5%",
+      "pvt": "51.4%",
+      "creator": "Agaton",
+      "size": "130x150",
+      "spawn-positions": "2 at 2,8",
+      "refreshed": 1635589548
+    },
+    "Pride of Altaris": {
+      "tvz": "25.0%",
+      "zvp": "40.7%",
+      "pvt": "57.1%",
+      "creator": "4096SP",
+      "size": "134x160",
+      "spawn-positions": "2 at 4,10",
+      "refreshed": 1635589514
+    },
+    "Curious Minds": {
+      "tvz": "38.9%",
+      "zvp": "45.5%",
+      "pvt": "50.0%",
+      "creator": "MiloOnFire",
+      "size": "132x124",
+      "spawn-positions": "2 at 4,10",
+      "refreshed": 1635589456
+    },
+    "Berlingrad": {
+      "tvz": "57.1%",
+      "zvp": "41.7%",
+      "pvt": "56.5%",
+      "creator": "Skypirinha1",
+      "size": "128x140",
+      "spawn-positions": "2 at 4,10",
+      "refreshed": 1635589356
+    }
+  },
+  "custom_mappool": [
+    "2000 Atmospheres",
+    "Beckett Industries",
+    "Blackburn",
+    "Enchanted Isle",
+    "Jagannatha",
+    "Lightshade",
+    "Oxide",
+    "Romanticide"
+  ],
+  "ladder_mappool": [
+    "2000 Atmospheres",
+    "Berlingrad",
+    "Blackburn",
+    "Curious Minds",
+    "Glittering Ashes",
+    "Hardwire",
+    "Pride of Altaris"
+  ],
+  "mappool": 1,
+  "mappool_refresh": 1635589289
+}
