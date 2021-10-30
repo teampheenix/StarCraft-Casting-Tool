@@ -1,6 +1,13 @@
 # Changelog
 
 
+## v2.11.0 (2021-10-30)
+
+### Fix
+
+* Fix download of maps from Liquipedia.
+
+
 ## v2.10.2 (2021-07-18)
 
 ### New
