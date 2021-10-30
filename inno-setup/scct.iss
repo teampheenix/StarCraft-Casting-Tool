@@ -2,8 +2,8 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "StarCraft Casting Tool"
-#define MyAppVersion "2.10.2"
-#define MyDataVersion "2.10.0"
+#define MyAppVersion "2.11.0"
+#define MyDataVersion "2.11.0"
 #define MyAppPublisher "team pheeniX"
 #define MyAppURL "https://teampheenix.github.io/StarCraft-Casting-Tool/"
 #define MyAppExeName "StarCraft-Casting-Tool.exe"
@@ -65,7 +65,7 @@ procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
 begin
   if CurUninstallStep = usPostUninstall then
   begin
-    if MsgBox('Do you want to delete StarCraft Casting Tool`s profile data?', mbConfirmation, MB_YESNO or MB_DEFBUTTON2) = IDYES then
+    if MsgBox('Do you want to delete StarCraft Casting Tool´s profile data?', mbConfirmation, MB_YESNO or MB_DEFBUTTON2) = IDYES then
     //this is the msg that will display after uninstall,change is as you prefer 
     begin
         DelTree(ExpandConstant('{localappdata}\team pheeniX\StarCraft-Casting-Tool'), True, True, True);
