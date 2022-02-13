@@ -33,11 +33,13 @@ def updateTitle(newTitle):
 
         data = {'title': newTitle}
 
+        params = {'broadcaster_id': userID}
+
         if scctool.settings.config.parser.getboolean("Twitch", "set_game"):
             data['game_id'] = '490422'
 
         requests.patch(
-            url=f'https://api.twitch.tv/helix/channels?broadcaster_id={userID}', headers=headers, json=data).raise_for_status()
+            url=f'https://api.twitch.tv/helix/channels', headers=headers, params=params, json=data).raise_for_status()
         msg = _('Updated Twitch title of {} to: "{}"').format(
             twitchChannel, newTitle)
         success = True
