@@ -3,15 +3,14 @@
 block_cipher = None
 
 
-a = Analysis(['C:\\Users\\tasch\\GitHub\\StarCraft-Casting-Tool\\StarCraftCastingTool.py'],
-             pathex=['C:\\Users\\tasch\\GitHub\\StarCraft-Casting-Tool',
-                     'C:\\Users\\tasch\\GitHub\\StarCraft-Casting-Tool'],
+a = Analysis(['.\\StarCraftCastingTool.py'],
+             pathex=['C:\\Users\\tasch\\GitHub\\StarCraft-Casting-Tool'],
              binaries=[],
              datas=[('src/*', 'src'), ('locales', 'locales'),
                     ('CHANGELOG.md', '.'), ('README.md', '.')],
-             hiddenimports=[],
+             hiddenimports=['websockets.legacy.server'],
              hookspath=[
-                 'c:\\users\\tasch\\appdata\\local\\programs\\python\\python38\\lib\\site-packages\\pyupdater\\hooks'],
+                 '.\\.venv\\Lib\\site-packages\\pyupdater\\hooks', 'hooks'],
              runtime_hooks=[],
              excludes=[],
              win_no_prefer_redirects=False,

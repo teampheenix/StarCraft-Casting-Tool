@@ -1,5 +1,4 @@
 import subprocess
-import fileinput
 from scctool import __version__ as version
 
 if __name__ == "__main__":
@@ -9,4 +8,5 @@ if __name__ == "__main__":
         text = fh.read()
     with open('CHANGELOG.md', 'w', encoding='utf-8') as fh:
         fh.write(text)
-    subprocess.run(f'.\\.venv\\Scripts\\pyupdater.exe build --app-version {version} win.spec', shell=True, check=True)
+    subprocess.run(
+        f'.\\.venv\\Scripts\\pyupdater.exe build --app-version {version} win.spec', shell=True, check=True)

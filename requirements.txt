@@ -1,14 +1,14 @@
 appdirs >= 1.4.4
-beautifulsoup4 >= 4.9.3
-humanize >= 3.2.0
+beautifulsoup4 >= 4.10.0
+humanize >= 3.12.0
 keyboard==0.13.5
-markdown2 >= 2.3.10
-Pillow >= 8.1.0; platform_system == 'Windows'
-pywin32 >= 300; platform_system == 'Windows'
-PyQt5 ==5.13.2  # rq.filter: != 5.14.*, != 5.15.*
-pytesseract >= 0.3.6; platform_system == 'Windows'
-PyInstaller >= 4.1
-# PyUpdater >= 3.1.1
-git+git://github.com/Digital-Sapphire/PyUpdater@master
-requests >= 2.25.1
-websockets >= 8.1
+markdown2 >= 2.4.1
+Pillow >= 8.4.0; platform_system == 'Windows'
+PyInstaller >= 4.6
+pyinstaller-hooks-contrib >= 2021.3
+pywin32 >= 302; platform_system == 'Windows'
+PyQt5 == 5.13.2 # rq.filter: != 5.14.*, != 5.15.*
+pytesseract >= 0.3.8; platform_system == 'Windows'
+PyUpdater >= 4.0.0
+requests >= 2.26.0
+websockets >= 10.0

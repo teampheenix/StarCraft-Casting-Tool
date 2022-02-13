@@ -12,7 +12,7 @@ from scctool.tasks.liquipedia import LiquipediaGrabber, MapNotFound
 from scctool.tasks.tasksthread import TasksThread
 
 module_logger = logging.getLogger(__name__)
-# _ = scctool.settings.translation.gettext
+_ = scctool.settings.translation.gettext
 
 
 class MapStatsManager:
@@ -161,25 +161,18 @@ class MapStatsManager:
         maps2refresh_full = list()
 
         for mymap, data in self.__maps.items():
-            # TODO: Old elegant version is currently no longer possible:
-            is_none = False
             for key in ['creator', 'size', 'spawn-positions']:
-                if data.get(key, '') == '':
+                if not data.get(key):
                     maps2refresh_full.append(mymap)
-                    is_none = True
                     break
-            if is_none:
-                continue
-            last_refresh = data.get('refreshed', None)
-            if (not last_refresh
-                    or (time.time() - int(last_refresh)) > 24 * 60 * 60):
-                maps2refresh.append(mymap)
+            else:
+                last_refresh = data.get('refreshed')
+                if (not last_refresh
+                        or (time.time() - int(last_refresh)) > 24 * 60 * 60):
+                    maps2refresh.append(mymap)
 
-            # Unelegant way:
-            # last_refresh = data.get('refreshed', None)
-            # if (not last_refresh or
-            #         (time.time() - int(last_refresh)) > 24 * 60 * 60):
-            #     maps2refresh_full.append(map)
+        module_logger.info('maps2refresh_full')
+        module_logger.info(maps2refresh_full)
 
         if len(maps2refresh) > 0:
             self.__thread.setMaps(maps2refresh)
@@ -230,6 +223,8 @@ class MapStatsManager:
                 'Dreamcatcher', 'Dream&shy;catcher')
             out_data['maps'][mymap]['map-name'] = mymap.replace(
                 'Thunderbird', 'Thunder&shy;bird')
+            out_data['maps'][mymap]['map-name'] = mymap.replace(
+                '2000 Atmospheres', '2000 Atmo&shy;spheres')
             if out_data['map'] is None:
                 out_data['map'] = mymap
             if scctool.settings.config.parser.getboolean(

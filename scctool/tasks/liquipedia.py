@@ -1,4 +1,5 @@
 """Data grabber for Liquipedia."""
+from json.decoder import JSONDecodeError
 import logging
 import re
 import urllib.parse
@@ -118,9 +119,9 @@ class LiquipediaGrabber:
         except IndexError:
             if not retry:
                 return self.get_map(map_name, retry=True)
-            else:
-                raise MapNotFound
-        if map:
+            raise MapNotFound
+
+        if liquipedia_map:
             params = dict()
             params['action'] = "parse"
             params['format'] = "json"
@@ -159,14 +160,18 @@ class LiquipediaGrabber:
 
         url = '{}/starcraft2/api.php'.format(self._base_url)
 
-        data = requests.get(url, headers=self._headers, params=params).json()
-        content = data['parse']['text']['*']
-        soup = BeautifulSoup(content, 'html.parser')
-        for result in soup.find_all("td", class_="navbox-group"):
-            if result.contents[0].strip() == f"{players_per_team} vs {players_per_team}":
-                for mymap in result.findNext("td").find_all('a'):
-                    yield mymap.contents[0].replace("LE", '').strip()
-                break
+        try:
+            data = requests.get(url, headers=self._headers,
+                                params=params).json()
+            content = data['parse']['text']['*']
+            soup = BeautifulSoup(content, 'html.parser')
+            for result in soup.find_all("th", class_="navbox-group"):
+                if result.contents[0].strip() == f"{players_per_team} vs {players_per_team}":
+                    for mymap in result.findNext("td").find_all('a'):
+                        yield mymap.contents[0].replace("LE", '').strip()
+                    break
+        except JSONDecodeError:
+            module_logger.exception("message")
 
     def get_map_stats(self, maps):
         """Get map statistics of specified maps."""
@@ -188,23 +193,27 @@ class LiquipediaGrabber:
                 + sc2map.strip() + "}}")
         params['text'] = params['text'] + "</div>"
         url = f'{self._base_url}/starcraft2/api.php'
-        data = requests.get(url, headers=self._headers, params=params).json()
-        content = data['parse']['text']['*']
-        soup = BeautifulSoup(content, 'html.parser')
-        for map_stats in soup.find_all("tr", class_="stats-map-row"):
-            data = dict()
-            data['map'] = map_stats.find(
-                'td', class_='stats-map-name').find('a').text.replace(
-                    'LE', '').strip()
-            data['games'] = map_stats.find(
-                "td", class_="stats-map-number").text.strip()
-            data['tvz'] = map_stats.find(
-                "td", class_="stats-tvz-4").text.strip()
-            data['zvp'] = map_stats.find(
-                "td", class_="stats-zvp-4").text.strip()
-            data['pvt'] = map_stats.find(
-                "td", class_="stats-pvt-4").text.strip()
-            yield data
+        try:
+            data = requests.get(url, headers=self._headers,
+                                params=params).json()
+            content = data['parse']['text']['*']
+            soup = BeautifulSoup(content, 'html.parser')
+            for map_stats in soup.find_all("tr", class_="stats-map-row"):
+                data = dict()
+                data['map'] = map_stats.find(
+                    'td', class_='stats-map-name').find('a').text.replace(
+                        'LE', '').strip()
+                data['games'] = map_stats.find(
+                    "td", class_="stats-map-number").text.strip()
+                data['tvz'] = map_stats.find(
+                    "td", class_="stats-tvz-4").text.strip()
+                data['zvp'] = map_stats.find(
+                    "td", class_="stats-zvp-4").text.strip()
+                data['pvt'] = map_stats.find(
+                    "td", class_="stats-pvt-4").text.strip()
+                yield data
+        except JSONDecodeError:
+            module_logger.exception("message")
 
 
 class LiquipediaMap:
@@ -217,16 +226,15 @@ class LiquipediaMap:
     def is_map(self):
         """Test if this is an actual map."""
         return self._soup.find(
-            href='/starcraft2/Template:Infobox_map') is not None
+            href='/starcraft2/Template:Infobox_map/doc') is not None
 
     def redirect(self):
-        redirect = self._soup.find("div", class_="redirectMsg")
-        if redirect:
+        if redirect := self._soup.find("div", class_="redirectMsg"):
             link = redirect.find(
                 'a', attrs={'href': re.compile("^/starcraft2/")}).get('href')
             return link.replace('/starcraft2/', '')
-        else:
-            return ''
+
+        return ''
 
     def get_name(self):
         """Get the name of the map."""
@@ -245,17 +253,16 @@ class LiquipediaMap:
         infobox = self._soup.find("div", class_="fo-nttax-infobox")
         for cell in infobox.find_all("div", class_="infobox-cell-2"):
             if 'infobox-description' in cell.get("class"):
-                key = cell.getText().replace(":", "")
+                key = cell.getText().replace(":", "").lower().replace(" ", "-")
+                continue
+            if key:
+                try:
+                    data[key] = cell.getText()
+                    key = ""
+                except Exception:
+                    pass
             else:
-                if key:
-                    try:
-                        key = key.lower().replace(" ", "-")
-                        data[key] = cell.getText()
-                        key = ""
-                    except Exception:
-                        pass
-                else:
-                    raise ValueError('Key is missing in Infobox')
+                raise ValueError('Key is missing in Infobox')
         return data
 
     def get_map_images(self):

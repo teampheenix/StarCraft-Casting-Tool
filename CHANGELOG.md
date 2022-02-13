@@ -1,6 +1,46 @@
 # Changelog
 
 
+## v2.11.0 (2021-10-30)
+
+### Fix
+
+* Fix download of maps from Liquipedia.
+
+
+## v2.10.2 (2021-07-18)
+
+### New
+
+* Add option for prefix text to the ticker.
+
+### Fix
+
+* Increase time between liquipedia API stats queries.
+
+
+## v2.10.1 (2021-07-04)
+
+### Fix
+
+* Remove console.
+
+
+## v2.10.0 (2021-07-04)
+
+### Changes
+
+* Dependencies updated.
+
+### Fix
+
+* Fixed a bug where the map stats would not update.
+
+* Prompt about new ladder maps is appearing again!
+
+* Break "2000 Atmospheres" in mapstats.
+
+
 ## v2.9.2 (2021-01-19)
 
 ### New

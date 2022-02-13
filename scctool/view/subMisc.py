@@ -88,7 +88,7 @@ class SubwindowMisc(QWidget):
         self.tabs.addTab(self.alphaBox, _("AlphaTL && Ingame Score"))
         self.tabs.addTab(self.clientapiBox, _("SC2 Client API"))
         self.tabs.addTab(self.aligulacTab, _("Aligulac"))
-        self.tabs.addTab(self.counterTab, _("Countdown"))
+        self.tabs.addTab(self.counterTab, _("Countdown && Ticker"))
 
         table = dict()
         table['mapmanager'] = 0
@@ -595,7 +595,9 @@ class SubwindowMisc(QWidget):
     def createCounterTab(self):
         """Create the aligulac tab."""
         self.counterTab = QWidget()
+        mainLayout = QVBoxLayout()
 
+        box = QGroupBox(_("Countdown"))
         layout = QFormLayout()
         self.le_countdown_replacement = QLineEdit()
         self.le_countdown_replacement.setText(
@@ -619,12 +621,25 @@ class SubwindowMisc(QWidget):
         self.counter_posttext.setPlainText(scctool.settings.config.parser.get(
             "Countdown", "post_txt"))
         self.counter_posttext.textChanged.connect(self.changed)
-        layout.addRow(QLabel('Pre-Text (in countdown.txt)'),
+        layout.addRow(QLabel(_('Pre-Text (in countdown.txt)')),
                       self.counter_pretext)
-        layout.addRow(QLabel('Post-Text (in countdown.txt)'),
+        layout.addRow(QLabel(_('Post-Text (in countdown.txt)')),
                       self.counter_posttext)
+        box.setLayout(layout)
+        mainLayout.addWidget(box)
 
-        self.counterTab.setLayout(layout)
+        box = QGroupBox(_("Ticker"))
+        layout = QFormLayout()
+        box.setLayout(layout)
+        self.ticker_pretext = QLineEdit()
+        self.ticker_pretext.setText(scctool.settings.config.parser.get(
+            "Ticker", "prefix"))
+        self.ticker_pretext.textChanged.connect(self.changed)
+        layout.addRow(QLabel(_('Prefix text (in ticker.txt)')),
+                      self.ticker_pretext)
+        mainLayout.addWidget(box)
+
+        self.counterTab.setLayout(mainLayout)
 
     def createMapsBox(self):
         """Create box for map manager."""
@@ -1007,6 +1022,9 @@ class SubwindowMisc(QWidget):
                 "Countdown", "pre_txt", self.counter_pretext.toPlainText())
             scctool.settings.config.parser.set(
                 "Countdown", "post_txt", self.counter_posttext.toPlainText())
+            scctool.settings.config.parser.set(
+                "Ticker", "prefix", self.ticker_pretext.text().strip())
+            self.controller.matchControl.tickerChanged.emit()
             self.controller.refreshButtonStatus()
             # self.controller.setCBS()
             self.__dataChanged = False
