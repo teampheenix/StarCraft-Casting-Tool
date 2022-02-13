@@ -1,6 +1,13 @@
 # Changelog
 
 
+## v2.12.0 (2022-02-13)
+
+### Changes
+
+* Use new Twitch-API to set stream title.
+
+
 ## v2.11.0 (2021-10-30)
 
 ### Fix
