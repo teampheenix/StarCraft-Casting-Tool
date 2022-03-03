@@ -1621,94 +1621,19 @@ class ProfileMenu(QMenu):
             return
 
 
-class MatchComboBox(QComboBox):
-    """Define QComboBox for the match url."""
+class MatchComboBox(QLineEdit):
+    """Define QLineEdit for the match url."""
 
     returnPressed = pyqtSignal()
 
     def __init__(self, parent=None):
         """Init the combobox."""
         super().__init__(parent)
-        self.setEditable(True)
-        self.lineEdit().setAlignment(Qt.AlignCenter)
-        tooltip = _('Enter spire.gg, RSL, Alpha, or Chobo Teamleague Match-URL or '
-                    'search for an upcoming spire.gg Match.')
-        self.lineEdit().setPlaceholderText(tooltip)
-        self.lineEdit().setToolTip(tooltip)
-        self._alpha_icon = QIcon(scctool.settings.getResFile('alpha.png'))
-        self._spire_icon = QIcon(scctool.settings.getResFile('spire.png'))
-        self._rstl_icon = QIcon(scctool.settings.getResFile('rstl.png'))
-        self._rsl_icon = QIcon(scctool.settings.getResFile('rsl.png'))
-        self._ctl_icon = QIcon(scctool.settings.getResFile('chobo.png'))
-        self.setItemData(0, Qt.AlignCenter, Qt.TextAlignmentRole)
-        self.insertSeparator(1)
-        self.lineEdit().returnPressed.connect(self.returnPressed.emit)
-        self.activated.connect(self._handleActivated)
-
-    def setText(self, text):
-        """Set the text."""
-        self.setURL(text)
-
-    def _handleActivated(self, idx):
-        data = self.itemData(idx)
-        if not data:
-            data = self.itemText(idx)
-        self.setURL(data)
-
-    def _handleCompleterActivated(self, text):
-        if text in self._matches:
-            data = self._matches[text]
-        else:
-            data = text
-        self.setURL(data)
-
-    def updateItems(self, matches):
-        """Update the items."""
-        self.removeItems()
-        self._matches = matches
-        completer = QCompleter(
-            self._matches.keys(),
-            self.lineEdit())
-        completer.setFilterMode(Qt.MatchContains)
-        completer.setCaseSensitivity(Qt.CaseInsensitive)
-        completer.setCompletionMode(
-            QCompleter.PopupCompletion)
-        completer.setWrapAround(True)
-        completer.activated.connect(self._handleCompleterActivated)
-        self.setCompleter(completer)
-
-        for text, url in self._matches.items():
-            self.addItem(self._spire_icon, text, url)
-
-    def removeItems(self):
-        """Remove all items."""
-        for __ in range(2, self.count()):
-            self.removeItem(2)
-
-    def setURL(self, url):
-        """Set a new URL."""
-        lower_url = str(url).lower()
-        if(lower_url.find('alpha') != -1):
-            self.setItemIcon(0, self._alpha_icon)
-        elif(lower_url.find('spire') != -1):
-            self.setItemIcon(0, self._spire_icon)
-        elif(lower_url.find('rfcs') != -1):
-            self.setItemIcon(0, self._rsl_icon)
-        elif(lower_url.find('hdgame') != -1):
-            self.setItemIcon(0, self._rstl_icon)
-        elif(lower_url.find('choboteamleague') != -1):
-            self.setItemIcon(0, self._ctl_icon)
-        else:
-            self.setItemIcon(0, QIcon())
-        self.setItemText(0, url)
-        self.setCurrentIndex(0)
-
-    def text(self):
-        """Return it's text."""
-        return self.lineEdit().text()
-
-    def selectAll(self):
-        self.lineEdit().selectAll()
+        self.setAlignment(Qt.AlignCenter)
+        tooltip = _('Enter Chobo Teamleague Match-URL.')
+        self.setPlaceholderText(tooltip)
+        self.setToolTip(tooltip)
+        self.returnPressed.connect(self.returnPressed.emit)
 
 
 class ScopeGroupBox(QGroupBox):

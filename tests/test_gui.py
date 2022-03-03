@@ -158,52 +158,6 @@ class TestGUI(object):
                         scctool.settings.race2idx(new_race))
                     self.assert_race(team_idx, set_idx, new_race)
 
-    @pytest.mark.parametrize("match_url", ['https://alpha.tl/match/4709'])
-    def test_alpha_match_grabber(self, qtbot, scct_app, match_url):
-        self.gui_setup(qtbot, scct_app)
-
-        self.new_tab()
-        self.assert_bo(3)
-        self.main_window.tabs.setCurrentIndex(0)
-        assert self.main_window.tabs.currentIndex() == 0
-        self.insert_into_widget(self.main_window.le_url, match_url)
-        assert self.main_window.le_url.text() == match_url
-        with self.qtbot.waitSignal(self.cntlr.matchControl.metaChanged):
-            self.qtbot.mouseClick(self.main_window.pb_refresh, Qt.LeftButton)
-
-        assert self.main_window.cb_bestof.currentText() == str(5)
-        assert self.main_window.cb_minSets.currentText() == '3'
-        assert self.main_window.cb_ace_bo.isEnabled()
-        match = self.cntlr.matchControl.activeMatch()
-        assert match.getBestOf() == 5
-        assert match.getNoSets() == 5
-        assert match.getMinSets() == 3
-        assert match.getNoAceSets() == 1
-
-    @pytest.mark.parametrize("match_url", ['https://spire.gg/match/406'])
-    def test_alpha_match_grabber(self, qtbot, scct_app, match_url):
-        self.gui_setup(qtbot, scct_app)
-
-        self.new_tab()
-        self.assert_bo(3)
-        self.main_window.tabs.setCurrentIndex(0)
-        assert self.main_window.tabs.currentIndex() == 0
-        self.insert_into_widget(self.main_window.le_url, match_url)
-        assert self.main_window.le_url.text() == match_url
-        with self.qtbot.waitSignal(self.cntlr.matchControl.metaChanged):
-            self.qtbot.mouseClick(self.main_window.pb_refresh, Qt.LeftButton)
-
-        assert self.main_window.cb_bestof.currentText() == str(7)
-        assert self.main_window.cb_minSets.currentText() == '6'
-        assert self.main_window.cb_ace_bo.isEnabled()
-        match = self.cntlr.matchControl.activeMatch()
-        assert match.getBestOf() == 7
-        assert match.getNoSets() == 7
-        assert match.getMinSets() == 6
-        assert match.getNoAceSets() == 1
-        assert match.getAllKill() == False
-        assert match.getSolo() == False
-
     @pytest.mark.parametrize(
         "match_url",
         ['https://www.choboteamleague.com/home/m/6235882/article/4940572',

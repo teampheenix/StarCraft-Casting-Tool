@@ -235,18 +235,6 @@ class MainWindow(QMainWindow):
                 lambda: self.controller.openURL("http://team-pheenix.de"))
             infoMenu.addAction(ixAct)
 
-            spireAct = QAction(QIcon(scctool.settings.getResFile(
-                'spire.png')), 'spire.gg', self)
-            spireAct.triggered.connect(
-                lambda: self.controller.openURL("https://spire.gg"))
-            infoMenu.addAction(spireAct)
-
-            rslAct = QAction(QIcon(scctool.settings.getResFile(
-                'rsl.png')), 'RSL', self)
-            rslAct.triggered.connect(
-                lambda: self.controller.openURL("https://rfcs.ru/"))
-            infoMenu.addAction(rslAct)
-
         except Exception:
             module_logger.exception("message")
 
@@ -347,14 +335,6 @@ class MainWindow(QMainWindow):
                              {'name': _('Countdown'),
                               'icon': 'countdown.png',
                               'file': 'countdown.html'},
-                             {'name': _('League (AlphaTL && RSL only)'),
-                              'icon': 'alpha.png',
-                              'file': 'league.html'},
-                             {'name': _('Matchbanner (AlphaTL)'),
-                              'icon': 'alpha.png',
-                              'file': 'matchbanner.html',
-                              'settings': lambda:
-                              self.openMiscDialog('alphatl')}
                              ]})
 
         act = QAction(QIcon(scctool.settings.getResFile(
@@ -662,7 +642,7 @@ class MainWindow(QMainWindow):
 
             # Add tabs
             self.tabs.addTab(self.tab1, _(
-                "Match Grabber for AlphaTL, RSL && CTL"))
+                "Match Grabber for CTL"))
             self.tabs.addTab(self.tab2, _("Custom Match"))
 
             # Create first tab
@@ -687,20 +667,6 @@ class MainWindow(QMainWindow):
             label.setMinimumWidth(80)
             container.addWidget(label, 0)
             container.addWidget(self.le_url, 1)
-            button = QPushButton()
-            pixmap = QIcon(
-                scctool.settings.getResFile('spire.png'))
-            button.setIcon(pixmap)
-            button.clicked.connect(
-                lambda: self.controller.openURL("https://spire.gg/"))
-            container.addWidget(button, 0)
-            button = QPushButton()
-            pixmap = QIcon(
-                scctool.settings.getResFile('rsl.png'))
-            button.setIcon(pixmap)
-            button.clicked.connect(
-                lambda: self.controller.openURL("https://rfcs.ru/en/"))
-            container.addWidget(button, 0)
             button = QPushButton()
             pixmap = QIcon(
                 scctool.settings.getResFile('chobo.png'))
@@ -1162,7 +1128,7 @@ class MainWindow(QMainWindow):
         QApplication.setOverrideCursor(
             Qt.WaitCursor)
         try:
-            url = self.le_url.lineEdit().text()
+            url = self.le_url.text()
             progress_dialog.setWindowTitle(_("Match Grabber"))
             progress_dialog.setLabelText(
                 _("Collecting data from {}".format(url)))

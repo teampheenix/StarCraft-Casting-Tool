@@ -85,7 +85,7 @@ class SubwindowMisc(QWidget):
         self.tabs.addTab(self.favBox, _("Favorites"))
         self.tabs.addTab(self.aliasBox, _("Alias"))
         self.tabs.addTab(self.ocrBox, _("OCR"))
-        self.tabs.addTab(self.alphaBox, _("AlphaTL && Ingame Score"))
+        self.tabs.addTab(self.alphaBox, _("Ingame Score"))
         self.tabs.addTab(self.clientapiBox, _("SC2 Client API"))
         self.tabs.addTab(self.aligulacTab, _("Aligulac"))
         self.tabs.addTab(self.counterTab, _("Countdown && Ticker"))
@@ -95,7 +95,7 @@ class SubwindowMisc(QWidget):
         table['favorites'] = 1
         table['alias'] = 2
         table['ocr'] = 3
-        table['alphatl'] = 4
+        table['ingamescore'] = 4
         table['sc2clientapi'] = 5
         table['aligulac'] = 6
         table['counter'] = 7
@@ -115,21 +115,6 @@ class SubwindowMisc(QWidget):
         """Create Alpha QWidget."""
         self.alphaBox = QWidget()
         mainLayout = QVBoxLayout()
-
-        box = QGroupBox(_("AlphaTL"))
-        layout = QHBoxLayout()
-
-        self.cb_trans_banner = QCheckBox(
-            " " + _("Download transparent Banner of the Match"))
-        self.cb_trans_banner.setChecked(
-            scctool.settings.config.parser.getboolean(
-                "SCT", "transparent_match_banner"))
-        self.cb_trans_banner.stateChanged.connect(self.changed)
-
-        layout.addWidget(self.cb_trans_banner)
-        box.setLayout(layout)
-
-        mainLayout.addWidget(box)
 
         box = QGroupBox(_("Set Ingame Score Task"))
         layout = QVBoxLayout()
@@ -987,9 +972,6 @@ class SubwindowMisc(QWidget):
                 "SCT", "use_ocr", str(self.cb_useocr.isChecked()))
             scctool.settings.config.parser.set(
                 "SCT", "new_maps_prompt", str(self.cb_newMapsPrompt.isChecked()))
-            scctool.settings.config.parser.set(
-                "SCT", "transparent_match_banner",
-                str(self.cb_trans_banner.isChecked()))
             scctool.settings.config.parser.set(
                 "SCT", "CtrlShiftS", str(self.cb_ctrlshifts.isChecked()))
             scctool.settings.config.parser.set(

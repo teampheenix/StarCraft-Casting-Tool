@@ -128,7 +128,6 @@ def setDefaultConfigAll():
     setDefaultConfig("SCT", "CtrlN", "False")
     setDefaultConfig("SCT", "CtrlX", "False")
     setDefaultConfig("SCT", "language", "en_US")
-    setDefaultConfig("SCT", "transparent_match_banner", "False")
 
     setDefaultConfig("SCT", "blacklist_on", "False")
     setDefaultConfig("SCT", "blacklist", "")

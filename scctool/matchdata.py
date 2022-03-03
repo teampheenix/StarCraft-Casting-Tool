@@ -106,15 +106,7 @@ class MatchData(QObject):
     # try:
         url = str(url).lower()
 
-        if(url.find('alpha') != -1):
-            chg = self.setProvider("AlphaSC2")
-        elif(url.find('spire') != -1):
-            chg = self.setProvider("spiregg")
-        elif(url.find('rfcs') != -1):
-            chg = self.setProvider("RSL")
-        elif(url.find('hdgame') != -1):
-            chg = self.setProvider("RSTL")
-        elif(url.find('choboteamleague') != -1):
+        if(url.find('choboteamleague') != -1):
             chg = self.setProvider("ChoboTeamLeague")
         else:
             chg = self.setProvider("Custom")
@@ -1134,21 +1126,6 @@ class MatchData(QObject):
             module_logger.exception("message")
 
         return websocket_data
-
-    def updateLeagueIcon(self):
-        """Update league icon."""
-        try:
-            filename_old = scctool.settings.casting_html_dir + "/data/" + \
-                self.getProvider() + ".html"
-            filename_new = scctool.settings.casting_html_dir + \
-                "/data/league-data.html"
-            shutil.copy(scctool.settings.getAbsPath(filename_old),
-                        scctool.settings.getAbsPath(filename_new))
-        except FileNotFoundError:
-            module_logger.warning(
-                "MatchGrabber doesn't have an associated league icon.")
-        except Exception:
-            module_logger.exception("message")
 
     def autoSetMyTeam(self, swap=False):
         """Try to set team via fav teams."""

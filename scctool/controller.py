@@ -140,8 +140,6 @@ class MainController:
             self.setCBs()
             self.view.resizeWindow()
             self.housekeeper.activateTask('save')
-            self.housekeeper.spireMatches.connect(self.view.le_url.updateItems)
-            self.housekeeper.activateTask('spiregg')
             self.housekeeper.ip_updated.connect(self.update_ip)
             self.housekeeper.activateTask('check_ip')
         except Exception:
@@ -181,7 +179,7 @@ class MainController:
             if index >= 0:
                 self.view.cb_minSets.setCurrentIndex(index)
 
-            self.view.le_url.setURL(
+            self.view.le_url.setText(
                 self.matchControl.selectedMatch().getURL())
             self.view.le_url_custom.setText(
                 self.matchControl.selectedMatch().getURL())
@@ -228,8 +226,6 @@ class MainController:
                 matchWidget = self.view.matchDataTabWidget.widget(idx)
                 matchWidget.updateForms()
                 self.view.resizeWindow()
-                if idx == self.matchControl.activeMatchIdx():
-                    self.matchControl.selectedMatch().updateLeagueIcon()
 
         except Exception:
             module_logger.exception("message")
@@ -278,7 +274,6 @@ class MainController:
             update_progress(95)
             self.updateMatchFormat()
             self.view.resizeWindow()
-            self.matchControl.activeMatch().updateLeagueIcon()
             update_progress(99)
 
         except Exception:
