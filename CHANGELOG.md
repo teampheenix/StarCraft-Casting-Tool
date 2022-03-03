@@ -1,6 +1,13 @@
 # Changelog
 
 
+## v2.13.0 (2022-03-03)
+
+### Changes
+
+* Remove Spire.gg, AlphaTL, RSL, RSTL.
+
+
 ## v2.12.0 (2022-02-13)
 
 ### Changes
