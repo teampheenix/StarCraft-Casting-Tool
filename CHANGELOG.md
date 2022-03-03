@@ -1,6 +1,13 @@
 # Changelog
 
 
+## v2.13.1 (2022-03-03)
+
+### Changes
+
+* Increase delays for requests to Liquipedia.
+
+
 ## v2.13.0 (2022-03-03)
 
 ### Changes
