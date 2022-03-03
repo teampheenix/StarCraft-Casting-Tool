@@ -1,6 +1,7 @@
 """Subwindow with miscellaneous settings."""
 import logging
 import os.path
+from time import sleep
 
 import humanize  # pip install humanize
 import requests
@@ -805,6 +806,7 @@ class SubwindowMisc(QWidget):
             if not sc2map in scctool.settings.maps:
                 found_a_map = True
                 self.controller.autoDownloadMap(sc2map, self)
+                sleep(2)
                 scctool.settings.maps.append(sc2map)
                 items = self.maplist.findItems(sc2map,
                                                Qt.MatchExactly)

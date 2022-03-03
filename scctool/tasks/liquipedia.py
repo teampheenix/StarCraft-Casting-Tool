@@ -97,7 +97,7 @@ class LiquipediaGrabber:
         params = dict()
         params['action'] = "opensearch"
         if retry:
-            time.sleep(1)
+            time.sleep(2)
             params['search'] = str(map_name).strip() + ' LE'
         else:
             params['search'] = str(map_name).strip()
