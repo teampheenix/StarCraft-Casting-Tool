@@ -1,6 +1,19 @@
 # Changelog
 
 
+## v2.13.2 (2022-07-24)
+
+### Changes
+
+* New ladder maps added.
+
+### Fix
+
+* Fix download of mapstats from liquipedia.
+
+* Enable liquipedia map download again.
+
+
 ## v2.13.1 (2022-03-03)
 
 ### Changes
