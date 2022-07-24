@@ -205,7 +205,7 @@ class LiquipediaGrabber:
                     'td', class_='stats-map-name').find('a').text.replace(
                         'LE', '').strip()
                 data['games'] = map_stats.find(
-                    "td", class_="stats-map-number").text.strip()
+                    'td', class_='stats-map-name').next_element.text.strip()
                 data['tvz'] = map_stats.find(
                     "td", class_="stats-tvz-4").text.strip()
                 data['zvp'] = map_stats.find(
@@ -275,7 +275,7 @@ class LiquipediaMap:
         data = dict()
         try:
             data['games'] = self._soup.find(
-                "td", class_="stats-map-number").text.strip()
+                "td", class_="stats-map-name").next_element.text.strip()
             data['tvz'] = self._soup.find(
                 "td", class_="stats-tvz-4").text.strip()
             data['zvp'] = self._soup.find(
