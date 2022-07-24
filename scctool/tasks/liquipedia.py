@@ -88,10 +88,6 @@ class LiquipediaGrabber:
 
         return images
 
-    def get_images_new(self, image):
-        """Get all image sizes available for an image by using the API."""
-        pass
-
     def get_map(self, map_name, retry=False):
         """Search for an map."""
         params = dict()
@@ -118,6 +114,7 @@ class LiquipediaGrabber:
             liquipedia_map = data[1][0]
         except IndexError:
             if not retry:
+                time.sleep(2)
                 return self.get_map(map_name, retry=True)
             raise MapNotFound
 
@@ -129,6 +126,7 @@ class LiquipediaGrabber:
 
             url = f'{self._base_url}/starcraft2/api.php'
 
+            time.sleep(2)
             data = self._session.get(url, headers=self._headers,
                                      params=params).json()
             content = data['parse']['text']['*']
@@ -138,12 +136,15 @@ class LiquipediaGrabber:
             if liquipedia_map.is_map():
                 return liquipedia_map
             elif redirect:
+                time.sleep(2)
                 return self.get_map(redirect, retry=False)
             elif not retry:
+                time.sleep(2)
                 return self.get_map(map_name, retry=True)
             else:
                 raise MapNotFound
         elif not retry:
+            time.sleep(2)
             return self.get_map(map_name, retry=True)
         else:
             raise MapNotFound
@@ -226,7 +227,7 @@ class LiquipediaMap:
     def is_map(self):
         """Test if this is an actual map."""
         return self._soup.find(
-            href='/starcraft2/Template:Infobox_map/doc') is not None
+            href='/starcraft2/Template:Infobox_map') is not None
 
     def redirect(self):
         if redirect := self._soup.find("div", class_="redirectMsg"):
