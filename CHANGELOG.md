@@ -1,6 +1,13 @@
 # Changelog
 
 
+## v2.13.3 (2022-08-08)
+
+### Fix
+
+* Fixed a bug where jpeg maps would no show in mapstats browser source.
+
+
 ## v2.13.2 (2022-07-24)
 
 ### Changes
