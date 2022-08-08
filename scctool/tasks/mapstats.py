@@ -219,6 +219,8 @@ class MapStatsManager:
                 continue
             data = self.__maps[mymap]
             out_data['maps'][mymap] = dict()
+            out_data['maps'][mymap]['map-img'] = self.__controller.getMapImg(
+                mymap)
             out_data['maps'][mymap]['map-name'] = mymap.replace(
                 'Dreamcatcher', 'Dream&shy;catcher')
             out_data['maps'][mymap]['map-name'] = mymap.replace(

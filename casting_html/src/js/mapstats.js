@@ -189,7 +189,7 @@ function newMapData(newData) {
 function loadImages() {
   for (var name in mapData) {
     mapData[name]["image"] = new Image();
-    mapData[name]["image"].src = "src/img/maps/".concat(name.replace(/\s/g, "_"), ".jpg");
+    mapData[name]["image"].src = "src/img/maps/" + mapData[name]["map-img"];
   }
 }
 
