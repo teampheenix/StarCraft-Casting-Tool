@@ -63,8 +63,12 @@ class TextToSpeech:
         params['languageCode'] = 'en-US'
         params['key'] = self.getKey()
 
-        response = requests.get(self.__voices_url, params=params)
-        voices = response.json().get('voices', [])
+        try:
+            response = requests.get(self.__voices_url, params=params)
+            voices = response.json().get('voices', [])
+        except Exception:
+            voices = []
+            module_logger.exception("message")
 
         def sortVoices(elem):
             """Sort voices by name."""
