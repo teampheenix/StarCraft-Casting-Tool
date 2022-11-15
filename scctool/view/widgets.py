@@ -313,7 +313,7 @@ class HotkeyRecorder(QProgressDialog):
         self.setValue(self.minimum())
 
         self.resize(QSize(
-            mainWindow.size().width() * 0.8, self.sizeHint().height()))
+            int(mainWindow.size().width() * 0.8), self.sizeHint().height()))
         relativeChange = QPoint(int(mainWindow.size().width() / 2),
                                 int(mainWindow.size().height() / 3))\
             - QPoint(int(self.size().width() / 2),
@@ -428,7 +428,7 @@ class ToolUpdater(QProgressDialog):
         self.setValue(self.minimum())
 
         self.resize(QSize(
-            mainWindow.size().width() * 0.8, self.sizeHint().height()))
+            int(mainWindow.size().width() * 0.8), self.sizeHint().height()))
         relativeChange = QPoint(int(mainWindow.size().width() / 2),
                                 int(mainWindow.size().height() / 3))\
             - QPoint(int(self.size().width() / 2),
