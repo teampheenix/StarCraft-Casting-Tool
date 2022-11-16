@@ -1,14 +1,15 @@
-appdirs >= 1.4.4
-beautifulsoup4 >= 4.10.0
-humanize >= 3.14.0
+appdirs == 1.4.4
+beautifulsoup4 == 4.10.0
+humanize == 3.14.0
 keyboard==0.13.5
-markdown2 >= 2.4.2
-Pillow >= 9.0.1; platform_system == 'Windows'
-PyInstaller >= 4.9
-pyinstaller-hooks-contrib >= 2022.1
-pywin32 >= 303; platform_system == 'Windows'
-PyQt5 == 5.13.2 # rq.filter: != 5.14.*, != 5.15.*
+markdown2 == 2.4.2
+Pillow == 9.3.0; platform_system == 'Windows'
+PyInstaller == 4.9
+pyinstaller-hooks-contrib == 2022.1
+pywin32 >= 305; platform_system == 'Windows'
+PyQt5 == 5.15.7
 pytesseract >= 0.3.8; platform_system == 'Windows'
-PyUpdater >= 4.0.0
-requests >= 2.27.0
-websockets >= 10.1
+#PyUpdater >= 4.0.0
+git+https://github.com/dennisvang/PyUpdater@multifix
+requests == 2.27.0
+websockets == 10.2
