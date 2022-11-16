@@ -2,8 +2,8 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "StarCraft Casting Tool"
-#define MyAppVersion "2.13.3"
-#define MyDataVersion "2.13.3"
+#define MyAppVersion "2.14.0"
+#define MyDataVersion "2.14.0"
 #define MyAppPublisher "team pheeniX"
 #define MyAppURL "https://teampheenix.github.io/StarCraft-Casting-Tool/"
 #define MyAppExeName "StarCraft-Casting-Tool.exe"
@@ -29,7 +29,7 @@ LicenseFile=..\LICENSE
 ;PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
 OutputBaseFilename=StarCraftCastingTool-{#MyAppVersion}-Setup
-SetupIconFile=C:\Users\tasch\GitHub\StarCraft-Casting-Tool\src\scct.ico
+SetupIconFile=C:\Users\tasch\Documents\GitHub\StarCraft-Casting-Tool\src\scct.ico
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
@@ -45,8 +45,8 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 6.1; Check: not IsAdminInstallMode
 
 [Files]
-Source: "C:\Users\tasch\GitHub\StarCraft-Casting-Tool\inno-setup\StarCraft-Casting-Tool.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\tasch\GitHub\SCCT-archive\SCCT-data-win-{#MyDataVersion}.zip"; DestDir: "{localappdata}\team pheeniX\StarCraft-Casting-Tool\update\"; Flags: ignoreversion
+Source: "C:\Users\tasch\Documents\GitHub\StarCraft-Casting-Tool\inno-setup\StarCraft-Casting-Tool.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\tasch\Documents\GitHub\SCCT-archive\SCCT-data-win-{#MyDataVersion}.zip"; DestDir: "{localappdata}\team pheeniX\StarCraft-Casting-Tool\update\"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
