@@ -140,7 +140,7 @@ def extractData(asset_update, handler=lambda x: None):
         handler(90)
         os.remove(file)
         handler(95)
-        setDataVersion(asset_update.latest)
+        setDataVersion(asset_update.latest_version)
         handler(100)
 
 
