@@ -256,7 +256,7 @@ class MainWindow(QMainWindow):
         languages.append({'handle': 'ru_RU', 'icon': 'ru.png',
                           'name': 'Pусский', 'active': True})
         languages.append({'handle': 'zh_CN', 'icon': 'cn.png',
-                          'name': '中国人', 'active': True})
+                          'name': '简体中文', 'active': True})
 
         for lang in languages:
             myAct = QAction(QIcon(scctool.settings.getResFile(
