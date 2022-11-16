@@ -1,0 +1,1962 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: StarCraft Casting Tool\n"
+"POT-Creation-Date: 2022-11-15 17:17+0800\n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.2\n"
+"X-Poedit-Basepath: ../../../scctool\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: __init__.py:54
+#, python-brace-format
+msgid ""
+"Critical error <i>`{error}`</i>! Please provide the log-file to the "
+"developer of StarCraft Casting Tool. <a href=\"{link}\">{link}</a>"
+msgstr ""
+"严重错误 <i>`{error}`</i>! 请将日志文件提供给 StarCraft Casting Tool的开发"
+"者. <a href=\"{link}\">{link}</a>"
+
+#: __init__.py:58
+msgid "Critical Error"
+msgstr "严重错误"
+
+#: controller.py:101
+msgid "This version is up to date."
+msgstr "已更新至最新版本。"
+
+#: controller.py:553 controller.py:561
+msgid "Specify your Twitch Settings to use this feature"
+msgstr "指定你的Twitch设置以使用该功能"
+
+#: controller.py:556
+msgid ""
+"Automatically update the title of your twitch channel in the background."
+msgstr "在后台自动更新twitch频道的标题。"
+
+#: controller.py:567 controller.py:574
+msgid "Specify your Nightbot Settings to use this feature"
+msgstr "指定你的Nightbot设置以使用该功能"
+
+#: controller.py:568
+msgid "Automatically update the commands of your nightbot in the background."
+msgstr "在后台自动更新nightbot的指令。"
+
+#: controller.py:585 controller.py:592
+msgid "Not available when SC2 is running on a different PC."
+msgstr "当SC2在另一台电脑上运行时不可用。"
+
+#: controller.py:586 view/main.py:1013
+msgid ""
+"Automatically sets the score of your ingame UI-interface at the begining of "
+"a game."
+msgstr "在游戏开始时自动设置游戏内比分。"
+
+#: controller.py:593 view/main.py:1022
+msgid ""
+"Automatically toggles the production tab of your ingame UI-interface at the "
+"begining of a game."
+msgstr "在游戏开始时自动打开建造列表。"
+
+#: controller.py:692
+msgid "New ladder maps have been detected, but automatic download is disabled."
+msgstr "检测到了新天梯地图，但是自动下载被禁止了。"
+
+#: controller.py:695
+msgid "New ladder maps have been detected."
+msgstr "检测到了新天梯地图。"
+
+#: controller.py:699
+msgid "Should {} be download from Liquipedia?"
+msgstr "应该从Liquidpedia下载{}吗？"
+
+#: controller.py:700
+msgid "New Ladder Maps"
+msgstr "新天梯地图"
+
+#: controller.py:708
+msgid "Don't show this message again."
+msgstr "不再展示此消息。"
+
+#: controller.py:726 view/subMisc.py:847
+msgid "Map not found"
+msgstr "未找到地图"
+
+#: controller.py:727 view/subMisc.py:848
+msgid "\"{}\" was not found on Liquipedia."
+msgstr "未在Liquipedia中找到\"{}\"。"
+
+#: controller.py:907
+msgid "Warning: Map '{}' not found!"
+msgstr "警告：地图'{}'未找到！"
+
+#: controller.py:979
+msgid "{} {} Browser Source(s) connected on port {}."
+msgstr "{} {} 个浏览器源在端口{}上连接。"
+
+#: controller.py:1206
+msgid "A new version {} is available."
+msgstr "新版本{}现已可用。"
+
+#: controller.py:1208
+msgid "Update to new version?"
+msgstr "要更新到最新版本吗？"
+
+#: controller.py:1209
+msgid "New StarCraft Casting Tool Version"
+msgstr "新的StarCraft Casting Tool版本"
+
+#: controller.py:1218
+msgid "Don't show on startup."
+msgstr "不在启动时展示。"
+
+#: controller.py:1227
+msgid "A new version {} is available on GitHub!"
+msgstr "全新版本{}已上线Github！"
+
+#: matchcontrol.py:100
+msgid "All Maps"
+msgstr "全部地图"
+
+#: matchcontrol.py:101
+msgid "None Ace Maps"
+msgstr "非Ace地图"
+
+#: matchcontrol.py:102
+msgid "Ace Maps"
+msgstr "Ace地图"
+
+#: matchcontrol.py:103
+msgid "Decided Maps"
+msgstr "已决定的地图"
+
+#: matchcontrol.py:104
+msgid "Decided Maps + 1"
+msgstr "已决定的地图 + 1"
+
+#: matchcontrol.py:105
+msgid "Current Map"
+msgstr "当前地图"
+
+#: matchcontrol.py:106
+msgid "Current and Previous Map"
+msgstr "当前以及之前的地图"
+
+#: matchcontrol.py:107
+msgid "Undecided Maps"
+msgstr "未决定的地图"
+
+#: matchgrabber/ctl.py:68
+msgid "Select Match"
+msgstr "选择比赛"
+
+#: matchgrabber/ctl.py:69
+msgid "Please select a match"
+msgstr "请选择一场比赛"
+
+#: settings/alias.py:59
+msgid "Invalid player name."
+msgstr "不可用的玩家名称。"
+
+#: settings/alias.py:61 settings/alias.py:77 settings/alias.py:93
+msgid "Invalid alias name."
+msgstr "不可用的别名。"
+
+#: settings/alias.py:63 settings/alias.py:79 settings/alias.py:95
+msgid "Alias matches name."
+msgstr "别名与本名相同。"
+
+#: settings/alias.py:66 settings/alias.py:82 settings/alias.py:98
+msgid "Alias {} is already used by {}"
+msgstr "别名{}已经被{}使用。"
+
+#: settings/alias.py:75
+msgid "Invalid team name."
+msgstr "不可用的队伍名称。"
+
+#: settings/alias.py:91
+msgid "Invalid league name."
+msgstr "不可用的联赛名称。"
+
+#: settings/profileManager.py:122 settings/profileManager.py:166
+msgid "You cannot use empty names."
+msgstr "你不能空名称。"
+
+#: settings/profileManager.py:126 settings/profileManager.py:170
+msgid "The name is already in use."
+msgstr "该名称已被使用。"
+
+#: settings/profileManager.py:173
+msgid "Initial profile is not valid."
+msgstr "原始的预设不可用。"
+
+#: tasks/auth.py:44
+msgid "Succesfully recived access to {} - you can close this tab now."
+msgstr "成功连接到{}——你可以关闭该选项卡了。"
+
+#: tasks/nightbot.py:42 tasks/nightbot.py:108 tasks/twitch.py:53
+msgid "Forbidden - Do you have permission?"
+msgstr "禁止——你是否拥有权限？"
+
+#: tasks/nightbot.py:44 tasks/nightbot.py:110 tasks/twitch.py:55
+msgid "Unauthorized - Refresh your token!"
+msgstr "未授权——刷新你的token！"
+
+#: tasks/nightbot.py:46 tasks/nightbot.py:112 tasks/twitch.py:57
+msgid "Too Many Requests."
+msgstr "请求过多。"
+
+#: tasks/nightbot.py:64
+msgid "Nightbot command '{}' was already set to '{}'"
+msgstr "Nightbot指令'{}'已经被设置为'{}'。"
+
+#: tasks/nightbot.py:97
+msgid "Deleted command '{}'"
+msgstr "删除指令'{}'"
+
+#: tasks/nightbot.py:99
+msgid "Updated Nightbot command '{}' to '{}'"
+msgstr "更新Nightbot指令'{}'为'{}'"
+
+#: tasks/twitch.py:40
+msgid "Updated Twitch title of {} to: \"{}\""
+msgstr "更新Twitch标题{}为: \"{}\""
+
+#: tasks/twitch.py:49
+msgid "Not Found - Channel '{}' not found."
+msgstr "未找到——未找到'{}'频道。"
+
+#: tasks/updater.py:227
+msgid "Updated data files!"
+msgstr "更新数据文件！"
+
+#: view/countdown.py:32
+msgid "Static Countdown to date:"
+msgstr "固定倒计时到："
+
+#: view/countdown.py:35
+msgid "Dynamic Countdown duration:"
+msgstr "动态倒计时到："
+
+#: view/countdown.py:51
+msgid "Event description:"
+msgstr "时间描述："
+
+#: view/countdown.py:57
+msgid "Restart countdown when source becomes active"
+msgstr "当源激活时重启倒计时"
+
+#: view/countdown.py:59
+msgid "Start Countdown"
+msgstr "启动倒计时"
+
+#: view/countdown.py:68
+msgid "Set Today"
+msgstr "设置为今天"
+
+#: view/countdown.py:77
+msgid "Set {} min"
+msgstr "S设置为{}分钟"
+
+#: view/main.py:116
+msgid "StarCraft Casting Tool is up to date."
+msgstr "StarCraft Casting Tool已是最新。"
+
+#: view/main.py:118
+msgid "The new version {} is available!"
+msgstr "新版本{}现已可用！"
+
+#: view/main.py:124
+msgid "StarCraft Casting Tool - About"
+msgstr "StarCraft Casting Tool —— 关于"
+
+#: view/main.py:146 view/main.py:438 view/main.py:489 view/main.py:498
+msgid "Settings"
+msgstr "设置"
+
+#: view/main.py:149 view/main.py:297 view/subBrowserSources.py:60
+msgid "Browser Sources"
+msgstr "浏览器源"
+
+#: view/main.py:151 view/main.py:500
+msgid "Edit Settings for all Browser Sources"
+msgstr "为所有浏览器源更改设置"
+
+#: view/main.py:155
+msgid "Twitch && Nightbot"
+msgstr "Twitch && Nightbot"
+
+#: view/main.py:157
+msgid "Edit Intro-Settings and API-Settings for Twitch and Nightbot"
+msgstr "更改Twitch与Nightbot的Intro-Settings和API-Settings"
+
+#: view/main.py:162 view/main.py:505 view/subStyles.py:44
+msgid "Styles"
+msgstr "风格"
+
+#: view/main.py:167 view/main.py:344
+msgid "Misc"
+msgstr "杂项"
+
+#: view/main.py:178
+msgid "Info && Links"
+msgstr "信息 && 链接"
+
+#: view/main.py:181
+msgid "About"
+msgstr "关于"
+
+#: view/main.py:186 view/main.py:538
+msgid "Readme"
+msgstr "说明"
+
+#: view/main.py:193
+msgid "Video Tutorial"
+msgstr "视频教程"
+
+#: view/main.py:199
+msgid "Check for new version"
+msgstr "检查新版本"
+
+#: view/main.py:204 view/main.py:547
+msgid "Changelog"
+msgstr "修改日志"
+
+#: view/main.py:209
+msgid "Open log folder"
+msgstr "打开日志文件夹"
+
+#: view/main.py:253
+msgid "Become a Patron"
+msgstr "成为赞助者"
+
+#: view/main.py:259
+msgid "Donate via PayPal"
+msgstr "通过PayPal赞助"
+
+#: view/main.py:271
+msgid "Language"
+msgstr "语言"
+
+#: view/main.py:300
+msgid "Intro"
+msgstr "介绍"
+
+#: view/main.py:305 view/subBrowserSources.py:77
+msgid "Mapstats"
+msgstr "地图统计"
+
+#: view/main.py:310
+msgid "Score"
+msgstr "分数"
+
+#: view/main.py:313
+msgid "Map Icons Box"
+msgstr "地图图标框"
+
+#: view/main.py:317 view/main.py:320 view/main.py:323 view/main.py:330
+#: view/main.py:333 view/main.py:336
+msgid "Icon Set {}"
+msgstr "图标{}"
+
+#: view/main.py:326
+msgid "Map Icons Landscape"
+msgstr "地图图标横幅"
+
+#: view/main.py:339 view/subStyles.py:236
+msgid "Vetoes"
+msgstr "禁用"
+
+#: view/main.py:346 view/main.py:349
+msgid "Logo {}"
+msgstr "Logo {}"
+
+#: view/main.py:352 view/main.py:355
+msgid "UI Logo {}"
+msgstr "UI Logo {}"
+
+#: view/main.py:358
+msgid "Aligulac (only 1vs1)"
+msgstr "Aligulac （只有1vs1）"
+
+#: view/main.py:361 view/main.py:990 view/subMisc.py:91
+msgid "Countdown"
+msgstr "倒计时"
+
+#: view/main.py:364
+msgid "League (AlphaTL && RSL only)"
+msgstr "联赛 (AlphaTL && RSL only)"
+
+#: view/main.py:367
+msgid "Matchbanner (AlphaTL)"
+msgstr "比赛横幅 (AlphaTL)"
+
+#: view/main.py:375
+msgid "Open Folder"
+msgstr "打开文件夹"
+
+#: view/main.py:396 view/main.py:447
+msgid "Open local URL in Browser"
+msgstr "在浏览器中打开本地URL"
+
+#: view/main.py:403 view/main.py:454
+msgid "Copy local URL to Clipboard"
+msgstr "复制本地URL到剪切板"
+
+#: view/main.py:412 view/main.py:463
+msgid "Open external URL in Browser"
+msgstr "在浏览器中打开外部URL"
+
+#: view/main.py:422 view/main.py:472
+msgid "Copy external URL to Clipboard"
+msgstr "复制外部URL到剪切板"
+
+#: view/main.py:430 view/main.py:480
+msgid "Open File in Browser"
+msgstr "在浏览器中打开文件"
+
+#: view/main.py:591
+msgid "Add Match Tab"
+msgstr "添加比赛页面"
+
+#: view/main.py:599
+msgid "Copy Match Tab"
+msgstr "复制比赛页面"
+
+#: view/main.py:679
+msgid "Match Grabber for AlphaTL, RSL && CTL"
+msgstr "从AlphaTL, RSL && CTL爬取比赛"
+
+#: view/main.py:680
+msgid "Custom Match"
+msgstr "自定义比赛"
+
+#: view/main.py:693
+msgid "Open in Browser"
+msgstr "在浏览器中打开"
+
+#: view/main.py:700 view/main.py:863
+msgid "Match-URL:"
+msgstr "比赛URL："
+
+#: view/main.py:738
+msgid "Load Data from URL"
+msgstr "从URL中加载数据"
+
+#: view/main.py:752
+msgid "Maps:"
+msgstr "地图："
+
+#: view/main.py:756
+msgid "Best of"
+msgstr "BO"
+
+#: view/main.py:762
+msgid "\"Best of\" does not count extended Ace Maps."
+msgstr "Ace战不计入BO数中。"
+
+#: view/main.py:769
+msgid " but at least"
+msgstr " 最少"
+
+#: view/main.py:771
+msgid "Ace extended to"
+msgstr "Ace战包含"
+
+#: view/main.py:785
+msgid "Minimum number of maps played (even if the match is decided already)"
+msgstr "将至少进行地图的数量（即使比赛结果已经确定）"
+
+#: view/main.py:791
+msgid "maps"
+msgstr "地图"
+
+#: view/main.py:798
+msgid "map(s)."
+msgstr "地图。"
+
+#: view/main.py:806
+msgid "Vetoes."
+msgstr "禁用。"
+
+#: view/main.py:814
+msgid "Apply Format"
+msgstr "应用格式"
+
+#: view/main.py:843
+msgid "Modes:"
+msgstr "模式："
+
+#: view/main.py:847
+msgid "All-Kill"
+msgstr "All-Kill"
+
+#: view/main.py:850
+msgid "Winner stays and is automatically placed into the next set"
+msgstr "胜利的玩家将自动进入下一轮"
+
+#: view/main.py:855
+msgid "1vs1"
+msgstr "1vs1"
+
+#: view/main.py:858
+msgid "Select for solo (non-team matches)"
+msgstr "如果是1v1请选择这个"
+
+#: view/main.py:869
+msgid "Optionally specify the Match-URL, e.g., for Nightbot commands"
+msgstr "比赛URL的描述，例如Nightbot指令"
+
+#: view/main.py:872
+msgid "Specify the Match-URL of your Custom Match"
+msgstr "描述自定义比赛的URL"
+
+#: view/main.py:890
+msgid "Reset Match Data"
+msgstr "重置比赛数据"
+
+#: view/main.py:956
+msgid "Tasks"
+msgstr "任务"
+
+#: view/main.py:960
+msgid "Update Twitch Title"
+msgstr "更新Twitch标题"
+
+#: view/main.py:964
+msgid "Update Nightbot"
+msgstr "更新Nightbot"
+
+#: view/main.py:967
+msgid "Reset Score"
+msgstr "重置比分"
+
+#: view/main.py:987
+msgid "Background Tasks"
+msgstr "后台任务"
+
+#: view/main.py:1001
+msgid "Auto Score Update"
+msgstr "自动更新比分"
+
+#: view/main.py:1003
+msgid ""
+"Automatically detects the outcome of SC2 matches that are played/observed in "
+"your SC2-client and updates the score accordingly."
+msgstr "自动从你的SC2客户端中或者比赛结果并更新比分。"
+
+#: view/main.py:1011
+msgid "Set Ingame Score"
+msgstr "设置游戏内比分"
+
+#: view/main.py:1020
+msgid "Toggle Production Tab"
+msgstr "打开建造列表"
+
+#: view/main.py:1029
+msgid "Auto Twitch Update"
+msgstr "自动更新Twitvh"
+
+#: view/main.py:1034
+msgid "Auto Nightbot Update"
+msgstr "自动更新Nightbot"
+
+#: view/main.py:1043 view/main.py:1047
+msgid "Only Windows"
+msgstr "只适用于Windows"
+
+#: view/main.py:1137
+msgid "Applying Custom Match..."
+msgstr "应用自定义比赛中……"
+
+#: view/main.py:1180
+msgid "Match Grabber"
+msgstr "比赛爬虫"
+
+#: view/main.py:1182
+msgid "Collecting data from {}"
+msgstr "从{}收集数据"
+
+#: view/main.py:1185
+msgid "Reading {}..."
+msgstr "读取{}中……"
+
+#: view/main.py:1204
+msgid "Updating Nightbot Command..."
+msgstr "更新Nightbot指令中……"
+
+#: view/main.py:1213
+msgid "Updating Twitch Title..."
+msgstr "更新Twitch标题中……"
+
+#: view/main.py:1222
+msgid "Resetting Score..."
+msgstr "重置比分中……"
+
+#: view/matchdataview.py:47
+msgid "Activate Match"
+msgstr "激活比赛"
+
+#: view/matchdataview.py:61
+msgid "Close Match"
+msgstr "关闭比赛"
+
+#: view/matchdataview.py:193
+msgid "Choose your team"
+msgstr "选择你的队伍"
+
+#: view/matchdataview.py:211
+msgid "Swap teams and logos."
+msgstr "交换队伍与图表。"
+
+#: view/matchdataview.py:214
+msgid "League:"
+msgstr "联赛："
+
+#: view/matchdataview.py:224
+msgid "Maps \\ Teams:"
+msgstr "地图 \\ 队伍："
+
+#: view/matchdataview.py:259
+msgid "Player {} of team {}"
+msgstr "玩家{}来自队伍{}"
+
+#: view/matchdataview.py:289
+msgid "Set the score"
+msgstr "设置比分"
+
+#: view/matchdataview.py:296 view/widgets.py:1754 view/widgets.py:1762
+#: view/widgets.py:1824
+msgid "Map {}"
+msgstr "地图{}"
+
+#: view/matchdataview.py:307
+msgid "Select map on Mapstats Browser Source."
+msgstr "在地图统计浏览器源中选中地图。"
+
+#: view/matchdataview.py:344
+msgid "Map Vetoes"
+msgstr "地图禁用"
+
+#: view/matchdataview.py:369
+msgid "Map Veto {}"
+msgstr "地图禁用{}"
+
+#: view/matchdataview.py:381
+msgid "Select which player/team vetoes."
+msgstr "选择哪个玩家/队伍禁用的地图。"
+
+#: view/matchdataview.py:399 view/matchdataview.py:412
+#: view/matchdataview.py:424 view/subMisc.py:293 view/subMisc.py:306
+#: view/subMisc.py:319 view/widgets.py:822
+msgid "Add Alias"
+msgstr "添加别名"
+
+#: view/matchdataview.py:434
+msgid "Player Alias"
+msgstr "玩家别名"
+
+#: view/matchdataview.py:434 view/matchdataview.py:455
+#: view/matchdataview.py:476 view/widgets.py:805 view/widgets.py:825
+msgid "Name"
+msgstr "名称"
+
+#: view/matchdataview.py:440 view/matchdataview.py:461
+#: view/matchdataview.py:482 view/subMisc.py:86 view/subMisc.py:349
+msgid "Alias"
+msgstr "别名"
+
+#: view/matchdataview.py:440 view/matchdataview.py:461
+#: view/matchdataview.py:482 view/subMisc.py:349
+msgid "Alias of {}"
+msgstr "{}的别名"
+
+#: view/matchdataview.py:449 view/matchdataview.py:470
+#: view/matchdataview.py:491 view/subMisc.py:365 view/subMisc.py:724
+#: view/subMisc.py:770 view/subMisc.py:837 view/subMisc.py:895
+#: view/widgets.py:1513
+msgid "Error"
+msgstr "错误"
+
+#: view/matchdataview.py:455 view/matchdataview.py:476
+msgid "Team Alias"
+msgstr "队伍别名"
+
+#: view/matchdataview.py:786
+msgid "Updating Score..."
+msgstr "更新比分钟……"
+
+#: view/subBrowserSources.py:76
+msgid "Intros"
+msgstr "介绍"
+
+#: view/subBrowserSources.py:79
+msgid "Box Map Icons"
+msgstr "地图图标框"
+
+#: view/subBrowserSources.py:80
+msgid "Landscape Map Icons"
+msgstr "地图图标横幅"
+
+#: view/subBrowserSources.py:81
+msgid "Veto Icons"
+msgstr "禁用图表"
+
+#: view/subBrowserSources.py:153 view/subBrowserSources.py:292
+#: view/subBrowserSources.py:342 view/subBrowserSources.py:380
+msgid "General"
+msgstr "总览"
+
+#: view/subBrowserSources.py:161 view/subBrowserSources.py:300
+#: view/subBrowserSources.py:350 view/subBrowserSources.py:388
+msgid "Style:"
+msgstr "风格："
+
+#: view/subBrowserSources.py:163 view/subBrowserSources.py:302
+#: view/subBrowserSources.py:352 view/subBrowserSources.py:390
+#: view/subBrowserSources.py:438 view/subStyles.py:122 view/subStyles.py:139
+#: view/subStyles.py:156 view/subStyles.py:171 view/subStyles.py:186
+#: view/subStyles.py:201 view/subStyles.py:216 view/subStyles.py:231
+msgid "Show in Browser"
+msgstr "在浏览器中展示"
+
+#: view/subBrowserSources.py:171
+msgid "Current Ladder Map Pool"
+msgstr "当前天梯地图池"
+
+#: view/subBrowserSources.py:172
+msgid "Custom Map Pool (defined below)"
+msgstr "自定义地图池（在下方定义）"
+
+#: view/subBrowserSources.py:173
+msgid "Currently entered Maps only"
+msgstr "只使用当前输入的地图"
+
+#: view/subBrowserSources.py:177
+msgid "Map Pool:"
+msgstr "地图池："
+
+#: view/subBrowserSources.py:179
+msgid "Select the next map automatically"
+msgstr "自动选择下一张地图"
+
+#: view/subBrowserSources.py:184
+msgid "Next Map:"
+msgstr "下一张地图："
+
+#: view/subBrowserSources.py:188
+msgid "Mark already played maps"
+msgstr "标记已比过的地图"
+
+#: view/subBrowserSources.py:193
+msgid "Mark:"
+msgstr "标记："
+
+#: view/subBrowserSources.py:197
+msgid "Mark vetoed maps"
+msgstr "标记被禁用的地图"
+
+#: view/subBrowserSources.py:207
+msgid "Sort currently entered maps"
+msgstr "对当前输入的地图排序"
+
+#: view/subBrowserSources.py:213
+msgid "Sort:"
+msgstr "排序："
+
+#: view/subBrowserSources.py:220
+msgid "Custom Map Pool"
+msgstr "自定义地图池"
+
+#: view/subBrowserSources.py:266
+msgid "Add Map"
+msgstr "添加地图"
+
+#: view/subBrowserSources.py:267
+msgid "Please select a map"
+msgstr "请选择一张地图"
+
+#: view/subBrowserSources.py:278
+msgid "No maps available"
+msgstr "无可用地图"
+
+#: view/subBrowserSources.py:279
+msgid "All available maps have already been added."
+msgstr "所有可用的地图已经被添加。"
+
+#: view/subBrowserSources.py:314 view/subBrowserSources.py:364
+#: view/subBrowserSources.py:403
+msgid "Pixel"
+msgstr "像素"
+
+#: view/subBrowserSources.py:318 view/subBrowserSources.py:368
+#: view/subBrowserSources.py:407
+msgid "Icon Padding:"
+msgstr "图标填充："
+
+#: view/subBrowserSources.py:326 view/subBrowserSources.py:415
+msgid "Icon Set {} Scope"
+msgstr "图表{}范围"
+
+#: view/subBrowserSources.py:432
+msgid "Style"
+msgstr "风格"
+
+#: view/subBrowserSources.py:446
+msgid "Behavior"
+msgstr "表现"
+
+#: view/subBrowserSources.py:449
+msgid "Read player names and order in 1vs1 mode from SCCT instead of SC2"
+msgstr "从SCCT而不是SC2中读取玩家姓名与顺序"
+
+#: view/subBrowserSources.py:457
+msgid "Hotkeys"
+msgstr "快捷键"
+
+#: view/subBrowserSources.py:462
+msgid "Use a single hotkey for both players"
+msgstr "对于两名玩家使用相同的快捷键"
+
+#: view/subBrowserSources.py:467
+msgid "Player 1"
+msgstr "玩家1"
+
+#: view/subBrowserSources.py:468
+msgid "Player 2"
+msgstr "玩家2"
+
+#: view/subBrowserSources.py:469
+msgid "Debug"
+msgstr "调试"
+
+#: view/subBrowserSources.py:475
+msgid ""
+"Player 1 is always the player your observer camera is centered on at start "
+"of a game."
+msgstr "玩家1永远为比赛开始时镜头所在的位置。"
+
+#: view/subBrowserSources.py:481
+msgid "Animation"
+msgstr "动画"
+
+#: view/subBrowserSources.py:488
+msgid "Fly-In"
+msgstr "飞入"
+
+#: view/subBrowserSources.py:489
+msgid "Slide"
+msgstr "滑动"
+
+#: view/subBrowserSources.py:490
+msgid "Fanfare"
+msgstr "隆重"
+
+#: view/subBrowserSources.py:498
+msgid "Animation:"
+msgstr "动画："
+
+#: view/subBrowserSources.py:506
+msgid "Seconds"
+msgstr "秒"
+
+#: view/subBrowserSources.py:509
+msgid "Display Duration:"
+msgstr "显示时间："
+
+#: view/subBrowserSources.py:519 view/subBrowserSources.py:602
+msgid "Sound Volume:"
+msgstr "音量："
+
+#: view/subBrowserSources.py:523
+msgid "Text-to-Speech"
+msgstr "TTS"
+
+#: view/subBrowserSources.py:530
+msgid "Activate Text-to-Speech:"
+msgstr "激活TTS："
+
+#: view/subBrowserSources.py:554
+msgid "Voice:"
+msgstr "声音："
+
+#: view/subBrowserSources.py:566
+msgid "Pitch:"
+msgstr "音高："
+
+#: view/subBrowserSources.py:576
+msgid "Rate:"
+msgstr "速率："
+
+#: view/subBrowserSources.py:591
+msgid "Line:"
+msgstr "内容："
+
+#: view/subBrowserSources.py:605
+#, python-brace-format
+msgid ""
+"Text-to-Speech provided by Google-Cloud is paid for by StarCraft Casting "
+"Tool Patrons. To keep this service up consider becoming a <a "
+"href='{patreon}'>Patron</a> yourself. You can test all voices at {tts}."
+msgstr ""
+"使用Google-Cloud 的TTS由StarCraft Casting Tool的赞助者付费。为了此服务的长期"
+"使用请考虑成为<a href='{patreon}'>Patron</a>。你可以在{tts}测试声音。"
+
+#: view/subBrowserSources.py:634 view/subConnections.py:260
+#: view/subLiquipediaSearch.py:84 view/subMisc.py:945 view/subStyles.py:93
+msgid "Cancel"
+msgstr "取消"
+
+#: view/subBrowserSources.py:638 view/subConnections.py:264 view/subMisc.py:949
+#: view/subStyles.py:97
+msgid "&Save && Close"
+msgstr "保存并退出"
+
+#: view/subBrowserSources.py:639 view/subConnections.py:265 view/subMisc.py:950
+#: view/subStyles.py:98
+msgid "Shortcut: {}"
+msgstr "快捷方式： {}"
+
+#: view/subBrowserSources.py:770 view/subConnections.py:323
+#: view/subMisc.py:1036 view/subStyles.py:436
+msgid "Save data?"
+msgstr "保存数据？"
+
+#: view/subBrowserSources.py:770 view/subConnections.py:323
+msgid "Do you want to save the data?"
+msgstr "你希望保存数据吗？"
+
+#: view/subConnections.py:59
+msgid "Twitch & Nightbot Connections"
+msgstr "Twitch与Nightbot连接"
+
+#: view/subConnections.py:73
+msgid "Twitch"
+msgstr "Twitch"
+
+#: view/subConnections.py:75
+msgid "Nightbot"
+msgstr "Nightbot"
+
+#: view/subConnections.py:100
+msgid "Name of the Twitch channel that should be updated"
+msgstr "你想要更新的Twitch的频道名称"
+
+#: view/subConnections.py:102
+msgid "The connected twitch user needs to have editor rights for this channel."
+msgstr "已连接的Twutch用户需要有修改频道的权限。"
+
+#: view/subConnections.py:115 view/subConnections.py:188
+msgid "Press 'Get' to generate a token"
+msgstr "按下”获取“按钮来生成令牌"
+
+#: view/subConnections.py:117
+msgid "Press 'Get' to generate a new token."
+msgstr "按下”获取“按钮来生成新的令牌。"
+
+#: view/subConnections.py:120 view/subConnections.py:192
+msgid "Get"
+msgstr "获取"
+
+#: view/subConnections.py:126
+msgid "Access-Token:"
+msgstr "访问令牌："
+
+#: view/subConnections.py:137 view/subConnections.py:366
+msgid "Available placeholders:"
+msgstr "可用的占位符："
+
+#: view/subConnections.py:147 view/subConnections.py:374
+msgid "Test"
+msgstr "测试"
+
+#: view/subConnections.py:153
+msgid "Title Template:"
+msgstr "标题模板："
+
+#: view/subConnections.py:159
+msgid "Set Game to 'StarCraft II'"
+msgstr "设置游戏为”StarCraft II“"
+
+#: view/subConnections.py:165
+msgid "Options:"
+msgstr "选项："
+
+#: view/subConnections.py:190
+msgid "Press 'Get' to generate a token."
+msgstr "按下”获取“按钮来生成令牌。"
+
+#: view/subConnections.py:225
+msgid "Add Command"
+msgstr "添加命令"
+
+#: view/subConnections.py:336 view/subConnections.py:422
+msgid "Output:"
+msgstr "输出："
+
+#: view/subConnections.py:364
+msgid "message, e.g.,"
+msgstr "消息，比如,"
+
+#: view/subConnections.py:379
+msgid "Delete"
+msgstr "删除"
+
+#: view/subLiquipediaSearch.py:57
+msgid "Search"
+msgstr "搜索"
+
+#: view/subLiquipediaSearch.py:61
+msgid "Results"
+msgstr "结果"
+
+#: view/subLiquipediaSearch.py:82
+msgid "Use Selected Logo"
+msgstr "使用选择的图标"
+
+#: view/subLiquipediaSearch.py:93
+msgid "Liquipedia Image Search"
+msgstr "搜索Liqidpedia图片"
+
+#: view/subLiquipediaSearch.py:136
+msgid "Results for '{}': {}"
+msgstr "'{}'的结果：{}"
+
+#: view/subLiquipediaSearch.py:177
+msgid "Open on Liquipedia"
+msgstr "在Liquipedia中打开"
+
+#: view/subLiquipediaSearch.py:179
+msgid "Use as Team Logo"
+msgstr "使用队伍图标"
+
+#: view/subLogos.py:44
+msgid "Logo Team 1"
+msgstr "队伍1图标"
+
+#: view/subLogos.py:51 view/subLogos.py:101
+msgid "Load from File"
+msgstr "从文件中加载"
+
+#: view/subLogos.py:54 view/subLogos.py:104
+msgid "Load from URL"
+msgstr "从URL中加载"
+
+#: view/subLogos.py:57 view/subLogos.py:107
+msgid "Search Liquipedia"
+msgstr "搜索Liquipedia"
+
+#: view/subLogos.py:62 view/subLogos.py:112 view/subLogos.py:203
+msgid "Add to Favorites"
+msgstr "添加到收藏"
+
+#: view/subLogos.py:65 view/subLogos.py:115 view/subMisc.py:664
+#: view/widgets.py:1384
+msgid "Remove"
+msgstr "删除"
+
+#: view/subLogos.py:93
+msgid "Logo Team 2"
+msgstr "队伍2图标"
+
+#: view/subLogos.py:121 view/subMisc.py:85
+msgid "Favorites"
+msgstr "收藏"
+
+#: view/subLogos.py:143
+msgid "Last Used"
+msgstr "最后使用的"
+
+#: view/subLogos.py:163 view/subMarkdown.py:35
+msgid "&OK"
+msgstr "&OK"
+
+#: view/subLogos.py:171
+msgid "Logo Manager"
+msgstr "图标管理"
+
+#: view/subLogos.py:184 view/subLogos.py:197
+msgid "Set Team 1 Logo"
+msgstr "设置队伍1图标"
+
+#: view/subLogos.py:186 view/subLogos.py:200
+msgid "Set Team 2 Logo"
+msgstr "设置队伍2图标"
+
+#: view/subLogos.py:188
+msgid "Remove from Favorites"
+msgstr "从收藏中移除"
+
+#: view/subLogos.py:330
+msgid "Select Team Logo"
+msgstr "选择队伍图表"
+
+#: view/subLogos.py:331 view/subMisc.py:745 view/subMisc.py:758
+msgid "Supported Images"
+msgstr "支持的图像"
+
+#: view/subLogos.py:363
+msgid "Logo from URL"
+msgstr "URL中的图标"
+
+#: view/subLogos.py:364
+msgid "URL of Team Logo"
+msgstr "队伍图表的URL"
+
+#: view/subLogos.py:371
+msgid "{} is not a valid URL."
+msgstr "{}不是一个有效的URL。"
+
+#: view/subMisc.py:65
+msgid "Miscellaneous Settings"
+msgstr "杂项设置"
+
+#: view/subMisc.py:84
+msgid "Map Manager"
+msgstr "地图管理"
+
+#: view/subMisc.py:87
+msgid "OCR"
+msgstr "OCR"
+
+#: view/subMisc.py:88
+msgid "AlphaTL && Ingame Score"
+msgstr "AlphaTL与游戏内比分"
+
+#: view/subMisc.py:89
+msgid "SC2 Client API"
+msgstr "SC2客户端API"
+
+#: view/subMisc.py:90
+msgid "Aligulac"
+msgstr "Aligulac"
+
+#: view/subMisc.py:119
+msgid "AlphaTL"
+msgstr "AlphaTL"
+
+#: view/subMisc.py:123
+msgid "Download transparent Banner of the Match"
+msgstr "下载比赛的透明横幅"
+
+#: view/subMisc.py:134
+msgid "Set Ingame Score Task"
+msgstr "设置游戏内比分"
+
+#: view/subMisc.py:138
+msgid "Automatically press Ctrl+X to apply the correct player order ingame"
+msgstr "自动按下Ctrl+X来修正游戏内的玩家顺序"
+
+#: view/subMisc.py:141
+msgid ""
+"This will ensure that the player of the first team is always on the left/top "
+"in the ingame Observer UI."
+msgstr "这将保证来自第一个队伍的玩家将永远在OB界面的左/上方。"
+
+#: view/subMisc.py:149
+msgid "Automatically press Ctrl+N before OCR to display player names"
+msgstr "自动在OCR前按下Ctrl+N已显示玩家姓名"
+
+#: view/subMisc.py:152
+msgid "This is recommended for Standard and Gawliq Observer UI."
+msgstr "对于标准与Gawliq OB界面推荐使用。"
+
+#: view/subMisc.py:159
+msgid "Automatically press Ctrl+Shift+S to display the ingame score"
+msgstr "自动按下Ctrl+Shift+S已显示游戏内比分"
+
+#: view/subMisc.py:162
+msgid ""
+"Ctrl+Shift+S is needed for the WCS-Gameheart Oberserver Overlay, but "
+"disables the sound for other overlays."
+msgstr "Ctrl+Shift+S对于WCS-Gameheart OB界面需要，但是会禁用其他OB界面的声音。"
+
+#: view/subMisc.py:170
+msgid "Automatically press Ctrl+Shift+C to toogle the clan tag"
+msgstr "自动按下Ctrl+Shift+C来切换队伍标记"
+
+#: view/subMisc.py:189
+msgid "Automatically press Ctrl+Shift+R to toogle the race icon "
+msgstr "自动按下Ctrl+Shift+C来切换种族图标 "
+
+#: view/subMisc.py:191
+msgid " time(s)"
+msgstr " 次数"
+
+#: view/subMisc.py:195
+msgid "Activate Blacklist for Ingame Score"
+msgstr "启用游戏内分数黑名单"
+
+#: view/subMisc.py:206
+msgid "Blacklist for Ingame Score"
+msgstr "游戏内分数黑名单"
+
+#: view/subMisc.py:209
+msgid ""
+"Enter your SC2 client usernames to deactivate automatically setting the "
+"ingame score and toogling the production tab when you are playing yourself. "
+"Replays are exempt."
+msgstr ""
+"输入你的SC2用户名已使得当你自己进行游戏时不会自动设置游戏内比分与建造列表。回"
+"放会被豁免。"
+
+#: view/subMisc.py:237
+msgid "Players"
+msgstr "玩家"
+
+#: view/subMisc.py:249
+msgid "Teams"
+msgstr "队伍"
+
+#: view/subMisc.py:257
+msgid "Swap my favorite team always to the left"
+msgstr "使我收藏的队伍永远在左边"
+
+#: view/subMisc.py:276
+msgid ""
+"Player, team, and league aliases are replaced by the actual name when "
+"encountered by the match grabber. Additionally, SC2 player names listed as "
+"aliases are replaced in the intros and used to identify players by the "
+"automatic background tasks \"Auto Score Update\" and \"Set Ingame Score\"."
+msgstr ""
+"玩家与队伍的别名会在使用比赛爬虫的时候被正式名称替代。同时，在别名列表中的SC2"
+"玩家会在介绍中被替换并在后台任务\"比分更新\"与\"设置游戏内比分\"被用来识别玩"
+"家。"
+
+#: view/subMisc.py:287
+msgid "Player Aliases"
+msgstr "玩家别名"
+
+#: view/subMisc.py:295 view/subMisc.py:578
+msgid "Player Name"
+msgstr "玩家名称"
+
+#: view/subMisc.py:300
+msgid "Team Aliases"
+msgstr "队伍别名"
+
+#: view/subMisc.py:308
+msgid "Team Name"
+msgstr "队伍名称"
+
+#: view/subMisc.py:313
+msgid "League Aliases"
+msgstr "联赛别名"
+
+#: view/subMisc.py:321
+msgid "League Name"
+msgstr "联赛名称"
+
+#: view/subMisc.py:374
+msgid "SC2 Client API Address"
+msgstr "SC2客户端API地址"
+
+#: view/subMisc.py:379
+msgid "Listen to SC2 Client API running on a different PC in the network."
+msgstr "监听网络中另一台PC上的SC2客户端API。"
+
+#: view/subMisc.py:396
+msgid "IP address and port of machine running SC2."
+msgstr "运行SC2的计算机的IP地址与端口。"
+
+#: view/subMisc.py:403
+msgid "Test SC2 Client API Connection"
+msgstr "测试SC2客户端API连通性"
+
+#: view/subMisc.py:407
+msgid ""
+"Activate this option if you are using a two computer setup with StarCraft "
+"Casting Tool running on a different PC than your SC2 client. Open the Battle."
+"net launcher on the latter PC, click 'Options', 'Game Settings', and under "
+"SC2, check 'Additional Command Line Arguments', and enter '-clientapi 6119'. "
+"Finally set as network address below: '[Your SC2 PC IP]:6119'."
+msgstr ""
+"激活这个选项如果你在不同的电脑上运行 StarCraft Casting Tool 与SC2。打开战网启"
+"动器在SC2的“选项”——“游戏设置”——“额外命令行参数”中输入“-clientapi 6119”。最后"
+"在下面的网络地址中输入'[你的SC2IP]:6119'。"
+
+#: view/subMisc.py:425
+msgid "Network Address"
+msgstr "网络地址"
+
+#: view/subMisc.py:450
+msgid "Connection Test"
+msgstr "连接测试"
+
+#: view/subMisc.py:455
+msgid "Connection to SC2 client API established!"
+msgstr "成功连接到SC2客户端API！"
+
+#: view/subMisc.py:459
+msgid ""
+"Unable to connect to SC2 client API. Please make sure that SC2 is currently "
+"running on that machine."
+msgstr "无法连接到SC2客户端API。请确认SC2正在本机上运行。"
+
+#: view/subMisc.py:470
+msgid "Optical Character Recognition for Automatic Setting of Ingame Score"
+msgstr "游戏内比分设置OCR"
+
+#: view/subMisc.py:476
+msgid "Activate Optical Character Recognition"
+msgstr "启用OCR"
+
+#: view/subMisc.py:489 view/subMisc.py:514 view/subMisc.py:544
+msgid "Tesseract-OCR Executable"
+msgstr "Tesseract-OCR可执行文件"
+
+#: view/subMisc.py:491
+msgid "Browse..."
+msgstr "浏览……"
+
+#: view/subMisc.py:495
+msgid ""
+"Sometimes the order of players given by the SC2-Client-API differs from the "
+"order in the Observer-UI resulting in a swapped match score. To correct this "
+"via Optical Character Recognition you have to download {} and install and "
+"select the exectuable below, if it is not detected automatically."
+msgstr ""
+"有时SC2API给出的玩家顺序与OB界面的玩家顺序不一致。为了解决这个问题你需要下载"
+"并安装{}，并且在下面选取可执行文件。"
+
+#: view/subMisc.py:528 view/subMisc.py:532 view/subMisc.py:536
+msgid "This feature is only available in Windows."
+msgstr "该特性只在Windows下可用。"
+
+#: view/subMisc.py:543
+msgid "Select Tesseract-OCR Executable"
+msgstr "选取Tesseract-OCR可执行文件"
+
+#: view/subMisc.py:545
+msgid "Executable"
+msgstr "可执行文件"
+
+#: view/subMisc.py:545
+msgid "All files"
+msgstr "全部文件"
+
+#: view/subMisc.py:560
+msgid "Add Aligluac ID"
+msgstr "添加Aligluac ID"
+
+#: view/subMisc.py:565
+msgid "Remove Aligulac ID"
+msgstr "删除Aligulac ID"
+
+#: view/subMisc.py:584
+msgid "Aligulac ID"
+msgstr "Aligulac ID"
+
+#: view/subMisc.py:605
+msgid "Replacement Text"
+msgstr "替代文本"
+
+#: view/subMisc.py:612
+msgid "Update Static Countdown via MatchGrabber"
+msgstr "使用比赛爬虫更新固定倒计时"
+
+#: view/subMisc.py:656
+msgid "Add from Liquipedia"
+msgstr "从Liquipedia中添加"
+
+#: view/subMisc.py:658
+msgid "Add from File"
+msgstr "从文件中添加"
+
+#: view/subMisc.py:660 view/widgets.py:1380
+msgid "Rename"
+msgstr "重命名"
+
+#: view/subMisc.py:662
+msgid "Change Image"
+msgstr "更改图片"
+
+#: view/subMisc.py:673
+msgid "Prompt to download new ladders maps."
+msgstr "立即下载新天梯地图。"
+
+#: view/subMisc.py:678
+msgid "Download Ladder Maps"
+msgstr "下载天梯地图"
+
+#: view/subMisc.py:713 view/subMisc.py:714 view/subMisc.py:764
+#: view/subMisc.py:830
+msgid "Map Name"
+msgstr "地图名"
+
+#: view/subMisc.py:725 view/subMisc.py:771 view/subMisc.py:838
+msgid "\"{}\" is not a valid map name."
+msgstr "\"{}\"不是一个有效的地图名。"
+
+#: view/subMisc.py:729 view/subMisc.py:776 view/subMisc.py:857
+msgid "Duplicate Entry"
+msgstr "重复元素"
+
+#: view/subMisc.py:730 view/subMisc.py:777
+msgid "Map is already in list! Overwrite?"
+msgstr "地图已经在列表中！覆盖它？"
+
+#: view/subMisc.py:744 view/subMisc.py:757
+msgid "Select Map Image (> 500x500px recommended)"
+msgstr "选择地图图标(推荐 > 500x500px)"
+
+#: view/subMisc.py:798
+msgid "Select the type of ladder maps to download"
+msgstr "选择要下载的地图类型"
+
+#: view/subMisc.py:799
+msgid "Please select a map type"
+msgstr "请选择地图类型"
+
+#: view/subMisc.py:821
+msgid "No missing map"
+msgstr "没有匹配的地图"
+
+#: view/subMisc.py:822
+msgid "All of the current ladder maps are already present."
+msgstr "所有天梯地图已经下载。"
+
+#: view/subMisc.py:858
+msgid "Map {} is already in list! Overwrite?"
+msgstr "地图{}已经在列表中！覆盖它？"
+
+#: view/subMisc.py:903
+msgid "Delete map?"
+msgstr "删除地图？"
+
+#: view/subMisc.py:904
+msgid "Delete '{}' permanently?"
+msgstr "永久删除'{}'？"
+
+#: view/subStyles.py:45
+msgid "Colors"
+msgstr "颜色"
+
+#: view/subStyles.py:46
+msgid "Font"
+msgstr "字体"
+
+#: view/subStyles.py:72
+msgid "Style Settings"
+msgstr "风格设置"
+
+#: view/subStyles.py:120
+msgid "Box Map Icons:"
+msgstr "地图图标框："
+
+#: view/subStyles.py:146
+msgid "Landscape Map Icons:"
+msgstr "地图图标横幅："
+
+#: view/subStyles.py:161
+msgid "Score:"
+msgstr "分数："
+
+#: view/subStyles.py:176
+msgid "Intros:"
+msgstr "介绍："
+
+#: view/subStyles.py:191
+msgid "Map Stats:"
+msgstr "地图统计："
+
+#: view/subStyles.py:206
+msgid "Aligulac:"
+msgstr "Aligulac："
+
+#: view/subStyles.py:221
+msgid "Countdown:"
+msgstr "倒计时："
+
+#: view/subStyles.py:242
+msgid ""
+"StarCraft Casting Tools allows you to make your own skins/styles via CSS by "
+"placing an alternative CSS-files into casting_html/src/css/{browser-source}. "
+"If you do so, please share these skins with this project. In case you need "
+"help or just want to share your ideas for new skins join our Discord Server."
+msgstr ""
+"StarCraft Casting Tools 允许你制作自己的皮肤/风格通过替换 casting_html/src/"
+"css/{browser-source} 中的CSS文件。如果你这样做了，请和本项目分享这些皮肤。如"
+"果你需要帮助或者分享你对皮肤的想法请加入我们的Discord服务器。"
+
+#: view/subStyles.py:264
+msgid "Map and Score Icons"
+msgstr "地图与分数图标"
+
+#: view/subStyles.py:267
+msgid "Default Border:"
+msgstr "默认边框："
+
+#: view/subStyles.py:279
+msgid "Win:"
+msgstr "胜利："
+
+#: view/subStyles.py:284
+msgid "Lose:"
+msgstr "失败："
+
+#: view/subStyles.py:289
+msgid "Undecided:"
+msgstr "未确定："
+
+#: view/subStyles.py:294
+msgid "Not played:"
+msgstr "未进行："
+
+#: view/subStyles.py:301
+msgid "Map Stats"
+msgstr "地图统计"
+
+#: view/subStyles.py:304
+msgid "Color 1:"
+msgstr "颜色1："
+
+#: view/subStyles.py:309
+msgid "Color 2:"
+msgstr "颜色2："
+
+#: view/subStyles.py:324
+msgid ""
+"Warning: Using a custom font instead of the regular font defined in the Icon "
+"Styles can lead to unitentional appereance."
+msgstr ""
+"警告：在图标风格中使用自定义字体而不是原生字体可能会导致不可预期的表现。"
+
+#: view/subStyles.py:327
+msgid "The proper way is to create a custom skin."
+msgstr "正确的做法是使用自定义皮肤。"
+
+#: view/subStyles.py:331
+msgid "Activate Custom Font"
+msgstr "启用自定义字体"
+
+#: view/subStyles.py:342
+msgid "Custom Font"
+msgstr "自定义字体"
+
+#: view/widgets.py:186
+msgid "Map Downloader"
+msgstr "地图下载器"
+
+#: view/widgets.py:188 view/widgets.py:369
+msgid "Downloading {}"
+msgstr "下载{}中"
+
+#: view/widgets.py:252
+msgid "Not set"
+msgstr "未设置"
+
+#: view/widgets.py:255
+msgid "Set Hotkey"
+msgstr "设置快捷键"
+
+#: view/widgets.py:258
+msgid "Clear"
+msgstr "清除"
+
+#: view/widgets.py:309
+msgid "Recording Hotkey"
+msgstr "记录快捷键"
+
+#: view/widgets.py:311
+msgid "Press a Hotkey for {}"
+msgstr "按下{}的快捷键"
+
+#: view/widgets.py:367
+msgid "Logo Downloader"
+msgstr "图标下载器"
+
+#: view/widgets.py:423
+msgid "Updater"
+msgstr "升级器"
+
+#: view/widgets.py:425
+msgid "Updating to a new version..."
+msgstr "升级到新版本中……"
+
+#: view/widgets.py:452
+msgid "Downloading a new version: Total file size {}, Time remaining {}."
+msgstr "下载新版本中：总文件大小{}，剩余时间{}."
+
+#: view/widgets.py:499
+msgid "Select"
+msgstr "选择"
+
+#: view/widgets.py:502
+msgid "Default"
+msgstr "默认"
+
+#: view/widgets.py:676
+msgid "Add Entry"
+msgstr "添加项目"
+
+#: view/widgets.py:681
+msgid "Edit Entry"
+msgstr "编辑项目"
+
+#: view/widgets.py:686
+msgid "Remove Entry"
+msgstr "删除项目"
+
+#: view/widgets.py:690
+msgid "Open on Aligulac.com"
+msgstr "在Aligulac.com上打开"
+
+#: view/widgets.py:827
+msgid "Remove with Aliases"
+msgstr "使用别名删除"
+
+#: view/widgets.py:832
+msgid "Remove Alias"
+msgstr "删除别名"
+
+#: view/widgets.py:974
+msgid "Processing..."
+msgstr "处理中……"
+
+#: view/widgets.py:1012
+msgid "Collecting data..."
+msgstr "收集数据……"
+
+#: view/widgets.py:1051
+msgid "Extracting data..."
+msgstr "解压数据……"
+
+#: view/widgets.py:1053
+msgid "Done."
+msgstr "完成。"
+
+#: view/widgets.py:1068
+msgid "Downloading required files: Total file size {}, Time remaining {}."
+msgstr "下载所需要的文件：总文件大小{}，剩余时间{}."
+
+#: view/widgets.py:1365
+msgid "Profile"
+msgstr "预设"
+
+#: view/widgets.py:1368
+msgid "Open current Profile Folder"
+msgstr "打开当前的预设文件夹"
+
+#: view/widgets.py:1372
+msgid "New"
+msgstr "新建"
+
+#: view/widgets.py:1376
+msgid "Duplicate"
+msgstr "复制"
+
+#: view/widgets.py:1388
+msgid "Import as New"
+msgstr "全新导入"
+
+#: view/widgets.py:1392
+msgid "Import && Overwrite"
+msgstr "导入并覆盖"
+
+#: view/widgets.py:1396
+msgid "Export"
+msgstr "导出"
+
+#: view/widgets.py:1420 view/widgets.py:1432
+msgid "Remove Profile"
+msgstr "删除预设"
+
+#: view/widgets.py:1421
+msgid "Are you sure you wish to remove profile '{}'?"
+msgstr "你确定要删除预设'{}'吗？"
+
+#: view/widgets.py:1446
+msgid "Add Profile"
+msgstr "添加预设"
+
+#: view/widgets.py:1447 view/widgets.py:1605
+msgid "Please enter the name of the profile"
+msgstr "请输入预设的名称"
+
+#: view/widgets.py:1459 view/widgets.py:1486 view/widgets.py:1544
+#: view/widgets.py:1616
+msgid "Please enter a valid name"
+msgstr "请输入一个可用的名称"
+
+#: view/widgets.py:1472
+msgid "Duplicate Profile"
+msgstr "复制预设"
+
+#: view/widgets.py:1473
+msgid "Please enter the name of the new profile"
+msgstr "请输入新预设的名称"
+
+#: view/widgets.py:1503 view/widgets.py:1524 view/widgets.py:1557
+msgid "ZIP archive"
+msgstr "ZIP归档"
+
+#: view/widgets.py:1531
+msgid "Import Profile"
+msgstr "导入预设"
+
+#: view/widgets.py:1532
+msgid "Please enter the name of the imported profile"
+msgstr "请输入已导入预设的名称"
+
+#: view/widgets.py:1564
+msgid "Overwrite Profile"
+msgstr "覆盖预设"
+
+#: view/widgets.py:1565
+msgid "Are you sure you wish to overwrite the current profile '{}'?"
+msgstr "你确定你要覆盖当前预设'{}'吗？"
+
+#: view/widgets.py:1582
+msgid "Import & Overwrite Profile"
+msgstr "导入并覆盖预设"
+
+#: view/widgets.py:1604
+msgid "Rename Profile"
+msgstr "重命名预设"
+
+#: view/widgets.py:1634
+msgid ""
+"Enter spire.gg, RSL, Alpha, or Chobo Teamleague Match-URL or search for an "
+"upcoming spire.gg Match."
+msgstr ""
+"输入spire.gg, RSL, Alpha, 或者Chobo Teamleague Match-URL 或者搜索即将到来的 "
+"spire.gg 比赛。"
+
+#: view/widgets.py:1728
+msgid "Dynamic:"
+msgstr "动态："
+
+#: view/widgets.py:1745
+msgid "Static:"
+msgstr "静态："
+
+#: view/widgets.py:1750
+msgid "From"
+msgstr "从"
+
+#: view/widgets.py:1757
+msgid "to"
+msgstr "到"
+
+#: view/widgets.py:1773
+msgid "Activate Separate Style:"
+msgstr "启用单独样式："
+
+#~ msgid "Winner Highlight:"
+#~ msgstr "Winner Highlight:"
+
+#~ msgid "Match Format:"
+#~ msgstr "Match Format:"
+
+#~ msgid ""
+#~ "\"Best of 6/4\": First, a Bo5/3 is played and the ace map gets extended "
+#~ "to a Bo3 if needed; Best of 2: Bo3 with only two maps played."
+#~ msgstr ""
+#~ "\"Best of 6/4\": First, a Bo5/3 is played and the ace map gets extended "
+#~ "to a Bo3 if needed; Best of 2: Bo3 with only two maps played."
+
+#~ msgid "New SCC-Tool Version"
+#~ msgstr "New SCC-Tool Version"
+
+#~ msgid "Add to Community 'StarCraft Casting Tool'"
+#~ msgstr "Add to Community 'StarCraft Casting Tool'"
+
+#~ msgid "Language:"
+#~ msgstr "Language:"
+
+#~ msgid "Team & Player"
+#~ msgstr "Team & Player"
+
+#~ msgid "Player"
+#~ msgstr "Player"
+
+#~ msgid "Scope:"
+#~ msgstr "Scope:"
+
+#~ msgid ""
+#~ "StarCraft Casting Tool: Succesfully recived access to {} - you can close "
+#~ "this tab now."
+#~ msgstr ""
+#~ "StarCraft Casting Tool: Succesfully recived access to {} - you can close "
+#~ "this tab now."
+
+#~ msgid ""
+#~ "A new <b>major upgrade</b> to version {} is available. <b>Warning: "
+#~ "Upgrading requires you to redo your streaming setup</b> as the folder "
+#~ "structure has been changed."
+#~ msgstr ""
+#~ "A new <b>major upgrade</b> to version {} is available. <b>Warning: "
+#~ "Upgrading requires you to redo your streaming setup</b> as the folder "
+#~ "structure has been changed."
+
+#~ msgid "<b>Do you really whish to upgrade to the new version now?</b>"
+#~ msgstr "<b>Do you really whish to upgrade to the new version now?</b>"
+
+#~ msgid "Upgrade to SCC-Tool Version 2.0"
+#~ msgstr "Upgrade to SCC-Tool Version 2.0"
+
+#~ msgid "Upgrade to v2.0 release"
+#~ msgstr "Upgrade to v2.0 release"
+
+#~ msgid "Update OB&S Data"
+#~ msgstr "Update OB&S Data"
+
+#~ msgid "Map Pool to be displayed"
+#~ msgstr "Map Pool to be displayed"
+
+#~ msgid "Intro Hotkeys"
+#~ msgstr "Intro Hotkeys"
+
+#~ msgid "Intro Settings"
+#~ msgstr "Intro Settings"
+
+#~ msgid "Text-to-Speech Settings"
+#~ msgstr "Text-to-Speech Settings"
+
+#~ msgid "Intros && Hotkeys"
+#~ msgstr "Intros && Hotkeys"
+
+#~ msgid "Apply"
+#~ msgstr "Apply"
+
+#~ msgid ""
+#~ "Note that to make these changes visible in OBS you have to refresh the "
+#~ "cache of your browser sources."
+#~ msgstr ""
+#~ "Note that to make these changes visible in OBS you have to refresh the "
+#~ "cache of your browser sources."
+
+#~ msgid "Donate"
+#~ msgstr "Donate"
+
+#~ msgid "Provide Player Intros"
+#~ msgstr "Provide Player Intros"
+
+#~ msgid "Update player intros files via SC2-Client-API"
+#~ msgstr "Update player intros files via SC2-Client-API"
+
+#~ msgid "Updating OBS Data..."
+#~ msgstr "Updating OBS Data..."
+
+#~ msgid "Add"
+#~ msgstr "Add"
+
+#~ msgid "Support Images ({})"
+#~ msgstr "Support Images ({})"
+
+#~ msgid "Tesseract-OCR Executable:"
+#~ msgstr "Tesseract-OCR Executable:"
+
+#~ msgid "Specify your FTP Settings to use this feature"
+#~ msgstr "Specify your FTP Settings to use this feature"
+
+#~ msgid ""
+#~ "Automatically uploads all streaming data in the background to a specified "
+#~ "FTP server."
+#~ msgstr ""
+#~ "Automatically uploads all streaming data in the background to a specified "
+#~ "FTP server."
+
+#~ msgid "FTP Transfer in progress..."
+#~ msgstr "FTP Transfer in progress..."
+
+#~ msgid "FTP Upload"
+#~ msgstr "FTP Upload"
+
+#~ msgid "Login error"
+#~ msgstr "Login error"
+
+#~ msgid "FTP server login incorrect!"
+#~ msgstr "FTP server login incorrect!"
+
+#~ msgid "FTP"
+#~ msgstr "FTP"
+
+#~ msgid "FTP server address"
+#~ msgstr "FTP server address"
+
+#~ msgid "Host:"
+#~ msgstr "Host:"
+
+#~ msgid "FTP username"
+#~ msgstr "FTP username"
+
+#~ msgid "Username:"
+#~ msgstr "Username:"
+
+#~ msgid "FTP password"
+#~ msgstr "FTP password"
+
+#~ msgid "Password:"
+#~ msgstr "Password:"
+
+#~ msgid "currently using root directory"
+#~ msgstr "currently using root directory"
+
+#~ msgid "Directory:"
+#~ msgstr "Directory:"
+
+#~ msgid "Test && Setup FTP server"
+#~ msgstr "Test && Setup FTP server"
+
+#~ msgid "FTP Server Setup"
+#~ msgstr "FTP Server Setup"
+
+#~ msgid "Setting up the required file structure on the FTP server..."
+#~ msgstr "Setting up the required file structure on the FTP server..."
+
+#~ msgid "Wrong login data for FTP"
+#~ msgstr "Wrong login data for FTP"
+
+#~ msgid "Message:"
+#~ msgstr "Message:"
+
+#~ msgid "Set Key"
+#~ msgstr "Set Key"
+
+#~ msgid ""
+#~ "{host}:{port} is unreachable. Is OBS Studio with obs-websocket plugin "
+#~ "launched?"
+#~ msgstr ""
+#~ "{host}:{port} is unreachable. Is OBS Studio with obs-websocket plugin "
+#~ "launched?"
+
+#~ msgid "Couldn't auth to obs-websocket. Correct password?"
+#~ msgstr "Couldn't auth to obs-websocket. Correct password?"
+
+#~ msgid "Unkown Error!"
+#~ msgstr "Unkown Error!"
+
+#~ msgid "OBS via Websocket Plugin"
+#~ msgstr "OBS via Websocket Plugin"
+
+#~ msgid "Server Port (Default: 4444)"
+#~ msgstr "Server Port (Default: 4444)"
+
+#~ msgid "Server Port:"
+#~ msgstr "Server Port:"
+
+#~ msgid "recommended"
+#~ msgstr "recommended"
+
+#~ msgid ""
+#~ "Name of the OBS-sources that should automatically be hidden 4.5 sec after "
+#~ "they become visible."
+#~ msgstr ""
+#~ "Name of the OBS-sources that should automatically be hidden 4.5 sec after "
+#~ "they become visible."
+
+#~ msgid "Automatic hide sources"
+#~ msgstr "Automatic hide sources"
+
+#~ msgid "Active:"
+#~ msgstr "Active:"
+
+#~ msgid "Test Connection to OBS"
+#~ msgstr "Test Connection to OBS"
