@@ -953,11 +953,11 @@ msgstr "已连接的Twutch用户需要有修改频道的权限。"
 
 #: view/subConnections.py:115 view/subConnections.py:188
 msgid "Press 'Get' to generate a token"
-msgstr "按下”获取“按钮来生成令牌"
+msgstr "按下”获取“按钮以生成令牌"
 
 #: view/subConnections.py:117
 msgid "Press 'Get' to generate a new token."
-msgstr "按下”获取“按钮来生成新的令牌。"
+msgstr "按下”获取“按钮以生成新的令牌。"
 
 #: view/subConnections.py:120 view/subConnections.py:192
 msgid "Get"
@@ -989,7 +989,7 @@ msgstr "选项："
 
 #: view/subConnections.py:190
 msgid "Press 'Get' to generate a token."
-msgstr "按下”获取“按钮来生成令牌。"
+msgstr "按下”获取“按钮以生成令牌。"
 
 #: view/subConnections.py:225
 msgid "Add Command"
@@ -1150,7 +1150,7 @@ msgstr "设置游戏内比分"
 
 #: view/subMisc.py:138
 msgid "Automatically press Ctrl+X to apply the correct player order ingame"
-msgstr "自动按下Ctrl+X来修正游戏内的玩家顺序"
+msgstr "自动按下Ctrl+X以修正游戏内的玩家顺序"
 
 #: view/subMisc.py:141
 msgid ""
@@ -1160,7 +1160,7 @@ msgstr "这将保证来自第一个队伍的玩家将永远在OB界面的左/上
 
 #: view/subMisc.py:149
 msgid "Automatically press Ctrl+N before OCR to display player names"
-msgstr "自动在OCR前按下Ctrl+N已显示玩家姓名"
+msgstr "自动在OCR前按下Ctrl+N以显示玩家姓名"
 
 #: view/subMisc.py:152
 msgid "This is recommended for Standard and Gawliq Observer UI."
@@ -1168,7 +1168,7 @@ msgstr "对于标准与Gawliq OB界面推荐使用。"
 
 #: view/subMisc.py:159
 msgid "Automatically press Ctrl+Shift+S to display the ingame score"
-msgstr "自动按下Ctrl+Shift+S已显示游戏内比分"
+msgstr "自动按下Ctrl+Shift+S以显示游戏内比分"
 
 #: view/subMisc.py:162
 msgid ""
@@ -1178,11 +1178,11 @@ msgstr "Ctrl+Shift+S对于WCS-Gameheart OB界面需要，但是会禁用其他OB
 
 #: view/subMisc.py:170
 msgid "Automatically press Ctrl+Shift+C to toogle the clan tag"
-msgstr "自动按下Ctrl+Shift+C来切换队伍标记"
+msgstr "自动按下Ctrl+Shift+C以切换队伍标记"
 
 #: view/subMisc.py:189
 msgid "Automatically press Ctrl+Shift+R to toogle the race icon "
-msgstr "自动按下Ctrl+Shift+C来切换种族图标 "
+msgstr "自动按下Ctrl+Shift+C以切换种族图标 "
 
 #: view/subMisc.py:191
 msgid " time(s)"
