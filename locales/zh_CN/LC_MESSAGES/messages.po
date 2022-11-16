@@ -357,7 +357,7 @@ msgstr "分数"
 
 #: view/main.py:313
 msgid "Map Icons Box"
-msgstr "地图图标框"
+msgstr "地图图标"
 
 #: view/main.py:317 view/main.py:320 view/main.py:323 view/main.py:330
 #: view/main.py:333 view/main.py:336
@@ -366,7 +366,7 @@ msgstr "图标{}"
 
 #: view/main.py:326
 msgid "Map Icons Landscape"
-msgstr "地图图标横幅"
+msgstr "地图横幅"
 
 #: view/main.py:339 view/subStyles.py:236
 msgid "Vetoes"
@@ -697,11 +697,11 @@ msgstr "介绍"
 
 #: view/subBrowserSources.py:79
 msgid "Box Map Icons"
-msgstr "地图图标框"
+msgstr "地图图标"
 
 #: view/subBrowserSources.py:80
 msgid "Landscape Map Icons"
-msgstr "地图图标横幅"
+msgstr "地图图标"
 
 #: view/subBrowserSources.py:81
 msgid "Veto Icons"
@@ -797,7 +797,7 @@ msgstr "像素"
 #: view/subBrowserSources.py:318 view/subBrowserSources.py:368
 #: view/subBrowserSources.py:407
 msgid "Icon Padding:"
-msgstr "图标填充："
+msgstr "图标间距："
 
 #: view/subBrowserSources.py:326 view/subBrowserSources.py:415
 msgid "Icon Set {} Scope"
@@ -1447,11 +1447,11 @@ msgstr "风格设置"
 
 #: view/subStyles.py:120
 msgid "Box Map Icons:"
-msgstr "地图图标框："
+msgstr "地图图标："
 
 #: view/subStyles.py:146
 msgid "Landscape Map Icons:"
-msgstr "地图图标横幅："
+msgstr "地图横幅："
 
 #: view/subStyles.py:161
 msgid "Score:"
@@ -1480,9 +1480,9 @@ msgid ""
 "If you do so, please share these skins with this project. In case you need "
 "help or just want to share your ideas for new skins join our Discord Server."
 msgstr ""
-"StarCraft Casting Tools 允许你制作自己的皮肤/风格通过替换 casting_html/src/"
-"css/{browser-source} 中的CSS文件。如果你这样做了，请和本项目分享这些皮肤。如"
-"果你需要帮助或者分享你对皮肤的想法请加入我们的Discord服务器。"
+"本工具允许你制作自己的皮肤/风格通过替换 casting_html/src/css/{browser-"
+"source} 中的CSS文件。若如此做，请和本项目分享这些皮肤。如果你需要帮助或者分享"
+"你对皮肤的想法请加入我们的Discord服务器。"
 
 #: view/subStyles.py:264
 msgid "Map and Score Icons"
