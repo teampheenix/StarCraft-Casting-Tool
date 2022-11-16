@@ -612,7 +612,7 @@ msgstr "选择你的队伍"
 
 #: view/matchdataview.py:211
 msgid "Swap teams and logos."
-msgstr "交换队伍与图表。"
+msgstr "交换队伍与图标。"
 
 #: view/matchdataview.py:214
 msgid "League:"
@@ -705,7 +705,7 @@ msgstr "地图图标"
 
 #: view/subBrowserSources.py:81
 msgid "Veto Icons"
-msgstr "禁用图表"
+msgstr "禁用图标"
 
 #: view/subBrowserSources.py:153 view/subBrowserSources.py:292
 #: view/subBrowserSources.py:342 view/subBrowserSources.py:380
@@ -801,7 +801,7 @@ msgstr "图标间距："
 
 #: view/subBrowserSources.py:326 view/subBrowserSources.py:415
 msgid "Icon Set {} Scope"
-msgstr "图表{}范围"
+msgstr "图标{}范围"
 
 #: view/subBrowserSources.py:432
 msgid "Style"
@@ -1094,7 +1094,7 @@ msgstr "从收藏中移除"
 
 #: view/subLogos.py:330
 msgid "Select Team Logo"
-msgstr "选择队伍图表"
+msgstr "选择队伍图标"
 
 #: view/subLogos.py:331 view/subMisc.py:745 view/subMisc.py:758
 msgid "Supported Images"
@@ -1106,7 +1106,7 @@ msgstr "URL中的图标"
 
 #: view/subLogos.py:364
 msgid "URL of Team Logo"
-msgstr "队伍图表的URL"
+msgstr "队伍图标的URL"
 
 #: view/subLogos.py:371
 msgid "{} is not a valid URL."
