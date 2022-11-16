@@ -93,7 +93,7 @@ def getDataVersion():
 def setDataVersion(version):
     """Write data version to json file."""
     readJsonFile()
-    this.data['data_version'] = version
+    this.data['data_version'] = str(version)
     dumpJsonFile()
 
 

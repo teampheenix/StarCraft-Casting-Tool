@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "StarCraft Casting Tool"
-#define MyAppVersion "2.14.2"
+#define MyAppVersion "2.14.3"
 #define MyDataVersion "2.14.0"
 #define MyAppPublisher "team pheeniX"
 #define MyAppURL "https://teampheenix.github.io/StarCraft-Casting-Tool/"
