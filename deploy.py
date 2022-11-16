@@ -5,8 +5,8 @@ import distutils.dir_util
 from scctool import __version__ as version
 
 if __name__ == "__main__":
-    subprocess.run(f'.\\.venv\\Scripts\\pyupdater.exe pkg --process', shell=True, check=True)
-    subprocess.run(f'.\\.venv\\Scripts\\pyupdater.exe pkg --sign', shell=True, check=True)
+    subprocess.run(f'pyupdater pkg --process', shell=True, check=True)
+    subprocess.run(f'pyupdater pkg --sign', shell=True, check=True)
     archive = '../SCCT-archive'
     distutils.log.set_verbosity(distutils.log.DEBUG)
     distutils.dir_util.copy_tree(

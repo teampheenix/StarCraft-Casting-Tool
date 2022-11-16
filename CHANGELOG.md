@@ -1,7 +1,14 @@
 # Changelog
 
 
-## v2.13.3 (2022-08-08)
+## v2.14.0 (2022-11-16)
+
+### New
+
+* Add Chinese translation. Thanks to ciwomuli!
+
+
+## v2.13.3 (2022-11-16)
 
 ### Fix
 

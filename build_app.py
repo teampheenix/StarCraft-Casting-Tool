@@ -9,4 +9,4 @@ if __name__ == "__main__":
     with open('CHANGELOG.md', 'w', encoding='utf-8') as fh:
         fh.write(text)
     subprocess.run(
-        f'.\\.venv\\Scripts\\pyupdater.exe build --app-version {version} win.spec', shell=True, check=True)
+        f'pyupdater build --app-version {version} win.spec', shell=True, check=True)

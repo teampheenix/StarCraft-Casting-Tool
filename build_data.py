@@ -9,4 +9,4 @@ def make_tarfile(output_filename, source_dir):
 
 if __name__ == "__main__":
     make_tarfile('pyu-data/new/SCCT-data', 'casting_html')
-    subprocess.run(f'.\\.venv\\Scripts\\pyupdater.exe archive --name SCCT-data --version {version}', shell=True, check=True)
+    subprocess.run(f'pyupdater archive --name SCCT-data --version {version}', shell=True, check=True)
