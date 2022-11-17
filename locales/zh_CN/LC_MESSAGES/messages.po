@@ -560,7 +560,7 @@ msgstr "打开建造列表"
 
 #: view/main.py:1029
 msgid "Auto Twitch Update"
-msgstr "自动更新Twitvh"
+msgstr "自动更新Twitch"
 
 #: view/main.py:1034
 msgid "Auto Nightbot Update"
