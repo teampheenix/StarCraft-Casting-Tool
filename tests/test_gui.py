@@ -245,8 +245,6 @@ class TestGUI(object):
         assert (match.getMapScore(set_idx) == score)
 
     def assert_match_format(self):
-        self.main_window.tabs.setCurrentIndex(1)
-        assert self.main_window.tabs.currentIndex() == 1
         for bo in range(1, scctool.settings.max_no_sets - 3):
             for ace_bo in [0, 1, 3, 5]:
                 self.new_tab()
