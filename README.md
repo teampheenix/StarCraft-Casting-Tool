@@ -22,7 +22,6 @@ Due to a crash of my hard drive, I lost the keypack to sign the updates. Therefo
 
 ## Feature List
 
--   **Match Grabber** for [Chobo Team League](https://www.choboteamleague.com/home/)
 -   **Custom Match Format**: Bo1-Bo15, All-Kill format, 1vs1 - including predefined formats for Koprulu, WardiTV, and PSISTORM Gaming Team League.
 -   Two sets of **Map Icons**: Box and Landscape in `casting_html`
 -   **Scoreboard** including team icons in `casting_html`

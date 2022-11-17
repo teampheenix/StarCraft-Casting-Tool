@@ -24,7 +24,7 @@ from scctool.view.subMarkdown import SubwindowMarkdown
 from scctool.view.subMisc import SubwindowMisc
 from scctool.view.subStyles import SubwindowStyles
 from scctool.view.widgets import (GenericProgressDialog, LedIndicator,
-                                  MatchComboBox, MonitoredLineEdit,
+                                  MonitoredLineEdit,
                                   ProfileMenu)
 
 _ = scctool.settings.translation.gettext
@@ -59,7 +59,7 @@ class MainWindow(QMainWindow):
             self.createMenuBar()
 
             mainLayout = QVBoxLayout()
-            mainLayout.addWidget(self.tabs, 0)
+            mainLayout.addWidget(self.tab, 0)
             mainLayout.addWidget(self.matchDataTabWidget, 1)
             # mainLayout.addWidget(self.fromMatchDataBox, 1)
             mainLayout.addWidget(self.lowerTabWidget, 0)
@@ -637,69 +637,9 @@ class MainWindow(QMainWindow):
         """Create tabs in main window."""
         try:
             # Initialize tab screen
-            self.tabs = QTabWidget()
-            self.tab1 = QWidget()
-            self.tab2 = QWidget()
-            # self.tabs.resize(300,200)
+            self.tab = QGroupBox(_("Custom Match"))
 
-            # Add tabs
-            self.tabs.addTab(self.tab1, _(
-                "Match Grabber for CTL"))
-            self.tabs.addTab(self.tab2, _("Custom Match"))
-
-            # Create first tab
-            self.tab1.layout = QVBoxLayout()
-
-            self.le_url = MatchComboBox(self)
-            self.le_url.returnPressed.connect(self.refresh_click)
-
-            minWidth = self.scoreWidth + 2 * self.raceWidth + \
-                2 * self.mimumLineEditWidth + 4 * 6
-            self.le_url.setMinimumWidth(minWidth)
-
-            self.pb_openBrowser = QPushButton(
-                _("Open in Browser"))
-            self.pb_openBrowser.clicked.connect(self.openBrowser_click)
-            width = int((self.scoreWidth + 2 * self.raceWidth + 2
-                         * self.mimumLineEditWidth + 4 * 6) / 2 - 2)
-            self.pb_openBrowser.setMinimumWidth(width)
-
-            container = QHBoxLayout()
-            label = QLabel(_("Match-URL:"))
-            label.setMinimumWidth(80)
-            container.addWidget(label, 0)
-            container.addWidget(self.le_url, 1)
-            button = QPushButton()
-            pixmap = QIcon(
-                scctool.settings.getResFile('chobo.png'))
-            button.setIcon(pixmap)
-            button.clicked.connect(
-                lambda: self.controller.openURL(
-                    "https://www.choboteamleague.com/home"))
-            container.addWidget(button, 0)
-
-            self.tab1.layout = QFormLayout()
-            self.tab1.layout.addRow(container)
-
-            container = QHBoxLayout()
-
-            # self.pb_download = QPushButton("Download Images from URL")
-            # container.addWidget(self.pb_download)
-            label = QLabel()
-            label.setMinimumWidth(80)
-            container.addWidget(label, 0)
-            self.pb_refresh = QPushButton(
-                _("Load Data from URL"))
-            self.pb_refresh.clicked.connect(self.refresh_click)
-            container.addWidget(self.pb_openBrowser, 3)
-            container.addWidget(self.pb_refresh, 3)
-
-            self.tab1.layout.addRow(container)
-            self.tab1.setLayout(self.tab1.layout)
-
-            # Create second tab
-
-            self.tab2.layout = QVBoxLayout()
+            self.tab.layout = QVBoxLayout()
 
             container = QHBoxLayout()
 
@@ -744,7 +684,7 @@ class MainWindow(QMainWindow):
             container.addWidget(
                 QLabel(_("maps") + ". "), 0)
             self.cb_minSets.currentIndexChanged.connect(
-                lambda idx: self.highlightApplyCustom())
+                lambda _: self.highlightApplyCustom())
 
             container.addWidget(self.cb_extend_ace, 0)
 
@@ -790,7 +730,7 @@ class MainWindow(QMainWindow):
 
             self.defaultButtonPalette = self.pb_applycustom.palette()
 
-            self.tab2.layout.addLayout(container)
+            self.tab.layout.addLayout(container)
 
             container = QHBoxLayout()
 
@@ -846,9 +786,9 @@ class MainWindow(QMainWindow):
             self.pb_resetdata.clicked.connect(self.resetdata_click)
             container.addWidget(self.pb_resetdata, 0)
 
-            self.tab2.layout.addLayout(container)
+            self.tab.layout.addLayout(container)
 
-            self.tab2.setLayout(self.tab2.layout)
+            self.tab.setLayout(self.tab.layout)
 
         except Exception:
             module_logger.exception("message")
@@ -1124,33 +1064,6 @@ class MainWindow(QMainWindow):
     def refresh_click(self):
         """Handle click to refresh/load data from an URL."""
         GenericProgressDialog(self, self.refresh_job)
-
-    def refresh_job(self, progress_dialog):
-        """Refresh data gathered by the match grabber."""
-        QApplication.setOverrideCursor(
-            Qt.WaitCursor)
-        try:
-            url = self.le_url.text()
-            progress_dialog.setWindowTitle(_("Match Grabber"))
-            progress_dialog.setLabelText(
-                _("Collecting data from {}".format(url)))
-            progress_dialog.setValue(10)
-            with self.tlock:
-                self.statusBar().showMessage(_('Reading {}...').format(url))
-                msg = self.controller.refreshData(url)
-                self.statusBar().showMessage(msg)
-        except Exception:
-            module_logger.exception("message")
-        finally:
-            QApplication.restoreOverrideCursor()
-
-    def openBrowser_click(self):
-        """Handle request to open URL in browser."""
-        try:
-            url = self.le_url.text()
-            self.controller.openURL(url)
-        except Exception:
-            module_logger.exception("message")
 
     def updatenightbot_click(self):
         """Handle click to change nightbot command."""

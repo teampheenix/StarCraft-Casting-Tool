@@ -148,11 +148,6 @@ class MainController:
     def updateMatchFormat(self):
         """Update match format in forms."""
         try:
-            if(self.matchControl.selectedMatch().getProvider() == "Custom"):
-                self.view.tabs.setCurrentIndex(1)
-            else:
-                self.view.tabs.setCurrentIndex(0)
-
             self.view.cb_allkill.setChecked(
                 self.matchControl.selectedMatch().getAllKill())
 
@@ -179,8 +174,6 @@ class MainController:
             if index >= 0:
                 self.view.cb_minSets.setCurrentIndex(index)
 
-            self.view.le_url.setText(
-                self.matchControl.selectedMatch().getURL())
             self.view.le_url_custom.setText(
                 self.matchControl.selectedMatch().getURL())
 

@@ -1621,21 +1621,6 @@ class ProfileMenu(QMenu):
             return
 
 
-class MatchComboBox(QLineEdit):
-    """Define QLineEdit for the match url."""
-
-    returnPressed = pyqtSignal()
-
-    def __init__(self, parent=None):
-        """Init the combobox."""
-        super().__init__(parent)
-        self.setAlignment(Qt.AlignCenter)
-        tooltip = _('Enter Chobo Teamleague Match-URL.')
-        self.setPlaceholderText(tooltip)
-        self.setToolTip(tooltip)
-        self.returnPressed.connect(self.returnPressed.emit)
-
-
 class ScopeGroupBox(QGroupBox):
     """Define QGroupBox for icon scope."""
 

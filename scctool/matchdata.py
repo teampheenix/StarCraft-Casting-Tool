@@ -106,10 +106,7 @@ class MatchData(QObject):
     # try:
         url = str(url).lower()
 
-        if(url.find('choboteamleague') != -1):
-            chg = self.setProvider("ChoboTeamLeague")
-        else:
-            chg = self.setProvider("Custom")
+        chg = self.setProvider("Custom")
 
         try:
             self.setID(re.findall(r'\d+', url)[-1])
