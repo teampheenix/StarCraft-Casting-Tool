@@ -3,7 +3,7 @@ import string
 
 import pytest
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QInputDialog, QMessageBox
+from PyQt5.QtWidgets import QMessageBox
 
 import scctool.settings
 
@@ -13,8 +13,8 @@ class TestGUI(object):
     def gui_setup(self, qtbot, scct_app):
         self.main_window, self.cntlr = scct_app
         self.qtbot = qtbot
-        self.qtbot.addWidget(self.main_window)
-        self.qtbot.waitForWindowShown(self.main_window)
+        with self.qtbot.waitExposed(self.main_window):
+            self.qtbot.addWidget(self.main_window)
 
     def test_match_formats(self, qtbot, scct_app):
         self.gui_setup(qtbot, scct_app)
@@ -399,64 +399,73 @@ class TestGUI(object):
         for logo_button in [matchWidget.qb_logo1, matchWidget.qb_logo2]:
             self.qtbot.mouseClick(logo_button, Qt.LeftButton)
             logo_dialog = self.main_window.mysubwindows['icons']
-            self.qtbot.waitForWindowShown(logo_dialog)
-            for liquipedia_button in [logo_dialog.pb_liquipedia_1,
-                                      logo_dialog.pb_liquipedia_2]:
-                team = random.choice(teams)
-                self.qtbot.mouseClick(
-                    liquipedia_button, Qt.LeftButton)
-                self.qtbot.waitForWindowShown(logo_dialog.mysubwindow)
-                self.insert_into_widget(
-                    logo_dialog.mysubwindow.qle_search, team, True)
-                assert (logo_dialog.mysubwindow.qle_search.text()
-                        == team)
-                # There is an error that should have been fixed in PyQt5.12.2,
-                # but isn't?
-                # self.qtbot.mouseClick(
-                #     logo_dialog.mysubwindow.searchButton, Qt.LeftButton)
-                #
-                # def check_for_result():
-                #     assert len(logo_dialog.mysubwindow.data) > 0
-                #     assert len(logo_dialog.mysubwindow.nams) > 0
-                #     logo_dialog.mysubwindow.nams
-                #     with qtbot.waitSignal(
-                #             logo_dialog.mysubwindow.nams[0].finished,
-                #             timeout=20000):
-                #         pass
-                # qtbot.waitUntil(check_for_result)
-                # self.qtbot.mouseClick(
-                #     logo_dialog.mysubwindow.selectButton, Qt.LeftButton)
-                self.qtbot.mouseClick(
-                    logo_dialog.mysubwindow.closeButton, Qt.LeftButton)
+            with self.qtbot.waitExposed(logo_dialog):
+                for liquipedia_button in [logo_dialog.pb_liquipedia_1,
+                                        logo_dialog.pb_liquipedia_2]:
+                    team = random.choice(teams)
+                    self.qtbot.mouseClick(
+                        liquipedia_button, Qt.LeftButton)
+                    with self.qtbot.waitExposed(logo_dialog.mysubwindow):
+                        self.insert_into_widget(
+                            logo_dialog.mysubwindow.qle_search, team, True)
+                    assert (logo_dialog.mysubwindow.qle_search.text()
+                            == team)
+                    # There is an error that should have been fixed in PyQt5.12.2,
+                    # but isn't?
+                    # self.qtbot.mouseClick(
+                    #     logo_dialog.mysubwindow.searchButton, Qt.LeftButton)
+                    #
+                    # def check_for_result():
+                    #     assert len(logo_dialog.mysubwindow.data) > 0
+                    #     assert len(logo_dialog.mysubwindow.nams) > 0
+                    #     logo_dialog.mysubwindow.nams
+                    #     with qtbot.waitSignal(
+                    #             logo_dialog.mysubwindow.nams[0].finished,
+                    #             timeout=20000):
+                    #         pass
+                    # qtbot.waitUntil(check_for_result)
+                    # self.qtbot.mouseClick(
+                    #     logo_dialog.mysubwindow.selectButton, Qt.LeftButton)
+                    self.qtbot.mouseClick(
+                        logo_dialog.mysubwindow.closeButton, Qt.LeftButton)
             logo_dialog.closeWindow()
 
     def assert_subwindows(self):
         self.main_window.openBrowserSourcesDialog()
         self.sub_window = self.main_window.mysubwindows['browser']
-        self.qtbot.waitForWindowShown(self.sub_window)
+        with self.qtbot.waitActive(self.sub_window):
+            pass
         self.sub_window.closeWindow()
 
         self.main_window.openMiscDialog()
         self.sub_window = self.main_window.mysubwindows['misc']
-        self.qtbot.waitForWindowShown(self.sub_window)
+        with self.qtbot.waitActive(self.sub_window):
+            pass
         self.sub_window.closeWindow()
 
         self.main_window.openStyleDialog()
         self.sub_window = self.main_window.mysubwindows['styles']
-        self.qtbot.waitForWindowShown(self.sub_window)
+        with self.qtbot.waitActive(self.sub_window):
+            pass
         self.sub_window.closeWindow()
 
         self.main_window.openApiDialog()
         self.sub_window = self.main_window.mysubwindows['connections']
-        self.qtbot.waitForWindowShown(self.sub_window)
+        with self.qtbot.waitActive(self.sub_window):
+            pass
         self.sub_window.closeWindow()
-
-        self.main_window.openReadme()
-        self.sub_window = self.main_window.mysubwindows['readme']
-        self.qtbot.waitForWindowShown(self.sub_window)
-        self.sub_window.close()
 
         self.main_window.openChangelog()
         self.sub_window = self.main_window.mysubwindows['changelog']
-        self.qtbot.waitForWindowShown(self.sub_window)
-        self.sub_window.close()
+        with self.qtbot.waitActive(self.sub_window):
+            pass
+        self.sub_window.destroy()
+
+        self.main_window.openReadme()
+        self.sub_window = self.main_window.mysubwindows['readme']
+        with self.qtbot.waitActive(self.sub_window):
+            pass
+        self.sub_window.destroy()
+
+
+
