@@ -330,8 +330,8 @@ def isSC2onForeground():
     """Detect if SC2-Client is the foreground window (only Windows)."""
     try:
         fg_window_name = GetWindowText(GetForegroundWindow()).lower()
-        sc2 = "StarCraft II".lower()
-        return fg_window_name == sc2
+        sc2 = ["StarCraft II".lower(), "《星际争霸ii》"]
+        return fg_window_name in sc2
     except Exception:
         module_logger.exception("message")
         return False
