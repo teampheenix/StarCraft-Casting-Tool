@@ -1098,7 +1098,7 @@ msgstr "Aligulac"
 
 #: view/subMisc.py:92
 msgid "Countdown && Ticker"
-msgstr "倒计时与结果速览"
+msgstr "倒计时与资讯栏"
 
 #: view/subMisc.py:120
 msgid "Set Ingame Score Task"
@@ -1326,11 +1326,11 @@ msgstr "倒计时结束后文本（存储在 countdown.txt中）"
 
 #: view/subMisc.py:617
 msgid "Ticker"
-msgstr "结果速览"
+msgstr "资讯栏"
 
 #: view/subMisc.py:624
 msgid "Prefix text (in ticker.txt)"
-msgstr "前缀文本（存储在 ticker.txt中）"
+msgstr "资讯栏前缀文本（存储在 ticker.txt中）"
 
 #: view/subMisc.py:657
 msgid "Add from Liquipedia"
