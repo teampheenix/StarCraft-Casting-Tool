@@ -1085,10 +1085,8 @@ msgid "OCR"
 msgstr "OCR"
 
 #: view/subMisc.py:89
-#, fuzzy
-#| msgid "Set Ingame Score"
 msgid "Ingame Score"
-msgstr "设置游戏内比分"
+msgstr "游戏内比分"
 
 #: view/subMisc.py:90
 msgid "SC2 Client API"
@@ -1099,10 +1097,8 @@ msgid "Aligulac"
 msgstr "Aligulac"
 
 #: view/subMisc.py:92
-#, fuzzy
-#| msgid "Countdown"
 msgid "Countdown && Ticker"
-msgstr "倒计时"
+msgstr "倒计时与资讯栏"
 
 #: view/subMisc.py:120
 msgid "Set Ingame Score Task"
@@ -1322,19 +1318,19 @@ msgstr "使用比赛爬虫更新固定倒计时"
 
 #: view/subMisc.py:610
 msgid "Pre-Text (in countdown.txt)"
-msgstr ""
+msgstr "倒计时进行中文本（存储在 countdown.txt中）"
 
 #: view/subMisc.py:612
 msgid "Post-Text (in countdown.txt)"
-msgstr ""
+msgstr "倒计时结束后文本（存储在 countdown.txt中）"
 
 #: view/subMisc.py:617
 msgid "Ticker"
-msgstr ""
+msgstr "资讯栏"
 
 #: view/subMisc.py:624
 msgid "Prefix text (in ticker.txt)"
-msgstr ""
+msgstr "资讯栏前缀文本（存储在 ticker.txt中）"
 
 #: view/subMisc.py:657
 msgid "Add from Liquipedia"
