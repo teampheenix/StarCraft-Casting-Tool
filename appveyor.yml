@@ -44,8 +44,6 @@ install:
     - "pip --version"
     - "pip install -r requirements.txt -U"
     - "pip install -r tests/requirements.txt -U"
-    - "pip install codecov"
-    - "pip install pytest-cov"
     - "pip install -e ."
 
 build: none
@@ -56,5 +54,4 @@ on_finish:
 
 test_script:
     # Split tests into several subprocesses.
-    - "pytest -v --cov=./ --aligulac_api_key=%aligulac_api_key%"
-    - "codecov"
+    - "pytest -v --aligulac_api_key=%aligulac_api_key%"
