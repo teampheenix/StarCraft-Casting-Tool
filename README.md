@@ -35,7 +35,7 @@ Due to a crash of my hard drive, I lost the keypack to sign the updates. Therefo
 -   **Automatic Score Detection** via SC2-Client
 -   **Interaction with SC2-Observer-UI**: Automatically toggle Production Tab and set Score at the start of a Game
 -   Nearly **unlimited Customization** via Skins and CSS
--   French, German, and Russian language support
+-   French, German, Chinese, and Russian language support
 
 ## Discord Server
 
