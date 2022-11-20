@@ -1,6 +1,17 @@
 # Changelog
 
 
+## v2.14.5 (2022-11-20)
+
+### Changes
+
+* Improve Chinese translation and interaction with SC2 client.
+
+* Update locales.
+
+* Remove chobo team league match grabber.
+
+
 ## v2.14.2 (2022-11-16)
 
 ### Fix
