@@ -12,7 +12,7 @@ import scctool.settings.translation
 
 logger = logging.getLogger(__name__)
 
-__version__ = "2.15.0"
+__version__ = "2.15.1"
 __latest_version__ = __version__
 __new_version__ = False
 
