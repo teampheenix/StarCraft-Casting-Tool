@@ -920,7 +920,7 @@ class MatchData(QObject):
         if self.getSolo():
             data['team1'] = self.getPlayer(0, 0)
             data['team2'] = self.getPlayer(1, 0)
-            data['1vs1-team1'] = self.getTeam(self.getNextMap)
+            data['1vs1-team1'] = self.getTeam(0)
             data['1vs1-team2'] = self.getTeam(1)
         else:
             data['team1'] = self.getTeam(0)
