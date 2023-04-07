@@ -1141,6 +1141,12 @@ class MainController:
                 'icon': obj['set_idx'] + 1,
                 'team': obj['team_idx'] + 1,
                 'race': obj['value'].lower()})
+        if obj.get('solo') and obj['set_idx'] == 0:
+            self.websocketThread.sendData2Path(
+            ['score'],
+            'CHANGE_RACE', {
+               'teamid': obj['team_idx'] + 1,
+               'race': obj['value'].lower()})
 
     def handleMapChange(self, obj):
         self.websocketThread.sendData2Path(

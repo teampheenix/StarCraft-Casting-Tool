@@ -42,6 +42,8 @@ function connectWebsocket() {
       }
     } else if (jsonObject.event === "CHANGE_TEXT") {
       changeText(jsonObject.data.id, jsonObject.data.text);
+    } else if (jsonObject.event === "CHANGE_RACE") {
+      changeRace(jsonObject.data.id, jsonObject.data.teamid, jsonObject.data.race);
     } else if (jsonObject.event === "CHANGE_IMAGE") {
       changeImage(jsonObject.data.id, jsonObject.data.img);
     } else if (jsonObject.event === "CHANGE_SCORE") {
@@ -95,11 +97,17 @@ function insertData() {
   $("#bestof").text(data["bestof"]);
   $("#logo1").css("background-image", "url('../" + data["logo1"] + "')");
   $("#logo2").css("background-image", "url('../" + data["logo2"] + "')");
+  $("div.race1").attr("id", data["race1"]);
+  $("div.race2").attr("id", data["race2"]);
   if (data["winner"][0]) {
     $("#team1").removeClass("loser");
     $("#team1").addClass("winner");
+    $("div.race1").removeClass("loser");
+    $("div.race1").addClass("winner");
     $("#team2").removeClass("winner");
     $("#team2").addClass("loser");
+    $("div.race2").removeClass("winner");
+    $("div.race2").addClass("loser");
     $("#1vs1-#team1").removeClass("loser");
     $("#1vs1-#team1").addClass("winner");
     $("#1vs1-#team2").removeClass("winner");
@@ -107,8 +115,12 @@ function insertData() {
   } else if (data["winner"][1]) {
     $("#team2").removeClass("loser");
     $("#team2").addClass("winner");
+    $("div.race2").removeClass("loser");
+    $("div.race2").addClass("winner");
     $("#team1").removeClass("winner");
     $("#team1").addClass("loser");
+    $("div.race1").removeClass("winner");
+    $("div.race1").addClass("loser");
     $("#1vs1-team2").removeClass("loser");
     $("#1vs1-team2").addClass("winner");
     $("#1vs1-team1").removeClass("winner");
@@ -116,8 +128,12 @@ function insertData() {
   } else {
     $("#team1").removeClass("winner");
     $("#team1").removeClass("loser");
+    $("div.race1").removeClass("winner");
+    $("div.race1").removeClass("loser");
     $("#team2").removeClass("winner");
     $("#team2").removeClass("loser");
+    $("div.race2").removeClass("winner");
+    $("div.race2").removeClass("loser");
     $("#1vs1-team1").removeClass("winner");
     $("#1vs1-team1").removeClass("loser");
     $("#1vs1-team2").removeClass("winner");
@@ -206,7 +222,7 @@ function initAnimation(force = true) {
         scaleY: 1.0,
         force3D: true
       })
-      .staggerFromTo([$("#logo1"), $("#logo2")], 0.35, {
+      .staggerFromTo([$("#logo1"), $("#logo2"), $("div.race1"), $("div.race2")], 0.35, {
         scale: 0.0,
         force3D: true
       }, {
@@ -306,6 +322,29 @@ function changeImage(id, new_value) {
 
   function _changeImage(object, new_value) {
     object.css("background-image", "url('../" + new_value + "')");
+  }
+}
+
+function changeRace(id, team, race) {
+  var object = $("div.race" + team.toString());
+  data["race" + team.toString()] = race;
+  storeData("data");
+  if (tweens[id] && tweens[id].isActive()) {
+    tweens[id].kill();
+  }
+  tweens[id] = new TimelineMax();
+  tweens[id].to(object, 0.35, {
+      scale: 0,
+      force3D: true
+    })
+    .call(_changeRace, [object, race])
+    .to(object, 0.35, {
+      scale: 1,
+      force3D: true
+    }, "+=0.25");
+
+  function _changeRace(object, race) {
+    object.attr("id", race);
   }
 }
 

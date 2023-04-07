@@ -666,7 +666,7 @@ class MatchData(QObject):
 
     def getNextRace(self, team_idx):
         """Get the players race of the next undecided set."""
-        player = "Random"
+        player = self.getRace(team_idx, 0)
         for set_idx in range(self.getNoSets()):
             if self.getMapScore(set_idx) == 0:
                 player = self.getRace(team_idx, set_idx)
@@ -731,6 +731,7 @@ class MatchData(QObject):
                 self.__emitSignal(
                     'data', 'race', {'team_idx': team_idx,
                                      'set_idx': set_idx,
+                                     'solo': self.getSolo(),
                                      'value': race})
             return True
         except Exception:
@@ -920,11 +921,15 @@ class MatchData(QObject):
         if self.getSolo():
             data['team1'] = self.getPlayer(0, 0)
             data['team2'] = self.getPlayer(1, 0)
+            data['race1'] = self.getRace(0, 0).lower()
+            data['race2'] = self.getRace(1, 0).lower()
             data['1vs1-team1'] = self.getTeam(0)
             data['1vs1-team2'] = self.getTeam(1)
         else:
             data['team1'] = self.getTeam(0)
             data['team2'] = self.getTeam(1)
+            data['race1'] = ''
+            data['race2'] = ''
             data['1vs1-team1'] = ''
             data['1vs1-team2'] = ''
 
