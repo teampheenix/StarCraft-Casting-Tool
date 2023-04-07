@@ -1,6 +1,13 @@
 # Changelog
 
 
+## v2.15.2 (2023-04-07)
+
+### Fix
+
+* Auto updater fixed.
+
+
 ## v2.15.1 (2023-04-07)
 
 ### Fix
