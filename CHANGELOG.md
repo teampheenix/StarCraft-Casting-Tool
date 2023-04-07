@@ -1,6 +1,13 @@
 # Changelog
 
 
+## v2.15.1 (2023-04-07)
+
+### Fix
+
+* Remove safe_extract.
+
+
 ## v2.15.0 (2023-04-07)
 
 ### New
