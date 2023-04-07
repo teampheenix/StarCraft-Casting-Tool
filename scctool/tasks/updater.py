@@ -140,7 +140,7 @@ def extractData(asset_update, handler=lambda x: None):
         handler(90)
         os.remove(file)
         handler(95)
-        setDataVersion(asset_update.latest_version)
+        setDataVersion(asset_update.latest_version.pyu_format())
         handler(100)
 
 
@@ -181,7 +181,7 @@ class VersionHandler(TasksThread):
 
     def isCompatible(self):
         """Check if data update is needed."""
-        return compareVersions(self.asset_update.latest,
+        return compareVersions(self.asset_update.latest_version.pyu_format(),
                                self.APP_VERSION, 3) < 1
 
     def update_progress(self, data):
@@ -197,17 +197,18 @@ class VersionHandler(TasksThread):
             self.app_update = self.client.update_check(self.APP_NAME,
                                                        self.APP_VERSION,
                                                        channel=channel)
+
             if self.asset_update is not None:
-                self.newData.emit(self.asset_update.latest)
-                module_logger.info("Asset: " + self.asset_update.latest)
+                self.newData.emit(self.asset_update.latest_version.pyu_format())
+                module_logger.info("Asset: " + self.asset_update.latest_version.pyu_format())
                 if self.isCompatible():
                     self.activateTask("update_data")
 
             if self.app_update is not None:
-                scctool.__latest_version__ = self.app_update.latest
+                scctool.__latest_version__ = self.app_update.latest_version.pyu_format()
                 scctool.__new_version__ = True
-                self.newVersion.emit(self.app_update.latest)
-                module_logger.info("App: " + self.app_update.latest)
+                self.newVersion.emit(self.app_update.latest_version.pyu_format())
+                module_logger.info("App: " + self.app_update.latest_version.pyu_format())
             else:
                 self.noNewVersion.emit()
         except Exception:
