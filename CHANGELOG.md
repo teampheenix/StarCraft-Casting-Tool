@@ -1,6 +1,15 @@
 # Changelog
 
 
+## v2.15.0 (2023-04-07)
+
+### New
+
+* Expose player races to score icon in 1vs1.
+
+* Expose team name on score icon in 1vs1 mode.
+
+
 ## v2.14.5 (2022-11-20)
 
 ### Changes
