@@ -191,6 +191,22 @@ div.upper-text-right {
   border-right: 1px solid var(--bcolor);
 }
 
+
+div.middle-text-right {
+  position: absolute;
+  display: unset !important;
+  font-size: 22px;
+  line-height: 100%;
+  bottom: 8%;
+  height: 30%;
+  padding: 5px;
+  width: calc(var(--side) - var(--logo));
+  box-sizing: border-box;
+  left: 0px;
+  text-align: center;
+  border-right: 1px solid var(--bcolor);
+}
+
 div.upper-text-left {
   position: absolute;
   font-size: 40px;
@@ -203,6 +219,21 @@ div.upper-text-left {
   right: 0px;
   text-align: center;
   border-left: 1px solid var(--bcolor);
+}
+
+div.middle-text-left {
+  position: absolute;
+  display: unset !important;
+  font-size: 22px;
+  line-height: 100%;
+  bottom: 8%;
+  height: 30%;
+  padding: 5px;
+  width: calc(var(--side) - var(--logo));
+  box-sizing: border-box;
+  right: 0px;
+  text-align: center;
+  border-right: 1px solid var(--bcolor);
 }
 
 div.box_veryleft {

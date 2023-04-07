@@ -88,6 +88,8 @@ function insertData() {
   storeData("data");
   $("#team1").text(data["team1"]);
   $("#team2").text(data["team2"]);
+  $("#1vs1-team1").text(data["1vs1-team1"]);
+  $("#1vs1-team2").text(data["1vs1-team2"]);
   $("#score1").text(data["score1"]);
   $("#score2").text(data["score2"]);
   $("#bestof").text(data["bestof"]);
@@ -98,16 +100,28 @@ function insertData() {
     $("#team1").addClass("winner");
     $("#team2").removeClass("winner");
     $("#team2").addClass("loser");
+    $("#1vs1-#team1").removeClass("loser");
+    $("#1vs1-#team1").addClass("winner");
+    $("#1vs1-#team2").removeClass("winner");
+    $("#1vs1-#team2").addClass("loser");
   } else if (data["winner"][1]) {
     $("#team2").removeClass("loser");
     $("#team2").addClass("winner");
     $("#team1").removeClass("winner");
     $("#team1").addClass("loser");
+    $("#1vs1-team2").removeClass("loser");
+    $("#1vs1-team2").addClass("winner");
+    $("#1vs1-team1").removeClass("winner");
+    $("#1vs1-team1").addClass("loser");
   } else {
     $("#team1").removeClass("winner");
     $("#team1").removeClass("loser");
     $("#team2").removeClass("winner");
     $("#team2").removeClass("loser");
+    $("#1vs1-team1").removeClass("winner");
+    $("#1vs1-team1").removeClass("loser");
+    $("#1vs1-team2").removeClass("winner");
+    $("#1vs1-team2").removeClass("loser");
   }
   insertIcons();
   $(document).ready(function() {
@@ -121,6 +135,10 @@ function setWinner(winner) {
     $("#team2").removeClass("winner");
     $("#team1").removeClass("loser");
     $("#team2").removeClass("loser");
+    $("#1vs1-team1").removeClass("winner");
+    $("#1vs1-team2").removeClass("winner");
+    $("#1vs1-team1").removeClass("loser");
+    $("#1vs1-team2").removeClass("loser");
     data["winner"][0] = false;
     data["winner"][1] = false;
   } else if (winner === 1) {
@@ -128,6 +146,10 @@ function setWinner(winner) {
     $("#team2").addClass("winner");
     $("#team1").removeClass("winner");
     $("#team1").addClass("loser");
+    $("#1vs1-team2").removeClass("loser");
+    $("#1vs1-team2").addClass("winner");
+    $("#1vs1-team1").removeClass("winner");
+    $("#1vs1-team1").addClass("loser");
     data["winner"][0] = false;
     data["winner"][1] = true;
   } else if (winner === -1) {
@@ -135,6 +157,10 @@ function setWinner(winner) {
     $("#team1").addClass("winner");
     $("#team2").removeClass("winner");
     $("#team2").addClass("loser");
+    $("#1vs1-team1").removeClass("loser");
+    $("#1vs1-team1").addClass("winner");
+    $("#1vs1-team2").removeClass("winner");
+    $("#1vs1-team2").addClass("loser");
     data["winner"][0] = true;
     data["winner"][1] = false;
   }
@@ -188,7 +214,7 @@ function initAnimation(force = true) {
         force3D: true
       }, 0, "-=0.1")
       .staggerFromTo([
-        [$("#team1"), $("#team2")], $("#score"), [$("#score1"), $("#score2")]
+        [$("#team1"), $("#team2"),$("#1vs1-team1"), $("#1vs1-team2")], $("#score"), [$("#score1"), $("#score2")]
       ], 0.35, {
         opacity: "0"
       }, {

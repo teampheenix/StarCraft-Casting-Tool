@@ -1018,7 +1018,12 @@ class MainController:
         self.websocketThread.sendData2Path('vetoes', "DATA", data)
 
     def handleTeamChange(self, obj):
-        if not self.matchControl.activeMatch().getSolo():
+        if self.matchControl.activeMatch().getSolo():
+            self.websocketThread.sendData2Path(
+                'score', 'CHANGE_TEXT',
+                {'id': '1vs1-team{}'.format(obj['idx'] + 1),
+                 'text': obj['value']})
+        else:
             self.websocketThread.sendData2Path(
                 'score', 'CHANGE_TEXT',
                 {'id': 'team{}'.format(obj['idx'] + 1),
