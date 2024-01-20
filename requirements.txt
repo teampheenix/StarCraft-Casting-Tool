@@ -4,7 +4,7 @@ humanize == 3.14.0
 keyboard==0.13.5
 markdown2 == 2.4.2
 Pillow == 10.0.1; platform_system == 'Windows'
-PyInstaller == 4.9
+PyInstaller == 4.10
 pyinstaller-hooks-contrib == 2022.1
 pywin32 >= 305; platform_system == 'Windows'
 PyQt5 == 5.15.7
