@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: StarCraft Casting Tool\n"
-"POT-Creation-Date: 2022-11-17 21:44+1100\n"
-"PO-Revision-Date: 2022-11-17 21:44+1100\n"
+"POT-Creation-Date: 2024-01-20 10:53+1100\n"
+"PO-Revision-Date: 2024-01-20 10:54+1100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 3.2\n"
+"X-Generator: Poedit 3.4.2\n"
 "X-Poedit-Basepath: ../../../scctool\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -109,23 +109,23 @@ msgstr "Attention: Carte '{}' introuvable!"
 msgid "{} {} Browser Source(s) connected on port {}."
 msgstr "{} {} Source(s) du navigateur connectée(s) sur le port {}."
 
-#: controller.py:1195
+#: controller.py:1206
 msgid "A new version {} is available."
 msgstr "Une nouvelle version {} est disponible."
 
-#: controller.py:1197
+#: controller.py:1208
 msgid "Update to new version?"
 msgstr "Mettre à jour vers la nouvelle version?"
 
-#: controller.py:1198
+#: controller.py:1209
 msgid "New StarCraft Casting Tool Version"
 msgstr "Nouvelle version de StarCraft Casting Tool"
 
-#: controller.py:1207
+#: controller.py:1218
 msgid "Don't show on startup."
 msgstr "Ne pas afficher au démarrage."
 
-#: controller.py:1216
+#: controller.py:1227
 msgid "A new version {} is available on GitHub!"
 msgstr "Une nouvelle version {} est disponible sur GitHub!"
 
@@ -241,7 +241,7 @@ msgstr "Mis à jour le titre Twitch de {} à: \"{}\""
 msgid "Not Found - Channel '{}' not found."
 msgstr "Introuvable - Chaine '{}' introuvable."
 
-#: tasks/updater.py:227
+#: tasks/updater.py:228
 msgid "Updated data files!"
 msgstr "Fichiers de données mise à jour!"
 
@@ -658,8 +658,6 @@ msgid "Error"
 msgstr "Erreur"
 
 #: view/matchdataview.py:455 view/matchdataview.py:476
-#, fuzzy
-#| msgid "Team Aliases"
 msgid "Team Alias"
 msgstr "Alias de l'équipe"
 
@@ -738,10 +736,8 @@ msgid "Mark vetoed maps"
 msgstr ""
 
 #: view/subBrowserSources.py:207
-#, fuzzy
-#| msgid "Currently entered Maps only"
 msgid "Sort currently entered maps"
-msgstr "Carte enregistré actuellement seulement"
+msgstr ""
 
 #: view/subBrowserSources.py:213
 msgid "Sort:"
@@ -775,7 +771,7 @@ msgstr "Pixel"
 #: view/subBrowserSources.py:318 view/subBrowserSources.py:368
 #: view/subBrowserSources.py:407
 msgid "Icon Padding:"
-msgstr "Espacement des icones"
+msgstr "Espacement des icons:"
 
 #: view/subBrowserSources.py:326 view/subBrowserSources.py:415
 msgid "Icon Set {} Scope"
@@ -1105,10 +1101,8 @@ msgid "OCR"
 msgstr "OCR"
 
 #: view/subMisc.py:89
-#, fuzzy
-#| msgid "Set Ingame Score"
 msgid "Ingame Score"
-msgstr "Régler le pointage dans le jeu"
+msgstr ""
 
 #: view/subMisc.py:90
 msgid "SC2 Client API"
@@ -1206,23 +1200,12 @@ msgid "Swap my favorite team always to the left"
 msgstr "Changer de place mon équipe favorite toujours à gauche"
 
 #: view/subMisc.py:262
-#, fuzzy
-#| msgid ""
-#| "Player and team aliases are replaced by the actual name when encountered "
-#| "by the match grabber. Additionally, SC2 player names listed as aliases "
-#| "are replaced in the intros and used to identify players by the automatic "
-#| "background tasks \"Auto Score Update\" and \"Set Ingame Score\"."
 msgid ""
 "Player, team, and league aliases are replaced by the actual name when "
 "encountered by the match grabber. Additionally, SC2 player names listed as "
 "aliases are replaced in the intros and used to identify players by the "
 "automatic background tasks \"Auto Score Update\" and \"Set Ingame Score\"."
 msgstr ""
-"Les alias des joueurs et des équipes sont remplacés par les noms actuels "
-"lorsque reconnus par le match grabber. De plus, les noms des joueurs de SC2 "
-"indiqués comme alias sont remplacés dans les intros et utilisé pour "
-"identifier les joueurs par les tâches en arrière-plan \"Mis à jour du "
-"pointage automatique\" et \"Régler le pointage dans le jeu\"."
 
 #: view/subMisc.py:273
 msgid "Player Aliases"
@@ -1241,16 +1224,12 @@ msgid "Team Name"
 msgstr "Nom de l'équipe"
 
 #: view/subMisc.py:299
-#, fuzzy
-#| msgid "Team Aliases"
 msgid "League Aliases"
-msgstr "Alias de l'équipe"
+msgstr ""
 
 #: view/subMisc.py:307
-#, fuzzy
-#| msgid "Team Name"
 msgid "League Name"
-msgstr "Nom de l'équipe"
+msgstr ""
 
 #: view/subMisc.py:360
 msgid "SC2 Client API Address"

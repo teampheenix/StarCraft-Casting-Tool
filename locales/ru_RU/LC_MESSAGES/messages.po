@@ -1,17 +1,17 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: StarCraft Casting Tool\n"
-"POT-Creation-Date: 2022-11-17 21:44+1100\n"
-"PO-Revision-Date: 2022-11-17 21:44+1100\n"
+"POT-Creation-Date: 2024-01-20 10:54+1100\n"
+"PO-Revision-Date: 2024-01-20 10:55+1100\n"
 "Last-Translator: \n"
 "Language-Team: Mayhem, TanTall\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 3.2\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Poedit 3.4.2\n"
 "X-Poedit-Basepath: ../../..\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: scctool\n"
@@ -114,23 +114,23 @@ msgstr "Внимание: Карта '{}' Не найдена!"
 msgid "{} {} Browser Source(s) connected on port {}."
 msgstr "{} {} Источник (и) браузера подключен к порту {}."
 
-#: scctool/controller.py:1195
+#: scctool/controller.py:1206
 msgid "A new version {} is available."
 msgstr "Доступна новая версия {}."
 
-#: scctool/controller.py:1197
+#: scctool/controller.py:1208
 msgid "Update to new version?"
 msgstr "Загрузить новую версию?"
 
-#: scctool/controller.py:1198
+#: scctool/controller.py:1209
 msgid "New StarCraft Casting Tool Version"
 msgstr "Новая версия StarCraft Casting Tool"
 
-#: scctool/controller.py:1207
+#: scctool/controller.py:1218
 msgid "Don't show on startup."
 msgstr "Не показывать при запуске."
 
-#: scctool/controller.py:1216
+#: scctool/controller.py:1227
 msgid "A new version {} is available on GitHub!"
 msgstr "Новая версия {} доступна на GitHub!"
 
@@ -260,7 +260,7 @@ msgstr "Изменить заголовок Twitch из {} на: \"{}\""
 msgid "Not Found - Channel '{}' not found."
 msgstr "Не найдено - канал '{}' не найден."
 
-#: scctool/tasks/updater.py:227
+#: scctool/tasks/updater.py:228
 msgid "Updated data files!"
 msgstr "Данные обновлены!"
 
@@ -705,10 +705,8 @@ msgid "Error"
 msgstr "Ошибка"
 
 #: scctool/view/matchdataview.py:455 scctool/view/matchdataview.py:476
-#, fuzzy
-#| msgid "Team Aliases"
 msgid "Team Alias"
-msgstr "Псевдонимы команды"
+msgstr ""
 
 #: scctool/view/matchdataview.py:786
 msgid "Updating Score..."
@@ -792,10 +790,8 @@ msgstr "Отметить вето карты"
 
 # Google Translate
 #: scctool/view/subBrowserSources.py:207
-#, fuzzy
-#| msgid "Currently entered Maps only"
 msgid "Sort currently entered maps"
-msgstr "В настоящее время введены только Карты"
+msgstr ""
 
 #: scctool/view/subBrowserSources.py:213
 msgid "Sort:"
@@ -1176,10 +1172,8 @@ msgid "OCR"
 msgstr "OCR"
 
 #: scctool/view/subMisc.py:89
-#, fuzzy
-#| msgid "Set Ingame Score"
 msgid "Ingame Score"
-msgstr "Задать счет"
+msgstr ""
 
 # Google Translate
 #: scctool/view/subMisc.py:90
@@ -1192,10 +1186,8 @@ msgstr "Aligulac"
 
 # Google Translate
 #: scctool/view/subMisc.py:92
-#, fuzzy
-#| msgid "Countdown"
 msgid "Countdown && Ticker"
-msgstr "обратный отсчет"
+msgstr ""
 
 #: scctool/view/subMisc.py:120
 msgid "Set Ingame Score Task"
@@ -1283,22 +1275,12 @@ msgid "Swap my favorite team always to the left"
 msgstr "Поменяйте мою любимую команду всегда налево"
 
 #: scctool/view/subMisc.py:262
-#, fuzzy
-#| msgid ""
-#| "Player and team aliases are replaced by the actual name when encountered "
-#| "by the match grabber. Additionally, SC2 player names listed as aliases "
-#| "are replaced in the intros and used to identify players by the automatic "
-#| "background tasks \"Auto Score Update\" and \"Set Ingame Score\"."
 msgid ""
 "Player, team, and league aliases are replaced by the actual name when "
 "encountered by the match grabber. Additionally, SC2 player names listed as "
 "aliases are replaced in the intros and used to identify players by the "
 "automatic background tasks \"Auto Score Update\" and \"Set Ingame Score\"."
 msgstr ""
-"Псевдонимы игрока и команды заменяются фактическими именами когда их "
-"собирает граббер матчей. Кроме того, имена игроков SC2, перечисленные как "
-"псевдонимы, заменяются в заставках и используются для определения игроков "
-"фоновыми задачами «Автообновление счета» и «Задать счет»."
 
 #: scctool/view/subMisc.py:273
 msgid "Player Aliases"
@@ -1317,16 +1299,12 @@ msgid "Team Name"
 msgstr "Название команды"
 
 #: scctool/view/subMisc.py:299
-#, fuzzy
-#| msgid "Team Aliases"
 msgid "League Aliases"
-msgstr "Псевдонимы команды"
+msgstr ""
 
 #: scctool/view/subMisc.py:307
-#, fuzzy
-#| msgid "Team Name"
 msgid "League Name"
-msgstr "Название команды"
+msgstr ""
 
 # Google Translate
 #: scctool/view/subMisc.py:360
@@ -1529,10 +1507,8 @@ msgstr ""
 
 # Google Translate
 #: scctool/view/subMisc.py:800
-#, fuzzy
-#| msgid "Please select a map"
 msgid "Please select a map type"
-msgstr "Выберите карту"
+msgstr ""
 
 #: scctool/view/subMisc.py:823
 msgid "No missing map"
