@@ -3,7 +3,7 @@ beautifulsoup4 == 4.10.0
 humanize == 3.14.0
 keyboard==0.13.5
 markdown2 == 2.4.2
-Pillow == 9.3.0; platform_system == 'Windows'
+Pillow == 10.0.1; platform_system == 'Windows'
 PyInstaller == 4.9
 pyinstaller-hooks-contrib == 2022.1
 pywin32 >= 305; platform_system == 'Windows'
