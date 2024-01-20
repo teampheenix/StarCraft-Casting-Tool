@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: StarCraft Casting Tool\n"
-"POT-Creation-Date: 2022-11-17 21:43+1100\n"
+"POT-Creation-Date: 2024-01-20 10:48+1100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.2\n"
+"X-Generator: Poedit 3.4.2\n"
 "X-Poedit-Basepath: ../../../scctool\n"
 "X-Poedit-SearchPath-0: .\n"
 
@@ -102,23 +102,23 @@ msgstr "Warnung: Karte '{}' nicht gefunden!"
 msgid "{} {} Browser Source(s) connected on port {}."
 msgstr "{} {} Browser Quellen auf Port {} verbunden."
 
-#: controller.py:1195
+#: controller.py:1206
 msgid "A new version {} is available."
 msgstr "Eine neue Version {} ist verfügbar."
 
-#: controller.py:1197
+#: controller.py:1208
 msgid "Update to new version?"
 msgstr "Auf die neue Version aktualisieren?"
 
-#: controller.py:1198
+#: controller.py:1209
 msgid "New StarCraft Casting Tool Version"
 msgstr "Neue StarCraft Casting Tool Version"
 
-#: controller.py:1207
+#: controller.py:1218
 msgid "Don't show on startup."
 msgstr "Nicht mehr beim Programm-Start zeigen."
 
-#: controller.py:1216
+#: controller.py:1227
 msgid "A new version {} is available on GitHub!"
 msgstr "Die neue Version {} ist bei GitHub verfügbar!"
 
@@ -235,7 +235,7 @@ msgstr "Aktualisiere Twitch Titel von {} auf \"{}\""
 msgid "Not Found - Channel '{}' not found."
 msgstr "Nicht gefunden - Kanal '{}' nicht gefunden."
 
-#: tasks/updater.py:227
+#: tasks/updater.py:228
 msgid "Updated data files!"
 msgstr "Daten aktualisiert!"
 
@@ -289,7 +289,7 @@ msgstr "Browser-Quellen"
 
 #: view/main.py:151 view/main.py:468
 msgid "Edit Settings for all Browser Sources"
-msgstr "Ändere die Einstellungen für alle Browser Quellen."
+msgstr "Ändere die Einstellungen für alle Browser Quellen"
 
 #: view/main.py:155
 msgid "Twitch && Nightbot"
@@ -653,8 +653,6 @@ msgid "Error"
 msgstr "Fehler"
 
 #: view/matchdataview.py:455 view/matchdataview.py:476
-#, fuzzy
-#| msgid "Team Aliases"
 msgid "Team Alias"
 msgstr "Teamaliase"
 
@@ -979,7 +977,7 @@ msgstr "Ausgabe:"
 
 #: view/subConnections.py:364
 msgid "message, e.g.,"
-msgstr "Nachricht, z.B."
+msgstr "Nachricht, z.B.."
 
 #: view/subConnections.py:379
 msgid "Delete"
@@ -1103,10 +1101,8 @@ msgid "OCR"
 msgstr "OCR"
 
 #: view/subMisc.py:89
-#, fuzzy
-#| msgid "Set Ingame Score"
 msgid "Ingame Score"
-msgstr "Setzte Spielstand im Spiel"
+msgstr "Spielstand"
 
 #: view/subMisc.py:90
 msgid "SC2 Client API"
@@ -1117,10 +1113,8 @@ msgid "Aligulac"
 msgstr "Aligulac"
 
 #: view/subMisc.py:92
-#, fuzzy
-#| msgid "Countdown"
 msgid "Countdown && Ticker"
-msgstr "Countdown"
+msgstr "Countdown && Ticker"
 
 #: view/subMisc.py:120
 msgid "Set Ingame Score Task"
@@ -1202,12 +1196,6 @@ msgid "Swap my favorite team always to the left"
 msgstr "Platziere mein Favoriten-Team immer links"
 
 #: view/subMisc.py:262
-#, fuzzy
-#| msgid ""
-#| "Player and team aliases are replaced by the actual name when encountered "
-#| "by the match grabber. Additionally, SC2 player names listed as aliases "
-#| "are replaced in the intros and used to identify players by the automatic "
-#| "background tasks \"Auto Score Update\" and \"Set Ingame Score\"."
 msgid ""
 "Player, team, and league aliases are replaced by the actual name when "
 "encountered by the match grabber. Additionally, SC2 player names listed as "
@@ -1237,16 +1225,12 @@ msgid "Team Name"
 msgstr "Teamname"
 
 #: view/subMisc.py:299
-#, fuzzy
-#| msgid "Team Aliases"
 msgid "League Aliases"
-msgstr "Teamaliase"
+msgstr "Liga Alia"
 
 #: view/subMisc.py:307
-#, fuzzy
-#| msgid "Team Name"
 msgid "League Name"
-msgstr "Teamname"
+msgstr "Liganame"
 
 #: view/subMisc.py:360
 msgid "SC2 Client API Address"
@@ -1368,19 +1352,19 @@ msgstr "Aktualisiere Statischen Countdown über Partie-Kralle"
 
 #: view/subMisc.py:610
 msgid "Pre-Text (in countdown.txt)"
-msgstr ""
+msgstr "Pre-Text (in countdown.txt)"
 
 #: view/subMisc.py:612
 msgid "Post-Text (in countdown.txt)"
-msgstr ""
+msgstr "Post-Text (in countdown.txt)"
 
 #: view/subMisc.py:617
 msgid "Ticker"
-msgstr ""
+msgstr "Ticker"
 
 #: view/subMisc.py:624
 msgid "Prefix text (in ticker.txt)"
-msgstr ""
+msgstr "Prefix text (in ticker.txt)"
 
 #: view/subMisc.py:657
 msgid "Add from Liquipedia"
@@ -1400,7 +1384,7 @@ msgstr "Ändere Bild"
 
 #: view/subMisc.py:674
 msgid "Prompt to download new ladders maps."
-msgstr "Zeige an, wenn neue Ranglistenkarten verfügbar sind"
+msgstr "Zeige an, wenn neue Ranglistenkarten verfügbar sind."
 
 #: view/subMisc.py:679
 msgid "Download Ladder Maps"
@@ -1503,7 +1487,7 @@ msgid ""
 "help or just want to share your ideas for new skins join our Discord Server."
 msgstr ""
 "StarCraft Casting Tools ermöglicht eigne Stile per CSS zu erstellen, indem "
-"alternative CSS-Dateien in casting_html/src/css/{browser-quelle} gelegt "
+"alternative CSS-Dateien in casting_html/src/css/{browser-source} gelegt "
 "werden. Bitte teile deine Stile mit diesem Project. Trete unseren Discord-"
 "Server bei, falls du Hilfe benötigst oder deine Ideen für neue Stile mit uns "
 "teilen möchtest."
@@ -1623,7 +1607,7 @@ msgstr "Eintrag hinzufügen"
 
 #: view/widgets.py:681
 msgid "Edit Entry"
-msgstr "Eintrag editieren."
+msgstr "Eintrag editieren"
 
 #: view/widgets.py:686
 msgid "Remove Entry"
