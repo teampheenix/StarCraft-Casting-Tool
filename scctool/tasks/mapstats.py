@@ -300,7 +300,7 @@ class MapStatsThread(TasksThread):
                 data['spawn-positions'] = info.get('spawn-positions', '')
                 data['refreshed'] = int(time.time())
                 self.newMapData.emit(mymap, data)
-                module_logger.info(f'Map {mymap} found.')
+                module_logger.info(f'Map {mymap} found: {data}')
             except MapNotFound:
                 module_logger.info(f'Map {mymap} not found.')
             except ConnectionError:
@@ -319,7 +319,7 @@ class MapStatsThread(TasksThread):
                 data['zvp'] = stats['zvp']
                 data['pvt'] = stats['pvt']
                 data['refreshed'] = int(time.time())
-                module_logger.info(f'Map {mymap} found.')
+                module_logger.info(f'Map {mymap} found: {data}')
                 self.newMapData.emit(mymap, data)
         finally:
             self.deactivateTask('refresh_stats')
