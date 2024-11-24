@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: StarCraft Casting Tool\n"
-"POT-Creation-Date: 2024-01-20 10:54+1100\n"
-"PO-Revision-Date: 2024-01-20 10:55+1100\n"
+"POT-Creation-Date: 2024-11-24 19:46+1100\n"
+"PO-Revision-Date: 2024-11-24 19:46+1100\n"
 "Last-Translator: \n"
 "Language-Team: Mayhem, TanTall\n"
 "Language: ru\n"
@@ -11,24 +11,19 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 3.5\n"
 "X-Poedit-Basepath: ../../..\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: scctool\n"
 "X-Poedit-SearchPath-1: StarCraftCastingTool.py\n"
 "X-Poedit-SearchPath-2: StarCraftCastingTool.pyw\n"
 
-# Google Translate
-#: scctool/__init__.py:54
+#: scctool/__init__.py:53
 #, python-brace-format
-msgid ""
-"Critical error <i>`{error}`</i>! Please provide the log-file to the "
-"developer of StarCraft Casting Tool. <a href=\"{link}\">{link}</a>"
+msgid "Critical error <i>`{error}`</i>!"
 msgstr ""
-"Критическая ошибка <i>`{error}`</i>! Пожалуйста, предоставьте лог-файл "
-"разработчику StarCraft Casting Tool. <a href=\"{link}\">{link}</a>"
 
-#: scctool/__init__.py:58
+#: scctool/__init__.py:55
 msgid "Critical Error"
 msgstr "Критическая ошибка"
 
@@ -59,14 +54,14 @@ msgstr "Автоматическое обновление команд nightbot 
 msgid "Not available when SC2 is running on a different PC."
 msgstr "Недоступно, если SC2 работает на другом ПК."
 
-#: scctool/controller.py:574 scctool/view/main.py:907
+#: scctool/controller.py:574 scctool/view/main.py:899
 msgid ""
 "Automatically sets the score of your ingame UI-interface at the begining of "
 "a game."
 msgstr ""
 "Автоматически задает счет внутри вашего игрового интерфейса в начале игры."
 
-#: scctool/controller.py:581 scctool/view/main.py:916
+#: scctool/controller.py:581 scctool/view/main.py:908
 msgid ""
 "Automatically toggles the production tab of your ingame UI-interface at the "
 "begining of a game."
@@ -311,17 +306,17 @@ msgstr "Доступна новая версия {}!"
 msgid "StarCraft Casting Tool - About"
 msgstr "StarCraft Casting Tool - О программе"
 
-#: scctool/view/main.py:146 scctool/view/main.py:406 scctool/view/main.py:457
-#: scctool/view/main.py:466
+#: scctool/view/main.py:146 scctool/view/main.py:398 scctool/view/main.py:449
+#: scctool/view/main.py:458
 msgid "Settings"
 msgstr "Настройки"
 
-#: scctool/view/main.py:149 scctool/view/main.py:273
+#: scctool/view/main.py:149 scctool/view/main.py:265
 #: scctool/view/subBrowserSources.py:60
 msgid "Browser Sources"
 msgstr "Ресурсы"
 
-#: scctool/view/main.py:151 scctool/view/main.py:468
+#: scctool/view/main.py:151 scctool/view/main.py:460
 msgid "Edit Settings for all Browser Sources"
 msgstr "Изменить настройки для всех источников браузера"
 
@@ -333,12 +328,12 @@ msgstr "Twitch && Nightbot"
 msgid "Edit Intro-Settings and API-Settings for Twitch and Nightbot"
 msgstr "Редактировать настройки превью и API для Twitch Nightbot"
 
-#: scctool/view/main.py:162 scctool/view/main.py:473
+#: scctool/view/main.py:162 scctool/view/main.py:465
 #: scctool/view/subStyles.py:44
 msgid "Styles"
 msgstr "Стили"
 
-#: scctool/view/main.py:167 scctool/view/main.py:320
+#: scctool/view/main.py:167 scctool/view/main.py:312
 msgid "Misc"
 msgstr "Разное"
 
@@ -350,7 +345,7 @@ msgstr "Информация и ссылки"
 msgid "About"
 msgstr "О программе"
 
-#: scctool/view/main.py:186 scctool/view/main.py:506
+#: scctool/view/main.py:186 scctool/view/main.py:498
 msgid "Readme"
 msgstr "Прочти"
 
@@ -363,7 +358,7 @@ msgstr "Видеоурок"
 msgid "Check for new version"
 msgstr "Проверить наличие обновлений"
 
-#: scctool/view/main.py:204 scctool/view/main.py:515
+#: scctool/view/main.py:204 scctool/view/main.py:507
 msgid "Changelog"
 msgstr "История изменений"
 
@@ -372,202 +367,202 @@ msgstr "История изменений"
 msgid "Open log folder"
 msgstr "Открыть папку журнала"
 
-#: scctool/view/main.py:245
+#: scctool/view/main.py:237
 msgid "Language"
 msgstr "Язык"
 
-#: scctool/view/main.py:276
+#: scctool/view/main.py:268
 msgid "Intro"
 msgstr "Заставк"
 
 # Google Translate
-#: scctool/view/main.py:281 scctool/view/subBrowserSources.py:77
+#: scctool/view/main.py:273 scctool/view/subBrowserSources.py:77
 msgid "Mapstats"
 msgstr "Статистика карт"
 
-#: scctool/view/main.py:286
+#: scctool/view/main.py:278
 msgid "Score"
 msgstr "Счет"
 
-#: scctool/view/main.py:289
+#: scctool/view/main.py:281
 msgid "Map Icons Box"
 msgstr "Пиктограммы карт"
 
-#: scctool/view/main.py:293 scctool/view/main.py:296 scctool/view/main.py:299
-#: scctool/view/main.py:306 scctool/view/main.py:309 scctool/view/main.py:312
+#: scctool/view/main.py:285 scctool/view/main.py:288 scctool/view/main.py:291
+#: scctool/view/main.py:298 scctool/view/main.py:301 scctool/view/main.py:304
 msgid "Icon Set {}"
 msgstr "Набор значков {}"
 
-#: scctool/view/main.py:302
+#: scctool/view/main.py:294
 msgid "Map Icons Landscape"
 msgstr "Карта Иконки Пейзаж"
 
 # Google Translate
-#: scctool/view/main.py:315 scctool/view/subStyles.py:236
+#: scctool/view/main.py:307 scctool/view/subStyles.py:236
 msgid "Vetoes"
 msgstr "Вето"
 
-#: scctool/view/main.py:322 scctool/view/main.py:325
+#: scctool/view/main.py:314 scctool/view/main.py:317
 msgid "Logo {}"
 msgstr "Логотип {}"
 
-#: scctool/view/main.py:328 scctool/view/main.py:331
+#: scctool/view/main.py:320 scctool/view/main.py:323
 msgid "UI Logo {}"
 msgstr "Логотип UI {}"
 
 # Google Translate
-#: scctool/view/main.py:334
+#: scctool/view/main.py:326
 msgid "Aligulac (only 1vs1)"
 msgstr "Aligulac (только 1vs1)"
 
 # Google Translate
-#: scctool/view/main.py:337 scctool/view/main.py:884
+#: scctool/view/main.py:329 scctool/view/main.py:876
 #: scctool/view/subMisc.py:586
 msgid "Countdown"
 msgstr "обратный отсчет"
 
 # Google Translate
-#: scctool/view/main.py:343
+#: scctool/view/main.py:335
 msgid "Open Folder"
 msgstr "Открыть папку"
 
-#: scctool/view/main.py:364 scctool/view/main.py:415
+#: scctool/view/main.py:356 scctool/view/main.py:407
 msgid "Open local URL in Browser"
 msgstr "Открыть локальный URL в браузере"
 
-#: scctool/view/main.py:371 scctool/view/main.py:422
+#: scctool/view/main.py:363 scctool/view/main.py:414
 msgid "Copy local URL to Clipboard"
 msgstr "Скопировать локальный URL в буфер обмена"
 
-#: scctool/view/main.py:380 scctool/view/main.py:431
+#: scctool/view/main.py:372 scctool/view/main.py:423
 msgid "Open external URL in Browser"
 msgstr "Открыть внешний URL в браузере"
 
-#: scctool/view/main.py:390 scctool/view/main.py:440
+#: scctool/view/main.py:382 scctool/view/main.py:432
 msgid "Copy external URL to Clipboard"
 msgstr "Скопировать внешний URL в буфер обмена"
 
-#: scctool/view/main.py:398 scctool/view/main.py:448
+#: scctool/view/main.py:390 scctool/view/main.py:440
 msgid "Open File in Browser"
 msgstr "Открыть файл в браузере"
 
 # Google Translate
-#: scctool/view/main.py:559
+#: scctool/view/main.py:551
 msgid "Add Match Tab"
 msgstr "Добавить игру"
 
 # Google Translate
-#: scctool/view/main.py:567
+#: scctool/view/main.py:559
 msgid "Copy Match Tab"
 msgstr "Скопировать вкладку"
 
-#: scctool/view/main.py:640
+#: scctool/view/main.py:632
 msgid "Custom Match"
 msgstr "Кастомный матч"
 
 # Google Translate
-#: scctool/view/main.py:646
+#: scctool/view/main.py:638
 msgid "Maps:"
 msgstr "Карты:"
 
-#: scctool/view/main.py:650
+#: scctool/view/main.py:642
 msgid "Best of"
 msgstr "Лучший из"
 
-#: scctool/view/main.py:656
+#: scctool/view/main.py:648
 msgid "\"Best of\" does not count extended Ace Maps."
 msgstr "«Лучший из» не считается расширенным Карты Туза."
 
-#: scctool/view/main.py:663
+#: scctool/view/main.py:655
 msgid " but at least"
 msgstr " но как минимум"
 
-#: scctool/view/main.py:665
+#: scctool/view/main.py:657
 msgid "Ace extended to"
 msgstr "Туз продлен до"
 
-#: scctool/view/main.py:679
+#: scctool/view/main.py:671
 msgid "Minimum number of maps played (even if the match is decided already)"
 msgstr "Минимальное количество сыгранных карт (Даже если матч уже завершен)"
 
-#: scctool/view/main.py:685
+#: scctool/view/main.py:677
 msgid "maps"
 msgstr "карты"
 
-#: scctool/view/main.py:692
+#: scctool/view/main.py:684
 msgid "map(s)."
 msgstr "Карта (ы)."
 
 # Google Translate
-#: scctool/view/main.py:700
+#: scctool/view/main.py:692
 msgid "Vetoes."
 msgstr "Вето."
 
-#: scctool/view/main.py:708
+#: scctool/view/main.py:700
 msgid "Apply Format"
 msgstr "Применить формат"
 
-#: scctool/view/main.py:737
+#: scctool/view/main.py:729
 msgid "Modes:"
 msgstr "Режимы работы:"
 
-#: scctool/view/main.py:741
+#: scctool/view/main.py:733
 msgid "All-Kill"
 msgstr "All-Kill"
 
-#: scctool/view/main.py:744
+#: scctool/view/main.py:736
 msgid "Winner stays and is automatically placed into the next set"
 msgstr "Победитель автоматически переносится в следующий сет"
 
-#: scctool/view/main.py:749
+#: scctool/view/main.py:741
 msgid "1vs1"
 msgstr "1vs1"
 
-#: scctool/view/main.py:752
+#: scctool/view/main.py:744
 msgid "Select for solo (non-team matches)"
 msgstr "Выбрать для дуэлей (не командных игр)"
 
-#: scctool/view/main.py:757
+#: scctool/view/main.py:749
 msgid "Match-URL:"
 msgstr "URL матча:"
 
-#: scctool/view/main.py:763
+#: scctool/view/main.py:755
 msgid "Optionally specify the Match-URL, e.g., for Nightbot commands"
 msgstr "Опционально введите URL матча, например для команд Nightbot"
 
-#: scctool/view/main.py:766
+#: scctool/view/main.py:758
 msgid "Specify the Match-URL of your Custom Match"
 msgstr "Введите URL вашего матча"
 
-#: scctool/view/main.py:784
+#: scctool/view/main.py:776
 msgid "Reset Match Data"
 msgstr "Сброс данных матча"
 
-#: scctool/view/main.py:850
+#: scctool/view/main.py:842
 msgid "Tasks"
 msgstr "Задачи"
 
-#: scctool/view/main.py:854
+#: scctool/view/main.py:846
 msgid "Update Twitch Title"
 msgstr "Обновить заголовок на Twitch"
 
-#: scctool/view/main.py:858
+#: scctool/view/main.py:850
 msgid "Update Nightbot"
 msgstr "Обновить Nightbot"
 
-#: scctool/view/main.py:861
+#: scctool/view/main.py:853
 msgid "Reset Score"
 msgstr "Сбросить счет"
 
-#: scctool/view/main.py:881
+#: scctool/view/main.py:873
 msgid "Background Tasks"
 msgstr "Задачи в фоновом режиме"
 
-#: scctool/view/main.py:895
+#: scctool/view/main.py:887
 msgid "Auto Score Update"
 msgstr "Автообновление счета"
 
-#: scctool/view/main.py:897
+#: scctool/view/main.py:889
 msgid ""
 "Automatically detects the outcome of SC2 matches that are played/observed in "
 "your SC2-client and updates the score accordingly."
@@ -575,39 +570,39 @@ msgstr ""
 "Автоматически определяет вывод о текущем матче из вашего клиента SC2 и "
 "обновляет счет."
 
-#: scctool/view/main.py:905
+#: scctool/view/main.py:897
 msgid "Set Ingame Score"
 msgstr "Задать счет"
 
-#: scctool/view/main.py:914
+#: scctool/view/main.py:906
 msgid "Toggle Production Tab"
 msgstr "Включать вкладку \"Производство\""
 
-#: scctool/view/main.py:923
+#: scctool/view/main.py:915
 msgid "Auto Twitch Update"
 msgstr "Автообновление Twitch"
 
-#: scctool/view/main.py:928
+#: scctool/view/main.py:920
 msgid "Auto Nightbot Update"
 msgstr "Автообновление Nightbot"
 
-#: scctool/view/main.py:937 scctool/view/main.py:941
+#: scctool/view/main.py:929 scctool/view/main.py:933
 msgid "Only Windows"
 msgstr "Только Windows"
 
-#: scctool/view/main.py:1031
+#: scctool/view/main.py:1023
 msgid "Applying Custom Match..."
 msgstr "Применение матча..."
 
-#: scctool/view/main.py:1071
+#: scctool/view/main.py:1063
 msgid "Updating Nightbot Command..."
 msgstr "Обновление команды Nightbot..."
 
-#: scctool/view/main.py:1080
+#: scctool/view/main.py:1072
 msgid "Updating Twitch Title..."
 msgstr "Обновление заголовка Twitch..."
 
-#: scctool/view/main.py:1089
+#: scctool/view/main.py:1081
 msgid "Resetting Score..."
 msgstr "Сброс счета..."
 
@@ -966,7 +961,7 @@ msgid "Shortcut: {}"
 msgstr "Горячая клавиша: {}"
 
 #: scctool/view/subBrowserSources.py:770 scctool/view/subConnections.py:323
-#: scctool/view/subMisc.py:1038 scctool/view/subStyles.py:436
+#: scctool/view/subMisc.py:1038 scctool/view/subStyles.py:433
 msgid "Save data?"
 msgstr "Сохранить данные?"
 
@@ -1574,56 +1569,57 @@ msgstr "обратный отсчет:"
 
 # Google Translate
 #: scctool/view/subStyles.py:242
+#, fuzzy
+#| msgid ""
+#| "StarCraft Casting Tools allows you to make your own skins/styles via CSS "
+#| "by placing an alternative CSS-files into casting_html/src/css/{browser-"
+#| "source}. "
 msgid ""
 "StarCraft Casting Tools allows you to make your own skins/styles via CSS by "
-"placing an alternative CSS-files into casting_html/src/css/{browser-source}. "
-"If you do so, please share these skins with this project. In case you need "
-"help or just want to share your ideas for new skins join our Discord Server."
+"placing an alternative CSS-files into casting_html/src/css/{browser-source}."
 msgstr ""
 "StarCraft Casting Tools позволяет создавать собственные скины / стили с "
 "помощью CSS, помещая альтернативные CSS-файлы в casting_html / src / css / "
-"{browser-source}. Если вы это сделаете, поделитесь этими скинами с этим "
-"проектом. Если вам нужна помощь или просто хотите поделиться своими идеями о "
-"новых скинах, присоединяйтесь к нашему Discord Server."
+"{browser-source}."
 
-#: scctool/view/subStyles.py:264
+#: scctool/view/subStyles.py:261
 msgid "Map and Score Icons"
 msgstr "Иконки карты и оценки"
 
-#: scctool/view/subStyles.py:267
+#: scctool/view/subStyles.py:264
 msgid "Default Border:"
 msgstr "Граница по умолчанию:"
 
-#: scctool/view/subStyles.py:279
+#: scctool/view/subStyles.py:276
 msgid "Win:"
 msgstr "Победа:"
 
-#: scctool/view/subStyles.py:284
+#: scctool/view/subStyles.py:281
 msgid "Lose:"
 msgstr "Поражение:"
 
-#: scctool/view/subStyles.py:289
+#: scctool/view/subStyles.py:286
 msgid "Undecided:"
 msgstr "Не определено:"
 
-#: scctool/view/subStyles.py:294
+#: scctool/view/subStyles.py:291
 msgid "Not played:"
 msgstr "Не сыграно:"
 
 # Google Translate
-#: scctool/view/subStyles.py:301
+#: scctool/view/subStyles.py:298
 msgid "Map Stats"
 msgstr "Статистика карт"
 
-#: scctool/view/subStyles.py:304
+#: scctool/view/subStyles.py:301
 msgid "Color 1:"
 msgstr "Цвет 1:"
 
-#: scctool/view/subStyles.py:309
+#: scctool/view/subStyles.py:306
 msgid "Color 2:"
 msgstr "Цвет 2:"
 
-#: scctool/view/subStyles.py:324
+#: scctool/view/subStyles.py:321
 msgid ""
 "Warning: Using a custom font instead of the regular font defined in the Icon "
 "Styles can lead to unitentional appereance."
@@ -1631,15 +1627,15 @@ msgstr ""
 "Предупреждение: Использование пользовательского шрифта вместо обычного, "
 "определенного в стилях значков, может привести к нежелательному виду."
 
-#: scctool/view/subStyles.py:327
+#: scctool/view/subStyles.py:324
 msgid "The proper way is to create a custom skin."
 msgstr "Правильный способ - создать пользовательский скин."
 
-#: scctool/view/subStyles.py:331
+#: scctool/view/subStyles.py:328
 msgid "Activate Custom Font"
 msgstr "Активировать пользовательский шрифт"
 
-#: scctool/view/subStyles.py:342
+#: scctool/view/subStyles.py:339
 msgid "Custom Font"
 msgstr "Пользовательский шрифт"
 
@@ -1853,6 +1849,15 @@ msgstr "в"
 #: scctool/view/widgets.py:1683
 msgid "Activate Separate Style:"
 msgstr "Активировать отдельный стиль:"
+
+# Google Translate
+#, python-brace-format
+#~ msgid ""
+#~ "Critical error <i>`{error}`</i>! Please provide the log-file to the "
+#~ "developer of StarCraft Casting Tool. <a href=\"{link}\">{link}</a>"
+#~ msgstr ""
+#~ "Критическая ошибка <i>`{error}`</i>! Пожалуйста, предоставьте лог-файл "
+#~ "разработчику StarCraft Casting Tool. <a href=\"{link}\">{link}</a>"
 
 #~ msgid "Become a Patron"
 #~ msgstr "Станьте покровителем"

@@ -221,14 +221,6 @@ class MainWindow(QMainWindow):
                 "https://teampheenix.github.io/StarCraft-Casting-Tool/"))
             infoMenu.addAction(websiteAct)
 
-            discordAct = QAction(
-                QIcon(
-                    scctool.settings.getResFile('discord.png')),
-                'Discord', self)
-            discordAct.triggered.connect(lambda: self.controller.openURL(
-                "https://discord.gg/G9hFEfh"))
-            infoMenu.addAction(discordAct)
-
             ixAct = QAction(QIcon(scctool.settings.getResFile(
                 'icon.png')), 'team pheeniX', self)
             ixAct.triggered.connect(

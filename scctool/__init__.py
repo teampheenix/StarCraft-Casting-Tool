@@ -50,14 +50,10 @@ def main():
             app = None
         except Exception as e:
             logger.exception("message")
-            message = _(
-                'Critical error <i>`{error}`</i>! Please provide the log-file'
-                ' to the developer of StarCraft Casting Tool. '
-                '<a href="{link}">{link}</a>')
+            message = _('Critical error <i>`{error}`</i>!')
             QMessageBox.critical(
                 None, _('Critical Error'),
-                message.format(
-                    error=e, link='https://discord.gg/G9hFEfh'),
+                message.format(error=e),
                 QMessageBox.Ok)
             break
 
