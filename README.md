@@ -1,9 +1,6 @@
 [![Release](https://img.shields.io/github/release/teampheenix/StarCraft-Casting-Tool.svg)](https://github.com/teampheenix/StarCraft-Casting-Tool/releases/latest)
-[![Build status](https://ci.appveyor.com/api/projects/status/5g765ntfwpyv4xq4/branch/master?svg=true)](https://ci.appveyor.com/project/2press/starcraft-casting-tool/branch/master)
 [![Downloads](https://img.shields.io/github/downloads/teampheenix/StarCraft-Casting-Tool/total.svg)](https://github.com/teampheenix/StarCraft-Casting-Tool/releases/latest)
 [![GitHub license](https://img.shields.io/github/license/teampheenix/StarCraft-Casting-Tool.svg)](https://github.com/teampheenix/StarCraft-Casting-Tool/blob/master/LICENSE)
-[![Requirements Status](https://requires.io/github/teampheenix/StarCraft-Casting-Tool/requirements.svg?branch=master)](https://requires.io/github/teampheenix/StarCraft-Casting-Tool/requirements/?branch=master)
-[![Discord](https://img.shields.io/discord/408901724355559435.svg)](https://discord.gg/G9hFEfh)
 
 # StarCraft Casting Tool
 
@@ -11,9 +8,12 @@
 
 ![scct-v2](https://user-images.githubusercontent.com/26044736/43646667-c915c8e2-9735-11e8-883c-4e9d6b94061b.jpg)
 
+## Important Note (2024-12-24)
+This software is no longer mainted.
+
 ## Important Note (2020-03-06)
 
-Due to a crash of my hard drive, I lost the keypack to sign the updates. Therefore, I had to rebuild the update channel of the application. Thus, in order to update your version of StarCraft Casting Tool you have to download the **[latest Setup](https://github.com/teampheenix/StarCraft-Casting-Tool/releases/latest)** and install the latest version manually
+Due to a crash of my hard drive, I lost the keypack to sign the updates. Therefore, I had to rebuild the update channel of the application. Thus, in order to update your version of StarCraft Casting Tool you have to download the **[latest Setup](https://github.com/teampheenix/StarCraft-Casting-Tool/releases/latest)** and install the latest version manually.
 
 ## Downloads
 
@@ -37,13 +37,9 @@ Due to a crash of my hard drive, I lost the keypack to sign the updates. Therefo
 -   Nearly **unlimited Customization** via Skins and CSS
 -   French, German, Chinese, and Russian language support
 
-## Discord Server
-
-If you need support, have questions, want to be up-to-date on, or like to contribute to this project in any way, join our [Discord Server](https://discord.gg/G9hFEfh).
-
 ## Links
 
-[Video Tutorial](https://youtu.be/j5iWa4JB8bM) \| [Changelog](https://github.com/teampheenix/StarCraft-Casting-Tool/blob/master/CHANGELOG.md) \| [Discord Server](https://discord.gg/G9hFEfh)
+[Video Tutorial](https://youtu.be/j5iWa4JB8bM) \| [Changelog](https://github.com/teampheenix/StarCraft-Casting-Tool/blob/master/CHANGELOG.md)
 
 ## General Information
 
@@ -115,10 +111,4 @@ You have the option to have the player announced with Google-Cloud Text-to-Speec
 
 ## Customization
 
-Some basic options for customization can be found under _Settings: Styles_, for example, alternative styles/skins for the Map Icons, Score Icon, Intro and option to specify colors. For additional **nearly unlimited customization** of the Icons you can make your own custom skins via [CSS](https://www.w3schools.com/css/) by creating new alternative _CSS_-files and placing them into `casting_html/src/css/{browser-source}`. If you do so, please share your custom skins with this project. If you want help implementing your own icon skin with CSS or just want to share an idea for a skin join the [Discord Server](https://discord.gg/G9hFEfh).
-
-## Help, Bug-Report, Suggestions & Contribution
-
-If you need help, have bugs to report, have suggestions to make, or want to contribute to this project in any way join the Discord Server of this project via <https://discord.gg/G9hFEfh> and/or message me (_pres.sure#5247_) on [Discord](https://discordapp.com/).
-
-In the case of a bug report please provide the log-file (after closing StarCraft Casting Tool) that can be found in the directory `C:\Users\<User>\AppData\Local\team pheeniX\StarCraft-Casting-Tool\Log` or navigated to via the menu.
+Some basic options for customization can be found under _Settings: Styles_, for example, alternative styles/skins for the Map Icons, Score Icon, Intro and option to specify colors. For additional **nearly unlimited customization** of the Icons you can make your own custom skins via [CSS](https://www.w3schools.com/css/) by creating new alternative _CSS_-files and placing them into `casting_html/src/css/{browser-source}`.

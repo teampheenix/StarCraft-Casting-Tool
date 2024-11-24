@@ -93,7 +93,7 @@ class LiquipediaGrabber:
         params = dict()
         params['action'] = "opensearch"
         if retry:
-            time.sleep(2)
+            time.sleep(3)
             params['search'] = str(map_name).strip() + ' LE'
         else:
             params['search'] = str(map_name).strip()
@@ -114,7 +114,7 @@ class LiquipediaGrabber:
             liquipedia_map = data[1][0]
         except IndexError:
             if not retry:
-                time.sleep(2)
+                time.sleep(3)
                 return self.get_map(map_name, retry=True)
             raise MapNotFound
 
@@ -126,7 +126,7 @@ class LiquipediaGrabber:
 
             url = f'{self._base_url}/starcraft2/api.php'
 
-            time.sleep(2)
+            time.sleep(3)
             data = self._session.get(url, headers=self._headers,
                                      params=params).json()
             content = data['parse']['text']['*']
@@ -136,15 +136,15 @@ class LiquipediaGrabber:
             if liquipedia_map.is_map():
                 return liquipedia_map
             elif redirect:
-                time.sleep(2)
+                time.sleep(3)
                 return self.get_map(redirect, retry=False)
             elif not retry:
-                time.sleep(2)
+                time.sleep(3)
                 return self.get_map(map_name, retry=True)
             else:
                 raise MapNotFound
         elif not retry:
-            time.sleep(2)
+            time.sleep(3)
             return self.get_map(map_name, retry=True)
         else:
             raise MapNotFound
@@ -182,17 +182,11 @@ class LiquipediaGrabber:
         params['prop'] = "text"
         params['contentmodel'] = "wikitext"
         params['utf8'] = 1
-        params['text'] = "{{Tournament statistics/intro}}"
 
         if len(maps) < 1:
             return
 
-        for sc2map in maps:
-            params['text'] = (
-                params['text']
-                + "{{Map statistics row|tournament=+|map="
-                + sc2map.strip() + "}}")
-        params['text'] = params['text'] + "</div>"
+        params['text'] = "{{Map statistics|maps=" + ("{{!}}").join(maps) + "}}"
         url = f'{self._base_url}/starcraft2/api.php'
         try:
             data = requests.get(url, headers=self._headers,
@@ -200,6 +194,8 @@ class LiquipediaGrabber:
             content = data['parse']['text']['*']
             soup = BeautifulSoup(content, 'html.parser')
             for map_stats in soup.find_all("tr", class_="stats-map-row"):
+                if("Total Sum" in map_stats.getText()):
+                    continue
                 data = dict()
                 data['map'] = map_stats.find(
                     'td', class_='stats-map-name').find('a').text.replace(
@@ -255,11 +251,8 @@ class LiquipediaMap:
         for cell in infobox.find_all("div", class_="infobox-cell-2"):
             if 'infobox-description' in cell.get("class"):
                 key = cell.getText().replace(":", "").lower().replace(" ", "-")
-                continue
-            if key:
                 try:
-                    data[key] = cell.getText()
-                    key = ""
+                    data[key] = cell.find_next("div").getText()
                 except Exception:
                     pass
             else:

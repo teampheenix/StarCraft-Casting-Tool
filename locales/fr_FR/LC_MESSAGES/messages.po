@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: StarCraft Casting Tool\n"
-"POT-Creation-Date: 2022-11-17 21:44+1100\n"
-"PO-Revision-Date: 2022-11-17 21:44+1100\n"
+"POT-Creation-Date: 2024-11-24 19:45+1100\n"
+"PO-Revision-Date: 2024-11-24 19:45+1100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -10,21 +10,17 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 3.2\n"
+"X-Generator: Poedit 3.5\n"
 "X-Poedit-Basepath: ../../../scctool\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: __init__.py:54
+#: __init__.py:53
 #, python-brace-format
-msgid ""
-"Critical error <i>`{error}`</i>! Please provide the log-file to the "
-"developer of StarCraft Casting Tool. <a href=\"{link}\">{link}</a>"
+msgid "Critical error <i>`{error}`</i>!"
 msgstr ""
-"Erreur critique <i>`{error}`</i>! Fournir s'il vous plait le fichier journal "
-"au développeur du Starcraft Casting Tool. <a href=\"{link}\">{link}</a>"
 
-#: __init__.py:58
+#: __init__.py:55
 msgid "Critical Error"
 msgstr "Erreur critique"
 
@@ -57,7 +53,7 @@ msgstr ""
 msgid "Not available when SC2 is running on a different PC."
 msgstr "Non disponible lorsque SC2 est en cours d'exécution sur un autre PC."
 
-#: controller.py:574 view/main.py:907
+#: controller.py:574 view/main.py:899
 msgid ""
 "Automatically sets the score of your ingame UI-interface at the begining of "
 "a game."
@@ -65,7 +61,7 @@ msgstr ""
 "Règle automatiquement le pointage de votre interface utilisateur au débutdu "
 "match."
 
-#: controller.py:581 view/main.py:916
+#: controller.py:581 view/main.py:908
 msgid ""
 "Automatically toggles the production tab of your ingame UI-interface at the "
 "begining of a game."
@@ -109,23 +105,23 @@ msgstr "Attention: Carte '{}' introuvable!"
 msgid "{} {} Browser Source(s) connected on port {}."
 msgstr "{} {} Source(s) du navigateur connectée(s) sur le port {}."
 
-#: controller.py:1195
+#: controller.py:1206
 msgid "A new version {} is available."
 msgstr "Une nouvelle version {} est disponible."
 
-#: controller.py:1197
+#: controller.py:1208
 msgid "Update to new version?"
 msgstr "Mettre à jour vers la nouvelle version?"
 
-#: controller.py:1198
+#: controller.py:1209
 msgid "New StarCraft Casting Tool Version"
 msgstr "Nouvelle version de StarCraft Casting Tool"
 
-#: controller.py:1207
+#: controller.py:1218
 msgid "Don't show on startup."
 msgstr "Ne pas afficher au démarrage."
 
-#: controller.py:1216
+#: controller.py:1227
 msgid "A new version {} is available on GitHub!"
 msgstr "Une nouvelle version {} est disponible sur GitHub!"
 
@@ -241,7 +237,7 @@ msgstr "Mis à jour le titre Twitch de {} à: \"{}\""
 msgid "Not Found - Channel '{}' not found."
 msgstr "Introuvable - Chaine '{}' introuvable."
 
-#: tasks/updater.py:227
+#: tasks/updater.py:228
 msgid "Updated data files!"
 msgstr "Fichiers de données mise à jour!"
 
@@ -285,15 +281,15 @@ msgstr "La version {} est disponible!"
 msgid "StarCraft Casting Tool - About"
 msgstr "StarCraft Casting Tool - À propos"
 
-#: view/main.py:146 view/main.py:406 view/main.py:457 view/main.py:466
+#: view/main.py:146 view/main.py:398 view/main.py:449 view/main.py:458
 msgid "Settings"
 msgstr "Réglages"
 
-#: view/main.py:149 view/main.py:273 view/subBrowserSources.py:60
+#: view/main.py:149 view/main.py:265 view/subBrowserSources.py:60
 msgid "Browser Sources"
 msgstr "Sources de navigateur"
 
-#: view/main.py:151 view/main.py:468
+#: view/main.py:151 view/main.py:460
 msgid "Edit Settings for all Browser Sources"
 msgstr "Éditer les réglages pour toutes les sources de navigateurs"
 
@@ -305,11 +301,11 @@ msgstr "Twitch && Nightbot"
 msgid "Edit Intro-Settings and API-Settings for Twitch and Nightbot"
 msgstr "Éditer Réglges-Intro et Réglages-API pour Twitch et Nightbot"
 
-#: view/main.py:162 view/main.py:473 view/subStyles.py:44
+#: view/main.py:162 view/main.py:465 view/subStyles.py:44
 msgid "Styles"
 msgstr "Styles"
 
-#: view/main.py:167 view/main.py:320
+#: view/main.py:167 view/main.py:312
 msgid "Misc"
 msgstr "Divers"
 
@@ -321,7 +317,7 @@ msgstr "Infos et liens"
 msgid "About"
 msgstr "À propos"
 
-#: view/main.py:186 view/main.py:506
+#: view/main.py:186 view/main.py:498
 msgid "Readme"
 msgstr "Lisez-moi"
 
@@ -333,7 +329,7 @@ msgstr "Tutoriel Vidéo"
 msgid "Check for new version"
 msgstr "Vérifier pour une mise à jour"
 
-#: view/main.py:204 view/main.py:515
+#: view/main.py:204 view/main.py:507
 msgid "Changelog"
 msgstr "Changelog"
 
@@ -341,194 +337,194 @@ msgstr "Changelog"
 msgid "Open log folder"
 msgstr "Ouvrir le dosssier journal"
 
-#: view/main.py:245
+#: view/main.py:237
 msgid "Language"
 msgstr "Langue"
 
-#: view/main.py:276
+#: view/main.py:268
 msgid "Intro"
 msgstr "Intro"
 
-#: view/main.py:281 view/subBrowserSources.py:77
+#: view/main.py:273 view/subBrowserSources.py:77
 msgid "Mapstats"
 msgstr ""
 
-#: view/main.py:286
+#: view/main.py:278
 msgid "Score"
 msgstr "Pointage"
 
-#: view/main.py:289
+#: view/main.py:281
 msgid "Map Icons Box"
 msgstr ""
 
-#: view/main.py:293 view/main.py:296 view/main.py:299 view/main.py:306
-#: view/main.py:309 view/main.py:312
+#: view/main.py:285 view/main.py:288 view/main.py:291 view/main.py:298
+#: view/main.py:301 view/main.py:304
 msgid "Icon Set {}"
 msgstr "Je d'icone {}"
 
-#: view/main.py:302
+#: view/main.py:294
 msgid "Map Icons Landscape"
 msgstr ""
 
-#: view/main.py:315 view/subStyles.py:236
+#: view/main.py:307 view/subStyles.py:236
 msgid "Vetoes"
 msgstr ""
 
-#: view/main.py:322 view/main.py:325
+#: view/main.py:314 view/main.py:317
 msgid "Logo {}"
 msgstr "Logo {}"
 
-#: view/main.py:328 view/main.py:331
+#: view/main.py:320 view/main.py:323
 msgid "UI Logo {}"
 msgstr "Logo d'IU {}"
 
-#: view/main.py:334
+#: view/main.py:326
 msgid "Aligulac (only 1vs1)"
 msgstr "Aligulac (seulement 1c1)"
 
-#: view/main.py:337 view/main.py:884 view/subMisc.py:586
+#: view/main.py:329 view/main.py:876 view/subMisc.py:586
 msgid "Countdown"
 msgstr ""
 
-#: view/main.py:343
+#: view/main.py:335
 msgid "Open Folder"
 msgstr "Ouvrir le dossier"
 
-#: view/main.py:364 view/main.py:415
+#: view/main.py:356 view/main.py:407
 msgid "Open local URL in Browser"
 msgstr "Ouvrir l'URL locale dans le navigateur"
 
-#: view/main.py:371 view/main.py:422
+#: view/main.py:363 view/main.py:414
 msgid "Copy local URL to Clipboard"
 msgstr "Copier l'URL locale dans le Presse-papiers"
 
-#: view/main.py:380 view/main.py:431
+#: view/main.py:372 view/main.py:423
 msgid "Open external URL in Browser"
 msgstr "Ouvrir une URL externe dans le navigateur"
 
-#: view/main.py:390 view/main.py:440
+#: view/main.py:382 view/main.py:432
 msgid "Copy external URL to Clipboard"
 msgstr "Copier l'URL externe dans le Presse-papiers"
 
-#: view/main.py:398 view/main.py:448
+#: view/main.py:390 view/main.py:440
 msgid "Open File in Browser"
 msgstr "Ouvrir le fichier dans le navigateur"
 
-#: view/main.py:559
+#: view/main.py:551
 msgid "Add Match Tab"
 msgstr "Ajouter l'onglet Match"
 
-#: view/main.py:567
+#: view/main.py:559
 msgid "Copy Match Tab"
 msgstr "Copier l'onglet Match"
 
-#: view/main.py:640
+#: view/main.py:632
 msgid "Custom Match"
 msgstr "Match personnalisé"
 
-#: view/main.py:646
+#: view/main.py:638
 msgid "Maps:"
 msgstr "Maps:"
 
-#: view/main.py:650
+#: view/main.py:642
 msgid "Best of"
 msgstr "Série au meilleur de"
 
-#: view/main.py:656
+#: view/main.py:648
 msgid "\"Best of\" does not count extended Ace Maps."
 msgstr ""
 
-#: view/main.py:663
+#: view/main.py:655
 msgid " but at least"
 msgstr " mais au moins"
 
-#: view/main.py:665
+#: view/main.py:657
 msgid "Ace extended to"
 msgstr ""
 
-#: view/main.py:679
+#: view/main.py:671
 msgid "Minimum number of maps played (even if the match is decided already)"
 msgstr ""
 "Nombre minimum de cartes joués (même si le vainqueur est déjà déterminé)"
 
-#: view/main.py:685
+#: view/main.py:677
 msgid "maps"
 msgstr "maps"
 
-#: view/main.py:692
+#: view/main.py:684
 msgid "map(s)."
 msgstr ""
 
-#: view/main.py:700
+#: view/main.py:692
 msgid "Vetoes."
 msgstr ""
 
-#: view/main.py:708
+#: view/main.py:700
 msgid "Apply Format"
 msgstr "Appliquer le format"
 
-#: view/main.py:737
+#: view/main.py:729
 msgid "Modes:"
 msgstr ""
 
-#: view/main.py:741
+#: view/main.py:733
 msgid "All-Kill"
 msgstr "All-Kill"
 
-#: view/main.py:744
+#: view/main.py:736
 msgid "Winner stays and is automatically placed into the next set"
 msgstr "Le gagnant reste et est automatiquement placé dans le prochain set"
 
-#: view/main.py:749
+#: view/main.py:741
 msgid "1vs1"
 msgstr "1c1"
 
-#: view/main.py:752
+#: view/main.py:744
 msgid "Select for solo (non-team matches)"
 msgstr "Choisir pour solo (matchs sans équipe)"
 
-#: view/main.py:757
+#: view/main.py:749
 msgid "Match-URL:"
 msgstr "Match-URL:"
 
-#: view/main.py:763
+#: view/main.py:755
 msgid "Optionally specify the Match-URL, e.g., for Nightbot commands"
 msgstr ""
 "Spécifier le Match-URL (optionnel), par exemple pour les commandes Nightbot"
 
-#: view/main.py:766
+#: view/main.py:758
 msgid "Specify the Match-URL of your Custom Match"
 msgstr "Indiquer le Match-URL de votre match personnalisé"
 
-#: view/main.py:784
+#: view/main.py:776
 msgid "Reset Match Data"
 msgstr "Réinitialiser les données du match"
 
-#: view/main.py:850
+#: view/main.py:842
 msgid "Tasks"
 msgstr "Tâches"
 
-#: view/main.py:854
+#: view/main.py:846
 msgid "Update Twitch Title"
 msgstr "Mettre à jour le titre Twitch"
 
-#: view/main.py:858
+#: view/main.py:850
 msgid "Update Nightbot"
 msgstr "Mettre à jour Nightbot"
 
-#: view/main.py:861
+#: view/main.py:853
 msgid "Reset Score"
 msgstr "Réinitialiser le pointage"
 
-#: view/main.py:881
+#: view/main.py:873
 msgid "Background Tasks"
 msgstr "Tâches en arrière-plan"
 
-#: view/main.py:895
+#: view/main.py:887
 msgid "Auto Score Update"
 msgstr "Mis à jour du pointage automatique"
 
-#: view/main.py:897
+#: view/main.py:889
 msgid ""
 "Automatically detects the outcome of SC2 matches that are played/observed in "
 "your SC2-client and updates the score accordingly."
@@ -536,39 +532,39 @@ msgstr ""
 "Détecte automatiquement le résultat des matchs de SC2 qui sont joués/"
 "observés dans votre client SC2 et mets à jour le pointage en conséquence."
 
-#: view/main.py:905
+#: view/main.py:897
 msgid "Set Ingame Score"
 msgstr "Régler le pointage dans le jeu"
 
-#: view/main.py:914
+#: view/main.py:906
 msgid "Toggle Production Tab"
 msgstr "Afficher l'onglet de production"
 
-#: view/main.py:923
+#: view/main.py:915
 msgid "Auto Twitch Update"
 msgstr "Mis à jour automatique de Twitch"
 
-#: view/main.py:928
+#: view/main.py:920
 msgid "Auto Nightbot Update"
 msgstr "Mis à jour automatique de Nightbot"
 
-#: view/main.py:937 view/main.py:941
+#: view/main.py:929 view/main.py:933
 msgid "Only Windows"
 msgstr "Windows seulement"
 
-#: view/main.py:1031
+#: view/main.py:1023
 msgid "Applying Custom Match..."
 msgstr "Application du match personnalisé..."
 
-#: view/main.py:1071
+#: view/main.py:1063
 msgid "Updating Nightbot Command..."
 msgstr "Mise à jour de la commande Nightbot..."
 
-#: view/main.py:1080
+#: view/main.py:1072
 msgid "Updating Twitch Title..."
 msgstr "Mise à jour du titre de Twitch..."
 
-#: view/main.py:1089
+#: view/main.py:1081
 msgid "Resetting Score..."
 msgstr "Réinitialisation du pointage..."
 
@@ -658,8 +654,6 @@ msgid "Error"
 msgstr "Erreur"
 
 #: view/matchdataview.py:455 view/matchdataview.py:476
-#, fuzzy
-#| msgid "Team Aliases"
 msgid "Team Alias"
 msgstr "Alias de l'équipe"
 
@@ -738,10 +732,8 @@ msgid "Mark vetoed maps"
 msgstr ""
 
 #: view/subBrowserSources.py:207
-#, fuzzy
-#| msgid "Currently entered Maps only"
 msgid "Sort currently entered maps"
-msgstr "Carte enregistré actuellement seulement"
+msgstr ""
 
 #: view/subBrowserSources.py:213
 msgid "Sort:"
@@ -775,7 +767,7 @@ msgstr "Pixel"
 #: view/subBrowserSources.py:318 view/subBrowserSources.py:368
 #: view/subBrowserSources.py:407
 msgid "Icon Padding:"
-msgstr "Espacement des icones"
+msgstr "Espacement des icons:"
 
 #: view/subBrowserSources.py:326 view/subBrowserSources.py:415
 msgid "Icon Set {} Scope"
@@ -903,7 +895,7 @@ msgid "Shortcut: {}"
 msgstr "Raccourci: {}"
 
 #: view/subBrowserSources.py:770 view/subConnections.py:323
-#: view/subMisc.py:1038 view/subStyles.py:436
+#: view/subMisc.py:1038 view/subStyles.py:433
 msgid "Save data?"
 msgstr "Sauvegarder les données?"
 
@@ -1105,10 +1097,8 @@ msgid "OCR"
 msgstr "OCR"
 
 #: view/subMisc.py:89
-#, fuzzy
-#| msgid "Set Ingame Score"
 msgid "Ingame Score"
-msgstr "Régler le pointage dans le jeu"
+msgstr ""
 
 #: view/subMisc.py:90
 msgid "SC2 Client API"
@@ -1206,23 +1196,12 @@ msgid "Swap my favorite team always to the left"
 msgstr "Changer de place mon équipe favorite toujours à gauche"
 
 #: view/subMisc.py:262
-#, fuzzy
-#| msgid ""
-#| "Player and team aliases are replaced by the actual name when encountered "
-#| "by the match grabber. Additionally, SC2 player names listed as aliases "
-#| "are replaced in the intros and used to identify players by the automatic "
-#| "background tasks \"Auto Score Update\" and \"Set Ingame Score\"."
 msgid ""
 "Player, team, and league aliases are replaced by the actual name when "
 "encountered by the match grabber. Additionally, SC2 player names listed as "
 "aliases are replaced in the intros and used to identify players by the "
 "automatic background tasks \"Auto Score Update\" and \"Set Ingame Score\"."
 msgstr ""
-"Les alias des joueurs et des équipes sont remplacés par les noms actuels "
-"lorsque reconnus par le match grabber. De plus, les noms des joueurs de SC2 "
-"indiqués comme alias sont remplacés dans les intros et utilisé pour "
-"identifier les joueurs par les tâches en arrière-plan \"Mis à jour du "
-"pointage automatique\" et \"Régler le pointage dans le jeu\"."
 
 #: view/subMisc.py:273
 msgid "Player Aliases"
@@ -1241,16 +1220,12 @@ msgid "Team Name"
 msgstr "Nom de l'équipe"
 
 #: view/subMisc.py:299
-#, fuzzy
-#| msgid "Team Aliases"
 msgid "League Aliases"
-msgstr "Alias de l'équipe"
+msgstr ""
 
 #: view/subMisc.py:307
-#, fuzzy
-#| msgid "Team Name"
 msgid "League Name"
-msgstr "Nom de l'équipe"
+msgstr ""
 
 #: view/subMisc.py:360
 msgid "SC2 Client API Address"
@@ -1487,62 +1462,60 @@ msgstr ""
 #: view/subStyles.py:242
 msgid ""
 "StarCraft Casting Tools allows you to make your own skins/styles via CSS by "
-"placing an alternative CSS-files into casting_html/src/css/{browser-source}. "
-"If you do so, please share these skins with this project. In case you need "
-"help or just want to share your ideas for new skins join our Discord Server."
+"placing an alternative CSS-files into casting_html/src/css/{browser-source}."
 msgstr ""
 
-#: view/subStyles.py:264
+#: view/subStyles.py:261
 msgid "Map and Score Icons"
 msgstr ""
 
-#: view/subStyles.py:267
+#: view/subStyles.py:264
 msgid "Default Border:"
 msgstr ""
 
-#: view/subStyles.py:279
+#: view/subStyles.py:276
 msgid "Win:"
 msgstr ""
 
-#: view/subStyles.py:284
+#: view/subStyles.py:281
 msgid "Lose:"
 msgstr ""
 
-#: view/subStyles.py:289
+#: view/subStyles.py:286
 msgid "Undecided:"
 msgstr ""
 
-#: view/subStyles.py:294
+#: view/subStyles.py:291
 msgid "Not played:"
 msgstr ""
 
-#: view/subStyles.py:301
+#: view/subStyles.py:298
 msgid "Map Stats"
 msgstr ""
 
-#: view/subStyles.py:304
+#: view/subStyles.py:301
 msgid "Color 1:"
 msgstr ""
 
-#: view/subStyles.py:309
+#: view/subStyles.py:306
 msgid "Color 2:"
 msgstr ""
 
-#: view/subStyles.py:324
+#: view/subStyles.py:321
 msgid ""
 "Warning: Using a custom font instead of the regular font defined in the Icon "
 "Styles can lead to unitentional appereance."
 msgstr ""
 
-#: view/subStyles.py:327
+#: view/subStyles.py:324
 msgid "The proper way is to create a custom skin."
 msgstr ""
 
-#: view/subStyles.py:331
+#: view/subStyles.py:328
 msgid "Activate Custom Font"
 msgstr ""
 
-#: view/subStyles.py:342
+#: view/subStyles.py:339
 msgid "Custom Font"
 msgstr ""
 
@@ -1752,6 +1725,15 @@ msgstr ""
 #: view/widgets.py:1683
 msgid "Activate Separate Style:"
 msgstr ""
+
+#, python-brace-format
+#~ msgid ""
+#~ "Critical error <i>`{error}`</i>! Please provide the log-file to the "
+#~ "developer of StarCraft Casting Tool. <a href=\"{link}\">{link}</a>"
+#~ msgstr ""
+#~ "Erreur critique <i>`{error}`</i>! Fournir s'il vous plait le fichier "
+#~ "journal au développeur du Starcraft Casting Tool. <a "
+#~ "href=\"{link}\">{link}</a>"
 
 #~ msgid "Become a Patron"
 #~ msgstr "Devenir un Patron"

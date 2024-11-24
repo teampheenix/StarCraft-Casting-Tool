@@ -241,10 +241,7 @@ class SubwindowStyles(QWidget):
         stylesDisc = _(
             'StarCraft Casting Tools allows you to make your own skins/styles'
             ' via CSS by placing an alternative CSS-files into '
-            'casting_html/src/css/{browser-source}. If you do so, please'
-            ' share these skins with this project. In case you need help'
-            ' or just want to share your ideas for new skins'
-            ' join our Discord Server.')
+            'casting_html/src/css/{browser-source}.')
         label = QLabel(stylesDisc)
         label.setAlignment(Qt.AlignJustify)
         label.setWordWrap(True)
