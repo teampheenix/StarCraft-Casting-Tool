@@ -247,8 +247,6 @@ class MainWindow(QMainWindow):
         language = scctool.settings.config.parser.get("SCT", "language")
 
         languages = []
-        languages.append({'handle': 'cs_CZ', 'icon': 'cz.png',
-                          'name': 'Čeština', 'active': True})
         languages.append({'handle': 'de_DE', 'icon': 'de.png',
                           'name': 'Deutsch', 'active': True})
         languages.append({'handle': 'en_US', 'icon': 'en.png',
