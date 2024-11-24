@@ -49,7 +49,7 @@
 * Add Chinese translation. Thanks to ciwomuli!
 
 
-## v2.13.3 (2022-11-16)
+## v2.13.3 (2022-08-08)
 
 ### Fix
 
@@ -130,7 +130,20 @@
 * Break "2000 Atmospheres" in mapstats.
 
 
-## v2.9.2 (2021-01-19)
+## v2.9.3 (2021-02-20)
+
+### Changes
+
+* Locales updated.
+
+### Fix
+
+* Missing meta data of maps will now be updated.
+
+* Map creator, size and spawn position is now correctly fetched from Liquipedia.
+
+
+## v2.9.2 (2020-11-21)
 
 ### New
 
@@ -142,24 +155,25 @@
 
 ### Changes
 
-* Locales updated.
-
 * Dependencies upgraded.
 
-### Fix
 
-* Missing meta data of maps will now be updated.
-
-* Map creator, size and spawn position is now correctly fetched from Liquipedia.
-
-
-## v2.9.0 (2020-10-25)
+## v2.9.1 (2020-10-25)
 
 ### New
 
 * Added new map images.
 
 * Added match grabber for spire.gg solo matches.
+
+### Fix
+
+* Fixed a bug where Lightshade would be correct to Nightshade when fetch with the match grabber.
+
+
+## v2.9.0 (2020-10-09)
+
+### New
 
 * Added match grabber for spire.gg team matches.
 
@@ -180,8 +194,6 @@
 * Removed Python 3.6 compatibility.
 
 ### Fix
-
-* Fixed a bug where Lightshade would be correct to Nightshade when fetch with the match grabber.
 
 * File ending of logos are automatically added when missing.
 
